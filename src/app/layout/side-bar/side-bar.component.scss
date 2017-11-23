@@ -1,0 +1,99 @@
+@import "../../../assets/variables";
+
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_vendor-prefixes";
+
+$sidebar-width: 230px;
+
+$sidebar-background: #222d32;
+$sidebar-item-menu-background: lighten($sidebar-background, 5%);
+$sidebar-item-menu-color: lighten($sidebar-background, 60%);
+$sidebar-item-menu-color-hover: $white;
+$sidebar-item-submenu-color: lighten($sidebar-item-menu-background, 40%);
+$sidebar-item-submenu-color-hover: $white;
+$sidebar-item-submenu-transition: .3s;
+
+$link-color: $light-blue;
+$link-hover-color: lighten($link-color, 15%);
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top: 20px;
+  min-height: 100%;
+  width: $sidebar-width;
+  z-index: 2;
+  background-color: $sidebar-background;
+
+  .sidebar-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li.menu-item {
+      position: relative;
+      margin: 0;
+      padding: 0;
+
+      a {
+        text-decoration: none;
+      }
+
+      > a {
+        border-left: 3px solid transparent;
+        color: $sidebar-item-menu-color;
+        padding: 12px 5px 12px 15px;
+        display: block;
+        > .fa {
+          width: 20px;
+        }
+        > .pull-right-container > .fa-angle-left {
+          width: auto;
+          height: auto;
+          padding: 0;
+          margin-right: 10px;
+          @include transition(transform $sidebar-item-submenu-transition ease);
+        }
+      }
+      &.active > a {
+        border-left-color: $light-blue;
+      }
+      &.active > a, > a:hover {
+        color: $sidebar-item-submenu-color-hover;
+      }
+      &.active {
+        > a > .fa-angle-left,
+        > a > .pull-right-container > .fa-angle-left {
+          @include rotate(-90deg);
+        }
+      }
+
+      > ul.sub-menu {
+        max-height: 0;
+        opacity: 0;
+        transition: all $sidebar-item-submenu-transition ease-in-out;
+        > li {
+          list-style: none;
+          &:not(:first-child) {
+            padding-top: 10px;
+          }
+          > a {
+            color: $sidebar-item-submenu-color;
+          }
+          &.active > a, > a:hover {
+            color: $sidebar-item-submenu-color-hover;
+          }
+        }
+      }
+
+      &.active > ul.sub-menu {
+        max-height: 1200px;
+        opacity: 1;
+        padding-top: 5px;
+        border-bottom-right-radius: 4px;
+        background-color: $sidebar-item-menu-background;
+      }
+    }
+  }
+}
