@@ -1,4 +1,5 @@
 {
-    "signIn":"Sign in",
-    "signOut":"Sign out"
+  "signIn": "Sign in",
+  "signOut": "Sign out",
+  "persons": "Persons"
 }

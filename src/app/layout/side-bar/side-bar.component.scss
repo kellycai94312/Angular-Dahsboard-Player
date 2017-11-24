@@ -1,34 +1,55 @@
-@import "../../../assets/variables";
-
-$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+@import "../layout.component";
 @import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_vendor-prefixes";
-
-$sidebar-width: 230px;
 
 $sidebar-background: #222d32;
 $sidebar-item-menu-background: lighten($sidebar-background, 5%);
+$sidebar-item-menu-background-hover: darken($sidebar-background, 2%);
 $sidebar-item-menu-color: lighten($sidebar-background, 60%);
 $sidebar-item-menu-color-hover: $white;
 $sidebar-item-submenu-color: lighten($sidebar-item-menu-background, 40%);
 $sidebar-item-submenu-color-hover: $white;
-$sidebar-item-submenu-transition: .3s;
+$sidebar-item-submenu-transition: .2s;
 
 $link-color: $light-blue;
 $link-hover-color: lighten($link-color, 15%);
 
 .sidebar {
   position: absolute;
-  top: 0;
+  top: $navbar-height;
   left: 0;
-  padding-top: 20px;
   min-height: 100%;
   width: $sidebar-width;
   z-index: 2;
   background-color: $sidebar-background;
 
-  .sidebar-menu {
+  > div.user-panel {
+    position: relative;
+    width: 100%;
+    padding: 6px;
+    overflow: hidden;
+
+    > img {
+      width: 100%;
+      max-width: 45px;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    > p {
+      display: inline;
+      vertical-align: middle;
+      padding: 5px 5px 5px 12px;
+      line-height: 1px;
+      left: 60px;
+      font-weight: 500;
+      color: $white;
+    }
+  }
+
+  > ul.sidebar-menu {
+    margin-top: 5px;
     list-style: none;
-    margin: 0;
+    position: relative;
     padding: 0;
 
     li.menu-item {
@@ -45,13 +66,13 @@ $link-hover-color: lighten($link-color, 15%);
         color: $sidebar-item-menu-color;
         padding: 12px 5px 12px 15px;
         display: block;
-        > .fa {
-          width: 20px;
+        > i.lnr {
+          font-size: 20px;
         }
-        > .pull-right-container > .fa-angle-left {
-          width: auto;
-          height: auto;
+        > .pull-right-container > i.lnr-chevron-left {
+          font-size: 8px;
           padding: 0;
+          margin-top: 5px;
           margin-right: 10px;
           @include transition(transform $sidebar-item-submenu-transition ease);
         }
@@ -63,8 +84,9 @@ $link-hover-color: lighten($link-color, 15%);
         color: $sidebar-item-submenu-color-hover;
       }
       &.active {
-        > a > .fa-angle-left,
-        > a > .pull-right-container > .fa-angle-left {
+        background-color: $sidebar-item-menu-background-hover;
+        > a > i.lnr-chevron-left,
+        > a > span.pull-right-container > i.lnr-chevron-left {
           @include rotate(-90deg);
         }
       }
@@ -95,5 +117,9 @@ $link-hover-color: lighten($link-color, 15%);
         background-color: $sidebar-item-menu-background;
       }
     }
+  }
+
+  &.mini {
+    width: 50px !important;
   }
 }

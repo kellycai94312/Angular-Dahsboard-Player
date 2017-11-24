@@ -1,31 +1,19 @@
-<aside class="sidebar">
-  <section>
-    <ul class="sidebar-menu">
-      <li class="menu-item active open-sub-menu" appMenuItem>
-        <a href="#" (click)="dashboard=!dashboard">
-          <i class="fa fa-home"></i> <span>Dashboard</span>
-          <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
-        </a>
-        <ul class="sub-menu">
-          <li>
-            <a href="#">
-              <i class="fa fa-circle-o"></i> Dashboard v1
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="fa fa-circle-o"></i> Dashboard v2
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="menu-item" appMenuItem>
-        <a href="#">
-          <i class="fa fa-inbox"></i> <span>Mailbox</span>
-        </a>
-      </li>
-    </ul>
-  </section>
+<aside class="sidebar mini">
+  <div class="user-panel">
+    <img src="https://pbs.twimg.com/profile_images/917826331068567552/_0z8T2_v.jpg" class="img-circle"
+         alt="User Image">
+    <p>Иванов Иван</p>
+  </div>
+  <ul class="sidebar-menu">
+    <li class="menu-item" routerLink="person" routerLinkActive="active">
+      <a href routerLink="person">
+        <i class="lnr lnr-users"></i> <span>{{'persons' | translate}}</span>
+      </a>
+    </li>
+    <li class="menu-item" routerLink="not-found" routerLinkActive="active">
+      <a routerLink="not-found">
+        <i class="lnr lnr-envelope"></i> <span>Not Found</span>
+      </a>
+    </li>
+  </ul>
 </aside>

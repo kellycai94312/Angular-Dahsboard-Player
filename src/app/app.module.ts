@@ -8,7 +8,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import {DevExpressModule} from './devexpress';
 import {LayoutComponent} from './layout/layout.component';
 import {SideBarComponent} from './layout/side-bar/side-bar.component';
 import {NavBarComponent} from './layout/nav-bar/nav-bar.component';

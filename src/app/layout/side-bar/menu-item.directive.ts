@@ -11,11 +11,11 @@ export class MenuItemDirective {
 
   @HostListener('click')
   onClick() {
-    if (this.elementRef.nativeElement.classList.contains('active')) {
-      this.renderer.removeClass(this.elementRef.nativeElement, 'active');
-    } else {
-      this.renderer.addClass(this.elementRef.nativeElement, 'active');
-    }
+    // if (this.elementRef.nativeElement.classList.contains('active')) {
+    //   this.renderer.removeClass(this.elementRef.nativeElement, 'active');
+    // } else {
+    //   this.renderer.addClass(this.elementRef.nativeElement, 'active');
+    // }
   }
 
 }
