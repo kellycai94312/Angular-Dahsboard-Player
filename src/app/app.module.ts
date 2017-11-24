@@ -9,9 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import {LayoutComponent} from './layout/layout.component';
-import {SideBarComponent} from './layout/side-bar/side-bar.component';
-import {NavBarComponent} from './layout/nav-bar/nav-bar.component';
-import {MenuItemDirective} from './layout/side-bar/menu-item.directive';
+import { MenuToggleDirective } from './layout/menu-toggle.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -21,9 +19,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     LayoutComponent,
-    SideBarComponent,
-    NavBarComponent,
-    MenuItemDirective
+    MenuToggleDirective
   ],
   imports: [
     BrowserModule,

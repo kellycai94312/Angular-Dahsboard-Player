@@ -7,15 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
-  toggleMenu = false;
-
   constructor() { }
+
 
   ngOnInit() {
   }
 
-  onToggleMenu() {
-    this.toggleMenu = !this.toggleMenu;
-  }
-
 }
+
