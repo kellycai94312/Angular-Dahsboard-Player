@@ -23,12 +23,15 @@ $link-hover-color: lighten($link-color, 15%);
   height: calc(100% - #{$navbar-height});
   width: 100%;
   display: flex;
+  flex-direction: row;
 }
 
 .content {
   width: 100%;
   min-height: 100%;
   flex-direction: column;
+  flex: 1 1 auto;
+  overflow: auto;
   display: flex;
   padding: 10px;
 }
