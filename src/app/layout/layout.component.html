@@ -1,48 +1,7 @@
-<div class="layout">
-
-  <div class="wrapper" [hidden]="hidden">
-    <header class="main-header">
-      <a href class="logo-wrapper">
-        <span class="mini"><b>R</b>C</span>
-        <span class="large"><b>Reactor </b>Combine</span>
-      </a>
-      <nav class="navbar">
-        <a appMenuToggle class="sidebar-toggle" data-toggle="push-menu">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <div class="navbar-menu">
-          <ul class="dropdown">
-            <li class="user-panel">
-              <img src="https://pbs.twimg.com/profile_images/917826331068567552/_0z8T2_v.jpg" class="img-circle"
-                   alt="User Image">
-              <p>Иванов Иван</p>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </header>
-
-    <aside class="sidebar">
-      <ul class="sidebar-menu">
-        <li class="menu-item" routerLink="person" routerLinkActive="active">
-          <a href routerLink="person">
-            <i class="lnr lnr-users"></i> <span>{{'persons' | translate}}</span>
-          </a>
-        </li>
-        <li class="menu-item" routerLink="not-found" routerLinkActive="active">
-          <a routerLink="not-found">
-            <i class="lnr lnr-envelope"></i> <span>Not Found</span>
-          </a>
-        </li>
-      </ul>
-    </aside>
-  </div>
-
+<app-nav-bar [hidden]="hidden"></app-nav-bar>
+<div class="flex-wrapper">
+  <app-side-bar [hidden]="hidden"></app-side-bar>
   <div class="content">
     <router-outlet></router-outlet>
   </div>
-
 </div>

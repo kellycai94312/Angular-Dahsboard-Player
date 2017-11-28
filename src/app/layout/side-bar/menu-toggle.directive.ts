@@ -12,8 +12,8 @@ export class MenuToggleDirective {
 
   @HostListener('click')
   onClick() {
-    /*sidebar-toggle > navbar > main-header > wrapper > layout*/
-    const parent = this.elementRef.nativeElement.parentElement.parentElement.parentElement.parentElement;
+    /*sidebar-toggle > wrapper */
+    const parent = this.elementRef.nativeElement.parentElement;
     if (parent.classList.contains('mini')) {
       this.renderer.removeClass(parent, 'mini');
     } else {
