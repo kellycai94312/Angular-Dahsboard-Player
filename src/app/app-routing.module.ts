@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from "@angular/router";
+import { RouterModule, Routes } from '@angular/router';
+import { LayoutService } from './layout/layout.service';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,6 +12,10 @@ const routes: Routes = [
   { path: 'not-found', loadChildren: './pages/not-found-page/not-found-page.module#NotFoundPageModule' },
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];
+
+for (const route of routes) {
+  route.canActivate = [LayoutService];
+}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

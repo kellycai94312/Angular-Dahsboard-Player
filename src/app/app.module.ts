@@ -8,8 +8,9 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import {LayoutComponent} from './layout/layout.component';
+import { LayoutComponent } from './layout/layout.component';
 import { MenuToggleDirective } from './layout/menu-toggle.directive';
+import { LayoutService } from './layout/layout.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -33,7 +34,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [],
+  providers: [LayoutService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

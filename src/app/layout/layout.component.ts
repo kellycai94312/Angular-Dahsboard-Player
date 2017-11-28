@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LayoutService } from './layout.service';
 
 @Component({
   selector: 'app-layout',
@@ -7,10 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor() { }
+  private hidden: boolean = true;
 
+  constructor(private layoutService: LayoutService) {
+  }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.layoutService
+      .displayLayout
+      .subscribe(res => this.hidden = res);
   }
 
 }
