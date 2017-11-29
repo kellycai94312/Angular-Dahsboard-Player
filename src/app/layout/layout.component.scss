@@ -20,6 +20,7 @@ $link-color: $light-blue;
 $link-hover-color: lighten($link-color, 15%);
 
 .flex-wrapper {
+  position: absolute;
   height: calc(100% - #{$navbar-height});
   width: 100%;
   display: flex;

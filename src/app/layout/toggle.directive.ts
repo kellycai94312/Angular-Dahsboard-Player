@@ -1,23 +1,27 @@
 import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
+
+/**
+ * toggle parent element class
+ * */
 @Directive({
-  selector: '[appMenuToggle]'
+  selector: '[appToggle]'
 })
-export class MenuToggleDirective {
+export class ToggleDirective {
+
+  readonly className: string = 'minify';
 
   constructor(private renderer: Renderer2,
               private elementRef: ElementRef) {
   }
 
-
   @HostListener('click')
   onClick() {
-    /*sidebar-toggle > wrapper */
     const parent = this.elementRef.nativeElement.parentElement;
-    if (parent.classList.contains('mini')) {
-      this.renderer.removeClass(parent, 'mini');
+    if (parent.classList.contains(this.className)) {
+      this.renderer.removeClass(parent, this.className);
     } else {
-      this.renderer.addClass(parent, 'mini');
+      this.renderer.addClass(parent, this.className);
     }
   }
 

@@ -1,6 +1,7 @@
 /* colors */
 $light-blue: #0091F1;
+$light-blue: darken($light-blue, 7%);
 $dark-blue: #1C1D1F;
-//$light-blue: #3c8dbc;;
-//$dark-blue: #222d32;
-$white: #fff;
+$white: #f9f9f9;
+$white-light: #fff;
+

@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
 import { LayoutComponent } from './layout/layout.component';
-import { MenuToggleDirective } from './layout/side-bar/menu-toggle.directive';
+import { ToggleDirective } from './layout/toggle.directive';
 import { LayoutService } from './layout/layout.service';
 import { SideBarComponent } from './layout/side-bar/side-bar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
@@ -22,7 +22,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     LayoutComponent,
-    MenuToggleDirective,
+    ToggleDirective,
     SideBarComponent,
     NavBarComponent
   ],
