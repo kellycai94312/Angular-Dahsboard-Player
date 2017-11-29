@@ -13,6 +13,22 @@
     float: left;
     height: $navbar-height;
     width: $sidebar-width;
+    > .large {
+      display: block;
+    }
+    > .mini {
+      display: none;
+    }
+    @media (max-width: $screen-xs-max) {
+      width: $sidebar-width-mini;
+      padding: 0 10px;
+      > .large {
+        display: none;
+      }
+      > .mini {
+        display: block;
+      }
+    }
     @include transition(width $sidebar-mini-transition);
 
     font-size: 20px;
