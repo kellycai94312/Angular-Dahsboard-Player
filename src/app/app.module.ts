@@ -13,6 +13,7 @@ import { ToggleDirective } from './layout/toggle.directive';
 import { LayoutService } from './layout/shared/layout.service';
 import { SideBarComponent } from './layout/side-bar/side-bar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+import { UserPanelDirective } from './layout/nav-bar/user-panel.directive';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -24,7 +25,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LayoutComponent,
     ToggleDirective,
     SideBarComponent,
-    NavBarComponent
+    NavBarComponent,
+    UserPanelDirective
   ],
   imports: [
     BrowserModule,
