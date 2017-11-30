@@ -10,7 +10,6 @@
     position: relative;
     height: 100%;
     width: $sidebar-width;
-    flex: 1 0;
     transition: width $sidebar-mini-transition ease-in;
     @include transition(width $sidebar-mini-transition);
     background-color: $sidebar-background;

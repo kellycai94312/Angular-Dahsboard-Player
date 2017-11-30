@@ -2,6 +2,7 @@
 
 $navbar-background: $light-blue;
 $navbar-background-dark: darken($navbar-background, 12%);
+$user-panel-width: 180px;
 
 #navbar > header.wrapper {
   @include user-select(none);
@@ -32,7 +33,7 @@ $navbar-background-dark: darken($navbar-background, 12%);
         display: block;
       }
     }
-    @include transition(width $sidebar-mini-transition);
+    @include transition(width $sidebar-mini-transition ease);
 
     font-size: 20px;
     line-height: 50px;
@@ -63,6 +64,7 @@ $navbar-background-dark: darken($navbar-background, 12%);
       > .user-panel {
 
         margin-right: 50px;
+        @include transition(margin-right $sidebar-mini-transition ease);
         @media (max-width: $screen-xs-max) {
           margin-right: 0;
         }
@@ -70,6 +72,7 @@ $navbar-background-dark: darken($navbar-background, 12%);
         > .info {
 
           white-space: nowrap;
+          width: $user-panel-width;
           padding: 5px 15px 5px 15px;
           background-color: darken($light-blue, 12%);
 
