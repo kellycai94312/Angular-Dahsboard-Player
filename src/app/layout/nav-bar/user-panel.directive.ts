@@ -1,4 +1,4 @@
-import {Directive, ElementRef, EventEmitter, HostListener, Output, Renderer2} from '@angular/core';
+import {Directive, ElementRef, HostListener, Renderer2} from '@angular/core';
 
 @Directive({
   selector: '[appUserPanel]'
