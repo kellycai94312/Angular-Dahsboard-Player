@@ -1,0 +1,34 @@
+@import "../../assets/variables";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/_variables";
+@import "~bootstrap-sass/assets/stylesheets/bootstrap/mixins/_vendor-prefixes";
+
+$navbar-height: 50px;
+$sidebar-width: 230px;
+$sidebar-width-mini: 50px;
+$sidebar-mini-transition: .3s;
+
+$sidebar-background: $dark-blue;
+$sidebar-item-menu-background: lighten($sidebar-background, 5%);
+$sidebar-item-menu-background-hover: darken($sidebar-background, 2%);
+$sidebar-item-menu-color: lighten($sidebar-background, 60%);
+$sidebar-item-menu-color-hover: $white;
+$sidebar-item-submenu-color: lighten($sidebar-item-menu-background, 40%);
+$sidebar-item-submenu-color-hover: $white;
+$sidebar-item-submenu-transition: .2s;
+
+$link-color: $light-blue;
+$link-hover-color: lighten($link-color, 15%);
+
+.flex-wrapper {
+  position: absolute;
+  height: calc(100% - #{$navbar-height});
+  width: 100%;
+  display: flex;
+}
+
+.content {
+  width: 100%;
+  min-height: 100%;
+  overflow: auto;
+  padding: 10px;
+}

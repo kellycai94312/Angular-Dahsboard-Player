@@ -8,13 +8,23 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { LayoutComponent } from './layout/layout.component';
+import { ToggleDirective } from './layout/toggle.directive';
+import { LayoutService } from './layout/shared/layout.service';
+import { SideBarComponent } from './layout/side-bar/side-bar.component';
+import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LayoutComponent,
+    ToggleDirective,
+    SideBarComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +38,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [],
+  providers: [LayoutService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

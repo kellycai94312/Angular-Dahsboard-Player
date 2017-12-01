@@ -24,10 +24,11 @@
     "@ngx-translate/core": "^8.0.0",
     "@ngx-translate/http-loader": "^2.0.0",
     "admin-lte": "^2.4.2",
-    "bootstrap": "^4.0.0-beta.2",
+    "bootstrap-sass": "^3.3.7",
     "core-js": "^2.4.1",
     "devextreme": "^17.2.3",
     "devextreme-angular": "^17.2.3",
+    "font-awesome": "^4.7.0",
     "linearicons": "^1.0.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14"
