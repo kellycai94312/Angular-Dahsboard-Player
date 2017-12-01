@@ -5,7 +5,7 @@ $navbar-background-dark: darken($navbar-background, 12%);
 $user-panel-width: 180px;
 
 #navbar > header.wrapper {
-  @include user-select(none);
+  user-select: none;
   position: relative;
   width: 100%;
   height: $navbar-height;
@@ -23,7 +23,7 @@ $user-panel-width: 180px;
     > .mini {
       display: none;
     }
-    @media (max-width: $screen-xs-max) {
+    @media (max-width: max-width-xs()) {
       width: $sidebar-width-mini;
       padding: 0 10px;
       > .large {
@@ -33,7 +33,7 @@ $user-panel-width: 180px;
         display: block;
       }
     }
-    @include transition(width $sidebar-mini-transition ease);
+   transition: width $sidebar-mini-transition ease;
 
     font-size: 20px;
     line-height: 50px;
@@ -55,7 +55,7 @@ $user-panel-width: 180px;
 
   }
 
-  > nav.navbar {
+  > nav.navbar-wrapper {
     margin-bottom: 0;
     border: 0;
 
@@ -64,8 +64,8 @@ $user-panel-width: 180px;
       > .user-panel {
 
         margin-right: 50px;
-        @include transition(margin-right $sidebar-mini-transition ease);
-        @media (max-width: $screen-xs-max) {
+        transition: margin-right $sidebar-mini-transition ease;
+        @media (max-width: max-width-xs()) {
           margin-right: 0;
         }
 
@@ -142,7 +142,7 @@ $user-panel-width: 180px;
         }
 
         &.minify > .menu {
-          @include box-sizing(border-box);
+          box-sizing: border-box;
           height: 0;
           width: 0;
           color: white;
