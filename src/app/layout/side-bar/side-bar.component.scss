@@ -27,7 +27,7 @@ $sidebar-item-submenu-transition: .2s;
       cursor: pointer;
       float: right;
 
-      @media (max-width: max-width-xs()) {
+      @media (max-width: max-width-sm()) {
         display: none;
       }
 
@@ -147,7 +147,7 @@ $sidebar-item-submenu-transition: .2s;
       @include minifySideBar();
     }
 
-    @media (max-width: max-width-xs()) {
+    @media (max-width: max-width-sm()) {
       @include minifySideBar();
     }
 

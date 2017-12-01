@@ -23,7 +23,7 @@ $user-panel-width: 180px;
     > .mini {
       display: none;
     }
-    @media (max-width: max-width-xs()) {
+    @media (max-width: max-width-sm()) {
       width: $sidebar-width-mini;
       padding: 0 10px;
       > .large {
@@ -65,7 +65,7 @@ $user-panel-width: 180px;
 
         margin-right: 50px;
         transition: margin-right $sidebar-mini-transition ease;
-        @media (max-width: max-width-xs()) {
+        @media (max-width: max-width-sm()) {
           margin-right: 0;
         }
 
