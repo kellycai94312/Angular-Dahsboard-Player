@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, OnInit, Renderer2 } from '@angular/core';
 
 
 /**
@@ -7,7 +7,7 @@ import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 @Directive({
   selector: '[appToggle]'
 })
-export class ToggleDirective {
+export class ToggleDirective implements OnInit {
 
   readonly className: string = 'minify';
 
@@ -15,13 +15,23 @@ export class ToggleDirective {
               private elementRef: ElementRef) {
   }
 
+  ngOnInit() {
+    const minify: boolean = localStorage.getItem(this.className) == 'true';
+    if (minify) {
+      const parent = this.elementRef.nativeElement.parentElement;
+      this.renderer.addClass(parent, this.className);
+    }
+  }
+
   @HostListener('click')
   onClick() {
     const parent = this.elementRef.nativeElement.parentElement;
     if (parent.classList.contains(this.className)) {
       this.renderer.removeClass(parent, this.className);
+      localStorage.setItem(this.className, String(false));
     } else {
       this.renderer.addClass(parent, this.className);
+      localStorage.setItem(this.className, String(true));
     }
   }
 
