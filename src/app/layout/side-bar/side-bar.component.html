@@ -1,22 +1,22 @@
-<div id="sidebar">
-  <aside class="wrapper">
-    <a appToggle class="sidebar-toggle">
+<aside class="sidebar-wrapper">
+  <div class="toggle-wrapper">
+    <a appToggle class="toggle">
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </a>
-    <ul class="sidebar-menu">
-      <li class="menu-item" routerLink="person" routerLinkActive="active">
-        <a href routerLink="person">
-          <i class="lnr lnr-users"></i> <span>{{'persons' | translate}}</span>
-        </a>
-      </li>
-      <li class="menu-item" routerLink="not-found" routerLinkActive="active">
-        <a routerLink="not-found">
-          <i class="lnr lnr-envelope"></i> <span>Not Found</span>
-        </a>
-      </li>
-    </ul>
-  </aside>
-</div>
+  </div>
+  <ul class="sidebar-menu">
+    <li class="menu-item" routerLink="person" routerLinkActive="active">
+      <a href routerLink="person">
+        <i class="lnr lnr-users"></i> <span>{{'persons' | translate}}</span>
+      </a>
+    </li>
+    <li class="menu-item" routerLink="not-found" routerLinkActive="active">
+      <a routerLink="not-found">
+        <i class="lnr lnr-envelope"></i> <span>Not Found</span>
+      </a>
+    </li>
+  </ul>
+</aside>
