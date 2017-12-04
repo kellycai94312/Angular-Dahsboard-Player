@@ -3,18 +3,16 @@
 $navbar-background: $light-blue;
 $navbar-background-dark: darken($navbar-background, 12%);
 $user-panel-width: 180px;
+$avatar-size: 40px;
 
-#navbar > header.wrapper {
+.navbar-wrapper {
   user-select: none;
-  position: relative;
-  width: 100%;
   height: $navbar-height;
   background-color: $navbar-background;
-  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
 
   > .logo-wrapper {
-    position: absolute;
-    z-index: 1;
     height: $navbar-height;
     width: $sidebar-width;
     > .large {
@@ -33,7 +31,7 @@ $user-panel-width: 180px;
         display: block;
       }
     }
-   transition: width $sidebar-mini-transition ease;
+    transition: width $sidebar-mini-transition ease;
 
     font-size: 20px;
     line-height: 50px;
@@ -60,9 +58,11 @@ $user-panel-width: 180px;
     border: 0;
 
     > .navbar-menu {
-      float: right;
+
       > .user-panel {
 
+        display: flex;
+        flex-direction: column;
         margin-right: 50px;
         transition: margin-right $sidebar-mini-transition ease;
         @media (max-width: max-width-sm()) {
@@ -77,8 +77,8 @@ $user-panel-width: 180px;
           background-color: darken($light-blue, 12%);
 
           > img {
-            width: 100%;
-            max-width: 40px;
+            max-height: $avatar-size;
+            max-width: $avatar-size;
           }
 
           > p {
@@ -110,10 +110,11 @@ $user-panel-width: 180px;
           border-top: 1px lighten($sidebar-background, 5%) solid;
           background-color: lighten($sidebar-background, 5%);
           z-index: 1;
-          position: relative;
           cursor: pointer;
           border-radius: 0 0 3px 3px;
           padding-left: 0;
+          display: flex;
+          flex-direction: column;
 
           :not(:last-child) {
             border-bottom: 1px lighten($sidebar-background, 15%) solid;
