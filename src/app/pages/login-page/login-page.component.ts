@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login-page',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor() { }
+  public login: string;
+  public password: string;
+
+  constructor(private translate: TranslateService) {
+
+  }
 
   ngOnInit() {
+  }
+
+  public onApply(event: any): void {
+    var result = event.validationGroup.validate();
+    if (result.isValid) {
+    }
   }
 
 }

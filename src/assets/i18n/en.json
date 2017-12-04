@@ -1,5 +1,29 @@
 {
-  "signIn": "Sign in",
+  "chooseLanguage": "Choose language",
   "signOut": "Sign out",
-  "persons": "Persons"
+  "applicationFullName": "Reactor Combine",
+  "applicationShortName": "RC",
+  "persons": "Persons",
+  "login": {
+    "enterEmailOrPhoneNumber": "Enter email or phone number",
+    "enterPassword": "Enter password",
+    "signIn": "Sign in",
+    "alreadyRegistered": "Already registered?",
+    "forgotYourPassword": "Forgot your password?"
+  },
+  "registration": {
+    "enterEmail": "Enter email",
+    "createPassword": "Create password",
+    "retypePassword": "Retype password",
+    "signUp": "Sign up",
+    "notRegistered": "Not registered?"
+  },
+  "password": {
+    "resetPassword": "Reset password"
+  },
+  "notFound": {
+    "notFound": "Not found"
+  },
+  "reset": "Reset",
+  "enterEmail": "Enter email"
 }
