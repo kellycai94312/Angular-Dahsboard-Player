@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'login', loadChildren: './pages/login-page/login-page.module#LoginPageModule' },
   { path: 'registration', loadChildren: './pages/registration-page/registration-page.module#RegistrationPageModule' },
   { path: 'person', loadChildren: './pages/person-page/person-page.module#PersonPageModule' },
-
+  { path: 'password', loadChildren: './pages/password-page/password-page.module#PasswordPageModule' },
   { path: 'not-found', loadChildren: './pages/not-found-page/not-found-page.module#NotFoundPageModule' },
   { path: '**', redirectTo: 'not-found', pathMatch: 'full' }
 ];

@@ -3,18 +3,16 @@ import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 import { DxTextBoxModule, DxButtonModule, DxValidatorModule } from 'devextreme-angular';
 
-import { LoginPageComponent } from './login-page.component';
-import { LoginPageRoutingModule } from "./login-page-routing.module";
+import { PasswordResetPageComponent } from './password-reset-page.component';
 
 @NgModule({
   imports: [
     CommonModule,
-    LoginPageRoutingModule,
-    DxValidatorModule,
     DxTextBoxModule,
     DxButtonModule,
+    DxValidatorModule,
     TranslateModule.forChild()
   ],
-  declarations: [LoginPageComponent]
+  declarations: [PasswordResetPageComponent]
 })
-export class LoginPageModule { }
+export class PasswordResetPageModule { }

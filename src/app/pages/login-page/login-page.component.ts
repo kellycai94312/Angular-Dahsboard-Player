@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Locale } from "../../data/index";
-import { log } from 'util';
 
 @Component({
   selector: 'app-login-page',
@@ -10,12 +8,20 @@ import { log } from 'util';
 })
 export class LoginPageComponent implements OnInit {
 
+  public login: string;
+  public password: string;
 
   constructor(private translate: TranslateService) {
-    log(Locale.English);
+
   }
 
   ngOnInit() {
+  }
+
+  public onApply(event: any): void {
+    var result = event.validationGroup.validate();
+    if (result.isValid) {
+    }
   }
 
 }

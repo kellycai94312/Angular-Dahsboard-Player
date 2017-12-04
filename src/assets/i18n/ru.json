@@ -1,5 +1,30 @@
 {
-  "signIn": "Вход",
+  "chooseLanguage": "Выберите язык",
   "signOut": "Выход",
-  "persons": "Пользователи"
+  "notRegistered": "",
+  "applicationFullName": "Reactor Combine",
+  "applicationShortName": "RC",
+  "persons": "Пользователи",
+  "login": {
+    "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
+    "enterPassword": "Введите пароль",
+    "signIn": "Вход",
+    "alreadyRegistered": "Уже зарегистрированы?",
+    "forgotYourPassword": "Забыли пароль?"
+  },
+  "registration": {
+    "enterEmail": "Введите электронную почту",
+    "createPassword": "Создайте пароль",
+    "retypePassword": "Повторите ввод пароля",
+    "signUp": "Зарегистрироваться",
+    "notRegistered": "Не зарегистрированы?"
+  },
+  "password": {
+    "resetPassword": "Сброс пароля"
+  },
+  "notFound": {
+    "notFound": "Не найдено"
+  },
+  "reset": "Сброс",
+  "enterEmail": "Введите электронную почту"
 }
