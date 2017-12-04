@@ -11,7 +11,7 @@ export class LoginPageComponent implements OnInit {
   public login: string;
   public password: string;
 
-  constructor(private translate: TranslateService) {
+  constructor(public translate: TranslateService) {
 
   }
 
@@ -19,7 +19,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   public onApply(event: any): void {
-    var result = event.validationGroup.validate();
+    const result = event.validationGroup.validate();
     if (result.isValid) {
     }
   }

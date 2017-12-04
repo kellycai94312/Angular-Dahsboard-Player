@@ -8,7 +8,7 @@ import { LayoutService } from './shared/layout.service';
 })
 export class LayoutComponent implements OnInit {
 
-  private hidden: boolean = true;
+  public hidden = true;
 
   constructor(private layoutService: LayoutService) {
   }
@@ -20,4 +20,3 @@ export class LayoutComponent implements OnInit {
   }
 
 }
-

@@ -1,13 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
-
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { LocationStrategy, PathLocationStrategy } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
 import { LayoutComponent } from './layout/layout.component';
 import { ToggleDirective } from './layout/side-bar/toggle.directive';
 import { LayoutService } from './layout/shared/layout.service';
@@ -40,7 +39,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [LayoutService],
+  providers: [LayoutService, {provide: LocationStrategy, useClass: PathLocationStrategy}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
