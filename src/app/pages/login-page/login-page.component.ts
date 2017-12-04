@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { Locale } from "../../data/index";
+import { log } from 'util';
 
 @Component({
   selector: 'app-login-page',
@@ -7,7 +10,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginPageComponent implements OnInit {
 
-  constructor() { }
+
+  constructor(private translate: TranslateService) {
+    log(Locale.English);
+  }
 
   ngOnInit() {
   }
