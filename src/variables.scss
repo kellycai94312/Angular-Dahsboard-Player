@@ -1,0 +1,17 @@
+@import "~bootstrap/scss/_functions";
+@import "~bootstrap/scss/_variables";
+
+/* colors */
+$light-blue: #0091F1;
+$light-blue: darken($light-blue, 7%);
+$dark-blue: #1C1D1F;
+$white: #f9f9f9;
+$white-light: #fff;
+
+$nav-tabs-border-color:             $light-blue;
+$nav-tabs-border-width:             $border-width;
+$nav-tabs-border-radius:            2px;
+$nav-tabs-link-hover-border-color:  $light-blue;
+$nav-tabs-link-active-color:        $white;
+$nav-tabs-link-active-bg:           $light-blue;
+$nav-tabs-link-active-border-color: $light-blue;

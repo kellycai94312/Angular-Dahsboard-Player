@@ -1,9 +1,45 @@
 {
   "chooseLanguage": "Choose language",
   "signOut": "Sign out",
+  "profile": "Profile",
   "applicationFullName": "Reactor Combine",
   "applicationShortName": "RC",
-  "persons": "Persons",
+  "persons": {
+    "section": "Persons",
+    "person": {
+      "changeAvatar": "Change avatar",
+      "roles": "Roles",
+      "sportTypes": "Sport types",
+      "rating": "Rating",
+      "edit": "edit",
+      "personal": {
+        "section": "Personal information",
+        "firstName" : "First name",
+        "lastName" : "Last name",
+        "middleName" : "Middle name",
+        "birthDate" : "Birth date",
+        "sex" : "Sex",
+        "country" : "Country",
+        "region" : "Region",
+        "city" : "City"
+      },
+      "anthropometry": {
+        "section": "Anthropometry"
+      },
+      "physiology": {
+        "section": "Physiology"
+      },
+      "contact": {
+        "section": "Contact information"
+      },
+      "testsResults" : {
+        "section" : "Tests results"
+      },
+      "events" : {
+        "section" : "Events"
+      }
+    }
+  },
   "login": {
     "enterEmailOrPhoneNumber": "Enter email or phone number",
     "enterPassword": "Enter password",

@@ -4,7 +4,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { DxTextBoxModule, DxButtonModule, DxValidatorModule } from 'devextreme-angular';
 
 import { LoginPageComponent } from './login-page.component';
-import { LoginPageRoutingModule } from "./login-page-routing.module";
+import { LoginPageRoutingModule } from './login-page-routing.module';
 
 @NgModule({
   imports: [

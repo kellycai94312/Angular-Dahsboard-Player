@@ -20,7 +20,7 @@ export class RegistrationPageComponent implements OnInit {
 
   passwordComparison = () => {
     return this.password;
-  };
+  }
 
   public onApply(event: any): void {
     const result = event.validationGroup.validate();

@@ -2,7 +2,7 @@
 
 $navbar-background: $light-blue;
 $navbar-background-dark: darken($navbar-background, 12%);
-$user-panel-width: 180px;
+$user-panel-width: 200px;
 $avatar-size: 40px;
 
 .navbar-wrapper {
@@ -71,20 +71,33 @@ $avatar-size: 40px;
 
         > .info {
 
-          white-space: nowrap;
+          display: flex;
+          align-items: center;
           width: $user-panel-width;
-          padding: 5px 15px 5px 15px;
+          height: $navbar-height;
+          padding-left: 5px;
+          padding-right: 5px;
+
+          //padding: 5px 15px 5px 15px;
           background-color: darken($light-blue, 12%);
 
-          > img {
-            max-height: $avatar-size;
-            max-width: $avatar-size;
+          > .avatar {
+            width: $avatar-size;
+            height: $avatar-size;
+            background-clip: padding-box;
+            border-radius: 50% !important;
+            background-size: cover;
+            background-position: center center;
           }
 
           > p {
-            display: inline;
-            vertical-align: middle;
-            line-height: 1px;
+            padding-top: 10px;
+            padding-left: 5px;
+            height: $avatar-size;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             font-weight: 500;
             color: $white;
           }
