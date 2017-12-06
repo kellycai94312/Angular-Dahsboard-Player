@@ -7,8 +7,7 @@ import { Address } from '../../../data/remote/model/address';
 import { Country } from '../../../data/remote/model/country';
 import { Region } from '../../../data/remote/model/region';
 import { City } from '../../../data/remote/model/city';
-import { HttpClient } from '@angular/common/http';
-import { PageContainer } from '../../../data/remote/bean/page-container';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
   selector: 'app-person-page',
@@ -24,7 +23,7 @@ export class PersonPageComponent implements OnInit {
   private cities: City[];
 
   constructor(public translate: TranslateService,
-              public http: HttpClient) {
+              public participantRestApiService: ParticipantRestApiService) {
     this.initLangs();
   }
 
@@ -83,27 +82,23 @@ export class PersonPageComponent implements OnInit {
     address.city = city;
     this.person.address = address;
 
+    /*fixme load only when user tries to change value*/
     this.loadCountries();
     this.loadRegions(country.id);
     this.loadCities(region.id);
   }
 
-  private loadCountries(): void {
-    this.http.get(`http://localhost:8082/country/filter?count=2147483647`, {withCredentials: true})
-      .toPromise()
-      .then(response => this.countries = (response as PageContainer<Country>).list);
+  private async loadCountries() {
+    this.countries = (await this.participantRestApiService.getCountries()).list;
   }
 
-  private loadRegions(countryId: number): void {
-    this.http.get(`http://localhost:8082/region/filter?countryId=${countryId}&count=2147483647`, {withCredentials: true})
-      .toPromise()
-      .then(response => this.regions = (response as PageContainer<Region>).list);
+  private async loadRegions(countryId: number) {
+    this.regions = (await this.participantRestApiService.getRegions({countryId: countryId})).list;
   }
 
-  private loadCities(regionId: number): void {
-    this.http.get(`http://localhost:8082/city/filter?regionId=${regionId}&count=2147483647`, {withCredentials: true})
-      .toPromise()
-      .then(response => this.cities = (response as PageContainer<City>).list);
+  private async loadCities(regionId: number) {
+    this.cities = (await this.participantRestApiService.getCities({regionId: regionId})).list;
+
   }
 
 }
