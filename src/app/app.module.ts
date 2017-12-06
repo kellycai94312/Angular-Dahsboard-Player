@@ -4,6 +4,7 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { RestModule } from 'rest-ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +14,7 @@ import { LayoutService } from './layout/shared/layout.service';
 import { SideBarComponent } from './layout/side-bar/side-bar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { UserPanelDirective } from './layout/nav-bar/user-panel.directive';
+import { ParticipantRestApiService } from './data/remote/rest-api/participant-rest-api.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -25,12 +27,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToggleDirective,
     SideBarComponent,
     NavBarComponent,
-    UserPanelDirective
+    UserPanelDirective,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    RestModule.forRoot(),
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -39,7 +42,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [LayoutService, {provide: LocationStrategy, useClass: PathLocationStrategy}],
+  providers: [LayoutService, ParticipantRestApiService, {provide: LocationStrategy, useClass: PathLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
