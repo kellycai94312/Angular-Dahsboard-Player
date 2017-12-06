@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
-import { DxTextBoxModule, DxButtonModule, DxValidatorModule, } from 'devextreme-angular';
+import { DxButtonModule, DxTextBoxModule, DxValidatorModule, } from 'devextreme-angular';
 
 import { RegistrationPageComponent } from './registration-page.component';
 import { RegistrationPageRoutingModule } from './registration-page-routing.module';
@@ -17,4 +17,5 @@ import { RegistrationPageRoutingModule } from './registration-page-routing.modul
   ],
   declarations: [RegistrationPageComponent]
 })
-export class RegistrationPageModule { }
+export class RegistrationPageModule {
+}
