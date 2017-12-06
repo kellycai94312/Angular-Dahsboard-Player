@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
-import { log } from 'util';
 
 @Injectable()
 export class LayoutService implements CanActivate {
 
   private hidden: Subject<boolean>;
-  private hiddenRoutes: string[] = ["login", "registration", "password", "not-found"];
+  private hiddenRoutes: string[] = ['login', 'registration', 'password', 'not-found'];
 
   constructor() {
     this.hidden = <Subject<boolean>>new Subject();
