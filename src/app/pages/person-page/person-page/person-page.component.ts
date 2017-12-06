@@ -19,7 +19,7 @@ import { PageContainer } from '../../../data/remote/bean/page-container';
 })
 export class PersonPageComponent implements OnInit {
 
-  private person: Person;
+  public person: Person;
   private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum).map(k => SexEnum[k]);
   private countriesDS: any = {};
 

@@ -30,6 +30,8 @@
     "devextreme-angular": "^17.2.3",
     "font-awesome": "^4.7.0",
     "linearicons": "^1.0.1",
+    "rest-core": "^0.2.2",
+    "rest-ngx": "^0.1.1",
     "rxjs": "^5.5.2",
     "zone.js": "^0.8.14"
   },
