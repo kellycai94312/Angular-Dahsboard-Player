@@ -1,0 +1,43 @@
+@import "../../../../variables";
+@import "~bootstrap/scss/_functions";
+@import "~bootstrap/scss/_variables";
+
+$avatar-size: 150px;
+$avatar-size-md: 80px;
+
+a {
+  text-decoration: none;
+}
+
+a, p, h3, h4 {
+
+  color: $light-blue;
+}
+
+.fullname {
+  > * {
+    text-transform: uppercase;
+  }
+}
+
+a.nav-link {
+  text-transform: uppercase;
+}
+
+ngb-tab.active {
+  background-color: #161616;
+}
+
+.img {
+  border: 2px solid $light-blue;
+  width: $avatar-size;
+  height: $avatar-size;
+  margin: auto;
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  background-size: cover;
+  background-position: center center;
+  .avatar {
+    border: 2px solid $light-blue;
+  }
+}

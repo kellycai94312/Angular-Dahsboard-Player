@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Locale } from "./data/index";
-import { log } from 'util';
+import { Locale } from './data/index';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +14,14 @@ export class AppComponent {
   }
 
   private initLangs(): void {
-    var langs: Array<string> = [];
+    const langs: Array<string> = [];
 
-    for (var item in Locale)
+    for (const item in Locale)
       langs.push(Locale[item]);
     this.translate.addLangs(langs);
 
     this.translate.setDefaultLang(Locale.English);
-    let browserLang = this.translate.getBrowserLang();
+    const browserLang = this.translate.getBrowserLang();
     this.translate.use(langs.find(x => x === browserLang) != null ? browserLang : Locale.English);
   }
 

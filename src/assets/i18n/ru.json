@@ -1,10 +1,46 @@
 {
   "chooseLanguage": "Выберите язык",
   "signOut": "Выход",
+  "profile": "Профиль",
   "notRegistered": "",
   "applicationFullName": "Reactor Combine",
   "applicationShortName": "RC",
-  "persons": "Пользователи",
+  "persons": {
+    "section": "Пользователи",
+    "person": {
+      "changeAvatar": "Сменить аватар",
+      "roles": "Роли",
+      "sportTypes": "Виды спорта",
+      "rating": "Рейтинг",
+      "edit": "редактировать",
+      "personal": {
+        "section": "Основные данные",
+        "firstName" : "Имя",
+        "lastName" : "Фамилия",
+        "middleName" : "Отчество",
+        "birthDate" : "Дата рождения",
+        "sex" : "Пол",
+        "country" : "Страна",
+        "region" : "Регион",
+        "city" : "Город"
+      },
+      "anthropometry": {
+        "section": "Антропометрия"
+      },
+      "physiology": {
+        "section": "Физиология"
+      },
+      "contact": {
+        "section": "Контактная информация"
+      },
+      "testsResults" : {
+        "section" : "Результаты тестов"
+      },
+      "events" : {
+        "section" : "События"
+      }
+    }
+  },
   "login": {
     "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
     "enterPassword": "Введите пароль",

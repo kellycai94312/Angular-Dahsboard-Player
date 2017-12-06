@@ -1,1 +1,1 @@
-export * from './remote/Locale';
+export * from './remote/misc/locale';
