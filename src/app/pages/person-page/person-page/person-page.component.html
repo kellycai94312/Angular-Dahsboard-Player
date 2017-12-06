@@ -109,16 +109,21 @@
           </div>
           <div class="row">
             <div class="col-3">
-              <label for="birthDate">{{'persons.person.personal.country' | translate}}</label>
-              <dx-select-box [dataSource]="countriesDS" [value]="person.address.city.region.country.id"
+              <label for="country">{{'persons.person.personal.country' | translate}}</label>
+              <dx-select-box id="country" [dataSource]="countries" [(value)]="person.address.country.id"
+                             (onValueChanged)="onCountryChange($event)"
                              valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
-              <!--<dx-lookup-->
-                <!--[dataSource]="countriesDS"-->
-                <!--[value]="person.address.city.region.country"-->
-                <!--valueExpr="id"-->
-                <!--displayExpr="name"-->
-                <!--applyValueMode="useButtons">-->
-              <!--</dx-lookup>-->
+            </div>
+            <div class="col-3">
+              <label for="region">{{'persons.person.personal.region' | translate}}</label>
+              <dx-select-box id="region" [dataSource]="regions" [(value)]="person.address.region.id"
+                             (onValueChanged)="onRegionChange($event)"
+                             valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
+            </div>
+            <div class="col-3">
+              <label for="city">{{'persons.person.personal.city' | translate}}</label>
+              <dx-select-box id="city" [dataSource]="cities" [(value)]="person.address.city.id"
+                             valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
             </div>
           </div>
         </div>
