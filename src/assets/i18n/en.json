@@ -14,14 +14,14 @@
       "edit": "edit",
       "personal": {
         "section": "Personal information",
-        "firstName" : "First name",
-        "lastName" : "Last name",
-        "middleName" : "Middle name",
-        "birthDate" : "Birth date",
-        "sex" : "Sex",
-        "country" : "Country",
-        "region" : "Region",
-        "city" : "City"
+        "firstName": "First name",
+        "lastName": "Last name",
+        "middleName": "Middle name",
+        "birthDate": "Birth date",
+        "sex": "Sex",
+        "country": "Country",
+        "region": "Region",
+        "city": "City"
       },
       "anthropometry": {
         "section": "Anthropometry"
@@ -32,11 +32,11 @@
       "contact": {
         "section": "Contact information"
       },
-      "testsResults" : {
-        "section" : "Tests results"
+      "testsResults": {
+        "section": "Tests results"
       },
-      "events" : {
-        "section" : "Events"
+      "events": {
+        "section": "Events"
       }
     }
   },
@@ -52,7 +52,12 @@
     "createPassword": "Create password",
     "retypePassword": "Retype password",
     "signUp": "Sign up",
-    "notRegistered": "Not registered?"
+    "notRegistered": "Not registered?",
+    "registrationComplete": "Registration complete",
+    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it.",
+    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "An email with a key for activation will be sent to your e-mail.",
+    "followTheInstructionsInIt": "Follow the instructions in it.",
+    "invalidCredentials":"Invalid credentials"
   },
   "password": {
     "resetPassword": "Reset password"
@@ -60,6 +65,11 @@
   "notFound": {
     "notFound": "Not found"
   },
+  "sexEnum": {
+    "MALE": "Male",
+    "FEMALE": "Female"
+  },
   "reset": "Reset",
-  "enterEmail": "Enter email"
+  "enterEmail": "Enter email",
+  "apply": "Apply"
 }

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Person } from '../../../data/remote/model/person';
 import { TranslateService } from '@ngx-translate/core';
-import { Locale } from '../../../data/remote/misc/locale';
 import { SexEnum } from '../../../data/remote/misc/sex-enum';
 import { Address } from '../../../data/remote/model/address';
 import { Country } from '../../../data/remote/model/country';
@@ -24,19 +23,6 @@ export class PersonPageComponent implements OnInit {
 
   constructor(public translate: TranslateService,
               public participantRestApiService: ParticipantRestApiService) {
-    this.initLangs();
-  }
-
-  private initLangs(): void {
-    const langs: Array<string> = [];
-
-    for (const item in Locale)
-      langs.push(Locale[item]);
-    this.translate.addLangs(langs);
-
-    this.translate.setDefaultLang(Locale.English);
-    const browserLang = this.translate.getBrowserLang();
-    this.translate.use(langs.find(x => x === browserLang) != null ? browserLang : Locale.English);
   }
 
   onCountryChange(e: any): void {
