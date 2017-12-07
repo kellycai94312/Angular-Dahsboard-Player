@@ -1,7 +1,8 @@
 import { SexEnum } from '../misc/sex-enum';
 import { Address } from './address';
+import { IdentifiedObject } from '../base/identified-object';
 
-export class Person {
+export class Person extends IdentifiedObject {
   firstName: string;
   lastName: string;
   patronymic: string;
