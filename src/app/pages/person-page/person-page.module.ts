@@ -7,8 +7,17 @@ import { PersonPageComponent } from './person-page/person-page.component';
 import { PersonListPageComponent } from './person-list-page/person-list-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
-  DxDateBoxModule, DxFormModule, DxLookupModule, DxSelectBoxModule, DxTextAreaModule,
-  DxTextBoxModule, DxValidatorModule
+  DxButtonModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxListModule,
+  DxPopupModule,
+  DxSelectBoxModule,
+  DxTagBoxModule,
+  DxTemplateModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxValidatorModule
 } from 'devextreme-angular';
 import { HttpLoaderFactory } from '../../app.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -34,7 +43,11 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
     DxTextBoxModule,
     DxValidatorModule,
     DxiValidationRuleModule,
-    DxLookupModule
+    DxPopupModule,
+    DxButtonModule,
+    DxTemplateModule,
+    DxListModule,
+    DxTagBoxModule
   ],
   declarations: [
     PersonPageComponent,

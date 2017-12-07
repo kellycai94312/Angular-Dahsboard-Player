@@ -8,10 +8,17 @@
     "section": "Persons",
     "person": {
       "changeAvatar": "Change avatar",
-      "roles": "Roles",
-      "sportTypes": "Sport types",
+      "roles": {
+        "section" : "Roles",
+        "edit" : "Edit roles"
+      },
+      "sportTypes": {
+        "section" : "Sport types",
+        "edit" : "Edit sport types"
+      },
       "rating": "Rating",
       "edit": "edit",
+      "save" : "Save",
       "personal": {
         "section": "Personal information",
         "firstName" : "First name",

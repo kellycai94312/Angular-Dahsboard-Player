@@ -57,3 +57,7 @@ html, body {
 *:focus {
   outline: none;
 }
+
+.select-none {
+  user-select: none;
+}

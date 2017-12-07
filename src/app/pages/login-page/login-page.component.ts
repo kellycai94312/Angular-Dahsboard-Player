@@ -35,12 +35,10 @@ export class LoginPageComponent implements OnInit {
         if (session != null) {
           // TODO:
           this.router.navigate(['/person', session.userId]);
-        }
-        else {
+        } else {
           this.invalidCredentials(event);
         }
-      }
-      catch (Error) {
+      } catch (Error) {
         this.invalidCredentials(event);
       }
     }

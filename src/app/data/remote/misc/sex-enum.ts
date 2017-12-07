@@ -1,4 +1,5 @@
+/* fixme */
 export enum SexEnum {
-  MALE = 'Мужской',
-  FEMALE = 'Женский'
+  MALE,
+  FEMALE
 }
