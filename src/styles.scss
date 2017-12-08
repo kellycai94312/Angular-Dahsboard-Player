@@ -58,6 +58,10 @@ html, body {
   outline: none;
 }
 
+.select-none {
+  user-select: none;
+}
+
 .max-width-content {
   max-width: $max-width-content;
 }

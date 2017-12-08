@@ -9,10 +9,17 @@
     "section": "Пользователи",
     "person": {
       "changeAvatar": "Сменить аватар",
-      "roles": "Роли",
-      "sportTypes": "Виды спорта",
+      "roles": {
+        "section" : "Роли",
+        "edit" : "Редактировать роли"
+      },
+      "sportTypes": {
+        "section" : "Виды спорта",
+        "edit" : "Редактировать виды спорта"
+      },
       "rating": "Рейтинг",
       "edit": "редактировать",
+      "save" : "Сохранить",
       "personal": {
         "section": "Основные данные",
         "firstName": "Имя",

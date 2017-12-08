@@ -36,12 +36,10 @@ export class LoginPageComponent implements OnInit {
         const session: Session = await this.participantRestApiService.login(auth);
         if (session != null) {
           this.router.navigate(['/registration/person']);
-        }
-        else {
+        } else {
           this.invalidCredentials(event);
         }
-      }
-      catch (Error) {
+      } catch (Error) {
         this.invalidCredentials(event);
       }
     }

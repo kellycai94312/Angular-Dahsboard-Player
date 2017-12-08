@@ -13,4 +13,5 @@ export class Person extends IdentifiedObject {
   countryCode: string;
   phoneNumber: string;
   address: Address;
+  user: User;
 }

@@ -5,6 +5,6 @@ import { Locale } from '../misc/locale';
 export class User extends IdentifiedObject {
   email: string;
   password: string;
-  roles: UserRole[];
+  userRoles: UserRole[];
   locale: Locale;
 }
