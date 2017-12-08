@@ -5,9 +5,12 @@
         <div class="col-5">
           <div class="text-center">
             <div class="img img-fluid avatar"
-                 style="background-image: url(http://gazettereview.com/wp-content/uploads/2016/03/facebook-avatar.jpg)"></div>
+                 [ngStyle]="{'background-image': 'url('+ logo +')'}"></div>
             <br>
-            <a href class="m-0">{{'persons.person.changeAvatar' | translate}}</a>
+            <span class="btn-sm btn-file">
+              {{'persons.person.changeAvatar' | translate}} <input type="file" (change)="onLogoChange($event)"
+                                                                   accept="image/*">
+            </span>
           </div>
         </div>
         <div class="col-5 fullname">
@@ -45,7 +48,9 @@
       <p>{{'persons.person.sportTypes.section' | translate}}</p>
     </div>
     <div class="col-10">
-      <button class="btn btn-primary btn-sm ml-2" *ngFor="let sportType of personSportTypes">{{sportType.sportTypeEnum}}</button>
+      <button class="btn btn-primary btn-sm ml-2" *ngFor="let sportType of personSportTypes">
+        {{sportType.sportTypeEnum}}
+      </button>
       <button class="btn btn-default btn-sm ml-3" (click)="toggleSportTypesModal()">
         <i class="fa fa-pencil-square-o"></i> <span> {{'persons.person.edit' | translate}}</span>
       </button>
@@ -128,7 +133,8 @@
             </div>
           </div>
           <button type="button" class="btn btn-outline-info mt-3"
-                  (click)="savePersonal()">{{'persons.person.save' | translate}}</button>
+                  (click)="savePersonal()">{{'persons.person.save' | translate}}
+          </button>
         </ng-template>
       </ngb-tab>
       <ngb-tab title="{{'persons.person.anthropometry.section' | translate | uppercase }}">

@@ -16,10 +16,14 @@ import { User } from '../model/user';
 import { ListRequest } from './list-request';
 import { IdentifiedObject } from '../base/identified-object';
 import { SportType } from '../model/sport-type';
+import { HttpClient } from '@angular/common/http';
+import { Picture } from '../model/picture';
+
+export const RestUrl = 'http://localhost:8082';
 
 @Injectable()
 @RestParams({
-  url: 'http://localhost:8082'
+  url: RestUrl
 })
 export class ParticipantRestApiService extends Rest {
 
@@ -113,8 +117,17 @@ export class ParticipantRestApiService extends Rest {
   })
   changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
 
-  constructor(restHandler: RestHandler) {
+  constructor(restHandler: RestHandler,
+              private http: HttpClient) {
     super(restHandler);
+  }
+
+  uploadPicture(file: File, picture: Picture): Promise<Picture> {
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    formData.append('picture', new Blob([JSON.stringify(picture)], {type: 'application/json'}));
+    return this.http.post<Picture>(`${RestUrl}/picture/upload`, formData, {withCredentials: true})
+      .toPromise();
   }
 
 }

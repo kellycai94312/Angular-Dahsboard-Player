@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit } from '@angular/core';
 import { Person } from '../../../data/remote/model/person';
 import { TranslateService } from '@ngx-translate/core';
 import { Locale } from '../../../data/remote/misc/locale';
@@ -6,12 +6,15 @@ import { SexEnum } from '../../../data/remote/misc/sex-enum';
 import { Country } from '../../../data/remote/model/country';
 import { Region } from '../../../data/remote/model/region';
 import { City } from '../../../data/remote/model/city';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { ParticipantRestApiService, RestUrl } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { UserRole } from '../../../data/remote/model/user-role';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Address } from '../../../data/remote/model/address';
 import { ListRequest } from '../../../data/remote/rest-api/list-request';
 import { SportType } from '../../../data/remote/model/sport-type';
+import { Picture } from '../../../data/remote/model/picture';
+import { PictureType } from '../../../data/remote/misc/picture-type';
+import { PictureClass } from '../../../data/remote/misc/picture-class';
 
 @Component({
   selector: 'app-person-page',
@@ -37,6 +40,8 @@ export class PersonPageComponent implements OnInit {
   private personSportTypesModal: SportType[] = [];
   private personSportTypes: SportType[] = [];
   private sportTypesModal = false;
+
+  private logo: string;
 
   constructor(public translate: TranslateService,
               public participantRestApiService: ParticipantRestApiService,
@@ -69,6 +74,19 @@ export class PersonPageComponent implements OnInit {
     this.person.address.city = new City();
     if (e.value != null) {
       this.loadCities(e.value);
+    }
+  }
+
+  async onLogoChange(event) {
+    const fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      const file: File = fileList[0];
+      const picture: Picture = new Picture();
+      picture.clazz = PictureClass.person;
+      picture.objectId = this.person.id;
+      picture.type = PictureType.LOGO;
+      await this.participantRestApiService.uploadPicture(file, picture);
+      this.updateLogo();
     }
   }
 
@@ -142,7 +160,14 @@ export class PersonPageComponent implements OnInit {
     await this.participantRestApiService.updatePerson(this.person, {id: this.person.id});
   }
 
+  updateLogo() {
+    this.route.params.subscribe(params => {
+      this.logo = `http://localhost:8082/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+params.id}&type=${PictureType[PictureType.LOGO]}&date=${new Date().getTime()}`;
+    });
+  }
+
   ngOnInit() {
+    this.updateLogo();
     this.route.params.subscribe(params => {
       this.participantRestApiService.getPerson({id: +params.id})
         .then(person => {
