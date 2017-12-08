@@ -15,7 +15,9 @@ export class LoginPageComponent implements OnInit {
   public login: string;
   public password: string;
 
-  constructor(public translate: TranslateService, private participantRestApiService: ParticipantRestApiService, private router: Router) {
+  constructor(public translate: TranslateService,
+              private participantRestApiService: ParticipantRestApiService,
+              private router: Router) {
     this.login = 'KirillVorozhbyanov@gmail.com';
     this.password = '11111111';
   }
@@ -33,8 +35,7 @@ export class LoginPageComponent implements OnInit {
       try {
         const session: Session = await this.participantRestApiService.login(auth);
         if (session != null) {
-          // TODO:
-          this.router.navigate(['/person', session.userId]);
+          this.router.navigate(['/registration/person']);
         }
         else {
           this.invalidCredentials(event);

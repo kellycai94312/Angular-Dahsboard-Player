@@ -99,7 +99,9 @@
             <div class="col-3">
               <div class="form-group p-1">
                 <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
-                <dx-select-box id="sex" [items]="sexEnumValues" [value]="person.sex">
+                <dx-select-box id="sex"
+                               items]="sexEnumValues"
+                               ([value])="person.sex">
                   <dx-validator>
                     <dxi-validation-rule type="required"></dxi-validation-rule>
                   </dx-validator>
@@ -110,15 +112,23 @@
           <div class="row">
             <div class="col-3">
               <label for="country">{{'persons.person.personal.country' | translate}}</label>
-              <dx-select-box id="country" [dataSource]="countries" [(value)]="person.address.country.id"
+              <dx-select-box id="country"
+                             [dataSource]="countries"
+                             [(value)]="person.address.country.id"
                              (onValueChanged)="onCountryChange($event)"
-                             valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
+                             valueExpr="id"
+                             displayExpr="name"
+                             [searchEnabled]="true"></dx-select-box>
             </div>
             <div class="col-3">
               <label for="region">{{'persons.person.personal.region' | translate}}</label>
-              <dx-select-box id="region" [dataSource]="regions" [(value)]="person.address.region.id"
+              <dx-select-box id="region"
+                             [dataSource]="regions"
+                             [(value)]="person.address.region.id"
                              (onValueChanged)="onRegionChange($event)"
-                             valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
+                             valueExpr="id"
+                             displayExpr="name"
+                             [searchEnabled]="true"></dx-select-box>
             </div>
             <div class="col-3">
               <label for="city">{{'persons.person.personal.city' | translate}}</label>

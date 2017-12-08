@@ -15,14 +15,14 @@
       "edit": "редактировать",
       "personal": {
         "section": "Основные данные",
-        "firstName" : "Имя",
-        "lastName" : "Фамилия",
-        "middleName" : "Отчество",
-        "birthDate" : "Дата рождения",
-        "sex" : "Пол",
-        "country" : "Страна",
-        "region" : "Регион",
-        "city" : "Город"
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "middleName": "Отчество",
+        "birthDate": "Дата рождения",
+        "sex": "Пол",
+        "country": "Страна",
+        "region": "Регион",
+        "city": "Город"
       },
       "anthropometry": {
         "section": "Антропометрия"
@@ -33,11 +33,11 @@
       "contact": {
         "section": "Контактная информация"
       },
-      "testsResults" : {
-        "section" : "Результаты тестов"
+      "testsResults": {
+        "section": "Результаты тестов"
       },
-      "events" : {
-        "section" : "События"
+      "events": {
+        "section": "События"
       }
     }
   },
@@ -53,7 +53,12 @@
     "createPassword": "Создайте пароль",
     "retypePassword": "Повторите ввод пароля",
     "signUp": "Зарегистрироваться",
-    "notRegistered": "Не зарегистрированы?"
+    "notRegistered": "Не зарегистрированы?",
+    "registrationComplete": "Регистрация завершена",
+    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать.",
+    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации.",
+    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям.",
+    "invalidCredentials": "Недопустимые учетные данные"
   },
   "password": {
     "resetPassword": "Сброс пароля"
@@ -61,6 +66,16 @@
   "notFound": {
     "notFound": "Не найдено"
   },
+  "registrationVerification":{
+    "accountActivation":"Account activation",
+    "yourAccountHasBeenSuccessfullyActivated":"Ваш аккаунт был успешно активирован",
+    "errorActivatingAccount":"Ошибка при активации аккаунта"
+  },
+  "sexEnum": {
+    "MALE": "Мужчина",
+    "FEMALE": "Женщина"
+  },
   "reset": "Сброс",
-  "enterEmail": "Введите электронную почту"
+  "enterEmail": "Введите электронную почту",
+  "apply": "Применить"
 }

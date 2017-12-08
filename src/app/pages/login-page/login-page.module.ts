@@ -5,6 +5,7 @@ import { DxButtonModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-a
 
 import { LoginPageComponent } from './login-page.component';
 import { LoginPageRoutingModule } from './login-page-routing.module';
+import { LocaleModule } from '../../components/locale/locale.module';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { LoginPageRoutingModule } from './login-page-routing.module';
     DxValidatorModule,
     DxTextBoxModule,
     DxButtonModule,
+    LocaleModule,
     TranslateModule.forChild()
   ],
   declarations: [LoginPageComponent]

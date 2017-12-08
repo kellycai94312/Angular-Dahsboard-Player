@@ -1,11 +1,6 @@
 <div class="d-flex align-items-center flex-column h-100">
-  <div class="mb-auto">
-    <p class="mt-2">{{'chooseLanguage'| translate}}
-      <select #langSelect (change)="translate.use(langSelect.value)">
-        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}
-        </option>
-      </select>
-    </p>
+  <div class="mb-auto mt-2">
+    <app-locale></app-locale>
   </div>
   <div class="mb-auto">
     <div class="m-2">

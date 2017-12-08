@@ -1,0 +1,51 @@
+<div class="d-flex align-items-center flex-column h-100">
+  <div class="m-auto">
+    <div class="m-2">
+      <h1 class="text-center">{{'applicationFullName' | translate | uppercase}}</h1>
+
+      <dx-text-box mode="text"
+                   placeholder="{{'persons.person.personal.firstName' | translate}}"
+                   [(value)]="person.firstName"
+                   [showClearButton]="true">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+
+      <dx-text-box class="mt-2"
+                   mode="text"
+                   placeholder="{{'persons.person.personal.lastName' | translate}}"
+                   [(value)]="person.lastName"
+                   [showClearButton]="true">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+
+      <dx-date-box class="mt-2 w-100"
+                   [(value)]="person.birthDate"
+                   [min]="dateMin"
+                   [max]="dateMax"
+                   placeholder="{{'persons.person.personal.birthDate' | translate}}">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+
+      <dx-select-box class="mt-2"
+                     [items]="sexValues"
+                     [(value)]="selectedSex"
+                     displayExpr="name"
+                     placeholder="{{'persons.person.personal.sex' | translate}}">
+
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-select-box>
+
+      <dx-button class="mt-2 w-100"
+                 text="{{'apply' | translate | uppercase}}"
+                 (onClick)="onApply($event)"></dx-button>
+    </div>
+  </div>
+</div>
