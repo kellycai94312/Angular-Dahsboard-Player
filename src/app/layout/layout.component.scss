@@ -26,26 +26,7 @@ $sidebar-background: $dark-blue;
 .content {
   width: 100%;
   min-height: 100%;
-  padding: 10px 10px 10px 20px;
+  padding: 10px;
   overflow-x: hidden;
   overflow-y: auto;
-
-  @media (max-width: map-get($container-max-widths, 'lg')) {
-    padding: 5px 8px 5px 5px;
-    margin-right: 8px;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      border-radius: 10px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background-color: #bbbbbb;
-    }
-  }
-
 }

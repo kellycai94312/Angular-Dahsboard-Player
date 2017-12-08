@@ -4,6 +4,7 @@ import { IdentifiedObject } from '../base/identified-object';
 import { User } from './user';
 
 export class Person extends IdentifiedObject {
+  user: User;
   firstName: string;
   lastName: string;
   patronymic: string;

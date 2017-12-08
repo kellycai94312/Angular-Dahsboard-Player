@@ -1,7 +1,6 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Person } from '../../../data/remote/model/person';
 import { TranslateService } from '@ngx-translate/core';
-import { Locale } from '../../../data/remote/misc/locale';
 import { SexEnum } from '../../../data/remote/misc/sex-enum';
 import { Country } from '../../../data/remote/model/country';
 import { Region } from '../../../data/remote/model/region';
@@ -47,19 +46,6 @@ export class PersonPageComponent implements OnInit {
               public participantRestApiService: ParticipantRestApiService,
               private router: Router,
               private route: ActivatedRoute) {
-    this.initLangs();
-  }
-
-  private initLangs(): void {
-    const langs: Array<string> = [];
-
-    for (const item in Locale)
-      langs.push(Locale[item]);
-    this.translate.addLangs(langs);
-
-    this.translate.setDefaultLang(Locale.English);
-    const browserLang = this.translate.getBrowserLang();
-    this.translate.use(langs.find(x => x === browserLang) != null ? browserLang : Locale.English);
   }
 
   onCountryChange(e: any): void {
@@ -162,7 +148,7 @@ export class PersonPageComponent implements OnInit {
 
   updateLogo() {
     this.route.params.subscribe(params => {
-      this.logo = `http://localhost:8082/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+params.id}&type=${PictureType[PictureType.LOGO]}&date=${new Date().getTime()}`;
+      this.logo = `${RestUrl}/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+params.id}&type=${PictureType[PictureType.LOGO]}&date=${new Date().getTime()}`;
     });
   }
 

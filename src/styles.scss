@@ -1,7 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-
 @import "variables";
-
 /*bootstrap*/
 @import "~bootstrap/scss/mixins";
 @import "~bootstrap/scss/root";
@@ -46,6 +44,8 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "~devextreme/dist/css/dx.common.css";
 @import "~devextreme/dist/css/dx.light.css";
 
+$max-width-content: 400px;
+
 html, body {
   height: 100%;
 
@@ -60,4 +60,13 @@ html, body {
 
 .select-none {
   user-select: none;
+}
+
+.max-width-content {
+  max-width: $max-width-content;
+}
+
+.dx-toast-content {
+  min-width: 100px;
+  max-width: $max-width-content;
 }

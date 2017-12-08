@@ -1,45 +1,60 @@
 <div class="d-flex align-items-center flex-column h-100">
-  <div class="mb-auto">
-    <p class="mt-2">{{'chooseLanguage'| translate}}
-      <select #langSelect (change)="translate.use(langSelect.value)">
-        <option *ngFor="let lang of translate.getLangs()" [value]="lang" [selected]="lang === translate.currentLang">{{ lang }}
-        </option>
-      </select>
-    </p>
+  <div class="mb-auto mt-2">
+    <app-locale></app-locale>
   </div>
-  <div class="mb-auto">
-    <div class="m-2">
+  <div class="mb-auto max-width-content">
+    <div *ngIf="!isRegistrationComplete;else content">
       <h1 class="text-center">{{'applicationFullName' | translate | uppercase}}</h1>
-      <dx-text-box mode="email" placeholder="{{'registration.enterEmail' | translate}}" [(value)]="email"
+      <dx-text-box mode="email"
+                   placeholder="{{'registration.enterEmail' | translate}}"
+                   [(value)]="user.email"
                    [showClearButton]="true">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
           <dxi-validation-rule type="email"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <dx-text-box class="mt-2" mode="password"
+      <dx-text-box class="mt-2"
+                   mode="password"
                    placeholder="{{'registration.createPassword' | translate}}"
-                   [(value)]="password"
+                   [(value)]="user.password"
                    [showClearButton]="true">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <dx-text-box class="mt-2" mode="password" placeholder="{{'registration.retypePassword' | translate}}"
+      <dx-text-box class="mt-2"
+                   mode="password"
+                   placeholder="{{'registration.retypePassword' | translate}}"
+                   [(value)]="repeatPassword"
                    [showClearButton]="true">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
-          <dxi-validation-rule type="compare" [comparisonTarget]="passwordComparison"></dxi-validation-rule>
+          <dxi-validation-rule type="compare"
+                               [comparisonTarget]="passwordComparison"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <dx-button class="mt-2 w-100" text="{{'registration.signUp' | translate | uppercase}}"
+
+      <dx-button class="mt-2 w-100"
+                 text="{{'registration.signUp' | translate | uppercase}}"
                  (onClick)="onApply($event)"></dx-button>
 
       <div class="mt-2 text-center">
         <p>{{'login.alreadyRegistered'| translate}}
-          <a routerLink="/login" routerLinkActive="active">{{'login.signIn' | translate}}</a>
+          <a routerLink="/login"
+             routerLinkActive="active">{{'login.signIn' | translate}}</a>
         </p>
       </div>
     </div>
+    <ng-template #content>
+      <div class="m-2 text-center">
+        <h1>{{'registration.registrationComplete' | translate | uppercase}}</h1>
+        <p>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate }} <br>
+          {{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
+          {{'registration.followTheInstructionsInIt' | translate }}</p>
+        <a routerLink="/login"
+           routerLinkActive="active">{{'login.signIn' | translate}}</a>
+      </div>
+    </ng-template>
   </div>
 </div>

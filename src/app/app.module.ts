@@ -15,6 +15,9 @@ import { SideBarComponent } from './layout/side-bar/side-bar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
 import { UserPanelDirective } from './layout/nav-bar/user-panel.directive';
 import { ParticipantRestApiService } from './data/remote/rest-api/participant-rest-api.service';
+import { TranslateObjectService } from './shared/translate-object.service';
+import { LocalStorageService } from './shared/local-storage.service';
+import { BusyIndicatorComponent } from './components/busy-indicator/busy-indicator.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -28,6 +31,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     SideBarComponent,
     NavBarComponent,
     UserPanelDirective,
+    BusyIndicatorComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +46,15 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     })
   ],
-  providers: [LayoutService, ParticipantRestApiService, {provide: LocationStrategy, useClass: PathLocationStrategy}],
+  providers: [
+    LayoutService,
+    ParticipantRestApiService,
+    TranslateObjectService,
+    LocalStorageService,
+    {
+      provide: LocationStrategy,
+      useClass: PathLocationStrategy
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -1,6 +1,6 @@
-import { NamedObject } from '../base/named-object';
-import { UserRoleEnum } from '../misc/user-role-enum';
+import { IdentifiedObject } from '../base/identified-object';
+import { UserRoleEnum } from './user-role-enum';
 
-export class UserRole extends NamedObject {
+export class UserRole extends IdentifiedObject {
   userRoleEnum: UserRoleEnum;
 }

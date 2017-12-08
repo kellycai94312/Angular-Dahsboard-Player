@@ -9,12 +9,13 @@ import { PageContainer } from '../bean/page-container';
 import { Country } from '../model/country';
 import { Region } from '../model/region';
 import { City } from '../model/city';
+import { User } from '../model/user';
+import { VerificationRequest } from '../model/verification-request';
+import { IdentifiedObject } from '../base/identified-object';
+import { Person } from '../model/person';
 import { QueryParams } from './query-params';
 import { UserRole } from '../model/user-role';
-import { Person } from '../model/person';
-import { User } from '../model/user';
 import { ListRequest } from './list-request';
-import { IdentifiedObject } from '../base/identified-object';
 import { SportType } from '../model/sport-type';
 import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
@@ -23,7 +24,8 @@ export const RestUrl = 'http://localhost:8082';
 
 @Injectable()
 @RestParams({
-  url: RestUrl
+  url: RestUrl,
+  withCredentials: true
 })
 export class ParticipantRestApiService extends Rest {
 
@@ -35,85 +37,98 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/auth',
-    withCredentials: true
+    path: '/auth'
   })
   logout: IRestMethod<void, void>;
+
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user'
+  })
+  createUser: IRestMethod<User, User>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/verification'
+  })
+  verification: IRestMethod<VerificationRequest, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!id}'
+  })
+  getUser: IRestMethod<IdentifiedObject, User>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person'
+  })
+  createPerson: IRestMethod<Person, Person>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/country?count={!count}',
-    withCredentials: true
   })
   getCountries: IRestMethod<QueryParams, PageContainer<Country>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/region/filter?countryId={!countryId}&count={!count}',
-    withCredentials: true
+    path: '/region/filter?countryId={!countryId}&count={!count}'
   })
   getRegions: IRestMethod<QueryParams, PageContainer<Region>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/city/filter?regionId={!regionId}&count={!count}',
-    withCredentials: true
+    path: '/city/filter?regionId={!regionId}&count={!count}'
   })
   getCities: IRestMethod<QueryParams, PageContainer<City>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}',
-    withCredentials: true
+    path: '/person/{!id}'
   })
   getPerson: IRestMethod<QueryParams, Person>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/person/{!id}',
-    withCredentials: true
+    path: '/person/{!id}'
   })
   updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/role',
-    withCredentials: true
+    path: '/role'
   })
   getRoles: IRestMethod<void, UserRole[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/user/{!id}/role',
-    withCredentials: true
+    path: '/user/{!id}/role'
   })
   getUserRoles: IRestMethod<QueryParams, UserRole[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/user/role',
-    withCredentials: true
+    path: '/user/role'
   })
   changeRoles: IRestMethod<ListRequest<IdentifiedObject>, User>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/sporttype',
-    withCredentials: true
+    path: '/sporttype'
   })
   getSportTypes: IRestMethod<void, SportType[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/sporttype',
-    withCredentials: true
+    path: '/person/{!id}/sporttype'
   })
   getPersonSportTypes: IRestMethod<QueryParams, SportType[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/sporttype',
-    withCredentials: true
+    path: '/person/sporttype'
   })
   changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
 

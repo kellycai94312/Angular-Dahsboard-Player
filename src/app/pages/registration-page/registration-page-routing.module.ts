@@ -1,12 +1,19 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from "@angular/router";
+import { RouterModule, Routes } from '@angular/router';
 
-import { RegistrationPageComponent } from "./registration-page.component";
+import { RegistrationPageComponent } from './registration-page.component';
+import { RegistrationPersonPageComponent } from './registration-person-page/registration-person-page.component';
+import { RegistrationVerificationPageComponent } from './registration-verification-page/registration-verification-page.component';
 
-const routes: Routes = [{ path: '', component: RegistrationPageComponent }];
+const routes: Routes = [
+  {path: '', component: RegistrationPageComponent},
+  {path: 'person', component: RegistrationPersonPageComponent},
+  {path: 'verification', component: RegistrationVerificationPageComponent}
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RegistrationPageRoutingModule { }
+export class RegistrationPageRoutingModule {
+}
