@@ -3,10 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { RegistrationPageComponent } from './registration-page.component';
 import { RegistrationPersonPageComponent } from './registration-person-page/registration-person-page.component';
+import { RegistrationVerificationPageComponent } from './registration-verification-page/registration-verification-page.component';
 
 const routes: Routes = [
   {path: '', component: RegistrationPageComponent},
-  {path: 'person', component: RegistrationPersonPageComponent}
+  {path: 'person', component: RegistrationPersonPageComponent},
+  {path: 'verification', component: RegistrationVerificationPageComponent}
 ];
 
 @NgModule({

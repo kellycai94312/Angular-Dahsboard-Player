@@ -66,6 +66,11 @@
   "notFound": {
     "notFound": "Не найдено"
   },
+  "registrationVerification":{
+    "accountActivation":"Account activation",
+    "yourAccountHasBeenSuccessfullyActivated":"Ваш аккаунт был успешно активирован",
+    "errorActivatingAccount":"Ошибка при активации аккаунта"
+  },
   "sexEnum": {
     "MALE": "Мужчина",
     "FEMALE": "Женщина"

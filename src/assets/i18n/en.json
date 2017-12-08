@@ -65,6 +65,11 @@
   "notFound": {
     "notFound": "Not found"
   },
+  "registrationVerification":{
+    "accountActivation":"Account activation",
+    "yourAccountHasBeenSuccessfullyActivated":"Your account has been successfully activated",
+    "errorActivatingAccount":"Error activating account"
+  },
   "sexEnum": {
     "MALE": "Male",
     "FEMALE": "Female"

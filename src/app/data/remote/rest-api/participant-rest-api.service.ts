@@ -9,10 +9,12 @@ import { City } from '../model/city';
 import { Person } from '../model/person';
 import { User } from '../model/user';
 import { IdentifiedObject } from '../base/identified-object';
+import { VerificationRequest } from '../model/verification-request';
 
 @Injectable()
 @RestParams({
-  url: 'http://localhost:8082'
+  url: 'http://localhost:8082',
+  withCredentials: true
 })
 export class ParticipantRestApiService extends Rest {
 
@@ -24,8 +26,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/auth',
-    withCredentials: true
+    path: '/auth'
   })
   logout: IRestMethod<void, void>;
 
@@ -36,6 +37,13 @@ export class ParticipantRestApiService extends Rest {
     withCredentials: true
   })
   createUser: IRestMethod<User, User>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/verification',
+    withCredentials: true
+  })
+  verification: IRestMethod<VerificationRequest, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,

@@ -2,9 +2,8 @@
   <div class="mb-auto mt-2">
     <app-locale></app-locale>
   </div>
-  <div class="mb-auto">
-    <div *ngIf="!isRegistrationComplete;else content"
-         class="m-2">
+  <div class="mb-auto max-width-content">
+    <div *ngIf="!isRegistrationComplete;else content">
       <h1 class="text-center">{{'applicationFullName' | translate | uppercase}}</h1>
       <dx-text-box mode="email"
                    placeholder="{{'registration.enterEmail' | translate}}"
@@ -35,11 +34,7 @@
                                [comparisonTarget]="passwordComparison"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <p *ngIf="isErrors"
-         class="m-0 mt-2 text-center"
-         style="color:red; ">
-        {{ 'registration.invalidCredentials' | translate }}
-      </p>
+
       <dx-button class="mt-2 w-100"
                  text="{{'registration.signUp' | translate | uppercase}}"
                  (onClick)="onApply($event)"></dx-button>
