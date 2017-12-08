@@ -14,6 +14,7 @@ import { RegistrationPersonPageComponent } from './registration-person-page/regi
 import { RegistrationPageRoutingModule } from './registration-page-routing.module';
 import { LocaleModule } from '../../components/locale/locale.module';
 import { RegistrationVerificationPageComponent } from './registration-verification-page/registration-verification-page.component';
+import { BusyIndicatorModule } from '../../components/busy-indicator/busy-indicator.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import { RegistrationVerificationPageComponent } from './registration-verificati
     DxValidatorModule,
     DxDateBoxModule,
     LocaleModule,
+    BusyIndicatorModule,
     TranslateModule.forChild()
   ],
   declarations: [

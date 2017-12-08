@@ -17,7 +17,6 @@ import { UserPanelDirective } from './layout/nav-bar/user-panel.directive';
 import { ParticipantRestApiService } from './data/remote/rest-api/participant-rest-api.service';
 import { TranslateObjectService } from './shared/translate-object.service';
 import { LocalStorageService } from './shared/local-storage.service';
-import { BusyIndicatorComponent } from './components/busy-indicator/busy-indicator.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -30,8 +29,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToggleDirective,
     SideBarComponent,
     NavBarComponent,
-    UserPanelDirective,
-    BusyIndicatorComponent
+    UserPanelDirective
   ],
   imports: [
     BrowserModule,

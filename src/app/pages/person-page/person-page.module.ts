@@ -28,13 +28,7 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
     CommonModule,
     HttpClientModule,
     PersonPageRoutingModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    }),
+    TranslateModule.forChild(),
     NgbModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,

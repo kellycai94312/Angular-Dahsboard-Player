@@ -20,7 +20,7 @@ export class RegistrationPersonPageComponent implements OnInit {
   public dateMin: Date;
   public dateMax: Date;
 
-  private sexValues: Array<Sex>;
+  public sexValues: Array<Sex>;
   public selectedSex: Sex;
 
   constructor(public translate: TranslateService,
