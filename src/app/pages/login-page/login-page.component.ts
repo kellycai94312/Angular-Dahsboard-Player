@@ -4,6 +4,7 @@ import { Auth } from '../../data/remote/model/auth';
 import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
 import { Router } from '@angular/router';
 import { Session } from '../../data/remote/model/session';
+import { LocalStorageService } from '../../shared/local-storage.service';
 
 @Component({
   selector: 'app-login-page',
@@ -12,14 +13,13 @@ import { Session } from '../../data/remote/model/session';
 })
 export class LoginPageComponent implements OnInit {
 
-  public login: string;
-  public password: string;
+  public auth: Auth;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
+              private localStorageService: LocalStorageService,
               private router: Router) {
-    this.login = 'KirillVorozhbyanov@gmail.com';
-    this.password = '11111111';
+    this.auth = new Auth();
   }
 
   ngOnInit() {
@@ -28,14 +28,16 @@ export class LoginPageComponent implements OnInit {
   public async onApply(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      const auth = new Auth();
-      auth.email = this.login;
-      auth.password = this.password;
-
       try {
-        const session: Session = await this.participantRestApiService.login(auth);
+        const session: Session = await this.participantRestApiService.login(this.auth);
         if (session != null) {
-          this.router.navigate(['/registration/person']);
+          this.localStorageService.saveUserId(session.userId);
+          if (session.personId != null) {
+            this.localStorageService.savePersonId(session.personId);
+            await this.router.navigate(['/person', session.personId]);
+          } else {
+            await this.router.navigate(['/registration/person']);
+          }
         } else {
           this.invalidCredentials(event);
         }
@@ -46,7 +48,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private invalidCredentials(event: any): void {
-    this.password = null;
+    this.auth.password = null;
     event.validationGroup.validate();
   }
 

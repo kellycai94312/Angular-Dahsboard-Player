@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import {
-  IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams,
+  IRestMethod,
+  IRestMethodStrict,
+  Rest,
+  RestAction,
+  RestHandler,
+  RestParams,
   RestRequestMethod
 } from 'rest-core';
 import { Session } from '../model/session';
@@ -21,6 +26,7 @@ import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
 import { Address } from '../model/address';
 import { PersonAnthropometry } from '../model/person-anthropometry';
+import { EmailRequest } from '../request/email-request';
 
 export const RestUrl = 'http://localhost:8082';
 
@@ -61,6 +67,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/user/{!id}'
   })
   getUser: IRestMethod<IdentifiedObject, User>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/password/reset'
+  })
+  resetPassword: IRestMethod<EmailRequest, void>;
 
   @RestAction({
     method: RestRequestMethod.Post,

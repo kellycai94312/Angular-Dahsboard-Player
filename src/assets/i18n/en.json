@@ -9,16 +9,16 @@
     "person": {
       "changeAvatar": "Change avatar",
       "roles": {
-        "section" : "Roles",
-        "edit" : "Edit roles"
+        "section": "Roles",
+        "edit": "Edit roles"
       },
       "sportTypes": {
-        "section" : "Sport types",
-        "edit" : "Edit sport types"
+        "section": "Sport types",
+        "edit": "Edit sport types"
       },
       "rating": "Rating",
       "edit": "edit",
-      "save" : "Save",
+      "save": "Save",
       "personal": {
         "section": "Personal information",
         "firstName": "First name",
@@ -64,18 +64,21 @@
     "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it.",
     "anEmailWithAKeyForActivationWillBeSentToYourEmail": "An email with a key for activation will be sent to your e-mail.",
     "followTheInstructionsInIt": "Follow the instructions in it.",
-    "invalidCredentials":"Invalid credentials"
+    "invalidCredentials": "Invalid credentials"
   },
   "password": {
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "passwordResetLinkSentToEmail": "Password reset link sent to email.",
+    "passwordChanged": "Password changed",
+    "passwordResetError": "Password reset error"
   },
   "notFound": {
     "notFound": "Not found"
   },
-  "registrationVerification":{
-    "accountActivation":"Account activation",
-    "yourAccountHasBeenSuccessfullyActivated":"Your account has been successfully activated",
-    "errorActivatingAccount":"Error activating account"
+  "registrationVerification": {
+    "accountActivation": "Account activation",
+    "yourAccountHasBeenSuccessfullyActivated": "Your account has been successfully activated",
+    "errorActivatingAccount": "Error activating account"
   },
   "sexEnum": {
     "MALE": "Male",
@@ -83,5 +86,8 @@
   },
   "reset": "Reset",
   "enterEmail": "Enter email",
-  "apply": "Apply"
+  "apply": "Apply",
+  "errors": {
+    "errorWhileSaving": "Error while saving"
+  }
 }

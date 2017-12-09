@@ -6,7 +6,7 @@ import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angul
 @Injectable()
 export class LayoutService implements CanActivate {
 
-  private hidden: Subject<boolean>;
+  public hidden: Subject<boolean>;
   private hiddenRoutes: string[] = ['login', 'registration', 'password', 'not-found'];
 
   constructor() {
