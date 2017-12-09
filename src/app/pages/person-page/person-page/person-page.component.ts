@@ -143,7 +143,17 @@ export class PersonPageComponent implements OnInit {
   }
 
   async savePersonal() {
-    await this.participantRestApiService.updatePerson(this.person, {id: this.person.id});
+    // fixme
+    const person: Person = JSON.parse(JSON.stringify(this.person));
+    if (person.address.country.id == null) {
+      person.address = null;
+    } else if (person.address.region.id == null) {
+      person.address.region = null;
+      person.address.city = null;
+    } else if (person.address.city.id == null) {
+      person.address.city = null;
+    }
+    await this.participantRestApiService.updatePerson(person, {id: person.id});
   }
 
   updateLogo() {
@@ -166,24 +176,34 @@ export class PersonPageComponent implements OnInit {
           this.participantRestApiService.getPersonSportTypes({id: +params.id})
             .then(personSportTypes => this.personSportTypes = personSportTypes);
 
-          /*fixme load only when user tries to change value*/
-          this.loadCountries();
-          if (this.person.address === null) {
-            const country = new Country();
-            const region = new Region();
-            const city = new City();
-            this.person.address = new Address();
-            this.person.address.country = country;
-            this.person.address.region = region;
-            this.person.address.city = city;
-          } else {
-            if (this.person.address.country !== null) {
-              this.loadRegions(this.person.address.country.id);
-            }
-            if (this.person.address.city !== null) {
-              this.loadCities(this.person.address.city.id);
-            }
-          }
+          // load person address
+          this.participantRestApiService.getPersonAddress({id: +params.id})
+            .then(address => {
+              this.person.address = address;
+              /*fixme load only when user tries to change value*/
+              this.loadCountries();
+              if (this.person.address.country != null) {
+                this.loadRegions(this.person.address.country.id);
+                if (this.person.address.region != null) {
+                  this.loadCities(this.person.address.region.id);
+                  if (this.person.address.city == null) {
+                    this.person.address.city = new City();
+                  }
+                } else {
+                  this.person.address.region = new Region();
+                  this.person.address.city = new City();
+                }
+              } else {
+                this.person.address.country = new Country();
+                this.person.address.region = new Region();
+                this.person.address.city = new City();
+              }
+            }).catch(error => {
+              this.person.address = new Address();
+              this.person.address.country = new Country();
+              this.person.address.region = new Region();
+              this.person.address.city = new City();
+          });
         }).catch(error => {
         this.router.navigate(['not-found']);
       });

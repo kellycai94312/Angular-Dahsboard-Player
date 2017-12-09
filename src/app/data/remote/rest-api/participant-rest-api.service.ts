@@ -19,6 +19,7 @@ import { ListRequest } from './list-request';
 import { SportType } from '../model/sport-type';
 import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
+import { Address } from '../model/address';
 
 export const RestUrl = 'http://localhost:8082';
 
@@ -89,6 +90,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!id}'
   })
   getPerson: IRestMethod<QueryParams, Person>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/address'
+  })
+  getPersonAddress: IRestMethod<QueryParams, Address>;
 
   @RestAction({
     method: RestRequestMethod.Put,

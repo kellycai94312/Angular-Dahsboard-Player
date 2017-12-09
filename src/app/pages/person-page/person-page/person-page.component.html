@@ -113,26 +113,26 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-3">
+              <div class="col-3" *ngIf="person.address.country">
                 <label for="country">{{'persons.person.personal.country' | translate}}</label>
                 <dx-select-box id="country" [dataSource]="countries" [(value)]="person.address.country.id"
                                (onValueChanged)="onCountryChange($event)"
                                valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
               </div>
-              <div class="col-3">
+              <div class="col-3" *ngIf="person.address.region">
                 <label for="region">{{'persons.person.personal.region' | translate}}</label>
                 <dx-select-box id="region" [dataSource]="regions" [(value)]="person.address.region.id"
                                (onValueChanged)="onRegionChange($event)"
                                valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
               </div>
-              <div class="col-3">
+              <div class="col-3" *ngIf="person.address.city">
                 <label for="city">{{'persons.person.personal.city' | translate}}</label>
                 <dx-select-box id="city" [dataSource]="cities" [(value)]="person.address.city.id"
                                valueExpr="id" displayExpr="name" [searchEnabled]="true"></dx-select-box>
               </div>
             </div>
           </div>
-          <button type="button" class="btn btn-outline-info mt-3"
+          <button type="button" class="btn btn-outline-success mt-3"
                   (click)="savePersonal()">{{'persons.person.save' | translate}}
           </button>
         </ng-template>
