@@ -20,6 +20,7 @@ import { SportType } from '../model/sport-type';
 import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
 import { Address } from '../model/address';
+import { PersonAnthropometry } from '../model/person-anthropometry';
 
 export const RestUrl = 'http://localhost:8082';
 
@@ -138,6 +139,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/sporttype'
   })
   changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/anthropometry'
+  })
+  getAnhtropometry: IRestMethod<QueryParams, PersonAnthropometry[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/anthropometry'
+  })
+  changeAnthropometry: IRestMethod<ListRequest<PersonAnthropometry>, PersonAnthropometry[]>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

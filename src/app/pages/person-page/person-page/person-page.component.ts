@@ -14,6 +14,7 @@ import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
+import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
 
 @Component({
   selector: 'app-person-page',
@@ -40,10 +41,16 @@ export class PersonPageComponent implements OnInit {
   private personSportTypes: SportType[] = [];
   private sportTypesModal = false;
 
+  private anthropometry: PersonAnthropometry[];
+
   private logo: string;
+  private roleToggle: UserRole;
+  private sportTypeToggle: SportType;
+
+  private personId: number;
 
   constructor(public translate: TranslateService,
-              public participantRestApiService: ParticipantRestApiService,
+              private participantRestApiService: ParticipantRestApiService,
               private router: Router,
               private route: ActivatedRoute) {
   }
@@ -156,6 +163,20 @@ export class PersonPageComponent implements OnInit {
     await this.participantRestApiService.updatePerson(person, {id: person.id});
   }
 
+  async saveAnthropometry() {
+    await this.participantRestApiService.changeAnthropometry(new ListRequest(this.anthropometry));
+  }
+
+  async onRoleChange() {
+  }
+
+  async onSportTypeChange() {
+    this.anthropometry = await this.participantRestApiService.getAnhtropometry({
+      id: this.personId,
+      sportType: this.sportTypeToggle.sportTypeEnum
+    });
+  }
+
   updateLogo() {
     this.route.params.subscribe(params => {
       this.logo = `${RestUrl}/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+params.id}&type=${PictureType[PictureType.LOGO]}&date=${new Date().getTime()}`;
@@ -165,19 +186,32 @@ export class PersonPageComponent implements OnInit {
   ngOnInit() {
     this.updateLogo();
     this.route.params.subscribe(params => {
-      this.participantRestApiService.getPerson({id: +params.id})
+      this.personId = +params.id;
+      this.participantRestApiService.getPerson({id: this.personId})
         .then(person => {
           this.person = person;
 
           // load user roles
           this.participantRestApiService.getUserRoles({id: this.person.user.id})
-            .then(userRoles => this.userRoles = userRoles);
+            .then(userRoles => {
+              this.userRoles = userRoles;
+              if (userRoles.length) {
+                this.roleToggle = userRoles[0];
+                this.onRoleChange();
+              }
+            });
 
-          this.participantRestApiService.getPersonSportTypes({id: +params.id})
-            .then(personSportTypes => this.personSportTypes = personSportTypes);
+          this.participantRestApiService.getPersonSportTypes({id: this.personId})
+            .then(personSportTypes => {
+              this.personSportTypes = personSportTypes;
+              if (personSportTypes.length) {
+                this.sportTypeToggle = personSportTypes[0];
+                this.onSportTypeChange();
+              }
+            });
 
           // load person address
-          this.participantRestApiService.getPersonAddress({id: +params.id})
+          this.participantRestApiService.getPersonAddress({id: this.personId})
             .then(address => {
               this.person.address = address;
               /*fixme load only when user tries to change value*/
@@ -199,10 +233,10 @@ export class PersonPageComponent implements OnInit {
                 this.person.address.city = new City();
               }
             }).catch(error => {
-              this.person.address = new Address();
-              this.person.address.country = new Country();
-              this.person.address.region = new Region();
-              this.person.address.city = new City();
+            this.person.address = new Address();
+            this.person.address.country = new Country();
+            this.person.address.region = new Region();
+            this.person.address.city = new City();
           });
         }).catch(error => {
         this.router.navigate(['not-found']);

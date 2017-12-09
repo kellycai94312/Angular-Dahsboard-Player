@@ -37,7 +37,11 @@
       <p>{{'persons.person.roles.section' | translate}}</p>
     </div>
     <div class="col-10">
-      <button class="btn btn-primary btn-sm ml-2" *ngFor="let role of userRoles">{{role.userRoleEnum}}</button>
+      <div class="btn-group" ngbRadioGroup name="radioBasic" [(ngModel)]="roleToggle" (change)="onRoleChange()">
+        <label ngbButtonLabel class="btn-primary" *ngFor="let role of userRoles">
+          <input ngbButton type="radio" [value]="role"> {{role.userRoleEnum}}
+        </label>
+      </div>
       <button class="btn btn-default btn-sm ml-3" (click)="toggleRolesModal()">
         <i class="fa fa-pencil-square-o"></i> <span> {{'persons.person.edit' | translate}}</span>
       </button>
@@ -48,16 +52,19 @@
       <p>{{'persons.person.sportTypes.section' | translate}}</p>
     </div>
     <div class="col-10">
-      <button class="btn btn-primary btn-sm ml-2" *ngFor="let sportType of personSportTypes">
-        {{sportType.sportTypeEnum}}
-      </button>
+      <div class="btn-group" ngbRadioGroup name="radioBasic" [(ngModel)]="sportTypeToggle"
+           (change)="onSportTypeChange()">
+        <label ngbButtonLabel class="btn-primary" *ngFor="let sportType of personSportTypes">
+          <input ngbButton type="radio" [value]="sportType"> {{sportType.sportTypeEnum}}
+        </label>
+      </div>
       <button class="btn btn-default btn-sm ml-3" (click)="toggleSportTypesModal()">
         <i class="fa fa-pencil-square-o"></i> <span> {{'persons.person.edit' | translate}}</span>
       </button>
     </div>
   </div>
   <div class="mt-4">
-    <ngb-tabset>
+    <ngb-tabset [destroyOnHide]="false">
       <ngb-tab title="{{'persons.person.personal.section' | translate | uppercase }}">
         <ng-template ngbTabContent>
           <div class="pt-3">
@@ -137,20 +144,40 @@
           </button>
         </ng-template>
       </ngb-tab>
-      <ngb-tab title="{{'persons.person.anthropometry.section' | translate | uppercase }}">
-        <ng-template ngbTabContent></ng-template>
+      <ngb-tab title="{{'persons.person.anthropometry.section' | translate | uppercase }}"
+               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+        <ng-template ngbTabContent>
+          <div class="pt-3">
+            <div class="row" *ngFor="let pa of anthropometry">
+              <div class="col-6">
+                <div class="form-group p-1">
+                  <label for="measure">{{pa.measureSpec.name}}</label>
+                  <dx-text-box id="measure" [(value)]="pa.value" class="w-100">
+                  </dx-text-box>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline-success mt-3"
+                    (click)="saveAnthropometry()">{{'persons.person.save' | translate}}
+            </button>
+          </div>
+        </ng-template>
       </ngb-tab>
-      <ngb-tab title="{{'persons.person.physiology.section' | translate | uppercase }}">
+      <ngb-tab title="{{'persons.person.physiology.section' | translate | uppercase }}"
+               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
         <ng-template ngbTabContent></ng-template>
       </ngb-tab>
       <ngb-tab title="{{'persons.person.contact.section' | translate | uppercase }}">
         <ng-template ngbTabContent></ng-template>
       </ngb-tab>
-      <ngb-tab title="{{'persons.person.testsResults.section' | translate | uppercase }}">
+      <ngb-tab title="{{'persons.person.testsResults.section' | translate | uppercase }}"
+               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
         <ng-template ngbTabContent></ng-template>
       </ngb-tab>
-      <ngb-tab title="{{'persons.person.events.section' | translate | uppercase }}">
-        <ng-template ngbTabContent></ng-template>
+      <ngb-tab title="{{'persons.person.events.section' | translate | uppercase }}"
+               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+        <ng-template ngbTabContent>
+        </ng-template>
       </ngb-tab>
     </ngb-tabset>
   </div>
