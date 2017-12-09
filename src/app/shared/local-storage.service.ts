@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Locale } from '../data/remote/misc/locale';
 import { TranslateService } from '@ngx-translate/core';
+import { CookieService } from 'ngx-cookie';
 
 @Injectable()
 export class LocalStorageService {
@@ -9,11 +10,14 @@ export class LocalStorageService {
   private readonly personId: string;
 
   private readonly locale: string;
+  private readonly sessionId: string;
 
-  constructor(private translateService: TranslateService) {
+  constructor(private translateService: TranslateService,
+              private cookieService: CookieService) {
     this.userId = 'user_id';
     this.personId = 'person_id';
     this.locale = 'locale';
+    this.sessionId = 'rsi';
   }
 
   public saveUserId(id: number): void {
@@ -56,4 +60,7 @@ export class LocalStorageService {
     return Locale[localeKey].toString();
   }
 
+  public getSessionId(): string {
+    return this.cookieService.get(this.sessionId);
+  }
 }
