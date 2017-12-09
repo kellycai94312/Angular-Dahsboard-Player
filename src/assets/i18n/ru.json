@@ -74,7 +74,7 @@
     "notFound": "Не найдено"
   },
   "registrationVerification":{
-    "accountActivation":"Account activation",
+    "accountActivation":"Активация аккаунта",
     "yourAccountHasBeenSuccessfullyActivated":"Ваш аккаунт был успешно активирован",
     "errorActivatingAccount":"Ошибка при активации аккаунта"
   },

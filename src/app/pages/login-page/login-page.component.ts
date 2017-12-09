@@ -12,14 +12,12 @@ import { Session } from '../../data/remote/model/session';
 })
 export class LoginPageComponent implements OnInit {
 
-  public login: string;
-  public password: string;
+  public auth: Auth;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router) {
-    this.login = 'KirillVorozhbyanov@gmail.com';
-    this.password = '11111111';
+    this.auth = new Auth();
   }
 
   ngOnInit() {
@@ -28,14 +26,15 @@ export class LoginPageComponent implements OnInit {
   public async onApply(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      const auth = new Auth();
-      auth.email = this.login;
-      auth.password = this.password;
-
       try {
-        const session: Session = await this.participantRestApiService.login(auth);
+        const session: Session = await this.participantRestApiService.login(this.auth);
         if (session != null) {
-          this.router.navigate(['/registration/person']);
+          console.log(session.personId);
+          if (session.personId != null) {
+            this.router.navigate(['/person', session.personId]);
+          } else {
+            this.router.navigate(['/registration/person']);
+          }
         } else {
           this.invalidCredentials(event);
         }
@@ -46,7 +45,7 @@ export class LoginPageComponent implements OnInit {
   }
 
   private invalidCredentials(event: any): void {
-    this.password = null;
+    this.auth.password = null;
     event.validationGroup.validate();
   }
 
