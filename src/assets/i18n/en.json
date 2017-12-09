@@ -67,7 +67,10 @@
     "invalidCredentials": "Invalid credentials"
   },
   "password": {
-    "resetPassword": "Reset password"
+    "resetPassword": "Reset password",
+    "passwordResetLinkSentToEmail": "Password reset link sent to email.",
+    "passwordChanged": "Password changed",
+    "passwordResetError": "Password reset error"
   },
   "notFound": {
     "notFound": "Not found"

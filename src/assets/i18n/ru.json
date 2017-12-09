@@ -68,7 +68,10 @@
     "invalidCredentials": "Недопустимые учетные данные"
   },
   "password": {
-    "resetPassword": "Сброс пароля"
+    "resetPassword": "Сброс пароля",
+    "passwordResetLinkSentToEmail": "Ссылка для сброса пароля отправлена на почту.",
+    "passwordChanged": "Пароль изменен",
+    "passwordResetError" : "Ошибка при сбросе пароля"
   },
   "notFound": {
     "notFound": "Не найдено"
