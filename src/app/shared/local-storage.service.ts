@@ -20,6 +20,13 @@ export class LocalStorageService {
     this.sessionId = 'rsi';
   }
 
+  public signOut(): void {
+    localStorage.removeItem(this.userId);
+    localStorage.removeItem(this.personId);
+
+    this.cookieService.remove(this.sessionId);
+  }
+
   public saveUserId(id: number): void {
     localStorage.setItem(this.userId, id.toString());
   }

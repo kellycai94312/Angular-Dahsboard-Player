@@ -20,6 +20,7 @@ import { LocalStorageService } from './shared/local-storage.service';
 import { AuthGuard } from './guard/auth.guard';
 import { CookieModule } from 'ngx-cookie';
 import { AuthDenyGuard } from './guard/auth-deny.guard';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -38,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    NgbModule.forRoot(),
     RestModule.forRoot(),
     CookieModule.forRoot(),
     TranslateModule.forRoot({

@@ -4,25 +4,20 @@
     <span class="mini"><b>R</b>C</span>
   </a>
   <nav class="navbar-wrapper">
-    <div class="navbar-menu">
-      <div class="user-panel minify" appUserPanel>
-        <div class="info">
-          <div class="avatar"
-               style="background-image: url(http://gazettereview.com/wp-content/uploads/2016/03/facebook-avatar.jpg)"></div>
-            <p>Иванов Денис</p>
-          <span class="lnr lnr-chevron-down"></span>
-        </div>
-        <ul class="menu">
-          <li class="menu-item" routerLink="person">
-            <span>{{'profile' | translate}}</span>
-          </li>
-          <li class="menu-item" routerLink="person">
-            <span>{{'persons.section' | translate}}</span>
-          </li>
-          <li class="menu-item" routerLink="not-found">
-            <span>{{'signOut' | translate}}</span>
-          </li>
-        </ul>
+    <div ngbDropdown>
+      <p class="nav-bar-dropdown-toggle"
+         id="dropdownManual"
+         ngbDropdownToggle>
+        <span class="dropdown-toggle-content">{{fullName}}</span>
+      </p>
+      <div ngbDropdownMenu
+           aria-labelledby="dropdownManual">
+        <button class="dropdown-item"
+                routerLink="{{personProfileRouterLink}}">{{'profile' | translate | uppercase}}
+        </button>
+        <button class="dropdown-item"
+                (click)="signOut($event)">{{'signOut' | translate | uppercase}}
+        </button>
       </div>
     </div>
   </nav>
