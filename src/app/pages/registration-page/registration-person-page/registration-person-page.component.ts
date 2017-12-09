@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { SexEnum } from '../../../data/remote/misc/sex-enum';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import notify from 'devextreme/ui/notify';
+
+import { SexEnum } from '../../../data/remote/misc/sex-enum';
 import { Sex } from '../../../data/local/sex';
 import { TranslateObjectService } from '../../../shared/translate-object.service';
 import { Person } from '../../../data/remote/model/person';
@@ -23,10 +26,13 @@ export class RegistrationPersonPageComponent implements OnInit {
   public sexValues: Array<Sex>;
   public selectedSex: Sex;
 
+  private errorMessage: string;
+
   constructor(public translate: TranslateService,
               private translateObjectService: TranslateObjectService,
               private participantRestApiService: ParticipantRestApiService,
-              private localStorageService: LocalStorageService) {
+              private localStorageService: LocalStorageService,
+              private router: Router) {
     this.person = new Person();
 
     this.dateMin = new Date();
@@ -49,15 +55,30 @@ export class RegistrationPersonPageComponent implements OnInit {
     const userId = new IdentifiedObject();
     userId.id = this.localStorageService.getCurrentUserId();
     this.person.user = await this.participantRestApiService.getUser(userId);
+
+    this.errorMessage = await this.translate.get('errors.errorWhileSaving').toPromise();
   }
 
   public async onApply(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      // TODO
-      this.person.sex = this.selectedSex.sexEnum;
-      const bewPerson = await this.participantRestApiService.createPerson(this.person);
-
+      try {
+        this.person.sex = this.selectedSex.sexEnum;
+        const newPerson = await this.participantRestApiService.createPerson(this.person);
+        if (newPerson != null) {
+          this.localStorageService.savePersonId(newPerson.id);
+          await this.router.navigate(['/person', newPerson.id]);
+        } else {
+          this.showErrorMessage();
+        }
+      } catch (Error) {
+        this.showErrorMessage();
+      }
     }
   }
+
+  private showErrorMessage(): void {
+    notify(this.errorMessage, 'error', 2000);
+  }
+
 }

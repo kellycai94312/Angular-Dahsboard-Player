@@ -4,20 +4,32 @@ import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class LocalStorageService {
-  private readonly currentUserId: string;
+
+  private readonly userId: string;
+  private readonly personId: string;
+
   private readonly locale: string;
 
   constructor(private translateService: TranslateService) {
-    this.currentUserId = 'CURRENT_USER_ID';
-    this.locale = 'LOCALE';
+    this.userId = 'user_id';
+    this.personId = 'person_id';
+    this.locale = 'locale';
   }
 
   public saveUserId(id: number): void {
-    localStorage.setItem(this.currentUserId, id.toString());
+    localStorage.setItem(this.userId, id.toString());
+  }
+
+  public savePersonId(id: number): void {
+    localStorage.setItem(this.personId, id.toString());
   }
 
   public getCurrentUserId(): number {
-    return +localStorage.getItem(this.currentUserId);
+    return +localStorage.getItem(this.userId);
+  }
+
+  public getCurrentPersonId(): number {
+    return +localStorage.getItem(this.personId);
   }
 
   public setLocale(localeKey: string): void {

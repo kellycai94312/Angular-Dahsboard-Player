@@ -10,16 +10,16 @@
     "person": {
       "changeAvatar": "Сменить аватар",
       "roles": {
-        "section" : "Роли",
-        "edit" : "Редактировать роли"
+        "section": "Роли",
+        "edit": "Редактировать роли"
       },
       "sportTypes": {
-        "section" : "Виды спорта",
-        "edit" : "Редактировать виды спорта"
+        "section": "Виды спорта",
+        "edit": "Редактировать виды спорта"
       },
       "rating": "Рейтинг",
       "edit": "редактировать",
-      "save" : "Сохранить",
+      "save": "Сохранить",
       "personal": {
         "section": "Основные данные",
         "firstName": "Имя",
@@ -73,10 +73,10 @@
   "notFound": {
     "notFound": "Не найдено"
   },
-  "registrationVerification":{
-    "accountActivation":"Активация аккаунта",
-    "yourAccountHasBeenSuccessfullyActivated":"Ваш аккаунт был успешно активирован",
-    "errorActivatingAccount":"Ошибка при активации аккаунта"
+  "registrationVerification": {
+    "accountActivation": "Активация аккаунта",
+    "yourAccountHasBeenSuccessfullyActivated": "Ваш аккаунт был успешно активирован",
+    "errorActivatingAccount": "Ошибка при активации аккаунта"
   },
   "sexEnum": {
     "MALE": "Мужчина",
@@ -84,5 +84,8 @@
   },
   "reset": "Сброс",
   "enterEmail": "Введите электронную почту",
-  "apply": "Применить"
+  "apply": "Применить",
+  "errors": {
+    "errorWhileSaving": "Ошибка при сохранении"
+  }
 }

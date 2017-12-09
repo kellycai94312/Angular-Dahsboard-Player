@@ -4,6 +4,7 @@ import { Auth } from '../../data/remote/model/auth';
 import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
 import { Router } from '@angular/router';
 import { Session } from '../../data/remote/model/session';
+import { LocalStorageService } from '../../shared/local-storage.service';
 
 @Component({
   selector: 'app-login-page',
@@ -16,6 +17,7 @@ export class LoginPageComponent implements OnInit {
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
+              private localStorageService: LocalStorageService,
               private router: Router) {
     this.auth = new Auth();
   }
@@ -29,11 +31,12 @@ export class LoginPageComponent implements OnInit {
       try {
         const session: Session = await this.participantRestApiService.login(this.auth);
         if (session != null) {
-          console.log(session.personId);
+          this.localStorageService.saveUserId(session.userId);
           if (session.personId != null) {
-            this.router.navigate(['/person', session.personId]);
+            this.localStorageService.savePersonId(session.personId);
+            await this.router.navigate(['/person', session.personId]);
           } else {
-            this.router.navigate(['/registration/person']);
+            await this.router.navigate(['/registration/person']);
           }
         } else {
           this.invalidCredentials(event);
