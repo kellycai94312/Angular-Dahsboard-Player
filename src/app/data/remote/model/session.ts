@@ -4,4 +4,5 @@ export class Session {
   expired: number;
   uuid: string;
   userId: number;
+  personId: number;
 }
