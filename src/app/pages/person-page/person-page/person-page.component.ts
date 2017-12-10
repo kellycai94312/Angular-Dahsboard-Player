@@ -215,7 +215,6 @@ export class PersonPageComponent implements OnInit {
             .then(address => {
               this.person.address = address;
               /*fixme load only when user tries to change value*/
-              this.loadCountries();
               if (this.person.address.country != null) {
                 this.loadRegions(this.person.address.country.id);
                 if (this.person.address.region != null) {
@@ -238,6 +237,7 @@ export class PersonPageComponent implements OnInit {
             this.person.address.region = new Region();
             this.person.address.city = new City();
           });
+          this.loadCountries();
         }).catch(error => {
         this.router.navigate(['not-found']);
       });
