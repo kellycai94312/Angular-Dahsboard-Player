@@ -10,14 +10,7 @@ a {
 }
 
 a, p, h3, h4 {
-
   color: $light-blue;
-}
-
-.fullname {
-  > * {
-    text-transform: uppercase;
-  }
 }
 
 a.nav-link {
