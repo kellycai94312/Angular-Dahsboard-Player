@@ -119,7 +119,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row" *ngIf="person.address">
               <div class="col-3" *ngIf="person.address.country">
                 <label for="country">{{'persons.person.personal.country' | translate}}</label>
                 <dx-select-box id="country" [dataSource]="countries" [(value)]="person.address.country.id"
