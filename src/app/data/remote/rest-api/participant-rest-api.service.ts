@@ -24,6 +24,8 @@ import { ListRequest } from './list-request';
 import { SportType } from '../model/sport-type';
 import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
+import { Address } from '../model/address';
+import { PersonAnthropometry } from '../model/person-anthropometry';
 import { EmailRequest } from '../request/email-request';
 
 export const RestUrl = 'http://localhost:8082';
@@ -103,6 +105,12 @@ export class ParticipantRestApiService extends Rest {
   getPerson: IRestMethod<QueryParams, Person>;
 
   @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/address'
+  })
+  getPersonAddress: IRestMethod<QueryParams, Address>;
+
+  @RestAction({
     method: RestRequestMethod.Put,
     path: '/person/{!id}'
   })
@@ -143,6 +151,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/sporttype'
   })
   changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/anthropometry'
+  })
+  getAnhtropometry: IRestMethod<QueryParams, PersonAnthropometry[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/anthropometry'
+  })
+  changeAnthropometry: IRestMethod<ListRequest<PersonAnthropometry>, PersonAnthropometry[]>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

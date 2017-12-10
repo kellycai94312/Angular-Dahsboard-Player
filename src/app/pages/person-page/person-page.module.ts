@@ -21,6 +21,7 @@ import {
 } from 'devextreme-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation-rule-dxi';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
     DxButtonModule,
     DxTemplateModule,
     DxListModule,
-    DxTagBoxModule
+    DxTagBoxModule,
+    FormsModule
   ],
   declarations: [
     PersonPageComponent,
