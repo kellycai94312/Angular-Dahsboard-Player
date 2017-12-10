@@ -15,6 +15,7 @@ import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
+import { LocalStorageService } from '../../../shared/local-storage.service';
 import { IdentifiedObject } from '../../../data/remote/base/identified-object';
 
 @Component({
@@ -25,6 +26,8 @@ import { IdentifiedObject } from '../../../data/remote/base/identified-object';
 export class PersonPageComponent implements OnInit {
 
   public person: Person;
+  public isEditAllow: boolean;
+
   private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
     .filter(e => parseInt(e, 10) >= 0)
     .map(k => SexEnum[k]);
@@ -53,7 +56,9 @@ export class PersonPageComponent implements OnInit {
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private _localStorageService: LocalStorageService) {
+    this.isEditAllow = false;
   }
 
   onCountryChange(e: any): void {
@@ -151,7 +156,6 @@ export class PersonPageComponent implements OnInit {
     this.toggleRolesModal();
   }
 
-
   async changeSportTypes() {
     this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(this.personSportTypesModal));
     this.toggleSportTypesModal();
@@ -198,6 +202,7 @@ export class PersonPageComponent implements OnInit {
       this.participantRestApiService.getPerson({id: this.personId})
         .then(person => {
           this.person = person;
+          this.isEditAllow = this.person.id === this._localStorageService.getCurrentPersonId();
 
           // load user roles
           this.participantRestApiService.getUserRoles({id: this.person.user.id})
