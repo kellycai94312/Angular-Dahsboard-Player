@@ -49,7 +49,6 @@ export class ParticipantRestApiService extends Rest {
   })
   logout: IRestMethod<void, void>;
 
-
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/user'
