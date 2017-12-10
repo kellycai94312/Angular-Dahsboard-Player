@@ -5,13 +5,19 @@
   </a>
   <nav class="navbar-wrapper">
     <div ngbDropdown>
-      <p class="nav-bar-dropdown-toggle"
-         id="dropdownManual"
-         ngbDropdownToggle>
-        <span class="dropdown-toggle-content">{{fullName}}</span>
-      </p>
+      <div class="nav-bar-dropdown-toggle"
+           id="dropdownManual"
+           ngbDropdownToggle>
+        <div class="dropdown-toggle-content">
+          <div class="avatar"
+               [ngStyle]="{'background-image': 'url('+ logo +')'}">
+          </div>
+          <p>{{fullName}}</p>
+          <span class="lnr lnr-chevron-down"></span>
+        </div>
+      </div>
       <div ngbDropdownMenu
-           aria-labelledby="dropdownManual">
+           aria-labelledby="dropdownManual" class="menu">
         <button class="dropdown-item"
                 routerLink="{{personProfileRouterLink}}">{{'profile' | translate | uppercase}}
         </button>
