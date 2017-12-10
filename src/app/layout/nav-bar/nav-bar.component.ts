@@ -33,6 +33,7 @@ export class NavBarComponent implements OnInit {
   }
 
   public async signOut(event: any) {
+    await this._participantRestApiService.logout();
     this._layoutService.hidden.next(true);
     this._localStorageService.signOut();
     await this._router.navigate(['/login']);
