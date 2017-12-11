@@ -5,11 +5,11 @@ import { SexEnum } from '../../../data/remote/misc/sex-enum';
 import { Country } from '../../../data/remote/model/country';
 import { Region } from '../../../data/remote/model/region';
 import { City } from '../../../data/remote/model/city';
-import { ParticipantRestApiService, RestUrl } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { UserRole } from '../../../data/remote/model/user-role';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Address } from '../../../data/remote/model/address';
-import { ListRequest } from '../../../data/remote/rest-api/list-request';
+import { ListRequest } from '../../../data/remote/request/list-request';
 import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
@@ -18,6 +18,7 @@ import { PersonAnthropometry } from '../../../data/remote/model/person-anthropom
 import { LocalStorageService } from '../../../shared/local-storage.service';
 import { IdentifiedObject } from '../../../data/remote/base/identified-object';
 import { LogoService } from '../../../shared/logo.service';
+import { AnthropometryRequest } from '../../../data/remote/request/anthropometry-request';
 
 @Component({
   selector: 'app-person-page',
@@ -180,7 +181,12 @@ export class PersonPageComponent implements OnInit {
   }
 
   async saveAnthropometry() {
-    await this.participantRestApiService.changeAnthropometry(new ListRequest(this.anthropometry));
+    if (this.sportTypeToggle) {
+      const request: AnthropometryRequest = new AnthropometryRequest();
+      request.anthropometry = new ListRequest(this.anthropometry);
+      request.sportType = this.sportTypeToggle.sportTypeEnum;
+      this.anthropometry = await this.participantRestApiService.changeAnthropometry(request);
+    }
   }
 
   async onRoleChange() {
