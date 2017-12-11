@@ -15,6 +15,7 @@ import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
+import { IdentifiedObject } from '../../../data/remote/base/identified-object';
 
 @Component({
   selector: 'app-person-page',
@@ -88,11 +89,10 @@ export class PersonPageComponent implements OnInit {
     if (this.rolesModal) {
       this.userRolesModal = Object.assign([], this.userRoles);
       this.roles = await this.participantRestApiService.getRoles();
-      for (let i = 0; i < this.roles.length; i++) {
-        for (const role of this.userRolesModal) {
-          if (this.roles[i].id === role.id) {
-            this.roles.splice(i, 1);
-          }
+      let i = this.roles.length;
+      while (i--) {
+        if (this.contains(this.userRolesModal, this.roles[i])) {
+          this.roles.splice(i, 1);
         }
       }
     } else {
@@ -105,16 +105,24 @@ export class PersonPageComponent implements OnInit {
     if (this.sportTypesModal) {
       this.personSportTypesModal = Object.assign([], this.personSportTypes);
       this.sportTypes = await this.participantRestApiService.getSportTypes();
-      for (let i = 0; i < this.sportTypes.length; i++) {
-        for (const role of this.personSportTypesModal) {
-          if (this.sportTypes[i].id === role.id) {
-            this.sportTypes.splice(i, 1);
-          }
+      let i = this.sportTypes.length;
+      while (i--) {
+        if (this.contains(this.personSportTypesModal, this.sportTypes[i])) {
+          this.sportTypes.splice(i, 1);
         }
       }
     } else {
       this.personSportTypesModal = [];
     }
+  }
+
+  private contains<T extends IdentifiedObject>(arr: T[], obj: T): boolean {
+    for (const item of arr) {
+      if (item.id === obj.id) {
+        return true;
+      }
+    }
+    return false;
   }
 
   addRole(role: UserRole) {
