@@ -28,9 +28,10 @@ import { Address } from '../model/address';
 import { PersonAnthropometry } from '../model/person-anthropometry';
 import { EmailRequest } from '../request/email-request';
 import { PageQuery } from './page-query';
+import { environment } from '../../../../environments/environment';
 import { AnthropometryRequest } from '../request/anthropometry-request';
 
-export const RestUrl = 'http://localhost:8082';
+export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
 @Injectable()
 @RestParams({

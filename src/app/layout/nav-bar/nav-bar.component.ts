@@ -17,8 +17,8 @@ export class NavBarComponent implements OnInit {
   public person: Person;
   public personProfileRouterLink: string;
   public fullName: string;
-  private logo: string;
-  private logoDefault: string;
+  public logo: string;
+  public logoDefault: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _localStorageService: LocalStorageService,
