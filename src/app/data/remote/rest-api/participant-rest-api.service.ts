@@ -27,6 +27,7 @@ import { Picture } from '../model/picture';
 import { Address } from '../model/address';
 import { PersonAnthropometry } from '../model/person-anthropometry';
 import { EmailRequest } from '../request/email-request';
+import { PageQuery } from './page-query';
 
 export const RestUrl = 'http://localhost:8082';
 
@@ -78,6 +79,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person'
   })
   createPerson: IRestMethod<Person, Person>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/filter?from={!from}&count={!count}'
+  })
+  getPersonsPage: IRestMethod<PageQuery, PageContainer<Person>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

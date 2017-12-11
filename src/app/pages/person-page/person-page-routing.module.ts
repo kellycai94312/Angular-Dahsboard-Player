@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { PersonPageComponent } from './person-page/person-page.component';
-import { PersonListPageComponent } from './person-list-page/person-list-page.component';
+import { PersonsPageComponent } from './persons-page/persons-page.component';
 
 
 const routes: Routes = [
-  {path: '', component: PersonListPageComponent},
+  {path: '', component: PersonsPageComponent},
   {path: ':id', component: PersonPageComponent},
 ];
 
