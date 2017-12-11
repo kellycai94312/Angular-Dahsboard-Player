@@ -9,8 +9,9 @@
           <div class="d-flex flex-column">
             <div class="d-flex flex-row h-100">
               <div class="align-self-center">
-                <img class="img-fluid avatar img"
-                     [src]="personLogoUrls.get(person.id)">
+                <div class="img-fluid avatar img"
+                     [ngStyle]="{'background-image': 'url('+ personLogoUrls.get(person.id) +'), url(' + logoDefault + ')'}">
+                </div>
               </div>
             </div>
           </div>

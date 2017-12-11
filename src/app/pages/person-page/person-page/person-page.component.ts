@@ -17,6 +17,7 @@ import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
 import { LocalStorageService } from '../../../shared/local-storage.service';
 import { IdentifiedObject } from '../../../data/remote/base/identified-object';
+import { LogoService } from '../../../shared/logo.service';
 
 @Component({
   selector: 'app-person-page',
@@ -48,6 +49,7 @@ export class PersonPageComponent implements OnInit {
   private anthropometry: PersonAnthropometry[];
 
   private logo: string;
+  private logoDefault: string;
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
 
@@ -57,8 +59,10 @@ export class PersonPageComponent implements OnInit {
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
               private route: ActivatedRoute,
-              private _localStorageService: LocalStorageService) {
+              private _localStorageService: LocalStorageService,
+              private logoService: LogoService) {
     this.isEditAllow = false;
+    this.logoDefault = this.logoService.getPersonDefault();
   }
 
   onCountryChange(e: any): void {
@@ -191,7 +195,7 @@ export class PersonPageComponent implements OnInit {
 
   updateLogo() {
     this.route.params.subscribe(params => {
-      this.logo = `${RestUrl}/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+params.id}&type=${PictureType[PictureType.LOGO]}&date=${new Date().getTime()}`;
+      this.logo = this.logoService.getPerson(+params.id);
     });
   }
 
