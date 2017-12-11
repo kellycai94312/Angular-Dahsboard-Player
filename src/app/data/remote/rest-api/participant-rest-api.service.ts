@@ -20,7 +20,7 @@ import { IdentifiedObject } from '../base/identified-object';
 import { Person } from '../model/person';
 import { QueryParams } from './query-params';
 import { UserRole } from '../model/user-role';
-import { ListRequest } from './list-request';
+import { ListRequest } from '../request/list-request';
 import { SportType } from '../model/sport-type';
 import { HttpClient } from '@angular/common/http';
 import { Picture } from '../model/picture';
@@ -28,6 +28,7 @@ import { Address } from '../model/address';
 import { PersonAnthropometry } from '../model/person-anthropometry';
 import { EmailRequest } from '../request/email-request';
 import { PageQuery } from './page-query';
+import { AnthropometryRequest } from '../request/anthropometry-request';
 
 export const RestUrl = 'http://localhost:8082';
 
@@ -168,7 +169,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/person/anthropometry'
   })
-  changeAnthropometry: IRestMethod<ListRequest<PersonAnthropometry>, PersonAnthropometry[]>;
+  changeAnthropometry: IRestMethod<AnthropometryRequest, PersonAnthropometry[]>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {
