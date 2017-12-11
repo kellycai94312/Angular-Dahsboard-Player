@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ParticipantRestApiService, RestUrl } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { PageContainer } from '../../../data/remote/bean/page-container';
 import { Person } from '../../../data/remote/model/person';
 import { PageQuery } from '../../../data/remote/rest-api/page-query';
-import { PictureClass } from '../../../data/remote/misc/picture-class';
-import { PictureType } from '../../../data/remote/misc/picture-type';
+import { LogoService } from '../../../shared/logo.service';
 
 @Component({
   selector: 'app-persons-page',
@@ -18,23 +17,23 @@ export class PersonsPageComponent implements OnInit {
 
   public personPageContainer: PageContainer<Person>;
   public pageSize: number;
+  public logoDefault: string;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _logoService: LogoService) {
     this.collectionSize = 0;
     this.personLogoUrls = new Map<number, string>();
 
     this.pageSize = 10;
+    this.logoDefault = _logoService.getPersonDefault();
   }
 
   async ngOnInit() {
     await this.updateItems(1);
   }
 
-  public getPersonLogoImage(person: Person): string {
-    // TODO:
-    const logoUrl = `${RestUrl}/picture/download?clazz=${PictureClass[PictureClass.person]}&id=${+person.id}&type=${PictureType[PictureType.LOGO]}`;
-    this.personLogoUrls.set(person.id, logoUrl);
-    return logoUrl;
+  public getPersonLogoImage(person: Person) {
+    this.personLogoUrls.set(person.id, this._logoService.getPerson(person.id));
   }
 
   public async onPageChange(selectedPage: number) {
