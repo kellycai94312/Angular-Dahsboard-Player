@@ -1,10 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PersonPageRoutingModule } from './person-page-routing.module';
-import { PersonService } from './person.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
-import { PersonListPageComponent } from './person-list-page/person-list-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
   DxButtonModule,
@@ -22,6 +20,8 @@ import {
 import { TranslateModule } from '@ngx-translate/core';
 import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation-rule-dxi';
 import { FormsModule } from '@angular/forms';
+import { PersonsPageComponent } from './persons-page/persons-page.component';
+import { InvokeDirective } from '../../directives/invoke.directive';
 
 @NgModule({
   imports: [
@@ -46,10 +46,8 @@ import { FormsModule } from '@angular/forms';
   ],
   declarations: [
     PersonPageComponent,
-    PersonListPageComponent
-  ],
-  providers: [
-    PersonService
+    PersonsPageComponent,
+    InvokeDirective
   ]
 })
 export class PersonPageModule {

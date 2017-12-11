@@ -8,9 +8,10 @@ import { LayoutService } from './shared/layout.service';
 })
 export class LayoutComponent implements OnInit {
 
-  public hidden = true;
+  public hidden: boolean;
 
   constructor(private layoutService: LayoutService) {
+    this.hidden = true;
   }
 
   ngOnInit(): void {

@@ -71,7 +71,7 @@
     "resetPassword": "Сброс пароля",
     "passwordResetLinkSentToEmail": "Ссылка для сброса пароля отправлена на почту.",
     "passwordChanged": "Пароль изменен",
-    "passwordResetError" : "Ошибка при сбросе пароля"
+    "passwordResetError": "Ошибка при сбросе пароля"
   },
   "notFound": {
     "notFound": "Не найдено"
@@ -90,5 +90,17 @@
   "apply": "Применить",
   "errors": {
     "errorWhileSaving": "Ошибка при сохранении"
+  },
+  "groups": {
+    "section": "Группы"
+  },
+  "scheduler": {
+    "section": "Планировщик"
+  },
+  "messages":{
+    "section": "Сообщения"
+  },
+  "notifications":{
+    "section": "Уведомления"
   }
 }

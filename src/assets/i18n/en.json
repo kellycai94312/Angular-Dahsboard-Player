@@ -89,5 +89,17 @@
   "apply": "Apply",
   "errors": {
     "errorWhileSaving": "Error while saving"
+  },
+  "groups":{
+    "section": "Groups"
+  },
+  "scheduler":{
+    "section": "Scheduler"
+  },
+  "messages":{
+    "section": "Messages"
+  },
+  "notifications":{
+    "section": "Notifications"
   }
 }
