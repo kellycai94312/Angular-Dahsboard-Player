@@ -1,7 +1,7 @@
 <header class="navbar-wrapper">
   <a href class="logo-wrapper">
-    <span class="large"><b>Reactor </b>Combine</span>
-    <span class="mini"><b>R</b>C</span>
+    <span class="large"><b>Athlete </b>Readiness</span>
+    <span class="mini"><b>A</b>R</span>
   </a>
   <nav class="navbar-wrapper">
     <div ngbDropdown>
@@ -9,8 +9,8 @@
            id="dropdownManual"
            ngbDropdownToggle>
         <div class="dropdown-toggle-content">
-          <div class="avatar"
-               [ngStyle]="{'background-image': 'url('+ logo +'), url(' + logoDefault + ')'}">
+          <div class="avatar" *ngIf="logo"
+               [ngStyle]="{'background-image': 'url('+ logo +')'}">
           </div>
           <p>{{fullName}}</p>
           <span class="lnr lnr-chevron-down"></span>

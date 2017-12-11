@@ -3,7 +3,8 @@ import { ParticipantRestApiService } from '../../../data/remote/rest-api/partici
 import { PageContainer } from '../../../data/remote/bean/page-container';
 import { Person } from '../../../data/remote/model/person';
 import { PageQuery } from '../../../data/remote/rest-api/page-query';
-import { LogoService } from '../../../shared/logo.service';
+import { PictureService } from '../../../shared/picture.service';
+import { PictureClass } from '../../../data/remote/misc/picture-class';
 
 @Component({
   selector: 'app-persons-page',
@@ -17,15 +18,13 @@ export class PersonsPageComponent implements OnInit {
 
   public personPageContainer: PageContainer<Person>;
   public pageSize: number;
-  public logoDefault: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _logoService: LogoService) {
+              private _logoService: PictureService) {
     this.collectionSize = 0;
     this.personLogoUrls = new Map<number, string>();
 
     this.pageSize = 10;
-    this.logoDefault = _logoService.getPersonDefault();
   }
 
   async ngOnInit() {
@@ -33,7 +32,7 @@ export class PersonsPageComponent implements OnInit {
   }
 
   public getPersonLogoImage(person: Person) {
-    this.personLogoUrls.set(person.id, this._logoService.getPerson(person.id));
+    this.personLogoUrls.set(person.id, this._logoService.getLogo(PictureClass.person, person.id));
   }
 
   public async onPageChange(selectedPage: number) {
