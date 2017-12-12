@@ -66,8 +66,6 @@ import { PersonService } from './person-page/person.service';
   ],
   providers: [
     PersonService
-
-
   ]
 })
 export class PersonPageModule {

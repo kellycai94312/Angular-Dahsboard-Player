@@ -5,10 +5,9 @@ import { City } from '../../../../data/remote/model/city';
 import { Region } from '../../../../data/remote/model/region';
 import { Country } from '../../../../data/remote/model/country';
 import { SexEnum } from '../../../../data/remote/misc/sex-enum';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { LocalStorageService } from '../../../../shared/local-storage.service';
 import { Address } from '../../../../data/remote/model/address';
+import { NavBarService } from '../../../../layout/nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-personal',
@@ -28,10 +27,8 @@ export class PersonalComponent implements OnInit {
   private cities: City[];
 
   constructor(private participantRestApiService: ParticipantRestApiService,
-              private router: Router,
-              private route: ActivatedRoute,
-              private _localStorageService: LocalStorageService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _navbarService: NavBarService) {
     this.isEditAllow = _personService.shared.isEditAllow;
     this.person = _personService.shared.person;
   }
@@ -94,6 +91,7 @@ export class PersonalComponent implements OnInit {
       person.address.city = null;
     }
     await this.participantRestApiService.updatePerson(person, {id: person.id});
+    this._navbarService.emitFullNameChange(this.person);
   }
 
   private async loadCountries() {

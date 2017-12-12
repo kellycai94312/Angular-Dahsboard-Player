@@ -9,12 +9,11 @@ import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
-import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
-import { LocalStorageService } from '../../../shared/local-storage.service';
 import { PictureService } from '../../../shared/picture.service';
-import { AnthropometryRequest } from '../../../data/remote/request/anthropometry-request';
 import { Subject } from 'rxjs/Subject';
 import { PersonService } from './person.service';
+import { LocalStorageService } from '../../../shared/local-storage.service';
+import { NavBarService } from '../../../layout/nav-bar/nav-bar.service';
 
 @Component({
   selector: 'app-person-page',
@@ -38,13 +37,9 @@ export class PersonPageComponent implements OnInit {
   private sportTypeSubject: Subject<any> = new Subject();
   private sportTypesModal = false;
 
-  private anthropometry: PersonAnthropometry[];
-
   private logo: string;
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
-
-  private personId: number;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
@@ -52,7 +47,8 @@ export class PersonPageComponent implements OnInit {
               private route: ActivatedRoute,
               private _localStorageService: LocalStorageService,
               private logoService: PictureService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _navbarService: NavBarService) {
     this.isEditAllow = false;
   }
 
@@ -154,43 +150,29 @@ export class PersonPageComponent implements OnInit {
     this.toggleSportTypesModal();
   }
 
-  async saveAnthropometry() {
-    if (this.sportTypeToggle) {
-      const request: AnthropometryRequest = new AnthropometryRequest();
-      request.anthropometry = new ListRequest(this.anthropometry);
-      request.sportType = this.sportTypeToggle.sportTypeEnum;
-      this.anthropometry = await this.participantRestApiService.changeAnthropometry(request);
-    }
-  }
-
   async onRoleChange() {
   }
 
   async onSportTypeChange() {
-    this.anthropometry = await this.participantRestApiService.getAnhtropometry({
-      id: this.personId,
-      sportType: this.sportTypeToggle.sportTypeEnum
-    });
+    this._personService.emitSportTypeChange(this.sportTypeToggle);
   }
 
   updateLogo() {
-    this.route.params.subscribe(params => {
-      this.logo = this.logoService.getLogo(PictureClass.person, +params.id);
-    });
+    this.logo = this.logoService.getLogo(PictureClass.person, this.person.id);
+    this._navbarService.emitLogoChange(this.logo);
   }
 
-  ngOnInit() {
-    this.updateLogo();
+  async ngOnInit() {
     this.route.params.subscribe(params => {
-      this.personId = +params.id;
-      this.isEditAllow = this.personId === this._localStorageService.getCurrentPersonId();
-      this.participantRestApiService.getPerson({id: this.personId})
+      this.participantRestApiService.getPerson({id: +params.id})
         .then(person => {
           this.person = person;
+          this.updateLogo();
+          this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
           this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
           // load user roles
-          this.participantRestApiService.getUserRoles({id: this.person.user.id})
+          this.participantRestApiService.getUserRoles({id: person.user.id})
             .then(userRoles => {
               this.userRoles = userRoles;
               if (userRoles.length) {
@@ -199,7 +181,7 @@ export class PersonPageComponent implements OnInit {
               }
             });
 
-          this.participantRestApiService.getPersonSportTypes({id: this.personId})
+          this.participantRestApiService.getPersonSportTypes({id: person.id})
             .then(personSportTypes => {
               this.personSportTypes = personSportTypes;
               if (personSportTypes.length) {
