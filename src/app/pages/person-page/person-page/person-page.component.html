@@ -264,15 +264,12 @@
     <div *dxTemplate="let data of 'content'" class="p-0">
       <div class="row h-100 ">
         <div class="col-6">
-          <dx-list
-            [items]="roles"
-            [searchEnabled]="true"
-            searchExpr="userRoleEnum"
-            searchMode="contains">
-            <div *dxTemplate="let data of 'item'">
-              <div (dblclick)="addRole(data)" class="select-none">{{data.userRoleEnum}}</div>
-            </div>
-          </dx-list>
+          <app-input-search *ngIf="roles"
+                            [search]="getRoles"
+                            [dblclick]="addRole"
+                            [notify]="roleSubject"
+                            [key]="'userRoleEnum'">
+          </app-input-search>
         </div>
         <div class="col-6 ">
           <div class="user-roles">
@@ -301,15 +298,12 @@
     <div *dxTemplate="let data of 'content'" class="p-0">
       <div class="row h-100 ">
         <div class="col-6">
-          <dx-list
-            [items]="sportTypes"
-            [searchEnabled]="true"
-            searchExpr="sportTypeEnum"
-            searchMode="contains">
-            <div *dxTemplate="let data of 'item'">
-              <div (dblclick)="addSportType(data)" class="select-none">{{data.sportTypeEnum}}</div>
-            </div>
-          </dx-list>
+          <app-input-search *ngIf="sportTypes"
+                            [search]="getSportTypes"
+                            [dblclick]="addSportType"
+                            [notify]="sportTypeSubject"
+                            [key]="'sportTypeEnum'">
+          </app-input-search>
         </div>
         <div class="col-6 ">
           <div class="user-roles">

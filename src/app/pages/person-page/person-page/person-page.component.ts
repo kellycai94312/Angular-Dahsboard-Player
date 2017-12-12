@@ -16,9 +16,9 @@ import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
 import { LocalStorageService } from '../../../shared/local-storage.service';
-import { IdentifiedObject } from '../../../data/remote/base/identified-object';
 import { PictureService } from '../../../shared/picture.service';
 import { AnthropometryRequest } from '../../../data/remote/request/anthropometry-request';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-person-page',
@@ -40,11 +40,13 @@ export class PersonPageComponent implements OnInit {
   private roles: UserRole[];
   private userRolesModal: UserRole[] = [];
   private userRoles: UserRole[] = [];
+  private roleSubject: Subject<any> = new Subject();
   private rolesModal = false;
 
   private sportTypes: SportType[];
   private personSportTypesModal: SportType[] = [];
   private personSportTypes: SportType[] = [];
+  private sportTypeSubject: Subject<any> = new Subject();
   private sportTypesModal = false;
 
   private anthropometry: PersonAnthropometry[];
@@ -97,14 +99,13 @@ export class PersonPageComponent implements OnInit {
     if (this.rolesModal) {
       this.userRolesModal = Object.assign([], this.userRoles);
       this.roles = await this.participantRestApiService.getRoles();
-      let i = this.roles.length;
-      while (i--) {
-        if (this.contains(this.userRolesModal, this.roles[i])) {
-          this.roles.splice(i, 1);
-        }
-      }
+      this.roleSubject.next();
     } else {
       this.userRolesModal = [];
+      if (this.userRoles.length) {
+        this.roleToggle = this.userRoles[0];
+        this.onRoleChange();
+      }
     }
   }
 
@@ -113,44 +114,58 @@ export class PersonPageComponent implements OnInit {
     if (this.sportTypesModal) {
       this.personSportTypesModal = Object.assign([], this.personSportTypes);
       this.sportTypes = await this.participantRestApiService.getSportTypes();
-      let i = this.sportTypes.length;
-      while (i--) {
-        if (this.contains(this.personSportTypesModal, this.sportTypes[i])) {
-          this.sportTypes.splice(i, 1);
-        }
-      }
+      this.sportTypeSubject.next();
     } else {
       this.personSportTypesModal = [];
-    }
-  }
-
-  private contains<T extends IdentifiedObject>(arr: T[], obj: T): boolean {
-    for (const item of arr) {
-      if (item.id === obj.id) {
-        return true;
+      if (this.personSportTypes.length) {
+        this.sportTypeToggle = this.personSportTypes[0];
+        this.onSportTypeChange();
       }
     }
-    return false;
   }
 
-  addRole(role: UserRole) {
+  getRoles = (typing: string) => {
+    const data = [];
+    for (const item of this.roles) {
+      if (item.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1) {
+        data.push(item);
+      }
+    }
+    return data;
+  }
+
+  addRole = (typing: string, role: UserRole) => {
     this.roles.splice(this.roles.indexOf(role), 1);
     this.userRolesModal.push(role);
+    return this.getRoles(typing);
   }
 
-  addSportType(sportType: SportType) {
+  getSportTypes = (typing: string) => {
+    const data = [];
+    for (const item of this.sportTypes) {
+      if (item.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1) {
+        data.push(item);
+      }
+    }
+    return data;
+  }
+
+  addSportType = (typing: string, sportType: SportType) => {
     this.sportTypes.splice(this.sportTypes.indexOf(sportType), 1);
     this.personSportTypesModal.push(sportType);
+    return this.getSportTypes(typing);
   }
 
   removeRole(role: UserRole) {
     this.userRolesModal.splice(this.userRolesModal.indexOf(role), 1);
     this.roles.push(role);
+    this.roleSubject.next();
   }
 
   removeSportType(sportType: SportType) {
     this.personSportTypesModal.splice(this.personSportTypesModal.indexOf(sportType), 1);
     this.sportTypes.push(sportType);
+    this.sportTypeSubject.next();
   }
 
   async changeRoles() {

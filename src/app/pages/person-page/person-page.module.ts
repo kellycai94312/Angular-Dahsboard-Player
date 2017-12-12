@@ -22,6 +22,7 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
 import { FormsModule } from '@angular/forms';
 import { PersonsPageComponent } from './persons-page/persons-page.component';
 import { InvokeDirective } from '../../directives/invoke.directive';
+import { InputSearchModule } from '../../components/input-search/input-search.module';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { InvokeDirective } from '../../directives/invoke.directive';
     DxTemplateModule,
     DxListModule,
     DxTagBoxModule,
-    FormsModule
+    FormsModule,
+    InputSearchModule
   ],
   declarations: [
     PersonPageComponent,

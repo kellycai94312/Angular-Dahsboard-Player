@@ -1,0 +1,67 @@
+@import "../../../variables";
+
+* {
+  user-select: none;
+}
+
+$search-padding: 8px;
+$item-height: 35px;
+$item-bg-color-active: $light-blue;
+
+.wrapper {
+  .search {
+    position: relative;
+    > input {
+      text-indent: 25px;
+    }
+    > .fa-search {
+      position: absolute;
+      font-weight: 100;
+      margin: 0;
+      padding: 0;
+      top: 8px;
+      left: 8px;
+
+      font-size: 20px;
+      color: #ccc;
+    }
+  }
+  .items {
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    padding: 0;
+    margin-top: 1px;
+
+    > li {
+      height: $item-height;
+      background: $white;
+      cursor: pointer;
+      color: #555;
+      vertical-align: middle;
+      padding-left: 7px;
+      line-height: 28px;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #ccc;
+      }
+
+      &:hover {
+        color: #222;
+      }
+
+      &.active {
+        color: $white;
+        background-color: $item-bg-color-active;
+      }
+    }
+  }
+
+  .no_data {
+    padding-left: $search-padding;
+    padding-top: 2px;
+    > p {
+      color: #555;
+    }
+  }
+}
