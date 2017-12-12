@@ -23,6 +23,13 @@ import { FormsModule } from '@angular/forms';
 import { PersonsPageComponent } from './persons-page/persons-page.component';
 import { InvokeDirective } from '../../directives/invoke.directive';
 import { InputSearchModule } from '../../components/input-search/input-search.module';
+import { AnthropometryComponent } from './person-page/anthropometry/anthropometry.component';
+import { PersonalComponent } from './person-page/personal/personal.component';
+import { PhysiologyComponent } from './person-page/physiology/physiology.component';
+import { ContactComponent } from './person-page/contact/contact.component';
+import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
+import { EventsComponent } from './person-page/events/events.component';
+import { PersonService } from './person-page/person.service';
 
 @NgModule({
   imports: [
@@ -49,7 +56,18 @@ import { InputSearchModule } from '../../components/input-search/input-search.mo
   declarations: [
     PersonPageComponent,
     PersonsPageComponent,
-    InvokeDirective
+    InvokeDirective,
+    AnthropometryComponent,
+    PersonalComponent,
+    PhysiologyComponent,
+    ContactComponent,
+    TestsResultsComponent,
+    EventsComponent
+  ],
+  providers: [
+    PersonService
+
+
   ]
 })
 export class PersonPageModule {

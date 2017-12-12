@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Person } from '../../../data/remote/model/person';
 import { TranslateService } from '@ngx-translate/core';
-import { SexEnum } from '../../../data/remote/misc/sex-enum';
-import { Country } from '../../../data/remote/model/country';
-import { Region } from '../../../data/remote/model/region';
-import { City } from '../../../data/remote/model/city';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { UserRole } from '../../../data/remote/model/user-role';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Address } from '../../../data/remote/model/address';
 import { ListRequest } from '../../../data/remote/request/list-request';
 import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
@@ -19,6 +14,7 @@ import { LocalStorageService } from '../../../shared/local-storage.service';
 import { PictureService } from '../../../shared/picture.service';
 import { AnthropometryRequest } from '../../../data/remote/request/anthropometry-request';
 import { Subject } from 'rxjs/Subject';
+import { PersonService } from './person.service';
 
 @Component({
   selector: 'app-person-page',
@@ -29,13 +25,6 @@ export class PersonPageComponent implements OnInit {
 
   public person: Person;
   public isEditAllow: boolean;
-
-  private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
-    .filter(e => parseInt(e, 10) >= 0)
-    .map(k => SexEnum[k]);
-  private countries: Country[];
-  private regions: Region[];
-  private cities: City[];
 
   private roles: UserRole[];
   private userRolesModal: UserRole[] = [];
@@ -62,23 +51,9 @@ export class PersonPageComponent implements OnInit {
               private router: Router,
               private route: ActivatedRoute,
               private _localStorageService: LocalStorageService,
-              private logoService: PictureService) {
+              private logoService: PictureService,
+              private _personService: PersonService) {
     this.isEditAllow = false;
-  }
-
-  onCountryChange(e: any): void {
-    this.person.address.region = new Region();
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadRegions(e.value);
-    }
-  }
-
-  onRegionChange(e): void {
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadCities(e.value);
-    }
   }
 
   async onLogoChange(event) {
@@ -179,20 +154,6 @@ export class PersonPageComponent implements OnInit {
     this.toggleSportTypesModal();
   }
 
-  async savePersonal() {
-    // fixme
-    const person: Person = JSON.parse(JSON.stringify(this.person));
-    if (person.address.country.id == null) {
-      person.address = null;
-    } else if (person.address.region.id == null) {
-      person.address.region = null;
-      person.address.city = null;
-    } else if (person.address.city.id == null) {
-      person.address.city = null;
-    }
-    await this.participantRestApiService.updatePerson(person, {id: person.id});
-  }
-
   async saveAnthropometry() {
     if (this.sportTypeToggle) {
       const request: AnthropometryRequest = new AnthropometryRequest();
@@ -222,10 +183,11 @@ export class PersonPageComponent implements OnInit {
     this.updateLogo();
     this.route.params.subscribe(params => {
       this.personId = +params.id;
+      this.isEditAllow = this.personId === this._localStorageService.getCurrentPersonId();
       this.participantRestApiService.getPerson({id: this.personId})
         .then(person => {
           this.person = person;
-          this.isEditAllow = this.person.id === this._localStorageService.getCurrentPersonId();
+          this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
           // load user roles
           this.participantRestApiService.getUserRoles({id: this.person.user.id})
@@ -246,50 +208,11 @@ export class PersonPageComponent implements OnInit {
               }
             });
 
-          // load person address
-          this.participantRestApiService.getPersonAddress({id: this.personId})
-            .then(address => {
-              this.person.address = address;
-              /*fixme load only when user tries to change value*/
-              if (this.person.address.country != null) {
-                this.loadRegions(this.person.address.country.id);
-                if (this.person.address.region != null) {
-                  this.loadCities(this.person.address.region.id);
-                  if (this.person.address.city == null) {
-                    this.person.address.city = new City();
-                  }
-                } else {
-                  this.person.address.region = new Region();
-                  this.person.address.city = new City();
-                }
-              } else {
-                this.person.address.country = new Country();
-                this.person.address.region = new Region();
-                this.person.address.city = new City();
-              }
-            }).catch(error => {
-            this.person.address = new Address();
-            this.person.address.country = new Country();
-            this.person.address.region = new Region();
-            this.person.address.city = new City();
-          });
-          this.loadCountries();
+
         }).catch(error => {
         this.router.navigate(['not-found']);
       });
     });
-  }
-
-  private async loadCountries() {
-    this.countries = (await this.participantRestApiService.getCountries({count: 2147483647})).list;
-  }
-
-  private async loadRegions(countryId: number) {
-    this.regions = (await this.participantRestApiService.getRegions({countryId: countryId, count: 2147483647})).list;
-  }
-
-  private async loadCities(regionId: number) {
-    this.cities = (await this.participantRestApiService.getCities({regionId: regionId, count: 2147483647})).list;
   }
 
 }
