@@ -3,8 +3,8 @@
   "signOut": "Выход",
   "profile": "Профиль",
   "notRegistered": "",
-  "applicationFullName": "Reactor Combine",
-  "applicationShortName": "RC",
+  "applicationFullName": "Athlete Readiness",
+  "applicationShortName": "AR",
   "persons": {
     "section": "Пользователи",
     "person": {
@@ -19,6 +19,7 @@
       },
       "rating": "Рейтинг",
       "edit": "редактировать",
+      "cancel": "Отмена",
       "save": "Сохранить",
       "personal": {
         "section": "Основные данные",

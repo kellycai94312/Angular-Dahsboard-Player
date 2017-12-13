@@ -5,13 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
-  DxButtonModule,
   DxDateBoxModule,
   DxFormModule,
-  DxListModule,
   DxPopupModule,
   DxSelectBoxModule,
-  DxTagBoxModule,
   DxTemplateModule,
   DxTextAreaModule,
   DxTextBoxModule,
@@ -22,6 +19,17 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
 import { FormsModule } from '@angular/forms';
 import { PersonsPageComponent } from './persons-page/persons-page.component';
 import { InvokeDirective } from '../../directives/invoke.directive';
+import { InputSearchModule } from '../../components/input-search/input-search.module';
+import { AnthropometryComponent } from './person-page/anthropometry/anthropometry.component';
+import { PersonalComponent } from './person-page/personal/personal.component';
+import { PhysiologyComponent } from './person-page/physiology/physiology.component';
+import { ContactComponent } from './person-page/contact/contact.component';
+import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
+import { EventsComponent } from './person-page/events/events.component';
+import { PersonService } from './person-page/person.service';
+import { RolesModalComponent } from './person-page/roles-modal/roles-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-types-modal.component';
 
 @NgModule({
   imports: [
@@ -38,16 +46,30 @@ import { InvokeDirective } from '../../directives/invoke.directive';
     DxValidatorModule,
     DxiValidationRuleModule,
     DxPopupModule,
-    DxButtonModule,
     DxTemplateModule,
-    DxListModule,
-    DxTagBoxModule,
-    FormsModule
+    FormsModule,
+    InputSearchModule,
+    ModalModule.forRoot()
   ],
   declarations: [
     PersonPageComponent,
     PersonsPageComponent,
-    InvokeDirective
+    InvokeDirective,
+    AnthropometryComponent,
+    PersonalComponent,
+    PhysiologyComponent,
+    ContactComponent,
+    TestsResultsComponent,
+    EventsComponent,
+    RolesModalComponent,
+    SportTypesModalComponent
+  ],
+  providers: [
+    PersonService
+  ],
+  entryComponents: [
+    RolesModalComponent,
+    SportTypesModalComponent
   ]
 })
 export class PersonPageModule {

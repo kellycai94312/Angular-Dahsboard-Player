@@ -3,14 +3,13 @@
     <div class="mb-2"
          *ngFor="let person of personPageContainer.list">
       <a routerLink="{{person.id}}"
-         (invoke)="getPersonLogoImage(person)"
          routerLinkActive="active">
         <div class="d-flex flex-row">
           <div class="d-flex flex-column">
             <div class="d-flex flex-row h-100">
               <div class="align-self-center">
                 <div class="img-fluid avatar img"
-                     [ngStyle]="{'background-image': 'url('+ personLogoUrls.get(person.id) +'), url(' + logoDefault + ')'}">
+                     [ngStyle]="{'background-image': 'url('+ personLogoUrls.get(person.id) +')'}">
                 </div>
               </div>
             </div>

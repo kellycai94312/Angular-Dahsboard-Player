@@ -3,12 +3,13 @@
   <div class="d-flex flex-row">
     <div class="d-flex flex-column">
       <div class="img img-fluid avatar"
-           [ngStyle]="{'background-image': 'url('+ logo +'), url('+ logoDefault +')'}">
+           [ngStyle]="{'background-image': 'url('+ logo +')'}">
       </div>
       <button *ngIf="isEditAllow"
               class="btn btn-default btn-file btn-sm mt-2">
         <i class="fa fa-pencil-square-o"></i>
-        <span> {{'persons.person.changeAvatar' | translate | uppercase}}
+        <span>
+            <p>{{'persons.person.changeAvatar' | translate | uppercase}}</p>
             <input type="file"
                    (change)="onLogoChange($event)"
                    accept="image/*">
@@ -17,7 +18,7 @@
     </div>
     <div class="d-flex flex-column ml-4">
       <div class="d-flex flex-row h-100">
-        <div class="align-self-center">
+        <div class="align-self-center full-name">
           <h3>{{person.firstName | uppercase}}</h3>
           <h3>{{person.lastName | uppercase}}</h3>
           <h3>{{person.patronymic | uppercase}}</h3>
@@ -29,7 +30,7 @@
   </div>
 
   <!-- roles -->
-  <div class="d-flex flex-row mt-5">
+  <div class="d-flex flex-row mt-3">
     <div class="align-self-center">
       <p>{{'persons.person.roles.section' | translate | uppercase}}</p>
     </div>
@@ -90,240 +91,44 @@
 
   <!-- tabs -->
   <div class="mt-3">
-    <ngb-tabset [destroyOnHide]="false">
-      <ngb-tab title="{{'persons.person.personal.section' | translate | uppercase }}">
-        <ng-template ngbTabContent>
-          <div class="pt-3">
-            <div class="row">
-              <div class="col-3">
-                <div class="form-group p-1">
-                  <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
-                  <dx-text-box id="lastName"
-                               [(value)]="person.lastName"
-                               [readOnly]="!isEditAllow">
-                    <dx-validator>
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group p-1">
-                  <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
-                  <dx-text-box id="firstName"
-                               [(value)]="person.firstName"
-                               [readOnly]="!isEditAllow">
-                    <dx-validator>
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-text-box>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group p-1">
-                  <label for="middleName">{{'persons.person.personal.middleName' | translate}}</label>
-                  <dx-text-box id="middleName"
-                               [(value)]="person.patronymic"
-                               [showClearButton]="true"
-                               [readOnly]="!isEditAllow">
-                  </dx-text-box>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-3">
-                <div class="form-group p-1">
-                  <label for="birthDate">{{'persons.person.personal.birthDate' | translate}}</label>
-                  <dx-date-box id="birthDate"
-                               [(value)]="person.birthDate"
-                               type="date"
-                               class="w-100"
-                               [readOnly]="!isEditAllow">
-                    <dx-validator>
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-date-box>
-                </div>
-              </div>
-              <div class="col-3">
-                <div class="form-group p-1">
-                  <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
-                  <dx-select-box id="sex"
-                                 [items]="sexEnumValues"
-                                 [(value)]="person.sex"
-                                 [readOnly]="!isEditAllow">
-                    <dx-validator>
-                      <dxi-validation-rule type="required"></dxi-validation-rule>
-                    </dx-validator>
-                  </dx-select-box>
-                </div>
-              </div>
-            </div>
-            <div class="row"
-                 *ngIf="person.address">
-              <div class="col-3"
-                   *ngIf="person.address.country">
-                <label for="country">{{'persons.person.personal.country' | translate}}</label>
-                <dx-select-box id="country"
-                               [dataSource]="countries"
-                               [(value)]="person.address.country.id"
-                               (onValueChanged)="onCountryChange($event)"
-                               valueExpr="id"
-                               displayExpr="name"
-                               [searchEnabled]="true"
-                               [readOnly]="!isEditAllow">
-                </dx-select-box>
-              </div>
-              <div class="col-3"
-                   *ngIf="person.address.region">
-                <label for="region">{{'persons.person.personal.region' | translate}}</label>
-                <dx-select-box id="region"
-                               [dataSource]="regions"
-                               [(value)]="person.address.region.id"
-                               (onValueChanged)="onRegionChange($event)"
-                               valueExpr="id"
-                               displayExpr="name"
-                               [searchEnabled]="true"
-                               [readOnly]="!isEditAllow">
-                </dx-select-box>
-              </div>
-              <div class="col-3"
-                   *ngIf="person.address.city">
-                <label for="city">{{'persons.person.personal.city' | translate}}</label>
-                <dx-select-box id="city"
-                               [dataSource]="cities"
-                               [(value)]="person.address.city.id"
-                               valueExpr="id"
-                               displayExpr="name"
-                               [searchEnabled]="true"
-                               [readOnly]="!isEditAllow">
-                </dx-select-box>
-              </div>
-            </div>
-          </div>
-          <button *ngIf="isEditAllow"
-                  type="button"
-                  class="btn btn-outline-success mt-3"
-                  (click)="savePersonal()">{{'persons.person.save' | translate}}
-          </button>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="{{'persons.person.anthropometry.section' | translate | uppercase }}"
-               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-        <ng-template ngbTabContent>
-          <div class="pt-3">
-            <div class="row"
-                 *ngFor="let pa of anthropometry">
-              <div class="col-6">
-                <div class="form-group p-1">
-                  <label for="measure">{{pa.measureSpec.name}}</label>
-                  <dx-text-box id="measure"
-                               [(value)]="pa.value"
-                               class="w-100"
-                               [readOnly]="!isEditAllow">
-                  </dx-text-box>
-                </div>
-              </div>
-            </div>
-            <button *ngIf="isEditAllow"
-                    type="button"
-                    class="btn btn-outline-success mt-3"
-                    (click)="saveAnthropometry()">{{'persons.person.save' | translate}}
-            </button>
-          </div>
-        </ng-template>
-      </ngb-tab>
-      <ngb-tab title="{{'persons.person.physiology.section' | translate | uppercase }}"
-               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-        <ng-template ngbTabContent></ng-template>
-      </ngb-tab>
-      <ngb-tab title="{{'persons.person.contact.section' | translate | uppercase }}">
-        <ng-template ngbTabContent></ng-template>
-      </ngb-tab>
-      <ngb-tab title="{{'persons.person.testsResults.section' | translate | uppercase }}"
-               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-        <ng-template ngbTabContent></ng-template>
-      </ngb-tab>
-      <ngb-tab title="{{'persons.person.events.section' | translate | uppercase }}"
-               *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-        <ng-template ngbTabContent>
-        </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="personal" [ngClass]="{'active' : router.url.indexOf('personal') > -1}">
+          {{'persons.person.personal.section' | translate | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="anthropometry" [ngClass]="{'active' : router.url.indexOf('anthropometry') > -1}"
+           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+          {{'persons.person.anthropometry.section' | translate | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="physiology" [ngClass]="{'active' : router.url.indexOf('physiology') > -1}"
+           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+          {{'persons.person.physiology.section' | translate | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="contact" [ngClass]="{'active' : router.url.indexOf('contact') > -1}">
+          {{'persons.person.contact.section' | translate | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="tests_results" [ngClass]="{'active' : router.url.indexOf('tests_results') > -1}"
+           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+          {{'persons.person.testsResults.section' | translate | uppercase }}
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="events" [ngClass]="{'active' : router.url.indexOf('events') > -1}"
+           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
+          {{'persons.person.events.section' | translate | uppercase }}
+        </a>
+      </li>
+    </ul>
+    <div class="pt-3">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-
-  <dx-popup
-    class="popup"
-    [width]="600"
-    [height]="500"
-    [showTitle]="true"
-    title="{{'persons.person.roles.section' | translate}}"
-    [dragEnabled]="false"
-    [closeOnOutsideClick]="true"
-    [(visible)]="rolesModal">
-    <div *dxTemplate="let data of 'content'" class="p-0">
-      <div class="row h-100 ">
-        <div class="col-6">
-          <dx-list
-            [items]="roles"
-            [searchEnabled]="true"
-            searchExpr="userRoleEnum"
-            searchMode="contains">
-            <div *dxTemplate="let data of 'item'">
-              <div (dblclick)="addRole(data)" class="select-none">{{data.userRoleEnum}}</div>
-            </div>
-          </dx-list>
-        </div>
-        <div class="col-6 ">
-          <div class="user-roles">
-            <ul *ngFor="let role of userRolesModal">
-              <li class="item">
-                <button class="btn btn-primary btn-xs" (click)="removeRole(role)">
-                  <i class="fa fa-times"></i><span>{{role.userRoleEnum}}</span>
-                </button>
-              </li>
-            </ul>
-            <button class="btn btn-sm" (click)="changeRoles()">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dx-popup>
-  <dx-popup
-    class="popup"
-    [width]="600"
-    [height]="500"
-    [showTitle]="true"
-    title="{{'persons.person.sportTypes.edit' | translate}}"
-    [dragEnabled]="false"
-    [closeOnOutsideClick]="true"
-    [(visible)]="sportTypesModal">
-    <div *dxTemplate="let data of 'content'" class="p-0">
-      <div class="row h-100 ">
-        <div class="col-6">
-          <dx-list
-            [items]="sportTypes"
-            [searchEnabled]="true"
-            searchExpr="sportTypeEnum"
-            searchMode="contains">
-            <div *dxTemplate="let data of 'item'">
-              <div (dblclick)="addSportType(data)" class="select-none">{{data.sportTypeEnum}}</div>
-            </div>
-          </dx-list>
-        </div>
-        <div class="col-6 ">
-          <div class="user-roles">
-            <ul *ngFor="let sportType of personSportTypesModal">
-              <li class="item">
-                <button class="btn btn-primary btn-xs" (click)="removeSportType(sportType)">
-                  <i class="fa fa-times"></i><span>{{sportType.sportTypeEnum}}</span>
-                </button>
-              </li>
-            </ul>
-            <button class="btn btn-sm" (click)="changeSportTypes()">Save</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </dx-popup>
 </div>

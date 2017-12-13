@@ -1,24 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { Person } from '../../../data/remote/model/person';
 import { TranslateService } from '@ngx-translate/core';
-import { SexEnum } from '../../../data/remote/misc/sex-enum';
-import { Country } from '../../../data/remote/model/country';
-import { Region } from '../../../data/remote/model/region';
-import { City } from '../../../data/remote/model/city';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { UserRole } from '../../../data/remote/model/user-role';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Address } from '../../../data/remote/model/address';
-import { ListRequest } from '../../../data/remote/request/list-request';
 import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
-import { PersonAnthropometry } from '../../../data/remote/model/person-anthropometry';
+import { PictureService } from '../../../shared/picture.service';
+import { PersonService } from './person.service';
 import { LocalStorageService } from '../../../shared/local-storage.service';
-import { IdentifiedObject } from '../../../data/remote/base/identified-object';
-import { LogoService } from '../../../shared/logo.service';
-import { AnthropometryRequest } from '../../../data/remote/request/anthropometry-request';
+import { NavBarService } from '../../../layout/nav-bar/nav-bar.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { RolesModalComponent } from './roles-modal/roles-modal.component';
+import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
 
 @Component({
   selector: 'app-person-page',
@@ -30,56 +26,42 @@ export class PersonPageComponent implements OnInit {
   public person: Person;
   public isEditAllow: boolean;
 
-  private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
-    .filter(e => parseInt(e, 10) >= 0)
-    .map(k => SexEnum[k]);
-  private countries: Country[];
-  private regions: Region[];
-  private cities: City[];
-
-  private roles: UserRole[];
-  private userRolesModal: UserRole[] = [];
   private userRoles: UserRole[] = [];
-  private rolesModal = false;
-
-  private sportTypes: SportType[];
-  private personSportTypesModal: SportType[] = [];
-  private personSportTypes: SportType[] = [];
-  private sportTypesModal = false;
-
-  private anthropometry: PersonAnthropometry[];
+  private personSportTypes: SportType[];
 
   private logo: string;
-  private logoDefault: string;
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
 
-  private personId: number;
+  private rolesModalRef: BsModalRef;
+  private sportTypesModalRef: BsModalRef;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
               private route: ActivatedRoute,
               private _localStorageService: LocalStorageService,
-              private logoService: LogoService) {
+              private logoService: PictureService,
+              private _personService: PersonService,
+              private _navbarService: NavBarService,
+              private _modalService: BsModalService) {
     this.isEditAllow = false;
-    this.logoDefault = this.logoService.getPersonDefault();
+    this._personService.rolesChangeEmitted$.subscribe(userRoles => {
+      this.userRoles = userRoles;
+      if (this.userRoles.length) {
+        this.roleToggle = userRoles[0];
+        this.onRoleChange();
+      }
+    });
+    this._personService.sportTypesChangeEmitted$.subscribe(userRoles => {
+      this.personSportTypes = userRoles;
+      if (this.personSportTypes.length) {
+        this.sportTypeToggle = this.personSportTypes[0];
+        this.onSportTypeChange();
+      }
+    });
   }
 
-  onCountryChange(e: any): void {
-    this.person.address.region = new Region();
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadRegions(e.value);
-    }
-  }
-
-  onRegionChange(e): void {
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadCities(e.value);
-    }
-  }
 
   async onLogoChange(event) {
     const fileList: FileList = event.target.files;
@@ -94,128 +76,39 @@ export class PersonPageComponent implements OnInit {
     }
   }
 
-  async toggleRolesModal() {
-    this.rolesModal = !this.rolesModal;
-    if (this.rolesModal) {
-      this.userRolesModal = Object.assign([], this.userRoles);
-      this.roles = await this.participantRestApiService.getRoles();
-      let i = this.roles.length;
-      while (i--) {
-        if (this.contains(this.userRolesModal, this.roles[i])) {
-          this.roles.splice(i, 1);
-        }
-      }
-    } else {
-      this.userRolesModal = [];
-    }
+  toggleRolesModal() {
+    this.rolesModalRef = this._modalService.show(RolesModalComponent, {class: 'modal-lg'});
+    this.rolesModalRef.content.userRoles = Object.assign([], this.userRoles);
   }
 
-  async toggleSportTypesModal() {
-    this.sportTypesModal = !this.sportTypesModal;
-    if (this.sportTypesModal) {
-      this.personSportTypesModal = Object.assign([], this.personSportTypes);
-      this.sportTypes = await this.participantRestApiService.getSportTypes();
-      let i = this.sportTypes.length;
-      while (i--) {
-        if (this.contains(this.personSportTypesModal, this.sportTypes[i])) {
-          this.sportTypes.splice(i, 1);
-        }
-      }
-    } else {
-      this.personSportTypesModal = [];
-    }
-  }
-
-  private contains<T extends IdentifiedObject>(arr: T[], obj: T): boolean {
-    for (const item of arr) {
-      if (item.id === obj.id) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  addRole(role: UserRole) {
-    this.roles.splice(this.roles.indexOf(role), 1);
-    this.userRolesModal.push(role);
-  }
-
-  addSportType(sportType: SportType) {
-    this.sportTypes.splice(this.sportTypes.indexOf(sportType), 1);
-    this.personSportTypesModal.push(sportType);
-  }
-
-  removeRole(role: UserRole) {
-    this.userRolesModal.splice(this.userRolesModal.indexOf(role), 1);
-    this.roles.push(role);
-  }
-
-  removeSportType(sportType: SportType) {
-    this.personSportTypesModal.splice(this.personSportTypesModal.indexOf(sportType), 1);
-    this.sportTypes.push(sportType);
-  }
-
-  async changeRoles() {
-    const user = await this.participantRestApiService.changeRoles(new ListRequest(this.userRolesModal));
-    this.userRoles = user.userRoles;
-    this.toggleRolesModal();
-  }
-
-  async changeSportTypes() {
-    this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(this.personSportTypesModal));
-    this.toggleSportTypesModal();
-  }
-
-  async savePersonal() {
-    // fixme
-    const person: Person = JSON.parse(JSON.stringify(this.person));
-    if (person.address.country.id == null) {
-      person.address = null;
-    } else if (person.address.region.id == null) {
-      person.address.region = null;
-      person.address.city = null;
-    } else if (person.address.city.id == null) {
-      person.address.city = null;
-    }
-    await this.participantRestApiService.updatePerson(person, {id: person.id});
-  }
-
-  async saveAnthropometry() {
-    if (this.sportTypeToggle) {
-      const request: AnthropometryRequest = new AnthropometryRequest();
-      request.anthropometry = new ListRequest(this.anthropometry);
-      request.sportType = this.sportTypeToggle.sportTypeEnum;
-      this.anthropometry = await this.participantRestApiService.changeAnthropometry(request);
-    }
+  toggleSportTypesModal() {
+    this.sportTypesModalRef = this._modalService.show(SportTypesModalComponent, {class: 'modal-lg'});
+    this.sportTypesModalRef.content.personSportTypes = Object.assign([], this.personSportTypes);
   }
 
   async onRoleChange() {
   }
 
   async onSportTypeChange() {
-    this.anthropometry = await this.participantRestApiService.getAnhtropometry({
-      id: this.personId,
-      sportType: this.sportTypeToggle.sportTypeEnum
-    });
+    this._personService.emitSportTypeSelect(this.sportTypeToggle);
   }
 
   updateLogo() {
-    this.route.params.subscribe(params => {
-      this.logo = this.logoService.getPerson(+params.id);
-    });
+    this.logo = this.logoService.getLogo(PictureClass.person, this.person.id);
+    this._navbarService.emitLogoChange(this.logo);
   }
 
-  ngOnInit() {
-    this.updateLogo();
+  async ngOnInit() {
     this.route.params.subscribe(params => {
-      this.personId = +params.id;
-      this.participantRestApiService.getPerson({id: this.personId})
+      this.participantRestApiService.getPerson({id: +params.id})
         .then(person => {
           this.person = person;
-          this.isEditAllow = this.person.id === this._localStorageService.getCurrentPersonId();
+          this.updateLogo();
+          this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
+          this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
           // load user roles
-          this.participantRestApiService.getUserRoles({id: this.person.user.id})
+          this.participantRestApiService.getUserRoles({id: person.user.id})
             .then(userRoles => {
               this.userRoles = userRoles;
               if (userRoles.length) {
@@ -224,59 +117,21 @@ export class PersonPageComponent implements OnInit {
               }
             });
 
-          this.participantRestApiService.getPersonSportTypes({id: this.personId})
+          this.participantRestApiService.getPersonSportTypes({id: person.id})
             .then(personSportTypes => {
               this.personSportTypes = personSportTypes;
               if (personSportTypes.length) {
                 this.sportTypeToggle = personSportTypes[0];
+                this._personService.sportTypeSelectDefault = personSportTypes[0];
                 this.onSportTypeChange();
               }
             });
 
-          // load person address
-          this.participantRestApiService.getPersonAddress({id: this.personId})
-            .then(address => {
-              this.person.address = address;
-              /*fixme load only when user tries to change value*/
-              if (this.person.address.country != null) {
-                this.loadRegions(this.person.address.country.id);
-                if (this.person.address.region != null) {
-                  this.loadCities(this.person.address.region.id);
-                  if (this.person.address.city == null) {
-                    this.person.address.city = new City();
-                  }
-                } else {
-                  this.person.address.region = new Region();
-                  this.person.address.city = new City();
-                }
-              } else {
-                this.person.address.country = new Country();
-                this.person.address.region = new Region();
-                this.person.address.city = new City();
-              }
-            }).catch(error => {
-            this.person.address = new Address();
-            this.person.address.country = new Country();
-            this.person.address.region = new Region();
-            this.person.address.city = new City();
-          });
-          this.loadCountries();
+
         }).catch(error => {
         this.router.navigate(['not-found']);
       });
     });
-  }
-
-  private async loadCountries() {
-    this.countries = (await this.participantRestApiService.getCountries({count: 2147483647})).list;
-  }
-
-  private async loadRegions(countryId: number) {
-    this.regions = (await this.participantRestApiService.getRegions({countryId: countryId, count: 2147483647})).list;
-  }
-
-  private async loadCities(regionId: number) {
-    this.cities = (await this.participantRestApiService.getCities({regionId: regionId, count: 2147483647})).list;
   }
 
 }

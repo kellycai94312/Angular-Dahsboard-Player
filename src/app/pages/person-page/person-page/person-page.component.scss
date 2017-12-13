@@ -35,33 +35,10 @@ ngb-tab.active {
   }
 }
 
-.user-roles {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  height: 100%;
-  > ul {
-    .item {
-      list-style-type: none;
-      padding-left: 0;
-      > .btn {
-        cursor: pointer;
-        padding: 2px 2px 2px 5px;
-        span {
-          padding-left: 5px;
-        }
-      }
-    }
-  }
-  > .btn {
-    margin-top: auto;
-    margin-left: auto;
-  }
-}
-
 .btn-file {
   position: relative;
   overflow: hidden;
+  width: auto;
   color: $light-blue;
 
   &:hover, &:active {
@@ -72,9 +49,6 @@ ngb-tab.active {
     position: absolute;
     top: 0;
     right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
     text-align: right;
     filter: alpha(opacity=0);
     opacity: 0;
@@ -83,4 +57,29 @@ ngb-tab.active {
     cursor: pointer;
     display: block;
   }
+
+  p {
+    display: inline;
+  }
+
+}
+
+@media (max-width: max-width-sm()) {
+  .full-name > h3 {
+    font-size: 14px;
+  }
+
+  .img {
+    width: $avatar-size-md !important;
+    height: $avatar-size-md !important;
+  }
+
+  .btn-file {
+    padding-left: 0;
+    padding-right: 0;
+    p {
+      display: none;
+    }
+  }
+
 }

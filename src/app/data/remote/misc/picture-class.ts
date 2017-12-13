@@ -1,5 +1,6 @@
 export enum PictureClass {
   person,
+  group,
   exercise,
   exercise_spec,
   training,
