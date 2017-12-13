@@ -31,10 +31,6 @@ export class PersonsPageComponent implements OnInit {
     await this.updateItems(1);
   }
 
-  public getPersonLogoImage(person: Person) {
-    this.personLogoUrls.set(person.id, this._logoService.getLogo(PictureClass.person, person.id));
-  }
-
   public async onPageChange(selectedPage: number) {
     await this.updateItems(selectedPage);
   }
@@ -49,6 +45,9 @@ export class PersonsPageComponent implements OnInit {
     pageQuery.from = fromPage;
     pageQuery.count = this.pageSize;
     this.personPageContainer = await this._participantRestApiService.getPersonsPage(pageQuery);
+    for (const person of this.personPageContainer.list) {
+      this.personLogoUrls.set(person.id, this._logoService.getLogo(PictureClass.person, person.id));
+    }
     this.collectionSize = this.personPageContainer.total;
   }
 

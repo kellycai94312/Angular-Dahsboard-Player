@@ -3,7 +3,6 @@
     <div class="mb-2"
          *ngFor="let person of personPageContainer.list">
       <a routerLink="{{person.id}}"
-         (invoke)="getPersonLogoImage(person)"
          routerLinkActive="active">
         <div class="d-flex flex-row">
           <div class="d-flex flex-column">
