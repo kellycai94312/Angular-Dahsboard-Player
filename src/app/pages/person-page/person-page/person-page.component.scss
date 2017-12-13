@@ -62,6 +62,7 @@ ngb-tab.active {
 .btn-file {
   position: relative;
   overflow: hidden;
+  width: auto;
   color: $light-blue;
 
   &:hover, &:active {
@@ -72,9 +73,6 @@ ngb-tab.active {
     position: absolute;
     top: 0;
     right: 0;
-    min-width: 100%;
-    min-height: 100%;
-    font-size: 100px;
     text-align: right;
     filter: alpha(opacity=0);
     opacity: 0;
@@ -83,4 +81,29 @@ ngb-tab.active {
     cursor: pointer;
     display: block;
   }
+
+  p {
+    display: inline;
+  }
+
+}
+
+@media (max-width: max-width-sm()) {
+  .full-name > h3 {
+    font-size: 14px;
+  }
+
+  .img {
+    width: $avatar-size-md !important;
+    height: $avatar-size-md !important;
+  }
+
+  .btn-file {
+    padding-left: 0;
+    padding-right: 0;
+    p {
+      display: none;
+    }
+  }
+
 }

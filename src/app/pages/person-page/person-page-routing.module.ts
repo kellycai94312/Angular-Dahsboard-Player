@@ -15,6 +15,7 @@ const routes: Routes = [
   {
     path: ':id', component: PersonPageComponent,
     children: [
+      {path: '', redirectTo: 'personal', pathMatch: 'full'},
       {path: 'anthropometry', component: AnthropometryComponent},
       {path: 'contact', component: ContactComponent},
       {path: 'events', component: EventsComponent},

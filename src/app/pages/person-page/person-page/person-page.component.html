@@ -8,7 +8,8 @@
       <button *ngIf="isEditAllow"
               class="btn btn-default btn-file btn-sm mt-2">
         <i class="fa fa-pencil-square-o"></i>
-        <span> {{'persons.person.changeAvatar' | translate | uppercase}}
+        <span>
+            <p>{{'persons.person.changeAvatar' | translate | uppercase}}</p>
             <input type="file"
                    (change)="onLogoChange($event)"
                    accept="image/*">
@@ -17,7 +18,7 @@
     </div>
     <div class="d-flex flex-column ml-4">
       <div class="d-flex flex-row h-100">
-        <div class="align-self-center">
+        <div class="align-self-center full-name">
           <h3>{{person.firstName | uppercase}}</h3>
           <h3>{{person.lastName | uppercase}}</h3>
           <h3>{{person.patronymic | uppercase}}</h3>
@@ -29,7 +30,7 @@
   </div>
 
   <!-- roles -->
-  <div class="d-flex flex-row mt-5">
+  <div class="d-flex flex-row mt-3">
     <div class="align-self-center">
       <p>{{'persons.person.roles.section' | translate | uppercase}}</p>
     </div>
@@ -126,9 +127,11 @@
         </a>
       </li>
     </ul>
+    <div class="pt-3">
+      <router-outlet></router-outlet>
+    </div>
   </div>
 
-  <router-outlet></router-outlet>
 
   <dx-popup
     class="popup"

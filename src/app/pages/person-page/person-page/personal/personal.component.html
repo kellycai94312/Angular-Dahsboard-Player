@@ -1,109 +1,107 @@
-<div class="pt-3">
-  <div class="row">
-    <div class="col-3">
-      <div class="form-group p-1">
-        <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
-        <dx-text-box id="lastName"
-                     [(value)]="person.lastName"
-                     [readOnly]="!isEditAllow">
-          <dx-validator>
-            <dxi-validation-rule type="required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="form-group p-1">
-        <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
-        <dx-text-box id="firstName"
-                     [(value)]="person.firstName"
-                     [readOnly]="!isEditAllow">
-          <dx-validator>
-            <dxi-validation-rule type="required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="form-group p-1">
-        <label for="middleName">{{'persons.person.personal.middleName' | translate}}</label>
-        <dx-text-box id="middleName"
-                     [(value)]="person.patronymic"
-                     [showClearButton]="true"
-                     [readOnly]="!isEditAllow">
-        </dx-text-box>
-      </div>
+<div class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group p-1">
+      <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
+      <dx-text-box id="lastName"
+                   [(value)]="person.lastName"
+                   [readOnly]="!isEditAllow">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
     </div>
   </div>
-  <div class="row">
-    <div class="col-3">
-      <div class="form-group p-1">
-        <label for="birthDate">{{'persons.person.personal.birthDate' | translate}}</label>
-        <dx-date-box id="birthDate"
-                     [(value)]="person.birthDate"
-                     type="date"
-                     class="w-100"
-                     [readOnly]="!isEditAllow">
-          <dx-validator>
-            <dxi-validation-rule type="required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-date-box>
-      </div>
-    </div>
-    <div class="col-3">
-      <div class="form-group p-1">
-        <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
-        <dx-select-box id="sex"
-                       [items]="sexEnumValues"
-                       [(value)]="person.sex"
-                       [readOnly]="!isEditAllow">
-          <dx-validator>
-            <dxi-validation-rule type="required"></dxi-validation-rule>
-          </dx-validator>
-        </dx-select-box>
-      </div>
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group p-1">
+      <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
+      <dx-text-box id="firstName"
+                   [(value)]="person.firstName"
+                   [readOnly]="!isEditAllow">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
     </div>
   </div>
-  <div class="row"
-       *ngIf="person.address">
-    <div class="col-3"
-         *ngIf="person.address.country">
-      <label for="country">{{'persons.person.personal.country' | translate}}</label>
-      <dx-select-box id="country"
-                     [dataSource]="countries"
-                     [(value)]="person.address.country.id"
-                     (onValueChanged)="onCountryChange($event)"
-                     valueExpr="id"
-                     displayExpr="name"
-                     [searchEnabled]="true"
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group p-1">
+      <label for="middleName">{{'persons.person.personal.middleName' | translate}}</label>
+      <dx-text-box id="middleName"
+                   [(value)]="person.patronymic"
+                   [showClearButton]="true"
+                   [readOnly]="!isEditAllow">
+      </dx-text-box>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group p-1">
+      <label for="birthDate">{{'persons.person.personal.birthDate' | translate}}</label>
+      <dx-date-box id="birthDate"
+                   [(value)]="person.birthDate"
+                   type="date"
+                   class="w-100"
+                   [readOnly]="!isEditAllow">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+    </div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group p-1">
+      <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
+      <dx-select-box id="sex"
+                     [items]="sexEnumValues"
+                     [(value)]="person.sex"
                      [readOnly]="!isEditAllow">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
       </dx-select-box>
     </div>
-    <div class="col-3"
-         *ngIf="person.address.region">
-      <label for="region">{{'persons.person.personal.region' | translate}}</label>
-      <dx-select-box id="region"
-                     [dataSource]="regions"
-                     [(value)]="person.address.region.id"
-                     (onValueChanged)="onRegionChange($event)"
-                     valueExpr="id"
-                     displayExpr="name"
-                     [searchEnabled]="true"
-                     [readOnly]="!isEditAllow">
-      </dx-select-box>
-    </div>
-    <div class="col-3"
-         *ngIf="person.address.city">
-      <label for="city">{{'persons.person.personal.city' | translate}}</label>
-      <dx-select-box id="city"
-                     [dataSource]="cities"
-                     [(value)]="person.address.city.id"
-                     valueExpr="id"
-                     displayExpr="name"
-                     [searchEnabled]="true"
-                     [readOnly]="!isEditAllow">
-      </dx-select-box>
-    </div>
+  </div>
+</div>
+<div class="row"
+     *ngIf="person.address">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
+       *ngIf="person.address.country">
+    <label for="country">{{'persons.person.personal.country' | translate}}</label>
+    <dx-select-box id="country"
+                   [dataSource]="countries"
+                   [(value)]="person.address.country.id"
+                   (onValueChanged)="onCountryChange($event)"
+                   valueExpr="id"
+                   displayExpr="name"
+                   [searchEnabled]="true"
+                   [readOnly]="!isEditAllow">
+    </dx-select-box>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
+       *ngIf="person.address.region">
+    <label for="region">{{'persons.person.personal.region' | translate}}</label>
+    <dx-select-box id="region"
+                   [dataSource]="regions"
+                   [(value)]="person.address.region.id"
+                   (onValueChanged)="onRegionChange($event)"
+                   valueExpr="id"
+                   displayExpr="name"
+                   [searchEnabled]="true"
+                   [readOnly]="!isEditAllow">
+    </dx-select-box>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
+       *ngIf="person.address.city">
+    <label for="city">{{'persons.person.personal.city' | translate}}</label>
+    <dx-select-box id="city"
+                   [dataSource]="cities"
+                   [(value)]="person.address.city.id"
+                   valueExpr="id"
+                   displayExpr="name"
+                   [searchEnabled]="true"
+                   [readOnly]="!isEditAllow">
+    </dx-select-box>
   </div>
 </div>
 <button *ngIf="isEditAllow"

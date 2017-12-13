@@ -8,14 +8,6 @@ $sidebar-width-mini: 50px;
 $sidebar-mini-transition: .3s;
 $sidebar-background: $dark-blue;
 
-@function max-width-sm() {
-  @return map-get($container-max-widths, 'sm');
-}
-
-@function max-width-md() {
-  @return map-get($container-max-widths, 'md');
-}
-
 .flex-wrapper {
   position: absolute;
   height: calc(100% - #{$navbar-height});
