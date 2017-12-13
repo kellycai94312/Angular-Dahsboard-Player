@@ -8,9 +8,9 @@ import { Subject } from 'rxjs/Subject';
 })
 export class InputSearchComponent implements OnInit {
 
+  @Input() init: Subject<any>;
   @Input() search: Function;
   @Input() dblclick: Function;
-  @Input() notify: Subject<any>;
   @Input() key: any;
 
   private active: any;
@@ -22,7 +22,7 @@ export class InputSearchComponent implements OnInit {
 
   async ngOnInit() {
     await this.onSearchChange();
-    this.notify.subscribe(event => this.onSearchChange());
+    this.init.subscribe(event => this.onSearchChange());
   }
 
   async onSearchChange() {

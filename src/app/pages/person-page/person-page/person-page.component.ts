@@ -4,16 +4,17 @@ import { TranslateService } from '@ngx-translate/core';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { UserRole } from '../../../data/remote/model/user-role';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ListRequest } from '../../../data/remote/request/list-request';
 import { SportType } from '../../../data/remote/model/sport-type';
 import { Picture } from '../../../data/remote/model/picture';
 import { PictureType } from '../../../data/remote/misc/picture-type';
 import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PictureService } from '../../../shared/picture.service';
-import { Subject } from 'rxjs/Subject';
 import { PersonService } from './person.service';
 import { LocalStorageService } from '../../../shared/local-storage.service';
 import { NavBarService } from '../../../layout/nav-bar/nav-bar.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { RolesModalComponent } from './roles-modal/roles-modal.component';
+import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
 
 @Component({
   selector: 'app-person-page',
@@ -25,21 +26,15 @@ export class PersonPageComponent implements OnInit {
   public person: Person;
   public isEditAllow: boolean;
 
-  private roles: UserRole[];
-  private userRolesModal: UserRole[] = [];
   private userRoles: UserRole[] = [];
-  private roleSubject: Subject<any> = new Subject();
-  private rolesModal = false;
-
-  private sportTypes: SportType[];
-  private personSportTypesModal: SportType[] = [];
-  private personSportTypes: SportType[] = [];
-  private sportTypeSubject: Subject<any> = new Subject();
-  private sportTypesModal = false;
+  private personSportTypes: SportType[];
 
   private logo: string;
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
+
+  private rolesModalRef: BsModalRef;
+  private sportTypesModalRef: BsModalRef;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
@@ -48,9 +43,25 @@ export class PersonPageComponent implements OnInit {
               private _localStorageService: LocalStorageService,
               private logoService: PictureService,
               private _personService: PersonService,
-              private _navbarService: NavBarService) {
+              private _navbarService: NavBarService,
+              private _modalService: BsModalService) {
     this.isEditAllow = false;
+    this._personService.rolesChangeEmitted$.subscribe(userRoles => {
+      this.userRoles = userRoles;
+      if (this.userRoles.length) {
+        this.roleToggle = userRoles[0];
+        this.onRoleChange();
+      }
+    });
+    this._personService.sportTypesChangeEmitted$.subscribe(userRoles => {
+      this.personSportTypes = userRoles;
+      if (this.personSportTypes.length) {
+        this.sportTypeToggle = this.personSportTypes[0];
+        this.onSportTypeChange();
+      }
+    });
   }
+
 
   async onLogoChange(event) {
     const fileList: FileList = event.target.files;
@@ -65,96 +76,21 @@ export class PersonPageComponent implements OnInit {
     }
   }
 
-  async toggleRolesModal() {
-    this.rolesModal = !this.rolesModal;
-    if (this.rolesModal) {
-      this.userRolesModal = Object.assign([], this.userRoles);
-      this.roles = await this.participantRestApiService.getRoles();
-      this.roleSubject.next();
-    } else {
-      this.userRolesModal = [];
-      if (this.userRoles.length) {
-        this.roleToggle = this.userRoles[0];
-        this.onRoleChange();
-      }
-    }
+  toggleRolesModal() {
+    this.rolesModalRef = this._modalService.show(RolesModalComponent, {class: 'modal-lg'});
+    this.rolesModalRef.content.userRoles = Object.assign([], this.userRoles);
   }
 
-  async toggleSportTypesModal() {
-    this.sportTypesModal = !this.sportTypesModal;
-    if (this.sportTypesModal) {
-      this.personSportTypesModal = Object.assign([], this.personSportTypes);
-      this.sportTypes = await this.participantRestApiService.getSportTypes();
-      this.sportTypeSubject.next();
-    } else {
-      this.personSportTypesModal = [];
-      if (this.personSportTypes.length) {
-        this.sportTypeToggle = this.personSportTypes[0];
-        this.onSportTypeChange();
-      }
-    }
-  }
-
-  getRoles = (typing: string) => {
-    const data = [];
-    for (const item of this.roles) {
-      if (item.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1) {
-        data.push(item);
-      }
-    }
-    return data;
-  }
-
-  addRole = (typing: string, role: UserRole) => {
-    this.roles.splice(this.roles.indexOf(role), 1);
-    this.userRolesModal.push(role);
-    return this.getRoles(typing);
-  }
-
-  getSportTypes = (typing: string) => {
-    const data = [];
-    for (const item of this.sportTypes) {
-      if (item.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1) {
-        data.push(item);
-      }
-    }
-    return data;
-  }
-
-  addSportType = (typing: string, sportType: SportType) => {
-    this.sportTypes.splice(this.sportTypes.indexOf(sportType), 1);
-    this.personSportTypesModal.push(sportType);
-    return this.getSportTypes(typing);
-  }
-
-  removeRole(role: UserRole) {
-    this.userRolesModal.splice(this.userRolesModal.indexOf(role), 1);
-    this.roles.push(role);
-    this.roleSubject.next();
-  }
-
-  removeSportType(sportType: SportType) {
-    this.personSportTypesModal.splice(this.personSportTypesModal.indexOf(sportType), 1);
-    this.sportTypes.push(sportType);
-    this.sportTypeSubject.next();
-  }
-
-  async changeRoles() {
-    const user = await this.participantRestApiService.changeRoles(new ListRequest(this.userRolesModal));
-    this.userRoles = user.userRoles;
-    this.toggleRolesModal();
-  }
-
-  async changeSportTypes() {
-    this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(this.personSportTypesModal));
-    this.toggleSportTypesModal();
+  toggleSportTypesModal() {
+    this.sportTypesModalRef = this._modalService.show(SportTypesModalComponent, {class: 'modal-lg'});
+    this.sportTypesModalRef.content.personSportTypes = Object.assign([], this.personSportTypes);
   }
 
   async onRoleChange() {
   }
 
   async onSportTypeChange() {
-    this._personService.emitSportTypeChange(this.sportTypeToggle);
+    this._personService.emitSportTypeSelect(this.sportTypeToggle);
   }
 
   updateLogo() {
@@ -186,6 +122,7 @@ export class PersonPageComponent implements OnInit {
               this.personSportTypes = personSportTypes;
               if (personSportTypes.length) {
                 this.sportTypeToggle = personSportTypes[0];
+                this._personService.sportTypeSelectDefault = personSportTypes[0];
                 this.onSportTypeChange();
               }
             });

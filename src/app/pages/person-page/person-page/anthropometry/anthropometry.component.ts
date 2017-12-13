@@ -21,7 +21,11 @@ export class AnthropometryComponent implements OnInit {
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {
     this._isEditAllow = _personService.shared.isEditAllow;
-    _personService.sportTypeChangeEmitted$.subscribe(sportType => this.load(sportType));
+    if (_personService.sportTypeSelectDefault) {
+      this._sportTypeEnum = _personService.sportTypeSelectDefault.sportTypeEnum;
+      this.load(_personService.sportTypeSelectDefault);
+    }
+    _personService.sportTypeSelectEmitted$.subscribe(sportType => this.load(sportType));
   }
 
   ngOnInit() {

@@ -5,13 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
-  DxButtonModule,
   DxDateBoxModule,
   DxFormModule,
-  DxListModule,
   DxPopupModule,
   DxSelectBoxModule,
-  DxTagBoxModule,
   DxTemplateModule,
   DxTextAreaModule,
   DxTextBoxModule,
@@ -30,6 +27,9 @@ import { ContactComponent } from './person-page/contact/contact.component';
 import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
 import { EventsComponent } from './person-page/events/events.component';
 import { PersonService } from './person-page/person.service';
+import { RolesModalComponent } from './person-page/roles-modal/roles-modal.component';
+import { ModalModule } from 'ngx-bootstrap';
+import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-types-modal.component';
 
 @NgModule({
   imports: [
@@ -46,12 +46,10 @@ import { PersonService } from './person-page/person.service';
     DxValidatorModule,
     DxiValidationRuleModule,
     DxPopupModule,
-    DxButtonModule,
     DxTemplateModule,
-    DxListModule,
-    DxTagBoxModule,
     FormsModule,
-    InputSearchModule
+    InputSearchModule,
+    ModalModule.forRoot()
   ],
   declarations: [
     PersonPageComponent,
@@ -62,10 +60,16 @@ import { PersonService } from './person-page/person.service';
     PhysiologyComponent,
     ContactComponent,
     TestsResultsComponent,
-    EventsComponent
+    EventsComponent,
+    RolesModalComponent,
+    SportTypesModalComponent
   ],
   providers: [
     PersonService
+  ],
+  entryComponents: [
+    RolesModalComponent,
+    SportTypesModalComponent
   ]
 })
 export class PersonPageModule {
