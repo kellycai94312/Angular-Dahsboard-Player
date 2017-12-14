@@ -36,13 +36,12 @@ export class NavBarComponent implements OnInit {
   async ngOnInit() {
     const identifiedObject = new IdentifiedObject();
     identifiedObject.id = this._localStorageService.getCurrentPersonId();
-    try {
-      this.person = await this._participantRestApiService.getPerson(identifiedObject);
-      this.setFullName(this.person);
-      this.logo = this._logoService.getLogo(PictureClass.person, this.person.id);
-    } catch (Error) {
-      this._router.navigate(['../registration/person']);
+    if (identifiedObject.id === 0) {
+      this._router.navigate(['/registration/person']);
     }
+    this.person = await this._participantRestApiService.getPerson(identifiedObject);
+    this.setFullName(this.person);
+    this.logo = this._logoService.getLogo(PictureClass.person, this.person.id);
   }
 
   public async signOut(event: any) {
