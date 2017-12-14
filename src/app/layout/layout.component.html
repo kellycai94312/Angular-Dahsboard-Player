@@ -1,6 +1,6 @@
-<app-nav-bar *ngIf="!hidden"></app-nav-bar>
+<app-nav-bar [hidden]="hidden"></app-nav-bar>
 <div class="flex-wrapper">
-  <app-side-bar *ngIf="!hidden"></app-side-bar>
+  <app-side-bar [hidden]="hidden"></app-side-bar>
   <div class="content">
     <router-outlet></router-outlet>
   </div>
