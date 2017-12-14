@@ -5,20 +5,15 @@
 $avatar-size: 150px;
 $avatar-size-md: 80px;
 
-a {
-  text-decoration: none;
-}
-
 a, p, h3, h4 {
   color: $light-blue;
 }
 
-a.nav-link {
-  text-transform: uppercase;
-}
-
-ngb-tab.active {
-  background-color: #161616;
+a {
+  text-decoration: none;
+  &.nav-link {
+    text-transform: uppercase;
+  }
 }
 
 .img {

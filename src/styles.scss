@@ -44,6 +44,8 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "~devextreme/dist/css/dx.common.css";
 @import "~devextreme/dist/css/dx.light.css";
 
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 $max-width-content: 400px;
 
 html, body {
