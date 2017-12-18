@@ -6,7 +6,8 @@
            class="form-control"
            [(ngModel)]="value"
            (focus)="showList()"
-           (keydown)="searchData($event)">
+           (keyup)="searchData($event)"
+           [disabled]="disabled">
   </div>
   <app-scroll class="menu" [fetchMore]="fetchMore" *ngIf="active">
     <li class="empty" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>

@@ -1,5 +1,5 @@
 import {
-  Component, Input, OnInit, Output, EventEmitter, HostListener, ElementRef, ViewChild,
+  AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output,
   Renderer2
 } from '@angular/core';
 import { PageContainer } from '../../data/remote/bean/page-container';
@@ -19,8 +19,10 @@ export class InputSelectComponent implements OnInit {
   @Input() key: any;
   @Input() display: any;
   @Input() placeholder: string;
+  @Input() disabled: boolean;
 
   @Output() modelChange;
+  @Output() onChange;
 
   private active = false;
   private value: string;
@@ -32,6 +34,7 @@ export class InputSelectComponent implements OnInit {
               private renderer: Renderer2,
               private scrollService: ScrollService) {
     this.modelChange = new EventEmitter<any>();
+    this.onChange = new EventEmitter<any>();
   }
 
   ngOnInit() {
@@ -41,7 +44,7 @@ export class InputSelectComponent implements OnInit {
     if (!this.placeholder) {
       this.placeholder = 'Select an option';
     }
-    this.value = this.model ? this.model[this.display] : this.placeholder;
+    setTimeout(() => this.value = this.model ? this.model[this.display] : this.placeholder, 100);
     this.clearData();
   }
 
@@ -79,6 +82,7 @@ export class InputSelectComponent implements OnInit {
   select(item: any): void {
     this.model = item === this.empty ? null : item; // set empty element if no data selected
     this.modelChange.emit(this.model);
+    this.onChange.emit({});
     this.resetSearch();
   }
 

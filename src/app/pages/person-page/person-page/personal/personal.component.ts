@@ -8,6 +8,7 @@ import { SexEnum } from '../../../../data/remote/misc/sex-enum';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { Address } from '../../../../data/remote/model/address';
 import { NavBarService } from '../../../../layout/nav-bar/nav-bar.service';
+import { QueryParams } from '../../../../data/remote/rest-api/query-params';
 
 @Component({
   selector: 'app-personal',
@@ -18,13 +19,9 @@ export class PersonalComponent implements OnInit {
 
   private person: Person;
   private isEditAllow: boolean;
-
   private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
     .filter(e => parseInt(e, 10) >= 0)
     .map(k => SexEnum[k]);
-  private countries: Country[];
-  private regions: Region[];
-  private cities: City[];
 
   constructor(private participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
@@ -36,74 +33,38 @@ export class PersonalComponent implements OnInit {
   ngOnInit() {
     // load person address
     this.participantRestApiService.getPersonAddress({id: this.person.id})
-      .then(address => {
-        this.person.address = address;
-        /*fixme load only when user tries to change value*/
-        if (this.person.address.country != null) {
-          this.loadRegions(this.person.address.country.id);
-          if (this.person.address.region != null) {
-            this.loadCities(this.person.address.region.id);
-            if (this.person.address.city == null) {
-              this.person.address.city = new City();
-            }
-          } else {
-            this.person.address.region = new Region();
-            this.person.address.city = new City();
-          }
-        } else {
-          this.person.address.country = new Country();
-          this.person.address.region = new Region();
-          this.person.address.city = new City();
-        }
-      }).catch(error => {
-      this.person.address = new Address();
-      this.person.address.country = new Country();
-      this.person.address.region = new Region();
-      this.person.address.city = new City();
-    });
-    this.loadCountries();
+      .then(address => this.person.address = address)
+      .catch(() => this.person.address = new Address());
   }
 
-  onCountryChange(e: any): void {
-    this.person.address.region = new Region();
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadRegions(e.value);
-    }
+  onCountryChange(e: any) {
+    this.person.address.region = null;
+    this.person.address.city = null;
+    console.log(1);
   }
 
-  onRegionChange(e): void {
-    this.person.address.city = new City();
-    if (e.value != null) {
-      this.loadCities(e.value);
-    }
+  onRegionChange(e: any): void {
+    this.person.address.city = null;
+    console.log(2);
   }
 
   async savePersonal() {
-    // fixme
-    const person: Person = JSON.parse(JSON.stringify(this.person));
-    if (person.address.country.id == null) {
-      person.address = null;
-    } else if (person.address.region.id == null) {
-      person.address.region = null;
-      person.address.city = null;
-    } else if (person.address.city.id == null) {
-      person.address.city = null;
-    }
-    await this.participantRestApiService.updatePerson(person, {id: person.id});
+    await this.participantRestApiService.updatePerson(this.person, {id: this.person.id});
     this._navbarService.emitFullNameChange(this.person);
   }
 
-  private async loadCountries() {
-    this.countries = (await this.participantRestApiService.getCountries({count: 2147483647})).list;
+  loadCountries = (query: QueryParams) => {
+    return this.participantRestApiService.getCountries(query);
   }
 
-  private async loadRegions(countryId: number) {
-    this.regions = (await this.participantRestApiService.getRegions({countryId: countryId, count: 2147483647})).list;
+  loadRegions = (query: QueryParams) => {
+    query.countryId = this.person.address.country.id;
+    return this.participantRestApiService.getRegions(query);
   }
 
-  private async loadCities(regionId: number) {
-    this.cities = (await this.participantRestApiService.getCities({regionId: regionId, count: 2147483647})).list;
+  loadCities = (query: QueryParams) => {
+    query.regionId = this.person.address.region.id;
+    return this.participantRestApiService.getCities(query);
   }
 
 }

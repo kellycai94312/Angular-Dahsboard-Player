@@ -9,9 +9,9 @@ $background-color-hover: #ccc;
 .wrapper {
   display: flex;
   flex-direction: column;
+  position: relative;
 
   .search {
-    position: relative;
     > input {
       padding-right: 25px;
       z-index: 2;
@@ -35,6 +35,10 @@ $background-color-hover: #ccc;
   }
 
   .menu {
+    position: absolute;
+    width: 100%;
+    top: 38px; /* bootstrap input height */
+    z-index: 999;
     list-style-type: none;
     border: 1px solid #ddd;
     margin-top: 3px;
@@ -42,6 +46,7 @@ $background-color-hover: #ccc;
     max-height: 300px;
     overflow-y: auto;
     display: block;
+    background-color: #fff;
 
     li {
       padding: 3px;
