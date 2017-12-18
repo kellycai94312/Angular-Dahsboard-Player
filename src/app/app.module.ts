@@ -23,6 +23,11 @@ import { AuthDenyGuard } from './guard/auth-deny.guard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PictureService } from './shared/picture.service';
 import { NavBarService } from './layout/nav-bar/nav-bar.service';
+import { InputSelectComponent } from './components/input-select/input-select.component';
+import { FormsModule } from '@angular/forms';
+import { MatchFilterPipe } from './pipes/match-filter.pipe';
+import { ScrollComponent } from './components/input-select/scroll/scroll.component';
+import { ScrollService } from './components/input-select/scroll/scroll.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -35,7 +40,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ToggleDirective,
     SideBarComponent,
     NavBarComponent,
-    UserPanelDirective
+    UserPanelDirective,
+    InputSelectComponent,
+    MatchFilterPipe,
+    ScrollComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +58,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    FormsModule
   ],
   providers: [
     LayoutService,
@@ -61,6 +70,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateObjectService,
     LocalStorageService,
     PictureService,
+    ScrollService,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

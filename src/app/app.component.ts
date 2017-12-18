@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { Locale } from './data/index';
 import { LocalStorageService } from './shared/local-storage.service';
+import { ParticipantRestApiService } from './data/remote/rest-api/participant-rest-api.service';
+import { QueryParams } from './data/remote/rest-api/query-params';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +13,12 @@ import { LocalStorageService } from './shared/local-storage.service';
 export class AppComponent implements OnInit {
 
   constructor(private translate: TranslateService,
-              private localStorageService: LocalStorageService) {
+              private localStorageService: LocalStorageService,
+              private participantRestApiService: ParticipantRestApiService) {
+  }
+
+  loadData = (query: QueryParams) => {
+    return this.participantRestApiService.getCountries(query);
   }
 
   ngOnInit() {

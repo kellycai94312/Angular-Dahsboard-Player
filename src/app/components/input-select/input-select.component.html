@@ -1,0 +1,19 @@
+<div class="wrapper" tabindex="-1">
+  <div class="search">
+    <span class="fa fa-caret-down"></span>
+    <input #searchBar
+           id="searchBar"
+           class="form-control"
+           [(ngModel)]="value"
+           (focus)="showList()"
+           (keydown)="searchData($event)">
+  </div>
+  <app-scroll class="menu" [fetchMore]="fetchMore" *ngIf="active">
+    <li class="empty" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>
+    <li *ngFor="let item of data"
+        (click)="select(item)"
+        [ngClass]="{'active' : model && item[key] === model[key]}">
+      {{item[display]}}
+    </li>
+  </app-scroll>
+</div>

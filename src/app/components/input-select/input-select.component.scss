@@ -1,0 +1,78 @@
+@import "../../../variables";
+
+$color: #333;
+$color-active: #eee;
+$color-hover: #111;
+$background-color-active: $light-blue;
+$background-color-hover: #ccc;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+
+  .search {
+    position: relative;
+    > input {
+      padding-right: 25px;
+      z-index: 2;
+      &:focus {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+    > .fa-caret-down {
+      position: absolute;
+      font-weight: 100;
+      margin: 0;
+      padding: 0;
+      top: 8px;
+      float: right;
+      right: 10px;
+
+      font-size: 20px;
+      color: lighten($color, 30%);
+    }
+  }
+
+  .menu {
+    list-style-type: none;
+    border: 1px solid #ddd;
+    margin-top: 3px;
+    border-top: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    display: block;
+
+    li {
+      padding: 3px;
+      &:not(:first-child):not(:last-child) {
+        border-bottom: 1px solid #ccc;
+      }
+
+      color: $color;
+      cursor: pointer;
+
+      &:hover {
+        color: $color-hover;
+        background-color: $background-color-hover;
+      }
+
+      &.active {
+        color: $color-active;
+        background-color: $light-blue;
+      }
+
+      &.empty {
+        color: #888;
+        &.active {
+          color: $color-active;
+        }
+        &:hover {
+          color: $color-hover;
+          background-color: $background-color-hover;
+        }
+      }
+    }
+  }
+
+}

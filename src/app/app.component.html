@@ -1,3 +1,11 @@
-<app-layout>
-  <router-outlet></router-outlet>
-</app-layout>
+<div style="width: 300px;margin-left: 50px;margin-top: 50px;position: absolute;">
+  <app-input-select
+    [loadData]="loadData"
+    [(model)]="country"
+    [pageSize]="30"
+    key="id"
+    display="name"
+    placeholder="Select an option"
+    ngDefaultControl>
+  </app-input-select>
+</div>
