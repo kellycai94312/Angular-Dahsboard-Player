@@ -22,7 +22,7 @@ import { CookieModule } from 'ngx-cookie';
 import { AuthDenyGuard } from './guard/auth-deny.guard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PictureService } from './shared/picture.service';
-import { NavBarService } from './layout/nav-bar/nav-bar.service';
+import { ProfileService } from './layout/shared/profile.service';
 import { FormsModule } from '@angular/forms';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -56,7 +56,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     LayoutService,
-    NavBarService,
+    ProfileService,
     AuthGuard,
     AuthDenyGuard,
     ParticipantRestApiService,

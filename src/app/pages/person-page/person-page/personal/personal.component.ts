@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonService } from '../person.service';
 import { Person } from '../../../../data/remote/model/person';
-import { City } from '../../../../data/remote/model/city';
-import { Region } from '../../../../data/remote/model/region';
-import { Country } from '../../../../data/remote/model/country';
 import { SexEnum } from '../../../../data/remote/misc/sex-enum';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { Address } from '../../../../data/remote/model/address';
-import { NavBarService } from '../../../../layout/nav-bar/nav-bar.service';
+import { ProfileService } from '../../../../layout/shared/profile.service';
 import { QueryParams } from '../../../../data/remote/rest-api/query-params';
 
 @Component({
@@ -25,7 +22,7 @@ export class PersonalComponent implements OnInit {
 
   constructor(private participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
-              private _navbarService: NavBarService) {
+              private _profileService: ProfileService) {
     this.isEditAllow = _personService.shared.isEditAllow;
     this.person = _personService.shared.person;
   }
@@ -40,17 +37,15 @@ export class PersonalComponent implements OnInit {
   onCountryChange(e: any) {
     this.person.address.region = null;
     this.person.address.city = null;
-    console.log(1);
   }
 
   onRegionChange(e: any): void {
     this.person.address.city = null;
-    console.log(2);
   }
 
   async savePersonal() {
     await this.participantRestApiService.updatePerson(this.person, {id: this.person.id});
-    this._navbarService.emitFullNameChange(this.person);
+    this._profileService.emitFullNameChange(this.person);
   }
 
   loadCountries = (query: QueryParams) => {

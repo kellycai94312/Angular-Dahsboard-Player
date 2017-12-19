@@ -87,7 +87,7 @@
       [(model)]="person.address.region"
       [pageSize]="30"
       [disabled]="!isEditAllow || person.address.country == null"
-      (chaonChange)="onRegionChange($event)"
+      (onChange)="onRegionChange($event)"
       key="id"
       display="name"
       placeholder="Select a region"
