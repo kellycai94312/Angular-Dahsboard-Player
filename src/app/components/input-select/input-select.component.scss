@@ -25,11 +25,10 @@ $background-color-hover: #ccc;
       font-weight: 100;
       margin: 0;
       padding: 0;
-      top: 8px;
+      top: 12px;
       float: right;
       right: 10px;
 
-      font-size: 20px;
       color: lighten($color, 30%);
     }
   }
@@ -41,7 +40,6 @@ $background-color-hover: #ccc;
     z-index: 999;
     list-style-type: none;
     border: 1px solid #ddd;
-    margin-top: 3px;
     border-top: 0;
     max-height: 300px;
     overflow-y: auto;

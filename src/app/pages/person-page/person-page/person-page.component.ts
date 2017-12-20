@@ -57,13 +57,9 @@ export class PersonPageComponent implements OnInit {
     this.tabRoutes.set(4, 'tests_results');
     this.tabRoutes.set(5, 'events');
 
-    const entries = this.tabRoutes.entries();
-    console.log(entries);
-
     const url = this.router.url.substring(this.router.url.lastIndexOf('/') + 1);
     this.tabRoutes.forEach((value: string, key: number) => {
       if (value === url) {
-        console.log(key, value);
         this.defaultTabIndex = key;
       }
     });
