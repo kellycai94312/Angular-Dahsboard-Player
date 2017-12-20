@@ -31,6 +31,7 @@ import { RolesModalComponent } from './person-page/roles-modal/roles-modal.compo
 import { ModalModule } from 'ngx-bootstrap';
 import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-types-modal.component';
 import { InputSelectModule } from '../../components/input-select/input-select.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { InputSelectModule } from '../../components/input-select/input-select.mo
     PersonPageRoutingModule,
     TranslateModule.forChild(),
     NgbModule.forRoot(),
+    ModalModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,
     DxDateBoxModule,
@@ -51,7 +53,7 @@ import { InputSelectModule } from '../../components/input-select/input-select.mo
     FormsModule,
     InputSearchModule,
     InputSelectModule,
-    ModalModule.forRoot()
+    MatTabsModule
   ],
   declarations: [
     PersonPageComponent,

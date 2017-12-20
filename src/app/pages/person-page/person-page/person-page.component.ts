@@ -15,6 +15,7 @@ import { ProfileService } from '../../../layout/shared/profile.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { RolesModalComponent } from './roles-modal/roles-modal.component';
 import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-person-page',
@@ -36,6 +37,9 @@ export class PersonPageComponent implements OnInit {
   private rolesModalRef: BsModalRef;
   private sportTypesModalRef: BsModalRef;
 
+  private tabRoutes: Map<number, string>;
+  private defaultTabIndex: number;
+
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
@@ -45,6 +49,25 @@ export class PersonPageComponent implements OnInit {
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: BsModalService) {
+    this.tabRoutes = new Map<number, string>();
+    this.tabRoutes.set(0, 'personal');
+    this.tabRoutes.set(1, 'anthropometry');
+    this.tabRoutes.set(2, 'physiology');
+    this.tabRoutes.set(3, 'contact');
+    this.tabRoutes.set(4, 'tests_results');
+    this.tabRoutes.set(5, 'events');
+
+    const entries = this.tabRoutes.entries();
+    console.log(entries);
+
+    const url = this.router.url.substring(this.router.url.lastIndexOf('/') + 1);
+    this.tabRoutes.forEach((value: string, key: number) => {
+      if (value === url) {
+        console.log(key, value);
+        this.defaultTabIndex = key;
+      }
+    });
+
     this.isEditAllow = false;
     this._personService.rolesChangeEmitted$.subscribe(userRoles => {
       this.userRoles = userRoles;
@@ -62,6 +85,9 @@ export class PersonPageComponent implements OnInit {
     });
   }
 
+  selectTab(e: MatTabChangeEvent) {
+    this.router.navigate([`./${this.tabRoutes.get(e.index)}`], {relativeTo: this.route});
+  }
 
   async onLogoChange(event) {
     const fileList: FileList = event.target.files;

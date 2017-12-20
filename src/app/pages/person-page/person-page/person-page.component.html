@@ -90,45 +90,18 @@
   </div>
 
   <!-- tabs -->
-  <div class="mt-3">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="personal" [ngClass]="{'active' : router.url.indexOf('personal') > -1}">
-          {{'persons.person.personal.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="anthropometry" [ngClass]="{'active' : router.url.indexOf('anthropometry') > -1}"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.anthropometry.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="physiology" [ngClass]="{'active' : router.url.indexOf('physiology') > -1}"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.physiology.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="contact" [ngClass]="{'active' : router.url.indexOf('contact') > -1}">
-          {{'persons.person.contact.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="tests_results" [ngClass]="{'active' : router.url.indexOf('tests_results') > -1}"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.testsResults.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="events" [ngClass]="{'active' : router.url.indexOf('events') > -1}"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.events.section' | translate | uppercase }}
-        </a>
-      </li>
-    </ul>
-    <div class="pt-3">
-      <router-outlet></router-outlet>
-    </div>
+  <mat-tab-group class="mt-3" (selectedTabChange)="selectTab($event)" [selectedIndex]="defaultTabIndex">
+    <mat-tab label="{{'persons.person.personal.section' | translate | uppercase }}"></mat-tab>
+    <mat-tab [hidden]="roleToggle === undefined || roleToggle.userRoleEnum.toString() === 'TRAINER'"
+             label="{{'persons.person.anthropometry.section' | translate | uppercase }}"></mat-tab>
+    <mat-tab label="{{'persons.person.physiology.section' | translate | uppercase }}"></mat-tab>
+    <mat-tab label="{{'persons.person.contact.section' | translate | uppercase }}"></mat-tab>
+    <mat-tab [hidden]="roleToggle === undefined || roleToggle.userRoleEnum.toString() === 'TRAINER'"
+             label="{{'persons.person.testsResults.section' | translate | uppercase }}"></mat-tab>
+    <mat-tab [hidden]="roleToggle === undefined || roleToggle.userRoleEnum.toString() === 'TRAINER'"
+             label="{{'persons.person.events.section' | translate | uppercase }}"></mat-tab>
+  </mat-tab-group>
+  <div class="pt-3">
+    <router-outlet></router-outlet>
   </div>
 </div>
