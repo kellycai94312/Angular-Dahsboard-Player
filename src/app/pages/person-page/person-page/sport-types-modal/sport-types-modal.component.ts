@@ -14,7 +14,7 @@ import { ListRequest } from '../../../../data/remote/request/list-request';
 export class SportTypesModalComponent implements OnInit {
 
   personSportTypes: SportType[];
-  private sportTypes: SportType[] = [];
+  sportTypes: SportType[] = [];
   private sportTypeSubject: Subject<any> = new Subject();
 
   constructor(public bsModalRef: BsModalRef,

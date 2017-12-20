@@ -13,7 +13,7 @@ import { PersonService } from '../person.service';
 })
 export class RolesModalComponent implements OnInit {
   userRoles: UserRole[];
-  private roles: UserRole[];
+  roles: UserRole[];
   private roleSubject: Subject<any> = new Subject();
 
   constructor(public bsModalRef: BsModalRef,

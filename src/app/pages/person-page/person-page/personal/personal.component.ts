@@ -14,9 +14,9 @@ import { QueryParams } from '../../../../data/remote/rest-api/query-params';
 })
 export class PersonalComponent implements OnInit {
 
-  private person: Person;
-  private isEditAllow: boolean;
-  private readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
+  person: Person;
+  isEditAllow: boolean;
+  readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
     .filter(e => parseInt(e, 10) >= 0)
     .map(k => SexEnum[k]);
 

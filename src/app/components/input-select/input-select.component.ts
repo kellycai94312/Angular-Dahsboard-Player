@@ -1,9 +1,7 @@
-import {
-  AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output,
-  Renderer2
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
 import { PageContainer } from '../../data/remote/bean/page-container';
 import { ScrollService } from './scroll/scroll.service';
+import { Subject } from 'rxjs/Rx';
 
 @Component({
   selector: 'app-input-select',
@@ -24,17 +22,25 @@ export class InputSelectComponent implements OnInit {
   @Output() modelChange;
   @Output() onChange;
 
-  private active = false;
-  private value: string;
-  private data: any[];
+  active = false;
+  value: string;
+  data: any[];
   private pageNumber;
   private empty: Object = {};
+  private searchChanged: Subject<any>;
 
   constructor(private eRef: ElementRef,
               private renderer: Renderer2,
               private scrollService: ScrollService) {
     this.modelChange = new EventEmitter<any>();
     this.onChange = new EventEmitter<any>();
+    this.searchChanged = new Subject<any>();
+    this.searchChanged
+      .debounceTime(400)
+      .subscribe(() => {
+        this.clearData();
+        this.load();
+      });
   }
 
   ngOnInit() {
@@ -115,8 +121,7 @@ export class InputSelectComponent implements OnInit {
       const searchBar = this.renderer.selectRootElement('#searchBar');
       searchBar.parentElement.parentElement.focus();
     } else {
-      this.clearData();
-      this.load();
+      this.searchChanged.next(e);
     }
   }
 
