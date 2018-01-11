@@ -13,9 +13,9 @@ export class InputSearchComponent implements OnInit {
   @Input() dblclick: Function;
   @Input() key: any;
 
-  private active: any;
-  private searchBar = '';
-  private data: any[];
+  active: any;
+  searchBar = '';
+  data: any[];
 
   constructor() {
   }

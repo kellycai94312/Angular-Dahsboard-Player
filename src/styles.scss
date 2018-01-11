@@ -44,6 +44,8 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "~devextreme/dist/css/dx.common.css";
 @import "~devextreme/dist/css/dx.light.css";
 
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
 $max-width-content: 400px;
 
 html, body {
@@ -80,4 +82,14 @@ html, body {
 .dx-toast-content {
   min-width: 100px;
   max-width: $max-width-content;
+}
+
+.form-control {
+  &:hover {
+    border-color: rgba(51, 122, 183, .4);
+  }
+  &:focus {
+    box-shadow: none;
+    border-color: #337ab7;
+  }
 }

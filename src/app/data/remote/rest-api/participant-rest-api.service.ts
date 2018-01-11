@@ -90,7 +90,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/country?count={!count}',
+    path: '/country/filter?from={!from}&count={!count}&name={!name}',
   })
   getCountries: IRestMethod<QueryParams, PageContainer<Country>>;
 
@@ -102,7 +102,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/city/filter?regionId={!regionId}&count={!count}'
+    path: '/city/filter?from={!from}&count={!count}&regionId={!regionId}&name={!name}'
   })
   getCities: IRestMethod<QueryParams, PageContainer<City>>;
 

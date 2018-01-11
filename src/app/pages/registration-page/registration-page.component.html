@@ -3,8 +3,8 @@
     <app-locale></app-locale>
   </div>
   <div class="mb-auto max-width-content">
-    <div *ngIf="!isRegistrationComplete;else content">
-      <h1 class="text-center">{{'applicationFullName' | translate | uppercase}}</h1>
+    <div class="form" *ngIf="!isRegistrationComplete;else content">
+      <img src="/assets/img/athlete-readiness-logo.png" alt="">
       <dx-text-box mode="email"
                    placeholder="{{'registration.enterEmail' | translate}}"
                    [(value)]="user.email"

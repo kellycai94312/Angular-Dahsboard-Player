@@ -14,13 +14,13 @@ import { SportTypeEnum } from '../../../../data/remote/misc/sport-type-enum';
 })
 export class AnthropometryComponent implements OnInit {
 
-  private _anthropometry: PersonAnthropometry[];
-  private _isEditAllow: boolean;
+  anthropometry: PersonAnthropometry[];
+  isEditAllow: boolean;
   private _sportTypeEnum: SportTypeEnum;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {
-    this._isEditAllow = _personService.shared.isEditAllow;
+    this.isEditAllow = _personService.shared.isEditAllow;
     if (_personService.sportTypeSelectDefault) {
       this._sportTypeEnum = _personService.sportTypeSelectDefault.sportTypeEnum;
       this.load(_personService.sportTypeSelectDefault);
@@ -34,15 +34,15 @@ export class AnthropometryComponent implements OnInit {
   async save() {
     if (this._sportTypeEnum) {
       const request: AnthropometryRequest = new AnthropometryRequest();
-      request.anthropometry = new ListRequest(this._anthropometry);
+      request.anthropometry = new ListRequest(this.anthropometry);
       request.sportType = this._sportTypeEnum;
-      this._anthropometry = await this._participantRestApiService.changeAnthropometry(request);
+      this.anthropometry = await this._participantRestApiService.changeAnthropometry(request);
     }
   }
 
   private async load(sportType: SportType) {
     this._sportTypeEnum = sportType.sportTypeEnum;
-    this._anthropometry = await this._participantRestApiService.getAnhtropometry({
+    this.anthropometry = await this._participantRestApiService.getAnhtropometry({
       id: this._personService.shared.person.id,
       sportType: this._sportTypeEnum
     });

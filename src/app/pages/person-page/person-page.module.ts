@@ -30,6 +30,8 @@ import { PersonService } from './person-page/person.service';
 import { RolesModalComponent } from './person-page/roles-modal/roles-modal.component';
 import { ModalModule } from 'ngx-bootstrap';
 import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-types-modal.component';
+import { InputSelectModule } from '../../components/input-select/input-select.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   imports: [
@@ -38,6 +40,7 @@ import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-
     PersonPageRoutingModule,
     TranslateModule.forChild(),
     NgbModule.forRoot(),
+    ModalModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,
     DxDateBoxModule,
@@ -49,7 +52,8 @@ import { SportTypesModalComponent } from './person-page/sport-types-modal/sport-
     DxTemplateModule,
     FormsModule,
     InputSearchModule,
-    ModalModule.forRoot()
+    InputSelectModule,
+    MatTabsModule
   ],
   declarations: [
     PersonPageComponent,

@@ -63,45 +63,50 @@
     </div>
   </div>
 </div>
-<div class="row"
-     *ngIf="person.address">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
-       *ngIf="person.address.country">
+<div class="row" *ngIf="person.address">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="country">{{'persons.person.personal.country' | translate}}</label>
-    <dx-select-box id="country"
-                   [dataSource]="countries"
-                   [(value)]="person.address.country.id"
-                   (onValueChanged)="onCountryChange($event)"
-                   valueExpr="id"
-                   displayExpr="name"
-                   [searchEnabled]="true"
-                   [readOnly]="!isEditAllow">
-    </dx-select-box>
+    <app-input-select
+      id="country"
+      [loadData]="loadCountries"
+      [(model)]="person.address.country"
+      [pageSize]="30"
+      [disabled]="!isEditAllow"
+      (onChange)="onCountryChange($event)"
+      key="id"
+      display="name"
+      placeholder="Select a country"
+      ngDefaultControl>
+    </app-input-select>
   </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
-       *ngIf="person.address.region">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="region">{{'persons.person.personal.region' | translate}}</label>
-    <dx-select-box id="region"
-                   [dataSource]="regions"
-                   [(value)]="person.address.region.id"
-                   (onValueChanged)="onRegionChange($event)"
-                   valueExpr="id"
-                   displayExpr="name"
-                   [searchEnabled]="true"
-                   [readOnly]="!isEditAllow">
-    </dx-select-box>
+    <app-input-select
+      id="region"
+      [loadData]="loadRegions"
+      [(model)]="person.address.region"
+      [pageSize]="30"
+      [disabled]="!isEditAllow || person.address.country == null"
+      (onChange)="onRegionChange($event)"
+      key="id"
+      display="name"
+      placeholder="Select a region"
+      ngDefaultControl>
+    </app-input-select>
   </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3"
-       *ngIf="person.address.city">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="city">{{'persons.person.personal.city' | translate}}</label>
-    <dx-select-box id="city"
-                   [dataSource]="cities"
-                   [(value)]="person.address.city.id"
-                   valueExpr="id"
-                   displayExpr="name"
-                   [searchEnabled]="true"
-                   [readOnly]="!isEditAllow">
-    </dx-select-box>
+    <app-input-select
+      id="city"
+      [loadData]="loadCities"
+      [(model)]="person.address.city"
+      [pageSize]="30"
+      [disabled]="!isEditAllow || person.address.region == null"
+      key="id"
+      display="name"
+      placeholder="Select a city"
+      ngDefaultControl>
+    </app-input-select>
   </div>
 </div>
 <button *ngIf="isEditAllow"

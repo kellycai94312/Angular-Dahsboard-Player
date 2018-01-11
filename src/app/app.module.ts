@@ -22,7 +22,9 @@ import { CookieModule } from 'ngx-cookie';
 import { AuthDenyGuard } from './guard/auth-deny.guard';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PictureService } from './shared/picture.service';
-import { NavBarService } from './layout/nav-bar/nav-bar.service';
+import { ProfileService } from './layout/shared/profile.service';
+import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -41,6 +43,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     NgbModule.forRoot(),
     RestModule.forRoot(),
     CookieModule.forRoot(),
@@ -50,11 +53,12 @@ export function HttpLoaderFactory(http: HttpClient) {
         useFactory: HttpLoaderFactory,
         deps: [HttpClient]
       }
-    })
+    }),
+    FormsModule
   ],
   providers: [
     LayoutService,
-    NavBarService,
+    ProfileService,
     AuthGuard,
     AuthDenyGuard,
     ParticipantRestApiService,

@@ -11,10 +11,11 @@ import { PictureClass } from '../../../data/remote/misc/picture-class';
 import { PictureService } from '../../../shared/picture.service';
 import { PersonService } from './person.service';
 import { LocalStorageService } from '../../../shared/local-storage.service';
-import { NavBarService } from '../../../layout/nav-bar/nav-bar.service';
+import { ProfileService } from '../../../layout/shared/profile.service';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap';
 import { RolesModalComponent } from './roles-modal/roles-modal.component';
 import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'app-person-page',
@@ -36,6 +37,9 @@ export class PersonPageComponent implements OnInit {
   private rolesModalRef: BsModalRef;
   private sportTypesModalRef: BsModalRef;
 
+  private tabRoutes: Map<number, string>;
+  private defaultTabIndex: number;
+
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
@@ -43,8 +47,23 @@ export class PersonPageComponent implements OnInit {
               private _localStorageService: LocalStorageService,
               private logoService: PictureService,
               private _personService: PersonService,
-              private _navbarService: NavBarService,
+              private _navbarService: ProfileService,
               private _modalService: BsModalService) {
+    this.tabRoutes = new Map<number, string>();
+    this.tabRoutes.set(0, 'personal');
+    this.tabRoutes.set(1, 'anthropometry');
+    this.tabRoutes.set(2, 'physiology');
+    this.tabRoutes.set(3, 'contact');
+    this.tabRoutes.set(4, 'tests_results');
+    this.tabRoutes.set(5, 'events');
+
+    const url = this.router.url.substring(this.router.url.lastIndexOf('/') + 1);
+    this.tabRoutes.forEach((value: string, key: number) => {
+      if (value === url) {
+        this.defaultTabIndex = key;
+      }
+    });
+
     this.isEditAllow = false;
     this._personService.rolesChangeEmitted$.subscribe(userRoles => {
       this.userRoles = userRoles;
@@ -62,6 +81,9 @@ export class PersonPageComponent implements OnInit {
     });
   }
 
+  selectTab(e: MatTabChangeEvent) {
+    this.router.navigate([`./${this.tabRoutes.get(e.index)}`], {relativeTo: this.route});
+  }
 
   async onLogoChange(event) {
     const fileList: FileList = event.target.files;
@@ -100,35 +122,34 @@ export class PersonPageComponent implements OnInit {
 
   async ngOnInit() {
     this.route.params.subscribe(params => {
-      this.participantRestApiService.getPerson({id: +params.id})
-        .then(person => {
-          this.person = person;
-          this.updateLogo();
-          this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
-          this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
+      this._navbarService.getPerson(+params.id).then(person => {
+        this.person = person;
+        this.logo = this.logoService.getLogo(PictureClass.person, this.person.id);
+        this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
+        this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
-          // load user roles
-          this.participantRestApiService.getUserRoles({id: person.user.id})
-            .then(userRoles => {
-              this.userRoles = userRoles;
-              if (userRoles.length) {
-                this.roleToggle = userRoles[0];
-                this.onRoleChange();
-              }
-            });
+        // load user roles
+        this.participantRestApiService.getUserRoles({id: person.user.id})
+          .then(userRoles => {
+            this.userRoles = userRoles;
+            if (userRoles.length) {
+              this.roleToggle = userRoles[0];
+              this.onRoleChange();
+            }
+          });
 
-          this.participantRestApiService.getPersonSportTypes({id: person.id})
-            .then(personSportTypes => {
-              this.personSportTypes = personSportTypes;
-              if (personSportTypes.length) {
-                this.sportTypeToggle = personSportTypes[0];
-                this._personService.sportTypeSelectDefault = personSportTypes[0];
-                this.onSportTypeChange();
-              }
-            });
+        this.participantRestApiService.getPersonSportTypes({id: person.id})
+          .then(personSportTypes => {
+            this.personSportTypes = personSportTypes;
+            if (personSportTypes.length) {
+              this.sportTypeToggle = personSportTypes[0];
+              this._personService.sportTypeSelectDefault = personSportTypes[0];
+              this.onSportTypeChange();
+            }
+          });
 
 
-        }).catch(error => {
+      }).catch(error => {
         this.router.navigate(['not-found']);
       });
     });

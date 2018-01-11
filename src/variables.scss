@@ -8,13 +8,19 @@ $dark-blue: #1C1D1F;
 $white: #f9f9f9;
 $white-light: #fff;
 
-$nav-tabs-border-color:             $light-blue;
-$nav-tabs-border-width:             $border-width;
-$nav-tabs-border-radius:            2px;
-$nav-tabs-link-hover-border-color:  $light-blue;
-$nav-tabs-link-active-color:        $white;
-$nav-tabs-link-active-bg:           $light-blue;
-$nav-tabs-link-active-border-color: $light-blue;
+/*angular material tabs*/
+.mat-ink-bar /*underscore selected tab*/ {
+  height: 0 !important;
+}
+
+.mat-tab-label {
+  opacity: 1 !important;
+}
+
+.mat-tab-label-active /*active tab*/ {
+  color: $white !important;
+  background-color: $light-blue !important;
+}
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');
