@@ -38,13 +38,17 @@
 /*icons*/
 $fa-font-path: "~font-awesome/fonts/";
 @import "~font-awesome/scss/font-awesome";
-@import "~linearicons/dist/web-font/style.css";
+
+// Added link in .angular-cli.json
+// @import "~linearicons/dist/web-font/style.css";
 
 /*dev express*/
-@import "~devextreme/dist/css/dx.common.css";
-@import "~devextreme/dist/css/dx.light.css";
+// Added link in .angular-cli.json
+//@import "~devextreme/dist/css/dx.common.css";
+//@import "~devextreme/dist/css/dx.light.css";
 
-@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+// Added link in .angular-cli.json
+// @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 $max-width-content: 400px;
 
