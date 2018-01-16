@@ -1,3 +1,18 @@
-<p>
-  groups-page works!
-</p>
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link"
+       routerLink="all"
+       routerLinkActive="active">
+      {{'groups.all' | translate | uppercase }}
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link"
+       routerLink="my"
+       routerLinkActive="active">
+      {{'groups.my' | translate | uppercase }}
+    </a>
+  </li>
+</ul>
+
+<router-outlet></router-outlet>

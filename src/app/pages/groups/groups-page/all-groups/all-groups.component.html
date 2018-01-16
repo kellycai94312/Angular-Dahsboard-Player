@@ -1,0 +1,17 @@
+<div class="row mt-3">
+  <div class="col">
+    <dx-text-box placeholder="{{'search' | translate}}"
+                 [(value)]="search"
+                 [showClearButton]="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="groupTypes"
+                   [(value)]="selectedGroupTypes"
+                   displayExpr="name"
+                   placeholder="{{'groupType' | translate}}">
+    </dx-select-box>
+  </div>
+</div>
+
+
