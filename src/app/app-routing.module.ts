@@ -26,6 +26,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, LayoutService]
   },
   {
+    path: 'group',
+    loadChildren: './pages/groups/group-page.module#GroupPageModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]
