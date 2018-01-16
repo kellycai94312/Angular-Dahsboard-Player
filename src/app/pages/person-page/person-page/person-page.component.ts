@@ -1,21 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Person } from '../../../data/remote/model/person';
-import { TranslateService } from '@ngx-translate/core';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { UserRole } from '../../../data/remote/model/user-role';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SportType } from '../../../data/remote/model/sport-type';
-import { Picture } from '../../../data/remote/model/picture';
-import { PictureType } from '../../../data/remote/misc/picture-type';
-import { PictureClass } from '../../../data/remote/misc/picture-class';
-import { PictureService } from '../../../shared/picture.service';
-import { PersonService } from './person.service';
-import { LocalStorageService } from '../../../shared/local-storage.service';
-import { ProfileService } from '../../../layout/shared/profile.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { RolesModalComponent } from './roles-modal/roles-modal.component';
-import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
-import { MatTabChangeEvent } from '@angular/material';
+import {Component, OnInit} from '@angular/core';
+import {Person} from '../../../data/remote/model/person';
+import {TranslateService} from '@ngx-translate/core';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {UserRole} from '../../../data/remote/model/user-role';
+import {ActivatedRoute, Router} from '@angular/router';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {Picture} from '../../../data/remote/model/picture';
+import {PictureType} from '../../../data/remote/misc/picture-type';
+import {PictureClass} from '../../../data/remote/misc/picture-class';
+import {PictureService} from '../../../shared/picture.service';
+import {PersonService} from './person.service';
+import {LocalStorageService} from '../../../shared/local-storage.service';
+import {ProfileService} from '../../../layout/shared/profile.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {RolesModalComponent} from './roles-modal/roles-modal.component';
+import {SportTypesModalComponent} from './sport-types-modal/sport-types-modal.component';
 
 @Component({
   selector: 'app-person-page',
@@ -37,9 +36,6 @@ export class PersonPageComponent implements OnInit {
   private rolesModalRef: BsModalRef;
   private sportTypesModalRef: BsModalRef;
 
-  private tabRoutes: Map<number, string>;
-  private defaultTabIndex: number;
-
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private router: Router,
@@ -49,20 +45,6 @@ export class PersonPageComponent implements OnInit {
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: BsModalService) {
-    this.tabRoutes = new Map<number, string>();
-    this.tabRoutes.set(0, 'personal');
-    this.tabRoutes.set(1, 'anthropometry');
-    this.tabRoutes.set(2, 'physiology');
-    this.tabRoutes.set(3, 'contact');
-    this.tabRoutes.set(4, 'tests_results');
-    this.tabRoutes.set(5, 'events');
-
-    const url = this.router.url.substring(this.router.url.lastIndexOf('/') + 1);
-    this.tabRoutes.forEach((value: string, key: number) => {
-      if (value === url) {
-        this.defaultTabIndex = key;
-      }
-    });
 
     this.isEditAllow = false;
     this._personService.rolesChangeEmitted$.subscribe(userRoles => {
@@ -79,10 +61,6 @@ export class PersonPageComponent implements OnInit {
         this.onSportTypeChange();
       }
     });
-  }
-
-  selectTab(e: MatTabChangeEvent) {
-    this.router.navigate([`./${this.tabRoutes.get(e.index)}`], {relativeTo: this.route});
   }
 
   async onLogoChange(event) {
