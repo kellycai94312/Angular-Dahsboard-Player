@@ -1,35 +1,28 @@
-import { Injectable } from '@angular/core';
-import {
-  IRestMethod,
-  IRestMethodStrict,
-  Rest,
-  RestAction,
-  RestHandler,
-  RestParams,
-  RestRequestMethod
-} from 'rest-core';
-import { Session } from '../model/session';
-import { Auth } from '../model/auth';
-import { PageContainer } from '../bean/page-container';
-import { Country } from '../model/country';
-import { Region } from '../model/region';
-import { City } from '../model/city';
-import { User } from '../model/user';
-import { VerificationRequest } from '../model/verification-request';
-import { IdentifiedObject } from '../base/identified-object';
-import { Person } from '../model/person';
-import { QueryParams } from './query-params';
-import { UserRole } from '../model/user-role';
-import { ListRequest } from '../request/list-request';
-import { SportType } from '../model/sport-type';
-import { HttpClient } from '@angular/common/http';
-import { Picture } from '../model/picture';
-import { Address } from '../model/address';
-import { PersonAnthropometry } from '../model/person-anthropometry';
-import { EmailRequest } from '../request/email-request';
-import { PageQuery } from './page-query';
-import { environment } from '../../../../environments/environment';
-import { AnthropometryRequest } from '../request/anthropometry-request';
+import {Injectable} from '@angular/core';
+import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {Session} from '../model/session';
+import {Auth} from '../model/auth';
+import {PageContainer} from '../bean/page-container';
+import {Country} from '../model/country';
+import {Region} from '../model/region';
+import {City} from '../model/city';
+import {User} from '../model/user';
+import {VerificationRequest} from '../model/verification-request';
+import {IdentifiedObject} from '../base/identified-object';
+import {Person} from '../model/person';
+import {QueryParams} from './query-params';
+import {UserRole} from '../model/user-role';
+import {ListRequest} from '../request/list-request';
+import {SportType} from '../model/sport-type';
+import {HttpClient} from '@angular/common/http';
+import {Picture} from '../model/picture';
+import {Address} from '../model/address';
+import {PersonAnthropometry} from '../model/person-anthropometry';
+import {EmailRequest} from '../request/email-request';
+import {PageQuery} from './page-query';
+import {environment} from '../../../../environments/environment';
+import {AnthropometryRequest} from '../request/anthropometry-request';
+import {GroupType} from '../model/group/base/group-type';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -39,6 +32,8 @@ export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'ht
   withCredentials: true
 })
 export class ParticipantRestApiService extends Rest {
+
+  //#region Auth
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -51,6 +46,40 @@ export class ParticipantRestApiService extends Rest {
     path: '/auth'
   })
   logout: IRestMethod<void, void>;
+
+  //#endregion
+
+  //#region User
+
+  //#region GET
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/role'
+  })
+  getRoles: IRestMethod<void, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sporttype'
+  })
+  getSportTypes: IRestMethod<void, SportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!id}'
+  })
+  getUser: IRestMethod<IdentifiedObject, User>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!id}/role'
+  })
+  getUserRoles: IRestMethod<QueryParams, UserRole[]>;
+
+  //#endregion
+
+  //#region POST
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -65,16 +94,58 @@ export class ParticipantRestApiService extends Rest {
   verification: IRestMethod<VerificationRequest, void>;
 
   @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!id}'
-  })
-  getUser: IRestMethod<IdentifiedObject, User>;
-
-  @RestAction({
     method: RestRequestMethod.Post,
     path: '/user/password/reset'
   })
   resetPassword: IRestMethod<EmailRequest, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/role'
+  })
+  changeRoles: IRestMethod<ListRequest<IdentifiedObject>, User>;
+
+  //#endregion
+
+  //#endregion
+
+  //#region Person
+
+  //#region GET
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/filter?from={!from}&count={!count}'
+  })
+  getPersonsPage: IRestMethod<PageQuery, PageContainer<Person>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/sporttype'
+  })
+  getPersonSportTypes: IRestMethod<QueryParams, SportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}'
+  })
+  getPerson: IRestMethod<QueryParams, Person>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/address'
+  })
+  getPersonAddress: IRestMethod<QueryParams, Address>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/anthropometry'
+  })
+  getAnthropometry: IRestMethod<QueryParams, PersonAnthropometry[]>;
+
+  //#endregion
+
+  //#region POST
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -83,10 +154,32 @@ export class ParticipantRestApiService extends Rest {
   createPerson: IRestMethod<Person, Person>;
 
   @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/filter?from={!from}&count={!count}'
+    method: RestRequestMethod.Post,
+    path: '/person/sporttype'
   })
-  getPersonsPage: IRestMethod<PageQuery, PageContainer<Person>>;
+  changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/anthropometry'
+  })
+  changeAnthropometry: IRestMethod<AnthropometryRequest, PersonAnthropometry[]>;
+
+  //#endregion
+
+  //#region PUT
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!id}'
+  })
+  updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
+
+  //#endregion
+
+  //#endregion
+
+  //#region Country
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -106,83 +199,32 @@ export class ParticipantRestApiService extends Rest {
   })
   getCities: IRestMethod<QueryParams, PageContainer<City>>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!id}'
-  })
-  getPerson: IRestMethod<QueryParams, Person>;
+  //#endregion
+
+  //#region Group
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/address'
+    path: '/groupType',
   })
-  getPersonAddress: IRestMethod<QueryParams, Address>;
+  getGroupTypes: IRestMethod<QueryParams, GroupType[]>;
 
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/person/{!id}'
-  })
-  updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
+  //#endregion
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/role'
-  })
-  getRoles: IRestMethod<void, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!id}/role'
-  })
-  getUserRoles: IRestMethod<QueryParams, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/role'
-  })
-  changeRoles: IRestMethod<ListRequest<IdentifiedObject>, User>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/sporttype'
-  })
-  getSportTypes: IRestMethod<void, SportType[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!id}/sporttype'
-  })
-  getPersonSportTypes: IRestMethod<QueryParams, SportType[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/person/sporttype'
-  })
-  changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!id}/anthropometry'
-  })
-  getAnhtropometry: IRestMethod<QueryParams, PersonAnthropometry[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/person/anthropometry'
-  })
-  changeAnthropometry: IRestMethod<AnthropometryRequest, PersonAnthropometry[]>;
-
-  constructor(restHandler: RestHandler,
-              private http: HttpClient) {
-    super(restHandler);
-  }
-
+  //#region Image
   uploadPicture(file: File, picture: Picture): Promise<Picture> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
     formData.append('picture', new Blob([JSON.stringify(picture)], {type: 'application/json'}));
     return this.http.post<Picture>(`${RestUrl}/picture/upload`, formData, {withCredentials: true})
       .toPromise();
+  }
+
+  //#endregion
+
+  constructor(restHandler: RestHandler,
+              private http: HttpClient) {
+    super(restHandler);
   }
 
 }

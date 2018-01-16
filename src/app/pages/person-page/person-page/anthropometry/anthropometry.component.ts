@@ -42,7 +42,7 @@ export class AnthropometryComponent implements OnInit {
 
   private async load(sportType: SportType) {
     this._sportTypeEnum = sportType.sportTypeEnum;
-    this.anthropometry = await this._participantRestApiService.getAnhtropometry({
+    this.anthropometry = await this._participantRestApiService.getAnthropometry({
       id: this._personService.shared.person.id,
       sportType: this._sportTypeEnum
     });

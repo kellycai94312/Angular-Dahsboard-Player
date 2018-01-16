@@ -92,7 +92,9 @@
     "errorWhileSaving": "Error while saving"
   },
   "groups":{
-    "section": "Groups"
+    "section": "Groups",
+    "all": "All",
+    "my": "My"
   },
   "scheduler":{
     "section": "Scheduler"
@@ -102,5 +104,7 @@
   },
   "notifications":{
     "section": "Notifications"
-  }
+  },
+  "search":"Search",
+  "groupType":"Group type"
 }

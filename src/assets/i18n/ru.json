@@ -92,8 +92,10 @@
   "errors": {
     "errorWhileSaving": "Ошибка при сохранении"
   },
-  "groups": {
-    "section": "Группы"
+  "groups":{
+    "section": "Groups",
+    "all": "Все",
+    "my": "Мои"
   },
   "scheduler": {
     "section": "Планировщик"
@@ -103,5 +105,7 @@
   },
   "notifications":{
     "section": "Уведомления"
-  }
+  },
+  "search":"Поиск",
+  "groupType":"Тип группы"
 }
