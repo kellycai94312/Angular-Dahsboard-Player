@@ -95,6 +95,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="personal"
+           [queryParams]="queryParams"
            routerLinkActive="active">
           {{'persons.person.personal.section' | translate | uppercase }}
         </a>
@@ -102,6 +103,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="anthropometry"
+           [queryParams]="queryParams"
            routerLinkActive="active"
            *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
           {{'persons.person.anthropometry.section' | translate | uppercase }}
@@ -110,6 +112,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="physiology"
+           [queryParams]="queryParams"
            routerLinkActive="active"
            *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
           {{'persons.person.physiology.section' | translate | uppercase }}
@@ -118,6 +121,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="contact"
+           [queryParams]="queryParams"
            routerLinkActive="active">
           {{'persons.person.contact.section' | translate | uppercase }}
         </a>
@@ -125,6 +129,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="tests_results"
+           [queryParams]="queryParams"
            routerLinkActive="active"
            *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
           {{'persons.person.testsResults.section' | translate | uppercase }}
@@ -133,6 +138,7 @@
       <li class="nav-item">
         <a class="nav-link"
            routerLink="events"
+           [queryParams]="queryParams"
            routerLinkActive="active"
            *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
           {{'persons.person.events.section' | translate | uppercase }}

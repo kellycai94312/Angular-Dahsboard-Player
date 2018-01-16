@@ -1,20 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {Person} from '../../../data/remote/model/person';
-import {TranslateService} from '@ngx-translate/core';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {UserRole} from '../../../data/remote/model/user-role';
-import {ActivatedRoute, Router} from '@angular/router';
-import {SportType} from '../../../data/remote/model/sport-type';
-import {Picture} from '../../../data/remote/model/picture';
-import {PictureType} from '../../../data/remote/misc/picture-type';
-import {PictureClass} from '../../../data/remote/misc/picture-class';
-import {PictureService} from '../../../shared/picture.service';
-import {PersonService} from './person.service';
-import {LocalStorageService} from '../../../shared/local-storage.service';
-import {ProfileService} from '../../../layout/shared/profile.service';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
-import {RolesModalComponent} from './roles-modal/roles-modal.component';
-import {SportTypesModalComponent} from './sport-types-modal/sport-types-modal.component';
+import { Component, OnInit } from '@angular/core';
+import { Person } from '../../../data/remote/model/person';
+import { TranslateService } from '@ngx-translate/core';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { UserRole } from '../../../data/remote/model/user-role';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { SportType } from '../../../data/remote/model/sport-type';
+import { Picture } from '../../../data/remote/model/picture';
+import { PictureType } from '../../../data/remote/misc/picture-type';
+import { PictureClass } from '../../../data/remote/misc/picture-class';
+import { PictureService } from '../../../shared/picture.service';
+import { PersonService } from './person.service';
+import { LocalStorageService } from '../../../shared/local-storage.service';
+import { ProfileService } from '../../../layout/shared/profile.service';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { RolesModalComponent } from './roles-modal/roles-modal.component';
+import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
 
 @Component({
   selector: 'app-person-page',
@@ -25,6 +25,7 @@ export class PersonPageComponent implements OnInit {
 
   public person: Person;
   public isEditAllow: boolean;
+  public queryParams: Params;
 
   private userRoles: UserRole[] = [];
   private personSportTypes: SportType[];
@@ -87,10 +88,14 @@ export class PersonPageComponent implements OnInit {
   }
 
   async onRoleChange() {
+    this.queryParams['userRole'] = this.roleToggle.id;
+    this.router.navigate([], {queryParams: this.queryParams});
   }
 
   async onSportTypeChange() {
     this._personService.emitSportTypeSelect(this.sportTypeToggle);
+    this.queryParams['sportType'] = this.sportTypeToggle.id;
+    this.router.navigate([], {queryParams: this.queryParams});
   }
 
   updateLogo() {
@@ -99,6 +104,7 @@ export class PersonPageComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.route.params.subscribe(params => {
       this._navbarService.getPerson(+params.id).then(person => {
         this.person = person;
@@ -111,7 +117,16 @@ export class PersonPageComponent implements OnInit {
           .then(userRoles => {
             this.userRoles = userRoles;
             if (userRoles.length) {
-              this.roleToggle = userRoles[0];
+              if (this.queryParams['userRole']) {
+                for (const userRole of userRoles) {
+                  if (userRole.id === +this.queryParams['userRole']) {
+                    this.roleToggle = userRole;
+                    break;
+                  }
+                }
+              } else {
+                this.roleToggle = userRoles[0];
+              }
               this.onRoleChange();
             }
           });
@@ -120,15 +135,23 @@ export class PersonPageComponent implements OnInit {
           .then(personSportTypes => {
             this.personSportTypes = personSportTypes;
             if (personSportTypes.length) {
-              this.sportTypeToggle = personSportTypes[0];
-              this._personService.sportTypeSelectDefault = personSportTypes[0];
+              if (this.queryParams['sportType']) {
+                for (const sportType of personSportTypes) {
+                  if (sportType.id === +this.queryParams['sportType']) {
+                    this.sportTypeToggle = sportType;
+                    this._personService.sportTypeSelectDefault = sportType;
+                    break;
+                  }
+                }
+              } else {
+                this.sportTypeToggle = personSportTypes[0];
+                this._personService.sportTypeSelectDefault = personSportTypes[0];
+              }
               this.onSportTypeChange();
             }
           });
 
 
-      }).catch(error => {
-        this.router.navigate(['not-found']);
       });
     });
   }
