@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap';
-import { UserRole } from '../../../../data/remote/model/user-role';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { Subject } from 'rxjs/Subject';
-import { ListRequest } from '../../../../data/remote/request/list-request';
-import { PersonService } from '../person.service';
+import {Component, OnInit} from '@angular/core';
+import {BsModalRef} from 'ngx-bootstrap';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {Subject} from 'rxjs/Subject';
+import {ListRequest} from '../../../../data/remote/request/list-request';
+import {PersonService} from '../person.service';
 
 @Component({
   selector: 'app-roles-modal',
@@ -22,7 +22,8 @@ export class RolesModalComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.roles = await this._participantRestApiService.getRoles();
+    // TODO: Передалеть получение объектов
+    this.roles = await this._participantRestApiService.getUserRoles();
     this.roleSubject.next();
   }
 
@@ -34,13 +35,13 @@ export class RolesModalComponent implements OnInit {
       }
     }
     return data;
-  }
+  };
 
   addRole = (typing: string, role: UserRole) => {
     this.roles.splice(this.roles.indexOf(role), 1);
     this.userRoles.push(role);
     return this.getRoles(typing);
-  }
+  };
 
   removeRole(role: UserRole) {
     this.userRoles.splice(this.userRoles.indexOf(role), 1);

@@ -106,5 +106,6 @@
     "section": "Notifications"
   },
   "search":"Search",
-  "groupType":"Group type"
+  "groupType":"Group type",
+  "userRole":"User role"
 }
