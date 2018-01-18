@@ -107,7 +107,7 @@ export class PersonPageComponent implements OnInit {
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
         // load user roles
-        this.participantRestApiService.getUserRoles({id: person.user.id})
+        this.participantRestApiService.getUserRolesByUser({id: person.user.id})
           .then(userRoles => {
             this.userRoles = userRoles;
             if (userRoles.length) {

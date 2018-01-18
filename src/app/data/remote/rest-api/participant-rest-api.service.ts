@@ -23,6 +23,7 @@ import {PageQuery} from './page-query';
 import {environment} from '../../../../environments/environment';
 import {AnthropometryRequest} from '../request/anthropometry-request';
 import {GroupType} from '../model/group/base/group-type';
+import {Group} from '../model/group/base/group';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -55,12 +56,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/role'
-  })
-  getRoles: IRestMethod<void, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/sporttype'
   })
   getSportTypes: IRestMethod<void, SportType[]>;
@@ -75,7 +70,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/user/{!id}/role'
   })
-  getUserRoles: IRestMethod<QueryParams, UserRole[]>;
+  getUserRolesByUser: IRestMethod<QueryParams, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/userRole'
+  })
+  getUserRoles: IRestMethod<void, UserRole[]>;
 
   //#endregion
 
@@ -207,7 +208,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/groupType',
   })
-  getGroupTypes: IRestMethod<QueryParams, GroupType[]>;
+  getGroupTypes: IRestMethod<void, GroupType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/?from={!from}&count={!count}&name={!name}&groupTypeId={!groupTypeId}&userRoleId={!userRoleId}&personId={!personId}&approved={!approved}',
+  })
+  getGroups: IRestMethod<QueryParams, PageContainer<Group>>;
 
   //#endregion
 

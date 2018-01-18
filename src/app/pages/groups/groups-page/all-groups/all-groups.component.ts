@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {Group} from '../../../../data/remote/model/group/base/group';
+import 'rxjs/add/operator/toPromise';
 
 @Component({
   selector: 'app-all-groups',
@@ -10,12 +10,12 @@ import {Group} from '../../../../data/remote/model/group/base/group';
 })
 export class AllGroupsComponent implements OnInit {
 
-  public search: string;
+  public searchText: string;
 
   public groupTypes: GroupType[];
   public selectedGroupTypes: GroupType;
 
-  public groups: Group[];
+  public groups: any[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService) {
     this.groups = [];
@@ -23,12 +23,15 @@ export class AllGroupsComponent implements OnInit {
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-
-    let group
+    this.groups = await this._participantRestApiService.getGroupTypes();
   }
 
-  public onRowUpdating(e) {
-    console.log(e);
+  public onSearchChanged(search: string) {
+    console.log(search);
+  }
+
+  public onGroupTypeChanged(groupType: GroupType) {
+    console.log(groupType);
   }
 
 }

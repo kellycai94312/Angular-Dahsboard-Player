@@ -8,7 +8,8 @@ import {GroupPageRoutingModule} from './group-page-routing.module';
 import {LayoutService} from '../../layout/shared/layout.service';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {DxDataGridModule, DxSelectBoxModule, DxTextBoxModule} from 'devextreme-angular';
+import {DxSelectBoxModule, DxTextBoxModule} from 'devextreme-angular';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import {DxDataGridModule, DxSelectBoxModule, DxTextBoxModule} from 'devextreme-a
     TranslateModule.forChild(),
     DxTextBoxModule,
     DxSelectBoxModule,
-    DxDataGridModule
+    InfiniteScrollModule
   ],
   providers: [
     LayoutService
