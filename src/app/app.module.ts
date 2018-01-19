@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { LocationStrategy, PathLocationStrategy } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { RestModule } from 'rest-ngx';
@@ -24,6 +24,7 @@ import { PictureService } from './shared/picture.service';
 import { ProfileService } from './layout/shared/profile.service';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RestApiInterceptor } from './guard/rest-api-interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -66,7 +67,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
-    }],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: RestApiInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
