@@ -8,17 +8,15 @@ $sidebar-width-mini: 50px;
 $sidebar-mini-transition: .3s;
 $sidebar-background: $dark-blue;
 
-.flex-wrapper {
-  position: absolute;
-  height: calc(100% - #{$navbar-height});
-  width: 100%;
+.content-wrapper {
   display: flex;
-}
-
-.content {
-  width: 100%;
+  padding-top: $navbar-height;
   min-height: 100%;
-  padding: 10px;
-  overflow-x: hidden;
-  overflow-y: auto;
+
+  > .content {
+    width: 100%;
+    padding: 10px;
+    overflow-x: hidden;
+  }
+
 }

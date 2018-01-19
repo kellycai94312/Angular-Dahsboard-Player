@@ -9,7 +9,6 @@ import { RestModule } from 'rest-ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LayoutComponent } from './layout/layout.component';
-import { ToggleDirective } from './layout/side-bar/toggle.directive';
 import { LayoutService } from './layout/shared/layout.service';
 import { SideBarComponent } from './layout/side-bar/side-bar.component';
 import { NavBarComponent } from './layout/nav-bar/nav-bar.component';
@@ -34,7 +33,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     LayoutComponent,
-    ToggleDirective,
     SideBarComponent,
     NavBarComponent,
     UserPanelDirective

@@ -68,6 +68,8 @@ $avatar-size: 40px;
 
 .navbar-wrapper {
   user-select: none;
+  position: fixed;
+  width: 100%;
   height: $navbar-height;
   background-color: $navbar-background;
   display: flex;

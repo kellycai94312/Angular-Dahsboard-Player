@@ -7,9 +7,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SideBarComponent implements OnInit {
 
-  constructor() { }
+  readonly className: string = 'collapsed';
+
+  public isCollapsed: boolean;
+
+  constructor() {
+  }
 
   ngOnInit() {
+    this.isCollapsed = localStorage.getItem(this.className) === 'true';
+  }
+
+  toggle() {
+    this.isCollapsed = !this.isCollapsed;
+    localStorage.setItem(this.className, String(this.isCollapsed));
   }
 
 }
