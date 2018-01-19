@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
-import {UserRole} from '../../../../data/remote/model/user-role';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { Component, OnInit } from '@angular/core';
+import { GroupType } from '../../../../data/remote/model/group/base/group-type';
+import { UserRole } from '../../../../data/remote/model/user-role';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
   selector: 'app-my-groups',
@@ -13,7 +13,7 @@ export class MyGroupsComponent implements OnInit {
   public searchText: string;
 
   public groupTypes: GroupType[];
-  public selectedGroupTypes: GroupType;
+  public selectedGroupType: GroupType;
 
   public userRoles: UserRole[];
   public selectedUserRole: UserRole;

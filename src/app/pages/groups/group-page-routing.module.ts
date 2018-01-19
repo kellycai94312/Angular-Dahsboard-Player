@@ -5,6 +5,7 @@ import {GroupsPageComponent} from './groups-page/groups-page.component';
 import {GroupPageComponent} from './group-page/group-page.component';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
+import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
 
 const routes: Routes = [
   {
@@ -12,8 +13,11 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'all'},
       {path: 'all', component: AllGroupsComponent},
-      {path: 'my', component: MyGroupsComponent}
+      {path: 'my', component: MyGroupsComponent},
     ]
+  },
+  {
+    path: 'new', component: NewGroupPageComponent,
   },
   {
     path: ':id', component: GroupPageComponent

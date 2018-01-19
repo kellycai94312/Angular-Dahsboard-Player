@@ -216,6 +216,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getGroups: IRestMethod<QueryParams, PageContainer<Group>>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group',
+  })
+  postGroup: IRestMethod<Group, Group>;
+
   //#endregion
 
   //#region Image

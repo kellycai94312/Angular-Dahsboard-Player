@@ -1,6 +1,6 @@
-import { IdentifiedObject } from '../base/identified-object';
 import { SportTypeEnum } from '../misc/sport-type-enum';
+import { NamedObject } from '../base/named-object';
 
-export class SportType extends IdentifiedObject {
+export class SportType extends NamedObject {
   sportTypeEnum: SportTypeEnum;
 }
