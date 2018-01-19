@@ -92,56 +92,13 @@
   <!-- tabs -->
   <div class="mt-3">
     <ul class="nav nav-tabs">
-      <li class="nav-item">
+      <li class="nav-item" *ngFor="let tab of tabs">
         <a class="nav-link"
-           routerLink="personal"
-           [queryParams]="queryParams"
-           routerLinkActive="active">
-          {{'persons.person.personal.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"
-           routerLink="anthropometry"
+           routerLink="{{tab.route}}"
            [queryParams]="queryParams"
            routerLinkActive="active"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.anthropometry.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"
-           routerLink="physiology"
-           [queryParams]="queryParams"
-           routerLinkActive="active"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.physiology.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"
-           routerLink="contact"
-           [queryParams]="queryParams"
-           routerLinkActive="active">
-          {{'persons.person.contact.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"
-           routerLink="tests_results"
-           [queryParams]="queryParams"
-           routerLinkActive="active"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.testsResults.section' | translate | uppercase }}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link"
-           routerLink="events"
-           [queryParams]="queryParams"
-           routerLinkActive="active"
-           *ngIf="roleToggle !== undefined && roleToggle.userRoleEnum.toString() !== 'TRAINER'">
-          {{'persons.person.events.section' | translate | uppercase }}
+           *ngIf="isTabOpen(tab)">
+          {{tab.name | translate | uppercase }}
         </a>
       </li>
     </ul>
