@@ -24,6 +24,7 @@ import {environment} from '../../../../environments/environment';
 import {AnthropometryRequest} from '../request/anthropometry-request';
 import {GroupType} from '../model/group/base/group-type';
 import {Group} from '../model/group/base/group';
+import { GroupQuery } from './query/group-query';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -212,9 +213,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/?from={!from}&count={!count}&name={!name}&groupTypeId={!groupTypeId}&userRoleId={!userRoleId}&personId={!personId}&approved={!approved}',
+    path: '/group/filter',
   })
-  getGroups: IRestMethod<QueryParams, PageContainer<Group>>;
+  getGroups: IRestMethod<GroupQuery, PageContainer<Group>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
