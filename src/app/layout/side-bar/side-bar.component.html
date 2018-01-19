@@ -1,49 +1,50 @@
-<aside class="sidebar-wrapper">
-  <div class="toggle-wrapper">
-    <a appToggle
-       class="toggle">
-    </a>
+<aside class="sidebar-wrapper" [ngClass]="{'collapsed':isCollapsed}">
+  <div class="inner-content">
+    <div class="toggle-wrapper">
+      <a class="toggle" (click)="toggle()">
+      </a>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="menu-item"
+          routerLink="notifications"
+          routerLinkActive="active">
+        <a>
+          <i class="lnr lnr-alarm"></i>
+          <span>{{'notifications.section' | translate | uppercase}}</span>
+        </a>
+      </li>
+      <li class="menu-item"
+          routerLink="messages"
+          routerLinkActive="active">
+        <a>
+          <i class="lnr lnr-envelope"></i>
+          <span>{{'messages.section' | translate | uppercase}}</span>
+        </a>
+      </li>
+      <li class="menu-item"
+          routerLink="person"
+          routerLinkActive="active">
+        <a>
+          <i class="lnr lnr-users"></i>
+          <span>{{'persons.section' | translate | uppercase}}</span>
+        </a>
+      </li>
+      <li class="menu-item"
+          routerLink="group"
+          routerLinkActive="active">
+        <a routerLink="group">
+          <i class="lnr lnr-mustache"></i>
+          <span>{{'groups.section' | translate | uppercase}}</span>
+        </a>
+      </li>
+      <li class="menu-item"
+          routerLink="scheduler"
+          routerLinkActive="active">
+        <a routerLink="scheduler">
+          <i class="lnr lnr-calendar-full"></i>
+          <span>{{'scheduler.section' | translate | uppercase}}</span>
+        </a>
+      </li>
+    </ul>
   </div>
-  <ul class="sidebar-menu">
-    <li class="menu-item"
-        routerLink="notifications"
-        routerLinkActive="active">
-      <a>
-        <i class="lnr lnr-alarm"></i>
-        <span>{{'notifications.section' | translate | uppercase}}</span>
-      </a>
-    </li>
-    <li class="menu-item"
-        routerLink="messages"
-        routerLinkActive="active">
-      <a>
-        <i class="lnr lnr-envelope"></i>
-        <span>{{'messages.section' | translate | uppercase}}</span>
-      </a>
-    </li>
-    <li class="menu-item"
-        routerLink="person"
-        routerLinkActive="active">
-      <a>
-        <i class="lnr lnr-users"></i>
-        <span>{{'persons.section' | translate | uppercase}}</span>
-      </a>
-    </li>
-    <li class="menu-item"
-        routerLink="group"
-        routerLinkActive="active">
-      <a routerLink="group">
-        <i class="lnr lnr-mustache"></i>
-        <span>{{'groups.section' | translate | uppercase}}</span>
-      </a>
-    </li>
-    <li class="menu-item"
-        routerLink="scheduler"
-        routerLinkActive="active">
-      <a routerLink="scheduler">
-        <i class="lnr lnr-calendar-full"></i>
-        <span>{{'scheduler.section' | translate | uppercase}}</span>
-      </a>
-    </li>
-  </ul>
 </aside>

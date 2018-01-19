@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {BsModalRef} from 'ngx-bootstrap';
-import {UserRole} from '../../../../data/remote/model/user-role';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {Subject} from 'rxjs/Subject';
-import {ListRequest} from '../../../../data/remote/request/list-request';
-import {PersonService} from '../person.service';
+import { Component, OnInit } from '@angular/core';
+import { BsModalRef } from 'ngx-bootstrap';
+import { UserRole } from '../../../../data/remote/model/user-role';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { Subject } from 'rxjs/Subject';
+import { ListRequest } from '../../../../data/remote/request/list-request';
+import { PersonService } from '../person.service';
 
 @Component({
   selector: 'app-roles-modal',
@@ -22,8 +22,10 @@ export class RolesModalComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // TODO: Передалеть получение объектов
-    this.roles = await this._participantRestApiService.getUserRoles();
+    this.roles = (await this._participantRestApiService.getUserRoles())
+      .filter(role =>
+        this.userRoles
+          .filter(uRole => uRole.id === role.id).length === 0);
     this.roleSubject.next();
   }
 
