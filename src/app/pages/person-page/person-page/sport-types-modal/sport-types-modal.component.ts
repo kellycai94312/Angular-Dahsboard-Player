@@ -23,7 +23,10 @@ export class SportTypesModalComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.sportTypes = await this._participantRestApiService.getSportTypes();
+    this.sportTypes = (await this._participantRestApiService.getSportTypes())
+      .filter(type =>
+        this.personSportTypes
+          .filter(pType => pType.id === type.id).length === 0);
     this.sportTypeSubject.next();
   }
 
