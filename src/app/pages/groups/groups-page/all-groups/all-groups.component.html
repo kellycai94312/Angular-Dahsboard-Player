@@ -16,13 +16,9 @@
     </dx-select-box>
   </div>
 </div>
-
-<div infiniteScroll
-     [infiniteScrollDistance]="2"
-     [infiniteScrollUpDistance]="1.5"
-     [infiniteScrollThrottle]="50"
-     (scrolled)="onScrollDown()">
-  <h1 *ngFor="let item of groups">
+<app-infinite-list [items]="groups"
+                   (onNextPage)="onNextPage($event)">
+  <ng-template let-item>
     <app-group-item [group]="item"></app-group-item>
-  </h1>
-</div>
+  </ng-template>
+</app-infinite-list>

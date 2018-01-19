@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { GroupType } from '../../../../data/remote/model/group/base/group-type';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import 'rxjs/add/operator/toPromise';
 import { PropertyConstant } from '../../../../data/local/property-constant';
 import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
 import { DxTextBoxComponent } from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/map';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-all-groups',
@@ -24,7 +24,6 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public groups: any[];
 
   private _searchText: string;
-  private currentPosition: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService) {
     this.groups = [];
@@ -38,11 +37,11 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this._searchText = value;
-        await this.updateListAsync(0);
+        await this.updateListAsync();
       });
   }
 
-  public async updateListAsync(from: number) {
+  public async updateListAsync(from: number = 0) {
     const pageSize = PropertyConstant.pageSize;
     const groupQuery = new GroupQuery();
     groupQuery.from = from;
@@ -51,30 +50,20 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     if (this._searchText != null) {
       groupQuery.name = this._searchText;
     }
-
     if (this.selectedGroupType != null) {
       groupQuery.groupTypeId = this.selectedGroupType.id;
     }
 
     const pageContainer = await this._participantRestApiService.getGroups(groupQuery);
-    if (pageContainer != null) {
-      if (from <= 0) {
-        this.groups = pageContainer.list;
-      } else {
-        this.groups.push(pageContainer.list);
-      }
-      this.currentPosition = from + pageSize;
-    }
+    this.groups = AppHelper.pushItemsInList(from, this.groups, pageContainer);
   }
 
   public async onGroupTypeChanged(groupType: GroupType) {
-    await this.updateListAsync(0);
+    await this.updateListAsync();
   }
 
-  public async onScrollDown() {
-    console.log('onScrollDown');
-    this.currentPosition += 15;
-    await this.updateListAsync(this.currentPosition);
+  public async onNextPage(pageQuery: PageQuery) {
+    await this.updateListAsync(pageQuery.from);
   }
 
 }

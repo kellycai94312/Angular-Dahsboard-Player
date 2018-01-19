@@ -9,9 +9,9 @@ import { LayoutService } from '../../layout/shared/layout.service';
 import { AllGroupsComponent } from './groups-page/all-groups/all-groups.component';
 import { MyGroupsComponent } from './groups-page/my-groups/my-groups.component';
 import { DxButtonModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule } from 'devextreme-angular';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 import { GroupItemComponent } from './group-item/group-item.component';
+import { InfiniteListModule } from '../../components/infinite-list/infinite-list.module';
 
 @NgModule({
   imports: [
@@ -22,7 +22,7 @@ import { GroupItemComponent } from './group-item/group-item.component';
     DxValidatorModule,
     DxTextBoxModule,
     DxSelectBoxModule,
-    InfiniteScrollModule
+    InfiniteListModule
   ],
   providers: [
     LayoutService
