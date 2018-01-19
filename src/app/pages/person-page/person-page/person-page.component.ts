@@ -100,7 +100,7 @@ export class PersonPageComponent implements OnInit {
   }
 
   isTabOpen(tab: Tab): boolean {
-    return tab && this.roleToggle && tab.restrict.indexOf(UserRoleEnum[this.roleToggle.userRoleEnum]) < 0;
+    return tab && this.roleToggle && tab.restrict.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0;
   }
 
   async onLogoChange(event) {
@@ -130,7 +130,7 @@ export class PersonPageComponent implements OnInit {
     this.queryParams['userRole'] = this.roleToggle.id;
     /*redirect to personal tab when user selects role in restrict array*/
     const currentTab = this.tabs.filter(t => this.router.url.includes(t.route))[0];
-    if (currentTab && currentTab.restrict.indexOf(UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
+    if (currentTab && currentTab.restrict.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
       this.router.navigate(['./'], {relativeTo: this.route, queryParams: this.queryParams});
     } else {
       this.router.navigate([], {queryParams: this.queryParams});
