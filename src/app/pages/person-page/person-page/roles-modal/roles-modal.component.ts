@@ -5,6 +5,8 @@ import { ParticipantRestApiService } from '../../../../data/remote/rest-api/part
 import { Subject } from 'rxjs/Subject';
 import { ListRequest } from '../../../../data/remote/request/list-request';
 import { PersonService } from '../person.service';
+import { TranslateService } from '@ngx-translate/core';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-roles-modal',
@@ -14,11 +16,13 @@ import { PersonService } from '../person.service';
 export class RolesModalComponent implements OnInit {
   userRoles: UserRole[];
   roles: UserRole[];
+  private errorMessage: string;
   private roleSubject: Subject<any> = new Subject();
 
   constructor(public bsModalRef: BsModalRef,
               private _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _translate: TranslateService) {
   }
 
   async ngOnInit() {
@@ -27,6 +31,7 @@ export class RolesModalComponent implements OnInit {
         this.userRoles
           .filter(uRole => uRole.id === role.id).length === 0);
     this.roleSubject.next();
+    this.errorMessage = await this._translate.get('persons.person.roles.conflict').toPromise();
   }
 
   getRoles = (typing: string) => {
@@ -52,9 +57,17 @@ export class RolesModalComponent implements OnInit {
   }
 
   async save() {
-    const user = await this._participantRestApiService.changeRoles(new ListRequest(this.userRoles));
-    this._personService.emitRolesChange(user.userRoles);
-    this.bsModalRef.hide();
+    try {
+      const userRoles = await this._participantRestApiService.changeRoles(new ListRequest(this.userRoles));
+      this._personService.emitRolesChange(userRoles);
+      this.bsModalRef.hide();
+    } catch (e) {
+      if (e.status === 409) {
+        notify(this.errorMessage, 'warning', 3000);
+      } else {
+        throw e;
+      }
+    }
   }
 
 }

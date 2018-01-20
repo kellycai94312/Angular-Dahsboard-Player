@@ -106,7 +106,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/user/role'
   })
-  changeRoles: IRestMethod<ListRequest<IdentifiedObject>, User>;
+  changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
 
   //#endregion
 
