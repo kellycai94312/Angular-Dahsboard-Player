@@ -7,6 +7,7 @@ import { DxTextBoxComponent } from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
 import { PageQuery } from '../../../../data/remote/rest-api/page-query';
 import { AppHelper } from '../../../../utils/app-helper';
+import { Group } from '../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-all-groups',
@@ -19,14 +20,18 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
   public groupTypes: GroupType[];
-  public selectedGroupType: GroupType;
-
-  public groups: any[];
+  public groups: Group[];
 
   private _searchText: string;
+  private _selectedGroupType: GroupType;
+  private readonly _groupQuery: GroupQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService) {
     this.groups = [];
+
+    this._groupQuery = new GroupQuery();
+    this._groupQuery.from = 0;
+    this._groupQuery.count = PropertyConstant.pageSize;
   }
 
   async ngOnInit() {
@@ -41,29 +46,27 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  public async updateListAsync(from: number = 0) {
-    const pageSize = PropertyConstant.pageSize;
-    const groupQuery = new GroupQuery();
-    groupQuery.from = from;
-    groupQuery.count = pageSize;
-
-    if (this._searchText != null) {
-      groupQuery.name = this._searchText;
-    }
-    if (this.selectedGroupType != null) {
-      groupQuery.groupTypeId = this.selectedGroupType.id;
-    }
-
-    const pageContainer = await this._participantRestApiService.getGroups(groupQuery);
-    this.groups = AppHelper.pushItemsInList(from, this.groups, pageContainer);
-  }
-
   public async onGroupTypeChanged(groupType: GroupType) {
+    this._selectedGroupType = groupType;
     await this.updateListAsync();
   }
 
   public async onNextPage(pageQuery: PageQuery) {
     await this.updateListAsync(pageQuery.from);
+  }
+
+  public async updateListAsync(from: number = 0) {
+    this._groupQuery.from = from;
+    this._groupQuery.name = this._searchText;
+
+    if (this._selectedGroupType != null) {
+      this._groupQuery.groupTypeId = this._selectedGroupType.id;
+    } else {
+      delete this._groupQuery.groupTypeId;
+    }
+
+    const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
+    this.groups = AppHelper.pushItemsInList(from, this.groups, pageContainer);
   }
 
 }
