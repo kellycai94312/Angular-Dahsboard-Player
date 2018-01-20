@@ -13,6 +13,10 @@ $sidebar-background: $dark-blue;
   padding-top: $navbar-height;
   min-height: 100%;
 
+  &.hidden {
+    padding-top: 0;
+  }
+
   > .content {
     width: 100%;
     padding: 10px;

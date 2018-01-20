@@ -1,5 +1,5 @@
 <app-nav-bar *ngIf="!hidden"></app-nav-bar>
-<div class="content-wrapper">
+<div class="content-wrapper" [ngClass]="{'hidden' : hidden}">
   <app-side-bar *ngIf="!hidden"></app-side-bar>
   <div class="content">
     <router-outlet></router-outlet>
