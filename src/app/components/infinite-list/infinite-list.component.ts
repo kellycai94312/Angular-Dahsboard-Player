@@ -16,11 +16,11 @@ export class InfiniteListComponent implements OnInit {
   public items: any[];
 
   @Output()
-  public onNextPage: EventEmitter<PageQuery>;
+  public nextPage: EventEmitter<PageQuery>;
 
   constructor() {
     this.items = [];
-    this.onNextPage = new EventEmitter<PageQuery>();
+    this.nextPage = new EventEmitter<PageQuery>();
   }
 
   ngOnInit() {
@@ -30,7 +30,7 @@ export class InfiniteListComponent implements OnInit {
     const pageQuery = new PageQuery();
     pageQuery.from = this.items.length || 0;
     pageQuery.count = PropertyConstant.pageSize;
-    this.onNextPage.emit(pageQuery);
+    this.nextPage.emit(pageQuery);
   }
 
 }
