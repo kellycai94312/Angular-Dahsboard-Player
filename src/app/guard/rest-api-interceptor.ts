@@ -21,11 +21,11 @@ export class RestApiInterceptor implements HttpInterceptor {
       .catch((err: any, caught) => {
         if (err instanceof HttpErrorResponse) {
           switch (err.status) {
-            case 403:
+            /*case 403:
               this._injector.get(LocalStorageService).signOut();
               this._injector.get(LayoutService).toggleLayout('login');
               this._router.navigate(['login']);
-              return Observable.empty();
+              return Observable.empty();*/
             case 404:
               this._injector.get(LayoutService).toggleLayout('not-found');
               return Observable.empty();
