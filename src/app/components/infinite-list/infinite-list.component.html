@@ -1,0 +1,11 @@
+<div infiniteScroll
+     class="mt-2"
+     infiniteScrollDistance="2"
+     infiniteScrollUpDistance="1.5"
+     infiniteScrollThrottle="50"
+     (scrolled)="onScrollDown()">
+  <ng-template ngFor
+               [ngForOf]="items"
+               [ngForTemplate]="template">
+  </ng-template>
+</div>

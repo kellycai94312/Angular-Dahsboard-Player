@@ -1,18 +1,24 @@
 <div class="row mt-3">
   <div class="col pr-0">
-    <dx-text-box placeholder="{{'search' | translate}}"
-                 [mode]="search"
-                 [(value)]="searchText"
-                 (onValueChanged)="onSearchChanged($event.value)"
-                 [showClearButton]="true">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
     </dx-text-box>
   </div>
   <div class="col">
     <dx-select-box [items]="groupTypes"
-                   [(value)]="selectedGroupTypes"
                    displayExpr="name"
                    (onValueChanged)="onGroupTypeChanged($event.value)"
-                   placeholder="{{'groupType' | translate}}">
+                   placeholder="{{'groupType' | translate}}"
+                   showClearButton="true">
     </dx-select-box>
   </div>
 </div>
+<app-infinite-list class="mt-2"
+                   [items]="groups"
+                   (nextPage)="onNextPage($event)">
+  <ng-template let-item>
+    <app-group-item [group]="item"></app-group-item>
+  </ng-template>
+</app-infinite-list>

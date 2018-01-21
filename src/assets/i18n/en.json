@@ -107,5 +107,9 @@
   },
   "search":"Search",
   "groupType":"Group type",
-  "userRole":"User role"
+  "userRole":"User role",
+  "newGroupPage":"New group",
+  "name":"Name",
+  "sportType":"Sport type",
+  "requiredField":"Required field"
 }

@@ -25,6 +25,7 @@ import { ProfileService } from './layout/shared/profile.service';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RestApiInterceptor } from './guard/rest-api-interceptor';
+import { InfiniteListModule } from './components/infinite-list/infinite-list.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -53,7 +54,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    FormsModule
+    FormsModule,
+    InfiniteListModule
   ],
   providers: [
     LayoutService,
