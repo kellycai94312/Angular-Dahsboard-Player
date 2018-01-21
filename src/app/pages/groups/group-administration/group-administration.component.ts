@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Tab } from '../../../data/local/tab';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-group-administration',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GroupAdministrationComponent implements OnInit {
 
-  constructor() { }
+  public tabs: Tab[];
 
-  ngOnInit() {
+  constructor(private _translateService: TranslateService) {
+  }
+
+  async ngOnInit() {
+    this.tabs = [];
+    const allTab = new Tab();
+    allTab.name = await this._translateService.get('settings').toPromise();
+    allTab.routerLink = 'settings';
+    this.tabs.push(allTab);
   }
 
 }

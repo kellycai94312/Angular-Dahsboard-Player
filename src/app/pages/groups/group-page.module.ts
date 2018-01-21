@@ -15,6 +15,8 @@ import { InfiniteListModule } from '../../components/infinite-list/infinite-list
 import { GroupPersonComponent } from './group-person/group-person.component';
 import { GroupPersonsComponent } from './group-persons/group-persons.component';
 import { GroupAdministrationComponent } from './group-administration/group-administration.component';
+import { GroupSettingsComponent } from './group-administration/group-settings/group-settings.component';
+import { TabModule } from '../../components/tab/tab.module';
 
 @NgModule({
   imports: [
@@ -25,7 +27,8 @@ import { GroupAdministrationComponent } from './group-administration/group-admin
     DxValidatorModule,
     DxTextBoxModule,
     DxSelectBoxModule,
-    InfiniteListModule
+    InfiniteListModule,
+    TabModule
   ],
   providers: [
     LayoutService
@@ -39,7 +42,8 @@ import { GroupAdministrationComponent } from './group-administration/group-admin
     GroupItemComponent,
     GroupPersonComponent,
     GroupPersonsComponent,
-    GroupAdministrationComponent
+    GroupAdministrationComponent,
+    GroupSettingsComponent
   ]
 })
 export class GroupPageModule {

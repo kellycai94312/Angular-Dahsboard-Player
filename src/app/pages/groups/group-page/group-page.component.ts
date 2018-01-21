@@ -7,6 +7,7 @@ import { ImageType } from '../../../data/remote/model/image-type';
 import { GroupPersonState } from '../../../data/local/group-person-state';
 import { SubGroup } from '../../../data/remote/model/group/sub-group';
 import { TranslateService } from '@ngx-translate/core';
+import { Tab } from '../../../data/local/tab';
 
 @Component({
   selector: 'app-group-page',
@@ -98,9 +99,4 @@ export class GroupPageComponent implements OnInit {
     await this.baseInit();
   }
 
-}
-
-export class Tab {
-  public name: string;
-  public routerLink: string;
 }

@@ -93,7 +93,7 @@
   "errors": {
     "errorWhileSaving": "Ошибка при сохранении"
   },
-  "groups":{
+  "groups": {
     "section": "Группы",
     "all": "Все",
     "my": "Мои"
@@ -124,5 +124,8 @@
   "cancelJoin": "Отменить заявку",
   "leave": "Выйти",
   "members": "Участники",
-  "administration": "Администрирование"
+  "administration": "Администрирование",
+  "basicInformation": "Основная информация",
+  "additionalInformation": "Дополнительная информация",
+  "settings": "Настройки"
 }

@@ -123,5 +123,8 @@
   "cancelJoin": "Cancel join",
   "leave": "Leave",
   "members": "Members",
-  "administration": "Administration"
+  "administration": "Administration",
+  "basicInformation": "Basic information",
+  "additionalInformation": "Additional information",
+  "settings": "Settings"
 }
