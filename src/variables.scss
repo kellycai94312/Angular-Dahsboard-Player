@@ -8,19 +8,7 @@ $dark-blue: #1C1D1F;
 $white: #f9f9f9;
 $white-light: #fff;
 
-/*angular material tabs*/
-.mat-ink-bar /*underscore selected tab*/ {
-  height: 0 !important;
-}
-
-.mat-tab-label {
-  opacity: 1 !important;
-}
-
-.mat-tab-label-active /*active tab*/ {
-  color: $white !important;
-  background-color: $light-blue !important;
-}
+$logo-list-size: 120px;
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');
