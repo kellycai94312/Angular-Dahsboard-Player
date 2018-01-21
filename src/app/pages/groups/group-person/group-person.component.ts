@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { GroupPerson } from '../../../data/remote/model/group/group-person';
 
 @Component({
   selector: 'app-group-person',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GroupPersonComponent implements OnInit {
 
-  constructor() { }
+  @Input()
+  public groupPerson: GroupPerson;
+
+  constructor() {
+  }
 
   ngOnInit() {
   }

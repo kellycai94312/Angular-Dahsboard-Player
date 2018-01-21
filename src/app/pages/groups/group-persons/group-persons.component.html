@@ -7,10 +7,10 @@
     </dx-text-box>
   </div>
   <div>
-    <app-infinite-list [items]="groups"
+    <app-infinite-list [items]="groupPersons"
                        (nextPage)="onNextPage($event)">
       <ng-template let-item>
-        <app-group-item [group]="item"></app-group-item>
+        <app-group-person [groupPerson]="item"></app-group-person>
       </ng-template>
     </app-infinite-list>
   </div>
