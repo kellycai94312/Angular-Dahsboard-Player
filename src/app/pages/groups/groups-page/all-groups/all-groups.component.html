@@ -15,8 +15,7 @@
     </dx-select-box>
   </div>
 </div>
-<app-infinite-list class="mt-2"
-                   [items]="groups"
+<app-infinite-list [items]="groups"
                    (nextPage)="onNextPage($event)">
   <ng-template let-item>
     <app-group-item [group]="item"></app-group-item>

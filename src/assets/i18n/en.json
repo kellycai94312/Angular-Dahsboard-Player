@@ -121,5 +121,7 @@
   "city": "City",
   "join": "Join",
   "cancelJoin": "Cancel join",
-  "leave": "Leave"
+  "leave": "Leave",
+  "members": "Members",
+  "administration": "Administration"
 }

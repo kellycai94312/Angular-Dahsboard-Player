@@ -12,6 +12,9 @@ import { DxButtonModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule }
 import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
 import { GroupItemComponent } from './group-item/group-item.component';
 import { InfiniteListModule } from '../../components/infinite-list/infinite-list.module';
+import { GroupPersonComponent } from './group-person/group-person.component';
+import { GroupPersonsComponent } from './group-persons/group-persons.component';
+import { GroupAdministrationComponent } from './group-administration/group-administration.component';
 
 @NgModule({
   imports: [
@@ -33,7 +36,10 @@ import { InfiniteListModule } from '../../components/infinite-list/infinite-list
     AllGroupsComponent,
     MyGroupsComponent,
     NewGroupPageComponent,
-    GroupItemComponent
+    GroupItemComponent,
+    GroupPersonComponent,
+    GroupPersonsComponent,
+    GroupAdministrationComponent
   ]
 })
 export class GroupPageModule {

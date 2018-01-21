@@ -1,0 +1,17 @@
+<div class="d-flex flex-column">
+  <div>
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div>
+    <app-infinite-list [items]="groups"
+                       (nextPage)="onNextPage($event)">
+      <ng-template let-item>
+        <app-group-item [group]="item"></app-group-item>
+      </ng-template>
+    </app-infinite-list>
+  </div>
+</div>

@@ -27,6 +27,8 @@ import { Group } from '../model/group/base/group';
 import { GroupQuery } from './query/group-query';
 import { ImageQuery } from './query/image-query';
 import { GroupPerson } from '../model/group/group-person';
+import { SubGroup } from '../model/group/sub-group';
+import { GroupPersonQuery } from './query/group-person-query';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -240,6 +242,12 @@ export class ParticipantRestApiService extends Rest {
   getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
 
   @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!id}/person/filter',
+  })
+  getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+
+  @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!id}/join',
   })
@@ -250,6 +258,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/join',
   })
   leaveGroup: IRestMethod<QueryParams, void>;
+
+  //#endregion
+
+  //#region SubGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!id}/subgroup',
+  })
+  getSubGroupsByGroup: IRestMethod<QueryParams, SubGroup[]>;
 
   //#endregion
 
