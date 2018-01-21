@@ -69,6 +69,7 @@ $avatar-size: 40px;
 .navbar-wrapper {
   user-select: none;
   position: fixed;
+  z-index: 1;
   width: 100%;
   height: $navbar-height;
   background-color: $navbar-background;
@@ -110,7 +111,31 @@ $avatar-size: 40px;
     background-color: $navbar-background-dark;
   }
 
-  > nav.navbar-wrapper {
+  .menu {
+    width: 100%;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    > .dropdown-item {
+
+      outline: none;
+      cursor: pointer;
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      &:hover, &:active, &:focus {
+        background-color: #ddd;
+        color: #000;
+      }
+
+      &:not(:last-child) {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+
+  }
+
+  > nav {
     margin-bottom: 0;
     border: 0;
   }

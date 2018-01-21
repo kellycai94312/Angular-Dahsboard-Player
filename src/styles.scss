@@ -57,13 +57,13 @@ html, body {
   }
 
   p {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
   }
 
   label {
-    margin: 0px;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
   }
 
 }
@@ -93,4 +93,15 @@ html, body {
     box-shadow: none;
     border-color: #337ab7;
   }
+}
+
+.logo-list {
+  border: 2px solid $light-blue;
+  width: $logo-list-size;
+  height: $logo-list-size;
+  margin: auto;
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  background-size: cover;
+  background-position: center center;
 }

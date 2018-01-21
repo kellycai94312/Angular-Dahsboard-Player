@@ -10,7 +10,8 @@
       "changeAvatar": "Change avatar",
       "roles": {
         "section": "Roles",
-        "edit": "Edit roles"
+        "edit": "Edit roles",
+        "conflict": "You should quit groups with appropriate roles before you remove its"
       },
       "sportTypes": {
         "section": "Sport types",
