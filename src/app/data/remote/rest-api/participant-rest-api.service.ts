@@ -26,6 +26,7 @@ import { GroupType } from '../model/group/base/group-type';
 import { Group } from '../model/group/base/group';
 import { GroupQuery } from './query/group-query';
 import { ImageQuery } from './query/image-query';
+import { GroupPerson } from '../model/group/group-person';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -208,6 +209,12 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
+    path: '/group/{!id}',
+  })
+  getGroup: IRestMethod<QueryParams, Group>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
     path: '/groupType',
   })
   getGroupTypes: IRestMethod<void, GroupType[]>;
@@ -223,6 +230,28 @@ export class ParticipantRestApiService extends Rest {
     path: '/group',
   })
   postGroup: IRestMethod<Group, Group>;
+
+  //#region GroupPerson
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!id}/currentGroupPerson',
+  })
+  getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!id}/join',
+  })
+  joinGroup: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!id}/join',
+  })
+  leaveGroup: IRestMethod<QueryParams, void>;
+
+  //#endregion
 
   //#endregion
 

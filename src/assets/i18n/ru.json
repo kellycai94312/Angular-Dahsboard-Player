@@ -101,17 +101,26 @@
   "scheduler": {
     "section": "Планировщик"
   },
-  "messages":{
+  "messages": {
     "section": "Сообщения"
   },
-  "notifications":{
+  "notifications": {
     "section": "Уведомления"
   },
-  "search":"Поиск",
-  "groupType":"Тип группы",
-  "userRole":"Роль пользователя",
-  "newGroupPage":"Новая группа",
-  "name":"Название",
-  "sportType":"Тип спорта",
-  "requiredField":"Обязательное поле"
+  "search": "Поиск",
+  "groupType": "Тип группы",
+  "userRole": "Роль пользователя",
+  "newGroupPage": "Новая группа",
+  "name": "Название",
+  "sportType": "Тип спорта",
+  "requiredField": "Обязательное поле",
+  "teamType": "Тип команды",
+  "league": "Лига",
+  "ageGroup": "Возрастная группа",
+  "country": "Страна",
+  "region": "Регион",
+  "city": "Город",
+  "join": "Вступить",
+  "cancelJoin": "Отменить заявку",
+  "leave": "Выйти"
 }

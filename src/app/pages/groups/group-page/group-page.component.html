@@ -1,3 +1,34 @@
-<p>
-  group-page works!
-</p>
+<div *ngIf="group!=null">
+  <!-- group head -->
+  <div class="d-flex flex-row">
+    <div class="p-2">
+      <img *ngIf="imageLogoUrl!=null"
+           class="img-fluid"
+           [src]="imageLogoUrl"/>
+      <dx-button type="default"
+                 (onClick)="onGroupPersonState()"
+                 text="{{ textStateInGroup | translate | uppercase}}">
+      </dx-button>
+    </div>
+    <div class="p-2">
+      <h1>{{group.name}}</h1>
+      <p>{{'groupType' | translate }} - {{group.groupType.name}}</p>
+      <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
+        <p>{{'sportType' | translate }} - {{group.sportType.name}}</p>
+
+        <p *ngIf="group.teamType!=null">{{'teamType' | translate }} - {{group.teamType.name}}</p>
+        <p *ngIf="group.league!=null">{{'league' | translate }} - {{group.league.name}}</p>
+        <p *ngIf="group.ageGroup!=null">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
+      </div>
+      <div class="d-flex flex-row">
+        <div class="p-2">
+          <p *ngIf="group.address?.country!=null">{{'country' | translate }} - {{group.address.country.name}}</p>
+          <p *ngIf="group.address?.region!=null">{{'region' | translate }} - {{group.address.region.name}}</p>
+          <p *ngIf="group.address?.city!=null">{{'city' | translate }} - {{group.address.city.name}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+

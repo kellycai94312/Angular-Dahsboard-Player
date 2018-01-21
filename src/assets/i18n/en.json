@@ -92,25 +92,34 @@
   "errors": {
     "errorWhileSaving": "Error while saving"
   },
-  "groups":{
+  "groups": {
     "section": "Groups",
     "all": "All",
     "my": "My"
   },
-  "scheduler":{
+  "scheduler": {
     "section": "Scheduler"
   },
-  "messages":{
+  "messages": {
     "section": "Messages"
   },
-  "notifications":{
+  "notifications": {
     "section": "Notifications"
   },
-  "search":"Search",
-  "groupType":"Group type",
-  "userRole":"User role",
-  "newGroupPage":"New group",
-  "name":"Name",
-  "sportType":"Sport type",
-  "requiredField":"Required field"
+  "search": "Search",
+  "groupType": "Group type",
+  "userRole": "User role",
+  "newGroupPage": "New group",
+  "name": "Name",
+  "sportType": "Sport type",
+  "requiredField": "Required field",
+  "teamType": "Team type",
+  "league": "League",
+  "ageGroup": "Age group",
+  "country": "Country",
+  "region": "Region",
+  "city": "City",
+  "join": "Join",
+  "cancelJoin": "Cancel join",
+  "leave": "Leave"
 }
