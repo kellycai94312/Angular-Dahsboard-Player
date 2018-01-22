@@ -47,6 +47,9 @@
       },
       "events": {
         "section": "События"
+      },
+      "groups": {
+        "section": "Группы"
       }
     }
   },
@@ -106,6 +109,10 @@
   },
   "notifications": {
     "section": "Уведомления"
+  },
+  "modal": {
+    "cancel": "Отмена",
+    "save": "Сохранить"
   },
   "search": "Поиск",
   "groupType": "Тип группы",

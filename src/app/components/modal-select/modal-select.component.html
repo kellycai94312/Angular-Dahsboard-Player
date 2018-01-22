@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{header}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row h-100">
+    <div class="col-6">
+      <app-input-search *ngIf="defaultData"
+                        [search]="onSearch"
+                        [dblclick]="onSelect"
+                        [init]="subject"
+                        [key]="field">
+      </app-input-search>
+    </div>
+    <div class="col-6 ">
+      <div class="user-roles">
+        <ul *ngFor="let role of selectedData">
+          <li class="item">
+            <button class="btn btn-primary btn-xs" (click)="onRemove(role)">
+              <i class="fa fa-times"></i><span>{{role[field]}}</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-success" (click)="onSave()">{{'modal.save' | translate }}</button>
+  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}</button>
+</div>

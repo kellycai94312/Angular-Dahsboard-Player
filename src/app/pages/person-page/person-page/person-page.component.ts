@@ -12,11 +12,13 @@ import { PictureService } from '../../../shared/picture.service';
 import { PersonService } from './person.service';
 import { LocalStorageService } from '../../../shared/local-storage.service';
 import { ProfileService } from '../../../layout/shared/profile.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { RolesModalComponent } from './roles-modal/roles-modal.component';
-import { SportTypesModalComponent } from './sport-types-modal/sport-types-modal.component';
 import { Tab } from './tab';
 import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ModalSelectComponent } from '../../../components/modal-select/modal-select.component';
+import { Subject } from 'rxjs/Subject';
+import { ListRequest } from '../../../data/remote/request/list-request';
+import notify from 'devextreme/ui/notify';
 
 @Component({
   selector: 'app-person-page',
@@ -37,8 +39,8 @@ export class PersonPageComponent implements OnInit {
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
 
-  private rolesModalRef: BsModalRef;
-  private sportTypesModalRef: BsModalRef;
+  private rolesModalRef: NgbModalRef;
+  private sportTypesModalRef: NgbModalRef;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
@@ -48,7 +50,8 @@ export class PersonPageComponent implements OnInit {
               private logoService: PictureService,
               private _personService: PersonService,
               private _navbarService: ProfileService,
-              private _modalService: BsModalService) {
+              private _modalService: NgbModal,
+              private _translate: TranslateService) {
 
     this.isEditAllow = false;
     this._personService.rolesChangeEmitted$.subscribe(userRoles => {
@@ -95,7 +98,7 @@ export class PersonPageComponent implements OnInit {
         name: 'persons.person.events.section',
         route: 'events',
         restrict: [UserRoleEnum.TRAINER]
-      },
+      }
     ];
   }
 
@@ -116,14 +119,58 @@ export class PersonPageComponent implements OnInit {
     }
   }
 
-  toggleRolesModal() {
-    this.rolesModalRef = this._modalService.show(RolesModalComponent, {class: 'modal-lg'});
-    this.rolesModalRef.content.userRoles = Object.assign([], this.userRoles);
+  async toggleRolesModal() {
+    const ref = this._modalService.open(ModalSelectComponent);
+    const roles = (await this.participantRestApiService.getUserRoles())
+      .filter(role =>
+        this.userRoles
+          .filter(uRole => uRole.id === role.id).length === 0);
+    const userRoles = Object.assign([], this.userRoles);
+    const errorMessage = await this._translate.get('persons.person.roles.conflict').toPromise();
+    ref.componentInstance.header = await this._translate.get('persons.person.roles.edit').toPromise();
+    ref.componentInstance.defaultData = roles;
+    ref.componentInstance.selectedData = userRoles;
+    const subject = new Subject();
+    ref.componentInstance.subject = subject;
+    ref.componentInstance.field = 'userRoleEnum';
+    ref.componentInstance.onSearch = (typing: string) => this.getRoles(roles, typing);
+    ref.componentInstance.onSelect = (typing: string, role: UserRole) => {
+      roles.splice(roles.indexOf(role), 1);
+      userRoles.push(role);
+      return this.getRoles(roles, typing);
+    };
+    ref.componentInstance.onRemove = (role: UserRole) => {
+      userRoles.splice(userRoles.indexOf(role), 1);
+      roles.push(role);
+      subject.next();
+    };
+    ref.componentInstance.onSave = async () => {
+      try {
+        this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
+        ref.dismiss();
+      } catch (e) {
+        if (e.status === 409) {
+          notify(errorMessage, 'warning', 3000);
+        } else {
+          throw e;
+        }
+      }
+    };
+  }
+
+  private getRoles(roles: UserRole[], typing: string) {
+    const data = [];
+    for (const item of roles) {
+      if (item.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1) {
+        data.push(item);
+      }
+    }
+    return data;
   }
 
   toggleSportTypesModal() {
-    this.sportTypesModalRef = this._modalService.show(SportTypesModalComponent, {class: 'modal-lg'});
-    this.sportTypesModalRef.content.personSportTypes = Object.assign([], this.personSportTypes);
+    // this.sportTypesModalRef = this._modalService.show(SportTypesModalComponent, {class: 'modal-lg'});
+    // this.sportTypesModalRef.content.personSportTypes = Object.assign([], this.personSportTypes);
   }
 
   async onRoleChange() {

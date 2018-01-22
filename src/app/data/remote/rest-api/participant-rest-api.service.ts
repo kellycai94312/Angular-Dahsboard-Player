@@ -111,6 +111,12 @@ export class ParticipantRestApiService extends Rest {
   })
   changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/role'
+  })
+  a: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
+
   //#endregion
 
   //#endregion
@@ -258,6 +264,36 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/join',
   })
   leaveGroup: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupPerson/filter',
+  })
+  getMyGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!id}/visible',
+  })
+  setVisible: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!id}/visible',
+  })
+  unsetVisible: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!id}/baseGroup',
+  })
+  setBaseGroup: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!id}/baseGroup',
+  })
+  unsetBaseGroup: IRestMethod<QueryParams, void>;
 
   //#endregion
 
