@@ -13,9 +13,6 @@ export class ModalSelectComponent implements OnInit {
   public header: string;
 
   @Input()
-  public field: string;
-
-  @Input()
   public defaultData: any[];
 
   @Input()

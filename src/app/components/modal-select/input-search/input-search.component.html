@@ -15,7 +15,7 @@
           [ngClass]="{'active' : active === item}"
           (click)="setActive(item)"
           (dblclick)="onDblckick()">
-        {{item[key]}}
+        <app-modal-item [component]="component" [data]="item"></app-modal-item>
       </li>
     </ul>
     <div class="no_data" *ngIf="data.length === 0">

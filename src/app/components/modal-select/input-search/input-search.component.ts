@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Type } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 
 @Component({
@@ -11,7 +11,7 @@ export class InputSearchComponent implements OnInit {
   @Input() init: Subject<any>;
   @Input() search: Function;
   @Input() dblclick: Function;
-  @Input() key: any;
+  @Input() component: Type<any>;
 
   active: any;
   searchBar = '';

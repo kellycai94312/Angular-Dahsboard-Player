@@ -3,19 +3,20 @@ import { CommonModule } from '@angular/common';
 import { ModalSelectComponent } from './modal-select.component';
 import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { InputSearchModule } from '../input-search/input-search.module';
 import { ModalItemComponent } from './modal-item/modal-item.component';
 import { AdDirective } from '../ad.directive';
+import { InputSearchComponent } from './input-search/input-search.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
     CommonModule,
     NgbModule,
     TranslateModule.forChild(),
-    InputSearchModule
+    FormsModule
   ],
-  exports: [ModalSelectComponent, ModalItemComponent],
-  declarations: [ModalSelectComponent, ModalItemComponent, AdDirective],
+  exports: [ModalSelectComponent],
+  declarations: [ModalSelectComponent, ModalItemComponent, InputSearchComponent, AdDirective],
   entryComponents: [ModalItemComponent],
   providers: [NgbActiveModal]
 })

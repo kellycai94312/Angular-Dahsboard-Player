@@ -19,7 +19,6 @@ import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested/validation
 import { FormsModule } from '@angular/forms';
 import { PersonsPageComponent } from './persons-page/persons-page.component';
 import { InvokeDirective } from '../../directives/invoke.directive';
-import { InputSearchModule } from '../../components/input-search/input-search.module';
 import { AnthropometryComponent } from './person-page/anthropometry/anthropometry.component';
 import { PersonalComponent } from './person-page/personal/personal.component';
 import { PhysiologyComponent } from './person-page/physiology/physiology.component';
@@ -52,7 +51,6 @@ import { UserRoleItemComponent } from './person-page/user-role-item/user-role-it
     DxPopupModule,
     DxTemplateModule,
     FormsModule,
-    InputSearchModule,
     InputSelectModule,
     ModalSelectModule
   ],
