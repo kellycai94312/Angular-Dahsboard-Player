@@ -14,11 +14,12 @@ import { LocalStorageService } from '../../../shared/local-storage.service';
 import { ProfileService } from '../../../layout/shared/profile.service';
 import { Tab } from './tab';
 import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalSelectComponent } from '../../../components/modal-select/modal-select.component';
-import { Subject } from 'rxjs/Subject';
 import { ListRequest } from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
+import { SportTypeItemComponent } from './sport-type-item/sport-type-item.component';
+import { UserRoleItemComponent } from './user-role-item/user-role-item.component';
 
 @Component({
   selector: 'app-person-page',
@@ -38,9 +39,6 @@ export class PersonPageComponent implements OnInit {
   private logo: string;
   private roleToggle: UserRole;
   private sportTypeToggle: SportType;
-
-  private rolesModalRef: NgbModalRef;
-  private sportTypesModalRef: NgbModalRef;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
@@ -114,6 +112,7 @@ export class PersonPageComponent implements OnInit {
     const userRoles = Object.assign([], this.userRoles);
     const errorMessage = await this._translate.get('persons.person.roles.conflict').toPromise();
     ref.componentInstance.header = await this._translate.get('persons.person.roles.edit').toPromise();
+    ref.componentInstance.component = UserRoleItemComponent;
     ref.componentInstance.defaultData = roles;
     ref.componentInstance.selectedData = userRoles;
     ref.componentInstance.field = 'userRoleEnum';
@@ -144,6 +143,7 @@ export class PersonPageComponent implements OnInit {
           .filter(pType => pType.id === type.id).length === 0);
     const personSportTypes = Object.assign([], this.personSportTypes);
     ref.componentInstance.header = await this._translate.get('persons.person.sportTypes.edit').toPromise();
+    ref.componentInstance.component = SportTypeItemComponent;
     ref.componentInstance.defaultData = sportTypes;
     ref.componentInstance.selectedData = personSportTypes;
     ref.componentInstance.field = 'sportTypeEnum';
@@ -175,7 +175,6 @@ export class PersonPageComponent implements OnInit {
         data.push(item);
       }
     }
-    console.log(data);
     return data;
   }
 

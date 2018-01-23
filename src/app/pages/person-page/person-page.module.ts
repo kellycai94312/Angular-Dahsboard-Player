@@ -31,6 +31,8 @@ import { ModalModule } from 'ngx-bootstrap';
 import { InputSelectModule } from '../../components/input-select/input-select.module';
 import { ModalSelectModule } from '../../components/modal-select/modal-select.module';
 import { ModalSelectComponent } from '../../components/modal-select/modal-select.component';
+import { SportTypeItemComponent } from './person-page/sport-type-item/sport-type-item.component';
+import { UserRoleItemComponent } from './person-page/user-role-item/user-role-item.component';
 
 @NgModule({
   imports: [
@@ -63,13 +65,17 @@ import { ModalSelectComponent } from '../../components/modal-select/modal-select
     PhysiologyComponent,
     ContactComponent,
     TestsResultsComponent,
-    EventsComponent
+    EventsComponent,
+    SportTypeItemComponent,
+    UserRoleItemComponent
   ],
   providers: [
     PersonService
   ],
   entryComponents: [
-    ModalSelectComponent
+    ModalSelectComponent,
+    SportTypeItemComponent,
+    UserRoleItemComponent
   ]
 })
 export class PersonPageModule {

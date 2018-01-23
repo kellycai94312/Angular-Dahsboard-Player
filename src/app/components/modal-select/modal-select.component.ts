@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Type } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,6 +20,9 @@ export class ModalSelectComponent implements OnInit {
 
   @Input()
   public selectedData: any[];
+
+  @Input()
+  public component: Type<any>;
 
   @Input()
   public onSearch: Function;
@@ -47,7 +50,6 @@ export class ModalSelectComponent implements OnInit {
     this.selectedData.push(obj);
     return this.onSearch(typing);
   }
-
 
 
 }

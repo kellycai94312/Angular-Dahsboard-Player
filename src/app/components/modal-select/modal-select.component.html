@@ -14,12 +14,13 @@
                         [key]="field">
       </app-input-search>
     </div>
-    <div class="col-6 ">
+    <div class="col-6">
       <div class="user-roles">
-        <ul *ngFor="let role of selectedData">
+        <ul *ngFor="let item of selectedData">
           <li class="item">
-            <button class="btn btn-primary btn-xs" (click)="onRemove(role)">
-              <i class="fa fa-times"></i><span>{{role[field]}}</span>
+            <button class="btn btn-primary btn-xs" (click)="onRemove(item)">
+              <i class="fa fa-times"></i>
+              <app-modal-item [component]="component" [data]="item"></app-modal-item>
             </button>
           </li>
         </ul>
