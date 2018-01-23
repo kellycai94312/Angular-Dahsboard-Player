@@ -54,20 +54,6 @@ export class PersonPageComponent implements OnInit {
               private _translate: TranslateService) {
 
     this.isEditAllow = false;
-    this._personService.rolesChangeEmitted$.subscribe(userRoles => {
-      this.userRoles = userRoles;
-      if (this.userRoles.length) {
-        this.roleToggle = userRoles[0];
-        this.onRoleChange();
-      }
-    });
-    this._personService.sportTypesChangeEmitted$.subscribe(userRoles => {
-      this.personSportTypes = userRoles;
-      if (this.personSportTypes.length) {
-        this.sportTypeToggle = this.personSportTypes[0];
-        this.onSportTypeChange();
-      }
-    });
     this.tabs = [
       {
         name: 'persons.person.personal.section',
@@ -120,7 +106,7 @@ export class PersonPageComponent implements OnInit {
   }
 
   async toggleRolesModal() {
-    const ref = this._modalService.open(ModalSelectComponent);
+    const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
     const roles = (await this.participantRestApiService.getUserRoles())
       .filter(role =>
         this.userRoles
@@ -130,23 +116,15 @@ export class PersonPageComponent implements OnInit {
     ref.componentInstance.header = await this._translate.get('persons.person.roles.edit').toPromise();
     ref.componentInstance.defaultData = roles;
     ref.componentInstance.selectedData = userRoles;
-    const subject = new Subject();
-    ref.componentInstance.subject = subject;
     ref.componentInstance.field = 'userRoleEnum';
     ref.componentInstance.onSearch = (typing: string) => this.getRoles(roles, typing);
-    ref.componentInstance.onSelect = (typing: string, role: UserRole) => {
-      roles.splice(roles.indexOf(role), 1);
-      userRoles.push(role);
-      return this.getRoles(roles, typing);
-    };
-    ref.componentInstance.onRemove = (role: UserRole) => {
-      userRoles.splice(userRoles.indexOf(role), 1);
-      roles.push(role);
-      subject.next();
-    };
     ref.componentInstance.onSave = async () => {
       try {
         this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
+        if (this.userRoles.length) {
+          this.roleToggle = this.userRoles[0];
+          this.onRoleChange();
+        }
         ref.dismiss();
       } catch (e) {
         if (e.status === 409) {
@@ -155,6 +133,28 @@ export class PersonPageComponent implements OnInit {
           throw e;
         }
       }
+    };
+  }
+
+  async toggleSportTypesModal() {
+    const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
+    const sportTypes = (await this.participantRestApiService.getSportTypes())
+      .filter(type =>
+        this.personSportTypes
+          .filter(pType => pType.id === type.id).length === 0);
+    const personSportTypes = Object.assign([], this.personSportTypes);
+    ref.componentInstance.header = await this._translate.get('persons.person.sportTypes.edit').toPromise();
+    ref.componentInstance.defaultData = sportTypes;
+    ref.componentInstance.selectedData = personSportTypes;
+    ref.componentInstance.field = 'sportTypeEnum';
+    ref.componentInstance.onSearch = (typing: string) => this.getSportTypes(sportTypes, typing);
+    ref.componentInstance.onSave = async () => {
+      this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(personSportTypes));
+      if (this.personSportTypes.length) {
+        this.sportTypeToggle = this.personSportTypes[0];
+        this.onSportTypeChange();
+      }
+      ref.dismiss();
     };
   }
 
@@ -168,9 +168,15 @@ export class PersonPageComponent implements OnInit {
     return data;
   }
 
-  toggleSportTypesModal() {
-    // this.sportTypesModalRef = this._modalService.show(SportTypesModalComponent, {class: 'modal-lg'});
-    // this.sportTypesModalRef.content.personSportTypes = Object.assign([], this.personSportTypes);
+  private getSportTypes(sportTypes: SportType[], typing: string) {
+    const data = [];
+    for (const item of sportTypes) {
+      if (item.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1) {
+        data.push(item);
+      }
+    }
+    console.log(data);
+    return data;
   }
 
   async onRoleChange() {

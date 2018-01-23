@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-modal-select',
@@ -24,18 +25,29 @@ export class ModalSelectComponent implements OnInit {
   public onSearch: Function;
 
   @Input()
-  public onSelect: Function;
-
-  @Input()
-  public onRemove: Function;
-
-  @Input()
   public onSave: Function;
 
-  @Input()
   private subject: Subject<any>;
 
-  ngOnInit(): void {
+  constructor(public modal: NgbActiveModal) {
   }
+
+  ngOnInit(): void {
+    this.subject = new Subject();
+  }
+
+  onRemove(obj: any) {
+    this.selectedData.splice(this.selectedData.indexOf(obj), 1);
+    this.defaultData.push(obj);
+    this.subject.next();
+  }
+
+  onSelect = (typing: string, obj: any) => {
+    this.defaultData.splice(this.defaultData.indexOf(obj), 1);
+    this.selectedData.push(obj);
+    return this.onSearch(typing);
+  }
+
+
 
 }
