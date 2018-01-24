@@ -7,28 +7,38 @@
 <div class="modal-body">
   <div class="row h-100">
     <div class="col-6">
-      <app-input-search *ngIf="defaultData"
-                        [search]="onSearch"
-                        [dblclick]="onSelect"
-                        [init]="subject"
-                        [component]="component">
-      </app-input-search>
+      <dx-text-box #searchDxTextBoxComponent
+                   placeholder="{{'search' | translate}}"
+                   mode="search"
+                   showClearButton="true">
+      </dx-text-box>
+      <app-infinite-list [(items)]="data"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-item>
+          <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect()"
+               [ngClass]="{'active' : item === active}">
+            <app-modal-item [component]="component" [data]="item"></app-modal-item>
+          </div>
+        </ng-template>
+      </app-infinite-list>
     </div>
+
     <div class="col-6">
-      <div class="selected-data">
-        <ul *ngFor="let item of selectedData">
-          <li class="item">
+      <app-infinite-list [items]="selectedData"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-item>
+          <li class="selected-item">
             <button class="btn btn-primary btn-xs" (click)="onRemove(item)">
               <i class="fa fa-times"></i>
               <app-modal-item [component]="component" [data]="item"></app-modal-item>
             </button>
           </li>
-        </ul>
-      </div>
+        </ng-template>
+      </app-infinite-list>
     </div>
   </div>
-</div>
-<div class="modal-footer">
-  <button type="button" class="btn btn-outline-success" (click)="onSave()">{{'modal.save' | translate }}</button>
-  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}</button>
-</div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-success" (click)="onSave()">{{'modal.save' | translate }}</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+    </button>
+  </div>

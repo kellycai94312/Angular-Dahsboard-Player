@@ -115,8 +115,8 @@ export class PersonPageComponent implements OnInit {
     ref.componentInstance.component = UserRoleItemComponent;
     ref.componentInstance.defaultData = roles;
     ref.componentInstance.selectedData = userRoles;
-    ref.componentInstance.field = 'userRoleEnum';
-    ref.componentInstance.onSearch = (typing: string) => this.getRoles(roles, typing);
+    ref.componentInstance.filter = (typing: string, userRole: UserRole) =>
+      userRole.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1;
     ref.componentInstance.onSave = async () => {
       try {
         this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
@@ -146,8 +146,8 @@ export class PersonPageComponent implements OnInit {
     ref.componentInstance.component = SportTypeItemComponent;
     ref.componentInstance.defaultData = sportTypes;
     ref.componentInstance.selectedData = personSportTypes;
-    ref.componentInstance.field = 'sportTypeEnum';
-    ref.componentInstance.onSearch = (typing: string) => this.getSportTypes(sportTypes, typing);
+    ref.componentInstance.filter = (typing: string, sportType: SportType) =>
+      sportType.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1;
     ref.componentInstance.onSave = async () => {
       this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(personSportTypes));
       if (this.personSportTypes.length) {
@@ -156,26 +156,6 @@ export class PersonPageComponent implements OnInit {
       }
       ref.dismiss();
     };
-  }
-
-  private getRoles(roles: UserRole[], typing: string) {
-    const data = [];
-    for (const item of roles) {
-      if (item.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1) {
-        data.push(item);
-      }
-    }
-    return data;
-  }
-
-  private getSportTypes(sportTypes: SportType[], typing: string) {
-    const data = [];
-    for (const item of sportTypes) {
-      if (item.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1) {
-        data.push(item);
-      }
-    }
-    return data;
   }
 
   async onRoleChange() {

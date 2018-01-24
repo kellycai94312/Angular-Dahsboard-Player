@@ -15,6 +15,9 @@ export class InfiniteListComponent implements OnInit {
   @Input()
   public items: any[];
 
+  @Input()
+  public scrollBlock = false;
+
   @Output()
   public nextPage: EventEmitter<PageQuery>;
 
