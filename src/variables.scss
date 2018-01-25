@@ -9,6 +9,7 @@ $white: #f9f9f9;
 $white-light: #fff;
 
 $logo-list-size: 120px;
+$scroll-block-max-height: 500px;
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');

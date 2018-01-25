@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InputSearchComponent } from './input-search.component';
+import { UserRoleItemComponent } from './user-role-item.component';
 
-describe('InputSearchComponent', () => {
-  let component: InputSearchComponent;
-  let fixture: ComponentFixture<InputSearchComponent>;
+describe('UserRoleItemComponent', () => {
+  let component: UserRoleItemComponent;
+  let fixture: ComponentFixture<UserRoleItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InputSearchComponent ]
+      declarations: [ UserRoleItemComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InputSearchComponent);
+    fixture = TestBed.createComponent(UserRoleItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

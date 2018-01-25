@@ -1,0 +1,46 @@
+@import "../../../variables";
+
+* {
+  user-select: none;
+}
+
+$search-padding: 8px;
+$item-height: 35px;
+$item-bg-color-active: $light-blue;
+
+.selected-item {
+  list-style-type: none;
+  padding-left: 0;
+  > .btn {
+    cursor: pointer;
+    padding: 2px 2px 2px 5px;
+    span {
+      padding-left: 5px;
+    }
+  }
+  &:not(:last-child) {
+    margin-bottom: 10px;
+  }
+}
+
+.default-item {
+  background: $white;
+  cursor: pointer;
+  color: #555;
+  vertical-align: middle;
+  padding-left: 7px;
+  line-height: 34px;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #ccc;
+  }
+
+  &:hover {
+    color: #222;
+  }
+
+  &.active {
+    color: $white;
+    background-color: $item-bg-color-active;
+  }
+}

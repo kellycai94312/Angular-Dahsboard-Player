@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SportTypesModalComponent } from './sport-types-modal.component';
+import { ModalItemComponent } from './modal-item.component';
 
-describe('SportTypesModalComponent', () => {
-  let component: SportTypesModalComponent;
-  let fixture: ComponentFixture<SportTypesModalComponent>;
+describe('ModalItemComponent', () => {
+  let component: ModalItemComponent;
+  let fixture: ComponentFixture<ModalItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SportTypesModalComponent ]
+      declarations: [ ModalItemComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SportTypesModalComponent);
+    fixture = TestBed.createComponent(ModalItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
