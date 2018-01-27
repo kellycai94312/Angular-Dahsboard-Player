@@ -1,43 +1,38 @@
-import { Injectable } from '@angular/core';
-import {
-  IRestMethod,
-  IRestMethodStrict,
-  Rest,
-  RestAction,
-  RestHandler,
-  RestParams,
-  RestRequestMethod
-} from 'rest-core';
-import { Session } from '../model/session';
-import { Auth } from '../model/auth';
-import { PageContainer } from '../bean/page-container';
-import { Country } from '../model/country';
-import { Region } from '../model/region';
-import { City } from '../model/city';
-import { User } from '../model/user';
-import { VerificationRequest } from '../model/verification-request';
-import { IdentifiedObject } from '../base/identified-object';
-import { Person } from '../model/person';
-import { QueryParams } from './query-params';
-import { UserRole } from '../model/user-role';
-import { ListRequest } from '../request/list-request';
-import { SportType } from '../model/sport-type';
-import { HttpClient } from '@angular/common/http';
-import { Picture } from '../model/picture';
-import { Address } from '../model/address';
-import { PersonAnthropometry } from '../model/person-anthropometry';
-import { EmailRequest } from '../request/email-request';
-import { PageQuery } from './page-query';
-import { environment } from '../../../../environments/environment';
-import { AnthropometryRequest } from '../request/anthropometry-request';
-import { GroupType } from '../model/group/base/group-type';
-import { Group } from '../model/group/base/group';
-import { GroupQuery } from './query/group-query';
-import { ImageQuery } from './query/image-query';
-import { GroupPerson } from '../model/group/group-person';
-import { SubGroup } from '../model/group/sub-group';
-import { GroupPersonQuery } from './query/group-person-query';
-import { RoleQuery } from './query/role-query';
+import {Injectable} from '@angular/core';
+import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {Session} from '../model/session';
+import {Auth} from '../model/auth';
+import {PageContainer} from '../bean/page-container';
+import {Country} from '../model/country';
+import {Region} from '../model/region';
+import {City} from '../model/city';
+import {User} from '../model/user';
+import {VerificationRequest} from '../model/verification-request';
+import {IdentifiedObject} from '../base/identified-object';
+import {Person} from '../model/person';
+import {QueryParams} from './query-params';
+import {UserRole} from '../model/user-role';
+import {ListRequest} from '../request/list-request';
+import {SportType} from '../model/sport-type';
+import {HttpClient} from '@angular/common/http';
+import {Picture} from '../model/picture';
+import {Address} from '../model/address';
+import {PersonAnthropometry} from '../model/person-anthropometry';
+import {EmailRequest} from '../request/email-request';
+import {PageQuery} from './page-query';
+import {environment} from '../../../../environments/environment';
+import {AnthropometryRequest} from '../request/anthropometry-request';
+import {GroupType} from '../model/group/base/group-type';
+import {Group} from '../model/group/base/group';
+import {GroupQuery} from './query/group-query';
+import {ImageQuery} from './query/image-query';
+import {GroupPerson} from '../model/group/group-person';
+import {SubGroup} from '../model/group/sub-group';
+import {GroupPersonQuery} from './query/group-person-query';
+import {RoleQuery} from './query/role-query';
+import {TeamType} from '../model/group/team/team-type';
+import {League} from '../model/group/team/league';
+import {AgeGroup} from '../model/age-group';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -276,6 +271,12 @@ export class ParticipantRestApiService extends Rest {
   })
   postGroup: IRestMethod<Group, Group>;
 
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!id}',
+  })
+  putGroup: IRestMethod<Group, Group>;
+
   //#region GroupPerson
 
   @RestAction({
@@ -304,6 +305,12 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/teamType',
+  })
+  getTeamTypes: IRestMethod<void, TeamType[]>;
+
   //#region SubGroup
 
   @RestAction({
@@ -325,6 +332,18 @@ export class ParticipantRestApiService extends Rest {
     }
     return url;
   }
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/{!id}/league',
+  })
+  getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/ageGroup',
+  })
+  getAgeGroups: IRestMethod<void, AgeGroup[]>;
 
   uploadPicture(file: File, picture: Picture): Promise<Picture> {
     const formData: FormData = new FormData();

@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Group } from '../../../data/remote/model/group/base/group';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { ActivatedRoute } from '@angular/router';
-import { GroupPerson } from '../../../data/remote/model/group/group-person';
-import { ImageType } from '../../../data/remote/model/image-type';
-import { GroupPersonState } from '../../../data/local/group-person-state';
-import { SubGroup } from '../../../data/remote/model/group/sub-group';
-import { TranslateService } from '@ngx-translate/core';
-import { Tab } from '../../../data/local/tab';
+import {Component, OnInit} from '@angular/core';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {ActivatedRoute} from '@angular/router';
+import {GroupPerson} from '../../../data/remote/model/group/group-person';
+import {ImageType} from '../../../data/remote/model/image-type';
+import {GroupPersonState} from '../../../data/local/group-person-state';
+import {SubGroup} from '../../../data/remote/model/group/sub-group';
+import {TranslateService} from '@ngx-translate/core';
+import {Tab} from '../../../data/local/tab';
+import {GroupService} from '../group.service';
 
 @Component({
   selector: 'app-group-page',
@@ -29,14 +30,20 @@ export class GroupPageComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateService: TranslateService,
-              private _activatedRoute: ActivatedRoute) {
+              private _activatedRoute: ActivatedRoute,
+              private _groupService: GroupService) {
     this._groupPersonState = GroupPersonState.NOT_MEMBER;
     this.textStateInGroup = 'join';
+    this._groupService.groupSubject.subscribe(group => {
+      this.group = group;
+    });
   }
 
   async ngOnInit() {
     const groupId = this._activatedRoute.snapshot.params.id;
     this.group = await this._participantRestApiService.getGroup({id: groupId});
+    this._groupService.updateGroup(this.group);
+
     if (this.group != null) {
       await this.baseInit();
     }

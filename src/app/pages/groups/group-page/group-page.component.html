@@ -21,7 +21,7 @@
         <p *ngIf="group.ageGroup!=null">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
       </div>
       <div class="d-flex flex-row">
-        <div class="p-2">
+        <div>
           <p *ngIf="group.address?.country!=null">{{'country' | translate }} - {{group.address.country.name}}</p>
           <p *ngIf="group.address?.region!=null">{{'region' | translate }} - {{group.address.region.name}}</p>
           <p *ngIf="group.address?.city!=null">{{'city' | translate }} - {{group.address.city.name}}</p>
