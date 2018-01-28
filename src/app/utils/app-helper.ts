@@ -1,4 +1,4 @@
-import { PageContainer } from '../data/remote/bean/page-container';
+import {PageContainer} from '../data/remote/bean/page-container';
 
 export class AppHelper {
 
@@ -16,4 +16,9 @@ export class AppHelper {
     }
     return items;
   }
+
+  public static removeItem<T>(items: T[], item: T) {
+    items.splice(items.indexOf(item), 1);
+  }
+
 }

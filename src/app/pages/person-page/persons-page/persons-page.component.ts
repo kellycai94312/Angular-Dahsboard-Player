@@ -1,54 +1,58 @@
-import { Component, OnInit } from '@angular/core';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { PageContainer } from '../../../data/remote/bean/page-container';
-import { Person } from '../../../data/remote/model/person';
-import { PageQuery } from '../../../data/remote/rest-api/page-query';
-import { PictureService } from '../../../shared/picture.service';
-import { PictureClass } from '../../../data/remote/misc/picture-class';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {Person} from '../../../data/remote/model/person';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {AppHelper} from '../../../utils/app-helper';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 
 @Component({
   selector: 'app-persons-page',
   templateUrl: './persons-page.component.html',
   styleUrls: ['./persons-page.component.scss']
 })
-export class PersonsPageComponent implements OnInit {
+export class PersonsPageComponent implements OnInit, AfterViewInit {
 
-  public collectionSize: number;
-  public personLogoUrls: Map<number, string>;
+  @ViewChild('searchDxTextBoxComponent')
+  public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public personPageContainer: PageContainer<Person>;
-  public pageSize: number;
+  public persons: Person[];
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _logoService: PictureService) {
-    this.collectionSize = 0;
-    this.personLogoUrls = new Map<number, string>();
+  private _searchText: string;
+  private readonly _personQuery: PersonQuery;
 
-    this.pageSize = 10;
+  constructor(private _participantRestApiService: ParticipantRestApiService) {
+    this.persons = [];
+    this._searchText = '';
+
+    this._personQuery = new GroupQuery();
+    this._personQuery.from = 0;
+    this._personQuery.count = PropertyConstant.pageSize;
   }
 
-  async ngOnInit() {
-    await this.updateItems(1);
+  ngOnInit() {
   }
 
-  public async onPageChange(selectedPage: number) {
-    await this.updateItems(selectedPage);
+  ngAfterViewInit(): void {
+    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+      .subscribe(async value => {
+        this._searchText = value;
+        await this.updateListAsync();
+      });
   }
 
-  public async updateItems(selectedPage: number) {
-    let fromPage = (selectedPage - 1) * this.pageSize;
-    if (fromPage < 0) {
-      fromPage = 0;
-    }
+  public async onNextPage(pageQuery: PageQuery) {
+    await this.updateListAsync(pageQuery.from);
+  }
 
-    const pageQuery = new PageQuery();
-    pageQuery.from = fromPage;
-    pageQuery.count = this.pageSize;
-    this.personPageContainer = await this._participantRestApiService.getPersonsPage(pageQuery);
-    for (const person of this.personPageContainer.list) {
-      this.personLogoUrls.set(person.id, this._logoService.getLogo(PictureClass.person, person.id));
-    }
-    this.collectionSize = this.personPageContainer.total;
+  public async updateListAsync(from: number = 0) {
+    this._personQuery.from = from;
+    this._personQuery.fullName = this._searchText;
+
+    const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
+    this.persons = AppHelper.pushItemsInList(from, this.persons, pageContainer);
   }
 
 }

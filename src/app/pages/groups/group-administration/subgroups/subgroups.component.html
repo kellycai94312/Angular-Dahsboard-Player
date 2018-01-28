@@ -1,0 +1,18 @@
+<p *ngFor="let item of subgroups">
+  <app-subgroup [subgroup]="item"
+                [remove]="onRemove">
+  </app-subgroup>
+</p>
+
+<div class="row mt-2">
+  <div class="col">
+    <dx-text-box [(value)]="name"></dx-text-box>
+  </div>
+  <div class="col">
+    <dx-button type="default"
+               (onClick)="onAdd()"
+               [disabled]="name.trim().length===0"
+               text="{{'add' | translate | uppercase}}">
+    </dx-button>
+  </div>
+</div>

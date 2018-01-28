@@ -1,8 +1,111 @@
-<div class="row">
-  <div class="col">
+<div *ngIf="group!=null" class="row">
+  <div class="col-12 col-md-6 col-lg-4">
     <h5>{{'basicInformation' | translate }}</h5>
+
+    <label>{{'name' | translate }}</label>
+    <dx-text-box [(value)]="group.name">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+
+    <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
+
+      <label>{{'teamType' | translate }}</label>
+      <dx-select-box class="mt-2"
+                     [items]="teamTypes"
+                     [(value)]="group.teamType"
+                     displayExpr="name"
+                     acceptCustomValue="true"
+                     placeholder="{{'teamType' | translate}}">
+        <dx-validator>
+          <dxi-validation-rule type="required"
+                               message="{{'requiredField' | translate}}">
+          </dxi-validation-rule>
+        </dx-validator>
+      </dx-select-box>
+
+    </div>
   </div>
-  <div class="col">
+
+  <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
     <h5>{{'additionalInformation' | translate }}</h5>
+
+    <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
+
+      <label>{{'league' | translate }}</label>
+      <dx-select-box class="mt-2"
+                     [items]="leagues"
+                     [(value)]="group.league"
+                     displayExpr="name"
+                     acceptCustomValue="true"
+                     placeholder="{{'league' | translate}}">
+        <dx-validator>
+          <dxi-validation-rule type="required"
+                               message="{{'requiredField' | translate}}">
+          </dxi-validation-rule>
+        </dx-validator>
+      </dx-select-box>
+
+      <label>{{'ageGroup' | translate }}</label>
+      <dx-select-box class="mt-2"
+                     [items]="ageGroups"
+                     [(value)]="group.ageGroup"
+                     displayExpr="name"
+                     acceptCustomValue="true"
+                     placeholder="{{'ageGroup' | translate}}">
+        <dx-validator>
+          <dxi-validation-rule type="required"
+                               message="{{'requiredField' | translate}}">
+          </dxi-validation-rule>
+        </dx-validator>
+      </dx-select-box>
+
+    </div>
+
+    <label for="country">{{'persons.person.personal.country' | translate}}</label>
+    <app-input-select
+      id="country"
+      [loadData]="loadCountries"
+      [(model)]="group.address.country"
+      [pageSize]="pageSize"
+      (onChange)="onCountryChange($event)"
+      key="id"
+      display="name"
+      placeholder="Select a country"
+      ngDefaultControl>
+    </app-input-select>
+
+    <label for="region">{{'persons.person.personal.region' | translate}}</label>
+    <app-input-select
+      id="region"
+      [loadData]="loadRegions"
+      [(model)]="group.address.region"
+      [pageSize]="pageSize"
+      (onChange)="onRegionChange($event)"
+      key="id"
+      display="name"
+      placeholder="Select a region"
+      ngDefaultControl>
+    </app-input-select>
+
+    <label for="city">{{'persons.person.personal.city' | translate}}</label>
+    <app-input-select
+      id="city"
+      [loadData]="loadCities"
+      [(model)]="group.address.city"
+      [pageSize]="pageSize"
+      key="id"
+      display="name"
+      placeholder="Select a city"
+      ngDefaultControl>
+    </app-input-select>
+
   </div>
 </div>
+
+<dx-button type="default"
+           class="mt-2"
+           (onClick)="onApply()"
+           text="{{'save' | translate | uppercase}}">
+</dx-button>

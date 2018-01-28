@@ -137,5 +137,10 @@
   "administration": "Administration",
   "basicInformation": "Basic information",
   "additionalInformation": "Additional information",
-  "settings": "Settings"
+  "settings": "Settings",
+  "subgroups": "Subgroups",
+  "add": "add",
+  "remove": "Remove",
+  "member": "Member",
+  "requests": "Requests"
 }

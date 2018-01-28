@@ -1,0 +1,28 @@
+<div *ngIf="subgroup!=null"
+     class="row mt-2">
+  <div class="col">
+    <dx-text-box [(value)]="subgroup.name">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <div class="d-flex flex-row">
+      <div *ngIf="defaultName!==subgroup.name"
+           class="mr-2">
+        <dx-button type="success"
+                   (onClick)="onSave()"
+                   [disabled]="subgroup.name.trim().length===0"
+                   text="{{'save' | translate | uppercase}}">
+        </dx-button>
+      </div>
+      <div>
+        <dx-button type="danger"
+                   (onClick)="onRemove()"
+                   text="{{'remove' | translate | uppercase}}">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</div>
