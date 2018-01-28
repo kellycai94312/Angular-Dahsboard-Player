@@ -27,6 +27,9 @@
         </div>
       </div>
     </div>
+    <div class="d-flex flex-column ml-4">
+      <app-group-item *ngIf="baseGroup" [data]="baseGroup.group"></app-group-item>
+    </div>
   </div>
 
   <!-- roles -->
@@ -39,7 +42,7 @@
            ngbRadioGroup
            name="radioBasic"
            [(ngModel)]="roleToggle"
-           (change)="onRoleChange()">
+           (change)="onUserRoleChange()">
         <label ngbButtonLabel
                class="btn-primary"
                *ngFor="let role of userRoles">
@@ -52,7 +55,7 @@
     <div *ngIf="isEditAllow"
          class="ml-2 align-self-center">
       <button class="btn btn-default btn-sm"
-              (click)="toggleRolesModal()">
+              (click)="editUserRoles()">
         <i class="fa fa-pencil-square-o"></i>
         <span> {{'persons.person.edit' | translate | uppercase}}</span>
       </button>
@@ -82,7 +85,7 @@
     <div *ngIf="isEditAllow"
          class="ml-2 align-self-center">
       <button class="btn btn-default btn-sm"
-              (click)="toggleSportTypesModal()">
+              (click)="editSportTypes()">
         <i class="fa fa-pencil-square-o"></i>
         <span> {{'persons.person.edit' | translate | uppercase}}</span>
       </button>

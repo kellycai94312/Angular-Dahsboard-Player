@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Group } from '../../../data/remote/model/group/base/group';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { ImageType } from '../../../data/remote/model/image-type';
@@ -8,11 +8,9 @@ import { ImageType } from '../../../data/remote/model/image-type';
   templateUrl: './group-item.component.html',
   styleUrls: ['./group-item.component.scss']
 })
-export class GroupItemComponent implements OnInit {
-
+export class GroupItemComponent implements OnChanges {
   @Input()
-  public group: Group;
-
+  public data: Group;
   public imageUrl: string;
 
   public groupUrl: string;
@@ -20,14 +18,14 @@ export class GroupItemComponent implements OnInit {
   constructor(private  _participantRestApiService: ParticipantRestApiService) {
   }
 
-  ngOnInit() {
-    if (this.group != null) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this.data != null) {
       this.imageUrl = this._participantRestApiService.getImageUrl({
         clazz: 'group',
-        id: this.group.id,
+        id: this.data.id,
         type: ImageType.LOGO
       });
-      this.groupUrl = `/group/${this.group.id}`;
+      this.groupUrl = `/group/${this.data.id}`;
     }
   }
 

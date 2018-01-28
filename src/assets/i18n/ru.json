@@ -49,7 +49,11 @@
         "section": "События"
       },
       "groups": {
-        "section": "Группы"
+        "section": "Группы",
+        "placeholder": "Выбрать группу",
+        "baseGroup" : "Основная",
+        "additionalGroups": "Дополнительные",
+        "addGroup" : "Добавить"
       }
     }
   },

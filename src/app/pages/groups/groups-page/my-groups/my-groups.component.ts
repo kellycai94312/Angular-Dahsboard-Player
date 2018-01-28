@@ -29,12 +29,11 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   private _selectedGroupType: GroupType;
   private _selectedUserRole: UserRole;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _localStorageService: LocalStorageService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService) {
     this._groupQuery = new GroupQuery();
     this._groupQuery.from = 0;
     this._groupQuery.count = PropertyConstant.pageSize;
-    this._groupQuery.personId = this._localStorageService.getCurrentPersonId();
+    this._groupQuery.all = false;
   }
 
   async ngOnInit() {

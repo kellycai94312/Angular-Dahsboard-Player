@@ -6,16 +6,22 @@
 
 $search-padding: 8px;
 $item-height: 35px;
-$item-bg-color-active: $light-blue;
+$item-bg-color-active: #c5e4f3;
 
 .selected-item {
   list-style-type: none;
-  padding-left: 0;
-  > .btn {
-    cursor: pointer;
-    padding: 2px 2px 2px 5px;
-    span {
-      padding-left: 5px;
+  padding: 3px 10px;
+  border: 1px solid darken($item-bg-color-active, 20%);
+  border-radius: 3px;
+  background-color: $item-bg-color-active;
+  cursor: pointer;
+  .fa {
+    color: #555;
+  }
+  &:hover {
+    background-color: darken($item-bg-color-active, 5%);
+    .fa {
+      color: #222;
     }
   }
   &:not(:last-child) {
@@ -40,7 +46,6 @@ $item-bg-color-active: $light-blue;
   }
 
   &.active {
-    color: $white;
     background-color: $item-bg-color-active;
   }
 }

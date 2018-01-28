@@ -1,0 +1,63 @@
+<div class="row mt-3">
+  <div class="col-12
+              col-md pr-md-0">
+    <dx-text-box
+      placeholder="{{'search' | translate}}"
+      mode="search"
+      showClearButton="true"
+      (onInput)="onNameChanged($event.event.target.value)">
+    </dx-text-box>
+  </div>
+  <div class="col-12 mt-2
+              col-md-3 mt-md-0 pr-md-0">
+    <dx-select-box [items]="groupTypes"
+                   displayExpr="name"
+                   (onValueChanged)="onGroupTypeChanged($event.value)"
+                   placeholder="{{'groupType' | translate}}"
+                   showClearButton="true">
+    </dx-select-box>
+  </div>
+</div>
+
+<div class="mt-2">
+  <div class="group base" *ngIf="isEditAllow">
+    <label for="selectedBaseGroup">{{'persons.person.groups.baseGroup' | translate}}</label>
+    <app-group-person id="selectedBaseGroup" [(data)]="selectedBaseGroup" [role]="selectedPublicUserRole"
+                      [baseGroup]="true" (change)="onChange($event)"></app-group-person>
+  </div>
+  <div class="mt-5">
+    <label for="additional" *ngIf="isEditAllow">{{'persons.person.groups.additionalGroups' | translate}}</label>
+    <app-infinite-list id="additional" [items]="groupPersons"
+                       (nextPage)="onNextPage($event)">
+      <ng-template let-item>
+        <app-group-person class="group" [data]="item" [role]="selectedPublicUserRole"
+                          [baseGroup]="false"
+                          (change)="onChange($event)"></app-group-person>
+      </ng-template>
+    </app-infinite-list>
+  </div>
+  <div class="d-flex flex-row" *ngIf="isEditAllow">
+    <div class="d-flex flex-column">
+      <div class="d-flex flex-row">
+        <div class="form-group">
+          <app-input-select
+            [loadData]="loadData"
+            [(model)]="newGroup"
+            [pageSize]="pageSize"
+            [getKey]="getKey"
+            [getName]="getName"
+            placeholder="{{'persons.person.groups.placeholder' | translate}}"
+            ngDefaultControl>
+          </app-input-select>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-column ml-2">
+      <div class="d-flex flex-row">
+        <button class="btn btn-outline-primary" (click)="addGroup()" [disabled]="!newGroup">
+          {{'persons.person.groups.addGroup' | translate}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

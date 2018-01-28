@@ -32,6 +32,10 @@ import { ModalSelectModule } from '../../components/modal-select/modal-select.mo
 import { ModalSelectComponent } from '../../components/modal-select/modal-select.component';
 import { SportTypeItemComponent } from './person-page/sport-type-item/sport-type-item.component';
 import { UserRoleItemComponent } from './person-page/user-role-item/user-role-item.component';
+import { GroupsComponent } from './person-page/groups/groups.component';
+import { GroupPageModule } from '../groups/group-page.module';
+import { InfiniteListModule } from '../../components/infinite-list/infinite-list.module';
+import { GroupPersonComponent } from './person-page/group-person/group-person.component';
 
 @NgModule({
   imports: [
@@ -52,7 +56,9 @@ import { UserRoleItemComponent } from './person-page/user-role-item/user-role-it
     DxTemplateModule,
     FormsModule,
     InputSelectModule,
-    ModalSelectModule
+    ModalSelectModule,
+    InfiniteListModule,
+    GroupPageModule
   ],
   declarations: [
     PersonPageComponent,
@@ -65,7 +71,9 @@ import { UserRoleItemComponent } from './person-page/user-role-item/user-role-it
     TestsResultsComponent,
     EventsComponent,
     SportTypeItemComponent,
-    UserRoleItemComponent
+    UserRoleItemComponent,
+    GroupsComponent,
+    GroupPersonComponent
   ],
   providers: [
     PersonService
