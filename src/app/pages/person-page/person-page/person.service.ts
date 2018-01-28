@@ -4,7 +4,6 @@ import { Subject } from 'rxjs/Subject';
 import { SportType } from '../../../data/remote/model/sport-type';
 import { UserRole } from '../../../data/remote/model/user-role';
 import { GroupPerson } from '../../../data/remote/model/group/group-person';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 
 @Injectable()
 export class PersonService {
@@ -16,6 +15,7 @@ export class PersonService {
 
   sportTypeSelectDefault: SportType;
   userRoleSelectDefault: UserRole;
+  baseGroupSelectDefault: GroupPerson;
 
   private sportTypeSelect = new Subject<SportType>();
   sportTypeSelectEmitted$ = this.sportTypeSelect.asObservable();
@@ -38,6 +38,7 @@ export class PersonService {
   }
 
   emitBaseGroupSelect(change: GroupPerson) {
+    this.baseGroupSelectDefault = change;
     this.baseGroupSelect.next(change);
   }
 

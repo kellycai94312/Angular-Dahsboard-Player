@@ -49,6 +49,7 @@ export class GroupsComponent implements OnInit {
       this.selectedPublicUserRole = userRole;
       this.updateListAsync();
     });
+    this.selectedBaseGroup = this._personService.baseGroupSelectDefault;
     this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
       this.selectedBaseGroup = groupPerson;
     });
