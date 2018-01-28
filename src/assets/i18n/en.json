@@ -48,7 +48,11 @@
         "section": "Events"
       },
       "groups": {
-        "section": "Groups"
+        "section": "Groups",
+        "placeholder": "Select a group",
+        "baseGroup" : "Base",
+        "additionalGroups": "Additional",
+        "addGroup" : "Add"
       }
     }
   },

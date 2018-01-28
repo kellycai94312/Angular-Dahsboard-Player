@@ -20,6 +20,7 @@ import { ListRequest } from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
 import { SportTypeItemComponent } from './sport-type-item/sport-type-item.component';
 import { UserRoleItemComponent } from './user-role-item/user-role-item.component';
+import { GroupPerson } from '../../../data/remote/model/group/group-person';
 
 @Component({
   selector: 'app-person-page',
@@ -29,6 +30,7 @@ import { UserRoleItemComponent } from './user-role-item/user-role-item.component
 export class PersonPageComponent implements OnInit {
 
   public person: Person;
+  public baseGroup: GroupPerson;
   public isEditAllow: boolean;
   public queryParams: Params;
   public tabs: Tab[];
@@ -82,8 +84,16 @@ export class PersonPageComponent implements OnInit {
         name: 'persons.person.events.section',
         route: 'events',
         restrict: [UserRoleEnum.TRAINER]
+      },
+      {
+        name: 'persons.person.groups.section',
+        route: 'groups',
+        restrict: []
       }
     ];
+    this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {
+      this.baseGroup = groupPerson;
+    });
   }
 
   isTabOpen(tab: Tab): boolean {
@@ -103,7 +113,7 @@ export class PersonPageComponent implements OnInit {
     }
   }
 
-  async toggleRolesModal() {
+  async editUserRoles() {
     const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
     const roles = (await this.participantRestApiService.getUserRoles())
       .filter(role =>
@@ -122,7 +132,7 @@ export class PersonPageComponent implements OnInit {
         this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
         if (this.userRoles.length) {
           this.roleToggle = this.userRoles[0];
-          this.onRoleChange();
+          this.onUserRoleChange();
         }
         ref.dismiss();
       } catch (e) {
@@ -135,7 +145,7 @@ export class PersonPageComponent implements OnInit {
     };
   }
 
-  async toggleSportTypesModal() {
+  async editSportTypes() {
     const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
     const sportTypes = (await this.participantRestApiService.getSportTypes())
       .filter(type =>
@@ -158,7 +168,7 @@ export class PersonPageComponent implements OnInit {
     };
   }
 
-  async onRoleChange() {
+  async onUserRoleChange() {
     this.queryParams['userRole'] = this.roleToggle.id;
     /*redirect to personal tab when user selects role in restrict array*/
     const currentTab = this.tabs.filter(t => this.router.url.includes(t.route))[0];
@@ -167,6 +177,18 @@ export class PersonPageComponent implements OnInit {
     } else {
       this.router.navigate([], {queryParams: this.queryParams});
     }
+    this._personService.emitUserRoleSelect(this.roleToggle);
+
+    // load base group
+    try {
+      this.baseGroup = await this.participantRestApiService.getBaseGroup({
+        id: this.person.id,
+        userRoleId: this.roleToggle.id
+      });
+    } catch (e) {
+      this.baseGroup = null;
+    }
+    this._personService.emitBaseGroupSelect(this.baseGroup);
   }
 
   async onSportTypeChange() {
@@ -198,16 +220,19 @@ export class PersonPageComponent implements OnInit {
                 for (const userRole of userRoles) {
                   if (userRole.id === +this.queryParams['userRole']) {
                     this.roleToggle = userRole;
+                    this._personService.userRoleSelectDefault = userRole;
                     break;
                   }
                 }
                 if (!this.roleToggle) {
                   this.roleToggle = userRoles[0];
+                  this._personService.userRoleSelectDefault = userRoles[0];
                 }
               } else {
                 this.roleToggle = userRoles[0];
+                this._personService.userRoleSelectDefault = userRoles[0];
               }
-              this.onRoleChange();
+              this.onUserRoleChange();
             }
           });
 

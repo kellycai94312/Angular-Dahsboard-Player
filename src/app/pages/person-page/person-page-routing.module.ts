@@ -8,6 +8,7 @@ import { EventsComponent } from './person-page/events/events.component';
 import { PersonalComponent } from './person-page/personal/personal.component';
 import { PhysiologyComponent } from './person-page/physiology/physiology.component';
 import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
+import { GroupsComponent } from './person-page/groups/groups.component';
 
 
 const routes: Routes = [
@@ -21,7 +22,8 @@ const routes: Routes = [
       {path: 'events', component: EventsComponent},
       {path: 'personal', component: PersonalComponent},
       {path: 'physiology', component: PhysiologyComponent},
-      {path: 'tests_results', component: TestsResultsComponent}
+      {path: 'tests_results', component: TestsResultsComponent},
+      {path: 'groups', component: GroupsComponent}
     ]
   },
 ];

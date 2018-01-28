@@ -30,6 +30,9 @@ import { TabModule } from '../../components/tab/tab.module';
     InfiniteListModule,
     TabModule
   ],
+  exports: [
+    GroupItemComponent
+  ],
   providers: [
     LayoutService
   ],
@@ -44,6 +47,9 @@ import { TabModule } from '../../components/tab/tab.module';
     GroupPersonsComponent,
     GroupAdministrationComponent,
     GroupSettingsComponent
+  ],
+  entryComponents: [
+    GroupItemComponent
   ]
 })
 export class GroupPageModule {

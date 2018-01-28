@@ -13,8 +13,8 @@
     <li class="empty" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>
     <li *ngFor="let item of data"
         (click)="select(item)"
-        [ngClass]="{'active' : model && item[key] === model[key]}">
-      {{item[display]}}
+        [ngClass]="{'active' : model && getKey(item) === getKey(model)}">
+      {{getName(item)}}
     </li>
   </app-scroll>
 </div>

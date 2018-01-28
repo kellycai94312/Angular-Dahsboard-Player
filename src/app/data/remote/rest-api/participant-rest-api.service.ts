@@ -1,5 +1,13 @@
 import { Injectable } from '@angular/core';
-import { IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod } from 'rest-core';
+import {
+  IRestMethod,
+  IRestMethodStrict,
+  Rest,
+  RestAction,
+  RestHandler,
+  RestParams,
+  RestRequestMethod
+} from 'rest-core';
 import { Session } from '../model/session';
 import { Auth } from '../model/auth';
 import { PageContainer } from '../bean/page-container';
@@ -29,6 +37,7 @@ import { ImageQuery } from './query/image-query';
 import { GroupPerson } from '../model/group/group-person';
 import { SubGroup } from '../model/group/sub-group';
 import { GroupPersonQuery } from './query/group-person-query';
+import { RoleQuery } from './query/role-query';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -111,12 +120,6 @@ export class ParticipantRestApiService extends Rest {
   })
   changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
 
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/role'
-  })
-  a: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
-
   //#endregion
 
   //#endregion
@@ -155,6 +158,18 @@ export class ParticipantRestApiService extends Rest {
   })
   getAnthropometry: IRestMethod<QueryParams, PersonAnthropometry[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/role/{!userRoleId}/baseGroup',
+  })
+  getBaseGroup: IRestMethod<GroupQuery, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!id}/role/{!userRoleId}/groups',
+  })
+  getPersonGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
+
   //#endregion
 
   //#region POST
@@ -177,6 +192,18 @@ export class ParticipantRestApiService extends Rest {
   })
   changeAnthropometry: IRestMethod<AnthropometryRequest, PersonAnthropometry[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/role/{!userRoleId}/public',
+  })
+  addPublicRole: IRestMethod<RoleQuery, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/role/{!userRoleId}/baseGroup',
+  })
+  saveBaseGroup: IRestMethod<RoleQuery, void>;
+
   //#endregion
 
   //#region PUT
@@ -186,6 +213,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!id}'
   })
   updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
+
+  //#endregion
+
+  //#region DELETE
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/role/{!userRoleId}/public',
+  })
+  removePublicRole: IRestMethod<RoleQuery, void>;
 
   //#endregion
 
@@ -264,36 +301,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/join',
   })
   leaveGroup: IRestMethod<QueryParams, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/groupPerson/filter',
-  })
-  getMyGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!id}/visible',
-  })
-  setVisible: IRestMethod<QueryParams, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!id}/visible',
-  })
-  unsetVisible: IRestMethod<QueryParams, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!id}/baseGroup',
-  })
-  setBaseGroup: IRestMethod<QueryParams, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!id}/baseGroup',
-  })
-  unsetBaseGroup: IRestMethod<QueryParams, void>;
 
   //#endregion
 

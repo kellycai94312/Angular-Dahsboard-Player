@@ -1,21 +1,32 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  Renderer2
+} from '@angular/core';
 import { PageContainer } from '../../data/remote/bean/page-container';
 import { ScrollService } from './scroll/scroll.service';
 import { Subject } from 'rxjs/Rx';
+import { PropertyConstant } from '../../data/local/property-constant';
 
 @Component({
   selector: 'app-input-select',
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss']
 })
-export class InputSelectComponent implements OnInit {
+export class InputSelectComponent implements OnChanges, OnInit {
 
   @Input() loadData: Function;
   @Input() model: any;
   @Input() pageSize: number;
 
-  @Input() key: any;
-  @Input() display: any;
+  @Input() getKey: Function;
+  @Input() getName: Function;
   @Input() placeholder: string;
   @Input() disabled: boolean;
 
@@ -45,13 +56,16 @@ export class InputSelectComponent implements OnInit {
 
   ngOnInit() {
     if (!this.pageSize) {
-      this.pageSize = 30;
+      this.pageSize = PropertyConstant.pageSize;
     }
     if (!this.placeholder) {
       this.placeholder = 'Select an option';
     }
-    setTimeout(() => this.value = this.model ? this.model[this.display] : this.placeholder, 100);
     this.clearData();
+  }
+
+  ngOnChanges() {
+    setTimeout(() => this.value = this.model ? this.getName(this.model) : this.placeholder, 100);
   }
 
   /** show dropdown list */
@@ -86,9 +100,12 @@ export class InputSelectComponent implements OnInit {
 
   /** select an element from the list*/
   select(item: any): void {
+    this.onChange.emit({
+      prev: this.model === this.empty ? null : this.model,
+      current: item === this.empty ? null : item
+    });
     this.model = item === this.empty ? null : item; // set empty element if no data selected
     this.modelChange.emit(this.model);
-    this.onChange.emit({});
     this.resetSearch();
   }
 
@@ -126,11 +143,7 @@ export class InputSelectComponent implements OnInit {
   }
 
   private async load() {
-    const result: PageContainer<any> = (await this.loadData({
-      from: this.pageSize * (this.pageNumber - 1),
-      count: this.pageSize,
-      name: this.value
-    })).list;
+    const result: PageContainer<any> = (await this.loadData(this.pageSize * (this.pageNumber - 1), this.value)).list;
     this.data = this.data.concat(result);
   }
 
@@ -142,7 +155,7 @@ export class InputSelectComponent implements OnInit {
   /** clear dropdown list */
   private resetSearch(): void {
     this.active = false;
-    this.value = this.model ? this.model[this.display] : this.placeholder;
+    this.value = this.model ? this.getName(this.model) : this.placeholder;
     this.clearData();
   }
 

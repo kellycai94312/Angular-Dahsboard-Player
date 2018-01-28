@@ -70,11 +70,11 @@
       id="country"
       [loadData]="loadCountries"
       [(model)]="person.address.country"
-      [pageSize]="30"
+      [pageSize]="pageSize"
       [disabled]="!isEditAllow"
       (onChange)="onCountryChange($event)"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a country"
       ngDefaultControl>
     </app-input-select>
@@ -85,11 +85,11 @@
       id="region"
       [loadData]="loadRegions"
       [(model)]="person.address.region"
-      [pageSize]="30"
+      [pageSize]="pageSize"
       [disabled]="!isEditAllow || person.address.country == null"
       (onChange)="onRegionChange($event)"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a region"
       ngDefaultControl>
     </app-input-select>
@@ -100,10 +100,10 @@
       id="city"
       [loadData]="loadCities"
       [(model)]="person.address.city"
-      [pageSize]="30"
+      [pageSize]="pageSize"
       [disabled]="!isEditAllow || person.address.region == null"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a city"
       ngDefaultControl>
     </app-input-select>

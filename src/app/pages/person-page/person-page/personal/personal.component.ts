@@ -5,7 +5,9 @@ import { SexEnum } from '../../../../data/remote/misc/sex-enum';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { Address } from '../../../../data/remote/model/address';
 import { ProfileService } from '../../../../layout/shared/profile.service';
-import { QueryParams } from '../../../../data/remote/rest-api/query-params';
+import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
+import { NamedObject } from '../../../../data/remote/base/named-object';
+import { PropertyConstant } from '../../../../data/local/property-constant';
 
 @Component({
   selector: 'app-personal',
@@ -16,6 +18,7 @@ export class PersonalComponent implements OnInit {
 
   person: Person;
   isEditAllow: boolean;
+  public pageSize = PropertyConstant.pageSize;
   readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
     .filter(e => parseInt(e, 10) >= 0)
     .map(k => SexEnum[k]);
@@ -48,18 +51,38 @@ export class PersonalComponent implements OnInit {
     this._profileService.emitFullNameChange(this.person);
   }
 
-  loadCountries = (query: QueryParams) => {
-    return this.participantRestApiService.getCountries(query);
+  loadCountries = async (from: number, searchText: string) => {
+    return this.participantRestApiService.getCountries({
+      from: from,
+      count: this.pageSize,
+      name: searchText
+    });
   }
 
-  loadRegions = (query: QueryParams) => {
-    query.countryId = this.person.address.country.id;
-    return this.participantRestApiService.getRegions(query);
+  loadRegions = async (from: number, searchText: string) => {
+    return this.participantRestApiService.getRegions({
+      from: from,
+      count: this.pageSize,
+      name: searchText,
+      countryId: this.person.address.country.id
+    });
   }
 
-  loadCities = (query: QueryParams) => {
-    query.regionId = this.person.address.region.id;
-    return this.participantRestApiService.getCities(query);
+  loadCities = async (from: number, searchText: string) => {
+    return this.participantRestApiService.getCities({
+      from: from,
+      count: this.pageSize,
+      name: searchText,
+      regionId: this.person.address.region.id
+    });
+  }
+
+  getKey(item: IdentifiedObject) {
+    return item.id;
+  }
+
+  getName(item: NamedObject) {
+    return item.name;
   }
 
 }
