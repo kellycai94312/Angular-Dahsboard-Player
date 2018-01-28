@@ -21,6 +21,9 @@ import {InputSelectModule} from '../../components/input-select/input-select.modu
 import {GroupService} from './group.service';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
+import {MembersComponent} from './group-administration/members/members.component';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {GroupPersonModalComponent} from './group-person-modal/group-person-modal.component';
 
 @NgModule({
   imports: [
@@ -33,7 +36,8 @@ import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgr
     DxSelectBoxModule,
     InfiniteListModule,
     TabModule,
-    InputSelectModule
+    InputSelectModule,
+    NgbModule
   ],
   exports: [
     GroupItemComponent
@@ -54,6 +58,9 @@ import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgr
     GroupAdministrationComponent,
     GroupSettingsComponent,
     SubgroupsComponent,
+    SubgroupComponent,
+    MembersComponent,
+    GroupPersonModalComponent
     SubgroupComponent
     GroupSettingsComponent
   ],

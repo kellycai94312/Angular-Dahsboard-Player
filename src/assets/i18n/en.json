@@ -140,5 +140,6 @@
   "settings": "Settings",
   "subgroups": "Subgroups",
   "add": "add",
-  "remove": "Remove"
+  "remove": "Remove",
+  "member": "Member"
 }

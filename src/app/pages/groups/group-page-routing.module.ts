@@ -10,6 +10,7 @@ import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
+import {MembersComponent} from './group-administration/members/members.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,7 @@ const routes: Routes = [
         children: [
           {path: '', redirectTo: 'settings', pathMatch: 'full'},
           {path: 'settings', component: GroupSettingsComponent},
+          {path: 'member', component: MembersComponent},
           {path: 'subgroup', component: SubgroupsComponent}
         ]
       }
