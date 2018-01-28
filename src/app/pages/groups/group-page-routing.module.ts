@@ -1,14 +1,15 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { GroupsPageComponent } from './groups-page/groups-page.component';
-import { GroupPageComponent } from './group-page/group-page.component';
-import { AllGroupsComponent } from './groups-page/all-groups/all-groups.component';
-import { MyGroupsComponent } from './groups-page/my-groups/my-groups.component';
-import { NewGroupPageComponent } from './new-group-page/new-group-page.component';
-import { GroupPersonsComponent } from './group-persons/group-persons.component';
-import { GroupAdministrationComponent } from './group-administration/group-administration.component';
-import { GroupSettingsComponent } from './group-administration/group-settings/group-settings.component';
+import {GroupsPageComponent} from './groups-page/groups-page.component';
+import {GroupPageComponent} from './group-page/group-page.component';
+import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
+import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
+import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
+import {GroupPersonsComponent} from './group-persons/group-persons.component';
+import {GroupAdministrationComponent} from './group-administration/group-administration.component';
+import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
+import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,8 @@ const routes: Routes = [
         path: 'administration', component: GroupAdministrationComponent,
         children: [
           {path: '', redirectTo: 'settings', pathMatch: 'full'},
-          {path: 'settings', component: GroupSettingsComponent}
+          {path: 'settings', component: GroupSettingsComponent},
+          {path: 'subgroup', component: SubgroupsComponent}
         ]
       }
     ]

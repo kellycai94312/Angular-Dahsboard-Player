@@ -311,13 +311,31 @@ export class ParticipantRestApiService extends Rest {
   })
   getTeamTypes: IRestMethod<void, TeamType[]>;
 
-  //#region SubGroup
+  //#region Subgroup
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!id}/subgroup',
   })
   getSubGroupsByGroup: IRestMethod<QueryParams, SubGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/subgroup',
+  })
+  postSubgroup: IRestMethodStrict<SubGroup, any, { groupId: number }, SubGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!groupId}/subgroup/{!subgroupId}',
+  })
+  putSubgroup: IRestMethodStrict<SubGroup, any, { groupId: number, subgroupId: number }, SubGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/subgroup/{!subgroupId}',
+  })
+  deleteSubgroup: IRestMethodStrict<any, any, { groupId: number, subgroupId: number }, void>;
 
   //#endregion
 

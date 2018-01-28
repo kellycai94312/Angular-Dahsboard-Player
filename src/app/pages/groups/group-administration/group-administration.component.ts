@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Tab } from '../../../data/local/tab';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnInit} from '@angular/core';
+import {Tab} from '../../../data/local/tab';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-group-administration',
@@ -20,6 +20,11 @@ export class GroupAdministrationComponent implements OnInit {
     allTab.name = await this._translateService.get('settings').toPromise();
     allTab.routerLink = 'settings';
     this.tabs.push(allTab);
+
+    const subgroupsTab = new Tab();
+    subgroupsTab.name = await this._translateService.get('subgroups').toPromise();
+    subgroupsTab.routerLink = 'subgroup';
+    this.tabs.push(subgroupsTab);
   }
 
 }

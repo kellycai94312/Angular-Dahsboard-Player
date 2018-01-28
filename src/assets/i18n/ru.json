@@ -138,5 +138,8 @@
   "administration": "Администрирование",
   "basicInformation": "Основная информация",
   "additionalInformation": "Дополнительная информация",
-  "settings": "Настройки"
+  "settings": "Настройки",
+  "subgroups": "Подгруппа",
+  "add": "Добавить",
+  "remove": "Удалить"
 }

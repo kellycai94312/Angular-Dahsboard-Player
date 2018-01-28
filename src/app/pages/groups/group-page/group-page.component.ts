@@ -37,6 +37,10 @@ export class GroupPageComponent implements OnInit {
     this._groupService.groupSubject.subscribe(group => {
       this.group = group;
     });
+    this._groupService.subgroupsSubject.subscribe(async subgroups => {
+      this.subGroups = subgroups;
+      await  this.initTabs();
+    });
   }
 
   async ngOnInit() {
@@ -71,8 +75,10 @@ export class GroupPageComponent implements OnInit {
       }
     }
 
-    this.subGroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.group.id});
+    await this._groupService.updateSubgroups();
+  }
 
+  private async initTabs() {
     this.tabs = [];
     for (let i = 0; i < this.subGroups.length; i++) {
       const tab = new Tab();

@@ -19,6 +19,8 @@ import {GroupSettingsComponent} from './group-administration/group-settings/grou
 import {TabModule} from '../../components/tab/tab.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupService} from './group.service';
+import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
+import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
 
 @NgModule({
   imports: [
@@ -50,6 +52,9 @@ import {GroupService} from './group.service';
     GroupPersonComponent,
     GroupPersonsComponent,
     GroupAdministrationComponent,
+    GroupSettingsComponent,
+    SubgroupsComponent,
+    SubgroupComponent
     GroupSettingsComponent
   ],
   entryComponents: [
