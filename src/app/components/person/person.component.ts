@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Person} from '../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {ImageType} from '../../../data/remote/model/image-type';
+import {Person} from '../../data/remote/model/person';
+import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {ImageType} from '../../data/remote/model/image-type';
 
 @Component({
   selector: 'app-person',

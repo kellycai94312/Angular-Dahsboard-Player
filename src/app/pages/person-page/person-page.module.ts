@@ -26,11 +26,11 @@ import {ModalSelectModule} from '../../components/modal-select/modal-select.modu
 import {ModalSelectComponent} from '../../components/modal-select/modal-select.component';
 import {SportTypeItemComponent} from './person-page/sport-type-item/sport-type-item.component';
 import {UserRoleItemComponent} from './person-page/user-role-item/user-role-item.component';
-import {PersonComponent} from './person/person.component';
 import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
+import {PersonModule} from '../../components/person/person.module';
 
 @NgModule({
   imports: [
@@ -51,11 +51,10 @@ import {GroupPersonComponent} from './person-page/group-person/group-person.comp
     DxTemplateModule,
     FormsModule,
     InputSelectModule,
-    ModalSelectModule,
-    InfiniteListModule
-    ModalSelectModule,
     InfiniteListModule,
-    GroupPageModule
+    ModalSelectModule,
+    GroupPageModule,
+    PersonModule
   ],
   declarations: [
     PersonPageComponent,
@@ -69,8 +68,6 @@ import {GroupPersonComponent} from './person-page/group-person/group-person.comp
     EventsComponent,
     SportTypeItemComponent,
     UserRoleItemComponent,
-    PersonComponent
-    UserRoleItemComponent,
     GroupsComponent,
     GroupPersonComponent
   ],
@@ -81,8 +78,7 @@ import {GroupPersonComponent} from './person-page/group-person/group-person.comp
     ModalSelectComponent,
     SportTypeItemComponent,
     UserRoleItemComponent
-  ],
-  exports: [PersonComponent]
+  ]
 })
 export class PersonPageModule {
 }
