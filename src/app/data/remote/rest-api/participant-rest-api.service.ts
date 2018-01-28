@@ -19,7 +19,6 @@ import {Picture} from '../model/picture';
 import {Address} from '../model/address';
 import {PersonAnthropometry} from '../model/person-anthropometry';
 import {EmailRequest} from '../request/email-request';
-import {PageQuery} from './page-query';
 import {environment} from '../../../../environments/environment';
 import {AnthropometryRequest} from '../request/anthropometry-request';
 import {GroupType} from '../model/group/base/group-type';
@@ -33,6 +32,7 @@ import {RoleQuery} from './query/role-query';
 import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
+import {PersonQuery} from './query/person-query';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -125,9 +125,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/filter?from={!from}&count={!count}'
+    path: '/person/filter'
   })
-  getPersonsPage: IRestMethod<PageQuery, PageContainer<Person>>;
+  getPersons: IRestMethod<PersonQuery, PageContainer<Person>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -276,6 +276,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}',
   })
   putGroup: IRestMethod<Group, Group>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!id}/person/{!personId}/approve',
+  })
+  putApprovePersonInGroup: IRestMethod<{ id: number, personId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!id}/person/{!personId}/approve',
+  })
+  deleteApprovePersonInGroup: IRestMethod<{ id: number, personId: number }, void>;
 
   //#region GroupPerson
 

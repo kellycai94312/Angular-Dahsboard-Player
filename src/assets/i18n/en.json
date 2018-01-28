@@ -141,5 +141,6 @@
   "subgroups": "Subgroups",
   "add": "add",
   "remove": "Remove",
-  "member": "Member"
+  "member": "Member",
+  "requests": "Requests"
 }

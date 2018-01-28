@@ -1,14 +1,13 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { GroupType } from '../../../../data/remote/model/group/base/group-type';
-import { UserRole } from '../../../../data/remote/model/user-role';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { LocalStorageService } from '../../../../shared/local-storage.service';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {GroupType} from '../../../../data/remote/model/group/base/group-type';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {Group} from '../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-my-groups',

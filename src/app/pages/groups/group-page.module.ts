@@ -24,6 +24,8 @@ import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgr
 import {MembersComponent} from './group-administration/members/members.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {GroupPersonModalComponent} from './group-person-modal/group-person-modal.component';
+import {RequestsComponent} from './group-administration/requests/requests.component';
+import {PersonPageModule} from '../person-page/person-page.module';
 
 @NgModule({
   imports: [
@@ -37,7 +39,8 @@ import {GroupPersonModalComponent} from './group-person-modal/group-person-modal
     InfiniteListModule,
     TabModule,
     InputSelectModule,
-    NgbModule
+    NgbModule,
+    PersonPageModule
   ],
   exports: [
     GroupItemComponent
@@ -60,6 +63,8 @@ import {GroupPersonModalComponent} from './group-person-modal/group-person-modal
     SubgroupsComponent,
     SubgroupComponent,
     MembersComponent,
+    GroupPersonModalComponent,
+    RequestsComponent
     GroupPersonModalComponent
     SubgroupComponent
     GroupSettingsComponent

@@ -1,0 +1,26 @@
+<div *ngIf="person!==null"
+     class="mt-2">
+  <a routerLink="{{person.id}}"
+     routerLinkActive="active">
+    <div class="d-flex flex-row">
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row h-100">
+          <div class="align-self-center">
+            <div *ngIf="imageLogoUrl!==null" class="img-fluid logo-list"
+                 [ngStyle]="{'background-image': 'url('+ imageLogoUrl +')'}">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column ml-2">
+        <div class="d-flex flex-row h-100">
+          <div class="align-self-center">
+            <h4>{{person.lastName}}</h4>
+            <h4>{{person.firstName}}</h4>
+            <h4>{{person.patronymic}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>

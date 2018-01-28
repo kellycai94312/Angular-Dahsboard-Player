@@ -30,6 +30,11 @@ export class GroupAdministrationComponent implements OnInit {
     membersTab.name = await this._translateService.get('members').toPromise();
     membersTab.routerLink = 'member';
     this.tabs.push(membersTab);
+
+    const requestsTab = new Tab();
+    requestsTab.name = await this._translateService.get('requests').toPromise();
+    requestsTab.routerLink = 'request';
+    this.tabs.push(requestsTab);
   }
 
 }

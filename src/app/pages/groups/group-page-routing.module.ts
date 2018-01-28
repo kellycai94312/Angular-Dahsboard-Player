@@ -11,6 +11,7 @@ import {GroupAdministrationComponent} from './group-administration/group-adminis
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 import {MembersComponent} from './group-administration/members/members.component';
+import {RequestsComponent} from './group-administration/requests/requests.component';
 
 const routes: Routes = [
   {
@@ -35,7 +36,8 @@ const routes: Routes = [
           {path: '', redirectTo: 'settings', pathMatch: 'full'},
           {path: 'settings', component: GroupSettingsComponent},
           {path: 'member', component: MembersComponent},
-          {path: 'subgroup', component: SubgroupsComponent}
+          {path: 'subgroup', component: SubgroupsComponent},
+          {path: 'request', component: RequestsComponent}
         ]
       }
     ]

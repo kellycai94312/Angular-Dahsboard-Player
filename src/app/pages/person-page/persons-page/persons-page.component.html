@@ -1,37 +1,11 @@
-<div class="d-flex flex-column h-100">
-  <div *ngIf="personPageContainer">
-    <div class="mb-2"
-         *ngFor="let person of personPageContainer.list">
-      <a routerLink="{{person.id}}"
-         routerLinkActive="active">
-        <div class="d-flex flex-row">
-          <div class="d-flex flex-column">
-            <div class="d-flex flex-row h-100">
-              <div class="align-self-center">
-                <div class="img-fluid logo-list"
-                     [ngStyle]="{'background-image': 'url('+ personLogoUrls.get(person.id) +')'}">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="d-flex flex-column ml-4">
-            <div class="d-flex flex-row h-100">
-              <div class="align-self-center">
-                <h4>{{person.lastName}}</h4>
-                <h4>{{person.firstName}}</h4>
-                <h4>{{person.patronymic}}</h4>
-              </div>
-            </div>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-  <ngb-pagination class="mt-auto"
-                  [collectionSize]="collectionSize"
-                  [maxSize]="10"
-                  [pageSize]="pageSize"
-                  [boundaryLinks]="true"
-                  (pageChange)="onPageChange($event)">
-  </ngb-pagination>
-</div>
+<dx-text-box #searchDxTextBoxComponent
+             placeholder="{{'search' | translate}}"
+             mode="search"
+             showClearButton="true">
+</dx-text-box>
+<app-infinite-list [items]="persons"
+                   (nextPage)="onNextPage($event)">
+  <ng-template let-item>
+    <app-person [person]="item"></app-person>
+  </ng-template>
+</app-infinite-list>
