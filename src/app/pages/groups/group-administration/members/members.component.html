@@ -1,3 +1,11 @@
-<p>
-  members works!
-</p>
+<dx-text-box #searchDxTextBoxComponent
+             placeholder="{{'search' | translate}}"
+             mode="search"
+             showClearButton="true">
+</dx-text-box>
+<app-infinite-list [items]="groupPersons"
+                   (nextPage)="onNextPage($event)">
+  <ng-template let-item>
+    <app-person [person]="item.person"></app-person>
+  </ng-template>
+</app-infinite-list>
