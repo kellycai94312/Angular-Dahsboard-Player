@@ -1,15 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {ActivatedRoute} from '@angular/router';
-import {TeamType} from '../../../../data/remote/model/group/team/team-type';
-import {League} from '../../../../data/remote/model/group/team/league';
-import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
-import {AgeGroup} from '../../../../data/remote/model/age-group';
-import {QueryParams} from '../../../../data/remote/rest-api/query-params';
-import {GroupService} from '../../group.service';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {PropertyConstant} from '../../../../data/local/property-constant';
+import { Component, OnInit } from '@angular/core';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { ActivatedRoute } from '@angular/router';
+import { TeamType } from '../../../../data/remote/model/group/team/team-type';
+import { League } from '../../../../data/remote/model/group/team/league';
+import { GroupTeam } from '../../../../data/remote/model/group/team/group-team';
+import { AgeGroup } from '../../../../data/remote/model/age-group';
+import { QueryParams } from '../../../../data/remote/rest-api/query-params';
+import { GroupService } from '../../group.service';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupTypeEnum } from '../../../../data/remote/model/group/base/group-type-enum';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
+import { NamedObject } from '../../../../data/remote/base/named-object';
 
 @Component({
   selector: 'app-group-settings',
@@ -27,7 +29,6 @@ export class GroupSettingsComponent implements OnInit {
   public pageSize: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _activatedRoute: ActivatedRoute,
               private _groupService: GroupService) {
     this.pageSize = PropertyConstant.pageSize;
   }
@@ -44,19 +45,39 @@ export class GroupSettingsComponent implements OnInit {
 
   //#region Position
 
-  loadCountries = (query: QueryParams) => {
-    return this._participantRestApiService.getCountries(query);
-  };
+  loadCountries = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getCountries({
+      from: from,
+      count: this.pageSize,
+      name: searchText
+    });
+  }
 
-  loadRegions = (query: QueryParams) => {
-    query.countryId = this.group.address.country.id;
-    return this._participantRestApiService.getRegions(query);
-  };
+  loadRegions = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getRegions({
+      from: from,
+      count: this.pageSize,
+      name: searchText,
+      countryId: this.group.address.country.id
+    });
+  }
 
-  loadCities = (query: QueryParams) => {
-    query.regionId = this.group.address.region.id;
-    return this._participantRestApiService.getCities(query);
-  };
+  loadCities = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getCities({
+      from: from,
+      count: this.pageSize,
+      name: searchText,
+      regionId: this.group.address.region.id
+    });
+  }
+
+  getKey(item: IdentifiedObject) {
+    return item.id;
+  }
+
+  getName(item: NamedObject) {
+    return item.name;
+  }
 
   public onCountryChange(e: any) {
     this.group.address.region = null;

@@ -70,8 +70,8 @@
       [(model)]="group.address.country"
       [pageSize]="pageSize"
       (onChange)="onCountryChange($event)"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a country"
       ngDefaultControl>
     </app-input-select>
@@ -83,8 +83,8 @@
       [(model)]="group.address.region"
       [pageSize]="pageSize"
       (onChange)="onRegionChange($event)"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a region"
       ngDefaultControl>
     </app-input-select>
@@ -95,8 +95,8 @@
       [loadData]="loadCities"
       [(model)]="group.address.city"
       [pageSize]="pageSize"
-      key="id"
-      display="name"
+      [getKey]="getKey"
+      [getName]="getName"
       placeholder="Select a city"
       ngDefaultControl>
     </app-input-select>
