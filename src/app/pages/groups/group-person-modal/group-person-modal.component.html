@@ -3,16 +3,85 @@
   <button type="button"
           class="close"
           aria-label="Close"
-          (click)="ngbActiveModal.dismiss('Cross click')">
+          (click)="onCancel()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <p>Hello, {{name}}!</p>
+  <div class="row">
+    <div class="col">
+      <app-person [person]="groupPerson.person"></app-person>
+    </div>
+    <div class="col">
+      <app-group-item *ngIf="baseGroupPerson"
+                      [data]="baseGroupPerson.group"></app-group-item>
+    </div>
+  </div>
+
+  <label class="mt-4">{{'subgroup' | translate }}</label>
+  <dx-select-box class="mt-2"
+                 [items]="subgroups"
+                 [(value)]="groupPerson.subGroup"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 showClearButton="true"
+                 placeholder="{{'subgroup' | translate}}">
+  </dx-select-box>
+
+  <label class="mt-2">{{'userRole' | translate }}</label>
+  <dx-select-box class="mt-2"
+                 [items]="userRoles"
+                 [(value)]="groupPerson.userRole"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 showClearButton="true"
+                 (onSelectionChanged)="onUserRoleChange($event.selectedItem)"
+                 placeholder="{{'userRole' | translate}}">
+  </dx-select-box>
+
+  <div
+    *ngIf="groupPerson.userRole !== null && groupPerson.userRole !== undefined && groupPerson.userRole.userRoleEnum ==='ATHLETE'">
+    <label class="mt-2">{{'mentor' | translate}}</label>
+    <app-input-select
+      [loadData]="loadMentors"
+      [(model)]="groupPerson.mentor"
+      [pageSize]="pageSize"
+      [getKey]="getKey"
+      [getName]="getName"
+      ngDefaultControl>
+    </app-input-select>
+
+    <label class="mt-2">{{'sportRole' | translate }}</label>
+    <dx-select-box [items]="sportRoles"
+                   [(value)]="groupPerson.sportRole"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   placeholder="{{'sportRole' | translate}}">
+    </dx-select-box>
+
+    <label class="mt-2">{{'number' | translate }}</label>
+    <dx-text-box [(value)]="groupPerson.number"></dx-text-box>
+  </div>
+
+  <dx-check-box *ngIf="!isOwner"
+                class="mt-2"
+                [(value)]="groupPerson.admin"
+                text="{{ 'administrator' | translate }}">
+  </dx-check-box>
 </div>
 <div class="modal-footer">
   <button type="button"
-          class="btn btn-outline-dark"
-          (click)="ngbActiveModal.close('Close click')">Close
+          class="btn btn-success"
+          (click)="onSave()">{{ 'save' | translate | uppercase}}
+  </button>
+  <button *ngIf="!isOwner"
+          type="button"
+          class="btn btn-danger"
+          (click)="onRemove()">{{ 'remove' | translate | uppercase}}
+  </button>
+  <button type="button"
+          class="btn btn-primary"
+          (click)="onCancel()">{{ 'cancel' | translate | uppercase}}
   </button>
 </div>

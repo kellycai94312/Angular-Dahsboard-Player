@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { ImageType } from '../../../../data/remote/model/image-type';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { PersonService } from '../person.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { UserRole } from '../../../../data/remote/model/user-role';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {ImageType} from '../../../../data/remote/model/image-type';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {PersonService} from '../person.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {UserRole} from '../../../../data/remote/model/user-role';
 
+// TODO: Remove this component. See app-group-person-new!
 @Component({
   selector: 'app-group-person',
   templateUrl: './group-person.component.html',
@@ -63,7 +64,7 @@ export class GroupPersonComponent implements OnInit {
       container.list.push(this.data);
     }
     return container;
-  }
+  };
 
   getKey(item: GroupPerson) {
     return item.id;

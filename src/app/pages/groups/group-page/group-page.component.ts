@@ -9,6 +9,9 @@ import {SubGroup} from '../../../data/remote/model/group/sub-group';
 import {TranslateService} from '@ngx-translate/core';
 import {Tab} from '../../../data/local/tab';
 import {GroupService} from '../group.service';
+import {Picture} from '../../../data/remote/model/picture';
+import {PictureClass} from '../../../data/remote/misc/picture-class';
+import {PictureType} from '../../../data/remote/misc/picture-type';
 
 @Component({
   selector: 'app-group-page',
@@ -26,18 +29,14 @@ export class GroupPageComponent implements OnInit {
 
   public tabs: Tab[];
 
-  private _groupPersonState: GroupPersonState;
-
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateService: TranslateService,
               private _activatedRoute: ActivatedRoute,
-              private _groupService: GroupService) {
-    this._groupPersonState = GroupPersonState.NOT_MEMBER;
-    this.textStateInGroup = 'join';
-    this._groupService.groupSubject.subscribe(group => {
+              public groupService: GroupService) {
+    this.groupService.groupSubject.subscribe(group => {
       this.group = group;
     });
-    this._groupService.subgroupsSubject.subscribe(async subgroups => {
+    this.groupService.subgroupsSubject.subscribe(async subgroups => {
       this.subGroups = subgroups;
       await  this.initTabs();
     });
@@ -46,7 +45,7 @@ export class GroupPageComponent implements OnInit {
   async ngOnInit() {
     const groupId = this._activatedRoute.snapshot.params.id;
     this.group = await this._participantRestApiService.getGroup({id: groupId});
-    this._groupService.updateGroup(this.group);
+    this.groupService.updateGroup(this.group);
 
     if (this.group != null) {
       await this.baseInit();
@@ -60,22 +59,10 @@ export class GroupPageComponent implements OnInit {
       type: ImageType.LOGO
     });
 
-    this.groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: this.group.id});
+    this.groupPerson = await this.groupService.getCurrentGroupPerson();
+    this.textStateInGroup = this.groupService.getKeyNamePersonStateInGroup(this.groupService.getGroupPersonState());
 
-    if (this.groupPerson == null) {
-      this._groupPersonState = GroupPersonState.NOT_MEMBER;
-      this.textStateInGroup = 'join';
-    } else {
-      if (this.groupPerson.approved) {
-        this._groupPersonState = GroupPersonState.MEMBER;
-        this.textStateInGroup = 'leave';
-      } else {
-        this._groupPersonState = GroupPersonState.CONSIDERATION;
-        this.textStateInGroup = 'cancelJoin';
-      }
-    }
-
-    await this._groupService.updateSubgroups();
+    await this.groupService.updateSubgroups();
   }
 
   private async initTabs() {
@@ -91,7 +78,7 @@ export class GroupPageComponent implements OnInit {
     defaultTab.routerLink = this.getSubGroupRouterLink(0);
     this.tabs.push(defaultTab);
 
-    if (this.groupPerson.admin && this.groupPerson.approved) {
+    if (this.groupService.isEditAllow()) {
       const managementTab = new Tab();
       managementTab.name = await this._translateService.get('administration').toPromise();
       managementTab.routerLink = 'administration';
@@ -103,11 +90,36 @@ export class GroupPageComponent implements OnInit {
     return `subgroup/${subGroupId}`;
   }
 
+  public async onLogoChange(event) {
+    const fileList: FileList = event.target.files;
+    console.log(fileList);
+
+    if (fileList.length > 0) {
+      const file: File = fileList[0];
+      const picture: Picture = new Picture();
+      picture.clazz = PictureClass.group;
+      picture.objectId = this.group.id;
+      picture.type = PictureType.LOGO;
+      await this._participantRestApiService.uploadPicture(file, picture);
+
+      this.imageLogoUrl = this._participantRestApiService.getImageUrl({
+        clazz: 'group',
+        id: this.group.id,
+        type: ImageType.LOGO
+      });
+
+      this.imageLogoUrl = `${this.imageLogoUrl}&date=${new Date().getTime()}`;
+    }
+  }
+
   public async onGroupPersonState() {
-    if (this._groupPersonState === GroupPersonState.NOT_MEMBER) {
-      await this._participantRestApiService.joinGroup({id: this.group.id});
-    } else {
-      await this._participantRestApiService.leaveGroup({id: this.group.id});
+    try {
+      if (this.groupService.getGroupPersonState() === GroupPersonState.NOT_MEMBER) {
+        await this._participantRestApiService.joinGroup({id: this.group.id});
+      } else {
+        await this._participantRestApiService.leaveGroup({id: this.group.id});
+      }
+    } catch (e) {
     }
     await this.baseInit();
   }

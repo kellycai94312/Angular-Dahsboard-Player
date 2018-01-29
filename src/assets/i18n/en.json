@@ -50,9 +50,9 @@
       "groups": {
         "section": "Groups",
         "placeholder": "Select a group",
-        "baseGroup" : "Base",
+        "baseGroup": "Base",
         "additionalGroups": "Additional",
-        "addGroup" : "Add"
+        "addGroup": "Add"
       }
     }
   },
@@ -142,5 +142,13 @@
   "add": "add",
   "remove": "Remove",
   "member": "Member",
-  "requests": "Requests"
+  "requests": "Requests",
+  "edit": "Edit",
+  "cancel": "Cancel",
+  "administrator": "Administrator",
+  "mentor": "Mentor",
+  "subgroup": "Subgroup",
+  "sportRole": "Sport role",
+  "number": "Number",
+  "save": "Save"
 }

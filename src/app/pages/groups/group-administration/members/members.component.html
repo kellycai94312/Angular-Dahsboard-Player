@@ -6,6 +6,6 @@
 <app-infinite-list [items]="groupPersons"
                    (nextPage)="onNextPage($event)">
   <ng-template let-item>
-    <app-person [person]="item.person"></app-person>
+    <app-group-person-new [groupPerson]="item"></app-group-person-new>
   </ng-template>
 </app-infinite-list>
