@@ -3,6 +3,7 @@ import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GroupPersonModalComponent} from '../group-person-modal/group-person-modal.component';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {GroupService} from '../group.service';
 
 // TODO: Set GroupPersonComponent base component
 @Component({
@@ -17,7 +18,8 @@ export class GroupPersonComponent implements OnInit {
   public baseGroupPerson: GroupPerson;
 
   constructor(private _modalService: NgbModal,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              public groupService: GroupService) {
   }
 
   async ngOnInit() {

@@ -19,7 +19,7 @@
                     [data]="baseGroupPerson.group">
     </app-group-item>
   </div>
-  <div>
+  <div *ngIf="groupService.isEditAllow()">
     <dx-button type="default"
                class="ml-2"
                (onClick)="onEdit()"
