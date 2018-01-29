@@ -35,15 +35,19 @@ $avatar-size: 40px;
       background-position: center center;
     }
 
-    > p {
+    > .fullname {
       padding-left: 5px;
+      width: ($user-panel-width - $avatar-size) * .85;
       height: $avatar-size;
-      text-align: center;
       display: flex;
-      justify-content: center;
       align-items: center;
       font-weight: 400;
       color: $white;
+      white-space: nowrap;
+      > p {
+        overflow: hidden !important;
+        text-overflow: ellipsis;
+      }
     }
 
     > .lnr {

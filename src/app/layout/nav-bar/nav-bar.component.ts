@@ -17,7 +17,6 @@ export class NavBarComponent implements OnInit {
 
   public person: Person;
   public personProfileRouterLink: string;
-  public fullName: string;
   public logo: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -28,7 +27,7 @@ export class NavBarComponent implements OnInit {
               private _profileService: ProfileService) {
     this.person = new Person();
     this.personProfileRouterLink = '/person/' + this._localStorageService.getCurrentPersonId();
-    _profileService.fullNameChangeEmitted$.subscribe(person => this.setFullName(person));
+    _profileService.fullNameChangeEmitted$.subscribe(person => this.person.firstName = person.firstName);
     _profileService.logoChangeEmitted$.subscribe(logo => this.logo = logo);
   }
 
@@ -38,7 +37,6 @@ export class NavBarComponent implements OnInit {
       this._router.navigate(['/registration/person']);
     }
     this.person = await this._profileService.getPerson(personId);
-    this.setFullName(this.person);
     this.logo = this._logoService.getLogo(PictureClass.person, this.person.id);
   }
 
@@ -49,11 +47,4 @@ export class NavBarComponent implements OnInit {
     await this._router.navigate(['/login']);
   }
 
-  private setFullName(person: Person) {
-    this.fullName = this.trim(person.lastName) + ' ' + this.trim(person.firstName);
-  }
-
-  private trim(str: string) {
-    return str.length > 11 ? str.substring(0, 10) + '..' : str;
-  }
 }
