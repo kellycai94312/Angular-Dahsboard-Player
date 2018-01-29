@@ -70,8 +70,6 @@ export class GroupService {
 
       this._isOwner = this._group.owner.id === this._groupPerson.person.user.id;
     }
-    console.log(this._isOwner);
-    console.log(this._groupPerson);
     return this._groupPerson;
   }
 
@@ -87,7 +85,6 @@ export class GroupService {
   }
 
   public getGroupPersonState(): GroupPersonState {
-    console.log(GroupPersonState[this._groupPersonState]);
     return this._groupPersonState;
   }
 

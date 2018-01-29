@@ -64,8 +64,8 @@
     <dx-text-box [(value)]="groupPerson.number"></dx-text-box>
   </div>
 
-
-  <dx-check-box class="mt-2"
+  <dx-check-box *ngIf="!isOwner"
+                class="mt-2"
                 [(value)]="groupPerson.admin"
                 text="{{ 'administrator' | translate }}">
   </dx-check-box>
@@ -75,7 +75,8 @@
           class="btn btn-success"
           (click)="onSave()">{{ 'save' | translate | uppercase}}
   </button>
-  <button type="button"
+  <button *ngIf="!isOwner"
+          type="button"
           class="btn btn-danger"
           (click)="onRemove()">{{ 'remove' | translate | uppercase}}
   </button>

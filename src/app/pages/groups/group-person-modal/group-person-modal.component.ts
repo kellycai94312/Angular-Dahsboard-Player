@@ -6,12 +6,12 @@ import {UserRole} from '../../../data/remote/model/user-role';
 import {Person} from '../../../data/remote/model/person';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {NamedObject} from '../../../data/remote/base/named-object';
 import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../data/remote/model/sport-role';
 import {GroupTeam} from '../../../data/remote/model/group/team/group-team';
+import {GroupService} from '../group.service';
 
 @Component({
   selector: 'app-group-person-modal',
@@ -30,14 +30,18 @@ export class GroupPersonModalComponent implements OnInit {
   public subgroups: SubGroup[];
   public sportRoles: SportRole[];
 
+  public isOwner: boolean;
+
   constructor(public ngbActiveModal: NgbActiveModal,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _groupService: GroupService) {
     this.pageSize = PropertyConstant.pageSize;
+    this.isOwner = false;
   }
 
   async ngOnInit() {
     await this.initBaseGroup(this.groupPerson.person, this.groupPerson.userRole);
-    this.userRoles = await this._participantRestApiService.getUserRoles();
+    this.userRoles = this.groupPerson.person.user.userRoles;
     this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
 
     if (this.groupPerson.group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM]) {
@@ -52,6 +56,8 @@ export class GroupPersonModalComponent implements OnInit {
         this.mentorUserRole = this.userRoles.find(x => x.userRoleEnum.toString() === UserRoleEnum[UserRoleEnum.SCOUT]);
         break;
     }
+
+    this.isOwner = this.groupPerson.group.owner.id === this.groupPerson.person.user.id;
   }
 
   public async initBaseGroup(person: Person, userRole: UserRole) {
@@ -79,8 +85,12 @@ export class GroupPersonModalComponent implements OnInit {
     return item.id;
   }
 
-  getName(item: NamedObject) {
-    return item.name;
+  getName(item: GroupPerson) {
+    if (item.person.patronymic != null) {
+      return `${item.person.firstName} ${item.person.lastName} ${item.person.patronymic}`;
+    } else {
+      return `${item.person.firstName} ${item.person.lastName}`;
+    }
   }
 
   public async onUserRoleChange(userRole: UserRole) {
@@ -132,8 +142,11 @@ export class GroupPersonModalComponent implements OnInit {
     this.closeModal();
   }
 
-  public onRemove() {
-    // TODO:
+  public async onRemove() {
+    await this._participantRestApiService.deleteApprovePersonInGroup({
+      id: this.groupPerson.group.id,
+      personId: this.groupPerson.person.id
+    });
     this.closeModal();
   }
 
