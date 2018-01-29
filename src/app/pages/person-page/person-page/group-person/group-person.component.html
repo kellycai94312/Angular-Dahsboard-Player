@@ -8,6 +8,7 @@
       </div>
     </div>
   </div>
+
   <a class="d-flex flex-column ml-4" routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
     <div class="d-flex flex-row h-100">
       <div class="align-self-center">
@@ -17,8 +18,8 @@
     </div>
   </a>
 
-  <div class="d-flex flex-column" *ngIf="isEditAllow">
-    <div class="d-flex flex-row h-100">
+  <div class="d-flex flex-row align-items-center">
+    <div *ngIf="isEditAllow">
       <app-input-select
         [loadData]="loadData"
         [(model)]="data"
@@ -30,29 +31,20 @@
         ngDefaultControl>
       </app-input-select>
     </div>
-  </div>
-
-  <div class="d-flex flex-column ml-4" *ngIf="data">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center">
-        <h4 *ngIf="data?.sportRole">{{data.sportRole.sportType.sportTypeEnum}}</h4>
-      </div>
+    <div *ngIf="data?.sportRole"
+         class="ml-4">
+      <h4>{{data.sportRole.sportType.sportTypeEnum}}</h4>
     </div>
-  </div>
-  <div class="d-flex flex-column ml-4" *ngIf="data">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center">
-        <h4 *ngIf="data?.mentor">{{data.mentor.person.firstName + ' ' + data.mentor.person.lastName}}</h4>
-      </div>
+    <div *ngIf="data?.mentor"
+         class="ml-4">
+      <app-person [person]="data.mentor.person"></app-person>
     </div>
-  </div>
-  <div class="d-flex flex-column ml-4" *ngIf="isEditAllow && data">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center">
-        <button class="btn btn-xs btn-outline-warning" (click)="onRemove()">
-          <i class="fa fa-times"></i>
-        </button>
-      </div>
+    <div *ngIf="isEditAllow"
+         class="ml-2">
+      <button class="btn btn-xs btn-outline-warning"
+              (click)="onRemove()">
+        <i class="fa fa-times"></i>
+      </button>
     </div>
   </div>
 </div>
