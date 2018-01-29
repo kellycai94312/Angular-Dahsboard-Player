@@ -1,3 +1,29 @@
-<p>
-  group-person works!
-</p>
+<div class="d-flex flex-row align-items-center">
+  <app-person [person]="groupPerson.person"></app-person>
+  <div *ngIf="groupPerson.userRole"
+       class="ml-2">{{ groupPerson.userRole.name }}
+  </div>
+  <div *ngIf="groupPerson.mentor"
+       class="ml-2">
+    <p>{{ groupPerson.mentor.person.firstName }}</p>
+    <p>{{ groupPerson.mentor.person.lastName }}</p>
+    <p>{{ groupPerson.mentor.person.patronymic }}</p>
+  </div>
+
+  <div *ngIf="groupPerson.group.groupType==='TEAM'">
+    <div *ngIf="groupPerson.sportRole"
+         class="ml-2">{{ groupPerson.sportRole.name }}
+    </div>
+    <app-group-item *ngIf="baseGroupPerson"
+                    class="ml-2"
+                    [data]="baseGroupPerson.group">
+    </app-group-item>
+  </div>
+  <div>
+    <dx-button type="default"
+               class="ml-2"
+               (onClick)="onEdit()"
+               text="{{ 'edit' | translate | uppercase}}">
+    </dx-button>
+  </div>
+</div>

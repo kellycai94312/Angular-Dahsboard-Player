@@ -2,13 +2,27 @@
   <!-- group head -->
   <div class="d-flex flex-row">
     <div class="p-2">
-      <img *ngIf="imageLogoUrl!=null"
-           class="img-fluid"
-           [src]="imageLogoUrl"/>
-      <dx-button type="default"
-                 (onClick)="onGroupPersonState()"
-                 text="{{ textStateInGroup | translate | uppercase}}">
-      </dx-button>
+      <div class="d-flex flex-column">
+        <div class="img img-fluid avatar"
+             [ngStyle]="{'background-image': 'url('+ imageLogoUrl +')'}">
+        </div>
+        <button *ngIf="groupService.isEditAllow()"
+                class="btn btn-default btn-file btn-sm mt-2">
+          <i class="fa fa-pencil-square-o"></i>
+          <span>
+      <p>{{'persons.person.changeAvatar' | translate | uppercase}}</p>
+      <input type="file"
+             (change)="onLogoChange($event)"
+             accept="image/*">
+      </span>
+        </button>
+        <dx-button *ngIf="!groupService.isOwner()"
+                   type="default"
+                   class="mt-2"
+                   (onClick)="onGroupPersonState()"
+                   text="{{ textStateInGroup | translate | uppercase}}">
+        </dx-button>
+      </div>
     </div>
     <div class="p-2">
       <h1>{{group.name}}</h1>

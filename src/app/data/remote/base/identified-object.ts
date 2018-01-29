@@ -1,9 +1,9 @@
-import { User } from '../model/user';
+import {User} from '../model/user';
 
 export class IdentifiedObject {
-  id: number;
-  version: number;
-  created: Date;
-  deleted: Date;
-  owner: User;
+  public id: number;
+  public version: number;
+  public created: Date;
+  public deleted: Date;
+  public owner: User;
 }

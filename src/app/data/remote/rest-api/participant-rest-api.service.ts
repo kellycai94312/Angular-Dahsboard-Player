@@ -33,6 +33,7 @@ import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
 import {PersonQuery} from './query/person-query';
+import {SportRole} from '../model/sport-role';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -323,6 +324,42 @@ export class ParticipantRestApiService extends Rest {
   })
   getTeamTypes: IRestMethod<void, TeamType[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/subgroup',
+  })
+  postPersonSubgroup: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/userRole',
+  })
+  postPersonUserRole: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/mentor',
+  })
+  postPersonMentor: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/sportRole',
+  })
+  postPersonSportRole: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/number',
+  })
+  postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/admin',
+  })
+  postPersonAdmin: IRestMethodStrict<{ admin?: boolean }, any, { groupId: number, personId: number }, GroupPerson>;
+
   //#region Subgroup
 
   @RestAction({
@@ -363,18 +400,6 @@ export class ParticipantRestApiService extends Rest {
     return url;
   }
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/sportType/{!id}/league',
-  })
-  getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/ageGroup',
-  })
-  getAgeGroups: IRestMethod<void, AgeGroup[]>;
-
   uploadPicture(file: File, picture: Picture): Promise<Picture> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
@@ -384,6 +409,24 @@ export class ParticipantRestApiService extends Rest {
   }
 
   //#endregion
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/{!id}/league',
+  })
+  getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/{!id}/sportRole',
+  })
+  getSportRolesBySportType: IRestMethod<QueryParams, SportRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/ageGroup',
+  })
+  getAgeGroups: IRestMethod<void, AgeGroup[]>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {
