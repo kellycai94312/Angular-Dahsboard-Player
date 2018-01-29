@@ -78,7 +78,7 @@ export class GroupPageComponent implements OnInit {
     defaultTab.routerLink = this.getSubGroupRouterLink(0);
     this.tabs.push(defaultTab);
 
-    if (this.isEditAllow) {
+    if (this.groupService.isEditAllow()) {
       const managementTab = new Tab();
       managementTab.name = await this._translateService.get('administration').toPromise();
       managementTab.routerLink = 'administration';
