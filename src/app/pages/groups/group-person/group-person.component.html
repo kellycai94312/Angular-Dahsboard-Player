@@ -9,7 +9,7 @@
     <app-person [person]="groupPerson.mentor.person"></app-person>
   </div>
 
-  <div *ngIf="groupPerson.group.groupType.groupTypeEnum === 'TEAM'">
+  <div *ngIf="groupPerson.group.groupType.groupTypeEnum.toString() === 'TEAM'">
     <!--<div *ngIf="groupPerson.sportRole"-->
     <!--class="ml-2">-->
     <!--<strong>{{ groupPerson.sportRole.name }}</strong>-->

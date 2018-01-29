@@ -40,7 +40,7 @@
   </dx-select-box>
 
   <div
-    *ngIf="groupPerson.userRole !== null && groupPerson.userRole !== undefined && groupPerson.userRole.userRoleEnum ==='ATHLETE'">
+    *ngIf="groupPerson.userRole !== null && groupPerson.userRole !== undefined && groupPerson.userRole.userRoleEnum.toString() ==='ATHLETE'">
     <label class="mt-2">{{'mentor' | translate}}</label>
     <app-input-select
       [loadData]="loadMentors"
