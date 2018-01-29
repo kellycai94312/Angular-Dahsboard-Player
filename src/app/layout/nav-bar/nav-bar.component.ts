@@ -50,10 +50,7 @@ export class NavBarComponent implements OnInit {
   }
 
   private setFullName(person: Person) {
-    this.fullName = this.trim(person.lastName) + ' ' + this.trim(person.firstName);
+    this.fullName = person.firstName + ' ' + person.lastName;
   }
 
-  private trim(str: string) {
-    return str.length > 11 ? str.substring(0, 10) + '..' : str;
-  }
 }
