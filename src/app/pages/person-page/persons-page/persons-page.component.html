@@ -1,8 +1,67 @@
-<dx-text-box #searchDxTextBoxComponent
-             placeholder="{{'search' | translate}}"
-             mode="search"
-             showClearButton="true">
-</dx-text-box>
+<div class="row">
+  <div class="col">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 type="date"
+                 placeholder="{{'yearBirth' | translate}}"
+                 showClearButton="true"
+                 (onValueChanged)="onYearBirthChanged($event.value)">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sexItems"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   placeholder="{{'sex' | translate}}"
+                   (onSelectionChanged)="onSexChanged($event.selectedItem)">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="userRoles"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   (onSelectionChanged)="onUserRoleChanged($event.selectedItem)"
+                   placeholder="{{'userRole' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadGroups"
+                      [pageSize]="pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'group' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onGroupChanged($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sportTypes"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   (onSelectionChanged)="onSportTypeChanged($event.selectedItem)"
+                   placeholder="{{'sportType' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadCities"
+                      [pageSize]="pageSize"
+                      [getKey]="getCityKey"
+                      [getName]="getCityName"
+                      placeholder="{{'city' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onCityChanged($event.current)">
+    </app-input-select>
+  </div>
+</div>
 
 <div class="row mt-2 text-center text-uppercase font-weight-bold">
   <div class="col">
