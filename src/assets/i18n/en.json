@@ -150,5 +150,10 @@
   "subgroup": "Subgroup",
   "sportRole": "Sport role",
   "number": "Number",
-  "save": "Save"
+  "save": "Save",
+  "fullName": "Full name",
+  "birthDate": "Birth date",
+  "group": "Group",
+  "role": "Role",
+  "yearBirth": "Year birth"
 }
