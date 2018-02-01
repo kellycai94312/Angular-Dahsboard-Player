@@ -27,6 +27,10 @@ export class ProfileService {
     this.logoChange.next(change);
   }
 
+  init() {
+    this.profile = null;
+  }
+
   getPerson(id: number): Promise<Person> {
     if (this._localStorageService.getCurrentPersonId() === id) {
       if (this.profile) {

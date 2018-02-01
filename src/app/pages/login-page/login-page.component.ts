@@ -5,6 +5,7 @@ import { ParticipantRestApiService } from '../../data/remote/rest-api/participan
 import { Router } from '@angular/router';
 import { Session } from '../../data/remote/model/session';
 import { LocalStorageService } from '../../shared/local-storage.service';
+import { ProfileService } from '../../layout/shared/profile.service';
 
 @Component({
   selector: 'app-login-page',
@@ -18,6 +19,7 @@ export class LoginPageComponent implements OnInit {
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
               private localStorageService: LocalStorageService,
+              private _profileService: ProfileService,
               private router: Router) {
     this.auth = new Auth();
   }
@@ -34,6 +36,7 @@ export class LoginPageComponent implements OnInit {
           this.localStorageService.saveUserId(session.userId);
           if (session.personId != null) {
             this.localStorageService.savePersonId(session.personId);
+            this._profileService.init();
             await this.router.navigate(['/person', session.personId]);
           } else {
             await this.router.navigate(['/registration/person']);
