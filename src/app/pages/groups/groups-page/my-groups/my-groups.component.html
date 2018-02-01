@@ -30,6 +30,8 @@
 <app-infinite-list [items]="groups"
                    (nextPage)="onNextPage($event)">
   <ng-template let-item>
-    <app-group-item [data]="item"></app-group-item>
+    <div class="mt-2">
+      <app-group-item [data]="item"></app-group-item>
+    </div>
   </ng-template>
 </app-infinite-list>
