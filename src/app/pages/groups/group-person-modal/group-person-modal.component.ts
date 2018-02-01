@@ -33,15 +33,14 @@ export class GroupPersonModalComponent implements OnInit {
   public isOwner: boolean;
 
   constructor(public ngbActiveModal: NgbActiveModal,
-              private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
+              private _participantRestApiService: ParticipantRestApiService) {
     this.pageSize = PropertyConstant.pageSize;
     this.isOwner = false;
   }
 
   async ngOnInit() {
     await this.initBaseGroup(this.groupPerson.person, this.groupPerson.userRole);
-    this.userRoles = this.groupPerson.person.user.userRoles;
+    this.userRoles = await this._participantRestApiService.getUserRolesByUser({id: this.groupPerson.person.user.id});
     this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
 
     if (this.groupPerson.group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM]) {
