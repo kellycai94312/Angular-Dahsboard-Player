@@ -63,7 +63,7 @@
   </div>
 </div>
 
-<div class="row mt-2 text-center text-uppercase font-weight-bold">
+<div class="row mt-2 table-header">
   <div class="col">
     <p>{{ 'fullName' | translate }}</p>
   </div>
@@ -89,7 +89,8 @@
         <h5>{{item.person?.birthDate | date:'yyyy'}}</h5>
       </div>
       <div class="col d-flex justify-content-center">
-        <app-group-item [data]="item.baseGroup"></app-group-item>
+        <app-group-item *ngIf="item.baseGroup"
+                        [data]="item.baseGroup"></app-group-item>
       </div>
       <div class="col">
         <h5>TODO: BASE ROLE!</h5>

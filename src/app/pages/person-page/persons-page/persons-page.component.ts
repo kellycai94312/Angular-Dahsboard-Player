@@ -85,12 +85,18 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
     for (const person of pageContainer.list) {
       // TODO: Get base user role
-      const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
-        id: person.id,
-        userRoleId: 10
-      });
+      let baseGroup = null;
+      try {
+        const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
+          id: person.id,
+          userRoleId: 10
+        });
+        baseGroup = baseGroupPerson.group;
+      } catch (e) {
 
-      this.personViewModels.push(new PersonViewModel(person, baseGroupPerson.group, this._participantRestApiService));
+      }
+
+      this.personViewModels.push(new PersonViewModel(person, baseGroup, this._participantRestApiService));
     }
   }
 

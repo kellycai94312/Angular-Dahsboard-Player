@@ -21,12 +21,15 @@ export class PersonViewModel {
       type: ImageType.LOGO,
       full: false
     });
-    this.imageBaseGroupLogoUrl = this._participantRestApiService.getImageUrl({
-      clazz: 'group',
-      id: baseGroup.id,
-      type: ImageType.LOGO,
-      full: false
-    });
+
+    if (baseGroup != null) {
+      this.imageBaseGroupLogoUrl = this._participantRestApiService.getImageUrl({
+        clazz: 'group',
+        id: baseGroup.id,
+        type: ImageType.LOGO,
+        full: false
+      });
+    }
   }
 
 }

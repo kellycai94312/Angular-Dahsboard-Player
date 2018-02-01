@@ -2,12 +2,12 @@
   <a routerLink="{{groupUrl}}">
     <div class="d-flex flex-row align-items-center">
       <div *ngIf="imageUrl!==null"
-           class="img-fluid logo-list"
+           class="img-fluid img-circle"
            [ngStyle]="{'background-image': 'url('+ imageUrl +')'}">
       </div>
       <div class="d-flex flex-column ml-2">
         <h5>{{data.name}}</h5>
-        <p>{{data.groupType.groupTypeEnum}}</p>
+        <p>{{data.groupType.name}}</p>
       </div>
     </div>
   </a>
