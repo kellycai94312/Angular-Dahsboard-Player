@@ -155,5 +155,6 @@
   "birthDate": "Birth date",
   "group": "Group",
   "role": "Role",
-  "yearBirth": "Year birth"
+  "yearBirth": "Year birth",
+  "baseUserRole": "Base user role"
 }

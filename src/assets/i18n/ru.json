@@ -156,5 +156,6 @@
   "birthDate": "Дата рождения",
   "group": "Группа",
   "role": "Роль",
-  "yearBirth": "Год рождения"
+  "yearBirth": "Год рождения",
+  "baseUserRole": "Основная роль"
 }

@@ -89,7 +89,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
       let baseGroup = null;
       let baseUserRole = null;
       try {
-        baseUserRole = await this._participantRestApiService.getBaseRoleByUser({id: this._localStorageService.getCurrentUserId()});
+        baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: this._localStorageService.getCurrentUserId()});
         if (baseUserRole != null) {
           const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
             id: person.id,

@@ -90,9 +90,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/userRole/{!id}/baseRole'
+    path: '/user/{!id}/baseRole'
   })
-  getBaseRoleByUser: IRestMethod<{ id: number }, UserRole>;
+  getBaseUserRoleByUser: IRestMethod<{ id: number }, UserRole>;
 
   //#endregion
 
@@ -121,6 +121,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/user/role'
   })
   changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/baseRole'
+  })
+  postBaseUserRoleByUser: IRestMethod<{ id?: number }, UserRole>;
 
   //#endregion
 
