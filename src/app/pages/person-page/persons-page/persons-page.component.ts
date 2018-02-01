@@ -14,6 +14,7 @@ import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
+import {LocalStorageService} from '../../../shared/local-storage.service';
 
 @Component({
   selector: 'app-persons-page',
@@ -35,7 +36,8 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
   private readonly _personQuery: PersonQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _localStorageService: LocalStorageService) {
     this.personViewModels = [];
 
 
@@ -84,19 +86,22 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
     const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
     for (const person of pageContainer.list) {
-      // TODO: Get base user role
       let baseGroup = null;
+      let baseUserRole = null;
       try {
-        const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
-          id: person.id,
-          userRoleId: 10
-        });
-        baseGroup = baseGroupPerson.group;
+        baseUserRole = await this._participantRestApiService.getBaseRoleByUser({id: this._localStorageService.getCurrentUserId()});
+        if (baseUserRole != null) {
+          const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
+            id: person.id,
+            userRoleId: baseUserRole.id
+          });
+          baseGroup = baseGroupPerson.group;
+        }
       } catch (e) {
 
       }
 
-      this.personViewModels.push(new PersonViewModel(person, baseGroup, this._participantRestApiService));
+      this.personViewModels.push(new PersonViewModel(person, baseUserRole, baseGroup, this._participantRestApiService));
     }
   }
 

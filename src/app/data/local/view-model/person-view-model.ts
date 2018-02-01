@@ -11,8 +11,9 @@ export class PersonViewModel {
   public baseGroup: Group;
   public imageBaseGroupLogoUrl: string;
 
-  constructor(person: Person, baseGroup: Group, private _participantRestApiService: ParticipantRestApiService) {
+  constructor(person: Person, baseUserRole: UserRole, baseGroup: Group, private _participantRestApiService: ParticipantRestApiService) {
     this.person = person;
+    this.baseUserRole = baseUserRole;
     this.baseGroup = baseGroup;
 
     this.imagePersonLogoUrl = this._participantRestApiService.getImageUrl({

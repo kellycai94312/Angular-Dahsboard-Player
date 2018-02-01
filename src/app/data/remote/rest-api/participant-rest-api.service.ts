@@ -88,6 +88,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getUserRoles: IRestMethod<void, UserRole[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/userRole/{!id}/baseRole'
+  })
+  getBaseRoleByUser: IRestMethod<{ id: number }, UserRole>;
+
   //#endregion
 
   //#region POST
