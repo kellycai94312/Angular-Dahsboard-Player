@@ -1,11 +1,100 @@
-<dx-text-box #searchDxTextBoxComponent
-             placeholder="{{'search' | translate}}"
-             mode="search"
-             showClearButton="true">
-</dx-text-box>
-<app-infinite-list [items]="persons"
+<div class="row">
+  <div class="col">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 type="date"
+                 placeholder="{{'yearBirth' | translate}}"
+                 showClearButton="true"
+                 (onValueChanged)="onYearBirthChanged($event.value)">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sexItems"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   placeholder="{{'sex' | translate}}"
+                   (onSelectionChanged)="onSexChanged($event.selectedItem)">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="userRoles"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   (onSelectionChanged)="onUserRoleChanged($event.selectedItem)"
+                   placeholder="{{'userRole' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadGroups"
+                      [pageSize]="pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'group' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onGroupChanged($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sportTypes"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   (onSelectionChanged)="onSportTypeChanged($event.selectedItem)"
+                   placeholder="{{'sportType' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadCities"
+                      [pageSize]="pageSize"
+                      [getKey]="getCityKey"
+                      [getName]="getCityName"
+                      placeholder="{{'city' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onCityChanged($event.current)">
+    </app-input-select>
+  </div>
+</div>
+
+<div class="row mt-2 table-header">
+  <div class="col">
+    <p>{{ 'fullName' | translate }}</p>
+  </div>
+  <div class="col">
+    <p>{{ 'yearBirth' | translate }}</p>
+  </div>
+  <div class="col">
+    <p>{{ 'group' | translate }}</p>
+  </div>
+  <div class="col">
+    <p>{{ 'role' | translate }}</p>
+  </div>
+</div>
+<app-infinite-list [items]="personViewModels"
                    (nextPage)="onNextPage($event)">
   <ng-template let-item>
-    <app-person [person]="item"></app-person>
+    <hr>
+    <div class="row d-flex align-items-center text-center mt-1">
+      <div class="col">
+        <app-person [person]="item.person"></app-person>
+      </div>
+      <div class="col">
+        <h5>{{item.person?.birthDate | date:'yyyy'}}</h5>
+      </div>
+      <div class="col d-flex justify-content-center">
+        <app-group-item *ngIf="item.baseGroup"
+                        [data]="item.baseGroup"></app-group-item>
+      </div>
+      <div class="col">
+        <h5>{{item?.baseUserRole?.name}}</h5>
+      </div>
+    </div>
   </ng-template>
 </app-infinite-list>

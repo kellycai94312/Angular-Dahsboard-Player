@@ -1,18 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  Renderer2
-} from '@angular/core';
-import { PageContainer } from '../../data/remote/bean/page-container';
-import { ScrollService } from './scroll/scroll.service';
-import { Subject } from 'rxjs/Rx';
-import { PropertyConstant } from '../../data/local/property-constant';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, Renderer2} from '@angular/core';
+import {PageContainer} from '../../data/remote/bean/page-container';
+import {ScrollService} from './scroll/scroll.service';
+import {Subject} from 'rxjs/Rx';
+import {PropertyConstant} from '../../data/local/property-constant';
 
 @Component({
   selector: 'app-input-select',
@@ -46,8 +36,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
     this.modelChange = new EventEmitter<any>();
     this.onChange = new EventEmitter<any>();
     this.searchChanged = new Subject<any>();
-    this.searchChanged
-      .debounceTime(400)
+    this.searchChanged.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(() => {
         this.clearData();
         this.load();
@@ -96,7 +85,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
       this.load();
       this.pageNumber += 1;
     }
-  }
+  };
 
   /** select an element from the list*/
   select(item: any): void {
@@ -119,7 +108,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
       if (e.keyCode === 38) {
         if (index >= 0) {
           this.model = index === 0 ? this.empty : this.data[index - 1];
-          scrollMenu.scrollTop = childSize * (index - 4 );
+          scrollMenu.scrollTop = childSize * (index - 4);
         } else {
           scrollMenu.scrollTop = childSize * this.data.length;
           this.model = this.data[this.data.length - 1];
@@ -130,7 +119,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
           this.model = this.empty;
         } else {
           this.model = this.data[index + 1];
-          scrollMenu.scrollTop = childSize * (index - 2 );
+          scrollMenu.scrollTop = childSize * (index - 2);
         }
       }
     } else if (e.keyCode === 13) {

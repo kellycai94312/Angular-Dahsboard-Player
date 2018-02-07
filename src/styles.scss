@@ -105,3 +105,24 @@ html, body {
   background-size: cover;
   background-position: center center;
 }
+
+.img-circle {
+  border: 2px solid $light-blue;
+  width: $logo-list-size;
+  height: $logo-list-size;
+  min-width: $logo-list-size;
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  background-size: cover;
+  background-position: center center;
+}
+
+h5 {
+  color: $light-blue;
+}
+
+.table-header {
+  text-align: center;
+  text-transform: uppercase;
+  color: #999;
+}

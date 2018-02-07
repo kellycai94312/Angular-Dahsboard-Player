@@ -88,6 +88,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getUserRoles: IRestMethod<void, UserRole[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!id}/baseRole'
+  })
+  getBaseUserRoleByUser: IRestMethod<{ id: number }, UserRole>;
+
   //#endregion
 
   //#region POST
@@ -115,6 +121,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/user/role'
   })
   changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/baseRole'
+  })
+  postBaseUserRoleByUser: IRestMethod<{ id?: number }, UserRole>;
 
   //#endregion
 
@@ -228,19 +240,19 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/country/filter?from={!from}&count={!count}&name={!name}',
+    path: '/country/filter',
   })
   getCountries: IRestMethod<QueryParams, PageContainer<Country>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/region/filter?countryId={!countryId}&count={!count}'
+    path: '/region/filter'
   })
   getRegions: IRestMethod<QueryParams, PageContainer<Region>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/city/filter?from={!from}&count={!count}&regionId={!regionId}&name={!name}'
+    path: '/city/filter'
   })
   getCities: IRestMethod<QueryParams, PageContainer<City>>;
 
@@ -415,6 +427,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/sportType/{!id}/league',
   })
   getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/league',
+  })
+  getLeagues: IRestMethod<void, League[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
