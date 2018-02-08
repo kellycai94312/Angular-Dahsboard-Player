@@ -14,7 +14,6 @@ import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
-import {LocalStorageService} from '../../../shared/local-storage.service';
 
 @Component({
   selector: 'app-persons-page',
@@ -36,8 +35,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
   private readonly _personQuery: PersonQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateObjectService: TranslateObjectService,
-              private _localStorageService: LocalStorageService) {
+              private _translateObjectService: TranslateObjectService) {
     this.personViewModels = [];
 
 
@@ -89,7 +87,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
       let baseGroup = null;
       let baseUserRole = null;
       try {
-        baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: this._localStorageService.getCurrentUserId()});
+        baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: person.user.id});
         if (baseUserRole != null) {
           const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
             id: person.id,
@@ -98,7 +96,6 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
           baseGroup = baseGroupPerson.group;
         }
       } catch (e) {
-
       }
 
       this.personViewModels.push(new PersonViewModel(person, baseUserRole, baseGroup, this._participantRestApiService));

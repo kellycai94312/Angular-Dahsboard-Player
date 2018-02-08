@@ -3,15 +3,14 @@ import {Group} from '../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute} from '@angular/router';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
-import {ImageType} from '../../../data/remote/model/image-type';
 import {GroupPersonState} from '../../../data/local/group-person-state';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
 import {TranslateService} from '@ngx-translate/core';
 import {Tab} from '../../../data/local/tab';
 import {GroupService} from '../group.service';
-import {Picture} from '../../../data/remote/model/picture';
-import {PictureClass} from '../../../data/remote/misc/picture-class';
-import {PictureType} from '../../../data/remote/misc/picture-type';
+import {Image} from '../../../data/remote/model/image';
+import {ImageClass} from '../../../data/remote/misc/image-class';
+import {ImageType} from '../../../data/remote/model/image-type';
 
 @Component({
   selector: 'app-group-page',
@@ -96,11 +95,11 @@ export class GroupPageComponent implements OnInit {
 
     if (fileList.length > 0) {
       const file: File = fileList[0];
-      const picture: Picture = new Picture();
-      picture.clazz = PictureClass.group;
-      picture.objectId = this.group.id;
-      picture.type = PictureType.LOGO;
-      await this._participantRestApiService.uploadPicture(file, picture);
+      const image: Image = new Image();
+      image.clazz = ImageClass.GROUP;
+      image.objectId = this.group.id;
+      image.type = ImageType.LOGO;
+      await this._participantRestApiService.uploadImage(file, image);
 
       this.imageLogoUrl = this._participantRestApiService.getImageUrl({
         clazz: 'group',
