@@ -1,4 +1,4 @@
-export enum MeasureSpecEnum {
+export enum MeasureEnum {
   HEIGHT,
   WEIGHT,
   MAX_HEART_RATE,

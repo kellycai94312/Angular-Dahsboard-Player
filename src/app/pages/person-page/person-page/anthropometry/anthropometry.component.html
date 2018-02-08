@@ -2,7 +2,7 @@
      *ngFor="let pa of anthropometry">
   <div class="col-6" *ngIf="pa.value || isEditAllow">
     <div class="form-group p-1">
-      <label for="measure">{{pa.measureSpec.name}}</label>
+      <label for="measure">{{pa.measure.name}}</label>
       <dx-text-box id="measure"
                    [(value)]="pa.value"
                    class="w-100"
