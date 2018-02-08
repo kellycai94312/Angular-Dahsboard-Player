@@ -1,10 +1,8 @@
 <div *ngIf="data!=null">
   <a routerLink="{{groupUrl}}">
     <div class="d-flex flex-row align-items-center">
-      <div *ngIf="imageUrl!==null"
-           class="img-fluid img-circle"
-           [ngStyle]="{'background-image': 'url('+ imageUrl +')'}">
-      </div>
+      <img [src]="imageUrl"
+           width="80">
       <div class="d-flex flex-column ml-2">
         <h5>{{data.name}}</h5>
         <p>{{data.groupType.name}}</p>

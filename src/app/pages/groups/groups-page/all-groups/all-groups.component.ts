@@ -5,8 +5,6 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {Group} from '../../../../data/remote/model/group/base/group';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
 import {League} from '../../../../data/remote/model/group/team/league';
@@ -27,13 +25,12 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
-  public dataSource: any = {};
+  public dataSource: any;
 
   public groupTypes: GroupType[];
   public sportTypes: SportType[];
   public ageGroups: AgeGroup[];
   public leagues: League[];
-  public groups: Group[];
 
   public selectedCountry: Country;
   public selectedRegion: Region;
@@ -46,7 +43,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   private readonly _groupQuery: GroupQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService) {
-    this.groups = [];
+    this.dataSource = {};
 
     this.pageSize = PropertyConstant.pageSize;
 
@@ -100,10 +97,6 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   public onGroupTypeChanged(groupType: GroupType) {
     this._selectedGroupType = groupType;
-    this.initCustomStore();
-  }
-
-  public onNextPage(pageQuery: PageQuery) {
     this.initCustomStore();
   }
 

@@ -5,7 +5,14 @@ import {HttpClientModule} from '@angular/common/http';
 import {PersonPageComponent} from './person-page/person-page.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {
-  DxDateBoxModule, DxFormModule, DxPopupModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule,
+  DxDataGridModule,
+  DxDateBoxModule,
+  DxFormModule,
+  DxPopupModule,
+  DxSelectBoxModule,
+  DxTemplateModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
   DxValidatorModule
 } from 'devextreme-angular';
 import {TranslateModule} from '@ngx-translate/core';
@@ -54,7 +61,8 @@ import {PersonModule} from '../../components/person/person.module';
     InfiniteListModule,
     ModalSelectModule,
     GroupPageModule,
-    PersonModule
+    PersonModule,
+    DxDataGridModule
   ],
   declarations: [
     PersonPageComponent,

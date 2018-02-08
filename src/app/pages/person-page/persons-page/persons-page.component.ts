@@ -3,7 +3,6 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {Sex} from '../../../data/local/sex';
@@ -14,6 +13,7 @@ import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
+import CustomStore from 'devextreme/data/custom_store';
 
 @Component({
   selector: 'app-persons-page',
@@ -25,7 +25,8 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public personViewModels: PersonViewModel[];
+  public dataSource: any;
+
   public sexItems: Sex[];
   public userRoles: UserRole[];
   public sportTypes: SportType[];
@@ -36,15 +37,15 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService) {
-    this.personViewModels = [];
-
-
+    this.dataSource = {};
     this._searchText = '';
     this.pageSize = PropertyConstant.pageSize;
 
     this._personQuery = new GroupQuery();
     this._personQuery.from = 0;
     this._personQuery.count = PropertyConstant.pageSize;
+
+    this.initCustomStore();
   }
 
   async ngOnInit() {
@@ -64,25 +65,25 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(async value => {
+      .subscribe(value => {
         this._searchText = value;
-        await this.updateListAsync();
+        this.initCustomStore();
       });
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
+  private initCustomStore() {
+    this.dataSource.store = new CustomStore({
+      load: this.loadData
+    });
   }
 
-  public async updateListAsync(from: number = 0) {
-    this._personQuery.from = from;
+  loadData = async (loadOptions: any): Promise<any> => {
+    this._personQuery.from = loadOptions.skip;
     this._personQuery.fullName = this._searchText;
 
-    if (from <= 0) {
-      this.personViewModels = [];
-    }
-
     const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
+    const data: PersonViewModel[] = [];
+
     for (const person of pageContainer.list) {
       let baseGroup = null;
       let baseUserRole = null;
@@ -97,38 +98,42 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
         }
       } catch (e) {
       }
-
-      this.personViewModels.push(new PersonViewModel(person, baseUserRole, baseGroup, this._participantRestApiService));
+      data.push(new PersonViewModel(person, baseUserRole, baseGroup, this._participantRestApiService));
     }
-  }
 
-  public async onYearBirthChanged(value: Date) {
+    return {
+      data: data,
+      totalCount: pageContainer.total
+    };
+  };
+
+  public onYearBirthChanged(value: Date) {
     if (value != null) {
       this._personQuery.yearBirth = value.getFullYear();
     } else {
       delete this._personQuery.yearBirth;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
-  public async onSexChanged(value: Sex) {
+  public onSexChanged(value: Sex) {
     if (value != null) {
       this._personQuery.sex = SexEnum[value.sexEnum].toString();
     } else {
       delete this._personQuery.sex;
     }
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
-  public async onUserRoleChanged(value: UserRole) {
+  public onUserRoleChanged(value: UserRole) {
     if (value != null) {
       this._personQuery.userRoleId = value.id;
     } else {
       delete this._personQuery.userRoleId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   loadGroups = async (from: number, searchText: string) => {
@@ -147,24 +152,24 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public async onGroupChanged(value: Group) {
+  public onGroupChanged(value: Group) {
     if (value != null) {
       this._personQuery.groupId = value.id;
     } else {
       delete this._personQuery.groupId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
-  public async onSportTypeChanged(value: SportType) {
+  public onSportTypeChanged(value: SportType) {
     if (value != null) {
       this._personQuery.sportTypeId = value.id;
     } else {
       delete this._personQuery.sportTypeId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   loadCities = async (from: number, searchText: string) => {
@@ -183,14 +188,14 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public async onCityChanged(value: City) {
+  public onCityChanged(value: City) {
     if (value != null) {
       this._personQuery.cityId = value.id;
     } else {
       delete this._personQuery.cityId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
 }

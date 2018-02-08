@@ -6,17 +6,19 @@ import {ParticipantRestApiService} from '../../remote/rest-api/participant-rest-
 
 export class PersonViewModel {
   public person: Person;
+  public url: string;
   public imagePersonLogoUrl: string;
   public baseUserRole: UserRole;
   public baseGroup: Group;
   public imageBaseGroupLogoUrl: string;
 
-  constructor(person: Person, baseUserRole: UserRole, baseGroup: Group, private _participantRestApiService: ParticipantRestApiService) {
+  constructor(person: Person, baseUserRole: UserRole, baseGroup: Group, participantRestApiService: ParticipantRestApiService) {
     this.person = person;
     this.baseUserRole = baseUserRole;
     this.baseGroup = baseGroup;
+    this.url = `/person/${person.id}`;
 
-    this.imagePersonLogoUrl = this._participantRestApiService.getImageUrl({
+    this.imagePersonLogoUrl = participantRestApiService.getImageUrl({
       clazz: 'person',
       id: person.id,
       type: ImageType.LOGO,
@@ -24,7 +26,7 @@ export class PersonViewModel {
     });
 
     if (baseGroup != null) {
-      this.imageBaseGroupLogoUrl = this._participantRestApiService.getImageUrl({
+      this.imageBaseGroupLogoUrl = participantRestApiService.getImageUrl({
         clazz: 'group',
         id: baseGroup.id,
         type: ImageType.LOGO,
