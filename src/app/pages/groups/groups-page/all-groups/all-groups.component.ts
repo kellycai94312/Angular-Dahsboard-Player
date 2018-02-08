@@ -39,12 +39,9 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public readonly pageSize: number;
 
   private _searchText: string;
-  private _selectedGroupType: GroupType;
   private readonly _groupQuery: GroupQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService) {
-    this.dataSource = {};
-
     this.pageSize = PropertyConstant.pageSize;
 
     this._groupQuery = new GroupQuery();
@@ -70,6 +67,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   }
 
   private initCustomStore() {
+    this.dataSource = {};
     this.dataSource.store = new CustomStore({
       load: this.loadData
     });
@@ -77,6 +75,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   loadData = async (loadOptions: any): Promise<any> => {
     this._groupQuery.from = loadOptions.skip;
+    this._groupQuery.name = this._searchText;
 
     const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
     const data: GroupViewModel[] = [];
@@ -95,8 +94,13 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     };
   };
 
-  public onGroupTypeChanged(groupType: GroupType) {
-    this._selectedGroupType = groupType;
+  public onGroupTypeChanged(value: GroupType) {
+    if (value != null) {
+      this._groupQuery.groupTypeId = value.id;
+    } else {
+      delete this._groupQuery.groupTypeId;
+    }
+
     this.initCustomStore();
   }
 

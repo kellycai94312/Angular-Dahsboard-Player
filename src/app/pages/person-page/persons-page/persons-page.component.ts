@@ -37,7 +37,6 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService) {
-    this.dataSource = {};
     this._searchText = '';
     this.pageSize = PropertyConstant.pageSize;
 
@@ -72,6 +71,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
   }
 
   private initCustomStore() {
+    this.dataSource = {};
     this.dataSource.store = new CustomStore({
       load: this.loadData
     });
