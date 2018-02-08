@@ -8,7 +8,15 @@ import {GroupPageRoutingModule} from './group-page-routing.module';
 import {LayoutService} from '../../layout/shared/layout.service';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {DxButtonModule, DxCheckBoxModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
+import {
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
+  DxSelectBoxModule,
+  DxTemplateModule,
+  DxTextBoxModule,
+  DxValidatorModule
+} from 'devextreme-angular';
 import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
 import {GroupItemComponent} from './group-item/group-item.component';
 import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
@@ -41,7 +49,9 @@ import {PersonModule} from '../../components/person/person.module';
     InputSelectModule,
     NgbModule,
     PersonModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
+    DxDataGridModule,
+    DxTemplateModule
   ],
   exports: [
     GroupItemComponent

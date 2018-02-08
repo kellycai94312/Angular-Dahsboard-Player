@@ -6,7 +6,6 @@ import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {AppHelper} from '../../../../utils/app-helper';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
@@ -15,6 +14,9 @@ import {City} from '../../../../data/remote/model/city';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {Country} from '../../../../data/remote/model/country';
 import {Region} from '../../../../data/remote/model/region';
+import CustomStore from 'devextreme/data/custom_store';
+import {ImageType} from '../../../../data/remote/model/image-type';
+import {GroupViewModel} from '../../../../data/local/view-model/group-view-model';
 
 @Component({
   selector: 'app-all-groups',
@@ -25,6 +27,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
+  public dataSource: any = {};
 
   public groupTypes: GroupType[];
   public sportTypes: SportType[];
@@ -50,6 +53,8 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     this._groupQuery = new GroupQuery();
     this._groupQuery.from = 0;
     this._groupQuery.count = PropertyConstant.pageSize;
+
+    this.initCustomStore();
   }
 
   async ngOnInit() {
@@ -61,63 +66,75 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(async value => {
+      .subscribe(value => {
         this._searchText = value;
-        await this.updateListAsync();
+        this.initCustomStore();
       });
   }
 
-  public async onGroupTypeChanged(groupType: GroupType) {
-    this._selectedGroupType = groupType;
-    await this.updateListAsync();
+  private initCustomStore() {
+    this.dataSource.store = new CustomStore({
+      load: this.loadData
+    });
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
-
-  public async updateListAsync(from: number = 0) {
-    this._groupQuery.from = from;
-    this._groupQuery.name = this._searchText;
-
-    if (this._selectedGroupType != null) {
-      this._groupQuery.groupTypeId = this._selectedGroupType.id;
-    } else {
-      delete this._groupQuery.groupTypeId;
-    }
+  loadData = async (loadOptions: any): Promise<any> => {
+    this._groupQuery.from = loadOptions.skip;
 
     const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
-    this.groups = AppHelper.pushItemsInList(from, this.groups, pageContainer);
+    const data: GroupViewModel[] = [];
+    for (let i = 0; i < pageContainer.list.length; i++) {
+      const imageLogoUrl = this._participantRestApiService.getImageUrl({
+        clazz: 'group',
+        id: pageContainer.list[i].id,
+        type: ImageType.LOGO
+      });
+      data.push(new GroupViewModel(pageContainer.list[i], imageLogoUrl));
+    }
+
+    return {
+      data: data,
+      totalCount: pageContainer.total
+    };
+  };
+
+  public onGroupTypeChanged(groupType: GroupType) {
+    this._selectedGroupType = groupType;
+    this.initCustomStore();
   }
 
-  public async onSportTypeChanged(value: SportType) {
+  public onNextPage(pageQuery: PageQuery) {
+    this.initCustomStore();
+  }
+
+  public onSportTypeChanged(value: SportType) {
     if (value != null) {
       this._groupQuery.sportTypeId = value.id;
     } else {
       delete this._groupQuery.sportTypeId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
-  public async onAgeGroupChanged(value: AgeGroup) {
+  public onAgeGroupChanged(value: AgeGroup) {
     if (value != null) {
       this._groupQuery.ageGroupId = value.id;
     } else {
       delete this._groupQuery.ageGroupId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
-  public async onLeagueChanged(value: League) {
+  public onLeagueChanged(value: League) {
     if (value != null) {
       this._groupQuery.leagueId = value.id;
     } else {
       delete this._groupQuery.leagueId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   //#region Country filter
@@ -138,7 +155,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public async onCountryChanged(value: Country) {
+  public onCountryChanged(value: Country) {
     if (value != null) {
       this._groupQuery.countryId = value.id;
     } else {
@@ -151,7 +168,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     this.selectedRegion = null;
     this.selectedCity = null;
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   //#endregion
@@ -175,7 +192,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public async onRegionChanged(value: Region) {
+  public onRegionChanged(value: Region) {
     if (value != null) {
       this._groupQuery.regionId = value.id;
     } else {
@@ -184,7 +201,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     delete this._groupQuery.cityId;
     this.selectedCity = null;
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   //#endregion
@@ -209,14 +226,14 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public async onCityChanged(value: City) {
+  public onCityChanged(value: City) {
     if (value != null) {
       this._groupQuery.cityId = value.id;
     } else {
       delete this._groupQuery.cityId;
     }
 
-    await this.updateListAsync();
+    this.initCustomStore();
   }
 
   //#endregion
