@@ -157,5 +157,6 @@
   "role": "Role",
   "yearBirth": "Year birth",
   "baseUserRole": "Base user role",
-  "image": "Image"
+  "image": "Image",
+  "person": "Person"
 }

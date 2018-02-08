@@ -11,7 +11,6 @@ import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../data/remote/model/sport-role';
 import {GroupTeam} from '../../../data/remote/model/group/team/group-team';
-import {GroupService} from '../group.service';
 
 @Component({
   selector: 'app-group-person-modal',
@@ -110,7 +109,7 @@ export class GroupPersonModalComponent implements OnInit {
     });
 
     try {
-      const mentorId = this.groupPerson.mentor === null || this.groupPerson.mentor === undefined ? null : this.groupPerson.mentor.id;
+      const mentorId = this.groupPerson.mentor === null || this.groupPerson.mentor === undefined ? null : this.groupPerson.mentor.person.id;
       await  this._participantRestApiService.postPersonMentor({id: mentorId}, {}, {
         groupId: this.groupPerson.group.id,
         personId: this.groupPerson.person.id

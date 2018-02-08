@@ -85,20 +85,9 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     const data: PersonViewModel[] = [];
 
     for (const person of pageContainer.list) {
-      let baseGroup = null;
-      let baseUserRole = null;
-      try {
-        baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: person.user.id});
-        if (baseUserRole != null) {
-          const baseGroupPerson = await this._participantRestApiService.getBaseGroup({
-            id: person.id,
-            userRoleId: baseUserRole.id
-          });
-          baseGroup = baseGroupPerson.group;
-        }
-      } catch (e) {
-      }
-      data.push(new PersonViewModel(person, baseUserRole, baseGroup, this._participantRestApiService));
+      const personViewModel = new PersonViewModel(person, this._participantRestApiService);
+      await personViewModel.init();
+      data.push(personViewModel);
     }
 
     return {

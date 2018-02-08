@@ -1,12 +1,13 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import {AppHelper} from '../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
 import {GroupService} from '../../group.service';
+import {GroupPersonViewModel} from '../../../../data/local/view-model/group-person-view-model';
+import {GroupPersonModalComponent} from '../../group-person-modal/group-person-modal.component';
+import CustomStore from 'devextreme/data/custom_store';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-members',
@@ -17,21 +18,20 @@ export class MembersComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
-
-  public groupPersons: GroupPerson[];
+  public dataSource: any;
 
   private _searchText: string;
   private readonly _groupPersonQuery: GroupPersonQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
-    this.groupPersons = [];
+              private _modalService: NgbModal,
+              public groupService: GroupService) {
     this._searchText = '';
 
     this._groupPersonQuery = new GroupPersonQuery();
     this._groupPersonQuery.from = 0;
     this._groupPersonQuery.count = PropertyConstant.pageSize;
-    this._groupPersonQuery.id = this._groupService.getGroup().id;
+    this._groupPersonQuery.id = this.groupService.getGroup().id;
     this._groupPersonQuery.approved = true;
   }
 
@@ -42,20 +42,39 @@ export class MembersComponent implements OnInit, AfterViewInit {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this._searchText = value;
-        await this.updateListAsync();
+        this.initCustomStore();
       });
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
+  private initCustomStore() {
+    this.dataSource = {};
+    this.dataSource.store = new CustomStore({
+      load: this.loadData
+    });
   }
 
-  public async updateListAsync(from: number = 0) {
-    this._groupPersonQuery.from = from;
+  loadData = async (loadOptions: any): Promise<any> => {
+    this._groupPersonQuery.from = loadOptions.skip;
     this._groupPersonQuery.fullName = this._searchText;
 
     const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(this._groupPersonQuery);
-    this.groupPersons = AppHelper.pushItemsInList(from, this.groupPersons, pageContainer);
+    const data: GroupPersonViewModel[] = [];
+    for (let i = 0; i < pageContainer.list.length; i++) {
+      const groupPersonViewModel = new GroupPersonViewModel(pageContainer.list[i], this._participantRestApiService);
+      await groupPersonViewModel.init();
+      console.log(groupPersonViewModel);
+      data.push(groupPersonViewModel);
+    }
+
+    return {
+      data: data,
+      totalCount: pageContainer.total
+    };
+  };
+
+  public onEdit(groupPersonViewModel: GroupPersonViewModel) {
+    const modalRef = this._modalService.open(GroupPersonModalComponent, {size: 'lg'});
+    modalRef.componentInstance.groupPerson = groupPersonViewModel.groupPerson;
   }
 
 }
