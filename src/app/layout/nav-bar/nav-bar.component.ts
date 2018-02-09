@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { LocalStorageService } from '../../shared/local-storage.service';
-import { Person } from '../../data/remote/model/person';
-import { Router } from '@angular/router';
-import { LayoutService } from '../shared/layout.service';
-import { PictureService } from '../../shared/picture.service';
-import { PictureClass } from '../../data/remote/misc/picture-class';
-import { ProfileService } from '../shared/profile.service';
+import {Component, OnInit} from '@angular/core';
+import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {LocalStorageService} from '../../shared/local-storage.service';
+import {Person} from '../../data/remote/model/person';
+import {Router} from '@angular/router';
+import {LayoutService} from '../shared/layout.service';
+import {ImageService} from '../../shared/image.service';
+import {ImageClass} from '../../data/remote/misc/image-class';
+import {ProfileService} from '../shared/profile.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -23,7 +23,7 @@ export class NavBarComponent implements OnInit {
               private _localStorageService: LocalStorageService,
               private _router: Router,
               private _layoutService: LayoutService,
-              private _logoService: PictureService,
+              private _logoService: ImageService,
               private _profileService: ProfileService) {
     this.person = new Person();
     this.personProfileRouterLink = '/person/' + this._localStorageService.getCurrentPersonId();
@@ -37,7 +37,7 @@ export class NavBarComponent implements OnInit {
       this._router.navigate(['/registration/person']);
     }
     this.person = await this._profileService.getPerson(personId);
-    this.logo = this._logoService.getLogo(PictureClass.person, this.person.id);
+    this.logo = this._logoService.getLogo(ImageClass.PERSON, this.person.id);
   }
 
   public async signOut(event: any) {

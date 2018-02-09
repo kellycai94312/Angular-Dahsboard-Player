@@ -156,5 +156,7 @@
   "group": "Group",
   "role": "Role",
   "yearBirth": "Year birth",
-  "baseUserRole": "Base user role"
+  "baseUserRole": "Base user role",
+  "image": "Image",
+  "person": "Person"
 }

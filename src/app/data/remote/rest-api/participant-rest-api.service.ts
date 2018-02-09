@@ -15,7 +15,7 @@ import {UserRole} from '../model/user-role';
 import {ListRequest} from '../request/list-request';
 import {SportType} from '../model/sport-type';
 import {HttpClient} from '@angular/common/http';
-import {Picture} from '../model/picture';
+import {Image} from '../model/image';
 import {Address} from '../model/address';
 import {PersonAnthropometry} from '../model/person-anthropometry';
 import {EmailRequest} from '../request/email-request';
@@ -405,18 +405,18 @@ export class ParticipantRestApiService extends Rest {
   //#region Image
 
   getImageUrl(imageQuery: ImageQuery): string {
-    let url = `${RestUrl}/picture/download?clazz=${imageQuery.clazz}&id=${imageQuery.id}&type=${imageQuery.type}`;
+    let url = `${RestUrl}/image/download?clazz=${imageQuery.clazz}&id=${imageQuery.id}&type=${imageQuery.type}`;
     if (imageQuery.full != null) {
       url += `&full=${imageQuery.full}`;
     }
     return url;
   }
 
-  uploadPicture(file: File, picture: Picture): Promise<Picture> {
+  uploadImage(file: File, image: Image): Promise<Image> {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    formData.append('picture', new Blob([JSON.stringify(picture)], {type: 'application/json'}));
-    return this.http.post<Picture>(`${RestUrl}/picture/upload`, formData, {withCredentials: true})
+    formData.append('image', new Blob([JSON.stringify(image)], {type: 'application/json'}));
+    return this.http.post<Image>(`${RestUrl}/image/upload`, formData, {withCredentials: true})
       .toPromise();
   }
 

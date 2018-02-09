@@ -63,38 +63,49 @@
   </div>
 </div>
 
-<div class="row mt-2 table-header">
-  <div class="col">
-    <p>{{ 'fullName' | translate }}</p>
-  </div>
-  <div class="col">
-    <p>{{ 'yearBirth' | translate }}</p>
-  </div>
-  <div class="col">
-    <p>{{ 'group' | translate }}</p>
-  </div>
-  <div class="col">
-    <p>{{ 'role' | translate }}</p>
-  </div>
-</div>
-<app-infinite-list [items]="personViewModels"
-                   (nextPage)="onNextPage($event)">
-  <ng-template let-item>
-    <hr>
-    <div class="row d-flex align-items-center text-center mt-1">
-      <div class="col">
-        <app-person [person]="item.person"></app-person>
+<dx-data-grid class="mt-2"
+              [dataSource]="dataSource"
+              rowTemplate="rowTemplateName"
+              columnAutoWidth="true">
+
+  <dxi-column caption="{{ 'image' | translate }}"
+              width="80">
+  </dxi-column>
+  <dxi-column caption="{{ 'fullName' | translate }}"></dxi-column>
+  <dxi-column caption="{{ 'yearBirth' | translate }}"></dxi-column>
+  <dxi-column caption="{{ 'role' | translate }}"></dxi-column>
+  <dxi-column caption="{{ 'group' | translate }}"></dxi-column>
+
+  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+  <dxo-scrolling mode="infinite"></dxo-scrolling>
+  <dxo-sorting mode="none"></dxo-sorting>
+  <dxo-remote-operations [sorting]="false"
+                         [paging]="true">
+  </dxo-remote-operations>
+
+  <tbody *dxTemplate="let row of 'rowTemplateName'">
+  <tr [routerLink]="row.data.url">
+    <td>
+      <div *ngIf="row.data.imagePersonLogoUrl!==null"
+           class="img-fluid img-circle"
+           [ngStyle]="{'background-image': 'url('+ row.data.imagePersonLogoUrl +')'}">
       </div>
-      <div class="col">
-        <h5>{{item.person?.birthDate | date:'yyyy'}}</h5>
-      </div>
-      <div class="col d-flex justify-content-center">
-        <app-group-item *ngIf="item.baseGroup"
-                        [data]="item.baseGroup"></app-group-item>
-      </div>
-      <div class="col">
-        <h5>{{item?.baseUserRole?.name}}</h5>
-      </div>
-    </div>
-  </ng-template>
-</app-infinite-list>
+    </td>
+    <td>
+      <h5>{{row.data.person?.firstName}}<br>
+        {{row.data.person?.lastName}}<br>
+        {{row.data.person?.patronymic}}</h5>
+    </td>
+    <td>
+      <h5>{{row.data.person?.birthDate | date:'yyyy'}}</h5>
+    </td>
+    <td>
+      <h5>{{row.data?.baseUserRole?.name}}</h5></td>
+    <td>
+      <app-group-item *ngIf="row.data.baseGroup"
+                      [data]="row.data.baseGroup">
+      </app-group-item>
+    </td>
+  </tr>
+  </tbody>
+</dx-data-grid>
