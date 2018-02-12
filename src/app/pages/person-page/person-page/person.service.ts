@@ -34,6 +34,7 @@ export class PersonService {
   }
 
   emitUserRoleSelect(change: UserRole) {
+    this.userRoleSelectDefault = change;
     this.userRoleSelect.next(change);
   }
 
@@ -43,6 +44,7 @@ export class PersonService {
   }
 
   emitBaseGroupChange(change: GroupPerson) {
+    this.baseGroupSelectDefault = change;
     this.baseGroupChange.next(change);
   }
 
