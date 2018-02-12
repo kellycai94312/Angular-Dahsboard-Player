@@ -71,6 +71,11 @@ export class GroupsComponent implements OnInit {
   }
 
   async updateListAsync(from: number = 0) {
+    if (this.selectedPublicUserRole === null) {
+      this.groupPersons = [];
+      return;
+    }
+
     this._groupQuery.from = from;
     this._groupQuery.name = this._searchText;
 

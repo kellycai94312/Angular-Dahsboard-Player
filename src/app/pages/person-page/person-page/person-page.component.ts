@@ -58,37 +58,44 @@ export class PersonPageComponent implements OnInit {
       {
         name: 'persons.person.personal.section',
         route: 'personal',
-        restrict: []
+        restrictedRoles: [],
+        hasAnyRole: false
       },
       {
         name: 'persons.person.anthropometry.section',
         route: 'anthropometry',
-        restrict: [UserRoleEnum.TRAINER]
+        restrictedRoles: [UserRoleEnum.TRAINER],
+        hasAnyRole: true
       },
       {
         name: 'persons.person.physiology.section',
         route: 'physiology',
-        restrict: [UserRoleEnum.TRAINER]
+        restrictedRoles: [UserRoleEnum.TRAINER],
+        hasAnyRole: true
       },
       {
         name: 'persons.person.contact.section',
         route: 'contact',
-        restrict: []
+        restrictedRoles: [],
+        hasAnyRole: false
       },
       {
         name: 'persons.person.testsResults.section',
         route: 'tests_results',
-        restrict: [UserRoleEnum.TRAINER]
+        restrictedRoles: [UserRoleEnum.TRAINER],
+        hasAnyRole: true
       },
       {
         name: 'persons.person.events.section',
         route: 'events',
-        restrict: [UserRoleEnum.TRAINER]
+        restrictedRoles: [UserRoleEnum.TRAINER],
+        hasAnyRole: true
       },
       {
         name: 'persons.person.groups.section',
         route: 'groups',
-        restrict: []
+        restrictedRoles: [],
+        hasAnyRole: true
       }
     ];
     this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {
@@ -97,7 +104,7 @@ export class PersonPageComponent implements OnInit {
   }
 
   isTabOpen(tab: Tab): boolean {
-    return tab && this.roleToggle && tab.restrict.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0;
+    return tab && (!tab.hasAnyRole || this.roleToggle && tab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0);
   }
 
   async onLogoChange(event) {
@@ -130,11 +137,9 @@ export class PersonPageComponent implements OnInit {
     ref.componentInstance.onSave = async () => {
       try {
         this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
-        if (this.userRoles.length) {
-          this.roleToggle = this.userRoles[0];
-          this.onUserRoleChange();
-        }
+        this.roleToggle = this.userRoles.length ? this.userRoles[0] : null;
         ref.dismiss();
+        this.onUserRoleChange();
       } catch (e) {
         if (e.status === 409) {
           notify(errorMessage, 'warning', 3000);
@@ -160,40 +165,43 @@ export class PersonPageComponent implements OnInit {
       sportType.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1;
     ref.componentInstance.onSave = async () => {
       this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(personSportTypes));
-      if (this.personSportTypes.length) {
-        this.sportTypeToggle = this.personSportTypes[0];
-        this.onSportTypeChange();
-      }
+      this.sportTypeToggle = this.personSportTypes.length ? this.personSportTypes[0] : null;
       ref.dismiss();
+      this.onSportTypeChange();
     };
   }
 
   async onUserRoleChange() {
-    this.queryParams['userRole'] = this.roleToggle.id;
-    /*redirect to personal tab when user selects role in restrict array*/
+    this.queryParams['userRole'] = this.roleToggle ? this.roleToggle.id : null;
+    /*redirect to personal tab when user selects role in restrictedRoles array*/
     const currentTab = this.tabs.filter(t => this.router.url.includes(t.route))[0];
-    if (currentTab && currentTab.restrict.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
+    if (!this.roleToggle || currentTab && currentTab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
       this.router.navigate(['./'], {relativeTo: this.route, queryParams: this.queryParams});
     } else {
       this.router.navigate([], {queryParams: this.queryParams});
     }
     this._personService.emitUserRoleSelect(this.roleToggle);
 
-    // load base group
-    try {
-      this.baseGroup = await this.participantRestApiService.getBaseGroup({
-        id: this.person.id,
-        userRoleId: this.roleToggle.id
-      });
-    } catch (e) {
+    if (this.roleToggle) {
+      // load base group
+      try {
+        this.baseGroup = await this.participantRestApiService.getBaseGroup({
+          id: this.person.id,
+          userRoleId: this.roleToggle.id
+        });
+      } catch (e) {
+        this.baseGroup = null;
+      }
+    } else {
       this.baseGroup = null;
     }
+
     this._personService.emitBaseGroupSelect(this.baseGroup);
   }
 
   async onSportTypeChange() {
     this._personService.emitSportTypeSelect(this.sportTypeToggle);
-    this.queryParams['sportType'] = this.sportTypeToggle.id;
+    this.queryParams['sportType'] = this.sportTypeToggle ? this.sportTypeToggle.id : null;
     this.router.navigate([], {queryParams: this.queryParams});
   }
 
