@@ -416,7 +416,7 @@ export class ParticipantRestApiService extends Rest {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
     formData.append('image', new Blob([JSON.stringify(image)], {type: 'application/json'}));
-    return this.http.post<Image>(`${RestUrl}/image/upload`, formData, {withCredentials: true})
+    return this.http.post<Image>(`${RestUrl}/image`, formData, {withCredentials: true})
       .toPromise();
   }
 
