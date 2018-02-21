@@ -158,5 +158,8 @@
   "yearBirth": "Year birth",
   "baseUserRole": "Base user role",
   "image": "Image",
-  "person": "Person"
+  "person": "Person",
+  "date": "Date",
+  "units": "Units",
+  "value": "Value"
 }

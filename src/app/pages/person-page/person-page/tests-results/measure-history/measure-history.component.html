@@ -1,0 +1,38 @@
+<div class="text-light bg-primary p-1 mb-2">История по тесту "{{exerciseMeasure.baseExercise.name}}" параметра "{{exerciseMeasure.measure.measureEnum}}"</div>
+<div class="d-flex flex-row">
+  <label class="pr-3">from</label>
+  <dx-date-box id="dateFrom"
+               type="date"
+               [showClearButton]="true"
+               (onValueChanged)="onDateFromChange($event)"
+               class="w-100">
+  </dx-date-box>
+  <label class="pl-3 pr-3">to</label>
+  <dx-date-box id="dateTo"
+               type="date"
+               [showClearButton]="true"
+               (onValueChanged)="onDateToChange($event)"
+               class="w-100">
+  </dx-date-box>
+</div>
+<table class="table table-bordered table-hover table-sm mt-1">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-4">{{ 'date' | translate }}</th>
+    <th class="col-4">{{ 'units' | translate }}</th>
+    <th class="col-4">{{ 'value' | translate }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list [items]="measureValues"
+                     (nextPage)="onNextPage($event)">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-sm-4">{{item?.created | date:'dd.MM.yyyy'}}</td>
+        <td class="col-sm-4">{{item?.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
+        <td class="col-sm-4">{{item?.value}}</td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>

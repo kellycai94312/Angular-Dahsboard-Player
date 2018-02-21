@@ -1,39 +1,51 @@
-import {Injectable} from '@angular/core';
-import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
-import {Session} from '../model/session';
-import {Auth} from '../model/auth';
-import {PageContainer} from '../bean/page-container';
-import {Country} from '../model/country';
-import {Region} from '../model/region';
-import {City} from '../model/city';
-import {User} from '../model/user';
-import {VerificationRequest} from '../model/verification-request';
-import {IdentifiedObject} from '../base/identified-object';
-import {Person} from '../model/person';
-import {QueryParams} from './query-params';
-import {UserRole} from '../model/user-role';
-import {ListRequest} from '../request/list-request';
-import {SportType} from '../model/sport-type';
-import {HttpClient} from '@angular/common/http';
-import {Image} from '../model/image';
-import {Address} from '../model/address';
-import {PersonAnthropometry} from '../model/person-anthropometry';
-import {EmailRequest} from '../request/email-request';
-import {environment} from '../../../../environments/environment';
-import {AnthropometryRequest} from '../request/anthropometry-request';
-import {GroupType} from '../model/group/base/group-type';
-import {Group} from '../model/group/base/group';
-import {GroupQuery} from './query/group-query';
-import {ImageQuery} from './query/image-query';
-import {GroupPerson} from '../model/group/group-person';
-import {SubGroup} from '../model/group/sub-group';
-import {GroupPersonQuery} from './query/group-person-query';
-import {RoleQuery} from './query/role-query';
-import {TeamType} from '../model/group/team/team-type';
-import {League} from '../model/group/team/league';
-import {AgeGroup} from '../model/age-group';
-import {PersonQuery} from './query/person-query';
-import {SportRole} from '../model/sport-role';
+import { Injectable } from '@angular/core';
+import {
+  IRestMethod,
+  IRestMethodStrict,
+  Rest,
+  RestAction,
+  RestHandler,
+  RestParams,
+  RestRequestMethod
+} from 'rest-core';
+import { Session } from '../model/session';
+import { Auth } from '../model/auth';
+import { PageContainer } from '../bean/page-container';
+import { Country } from '../model/country';
+import { Region } from '../model/region';
+import { City } from '../model/city';
+import { User } from '../model/user';
+import { VerificationRequest } from '../model/verification-request';
+import { IdentifiedObject } from '../base/identified-object';
+import { Person } from '../model/person';
+import { QueryParams } from './query-params';
+import { UserRole } from '../model/user-role';
+import { ListRequest } from '../request/list-request';
+import { SportType } from '../model/sport-type';
+import { HttpClient } from '@angular/common/http';
+import { Image } from '../model/image';
+import { Address } from '../model/address';
+import { PersonAnthropometry } from '../model/person-anthropometry';
+import { EmailRequest } from '../request/email-request';
+import { environment } from '../../../../environments/environment';
+import { AnthropometryRequest } from '../request/anthropometry-request';
+import { GroupType } from '../model/group/base/group-type';
+import { Group } from '../model/group/base/group';
+import { GroupQuery } from './query/group-query';
+import { ImageQuery } from './query/image-query';
+import { GroupPerson } from '../model/group/group-person';
+import { SubGroup } from '../model/group/sub-group';
+import { GroupPersonQuery } from './query/group-person-query';
+import { RoleQuery } from './query/role-query';
+import { TeamType } from '../model/group/team/team-type';
+import { League } from '../model/group/team/league';
+import { AgeGroup } from '../model/age-group';
+import { PersonQuery } from './query/person-query';
+import { SportRole } from '../model/sport-role';
+import { MeasureTemplateQuery } from './query/measure-template-query';
+import { ExerciseResult } from '../bean/exercise-result';
+import { ExerciseExecMeasureValue } from '../model/training/exercise-exec-measure-value';
+import { ExerciseMeasure } from '../model/exercise/exercise-measure';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -177,6 +189,28 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!id}/role/{!userRoleId}/groups',
   })
   getPersonGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
+
+  //region MeasureTemplate
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/measureTemplate',
+  })
+  getGroupMeasureTemplate: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseResult>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/exerciseValue',
+  })
+  getExerciseValue: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseExecMeasureValue>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/exerciseValue/{!exerciseMeasureId}/history',
+  })
+  getExerciseValueHistory: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseExecMeasureValue>>;
+
+  //endregion
 
   //#endregion
 
@@ -445,6 +479,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/ageGroup',
   })
   getAgeGroups: IRestMethod<void, AgeGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/exerciseMeasure/{!exerciseMeasureId}',
+  })
+  getExerciseMeasure: IRestMethod<{ exerciseMeasureId: number }, ExerciseMeasure>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

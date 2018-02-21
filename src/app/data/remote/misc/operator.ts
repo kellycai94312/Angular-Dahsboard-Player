@@ -1,0 +1,9 @@
+export enum Operator {
+  MORE_THAN,
+  LESS_THAN,
+  EQUALS,
+  NOT_EQUALS,
+  NOT_MORE_THAN,
+  NOT_LESS_THAN,
+  INTERVAL
+}

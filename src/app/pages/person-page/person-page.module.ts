@@ -38,6 +38,7 @@ import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
 import {PersonModule} from '../../components/person/person.module';
+import { MeasureHistoryComponent } from './person-page/tests-results/measure-history/measure-history.component';
 
 @NgModule({
   imports: [
@@ -77,7 +78,8 @@ import {PersonModule} from '../../components/person/person.module';
     SportTypeItemComponent,
     UserRoleItemComponent,
     GroupsComponent,
-    GroupPersonComponent
+    GroupPersonComponent,
+    MeasureHistoryComponent
   ],
   providers: [
     PersonService
