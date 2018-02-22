@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ExerciseMeasure } from '../../../../../data/remote/model/exercise/exercise-measure';
+import { ExerciseMeasure } from '../../data/remote/model/exercise/exercise-measure';
 
 @Component({
   selector: 'app-exercise-measure-item',

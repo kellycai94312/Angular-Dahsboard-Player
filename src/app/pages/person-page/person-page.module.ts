@@ -41,7 +41,7 @@ import { PersonModule } from '../../components/person/person.module';
 import { MeasureHistoryComponent } from './person-page/tests-results/measure-history/measure-history.component';
 import { ModalSelectPageComponent } from '../../components/modal-select-page/modal-select-page.component';
 import { ModalSelectPageModule } from '../../components/modal-select-page/modal-select-page.module';
-import { ExerciseMeasureItemComponent } from './person-page/tests-results/exercise-measure-item/exercise-measure-item.component';
+import { ExerciseMeasureItemModule } from '../../components/exercise-measure-item/exercise-measure-item.module';
 
 @NgModule({
   imports: [
@@ -67,7 +67,8 @@ import { ExerciseMeasureItemComponent } from './person-page/tests-results/exerci
     ModalSelectPageModule,
     GroupPageModule,
     PersonModule,
-    DxDataGridModule
+    DxDataGridModule,
+    ExerciseMeasureItemModule
   ],
   declarations: [
     PersonPageComponent,
@@ -83,8 +84,7 @@ import { ExerciseMeasureItemComponent } from './person-page/tests-results/exerci
     UserRoleItemComponent,
     GroupsComponent,
     GroupPersonComponent,
-    MeasureHistoryComponent,
-    ExerciseMeasureItemComponent
+    MeasureHistoryComponent
   ],
   providers: [
     PersonService
@@ -93,8 +93,7 @@ import { ExerciseMeasureItemComponent } from './person-page/tests-results/exerci
     ModalSelectComponent,
     ModalSelectPageComponent,
     SportTypeItemComponent,
-    UserRoleItemComponent,
-    ExerciseMeasureItemComponent
+    UserRoleItemComponent
   ]
 })
 export class PersonPageModule {
