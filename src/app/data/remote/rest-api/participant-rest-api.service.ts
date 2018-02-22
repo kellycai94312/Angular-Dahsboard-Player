@@ -246,6 +246,22 @@ export class ParticipantRestApiService extends Rest {
   })
   saveBaseGroup: IRestMethod<RoleQuery, void>;
 
+  //region MeasureTemplate
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/measureTemplate',
+  })
+  getPersonMeasureTemplate: IRestMethod<void, ExerciseMeasure[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/measureTemplate',
+  })
+  updatePersonMeasureTemplate: IRestMethod<ListRequest<ExerciseMeasure>, ExerciseMeasure[]>;
+
+  //endregion
+
   //#endregion
 
   //#region PUT
@@ -482,9 +498,15 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
+    path: '/exerciseMeasure',
+  })
+  getExerciseMeasure: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseMeasure>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
     path: '/exerciseMeasure/{!exerciseMeasureId}',
   })
-  getExerciseMeasure: IRestMethod<{ exerciseMeasureId: number }, ExerciseMeasure>;
+  getExerciseMeasureById: IRestMethod<{ exerciseMeasureId: number }, ExerciseMeasure>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

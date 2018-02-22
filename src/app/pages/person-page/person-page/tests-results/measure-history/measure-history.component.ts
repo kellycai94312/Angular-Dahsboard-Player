@@ -39,7 +39,7 @@ export class MeasureHistoryComponent implements OnInit {
       this._measureQuery.exerciseMeasureId = +params.id;
       this.updateListAsync();
     });
-    this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasure({exerciseMeasureId: this._measureQuery.exerciseMeasureId});
+    this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({exerciseMeasureId: this._measureQuery.exerciseMeasureId});
   }
 
   async onDateFromChange(event: any) {

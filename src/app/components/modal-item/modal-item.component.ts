@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild } from '@angular/core';
-import { AdDirective } from '../../ad.directive';
+import { AdDirective } from './ad.directive';
 
 @Component({
   selector: 'app-modal-item',

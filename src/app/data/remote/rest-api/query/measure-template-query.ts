@@ -7,4 +7,5 @@ export class MeasureTemplateQuery extends PageQuery {
   exerciseMeasureId?: number;
   dateFrom?: Date;
   dateTo?: Date;
+  dictionaryType?: string;
 }

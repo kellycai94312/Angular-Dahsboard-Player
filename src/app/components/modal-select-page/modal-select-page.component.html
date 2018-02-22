@@ -1,0 +1,44 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{header}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row h-100">
+    <div class="col-6">
+      <dx-text-box #searchDxTextBoxComponent
+                   placeholder="{{'search' | translate}}"
+                   mode="search"
+                   showClearButton="true">
+      </dx-text-box>
+      <app-infinite-list [(items)]="dataSet.data"
+                         (nextPage)="onNextPage($event)"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-item>
+          <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect()"
+               [ngClass]="{'active' : item === active}">
+            <app-modal-item [component]="component" [data]="item"></app-modal-item>
+          </div>
+        </ng-template>
+      </app-infinite-list>
+    </div>
+
+    <div class="col-6">
+      <app-infinite-list [items]="selectedSet.data"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-item>
+          <li class="selected-item" (click)="onRemove(item)">
+            <i class="fa fa-times"></i>
+            <app-modal-item [component]="component" [data]="item"></app-modal-item>
+          </li>
+        </ng-template>
+      </app-infinite-list>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-success" (click)="onSave()">{{'modal.save' | translate }}</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+    </button>
+  </div>
+</div>

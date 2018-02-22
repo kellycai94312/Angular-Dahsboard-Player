@@ -1,16 +1,16 @@
 <!--personal-->
 <div id="personal" class="mb-4">
   <div class="d-flex flex-row">
-    <h5>Personal</h5>
-    <button class="btn btn-outline-primary btn-sm ml-2">Edit</button>
+    <h5>{{'persons.person.testsResults.personal' | translate}}</h5>
+    <button class="btn btn-outline-primary btn-sm ml-2" (click)="editPersonal()">{{'edit' | translate}}</button>
   </div>
   <table class="table table-bordered table-hover table-sm mt-1 mb-1">
     <thead>
     <tr class="d-flex">
-      <th class="col-4">Test</th>
-      <th class="col-2">Parameter</th>
-      <th class="col-2">Measure</th>
-      <th class="col-2">Value</th>
+      <th class="col-4">{{'test' | translate}}</th>
+      <th class="col-2">{{'parameter' | translate}}</th>
+      <th class="col-2">{{'units' | translate}}</th>
+      <th class="col-2">{{'value' | translate}}</th>
       <th class="col-2"></th>
     </tr>
     </thead>
@@ -21,12 +21,16 @@
       <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
       <td class="col-sm-2">{{mv.value}}</td>
       <td class="col-sm-2">
-        <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">Show history</button>
+        <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
+          {{'persons.person.testsResults.showHistory' | translate}}
+        </button>
       </td>
     </tr>
     </tbody>
   </table>
-  <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues()">Show more</button>
+  <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues()">
+    {{'persons.person.testsResults.showMore' | translate}}
+  </button>
 </div>
 <!--group-->
 <div class="mb-2">
@@ -45,10 +49,10 @@
       <table class="table table-bordered table-hover table-sm mt-1 mb-1">
         <thead>
         <tr class="d-flex">
-          <th class="col-4">Test</th>
-          <th class="col-2">Parameter</th>
-          <th class="col-2">Measure</th>
-          <th class="col-2">Value</th>
+          <th class="col-4">{{'test' | translate}}</th>
+          <th class="col-2">{{'parameter' | translate}}</th>
+          <th class="col-2">{{'units' | translate}}</th>
+          <th class="col-2">{{'value' | translate}}</th>
           <th class="col-2"></th>
         </tr>
         </thead>
@@ -59,12 +63,16 @@
           <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
           <td class="col-sm-2">{{mv.value}}</td>
           <td class="col-sm-2">
-            <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">Show history</button>
+            <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
+              {{'persons.person.testsResults.showHistory' | translate}}
+            </button>
           </td>
         </tr>
         </tbody>
       </table>
-      <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues(item)">Show more</button>
+      <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues(item)">
+        {{'persons.person.testsResults.showMore' | translate}}
+      </button>
     </div>
   </ng-template>
 </app-infinite-list>
