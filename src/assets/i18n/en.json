@@ -42,7 +42,17 @@
         "section": "Contact information"
       },
       "testsResults": {
-        "section": "Tests results"
+        "section": "Tests results",
+        "personal": "Personal",
+        "showHistory": "show history",
+        "showMore": "show more",
+        "history": {
+          "titleStart": "History for test ",
+          "titleEnd": " with parameter ",
+          "from": "From ",
+          "to": "to"
+        },
+        "edit": "Select tests and parameters to display in profile"
       },
       "events": {
         "section": "Events"
@@ -158,5 +168,10 @@
   "yearBirth": "Year birth",
   "baseUserRole": "Base user role",
   "image": "Image",
-  "person": "Person"
+  "person": "Person",
+  "date": "Date",
+  "units": "Units",
+  "value": "Value",
+  "test": "Test",
+  "parameter": "Parameter"
 }

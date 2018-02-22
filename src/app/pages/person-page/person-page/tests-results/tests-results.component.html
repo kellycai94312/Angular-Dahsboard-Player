@@ -1,3 +1,78 @@
-<p>
-  tests-results works!
-</p>
+<!--personal-->
+<div id="personal" class="mb-4">
+  <div class="d-flex flex-row">
+    <h5>{{'persons.person.testsResults.personal' | translate}}</h5>
+    <button class="btn btn-outline-primary btn-sm ml-2" (click)="editPersonal()">{{'edit' | translate}}</button>
+  </div>
+  <table class="table table-bordered table-hover table-sm mt-1 mb-1">
+    <thead>
+    <tr class="d-flex">
+      <th class="col-4">{{'test' | translate}}</th>
+      <th class="col-2">{{'parameter' | translate}}</th>
+      <th class="col-2">{{'units' | translate}}</th>
+      <th class="col-2">{{'value' | translate}}</th>
+      <th class="col-2"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="d-flex" *ngFor="let mv of personMeasureValues">
+      <td class="col-sm-4">{{mv.exerciseExecMeasure.exerciseMeasure.baseExercise.name}}</td>
+      <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.name}}</td>
+      <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
+      <td class="col-sm-2">{{mv.value}}</td>
+      <td class="col-sm-2">
+        <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
+          {{'persons.person.testsResults.showHistory' | translate}}
+        </button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues()">
+    {{'persons.person.testsResults.showMore' | translate}}
+  </button>
+</div>
+<!--group-->
+<div class="mb-2">
+  <dx-text-box #searchDxTextBoxComponent
+               placeholder="{{'search' | translate}}"
+               mode="search"
+               showClearButton="true">
+  </dx-text-box>
+</div>
+<app-infinite-list [items]="groupResults" (nextPage)="onNextPage($event)">
+  <ng-template let-item>
+    <div class="mb-2">
+      <div class="d-flex flex-row">
+        <h5><a [routerLink]="['/group', item.group.id]">{{item.group.name}}</a></h5>
+      </div>
+      <table class="table table-bordered table-hover table-sm mt-1 mb-1">
+        <thead>
+        <tr class="d-flex">
+          <th class="col-4">{{'test' | translate}}</th>
+          <th class="col-2">{{'parameter' | translate}}</th>
+          <th class="col-2">{{'units' | translate}}</th>
+          <th class="col-2">{{'value' | translate}}</th>
+          <th class="col-2"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="d-flex" *ngFor="let mv of item.exerciseValues.list">
+          <td class="col-sm-4">{{mv.exerciseExecMeasure.exerciseMeasure.baseExercise.name}}</td>
+          <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.name}}</td>
+          <td class="col-sm-2">{{mv.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
+          <td class="col-sm-2">{{mv.value}}</td>
+          <td class="col-sm-2">
+            <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
+              {{'persons.person.testsResults.showHistory' | translate}}
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues(item)">
+        {{'persons.person.testsResults.showMore' | translate}}
+      </button>
+    </div>
+  </ng-template>
+</app-infinite-list>

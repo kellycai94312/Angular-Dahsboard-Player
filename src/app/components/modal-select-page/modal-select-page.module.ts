@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ModalSelectComponent } from './modal-select.component';
-import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import { FormsModule } from '@angular/forms';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { InfiniteListModule } from '../infinite-list/infinite-list.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgbActiveModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 import { DxTextBoxModule } from 'devextreme-angular';
+import { ModalSelectPageComponent } from './modal-select-page.component';
 import { ModalItemModule } from '../modal-item/modal-item.module';
 
 @NgModule({
@@ -20,9 +20,10 @@ import { ModalItemModule } from '../modal-item/modal-item.module';
     DxTextBoxModule,
     ModalItemModule
   ],
-  exports: [ModalSelectComponent],
-  declarations: [ModalSelectComponent],
+  exports: [ModalSelectPageComponent],
+  declarations: [ModalSelectPageComponent],
   providers: [NgbActiveModal]
 })
-export class ModalSelectModule {
+export class ModalSelectPageModule {
+
 }

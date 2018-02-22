@@ -1,20 +1,20 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
-import {DxTextBoxComponent} from 'devextreme-angular';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { GroupType } from '../../../../data/remote/model/group/base/group-type';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
+import { DxTextBoxComponent } from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {AgeGroup} from '../../../../data/remote/model/age-group';
-import {League} from '../../../../data/remote/model/group/team/league';
-import {City} from '../../../../data/remote/model/city';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {Country} from '../../../../data/remote/model/country';
-import {Region} from '../../../../data/remote/model/region';
+import { SportType } from '../../../../data/remote/model/sport-type';
+import { AgeGroup } from '../../../../data/remote/model/age-group';
+import { League } from '../../../../data/remote/model/group/team/league';
+import { City } from '../../../../data/remote/model/city';
+import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
+import { Country } from '../../../../data/remote/model/country';
+import { Region } from '../../../../data/remote/model/region';
 import CustomStore from 'devextreme/data/custom_store';
-import {ImageType} from '../../../../data/remote/model/image-type';
-import {GroupViewModel} from '../../../../data/local/view-model/group-view-model';
+import { ImageType } from '../../../../data/remote/model/image-type';
+import { GroupViewModel } from '../../../../data/local/view-model/group-view-model';
 
 @Component({
   selector: 'app-all-groups',
@@ -68,6 +68,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   private initCustomStore() {
     this.dataSource = {};
+    this.dataSource.pageSize = this.pageSize;
     this.dataSource.store = new CustomStore({
       load: this.loadData
     });

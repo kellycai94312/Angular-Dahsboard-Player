@@ -1,6 +1,6 @@
 import { MeasureUnitEnum } from '../misc/measure-unit-enum';
-import { IdentifiedObject } from '../base/identified-object';
+import { ShortNameObject } from '../base/short-name-object';
 
-export class MeasureUnit extends IdentifiedObject {
+export class MeasureUnit extends ShortNameObject {
   measureUnitEnum: MeasureUnitEnum;
 }
