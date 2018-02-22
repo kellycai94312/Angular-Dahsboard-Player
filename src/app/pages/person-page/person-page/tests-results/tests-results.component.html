@@ -22,14 +22,14 @@
       <td class="col-sm-2">{{mv.value}}</td>
       <td class="col-sm-2">
         <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
-          {{'persons.person.testsResults.showHistory' | translate}}
+          {{'showHistory' | translate}}
         </button>
       </td>
     </tr>
     </tbody>
   </table>
   <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues()">
-    {{'persons.person.testsResults.showMore' | translate}}
+    {{'showMore' | translate}}
   </button>
 </div>
 <!--group-->
@@ -64,14 +64,14 @@
           <td class="col-sm-2">{{mv.value}}</td>
           <td class="col-sm-2">
             <button class="btn btn-outline-secondary btn-sm" [routerLink]="[mv.exerciseExecMeasure.exerciseMeasure.id]">
-              {{'persons.person.testsResults.showHistory' | translate}}
+              {{'showHistory' | translate}}
             </button>
           </td>
         </tr>
         </tbody>
       </table>
       <button class="btn btn-outline-secondary btn-sm" (click)="showMoreValues(item)">
-        {{'persons.person.testsResults.showMore' | translate}}
+        {{'showMore' | translate}}
       </button>
     </div>
   </ng-template>

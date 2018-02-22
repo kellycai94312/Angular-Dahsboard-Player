@@ -11,7 +11,7 @@ import { PageQuery } from '../../../../data/remote/rest-api/page-query';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalSelectPageComponent } from '../../../../components/modal-select-page/modal-select-page.component';
 import { TranslateService } from '@ngx-translate/core';
-import { ExerciseMeasureItemComponent } from './exercise-measure-item/exercise-measure-item.component';
+import { ExerciseMeasureItemComponent } from '../../../../components/exercise-measure-item/exercise-measure-item.component';
 import { DictionaryType } from '../../../../data/remote/misc/dictionary-type';
 import { HashSet } from '../../../../data/local/hash-set';
 import { ExerciseMeasure } from '../../../../data/remote/model/exercise/exercise-measure';
@@ -94,7 +94,7 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
     selectedSet.addAll(personMeasures);
 
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    ref.componentInstance.header = await this._translate.get('persons.person.testsResults.edit').toPromise();
+    ref.componentInstance.header = await this._translate.get('edit').toPromise();
     ref.componentInstance.component = ExerciseMeasureItemComponent;
     ref.componentInstance.selectedSet = selectedSet;
     ref.componentInstance.getListAsync = async (name: string, from: number) => {
@@ -111,7 +111,7 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
 
   private async updateListAsync(from: number = 0) {
     this._measureQuery.from = from;
-    const pageContainer = await this._participantRestApiService.getGroupMeasureTemplate(this._measureQuery);
+    const pageContainer = await this._participantRestApiService.getGroupsMeasureTemplate(this._measureQuery);
     this.groupResults = AppHelper.pushItemsInList(from, this.groupResults, pageContainer);
   }
 

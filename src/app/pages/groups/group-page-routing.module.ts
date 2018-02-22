@@ -12,6 +12,7 @@ import {GroupSettingsComponent} from './group-administration/group-settings/grou
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 import {MembersComponent} from './group-administration/members/members.component';
 import {RequestsComponent} from './group-administration/requests/requests.component';
+import { MeasureTemplateComponent } from './group-administration/measure-template/measure-template.component';
 
 const routes: Routes = [
   {
@@ -37,7 +38,8 @@ const routes: Routes = [
           {path: 'settings', component: GroupSettingsComponent},
           {path: 'member', component: MembersComponent},
           {path: 'subgroup', component: SubgroupsComponent},
-          {path: 'request', component: RequestsComponent}
+          {path: 'request', component: RequestsComponent},
+          {path: 'template', component: MeasureTemplateComponent}
         ]
       }
     ]

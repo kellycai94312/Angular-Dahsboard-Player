@@ -196,7 +196,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/measureTemplate',
   })
-  getGroupMeasureTemplate: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseResult>>;
+  getGroupsMeasureTemplate: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseResult>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -351,6 +351,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/person/{!personId}/approve',
   })
   deleteApprovePersonInGroup: IRestMethod<{ id: number, personId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/measureTemplate',
+  })
+  getGroupMeasureTemplate: IRestMethod<{ groupId: number }, ExerciseMeasure[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/measureTemplate',
+  })
+  updateGroupMeasureTemplate: IRestMethodStrict<ListRequest<ExerciseMeasure>, any, { groupId: number }, ExerciseMeasure[]>;
 
   //#region GroupPerson
 
