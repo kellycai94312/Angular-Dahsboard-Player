@@ -2,7 +2,7 @@ import { IdentifiedObject } from '../remote/base/identified-object';
 
 export class HashSet<T extends IdentifiedObject> {
 
-  public readonly data: T[];
+  public data: T[];
 
   constructor() {
     this.data = [];
