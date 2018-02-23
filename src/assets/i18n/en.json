@@ -46,9 +46,7 @@
         "personal": "Personal",
         "history": {
           "titleStart": "History for test ",
-          "titleEnd": " with parameter ",
-          "from": "From ",
-          "to": "to"
+          "titleEnd": " with parameter "
         }
       },
       "events": {
@@ -173,5 +171,10 @@
   "parameter": "Parameter",
   "templates": "Templates",
   "showHistory": "show history",
-  "showMore": "show more"
+  "showMore": "show more",
+  "from": "From",
+  "to": "to",
+  "location": "Location",
+  "public": "Public",
+  "moreInfo": "More info"
 }

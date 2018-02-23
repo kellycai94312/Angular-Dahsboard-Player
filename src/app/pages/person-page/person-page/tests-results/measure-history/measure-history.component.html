@@ -3,14 +3,14 @@
   "{{exerciseMeasure?.measure.measureEnum}}"
 </div>
 <div class="d-flex flex-row">
-  <p class="pr-3">{{'persons.person.testsResults.history.from' | translate}}</p>
+  <p class="pr-3">{{'from' | translate}}</p>
   <dx-date-box id="dateFrom"
                type="date"
                [showClearButton]="true"
                (onValueChanged)="onDateFromChange($event)"
                class="w-100">
   </dx-date-box>
-  <p class="pl-3 pr-3">{{'persons.person.testsResults.history.to' | translate}}</p>
+  <p class="pl-3 pr-3">{{'to' | translate}}</p>
   <dx-date-box id="dateTo"
                type="date"
                [showClearButton]="true"

@@ -47,9 +47,7 @@
         "personal": "Персональные",
         "history": {
           "titleStart": "История по тесту ",
-          "titleEnd": " параметру ",
-          "from": "C",
-          "to": "по"
+          "titleEnd": " параметру "
         }
       },
       "events": {
@@ -174,5 +172,10 @@
   "parameter": "Параметр",
   "templates": "Шаблоны",
   "showHistory": "посмотреть историю",
-  "showMore": "показать больше"
+  "showMore": "показать больше",
+  "from": "C",
+  "to": "по",
+  "location": "Место проведения",
+  "public": "Публичное",
+  "moreInfo": "Подробнее"
 }
