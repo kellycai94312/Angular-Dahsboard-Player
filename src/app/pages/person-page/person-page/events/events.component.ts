@@ -22,6 +22,7 @@ export class EventsComponent implements OnInit, AfterViewInit {
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
   public pageSize: number;
+  readonly isEditAllow: boolean;
 
   private readonly _trainingQuery: TrainingQuery;
 
@@ -31,6 +32,7 @@ export class EventsComponent implements OnInit, AfterViewInit {
               private _personService: PersonService,
               private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
+    this.isEditAllow = _personService.shared.isEditAllow;
     this._trainingQuery = new TrainingQuery();
     this._trainingQuery.from = 0;
     this._trainingQuery.count = this.pageSize;
@@ -97,7 +99,16 @@ export class EventsComponent implements OnInit, AfterViewInit {
 
   async editPublic(item: TrainingPerson) {
     const ref = this._modalService.open(EventModalComponent, {size: 'lg'});
-    ref.componentInstance.trainingPerson = item;
+    ref.componentInstance.trainingPerson = Object.assign({}, item);
+    ref.componentInstance.onSave = async (visible: boolean) => {
+      if (visible) {
+        await this._participantRestApiService.addTrainingVisible({trainingId: item.baseTraining.id});
+      } else {
+        await this._participantRestApiService.removeTrainingVisible({trainingId: item.baseTraining.id});
+      }
+      item.visible = visible;
+      ref.dismiss();
+    };
   }
 
   private async updateListAsync(from: number = 0) {

@@ -43,8 +43,8 @@
     <th class="col-2">{{ 'date' | translate }}</th>
     <th class="col-4">{{ 'name' | translate }}</th>
     <th class="col-3">{{ 'location' | translate }}</th>
-    <th class="col-2"></th>
     <th class="col-1">{{ 'public' | translate }}</th>
+    <th class="col-2"></th>
   </tr>
   </thead>
   <tbody>
@@ -55,16 +55,16 @@
         <td class="col-sm-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy'}}</td>
         <td class="col-sm-4">{{item?.baseTraining.name}}</td>
         <td class="col-sm-3">{{item?.baseTraining.location?.name}}</td>
-        <td class="col-sm-2">
-          <button class="btn btn-outline-secondary btn-sm" (click)="editPublic(item)">
-            {{'moreInfo' | translate}}
-          </button>
-        </td>
         <td class="col-sm-1">
           <dx-check-box class="mt-2"
                         [(value)]="item.visible"
                         [disabled]="true">
           </dx-check-box>
+        </td>
+        <td class="col-sm-2">
+          <button *ngIf="isEditAllow" class="btn btn-outline-secondary btn-sm" (click)="editPublic(item)">
+            {{'edit' | translate}}
+          </button>
         </td>
       </tr>
     </ng-template>
