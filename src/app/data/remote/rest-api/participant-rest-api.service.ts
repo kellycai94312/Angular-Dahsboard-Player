@@ -46,6 +46,9 @@ import { MeasureTemplateQuery } from './query/measure-template-query';
 import { ExerciseResult } from '../bean/exercise-result';
 import { ExerciseExecMeasureValue } from '../model/training/exercise-exec-measure-value';
 import { ExerciseMeasure } from '../model/exercise/exercise-measure';
+import { Location } from '../model/location';
+import { TrainingQuery } from './query/training-query';
+import { TrainingPerson } from '../model/training/training-person';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -210,6 +213,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getExerciseValueHistory: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseExecMeasureValue>>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/training',
+  })
+  getPersonTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingPerson>>;
+
   //endregion
 
   //#endregion
@@ -246,6 +255,12 @@ export class ParticipantRestApiService extends Rest {
   })
   saveBaseGroup: IRestMethod<RoleQuery, void>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/training/{!trainingId}/visible',
+  })
+  addTrainingVisible: IRestMethod<{trainingId: number}, void>;
+
   //region MeasureTemplate
 
   @RestAction({
@@ -281,6 +296,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/role/{!userRoleId}/public',
   })
   removePublicRole: IRestMethod<RoleQuery, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/training/{!trainingId}/visible',
+  })
+  removeTrainingVisible: IRestMethod<{trainingId: number}, void>;
 
   //#endregion
 
@@ -519,6 +540,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/exerciseMeasure/{!exerciseMeasureId}',
   })
   getExerciseMeasureById: IRestMethod<{ exerciseMeasureId: number }, ExerciseMeasure>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/location/filter',
+  })
+  getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

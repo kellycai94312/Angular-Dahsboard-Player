@@ -2,7 +2,8 @@
 <div id="personal" class="mb-4">
   <div class="d-flex flex-row">
     <h5>{{'persons.person.testsResults.personal' | translate}}</h5>
-    <button class="btn btn-outline-primary btn-sm ml-2" (click)="editPersonal()">{{'edit' | translate}}</button>
+    <button class="btn btn-outline-primary btn-sm ml-2"
+            *ngIf="isEditAllow" (click)="editPersonal()">{{'edit' | translate}}</button>
   </div>
   <table class="table table-bordered table-hover table-sm mt-1 mb-1">
     <thead>

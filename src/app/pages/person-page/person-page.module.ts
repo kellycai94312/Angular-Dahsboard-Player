@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
+  DxCheckBoxModule,
   DxDataGridModule,
   DxDateBoxModule,
   DxFormModule,
@@ -42,6 +43,7 @@ import { MeasureHistoryComponent } from './person-page/tests-results/measure-his
 import { ModalSelectPageComponent } from '../../components/modal-select-page/modal-select-page.component';
 import { ModalSelectPageModule } from '../../components/modal-select-page/modal-select-page.module';
 import { ExerciseMeasureItemModule } from '../../components/exercise-measure-item/exercise-measure-item.module';
+import { EventModalComponent } from './person-page/events/event-modal/event-modal.component';
 
 @NgModule({
   imports: [
@@ -68,7 +70,8 @@ import { ExerciseMeasureItemModule } from '../../components/exercise-measure-ite
     GroupPageModule,
     PersonModule,
     DxDataGridModule,
-    ExerciseMeasureItemModule
+    ExerciseMeasureItemModule,
+    DxCheckBoxModule
   ],
   declarations: [
     PersonPageComponent,
@@ -84,7 +87,8 @@ import { ExerciseMeasureItemModule } from '../../components/exercise-measure-ite
     UserRoleItemComponent,
     GroupsComponent,
     GroupPersonComponent,
-    MeasureHistoryComponent
+    MeasureHistoryComponent,
+    EventModalComponent
   ],
   providers: [
     PersonService
@@ -93,7 +97,8 @@ import { ExerciseMeasureItemModule } from '../../components/exercise-measure-ite
     ModalSelectComponent,
     ModalSelectPageComponent,
     SportTypeItemComponent,
-    UserRoleItemComponent
+    UserRoleItemComponent,
+    EventModalComponent
   ]
 })
 export class PersonPageModule {
