@@ -1,7 +1,7 @@
-import { IdentifiedObject } from '../../../base/identified-object';
 import { TrainingState } from '../../../misc/training-state';
+import { NamedObject } from '../../../base/named-object';
 
-export class BaseTraining extends IdentifiedObject {
+export class BaseTraining extends NamedObject {
   discriminator: string;
   startTime: Date;
   finishTime: Date;

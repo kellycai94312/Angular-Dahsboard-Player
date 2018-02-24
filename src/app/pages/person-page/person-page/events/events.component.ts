@@ -8,6 +8,8 @@ import { AppHelper } from '../../../../utils/app-helper';
 import { PageQuery } from '../../../../data/remote/rest-api/page-query';
 import { DxTextBoxComponent } from 'devextreme-angular';
 import { TrainingPerson } from '../../../../data/remote/model/training/training-person';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventModalComponent } from './event-modal/event-modal.component';
 
 @Component({
   selector: 'app-events',
@@ -26,7 +28,8 @@ export class EventsComponent implements OnInit, AfterViewInit {
   private trainingPersons: TrainingPerson[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
     this._trainingQuery = new TrainingQuery();
     this._trainingQuery.from = 0;
@@ -88,8 +91,13 @@ export class EventsComponent implements OnInit, AfterViewInit {
     });
   };
 
-  public async onNextPage(pageQuery: PageQuery) {
+  async onNextPage(pageQuery: PageQuery) {
     await this.updateListAsync(pageQuery.from);
+  }
+
+  async editPublic(item: TrainingPerson) {
+    const ref = this._modalService.open(EventModalComponent, {size: 'lg'});
+    ref.componentInstance.trainingPerson = item;
   }
 
   private async updateListAsync(from: number = 0) {

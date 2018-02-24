@@ -173,8 +173,9 @@
   "showHistory": "show history",
   "showMore": "show more",
   "from": "From",
-  "to": "to",
+  "to": "To",
   "location": "Location",
   "public": "Public",
-  "moreInfo": "More info"
+  "moreInfo": "More info",
+  "description": "Description"
 }

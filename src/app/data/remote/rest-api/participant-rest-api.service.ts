@@ -255,6 +255,12 @@ export class ParticipantRestApiService extends Rest {
   })
   saveBaseGroup: IRestMethod<RoleQuery, void>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/training/{!trainingId}/visible',
+  })
+  addTrainingVisible: IRestMethod<{trainingId: number}, void>;
+
   //region MeasureTemplate
 
   @RestAction({
@@ -290,6 +296,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/role/{!userRoleId}/public',
   })
   removePublicRole: IRestMethod<RoleQuery, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/training/{!trainingId}/visible',
+  })
+  removeTrainingVisible: IRestMethod<{trainingId: number}, void>;
 
   //#endregion
 

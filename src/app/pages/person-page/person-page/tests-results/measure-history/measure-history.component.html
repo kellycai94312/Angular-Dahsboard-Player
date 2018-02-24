@@ -2,21 +2,25 @@
   "{{exerciseMeasure?.baseExercise.name}}" {{'persons.person.testsResults.history.titleEnd' | translate}}
   "{{exerciseMeasure?.measure.measureEnum}}"
 </div>
-<div class="d-flex flex-row">
-  <p class="pr-3">{{'from' | translate}}</p>
-  <dx-date-box id="dateFrom"
-               type="date"
-               [showClearButton]="true"
-               (onValueChanged)="onDateFromChange($event)"
-               class="w-100">
-  </dx-date-box>
-  <p class="pl-3 pr-3">{{'to' | translate}}</p>
-  <dx-date-box id="dateTo"
-               type="date"
-               [showClearButton]="true"
-               (onValueChanged)="onDateToChange($event)"
-               class="w-100">
-  </dx-date-box>
+<div class="row">
+  <div class="col">
+    <dx-date-box id="dateFrom"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateFromChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateTo"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateToChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
 </div>
 <table class="table table-bordered table-hover table-sm mt-1">
   <thead>

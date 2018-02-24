@@ -12,4 +12,5 @@ export class TrainingPerson extends IdentifiedObject {
   sportRole: SportRole;
   number: number;
   orderId: number;
+  visible: boolean;
 }

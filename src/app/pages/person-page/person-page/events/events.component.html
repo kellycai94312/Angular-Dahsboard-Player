@@ -56,7 +56,7 @@
         <td class="col-sm-4">{{item?.baseTraining.name}}</td>
         <td class="col-sm-3">{{item?.baseTraining.location?.name}}</td>
         <td class="col-sm-2">
-          <button class="btn btn-outline-secondary btn-sm">
+          <button class="btn btn-outline-secondary btn-sm" (click)="editPublic(item)">
             {{'moreInfo' | translate}}
           </button>
         </td>
