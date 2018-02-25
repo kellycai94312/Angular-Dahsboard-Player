@@ -178,6 +178,6 @@
   "description": "Описание",
   "events": "События",
   "groupOnly": "Только для команды",
-  "trainersOnly": "Только для трененов",
+  "trainersOnly": "Только для тренеров",
   "trainingAccess": "Видимость тренировки"
 }
