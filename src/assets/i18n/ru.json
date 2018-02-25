@@ -50,9 +50,6 @@
           "titleEnd": " параметру "
         }
       },
-      "events": {
-        "section": "События"
-      },
       "groups": {
         "section": "Группы",
         "placeholder": "Выбрать группу",
@@ -178,5 +175,9 @@
   "location": "Место проведения",
   "public": "Публичное",
   "moreInfo": "Подробнее",
-  "description": "Описание"
+  "description": "Описание",
+  "events": "События",
+  "groupOnly": "Только для команды",
+  "trainersOnly": "Только для трененов",
+  "trainingAccess": "Видимость тренировки"
 }

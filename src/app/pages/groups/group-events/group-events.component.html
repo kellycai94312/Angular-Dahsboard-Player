@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateFrom"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateFromChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateTo"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateToChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <app-input-select
+      id="location"
+      [loadData]="loadLocations"
+      [pageSize]="pageSize"
+      (onChange)="onLocationChange($event)"
+      [getKey]="getKey"
+      [getName]="getName"
+      placeholder="Select a location"
+      ngDefaultControl>
+    </app-input-select>
+  </div>
+</div>
+<table class="table table-bordered table-hover table-sm mt-1">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-1">{{ 'date' | translate }}</th>
+    <th class="col-4">{{ 'name' | translate }}</th>
+    <th class="col-3">{{ 'location' | translate }}</th>
+    <th class="col-1">{{ 'public' | translate }}</th>
+    <th class="col-1">{{ 'groupOnly' | translate }}</th>
+    <th class="col-1">{{ 'trainersOnly' | translate }}</th>
+    <th class="col-1"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list [items]="trainingGroups"
+                     (nextPage)="onNextPage($event)">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-sm-1">{{item?.baseTraining.startTime | date:'dd.MM.yyyy'}}</td>
+        <td class="col-sm-4">{{item?.baseTraining.name}}</td>
+        <td class="col-sm-3">{{item?.baseTraining.location?.name}}</td>
+        <td class="col-sm-1">
+          <dx-check-box class="mt-2"
+                        [value]="item.access.toString() === 'PUBLIC'"
+                        [disabled]="true">
+          </dx-check-box>
+        </td>
+        <td class="col-sm-1">
+          <dx-check-box class="mt-2"
+                        [value]="item.access.toString() === 'GROUP'"
+                        [disabled]="true">
+          </dx-check-box>
+        </td>
+        <td class="col-sm-1">
+          <dx-check-box class="mt-2"
+                        [value]="item.access.toString() === 'TRAINER'"
+                        [disabled]="true">
+          </dx-check-box>
+        </td>
+        <td class="col-sm-1">
+          <button *ngIf="isEditAllow" class="btn btn-outline-secondary btn-sm" (click)="editAccess(item)">
+            {{'edit' | translate}}
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>

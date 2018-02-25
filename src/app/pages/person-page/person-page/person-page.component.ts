@@ -86,7 +86,7 @@ export class PersonPageComponent implements OnInit {
         hasAnyRole: true
       },
       {
-        name: 'persons.person.events.section',
+        name: 'events',
         route: 'events',
         restrictedRoles: [UserRoleEnum.TRAINER],
         hasAnyRole: true

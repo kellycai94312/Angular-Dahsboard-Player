@@ -12,8 +12,10 @@ import {
   DxButtonModule,
   DxCheckBoxModule,
   DxDataGridModule,
+  DxDateBoxModule,
   DxSelectBoxModule,
   DxTemplateModule,
+  DxTextAreaModule,
   DxTextBoxModule,
   DxValidatorModule
 } from 'devextreme-angular';
@@ -37,6 +39,8 @@ import { MeasureTemplateComponent } from './group-administration/measure-templat
 import { ModalSelectPageComponent } from '../../components/modal-select-page/modal-select-page.component';
 import { ModalSelectPageModule } from '../../components/modal-select-page/modal-select-page.module';
 import { ExerciseMeasureItemModule } from '../../components/exercise-measure-item/exercise-measure-item.module';
+import { GroupEventsComponent } from './group-events/group-events.component';
+import { GroupEventModalComponent } from './group-events/group-event-modal/group-event-modal.component';
 
 @NgModule({
   imports: [
@@ -56,7 +60,9 @@ import { ExerciseMeasureItemModule } from '../../components/exercise-measure-ite
     DxDataGridModule,
     DxTemplateModule,
     ModalSelectPageModule,
-    ExerciseMeasureItemModule
+    ExerciseMeasureItemModule,
+    DxDateBoxModule,
+    DxTextAreaModule
   ],
   exports: [
     GroupItemComponent
@@ -80,12 +86,15 @@ import { ExerciseMeasureItemModule } from '../../components/exercise-measure-ite
     MembersComponent,
     RequestsComponent,
     GroupPersonModalComponent,
-    MeasureTemplateComponent
+    MeasureTemplateComponent,
+    GroupEventsComponent,
+    GroupEventModalComponent
   ],
   entryComponents: [
     GroupItemComponent,
     GroupPersonModalComponent,
-    ModalSelectPageComponent
+    ModalSelectPageComponent,
+    GroupEventModalComponent
   ]
 })
 export class GroupPageModule {
