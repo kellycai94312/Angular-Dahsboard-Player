@@ -49,9 +49,6 @@
           "titleEnd": " with parameter "
         }
       },
-      "events": {
-        "section": "Events"
-      },
       "groups": {
         "section": "Groups",
         "placeholder": "Select a group",
@@ -177,5 +174,9 @@
   "location": "Location",
   "public": "Public",
   "moreInfo": "More info",
-  "description": "Description"
+  "description": "Description",
+  "events": "Events",
+  "groupOnly" : "Group only",
+  "trainersOnly" : "Trainers only",
+  "trainingAccess": "Training access"
 }

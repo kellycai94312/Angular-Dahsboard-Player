@@ -83,6 +83,13 @@ export class GroupPageComponent implements OnInit {
       managementTab.routerLink = 'administration';
       this.tabs.push(managementTab);
     }
+
+    if (this.groupService.hasEvents()) {
+      const eventsTab = new Tab();
+      eventsTab.name = await this._translateService.get('events').toPromise();
+      eventsTab.routerLink = 'events';
+      this.tabs.push(eventsTab);
+    }
   }
 
   private getSubGroupRouterLink(subGroupId: number): string {

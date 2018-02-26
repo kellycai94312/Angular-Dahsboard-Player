@@ -49,6 +49,8 @@ import { ExerciseMeasure } from '../model/exercise/exercise-measure';
 import { Location } from '../model/location';
 import { TrainingQuery } from './query/training-query';
 import { TrainingPerson } from '../model/training/training-person';
+import { TrainingGroup } from '../model/training-group';
+import { TrainingAccess } from '../misc/training-access';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -259,7 +261,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/person/training/{!trainingId}/visible',
   })
-  addTrainingVisible: IRestMethod<{trainingId: number}, void>;
+  addTrainingVisible: IRestMethod<{ trainingId: number }, void>;
 
   //region MeasureTemplate
 
@@ -301,7 +303,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Delete,
     path: '/person/training/{!trainingId}/visible',
   })
-  removeTrainingVisible: IRestMethod<{trainingId: number}, void>;
+  removeTrainingVisible: IRestMethod<{ trainingId: number }, void>;
 
   //#endregion
 
@@ -384,6 +386,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/measureTemplate',
   })
   updateGroupMeasureTemplate: IRestMethodStrict<ListRequest<ExerciseMeasure>, any, { groupId: number }, ExerciseMeasure[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/training',
+  })
+  getGroupTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingGroup>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/training/{!trainingId}/visible',
+  })
+  updateTrainingVisible: IRestMethodStrict<{ access?: TrainingAccess }, any, { groupId: number, trainingId: number }, PageContainer<TrainingGroup>>;
 
   //#region GroupPerson
 

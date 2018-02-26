@@ -1,22 +1,23 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Location } from '../../../../data/remote/model/location';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { TrainingQuery } from '../../../../data/remote/rest-api/query/training-query';
-import { PersonService } from '../person.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Location } from '../../../data/remote/model/location';
+import { AppHelper } from '../../../utils/app-helper';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { TrainingQuery } from '../../../data/remote/rest-api/query/training-query';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
 import { DxTextBoxComponent } from 'devextreme-angular';
-import { TrainingPerson } from '../../../../data/remote/model/training/training-person';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventModalComponent } from './event-modal/event-modal.component';
+import { GroupService } from '../group.service';
+import { TrainingGroup } from '../../../data/remote/model/training-group';
+import { GroupEventModalComponent } from './group-event-modal/group-event-modal.component';
+import { TrainingAccess } from '../../../data/remote/misc/training-access';
 
 @Component({
-  selector: 'app-events',
-  templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
+  selector: 'app-group-events',
+  templateUrl: './group-events.component.html',
+  styleUrls: ['./group-events.component.scss']
 })
-export class EventsComponent implements OnInit, AfterViewInit {
+export class GroupEventsComponent implements OnInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -25,18 +26,20 @@ export class EventsComponent implements OnInit, AfterViewInit {
   readonly isEditAllow: boolean;
 
   private readonly _trainingQuery: TrainingQuery;
+  private readonly _groupId: number;
 
-  private trainingPersons: TrainingPerson[];
+  private trainingGroups: TrainingGroup[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService,
+              private _groupService: GroupService,
               private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
-    this.isEditAllow = _personService.shared.isEditAllow;
+    this.isEditAllow = this._groupService.isEditAllow();
+    this._groupId = this._groupService.getGroup().id;
     this._trainingQuery = new TrainingQuery();
     this._trainingQuery.from = 0;
     this._trainingQuery.count = this.pageSize;
-    this._trainingQuery.personId = _personService.shared.person.id;
+    this._trainingQuery.groupId = this._groupId;
   }
 
   ngOnInit() {
@@ -97,24 +100,23 @@ export class EventsComponent implements OnInit, AfterViewInit {
     await this.updateListAsync(pageQuery.from);
   }
 
-  async editPublic(item: TrainingPerson) {
-    const ref = this._modalService.open(EventModalComponent, {size: 'lg'});
-    ref.componentInstance.trainingPerson = Object.assign({}, item);
-    ref.componentInstance.onSave = async (visible: boolean) => {
-      if (visible) {
-        await this._participantRestApiService.addTrainingVisible({trainingId: item.baseTraining.id});
-      } else {
-        await this._participantRestApiService.removeTrainingVisible({trainingId: item.baseTraining.id});
-      }
-      item.visible = visible;
+  async editAccess(item: TrainingGroup) {
+    const ref = this._modalService.open(GroupEventModalComponent, {size: 'lg'});
+    ref.componentInstance.trainingGroup = Object.assign({}, item);
+    ref.componentInstance.onSave = async (access: TrainingAccess) => {
+      await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
+        groupId: this._groupId,
+        trainingId: item.baseTraining.id
+      });
+      item.access = access;
       ref.dismiss();
     };
   }
 
   private async updateListAsync(from: number = 0) {
     this._trainingQuery.from = from;
-    const container = await this._participantRestApiService.getPersonTrainings(this._trainingQuery);
-    this.trainingPersons = AppHelper.pushItemsInList(from, this.trainingPersons, container);
+    const container = await this._participantRestApiService.getGroupTrainings(this._trainingQuery);
+    this.trainingGroups = AppHelper.pushItemsInList(from, this.trainingGroups, container);
   }
 
 }

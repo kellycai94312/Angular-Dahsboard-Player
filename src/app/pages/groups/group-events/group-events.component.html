@@ -40,29 +40,43 @@
 <table class="table table-bordered table-hover table-sm mt-1">
   <thead>
   <tr class="d-flex">
-    <th class="col-2">{{ 'date' | translate }}</th>
+    <th class="col-1">{{ 'date' | translate }}</th>
     <th class="col-4">{{ 'name' | translate }}</th>
     <th class="col-3">{{ 'location' | translate }}</th>
     <th class="col-1">{{ 'public' | translate }}</th>
-    <th class="col-2"></th>
+    <th class="col-1">{{ 'groupOnly' | translate }}</th>
+    <th class="col-1">{{ 'trainersOnly' | translate }}</th>
+    <th class="col-1"></th>
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list [items]="trainingPersons"
+  <app-infinite-list [items]="trainingGroups"
                      (nextPage)="onNextPage($event)">
     <ng-template let-item>
       <tr class="d-flex">
-        <td class="col-sm-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy'}}</td>
+        <td class="col-sm-1">{{item?.baseTraining.startTime | date:'dd.MM.yyyy'}}</td>
         <td class="col-sm-4">{{item?.baseTraining.name}}</td>
         <td class="col-sm-3">{{item?.baseTraining.location?.name}}</td>
         <td class="col-sm-1">
           <dx-check-box class="mt-2"
-                        [(value)]="item.visible"
+                        [value]="item.access.toString() === 'PUBLIC'"
                         [disabled]="true">
           </dx-check-box>
         </td>
-        <td class="col-sm-2">
-          <button *ngIf="isEditAllow" class="btn btn-outline-secondary btn-sm" (click)="editPublic(item)">
+        <td class="col-sm-1">
+          <dx-check-box class="mt-2"
+                        [value]="item.access.toString() === 'GROUP'"
+                        [disabled]="true">
+          </dx-check-box>
+        </td>
+        <td class="col-sm-1">
+          <dx-check-box class="mt-2"
+                        [value]="item.access.toString() === 'TRAINER'"
+                        [disabled]="true">
+          </dx-check-box>
+        </td>
+        <td class="col-sm-1">
+          <button *ngIf="isEditAllow" class="btn btn-outline-secondary btn-sm" (click)="editAccess(item)">
             {{'edit' | translate}}
           </button>
         </td>
