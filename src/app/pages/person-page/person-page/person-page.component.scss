@@ -80,6 +80,7 @@ a {
 }
 
 .btn-group-toggle {
+  z-index: -1;
   .btn-primary {
     color: $light-blue;
     border-color: $light-blue;

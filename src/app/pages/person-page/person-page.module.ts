@@ -44,6 +44,10 @@ import { ModalSelectPageComponent } from '../../components/modal-select-page/mod
 import { ModalSelectPageModule } from '../../components/modal-select-page/modal-select-page.module';
 import { ExerciseMeasureItemModule } from '../../components/exercise-measure-item/exercise-measure-item.module';
 import { EventModalComponent } from './person-page/events/event-modal/event-modal.component';
+import { TableHistoryComponent } from './person-page/tests-results/measure-history/table-history/table-history.component';
+import { ChartHistoryComponent } from './person-page/tests-results/measure-history/chart-history/chart-history.component';
+import { TabModule } from '../../components/tab/tab.module';
+import { MeasureHistoryService } from './person-page/tests-results/measure-history/measure-history.service';
 
 @NgModule({
   imports: [
@@ -71,7 +75,8 @@ import { EventModalComponent } from './person-page/events/event-modal/event-moda
     PersonModule,
     DxDataGridModule,
     ExerciseMeasureItemModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
+    TabModule
   ],
   declarations: [
     PersonPageComponent,
@@ -88,10 +93,13 @@ import { EventModalComponent } from './person-page/events/event-modal/event-moda
     GroupsComponent,
     GroupPersonComponent,
     MeasureHistoryComponent,
-    EventModalComponent
+    EventModalComponent,
+    TableHistoryComponent,
+    ChartHistoryComponent
   ],
   providers: [
-    PersonService
+    PersonService,
+    MeasureHistoryService
   ],
   entryComponents: [
     ModalSelectComponent,
