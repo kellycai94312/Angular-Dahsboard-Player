@@ -176,7 +176,9 @@
   "moreInfo": "More info",
   "description": "Description",
   "events": "Events",
-  "groupOnly" : "Group only",
-  "trainersOnly" : "Trainers only",
-  "trainingAccess": "Training access"
+  "groupOnly": "Group only",
+  "trainersOnly": "Trainers only",
+  "trainingAccess": "Training access",
+  "table": "Table",
+  "chart": "Chart"
 }

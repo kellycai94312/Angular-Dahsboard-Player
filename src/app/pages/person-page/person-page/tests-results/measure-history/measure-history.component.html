@@ -2,44 +2,15 @@
   "{{exerciseMeasure?.baseExercise.name}}" {{'persons.person.testsResults.history.titleEnd' | translate}}
   "{{exerciseMeasure?.measure.measureEnum}}"
 </div>
-<div class="row">
-  <div class="col">
-    <dx-date-box id="dateFrom"
-                 type="date"
-                 placeholder="{{'from' | translate}}"
-                 [showClearButton]="true"
-                 (onValueChanged)="onDateFromChange($event)"
-                 class="w-100">
-    </dx-date-box>
-  </div>
-  <div class="col">
-    <dx-date-box id="dateTo"
-                 type="date"
-                 placeholder="{{'to' | translate}}"
-                 [showClearButton]="true"
-                 (onValueChanged)="onDateToChange($event)"
-                 class="w-100">
-    </dx-date-box>
-  </div>
-</div>
-<table class="table table-bordered table-hover table-sm mt-1">
-  <thead>
-  <tr class="d-flex">
-    <th class="col-4">{{ 'date' | translate }}</th>
-    <th class="col-4">{{ 'units' | translate }}</th>
-    <th class="col-4">{{ 'value' | translate }}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <app-infinite-list [items]="measureValues"
-                     (nextPage)="onNextPage($event)">
-    <ng-template let-item>
-      <tr class="d-flex">
-        <td class="col-sm-4">{{item?.created | date:'dd.MM.yyyy'}}</td>
-        <td class="col-sm-4">{{item?.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
-        <td class="col-sm-4">{{item?.value}}</td>
-      </tr>
+<ngb-tabset>
+  <ngb-tab title="{{'table' | translate}}">
+    <ng-template ngbTabContent>
+      <app-table-history></app-table-history>
     </ng-template>
-  </app-infinite-list>
-  </tbody>
-</table>
+  </ngb-tab>
+  <ngb-tab title="{{'chart' | translate}}">
+    <ng-template ngbTabContent>
+      <app-chart-history></app-chart-history>
+    </ng-template>
+  </ngb-tab>
+</ngb-tabset>
