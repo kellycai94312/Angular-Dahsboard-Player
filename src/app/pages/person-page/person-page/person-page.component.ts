@@ -96,6 +96,12 @@ export class PersonPageComponent implements OnInit {
         route: 'groups',
         restrictedRoles: [],
         hasAnyRole: true
+      },
+      {
+        name: 'persons.person.myRegion.section',
+        route: 'my_region',
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true
       }
     ];
     this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {

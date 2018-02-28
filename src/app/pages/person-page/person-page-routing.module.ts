@@ -10,6 +10,10 @@ import { PhysiologyComponent } from './person-page/physiology/physiology.compone
 import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
 import { GroupsComponent } from './person-page/groups/groups.component';
 import { MeasureHistoryComponent } from './person-page/tests-results/measure-history/measure-history.component';
+import { MyRegionComponent } from './person-page/my-region/my-region.component';
+import { SchoolNoteComponent } from './person-page/my-region/school-note/school-note.component';
+import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
+import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
 
 
 const routes: Routes = [
@@ -25,7 +29,15 @@ const routes: Routes = [
       {path: 'physiology', component: PhysiologyComponent},
       {path: 'tests_results', component: TestsResultsComponent},
       {path: 'tests_results/:id', component: MeasureHistoryComponent},
-      {path: 'groups', component: GroupsComponent}
+      {path: 'groups', component: GroupsComponent},
+      {
+        path: 'my_region', component: MyRegionComponent, children: [
+          {path: '', redirectTo: 'school', pathMatch: 'full'},
+          {path: 'school', component: SchoolNoteComponent},
+          {path: 'trainer', component: TrainerNoteComponent},
+          {path: 'agent', component: AgentNoteComponent}
+        ]
+      }
     ]
   },
 ];

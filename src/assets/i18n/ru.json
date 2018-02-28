@@ -56,6 +56,19 @@
         "baseGroup": "Основная",
         "additionalGroups": "Дополнительные",
         "addGroup": "Добавить"
+      },
+      "myRegion": {
+        "section": "Мой регион",
+        "school": {
+          "section": "Контакты школ"
+        },
+        "trainer": {
+          "section": "Контакты тренеров",
+          "age": "Team age"
+        },
+        "agent": {
+          "section": "Контакты агентов"
+        }
       }
     }
   },
@@ -181,5 +194,9 @@
   "trainersOnly": "Только для тренеров",
   "trainingAccess": "Видимость тренировки",
   "table": "Таблица",
-  "chart": "График"
+  "chart": "График",
+  "phone": "Телефон",
+  "email": "Почта",
+  "club": "Клуб",
+  "organization": "Организация"
 }

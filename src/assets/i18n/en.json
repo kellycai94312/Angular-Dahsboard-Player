@@ -55,6 +55,19 @@
         "baseGroup": "Base",
         "additionalGroups": "Additional",
         "addGroup": "Add"
+      },
+      "myRegion": {
+        "section": "My region",
+        "school": {
+          "section": "School contacts"
+        },
+        "trainer": {
+          "section": "Trainer contacts",
+          "age": "Team age"
+        },
+        "agent": {
+          "section": "Agent contacts"
+        }
       }
     }
   },
@@ -141,7 +154,7 @@
   "additionalInformation": "Additional information",
   "settings": "Settings",
   "subgroups": "Subgroups",
-  "add": "add",
+  "add": "Add",
   "remove": "Remove",
   "member": "Member",
   "requests": "Requests",
@@ -180,5 +193,9 @@
   "trainersOnly": "Trainers only",
   "trainingAccess": "Training access",
   "table": "Table",
-  "chart": "Chart"
+  "chart": "Chart",
+  "phone": "Phone",
+  "email": "E-mail",
+  "club": "Club",
+  "organization": "Organization"
 }
