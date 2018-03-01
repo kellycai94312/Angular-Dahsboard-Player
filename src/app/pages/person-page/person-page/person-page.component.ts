@@ -1,26 +1,26 @@
-import {Component, OnInit} from '@angular/core';
-import {Person} from '../../../data/remote/model/person';
-import {TranslateService} from '@ngx-translate/core';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {UserRole} from '../../../data/remote/model/user-role';
-import {ActivatedRoute, Params, Router} from '@angular/router';
-import {SportType} from '../../../data/remote/model/sport-type';
-import {Image} from '../../../data/remote/model/image';
-import {ImageClass} from '../../../data/remote/misc/image-class';
-import {ImageService} from '../../../shared/image.service';
-import {PersonService} from './person.service';
-import {LocalStorageService} from '../../../shared/local-storage.service';
-import {ProfileService} from '../../../layout/shared/profile.service';
-import {Tab} from './tab';
-import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ModalSelectComponent} from '../../../components/modal-select/modal-select.component';
-import {ListRequest} from '../../../data/remote/request/list-request';
+import { Component, OnInit } from '@angular/core';
+import { Person } from '../../../data/remote/model/person';
+import { TranslateService } from '@ngx-translate/core';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { UserRole } from '../../../data/remote/model/user-role';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { SportType } from '../../../data/remote/model/sport-type';
+import { Image } from '../../../data/remote/model/image';
+import { ImageClass } from '../../../data/remote/misc/image-class';
+import { ImageService } from '../../../shared/image.service';
+import { PersonService } from './person.service';
+import { LocalStorageService } from '../../../shared/local-storage.service';
+import { ProfileService } from '../../../layout/shared/profile.service';
+import { Tab } from './tab';
+import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalSelectComponent } from '../../../components/modal-select/modal-select.component';
+import { ListRequest } from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
-import {SportTypeItemComponent} from './sport-type-item/sport-type-item.component';
-import {UserRoleItemComponent} from './user-role-item/user-role-item.component';
-import {GroupPerson} from '../../../data/remote/model/group/group-person';
-import {ImageType} from '../../../data/remote/model/image-type';
+import { SportTypeItemComponent } from './sport-type-item/sport-type-item.component';
+import { UserRoleItemComponent } from './user-role-item/user-role-item.component';
+import { GroupPerson } from '../../../data/remote/model/group/group-person';
+import { ImageType } from '../../../data/remote/model/image-type';
 
 @Component({
   selector: 'app-person-page',
@@ -57,9 +57,7 @@ export class PersonPageComponent implements OnInit {
     this.tabs = [
       {
         name: 'persons.person.personal.section',
-        route: 'personal',
-        restrictedRoles: [],
-        hasAnyRole: false
+        route: 'personal'
       },
       {
         name: 'persons.person.anthropometry.section',
@@ -75,9 +73,7 @@ export class PersonPageComponent implements OnInit {
       },
       {
         name: 'persons.person.contact.section',
-        route: 'contact',
-        restrictedRoles: [],
-        hasAnyRole: false
+        route: 'contact'
       },
       {
         name: 'persons.person.testsResults.section',
@@ -94,8 +90,14 @@ export class PersonPageComponent implements OnInit {
       {
         name: 'persons.person.groups.section',
         route: 'groups',
-        restrictedRoles: [],
         hasAnyRole: true
+      },
+      {
+        name: 'persons.person.myRegion.section',
+        route: 'my_region',
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true,
+        private: true
       }
     ];
     this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {
@@ -104,7 +106,9 @@ export class PersonPageComponent implements OnInit {
   }
 
   isTabOpen(tab: Tab): boolean {
-    return tab && (!tab.hasAnyRole || this.roleToggle && tab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0);
+    return tab
+      && (!tab.private || this.isEditAllow)
+      && (!tab.hasAnyRole || this.roleToggle && tab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0);
   }
 
   async onLogoChange(event) {

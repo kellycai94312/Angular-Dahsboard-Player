@@ -1,0 +1,74 @@
+<div>
+  <button class="btn btn-outline-success btn-sm" (click)="myRegionService.add()">
+    <i class="fa fa-plus"></i>
+    <span> {{'add' | translate}}</span>
+  </button>
+</div>
+<div class="row mt-2">
+  <div class="col">
+    <dx-text-box #name
+                 placeholder="{{'fullName' | translate}}"
+                 mode="search"
+                 valueChangeEvent="keyup"
+                 [showClearButton]="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-text-box #phone
+                 placeholder="{{'phone' | translate}}"
+                 mode="search"
+                 valueChangeEvent="keyup"
+                 [showClearButton]="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-text-box #email
+                 placeholder="{{'email' | translate}}"
+                 mode="search"
+                 valueChangeEvent="keyup"
+                 [showClearButton]="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-text-box #organization
+                 placeholder="{{'organization' | translate}}"
+                 mode="search"
+                 valueChangeEvent="keyup"
+                 [showClearButton]="true">
+    </dx-text-box>
+  </div>
+</div>
+<table class="table table-bordered table-hover table-sm mt-1">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-5">{{ 'name' | translate }}</th>
+    <th class="col-2">{{ 'phone' | translate }}</th>
+    <th class="col-2">{{ 'email' | translate }}</th>
+    <th class="col-2">{{ 'organization' | translate }}</th>
+    <th class="col-1"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list [items]="myRegionService.notes"
+                     (nextPage)="onNextPage($event)">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-sm-5">{{item?.name}}</td>
+        <td class="col-sm-2">{{item?.phone}}</td>
+        <td class="col-sm-2">{{item?.email}}</td>
+        <td class="col-sm-2">{{item?.organization}}</td>
+        <td class="col-sm-1">
+          <div class="text-center">
+            <button class="btn btn-outline-primary btn-sm" (click)="myRegionService.edit(item)">
+              <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-outline-danger btn-sm" (click)="myRegionService.remove(item)">
+              <i class="fa fa-remove"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>

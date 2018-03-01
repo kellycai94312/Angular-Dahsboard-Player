@@ -51,6 +51,8 @@ import { TrainingQuery } from './query/training-query';
 import { TrainingPerson } from '../model/training/training-person';
 import { TrainingGroup } from '../model/training-group';
 import { TrainingAccess } from '../misc/training-access';
+import { NoteQuery } from './query/note-query';
+import { Note } from '../model/note/base/note';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -195,6 +197,13 @@ export class ParticipantRestApiService extends Rest {
   })
   getPersonGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/note',
+  })
+  getNotes: IRestMethod<NoteQuery, PageContainer<Note>>;
+
+
   //region MeasureTemplate
 
   @RestAction({
@@ -263,6 +272,12 @@ export class ParticipantRestApiService extends Rest {
   })
   addTrainingVisible: IRestMethod<{ trainingId: number }, void>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/note',
+  })
+  addNote: IRestMethod<Note, Note>;
+
   //region MeasureTemplate
 
   @RestAction({
@@ -289,6 +304,12 @@ export class ParticipantRestApiService extends Rest {
   })
   updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
 
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/note/{!id}',
+  })
+  updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
+
   //#endregion
 
   //#region DELETE
@@ -304,6 +325,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/training/{!trainingId}/visible',
   })
   removeTrainingVisible: IRestMethod<{ trainingId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/note/{!id}',
+  })
+  removeNote: IRestMethod<{ id: number }, void>;
 
   //#endregion
 

@@ -48,6 +48,12 @@ import { TableHistoryComponent } from './person-page/tests-results/measure-histo
 import { ChartHistoryComponent } from './person-page/tests-results/measure-history/chart-history/chart-history.component';
 import { TabModule } from '../../components/tab/tab.module';
 import { MeasureHistoryService } from './person-page/tests-results/measure-history/measure-history.service';
+import { MyRegionComponent } from './person-page/my-region/my-region.component';
+import { SchoolNoteComponent } from './person-page/my-region/school-note/school-note.component';
+import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
+import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
+import { MyRegionService } from './person-page/my-region/my-region.service';
+import { NoteModalComponent } from './person-page/my-region/note-modal/note-modal.component';
 
 @NgModule({
   imports: [
@@ -95,18 +101,25 @@ import { MeasureHistoryService } from './person-page/tests-results/measure-histo
     MeasureHistoryComponent,
     EventModalComponent,
     TableHistoryComponent,
-    ChartHistoryComponent
+    ChartHistoryComponent,
+    MyRegionComponent,
+    SchoolNoteComponent,
+    TrainerNoteComponent,
+    AgentNoteComponent,
+    NoteModalComponent
   ],
   providers: [
     PersonService,
-    MeasureHistoryService
+    MeasureHistoryService,
+    MyRegionService
   ],
   entryComponents: [
     ModalSelectComponent,
     ModalSelectPageComponent,
     SportTypeItemComponent,
     UserRoleItemComponent,
-    EventModalComponent
+    EventModalComponent,
+    NoteModalComponent
   ]
 })
 export class PersonPageModule {

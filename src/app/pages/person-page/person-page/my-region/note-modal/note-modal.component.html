@@ -1,0 +1,52 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{header}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+
+  <div class="form-group">
+    <label>{{(noteType.toString() === 'SCHOOL' ? 'name' : 'fullName') | translate }}</label>
+    <dx-text-box [(value)]="note.name"></dx-text-box>
+  </div>
+
+  <div class="form-group">
+    <label>{{'phone' | translate }}</label>
+    <dx-text-box [(value)]="note.phone"></dx-text-box>
+  </div>
+
+  <div class="form-group">
+    <label>{{'email' | translate }}</label>
+    <dx-text-box [(value)]="note.email"></dx-text-box>
+  </div>
+
+  <div *ngIf="noteType.toString() === 'AGENT'">
+    <div class="form-group">
+      <label>{{'organization' | translate }}</label>
+      <dx-text-box [(value)]="note.organization"></dx-text-box>
+    </div>
+  </div>
+
+  <div *ngIf="noteType.toString() === 'TRAINER'">
+    <div class="form-group">
+      <label>{{'club' | translate }}</label>
+      <dx-text-box [(value)]="note.club"></dx-text-box>
+    </div>
+
+    <div class="form-group">
+      <label>{{'persons.person.myRegion.trainer.age' | translate }}</label>
+      <dx-text-box [(value)]="note.age"></dx-text-box>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-success"
+          [ngClass]="{'btn-outline-success' : modalEvent.toString() === 'ADD', 'btn-outline-primary' : modalEvent.toString() === 'EDIT'}"
+          (click)="onSave(note)">
+    {{(modalEvent.toString() === 'ADD' ? 'add' : 'save') | translate }}
+  </button>
+  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+  </button>
+</div>

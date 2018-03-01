@@ -1,8 +1,9 @@
 import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
 
-export interface Tab {
+export class Tab {
   name: string;
   route: string;
-  restrictedRoles: UserRoleEnum[];
-  hasAnyRole: boolean;
+  restrictedRoles?: UserRoleEnum[] = [];
+  hasAnyRole?: boolean = false;
+  private?: boolean = false;
 }
