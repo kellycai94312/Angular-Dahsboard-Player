@@ -57,7 +57,8 @@ export class PersonPageComponent implements OnInit {
     this.tabs = [
       {
         name: 'persons.person.personal.section',
-        route: 'personal'
+        route: 'personal',
+        restrictedRoles: []
       },
       {
         name: 'persons.person.anthropometry.section',
@@ -73,7 +74,8 @@ export class PersonPageComponent implements OnInit {
       },
       {
         name: 'persons.person.contact.section',
-        route: 'contact'
+        route: 'contact',
+        restrictedRoles: []
       },
       {
         name: 'persons.person.testsResults.section',
@@ -90,6 +92,7 @@ export class PersonPageComponent implements OnInit {
       {
         name: 'persons.person.groups.section',
         route: 'groups',
+        restrictedRoles: [],
         hasAnyRole: true
       },
       {
