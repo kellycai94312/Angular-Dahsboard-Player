@@ -308,7 +308,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Put,
     path: '/note/{!id}',
   })
-  updateNote: IRestMethodStrict<Note, { id: number }, void, Note>;
+  updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
 
   //#endregion
 

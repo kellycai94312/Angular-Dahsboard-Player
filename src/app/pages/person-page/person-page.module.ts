@@ -53,6 +53,7 @@ import { SchoolNoteComponent } from './person-page/my-region/school-note/school-
 import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
 import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
 import { MyRegionService } from './person-page/my-region/my-region.service';
+import { NoteModalComponent } from './person-page/my-region/note-modal/note-modal.component';
 
 @NgModule({
   imports: [
@@ -104,7 +105,8 @@ import { MyRegionService } from './person-page/my-region/my-region.service';
     MyRegionComponent,
     SchoolNoteComponent,
     TrainerNoteComponent,
-    AgentNoteComponent
+    AgentNoteComponent,
+    NoteModalComponent
   ],
   providers: [
     PersonService,
@@ -116,7 +118,8 @@ import { MyRegionService } from './person-page/my-region/my-region.service';
     ModalSelectPageComponent,
     SportTypeItemComponent,
     UserRoleItemComponent,
-    EventModalComponent
+    EventModalComponent,
+    NoteModalComponent
   ]
 })
 export class PersonPageModule {

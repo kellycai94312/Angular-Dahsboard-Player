@@ -59,14 +59,20 @@
       "myRegion": {
         "section": "My region",
         "school": {
-          "section": "School contacts"
+          "section": "School contacts",
+          "add": "Add school contact",
+          "edit": "Edit school contact"
         },
         "trainer": {
           "section": "Trainer contacts",
-          "age": "Team age"
+          "age": "Team age",
+          "add": "Add trainer contact",
+          "edit": "Edit trainer contact"
         },
         "agent": {
-          "section": "Agent contacts"
+          "section": "Agent contacts",
+          "add": "Add agent contact",
+          "edit": "Edit agent contact"
         }
       }
     }

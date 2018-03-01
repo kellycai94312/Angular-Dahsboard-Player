@@ -1,5 +1,5 @@
 <div>
-  <button class="btn btn-outline-success btn-sm">
+  <button class="btn btn-outline-success btn-sm" (click)="myRegionService.add()">
     <i class="fa fa-plus"></i>
     <span> {{'add' | translate}}</span>
   </button>
@@ -59,10 +59,10 @@
         <td class="col-sm-2">{{item?.organization}}</td>
         <td class="col-sm-1">
           <div class="text-center">
-            <button class="btn btn-outline-primary btn-sm">
+            <button class="btn btn-outline-primary btn-sm" (click)="myRegionService.edit(item)">
               <i class="fa fa-edit"></i>
             </button>
-            <button class="btn btn-outline-danger btn-sm">
+            <button class="btn btn-outline-danger btn-sm" (click)="myRegionService.remove(item)">
               <i class="fa fa-remove"></i>
             </button>
           </div>

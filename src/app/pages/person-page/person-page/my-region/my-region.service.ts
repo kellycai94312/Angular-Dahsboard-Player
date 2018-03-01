@@ -6,6 +6,9 @@ import { PropertyConstant } from '../../../../data/local/property-constant';
 import { PageQuery } from '../../../../data/remote/rest-api/page-query';
 import { AppHelper } from '../../../../utils/app-helper';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NoteModalComponent } from './note-modal/note-modal.component';
+import { ModalEvent } from '../../../../data/local/modal-event';
 
 @Injectable()
 export class MyRegionService {
@@ -14,8 +17,37 @@ export class MyRegionService {
   public pageSize: number;
   private _noteQuery: NoteQuery;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
+  }
+
+  public async add() {
+    const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});
+    ref.componentInstance.modalEvent = ModalEvent[ModalEvent.ADD];
+    ref.componentInstance.noteType = this._noteQuery.noteType;
+    ref.componentInstance.onSave = async (item: Note) => {
+      await this._participantRestApiService.addNote(item);
+      await this.updateListAsync();
+      ref.dismiss();
+    }
+  }
+
+  public async edit(item: Note) {
+    const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});
+    ref.componentInstance.modalEvent = ModalEvent[ModalEvent.EDIT];
+    ref.componentInstance.note = Object.assign({}, item);
+    ref.componentInstance.noteType = this._noteQuery.noteType;
+    ref.componentInstance.onSave = async (newItem: Note) => {
+      await this._participantRestApiService.updateNote(newItem, null, {id: item.id});
+      await this.updateListAsync();
+      ref.dismiss();
+    }
+  }
+
+  public async remove(item: Note) {
+    await this._participantRestApiService.removeNote({id: item.id});
+    await this.updateListAsync();
   }
 
   public async initialize(noteType: NoteType) {
