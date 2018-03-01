@@ -23,12 +23,12 @@ export class GroupEventsComponent implements OnInit {
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
   public pageSize: number;
-  readonly isEditAllow: boolean;
+  public trainingGroups: TrainingGroup[];
 
+  readonly isEditAllow: boolean;
   private readonly _trainingQuery: TrainingQuery;
   private readonly _groupId: number;
 
-  private trainingGroups: TrainingGroup[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,

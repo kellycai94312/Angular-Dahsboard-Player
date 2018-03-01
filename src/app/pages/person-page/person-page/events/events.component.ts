@@ -22,11 +22,11 @@ export class EventsComponent implements OnInit, AfterViewInit {
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
   public pageSize: number;
-  readonly isEditAllow: boolean;
+  public trainingPersons: TrainingPerson[];
 
+  readonly isEditAllow: boolean;
   private readonly _trainingQuery: TrainingQuery;
 
-  private trainingPersons: TrainingPerson[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
