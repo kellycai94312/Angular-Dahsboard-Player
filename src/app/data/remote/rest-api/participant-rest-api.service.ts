@@ -53,6 +53,7 @@ import { TrainingGroup } from '../model/training-group';
 import { TrainingAccess } from '../misc/training-access';
 import { NoteQuery } from './query/note-query';
 import { Note } from '../model/note/base/note';
+import { TestingPersonalReport } from '../bean/testing-personal-report';
 
 export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
 
@@ -545,6 +546,20 @@ export class ParticipantRestApiService extends Rest {
   }
 
   //#endregion
+
+  //region BaseTraining
+
+  //region Testing
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}',
+  })
+  getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
+
+  //endregion
+
+  //endregion
 
   @RestAction({
     method: RestRequestMethod.Get,

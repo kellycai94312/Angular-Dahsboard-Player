@@ -25,7 +25,8 @@
         "styles.scss"
       ],
       "scripts": [
-        "../node_modules/plotly.js/dist/plotly.min.js"
+        "../node_modules/plotly.js/dist/plotly.min.js",
+        "../node_modules/stimulsoft-reports-js/stimulsoft.reports.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
