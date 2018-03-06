@@ -55,7 +55,7 @@ import { NoteQuery } from './query/note-query';
 import { Note } from '../model/note/base/note';
 import { TestingPersonalReport } from '../bean/testing-personal-report';
 
-export const RestUrl = environment.production ? 'http://80.93.49.48/sp/v2' : 'http://localhost:8082';
+export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
 @Injectable()
 @RestParams({
