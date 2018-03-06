@@ -127,11 +127,19 @@ export class EventsComponent implements OnInit, AfterViewInit {
     trainingInfoDataSet.readJson(trainingInfo);
     report.regData('training_info', 'training_info', trainingInfoDataSet);
 
+    const estimatedParameters = testingPersonalReport.estimatedParameterResults;
+    for (let item of estimatedParameters) {
+      item.value = this.round(item.value);
+      item.perspectiveValue = this.round(item.perspectiveValue);
+    }
     const estimatedParametersDataSet = new Stimulsoft.System.Data.DataSet('estimated_parameters');
-    estimatedParametersDataSet.readJson(testingPersonalReport.estimatedParameterResults);
+    estimatedParametersDataSet.readJson(estimatedParameters);
     report.regData('estimated_parameters', 'estimated_parameters', estimatedParametersDataSet);
 
     const testResults = testingPersonalReport.testResults;
+    for (let item of testResults) {
+      item.value = this.round(item.value);
+    }
     const halfLength = testResults.length / 2;
     const testResultsDataSet = new Stimulsoft.System.Data.DataSet('test_results_1');
     testResultsDataSet.readJson(testResults.slice(0, halfLength));
@@ -161,6 +169,10 @@ export class EventsComponent implements OnInit, AfterViewInit {
     this._trainingQuery.from = from;
     const container = await this._participantRestApiService.getPersonTrainings(this._trainingQuery);
     this.trainingPersons = AppHelper.pushItemsInList(from, this.trainingPersons, container);
+  }
+
+  private round(value: number) {
+    return Math.round(value * 100) / 100;
   }
 
 }
