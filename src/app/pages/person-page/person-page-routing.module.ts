@@ -14,6 +14,7 @@ import { MyRegionComponent } from './person-page/my-region/my-region.component';
 import { SchoolNoteComponent } from './person-page/my-region/school-note/school-note.component';
 import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
 import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
+import { AchievementsComponent } from './person-page/achievements/achievements.component';
 
 
 const routes: Routes = [
@@ -37,7 +38,8 @@ const routes: Routes = [
           {path: 'trainer', component: TrainerNoteComponent},
           {path: 'agent', component: AgentNoteComponent}
         ]
-      }
+      },
+      {path: 'achievements', component: AchievementsComponent}
     ]
   },
 ];

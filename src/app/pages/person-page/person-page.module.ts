@@ -54,6 +54,7 @@ import { TrainerNoteComponent } from './person-page/my-region/trainer-note/train
 import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
 import { MyRegionService } from './person-page/my-region/my-region.service';
 import { NoteModalComponent } from './person-page/my-region/note-modal/note-modal.component';
+import { AchievementsComponent } from './person-page/achievements/achievements.component';
 
 @NgModule({
   imports: [
@@ -89,6 +90,7 @@ import { NoteModalComponent } from './person-page/my-region/note-modal/note-moda
     PersonsPageComponent,
     InvokeDirective,
     AnthropometryComponent,
+    AchievementsComponent,
     PersonalComponent,
     PhysiologyComponent,
     ContactComponent,

@@ -63,14 +63,28 @@ export class PersonPageComponent implements OnInit {
       {
         name: 'persons.person.anthropometry.section',
         route: 'anthropometry',
-        restrictedRoles: [UserRoleEnum.TRAINER],
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
         hasAnyRole: true
       },
       {
         name: 'persons.person.physiology.section',
         route: 'physiology',
-        restrictedRoles: [UserRoleEnum.TRAINER],
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
         hasAnyRole: true
+      },
+      {
+        name: 'persons.person.achievements.section',
+        route: 'achievements',
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true,
+        private: true
+      },
+      {
+        name: 'persons.person.myRegion.section',
+        route: 'my_region',
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true,
+        private: true
       },
       {
         name: 'persons.person.contact.section',
@@ -80,7 +94,7 @@ export class PersonPageComponent implements OnInit {
       {
         name: 'persons.person.testsResults.section',
         route: 'tests_results',
-        restrictedRoles: [UserRoleEnum.TRAINER],
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
         hasAnyRole: true
       },
       {
@@ -94,13 +108,6 @@ export class PersonPageComponent implements OnInit {
         route: 'groups',
         restrictedRoles: [],
         hasAnyRole: true
-      },
-      {
-        name: 'persons.person.myRegion.section',
-        route: 'my_region',
-        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
-        hasAnyRole: true,
-        private: true
       }
     ];
     this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {
