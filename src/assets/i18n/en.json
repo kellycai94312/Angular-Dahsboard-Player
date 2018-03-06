@@ -74,6 +74,9 @@
           "add": "Add agent contact",
           "edit": "Edit agent contact"
         }
+      },
+      "achievements": {
+        "section": "Achievements"
       }
     }
   },
