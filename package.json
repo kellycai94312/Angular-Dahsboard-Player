@@ -37,6 +37,7 @@
     "rest-core": "^0.2.2",
     "rest-ngx": "^0.1.1",
     "rxjs": "^5.5.6",
+    "stimulsoft-reports-js": "^2018.1.7",
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
