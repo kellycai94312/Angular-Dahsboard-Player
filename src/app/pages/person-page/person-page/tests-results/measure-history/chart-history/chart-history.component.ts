@@ -26,8 +26,8 @@ export class ChartHistoryComponent implements OnInit {
   ngOnInit() {
     const element = this.el.nativeElement;
     this._measureValues = this._measureHistoryService.measureValues.filter(mv => !isNaN(Number(mv.value)));
-    let data = [{
-      x: this._measureValues.map(mv => mv.created.toLocaleString().substring(0, 10)),
+    const data = [{
+      x: this._measureValues.map(mv => new Date(mv.created)),
       y: this._measureValues.map(mv => mv.value),
       type: 'bar',
       // hoverinfo: 'none',
@@ -39,7 +39,12 @@ export class ChartHistoryComponent implements OnInit {
       //   color: '#fff'
       // }
     }];
-    Plotly.plot(element, data);
+    const layout = {
+      xaxis: {
+        type: 'date'
+      }
+    };
+    Plotly.plot(element, data, layout);
   }
 
 }

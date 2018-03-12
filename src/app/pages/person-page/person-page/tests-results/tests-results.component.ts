@@ -87,6 +87,7 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
 
     const measureQuery = new MeasureTemplateQuery();
     measureQuery.from = 0;
+    measureQuery.count = PropertyConstant.pageSize;
     measureQuery.dictionaryType = DictionaryType[DictionaryType.SYSTEM].toString();
 
     const personMeasures: ExerciseMeasure[] = await this._participantRestApiService.getPersonMeasureTemplate();
