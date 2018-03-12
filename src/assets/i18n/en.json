@@ -207,5 +207,6 @@
   "email": "E-mail",
   "club": "Club",
   "organization": "Organization",
-  "report": "Report"
+  "report": "Report",
+  "reportError": "There is no enough data to make a report"
 }

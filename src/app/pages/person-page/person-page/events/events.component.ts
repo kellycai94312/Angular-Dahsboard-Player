@@ -11,6 +11,8 @@ import { TrainingPerson } from '../../../../data/remote/model/training/training-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventModalComponent } from './event-modal/event-modal.component';
 import { AssetsService } from '../../../../data/remote/rest-api/assets.service';
+import notify from 'devextreme/ui/notify';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-events',
@@ -31,7 +33,8 @@ export class EventsComponent implements OnInit, AfterViewInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _assetsService: AssetsService,
               private _personService: PersonService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _translate: TranslateService) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
     this._trainingQuery = new TrainingQuery();
@@ -114,10 +117,20 @@ export class EventsComponent implements OnInit, AfterViewInit {
 
   async downloadReport(item: TrainingPerson) {
     const reportJson = await this._assetsService.getPersonalReport();
-    const testingPersonalReport = await this._participantRestApiService.getPersonalReport({
-      testingId: item.baseTraining.id,
-      trainingPersonId: item.id
-    });
+    let testingPersonalReport;
+    try {
+      testingPersonalReport = await this._participantRestApiService.getPersonalReport({
+        testingId: item.baseTraining.id,
+        trainingPersonId: item.id
+      });
+    } catch (e) {
+      if (e.status === 404) {
+        const errorMessage = await this._translate.get('reportError').toPromise();
+        notify(errorMessage, 'warning', 3000);
+      }
+      return;
+    }
+
     const report = new Stimulsoft.Report.StiReport();
     report.loadDocument(reportJson);
     report.dictionary.databases.clear();
