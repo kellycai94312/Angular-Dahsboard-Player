@@ -95,21 +95,30 @@ html, body {
   }
 }
 
-.thumbnail {
-  width: $logo-thumbnail-size;
-  height: $logo-thumbnail-size;
-  min-width: $logo-thumbnail-size;
+.logo-sm {
+  width: $logo-size-sm;
+  height: $logo-size-sm;
+  min-width: $logo-size-sm;
+  min-height: $logo-size-sm;
 }
 
-.logo {
-  width: $logo-size;
-  height: $logo-size;
-  min-width: $logo-size;
+.logo-lg {
+  width: $logo-size-lg;
+  height: $logo-size-lg;
+  min-width: $logo-size-lg;
+  min-height: $logo-size-lg;
+}
+
+.logo-xl {
+  width: $logo-size-xl;
+  height: $logo-size-xl;
+  min-width: $logo-size-xl;
+  min-height: $logo-size-xl;
 
   @media (max-width: max-width-sm()) {
-    width: $logo-thumbnail-size;
-    height: $logo-thumbnail-size;
-    min-width: $logo-thumbnail-size;
+    width: $logo-size-lg;
+    height: $logo-size-lg;
+    min-width: $logo-size-lg;
   }
 
 }
@@ -122,13 +131,18 @@ html, body {
   background-position: center center;
 }
 
-.logo-circle {
-  @extend .logo;
+.logo-xl-circle {
+  @extend .logo-xl;
   @extend .circle;
 }
 
-.thumbnail-circle {
-  @extend .thumbnail;
+.logo-lg-circle {
+  @extend .logo-lg;
+  @extend .circle;
+}
+
+.logo-sm-circle {
+  @extend .logo-sm;
   @extend .circle;
 }
 
