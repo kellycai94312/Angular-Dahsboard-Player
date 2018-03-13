@@ -87,7 +87,7 @@
   <tr [routerLink]="row.data.url">
     <td>
       <div *ngIf="row.data.imagePersonLogoUrl!==null"
-           class="img-fluid img-circle"
+           class="img-fluid thumbnail-circle"
            [ngStyle]="{'background-image': 'url('+ row.data.imagePersonLogoUrl +')'}">
       </div>
     </td>

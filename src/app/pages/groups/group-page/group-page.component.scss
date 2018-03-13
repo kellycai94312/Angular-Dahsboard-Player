@@ -16,20 +16,6 @@ a {
   }
 }
 
-.img {
-  border: 2px solid $light-blue;
-  width: $avatar-size;
-  height: $avatar-size;
-  margin: auto;
-  background-clip: padding-box;
-  border-radius: 50% !important;
-  background-size: cover;
-  background-position: center center;
-  .avatar {
-    border: 2px solid $light-blue;
-  }
-}
-
 .btn-file {
   position: relative;
   overflow: hidden;
@@ -62,11 +48,6 @@ a {
 @media (max-width: max-width-sm()) {
   .full-name > h3 {
     font-size: 14px;
-  }
-
-  .img {
-    width: $avatar-size-md !important;
-    height: $avatar-size-md !important;
   }
 
   .btn-file {

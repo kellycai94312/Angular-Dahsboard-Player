@@ -95,26 +95,41 @@ html, body {
   }
 }
 
-.logo-list {
+.thumbnail {
+  width: $logo-thumbnail-size;
+  height: $logo-thumbnail-size;
+  min-width: $logo-thumbnail-size;
+}
+
+.logo {
+  width: $logo-size;
+  height: $logo-size;
+  min-width: $logo-size;
+
+  @media (max-width: max-width-sm()) {
+    width: $logo-thumbnail-size;
+    height: $logo-thumbnail-size;
+    min-width: $logo-thumbnail-size;
+  }
+
+}
+
+.circle {
   border: 2px solid $light-blue;
-  width: $logo-list-size;
-  height: $logo-list-size;
-  margin: auto;
   background-clip: padding-box;
   border-radius: 50% !important;
   background-size: cover;
   background-position: center center;
 }
 
-.img-circle {
-  border: 2px solid $light-blue;
-  width: $logo-list-size;
-  height: $logo-list-size;
-  min-width: $logo-list-size;
-  background-clip: padding-box;
-  border-radius: 50% !important;
-  background-size: cover;
-  background-position: center center;
+.logo-circle {
+  @extend .logo;
+  @extend .circle;
+}
+
+.thumbnail-circle {
+  @extend .thumbnail;
+  @extend .circle;
 }
 
 h5 {

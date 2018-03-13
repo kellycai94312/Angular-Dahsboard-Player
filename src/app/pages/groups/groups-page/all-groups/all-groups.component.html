@@ -101,8 +101,7 @@
   <tbody *dxTemplate="let row of 'rowTemplateName'">
   <tr [routerLink]="row.data.url">
     <td>
-      <img [src]="row.data.imageLogoUrl"
-           width="80"/>
+      <img class="thumbnail" [src]="row.data.imageLogoUrl"/>
     </td>
     <td>
       <h5>{{row.data.group?.name}}</h5>

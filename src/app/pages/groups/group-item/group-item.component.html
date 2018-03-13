@@ -1,8 +1,7 @@
 <div *ngIf="data!=null">
   <a routerLink="{{groupUrl}}">
     <div class="d-flex flex-row align-items-center">
-      <img [src]="imageUrl"
-           width="80">
+      <img [src]="imageUrl" class="thumbnail">
       <div class="d-flex flex-column ml-2">
         <h5>{{data.name}}</h5>
         <p>{{data.groupType.name}}</p>
