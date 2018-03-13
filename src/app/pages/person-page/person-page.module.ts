@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { PersonPageRoutingModule } from './person-page-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
@@ -113,7 +113,8 @@ import { AchievementsComponent } from './person-page/achievements/achievements.c
   providers: [
     PersonService,
     MeasureHistoryService,
-    MyRegionService
+    MyRegionService,
+    DatePipe
   ],
   entryComponents: [
     ModalSelectComponent,

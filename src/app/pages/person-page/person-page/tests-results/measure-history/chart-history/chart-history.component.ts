@@ -1,6 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MeasureHistoryService } from '../measure-history.service';
 import { ExerciseExecMeasureValue } from '../../../../../../data/remote/model/training/exercise-exec-measure-value';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-chart-history',
@@ -14,7 +15,8 @@ export class ChartHistoryComponent implements OnInit {
 
   private _measureValues: ExerciseExecMeasureValue[];
 
-  constructor(private _measureHistoryService: MeasureHistoryService) {
+  constructor(private _measureHistoryService: MeasureHistoryService,
+              private _datePipe: DatePipe) {
   }
 
   @HostListener('window:resize', ['$event'])
@@ -27,24 +29,11 @@ export class ChartHistoryComponent implements OnInit {
     const element = this.el.nativeElement;
     this._measureValues = this._measureHistoryService.measureValues.filter(mv => !isNaN(Number(mv.value)));
     const data = [{
-      x: this._measureValues.map(mv => new Date(mv.created)),
+      x: this._measureValues.map(mv => this._datePipe.transform(mv.created, 'yyyy.MM.dd HH:mm')),
       y: this._measureValues.map(mv => mv.value),
-      type: 'bar',
-      // hoverinfo: 'none',
-      // text: yValue,
-      // textposition: 'auto',
-      // textfont: {
-      //   family: 'Sans Serif',
-      //   size: 22,
-      //   color: '#fff'
-      // }
+      type: 'bar'
     }];
-    const layout = {
-      xaxis: {
-        type: 'date'
-      }
-    };
-    Plotly.plot(element, data, layout);
+    Plotly.plot(element, data);
   }
 
 }
