@@ -3,8 +3,7 @@
   <div class="d-flex flex-row">
     <div class="p-2">
       <div class="d-flex flex-column">
-        <img [src]="imageLogoUrl"
-             width="150">
+        <img class="logo-xl" [src]="imageLogoUrl">
         <button *ngIf="groupService.isEditAllow()"
                 class="btn btn-default btn-file btn-sm mt-2">
           <i class="fa fa-pencil-square-o"></i>

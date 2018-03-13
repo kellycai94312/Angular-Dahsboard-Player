@@ -95,26 +95,55 @@ html, body {
   }
 }
 
-.logo-list {
+.logo-sm {
+  width: $logo-size-sm;
+  height: $logo-size-sm;
+  min-width: $logo-size-sm;
+  min-height: $logo-size-sm;
+}
+
+.logo-lg {
+  width: $logo-size-lg;
+  height: $logo-size-lg;
+  min-width: $logo-size-lg;
+  min-height: $logo-size-lg;
+}
+
+.logo-xl {
+  width: $logo-size-xl;
+  height: $logo-size-xl;
+  min-width: $logo-size-xl;
+  min-height: $logo-size-xl;
+
+  @media (max-width: max-width-sm()) {
+    width: $logo-size-lg;
+    height: $logo-size-lg;
+    min-width: $logo-size-lg;
+  }
+
+}
+
+.circle {
   border: 2px solid $light-blue;
-  width: $logo-list-size;
-  height: $logo-list-size;
-  margin: auto;
   background-clip: padding-box;
   border-radius: 50% !important;
   background-size: cover;
   background-position: center center;
 }
 
-.img-circle {
-  border: 2px solid $light-blue;
-  width: $logo-list-size;
-  height: $logo-list-size;
-  min-width: $logo-list-size;
-  background-clip: padding-box;
-  border-radius: 50% !important;
-  background-size: cover;
-  background-position: center center;
+.logo-xl-circle {
+  @extend .logo-xl;
+  @extend .circle;
+}
+
+.logo-lg-circle {
+  @extend .logo-lg;
+  @extend .circle;
+}
+
+.logo-sm-circle {
+  @extend .logo-sm;
+  @extend .circle;
 }
 
 h5 {

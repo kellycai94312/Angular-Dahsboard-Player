@@ -3,7 +3,6 @@
 $navbar-background: $light-blue;
 $navbar-background-dark: darken($navbar-background, 12%);
 $user-panel-width: 250px;
-$avatar-size: 40px;
 
 .nav-bar-dropdown-toggle {
   height: $navbar-height;
@@ -26,19 +25,10 @@ $avatar-size: 40px;
 
     background-color: darken($light-blue, 12%);
 
-    > .avatar {
-      width: $avatar-size;
-      height: $avatar-size;
-      background-clip: padding-box;
-      border-radius: 50% !important;
-      background-size: cover;
-      background-position: center center;
-    }
-
     > .fullname {
       padding-left: 5px;
-      width: ($user-panel-width - $avatar-size) * .85;
-      height: $avatar-size;
+      width: ($user-panel-width - $logo-size-sm) * .85;
+      height: $logo-size-sm;
       display: flex;
       align-items: center;
       font-weight: 400;

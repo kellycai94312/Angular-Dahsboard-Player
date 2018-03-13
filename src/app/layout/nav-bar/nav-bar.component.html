@@ -9,8 +9,7 @@
            id="dropdownManual"
            ngbDropdownToggle>
         <div class="dropdown-toggle-content">
-          <div class="avatar" *ngIf="logo"
-               [ngStyle]="{'background-image': 'url('+ logo +')'}">
+          <div class="logo-sm-circle" *ngIf="logo" [ngStyle]="{'background-image': 'url('+ logo +')'}">
           </div>
           <div class="fullname">
             <p>{{person.firstName}}</p>
