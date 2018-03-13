@@ -124,7 +124,6 @@ html, body {
 }
 
 .circle {
-  border: 2px solid $light-blue;
   background-clip: padding-box;
   border-radius: 50% !important;
   background-size: cover;
@@ -134,11 +133,13 @@ html, body {
 .logo-xl-circle {
   @extend .logo-xl;
   @extend .circle;
+  border: 2px solid $light-blue;
 }
 
 .logo-lg-circle {
   @extend .logo-lg;
   @extend .circle;
+  border: 2px solid $light-blue;
 }
 
 .logo-sm-circle {
