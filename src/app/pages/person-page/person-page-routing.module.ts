@@ -15,6 +15,8 @@ import { SchoolNoteComponent } from './person-page/my-region/school-note/school-
 import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
 import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
+import { TableHistoryComponent } from './person-page/tests-results/measure-history/table-history/table-history.component';
+import { ChartHistoryComponent } from './person-page/tests-results/measure-history/chart-history/chart-history.component';
 
 
 const routes: Routes = [
@@ -29,7 +31,13 @@ const routes: Routes = [
       {path: 'personal', component: PersonalComponent},
       {path: 'physiology', component: PhysiologyComponent},
       {path: 'tests_results', component: TestsResultsComponent},
-      {path: 'tests_results/:id', component: MeasureHistoryComponent},
+      {
+        path: 'tests_results/:id', component: MeasureHistoryComponent, children: [
+          {path: '', redirectTo: 'table', pathMatch: 'full'},
+          {path: 'table', component: TableHistoryComponent},
+          {path: 'chart', component: ChartHistoryComponent},
+        ]
+      },
       {path: 'groups', component: GroupsComponent},
       {
         path: 'my_region', component: MyRegionComponent, children: [

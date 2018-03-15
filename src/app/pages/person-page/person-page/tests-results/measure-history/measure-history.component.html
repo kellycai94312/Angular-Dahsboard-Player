@@ -2,15 +2,24 @@
   "{{exerciseMeasure?.baseExercise.name}}" {{'persons.person.testsResults.history.titleEnd' | translate}}
   "{{exerciseMeasure?.measure.measureEnum}}"
 </div>
-<ngb-tabset>
-  <ngb-tab title="{{'table' | translate}}">
-    <ng-template ngbTabContent>
-      <app-table-history></app-table-history>
-    </ng-template>
-  </ngb-tab>
-  <ngb-tab title="{{'chart' | translate}}">
-    <ng-template ngbTabContent>
-      <app-chart-history></app-chart-history>
-    </ng-template>
-  </ngb-tab>
-</ngb-tabset>
+<div class="row">
+  <div class="col">
+    <dx-date-box id="dateFrom"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateFromChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateTo"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateToChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+</div>
+<app-tab [tabs]="tabs"></app-tab>
