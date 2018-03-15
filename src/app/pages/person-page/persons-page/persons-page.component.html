@@ -11,6 +11,9 @@
                  type="date"
                  placeholder="{{'yearBirth' | translate}}"
                  showClearButton="true"
+                 displayFormat="year"
+                 maxZoomLevel="decade"
+                 minZoomLevel="century"
                  (onValueChanged)="onYearBirthChanged($event.value)">
     </dx-date-box>
   </div>
