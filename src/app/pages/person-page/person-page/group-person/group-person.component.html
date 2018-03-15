@@ -29,8 +29,10 @@
         ngDefaultControl>
       </app-input-select>
     </div>
-    <div *ngIf="data?.sportRole"
-         class="ml-4">
+    <div class="ml-4" *ngIf="data?.sportRole">
+        <h4>{{data.sportRole.name}}</h4>
+    </div>
+    <div class="ml-4" *ngIf="data?.sportRole">
       <h4>{{data.sportRole.sportType.sportTypeEnum}}</h4>
     </div>
     <div *ngIf="data?.mentor"

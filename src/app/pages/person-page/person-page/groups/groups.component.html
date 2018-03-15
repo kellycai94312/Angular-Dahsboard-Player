@@ -20,14 +20,16 @@
 </div>
 
 <div class="mt-2">
-  <div class="group base"
-       *ngIf="isEditAllow">
+  <div class="group base" *ngIf="isEditAllow || selectedBaseGroup">
     <label for="selectedBaseGroup">{{'persons.person.groups.baseGroup' | translate}}</label>
-    <app-group-person id="selectedBaseGroup" [(data)]="selectedBaseGroup" [role]="selectedPublicUserRole"
+    <app-group-person *ngIf="isEditAllow" id="selectedBaseGroup" [(data)]="selectedBaseGroup" [role]="selectedPublicUserRole"
                       [baseGroup]="true" (change)="onChange($event)"></app-group-person>
+    <app-group-person *ngIf="!isEditAllow" class="group" [data]="selectedBaseGroup" [role]="selectedPublicUserRole"
+                      [baseGroup]="false"
+                      (change)="onChange($event)"></app-group-person>
   </div>
   <div class="mt-2">
-    <label for="additional" *ngIf="isEditAllow">{{'persons.person.groups.additionalGroups' | translate}}</label>
+    <label for="additional" *ngIf="isEditAllow || groupPersons.length">{{'persons.person.groups.additionalGroups' | translate}}</label>
     <app-infinite-list id="additional" [items]="groupPersons"
                        (nextPage)="onNextPage($event)">
       <ng-template let-item>
