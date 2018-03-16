@@ -54,8 +54,7 @@
         "section": "Группы",
         "placeholder": "Выбрать группу",
         "baseGroup": "Основная",
-        "additionalGroups": "Дополнительные",
-        "addGroup": "Добавить"
+        "additionalGroups": "Дополнительные"
       },
       "myRegion": {
         "section": "Мой регион",
@@ -147,7 +146,7 @@
   "userRole": "Роль пользователя",
   "newGroupPage": "Новая группа",
   "name": "Название",
-  "sportType": "Тип спорта",
+  "sportType": "Вид спорта",
   "requiredField": "Обязательное поле",
   "teamType": "Тип команды",
   "league": "Лига",

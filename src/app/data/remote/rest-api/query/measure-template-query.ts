@@ -8,4 +8,5 @@ export class MeasureTemplateQuery extends PageQuery {
   dateFrom?: Date;
   dateTo?: Date;
   dictionaryType?: string;
+  isNumeric?: boolean;
 }

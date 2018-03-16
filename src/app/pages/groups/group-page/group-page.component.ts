@@ -98,7 +98,6 @@ export class GroupPageComponent implements OnInit {
 
   public async onLogoChange(event) {
     const fileList: FileList = event.target.files;
-    console.log(fileList);
 
     if (fileList.length > 0) {
       const file: File = fileList[0];

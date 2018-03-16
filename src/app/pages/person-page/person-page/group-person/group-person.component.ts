@@ -1,10 +1,10 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {ImageType} from '../../../../data/remote/model/image-type';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {PersonService} from '../person.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {UserRole} from '../../../../data/remote/model/user-role';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { ImageType } from '../../../../data/remote/model/image-type';
+import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import { PersonService } from '../person.service';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { UserRole } from '../../../../data/remote/model/user-role';
 
 // TODO: Remove this component. See app-group-person-new!
 @Component({
@@ -12,8 +12,7 @@ import {UserRole} from '../../../../data/remote/model/user-role';
   templateUrl: './group-person.component.html',
   styleUrls: ['./group-person.component.scss']
 })
-export class GroupPersonComponent implements OnInit {
-
+export class GroupPersonComponent implements OnChanges {
   @Input()
   public data: GroupPerson;
 
@@ -40,7 +39,7 @@ export class GroupPersonComponent implements OnInit {
     this.change = new EventEmitter<GroupPerson>();
   }
 
-  ngOnInit() {
+  ngOnChanges(model: any) {
     if (this.data) {
       this.imageUrl = this._participantRestApiService.getImageUrl({
         clazz: 'group',
