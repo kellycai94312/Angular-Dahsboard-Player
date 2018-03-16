@@ -3,12 +3,12 @@
   <table class="table table-sm">
     <thead>
     <tr class="d-flex">
-      <th class="col-1">Logo</th>
-      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">Name</th>
-      <th class="col-2">Type</th>
-      <th class="col-2">Sport role</th>
-      <th class="col-2">Sport type</th>
-      <th class="col-2">Mentor</th>
+      <th class="col-1">{{'image' | translate}}</th>
+      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">{{'name' | translate}}</th>
+      <th class="col-2">{{'groupType' | translate}}</th>
+      <th class="col-2">{{'sportRole' | translate}}</th>
+      <th class="col-2">{{'sportType' | translate}}</th>
+      <th class="col-2">{{'mentor' | translate}}</th>
       <th class="col-1" *ngIf="isEditAllow"></th> <!--remove btn-->
     </tr>
     </thead>
@@ -45,12 +45,12 @@
   <table class="table table-sm mt-1" *ngIf="groupPersons.length">
     <thead>
     <tr class="d-flex">
-      <th class="col-1">Logo</th>
-      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">Name</th>
-      <th class="col-2">Type</th>
-      <th class="col-2">Sport role</th>
-      <th class="col-2">Sport type</th>
-      <th class="col-2">Mentor</th>
+      <th class="col-1">{{'image' | translate}}</th>
+      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">{{'name' | translate}}</th>
+      <th class="col-2">{{'groupType' | translate}}</th>
+      <th class="col-2">{{'sportRole' | translate}}</th>
+      <th class="col-2">{{'sportType' | translate}}</th>
+      <th class="col-2">{{'mentor' | translate}}</th>
       <th class="col-1" *ngIf="isEditAllow"></th> <!--remove btn-->
     </tr>
     </thead>
