@@ -37,6 +37,13 @@ export class GroupsComponent implements OnInit {
     this._groupQuery.from = 0;
     this._groupQuery.count = PropertyConstant.pageSize;
     this._groupQuery.id = _personService.shared.person.id;
+    this._personService.userRoleSelectEmitted$.subscribe(userRole => {
+      this.selectedPublicUserRole = userRole;
+      this.updateListAsync();
+    });
+    this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
+      this.selectedBaseGroup = groupPerson;
+    });
   }
 
   async ngOnInit() {
@@ -45,14 +52,7 @@ export class GroupsComponent implements OnInit {
       this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
       this.updateListAsync();
     }
-    this._personService.userRoleSelectEmitted$.subscribe(userRole => {
-      this.selectedPublicUserRole = userRole;
-      this.updateListAsync();
-    });
     this.selectedBaseGroup = this._personService.baseGroupSelectDefault;
-    this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
-      this.selectedBaseGroup = groupPerson;
-    });
   }
 
   async onGroupTypeChanged(groupType: GroupType) {

@@ -54,8 +54,7 @@
         "section": "Группы",
         "placeholder": "Выбрать группу",
         "baseGroup": "Основная",
-        "additionalGroups": "Дополнительные",
-        "addGroup": "Добавить"
+        "additionalGroups": "Дополнительные"
       },
       "myRegion": {
         "section": "Мой регион",

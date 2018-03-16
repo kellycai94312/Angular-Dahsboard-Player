@@ -1,50 +1,39 @@
-<div class="d-flex flex-row">
-  <div class="d-flex flex-column" *ngIf="!isEditAllow && data">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center">
-        <img class="logo-lg" [src]="imageUrl"/>
-      </div>
-    </div>
-  </div>
-
-  <a class="d-flex flex-column ml-4" routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center">
-        <h4>{{data?.group.name}}</h4>
-        <p>{{data?.group.groupType.groupTypeEnum}}</p>
-      </div>
-    </div>
-  </a>
-
-  <div class="d-flex flex-row align-items-center">
-    <div *ngIf="isEditAllow">
-      <app-input-select
-        [loadData]="loadData"
-        [(model)]="data"
-        [pageSize]="pageSize"
-        (onChange)="onGroupChange($event)"
-        [getKey]="getKey"
-        [getName]="getName"
-        placeholder="Select a group"
-        ngDefaultControl>
-      </app-input-select>
-    </div>
-    <div class="ml-4" *ngIf="data?.sportRole">
-        <h4>{{data.sportRole.name}}</h4>
-    </div>
-    <div class="ml-4" *ngIf="data?.sportRole">
-      <h4>{{data.sportRole.sportType.sportTypeEnum}}</h4>
-    </div>
-    <div *ngIf="data?.mentor"
-         class="ml-4">
-      <app-person [person]="data.mentor.person"></app-person>
-    </div>
-    <div *ngIf="isEditAllow"
-         class="ml-2">
-      <button class="btn btn-xs btn-outline-warning"
-              (click)="onRemove()">
-        <i class="fa fa-times"></i>
-      </button>
-    </div>
-  </div>
-</div>
+<tr class="d-flex">
+  <td class="col-sm-1">
+    <img class="logo-lg" *ngIf="data && imageUrl" [src]="imageUrl"/>
+  </td>
+  <td [ngClass]="{'col-sm-2' : isEditAllow, 'col-sm-3' : !isEditAllow}">
+    <a routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
+      <p>{{data?.group.name}}</p>
+    </a>
+        <div *ngIf="isEditAllow">
+          <app-input-select
+            [loadData]="loadData"
+            [(model)]="data"
+            [pageSize]="pageSize"
+            (onChange)="onGroupChange($event)"
+            [getKey]="getKey"
+            [getName]="getName"
+            placeholder="Select a group"
+            ngDefaultControl>
+          </app-input-select>
+        </div>
+  </td>
+  <td class="col-sm-2">
+    <p>{{data?.group.groupType.name}}</p>
+  </td>
+  <td class="col-sm-2">
+    <p *ngIf="data?.sportRole">{{data.sportRole.name}}</p>
+  </td>
+  <td class="col-sm-2">
+    <p *ngIf="data?.sportRole">{{data.sportRole.sportType.sportTypeEnum}}</p>
+  </td>
+  <td class="col-sm-2">
+    <app-person *ngIf="data?.mentor" [person]="data.mentor.person"></app-person>
+  </td>
+  <td class="col-sm-1" *ngIf="isEditAllow && data">
+    <button class="btn btn-outline-danger btn-sm" (click)="onRemove()">
+      <i class="fa fa-times"></i>
+    </button>
+  </td>
+</tr>

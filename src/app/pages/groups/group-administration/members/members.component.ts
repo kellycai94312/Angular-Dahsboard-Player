@@ -62,7 +62,6 @@ export class MembersComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < pageContainer.list.length; i++) {
       const groupPersonViewModel = new GroupPersonViewModel(pageContainer.list[i], this._participantRestApiService);
       await groupPersonViewModel.init();
-      console.log(groupPersonViewModel);
       data.push(groupPersonViewModel);
     }
 

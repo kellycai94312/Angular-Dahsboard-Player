@@ -53,8 +53,7 @@
         "section": "Groups",
         "placeholder": "Select a group",
         "baseGroup": "Base",
-        "additionalGroups": "Additional",
-        "addGroup": "Add"
+        "additionalGroups": "Additional"
       },
       "myRegion": {
         "section": "My region",
