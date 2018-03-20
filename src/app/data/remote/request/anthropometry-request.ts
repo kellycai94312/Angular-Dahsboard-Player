@@ -3,5 +3,5 @@ import { PersonAnthropometry } from '../model/person-anthropometry';
 
 export class AnthropometryRequest {
   anthropometry: ListRequest<PersonAnthropometry>;
-  sportType: string;
+  sportTypeId: number;
 }

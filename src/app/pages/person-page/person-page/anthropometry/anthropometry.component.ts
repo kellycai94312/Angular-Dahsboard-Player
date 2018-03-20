@@ -15,13 +15,13 @@ export class AnthropometryComponent implements OnInit {
 
   anthropometry: PersonAnthropometry[];
   isEditAllow: boolean;
-  private _sportTypeEnum: string;
+  private _sportTypeId: number;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {
     this.isEditAllow = _personService.shared.isEditAllow;
     if (_personService.sportTypeSelectDefault) {
-      this._sportTypeEnum = _personService.sportTypeSelectDefault.sportTypeEnum;
+      this._sportTypeId = _personService.sportTypeSelectDefault.id;
       this.load(_personService.sportTypeSelectDefault);
     }
     _personService.sportTypeSelectEmitted$.subscribe(sportType => this.load(sportType));
@@ -31,10 +31,10 @@ export class AnthropometryComponent implements OnInit {
   }
 
   async save() {
-    if (this._sportTypeEnum) {
+    if (this._sportTypeId) {
       const request: AnthropometryRequest = new AnthropometryRequest();
       request.anthropometry = new ListRequest(this.anthropometry);
-      request.sportType = this._sportTypeEnum;
+      request.sportTypeId = this._sportTypeId;
       this.anthropometry = await this._participantRestApiService.changeAnthropometry(request);
     }
   }
@@ -42,13 +42,13 @@ export class AnthropometryComponent implements OnInit {
   private async load(sportType: SportType) {
     this._personService.sportTypeSelectDefault = sportType;
     if (sportType == null) {
-      this._sportTypeEnum = null;
+      this._sportTypeId = null;
       this.anthropometry = [];
     } else {
-      this._sportTypeEnum = sportType.sportTypeEnum;
+      this._sportTypeId = sportType.id;
       this.anthropometry = await this._participantRestApiService.getAnthropometry({
         id: this._personService.shared.person.id,
-        sportType: this._sportTypeEnum
+        sportTypeId: this._sportTypeId
       });
     }
   }

@@ -12,7 +12,7 @@
     <ng-template let-item>
       <tr class="d-flex">
         <td class="col-sm-4">{{item?.created | date:'yyyy.MM.dd HH:mm'}}</td>
-        <td class="col-sm-4">{{item?.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.shortName}}</td>
+        <td class="col-sm-4">{{item?.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.name}}</td>
         <td class="col-sm-4">{{item?.value}}</td>
       </tr>
     </ng-template>

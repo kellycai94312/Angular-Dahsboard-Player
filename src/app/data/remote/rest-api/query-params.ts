@@ -5,5 +5,4 @@ export interface QueryParams extends PageQuery {
   name?: string;
   countryId?: number;
   regionId?: number;
-  sportType?: string;
 }
