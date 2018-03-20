@@ -15,12 +15,14 @@
     </dx-select-box>
   </div>
   <div class="col">
-    <dx-select-box [items]="sportTypes"
-                   displayExpr="name"
-                   (onValueChanged)="onSportTypeChanged($event.value)"
-                   placeholder="{{'sportType' | translate}}"
-                   showClearButton="true">
-    </dx-select-box>
+    <app-input-select [loadData]="loadSportTypes"
+                      [pageSize]="pageSize"
+                      [getKey]="getSportTypeKey"
+                      [getName]="getSportTypeName"
+                      placeholder="{{'sportType' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onSportTypeChanged($event.current)">
+    </app-input-select>
   </div>
   <div class="col">
     <dx-select-box [items]="ageGroups"

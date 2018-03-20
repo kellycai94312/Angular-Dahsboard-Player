@@ -10,12 +10,10 @@
       "changeAvatar": "Change avatar",
       "roles": {
         "section": "Roles",
-        "edit": "Edit roles",
         "conflict": "You should quit groups with appropriate roles before you remove its"
       },
       "sportTypes": {
-        "section": "Sport types",
-        "edit": "Edit sport types"
+        "section": "Sport types"
       },
       "rating": "Rating",
       "edit": "edit",
@@ -179,6 +177,7 @@
   "group": "Group",
   "role": "Role",
   "yearBirth": "Year birth",
+  "sex": "Sex",
   "baseUserRole": "Base user role",
   "image": "Image",
   "person": "Person",

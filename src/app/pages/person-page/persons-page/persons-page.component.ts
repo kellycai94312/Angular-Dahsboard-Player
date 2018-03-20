@@ -1,19 +1,20 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {DxTextBoxComponent} from 'devextreme-angular';
-import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
-import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
-import {Sex} from '../../../data/local/sex';
-import {SexEnum} from '../../../data/remote/misc/sex-enum';
-import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {UserRole} from '../../../data/remote/model/user-role';
-import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {Group} from '../../../data/remote/model/group/base/group';
-import {SportType} from '../../../data/remote/model/sport-type';
-import {City} from '../../../data/remote/model/city';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { DxTextBoxComponent } from 'devextreme-angular';
+import { GroupQuery } from '../../../data/remote/rest-api/query/group-query';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { PersonQuery } from '../../../data/remote/rest-api/query/person-query';
+import { PersonViewModel } from '../../../data/local/view-model/person-view-model';
+import { Sex } from '../../../data/local/sex';
+import { SexEnum } from '../../../data/remote/misc/sex-enum';
+import { TranslateObjectService } from '../../../shared/translate-object.service';
+import { UserRole } from '../../../data/remote/model/user-role';
+import { IdentifiedObject } from '../../../data/remote/base/identified-object';
+import { Group } from '../../../data/remote/model/group/base/group';
+import { SportType } from '../../../data/remote/model/sport-type';
+import { City } from '../../../data/remote/model/city';
 import CustomStore from 'devextreme/data/custom_store';
+import { NamedObject } from '../../../data/remote/base/named-object';
 
 @Component({
   selector: 'app-persons-page',
@@ -29,7 +30,6 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   public sexItems: Sex[];
   public userRoles: UserRole[];
-  public sportTypes: SportType[];
   public pageSize: number;
 
   private _searchText: string;
@@ -59,7 +59,6 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     }
 
     this.userRoles = await this._participantRestApiService.getUserRoles();
-    this.sportTypes = await this._participantRestApiService.getSportTypes();
   }
 
   ngAfterViewInit(): void {
@@ -133,19 +132,37 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     });
   };
 
-  getKey(item: IdentifiedObject) {
-    return item.id;
-  }
+  loadCities = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getCities({
+      from: from,
+      count: this.pageSize,
+      name: searchText
+    });
+  };
 
-  getName(item: Group) {
-    return item.name;
-  }
+  loadSportTypes = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getSportTypes({
+      name: searchText,
+      from: from,
+      count: this.pageSize
+    });
+  };
 
   public onGroupChanged(value: Group) {
     if (value != null) {
       this._personQuery.groupId = value.id;
     } else {
       delete this._personQuery.groupId;
+    }
+
+    this.initCustomStore();
+  }
+
+  public onCityChanged(value: City) {
+    if (value != null) {
+      this._personQuery.cityId = value.id;
+    } else {
+      delete this._personQuery.cityId;
     }
 
     this.initCustomStore();
@@ -161,30 +178,12 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     this.initCustomStore();
   }
 
-  loadCities = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCities({
-      from: from,
-      count: this.pageSize,
-      name: searchText
-    });
-  };
-
-  getCityKey(item: IdentifiedObject) {
+  getKey(item: IdentifiedObject) {
     return item.id;
   }
 
-  getCityName(item: City) {
+  getName(item: NamedObject) {
     return item.name;
-  }
-
-  public onCityChanged(value: City) {
-    if (value != null) {
-      this._personQuery.cityId = value.id;
-    } else {
-      delete this._personQuery.cityId;
-    }
-
-    this.initCustomStore();
   }
 
 }

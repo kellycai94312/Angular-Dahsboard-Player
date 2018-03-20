@@ -14,13 +14,17 @@ import { ProfileService } from '../../../layout/shared/profile.service';
 import { Tab } from './tab';
 import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalSelectComponent } from '../../../components/modal-select/modal-select.component';
 import { ListRequest } from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
-import { SportTypeItemComponent } from './sport-type-item/sport-type-item.component';
-import { UserRoleItemComponent } from './user-role-item/user-role-item.component';
+import { UserRoleItemComponent } from '../../../components/user-role-item/user-role-item.component';
 import { GroupPerson } from '../../../data/remote/model/group/group-person';
 import { ImageType } from '../../../data/remote/model/image-type';
+import { ModalSelectPageComponent } from '../../../components/modal-select-page/modal-select-page.component';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { SportTypeItemComponent } from '../../../components/sport-type-item/sport-type-item.component';
+import { HashSet } from '../../../data/local/hash-set';
+import { NamedQuery } from '../../../data/remote/rest-api/named-query';
+import { PageContainer } from '../../../data/remote/bean/page-container';
 
 @Component({
   selector: 'app-person-page',
@@ -135,27 +139,30 @@ export class PersonPageComponent implements OnInit {
   }
 
   async editUserRoles() {
-    const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
+    const selectedSet = new HashSet<UserRole>();
+    selectedSet.addAll(this.userRoles);
+
     const roles = (await this.participantRestApiService.getUserRoles())
       .filter(role =>
         this.userRoles
           .filter(uRole => uRole.id === role.id).length === 0);
-    const userRoles = Object.assign([], this.userRoles);
-    const errorMessage = await this._translate.get('persons.person.roles.conflict').toPromise();
-    ref.componentInstance.header = await this._translate.get('persons.person.roles.edit').toPromise();
+
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    ref.componentInstance.header = await this._translate.get('edit').toPromise();
     ref.componentInstance.component = UserRoleItemComponent;
-    ref.componentInstance.defaultData = roles;
-    ref.componentInstance.selectedData = userRoles;
-    ref.componentInstance.filter = (typing: string, userRole: UserRole) =>
-      userRole.userRoleEnum.toString().toLowerCase().indexOf(typing) > -1;
+    ref.componentInstance.selectedSet = selectedSet;
+    ref.componentInstance.getListAsync = async (name: string, from: number) => {
+      return new PageContainer(roles.filter(userRole => userRole.userRoleEnum.toString().toLowerCase().indexOf(name) > -1));
+    };
     ref.componentInstance.onSave = async () => {
       try {
-        this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(userRoles));
+        this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(selectedSet.data));
         this.roleToggle = this.userRoles.length ? this.userRoles[0] : null;
         ref.dismiss();
         this.onUserRoleChange();
       } catch (e) {
         if (e.status === 409) {
+          const errorMessage = await this._translate.get('persons.person.roles.conflict').toPromise();
           notify(errorMessage, 'warning', 3000);
         } else {
           throw e;
@@ -165,20 +172,24 @@ export class PersonPageComponent implements OnInit {
   }
 
   async editSportTypes() {
-    const ref = this._modalService.open(ModalSelectComponent, {size: 'lg'});
-    const sportTypes = (await this.participantRestApiService.getSportTypes())
-      .filter(type =>
-        this.personSportTypes
-          .filter(pType => pType.id === type.id).length === 0);
-    const personSportTypes = Object.assign([], this.personSportTypes);
-    ref.componentInstance.header = await this._translate.get('persons.person.sportTypes.edit').toPromise();
+    const namedQuery = new NamedQuery();
+    namedQuery.from = 0;
+    namedQuery.count = PropertyConstant.pageSize;
+
+    const selectedSet = new HashSet<SportType>();
+    selectedSet.addAll(this.personSportTypes);
+
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    ref.componentInstance.header = await this._translate.get('edit').toPromise();
     ref.componentInstance.component = SportTypeItemComponent;
-    ref.componentInstance.defaultData = sportTypes;
-    ref.componentInstance.selectedData = personSportTypes;
-    ref.componentInstance.filter = (typing: string, sportType: SportType) =>
-      sportType.sportTypeEnum.toString().toLowerCase().indexOf(typing) > -1;
+    ref.componentInstance.selectedSet = selectedSet;
+    ref.componentInstance.getListAsync = async (name: string, from: number) => {
+      namedQuery.from = from;
+      namedQuery.name = name;
+      return await this.participantRestApiService.getSportTypes(namedQuery);
+    };
     ref.componentInstance.onSave = async () => {
-      this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(personSportTypes));
+      this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(selectedSet.data));
       this.sportTypeToggle = this.personSportTypes.length ? this.personSportTypes[0] : null;
       ref.dismiss();
       this.onSportTypeChange();

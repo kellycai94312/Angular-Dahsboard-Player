@@ -30,10 +30,6 @@ import { EventsComponent } from './person-page/events/events.component';
 import { PersonService } from './person-page/person.service';
 import { ModalModule } from 'ngx-bootstrap';
 import { InputSelectModule } from '../../components/input-select/input-select.module';
-import { ModalSelectModule } from '../../components/modal-select/modal-select.module';
-import { ModalSelectComponent } from '../../components/modal-select/modal-select.component';
-import { SportTypeItemComponent } from './person-page/sport-type-item/sport-type-item.component';
-import { UserRoleItemComponent } from './person-page/user-role-item/user-role-item.component';
 import { InfiniteListModule } from '../../components/infinite-list/infinite-list.module';
 import { GroupsComponent } from './person-page/groups/groups.component';
 import { GroupPageModule } from '../groups/group-page.module';
@@ -55,6 +51,8 @@ import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-not
 import { MyRegionService } from './person-page/my-region/my-region.service';
 import { NoteModalComponent } from './person-page/my-region/note-modal/note-modal.component';
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
+import { SportTypeItemModule } from '../../components/sport-type-item/sport-type-item.module';
+import { UserRoleItemModule } from '../../components/user-role-item/user-role-item.module';
 
 @NgModule({
   imports: [
@@ -76,12 +74,13 @@ import { AchievementsComponent } from './person-page/achievements/achievements.c
     FormsModule,
     InputSelectModule,
     InfiniteListModule,
-    ModalSelectModule,
     ModalSelectPageModule,
     GroupPageModule,
     PersonModule,
     DxDataGridModule,
     ExerciseMeasureItemModule,
+    SportTypeItemModule,
+    UserRoleItemModule,
     DxCheckBoxModule,
     TabModule
   ],
@@ -96,8 +95,6 @@ import { AchievementsComponent } from './person-page/achievements/achievements.c
     ContactComponent,
     TestsResultsComponent,
     EventsComponent,
-    SportTypeItemComponent,
-    UserRoleItemComponent,
     GroupsComponent,
     GroupPersonComponent,
     MeasureHistoryComponent,
@@ -117,10 +114,7 @@ import { AchievementsComponent } from './person-page/achievements/achievements.c
     DatePipe
   ],
   entryComponents: [
-    ModalSelectComponent,
     ModalSelectPageComponent,
-    SportTypeItemComponent,
-    UserRoleItemComponent,
     EventModalComponent,
     NoteModalComponent
   ]

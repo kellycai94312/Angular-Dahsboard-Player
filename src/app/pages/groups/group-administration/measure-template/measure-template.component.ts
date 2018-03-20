@@ -10,6 +10,7 @@ import { MeasureTemplateQuery } from '../../../../data/remote/rest-api/query/mea
 import { HashSet } from '../../../../data/local/hash-set';
 import { ListRequest } from '../../../../data/remote/request/list-request';
 import { ExerciseMeasureItemComponent } from '../../../../components/exercise-measure-item/exercise-measure-item.component';
+import { PropertyConstant } from '../../../../data/local/property-constant';
 
 @Component({
   selector: 'app-measure-template',
@@ -35,6 +36,7 @@ export class MeasureTemplateComponent implements OnInit {
   async editTemplates() {
     const measureQuery = new MeasureTemplateQuery();
     measureQuery.from = 0;
+    measureQuery.count = PropertyConstant.pageSize;
     measureQuery.dictionaryType = DictionaryType[DictionaryType.SYSTEM].toString();
 
     const selectedSet = new HashSet<ExerciseMeasure>();
