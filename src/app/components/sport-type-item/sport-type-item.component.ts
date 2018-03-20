@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SportType } from '../../../../data/remote/model/sport-type';
+import { SportType } from '../../data/remote/model/sport-type';
 
 @Component({
   selector: 'app-sport-type-item',

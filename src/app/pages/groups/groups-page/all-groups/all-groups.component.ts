@@ -15,6 +15,7 @@ import { Region } from '../../../../data/remote/model/region';
 import CustomStore from 'devextreme/data/custom_store';
 import { ImageType } from '../../../../data/remote/model/image-type';
 import { GroupViewModel } from '../../../../data/local/view-model/group-view-model';
+import { NamedObject } from '../../../../data/remote/base/named-object';
 
 @Component({
   selector: 'app-all-groups',
@@ -28,7 +29,6 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public dataSource: any;
 
   public groupTypes: GroupType[];
-  public sportTypes: SportType[];
   public ageGroups: AgeGroup[];
   public leagues: League[];
 
@@ -53,7 +53,6 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.sportTypes = await this._participantRestApiService.getSportTypes();
     this.ageGroups = await this._participantRestApiService.getAgeGroups();
     this.leagues = await this._participantRestApiService.getLeagues();
   }
@@ -100,16 +99,6 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
       this._groupQuery.groupTypeId = value.id;
     } else {
       delete this._groupQuery.groupTypeId;
-    }
-
-    this.initCustomStore();
-  }
-
-  public onSportTypeChanged(value: SportType) {
-    if (value != null) {
-      this._groupQuery.sportTypeId = value.id;
-    } else {
-      delete this._groupQuery.sportTypeId;
     }
 
     this.initCustomStore();
@@ -229,6 +218,36 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
       this._groupQuery.cityId = value.id;
     } else {
       delete this._groupQuery.cityId;
+    }
+
+    this.initCustomStore();
+  }
+
+  //#endregion
+
+  //#region SportType filter
+
+  loadSportTypes = async (from: number, searchText: string) => {
+    return this._participantRestApiService.getSportTypes({
+      name: searchText,
+      from: from,
+      count: this.pageSize
+    });
+  };
+
+  getSportTypeKey(item: IdentifiedObject) {
+    return item.id;
+  }
+
+  getSportTypeName(item: NamedObject) {
+    return item.name;
+  }
+
+  public onSportTypeChanged(value: SportType) {
+    if (value != null) {
+      this._groupQuery.sportTypeId = value.id;
+    } else {
+      delete this._groupQuery.sportTypeId;
     }
 
     this.initCustomStore();

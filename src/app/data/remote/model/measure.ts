@@ -1,8 +1,8 @@
-import {MeasureEnum} from '../misc/measure-enum';
-import {MeasureUnit} from './measure-unit';
-import {ShortNameObject} from '../base/short-name-object';
+import { MeasureUnit } from './measure-unit';
+import { ShortNameObject } from '../base/short-name-object';
+import { MeasureParameter } from './measure-parameter';
 
 export class Measure extends ShortNameObject {
-  measureEnum: MeasureEnum;
+  measureParameter: MeasureParameter;
   measureUnit: MeasureUnit;
 }

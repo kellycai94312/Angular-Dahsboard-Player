@@ -1,4 +1,3 @@
-import { SportTypeEnum } from '../misc/sport-type-enum';
 import { PageQuery } from './page-query';
 
 export interface QueryParams extends PageQuery {
@@ -6,5 +5,5 @@ export interface QueryParams extends PageQuery {
   name?: string;
   countryId?: number;
   regionId?: number;
-  sportType?: SportTypeEnum;
+  sportType?: string;
 }

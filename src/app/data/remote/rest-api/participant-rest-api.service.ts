@@ -54,6 +54,7 @@ import { TrainingAccess } from '../misc/training-access';
 import { NoteQuery } from './query/note-query';
 import { Note } from '../model/note/base/note';
 import { TestingPersonalReport } from '../bean/testing-personal-report';
+import { NamedQuery } from './named-query';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -86,9 +87,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/sporttype'
+    path: '/sportType'
   })
-  getSportTypes: IRestMethod<void, SportType[]>;
+  getSportTypes: IRestMethod<NamedQuery, PageContainer<SportType>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

@@ -5,7 +5,6 @@ import { AnthropometryRequest } from '../../../../data/remote/request/anthropome
 import { PersonService } from '../person.service';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { SportType } from '../../../../data/remote/model/sport-type';
-import { SportTypeEnum } from '../../../../data/remote/misc/sport-type-enum';
 
 @Component({
   selector: 'app-anthropometry',
@@ -16,7 +15,7 @@ export class AnthropometryComponent implements OnInit {
 
   anthropometry: PersonAnthropometry[];
   isEditAllow: boolean;
-  private _sportTypeEnum: SportTypeEnum;
+  private _sportTypeEnum: string;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {

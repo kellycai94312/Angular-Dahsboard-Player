@@ -32,7 +32,7 @@ export class NewGroupPageComponent implements OnInit {
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.sportTypes = await this._participantRestApiService.getSportTypes();
+    this.sportTypes = (await this._participantRestApiService.getSportTypes()).list; //FIXME
   }
 
   public async onApply(event: any) {
