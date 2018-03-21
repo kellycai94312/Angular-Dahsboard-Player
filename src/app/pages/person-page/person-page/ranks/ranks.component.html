@@ -2,21 +2,21 @@
   <thead>
   <tr class="d-flex">
     <th class="col-2">{{ 'rank' | translate }}</th>
-    <th class="col-3">{{ 'assignee' | translate }}</th>
+    <th [ngClass]="{'col-3' : isEditAllow, 'col-4' : !isEditAllow}">{{ 'assignee' | translate }}</th>
     <th class="col-1">{{ 'date' | translate }}</th>
     <th class="col-3">{{ 'orderNumber' | translate }}</th>
     <th class="col-2">{{ 'certificateNumber' | translate }}</th>
-    <th class="col-1"></th>
+    <th class="col-1" *ngIf="isEditAllow"></th>
   </tr>
   </thead>
   <tbody>
       <tr class="d-flex" *ngFor="let personRank of personRanks; let index = index">
         <td class="col-sm-2">{{personRank.rank.name}}</td>
-        <td class="col-sm-3">{{personRank.assignee}}</td>
+        <td [ngClass]="{'col-sm-3' : isEditAllow, 'col-sm-4' : !isEditAllow}">{{personRank.assignee}}</td>
         <td class="col-sm-1">{{personRank.date | date: 'dd.MM.yyyy'}}</td>
         <td class="col-sm-3">{{personRank.orderNumber}}</td>
         <td class="col-sm-2">{{personRank.certificateNumber}}</td>
-        <td class="col-sm-1">
+        <td class="col-sm-1" *ngIf="isEditAllow">
           <div class="text-center">
             <button class="btn btn-outline-primary btn-sm" (click)="editRank(index)">
               <i class="fa fa-edit"></i>
