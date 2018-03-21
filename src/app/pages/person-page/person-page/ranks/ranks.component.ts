@@ -2,6 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { PersonService } from '../person.service';
 import { PersonRank } from '../../../../data/remote/model/person-rank';
+import { Note } from '../../../../data/remote/model/note/base/note';
+import { ModalEvent } from '../../../../data/local/modal-event';
+import { NoteModalComponent } from '../my-region/note-modal/note-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RankModalComponent } from './rank-modal/rank-modal.component';
 
 @Component({
   selector: 'app-ranks',
@@ -14,7 +19,8 @@ export class RanksComponent implements OnInit {
   public personRanks: PersonRank[];
 
   constructor(private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _modalService: NgbModal) {
     this.isEditAllow = _personService.shared.isEditAllow;
   }
 
@@ -22,13 +28,19 @@ export class RanksComponent implements OnInit {
     this.personRanks = await this._participantRestApiService.getRanks({id: this._personService.shared.person.id});
   }
 
-  async editRank(personRank: PersonRank) {
-    //todo
+  async editRank(index: number) {
+    const ref = this._modalService.open(RankModalComponent, {size: 'lg'});
+    ref.componentInstance.personRank = Object.assign({}, this.personRanks[index]);
+    ref.componentInstance.onSave = async (newPersonRank: PersonRank) => {
+      await this._participantRestApiService.updateRank(newPersonRank, {}, {rankId: newPersonRank.rank.id});
+      this.personRanks[index] = newPersonRank;
+      ref.dismiss();
+    }
   }
 
-  async removeRank(personRank: PersonRank) {
-    await this._participantRestApiService.removeRank({rankId: personRank.rank.id});
-    this.clearPersonRank(personRank);
+  async removeRank(index: number) {
+    await this._participantRestApiService.removeRank({rankId: this.personRanks[index].rank.id});
+    this.clearPersonRank(this.personRanks[index]);
   }
 
   private clearPersonRank(personRank: PersonRank) {
