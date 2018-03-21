@@ -17,6 +17,7 @@ import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-not
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
 import { TableHistoryComponent } from './person-page/tests-results/measure-history/table-history/table-history.component';
 import { ChartHistoryComponent } from './person-page/tests-results/measure-history/chart-history/chart-history.component';
+import { RanksComponent } from './person-page/ranks/ranks.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'personal', pathMatch: 'full'},
       {path: 'anthropometry', component: AnthropometryComponent},
+      {path: 'ranks', component: RanksComponent},
       {path: 'contact', component: ContactComponent},
       {path: 'events', component: EventsComponent},
       {path: 'personal', component: PersonalComponent},

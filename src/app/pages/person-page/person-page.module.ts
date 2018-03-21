@@ -5,6 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PersonPageComponent } from './person-page/person-page.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {
+  DxButtonModule,
   DxCheckBoxModule,
   DxDataGridModule,
   DxDateBoxModule,
@@ -53,6 +54,8 @@ import { NoteModalComponent } from './person-page/my-region/note-modal/note-moda
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
 import { SportTypeItemModule } from '../../components/sport-type-item/sport-type-item.module';
 import { UserRoleItemModule } from '../../components/user-role-item/user-role-item.module';
+import { RanksComponent } from './person-page/ranks/ranks.component';
+import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.component';
 
 @NgModule({
   imports: [
@@ -78,6 +81,7 @@ import { UserRoleItemModule } from '../../components/user-role-item/user-role-it
     GroupPageModule,
     PersonModule,
     DxDataGridModule,
+    DxButtonModule,
     ExerciseMeasureItemModule,
     SportTypeItemModule,
     UserRoleItemModule,
@@ -105,7 +109,9 @@ import { UserRoleItemModule } from '../../components/user-role-item/user-role-it
     SchoolNoteComponent,
     TrainerNoteComponent,
     AgentNoteComponent,
-    NoteModalComponent
+    NoteModalComponent,
+    RanksComponent,
+    RankModalComponent
   ],
   providers: [
     PersonService,
@@ -116,7 +122,8 @@ import { UserRoleItemModule } from '../../components/user-role-item/user-role-it
   entryComponents: [
     ModalSelectPageComponent,
     EventModalComponent,
-    NoteModalComponent
+    NoteModalComponent,
+    RankModalComponent
   ]
 })
 export class PersonPageModule {

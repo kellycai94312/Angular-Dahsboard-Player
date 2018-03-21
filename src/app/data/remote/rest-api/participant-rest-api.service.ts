@@ -55,6 +55,7 @@ import { NoteQuery } from './query/note-query';
 import { Note } from '../model/note/base/note';
 import { TestingPersonalReport } from '../bean/testing-personal-report';
 import { NamedQuery } from './named-query';
+import { PersonRank } from '../model/person-rank';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -189,6 +190,12 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
+    path: '/person/{!id}/rank'
+  })
+  getRanks: IRestMethod<{ id: number }, PersonRank[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
     path: '/person/{!id}/role/{!userRoleId}/baseGroup',
   })
   getBaseGroup: IRestMethod<GroupQuery, GroupPerson>;
@@ -312,6 +319,12 @@ export class ParticipantRestApiService extends Rest {
   })
   updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
 
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/rank/{!rankId}'
+  })
+  updateRank: IRestMethodStrict<PersonRank, any, { rankId: number }, PersonRank>;
+
   //#endregion
 
   //#region DELETE
@@ -333,6 +346,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/note/{!id}',
   })
   removeNote: IRestMethod<{ id: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/rank/{!rankId}'
+  })
+  removeRank: IRestMethod<{ rankId: number }, void>;
 
   //#endregion
 
