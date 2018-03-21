@@ -209,5 +209,9 @@
   "club": "Club",
   "organization": "Organization",
   "report": "Report",
-  "reportError": "There is no enough data to make a report"
+  "reportError": "There is no enough data to make a report",
+  "rank": "Rank",
+  "assignee": "Assignee",
+  "orderNumber": "Order №",
+  "certificateNumber": "Certificate №"
 }
