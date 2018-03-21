@@ -33,6 +33,9 @@
       "anthropometry": {
         "section": "Anthropometry"
       },
+      "ranks": {
+        "section": "Ranks"
+      },
       "physiology": {
         "section": "Physiology"
       },

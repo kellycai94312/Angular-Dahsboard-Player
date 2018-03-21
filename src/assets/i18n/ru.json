@@ -34,6 +34,9 @@
       "anthropometry": {
         "section": "Антропометрия"
       },
+      "ranks": {
+        "section": "Спорт разряды"
+      },
       "physiology": {
         "section": "Физиология"
       },

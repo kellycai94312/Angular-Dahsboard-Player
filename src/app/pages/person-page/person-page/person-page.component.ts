@@ -71,6 +71,12 @@ export class PersonPageComponent implements OnInit {
         hasAnyRole: true
       },
       {
+        name: 'persons.person.ranks.section',
+        route: 'ranks',
+        restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
+        hasAnyRole: true
+      },
+      {
         name: 'persons.person.physiology.section',
         route: 'physiology',
         restrictedRoles: [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],

@@ -53,6 +53,7 @@ import { NoteModalComponent } from './person-page/my-region/note-modal/note-moda
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
 import { SportTypeItemModule } from '../../components/sport-type-item/sport-type-item.module';
 import { UserRoleItemModule } from '../../components/user-role-item/user-role-item.module';
+import { RanksComponent } from './person-page/ranks/ranks.component';
 
 @NgModule({
   imports: [
@@ -105,7 +106,8 @@ import { UserRoleItemModule } from '../../components/user-role-item/user-role-it
     SchoolNoteComponent,
     TrainerNoteComponent,
     AgentNoteComponent,
-    NoteModalComponent
+    NoteModalComponent,
+    RanksComponent
   ],
   providers: [
     PersonService,
