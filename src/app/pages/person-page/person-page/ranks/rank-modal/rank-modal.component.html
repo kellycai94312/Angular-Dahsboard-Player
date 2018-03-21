@@ -9,8 +9,14 @@
 </div>
 <div class="modal-body">
 
+  <label for="rank">{{'rank' | translate}}</label>
+  <dx-text-box id="rank"
+               [(value)]="personRank.rank.name" [disabled]="true">
+  </dx-text-box>
+
   <label for="assignee">{{'assignee' | translate}}</label>
   <dx-text-box id="assignee"
+               class="mt-1"
                [(value)]="personRank.assignee">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>
