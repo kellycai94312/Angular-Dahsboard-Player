@@ -26,9 +26,15 @@ export class RankModalComponent implements OnInit {
   savePersonRank(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      this.personRank.date = this._datePipe.transform(this.personRank.date, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';
+      const date = new Date(this.personRank.date);
+      this.personRank.date = this.getGmtDate(date);
       this.onSave(this.personRank);
     }
+  }
+
+  private getGmtDate(date: Date): any {
+    const dateWithTimezone = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
+    return this._datePipe.transform(dateWithTimezone, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';
   }
 
 }
