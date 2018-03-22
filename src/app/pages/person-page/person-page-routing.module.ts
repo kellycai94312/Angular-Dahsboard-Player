@@ -6,7 +6,6 @@ import { AnthropometryComponent } from './person-page/anthropometry/anthropometr
 import { ContactComponent } from './person-page/contact/contact.component';
 import { EventsComponent } from './person-page/events/events.component';
 import { PersonalComponent } from './person-page/personal/personal.component';
-import { PhysiologyComponent } from './person-page/physiology/physiology.component';
 import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
 import { GroupsComponent } from './person-page/groups/groups.component';
 import { MeasureHistoryComponent } from './person-page/tests-results/measure-history/measure-history.component';
@@ -31,7 +30,6 @@ const routes: Routes = [
       {path: 'contact', component: ContactComponent},
       {path: 'events', component: EventsComponent},
       {path: 'personal', component: PersonalComponent},
-      {path: 'physiology', component: PhysiologyComponent},
       {path: 'tests_results', component: TestsResultsComponent},
       {
         path: 'tests_results/:id', component: MeasureHistoryComponent, children: [

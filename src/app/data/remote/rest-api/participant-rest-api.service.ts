@@ -28,7 +28,6 @@ import { Address } from '../model/address';
 import { PersonAnthropometry } from '../model/person-anthropometry';
 import { EmailRequest } from '../request/email-request';
 import { environment } from '../../../../environments/environment';
-import { AnthropometryRequest } from '../request/anthropometry-request';
 import { GroupType } from '../model/group/base/group-type';
 import { Group } from '../model/group/base/group';
 import { GroupQuery } from './query/group-query';
@@ -259,9 +258,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/anthropometry'
+    path: '/person/anthropometry/{!sportTypeId}'
   })
-  changeAnthropometry: IRestMethod<AnthropometryRequest, PersonAnthropometry[]>;
+  updateAnthropometry: IRestMethodStrict<ListRequest<PersonAnthropometry>, any, { sportTypeId: number }, PersonAnthropometry[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
