@@ -24,7 +24,6 @@ import { PersonsPageComponent } from './persons-page/persons-page.component';
 import { InvokeDirective } from '../../directives/invoke.directive';
 import { AnthropometryComponent } from './person-page/anthropometry/anthropometry.component';
 import { PersonalComponent } from './person-page/personal/personal.component';
-import { PhysiologyComponent } from './person-page/physiology/physiology.component';
 import { ContactComponent } from './person-page/contact/contact.component';
 import { TestsResultsComponent } from './person-page/tests-results/tests-results.component';
 import { EventsComponent } from './person-page/events/events.component';
@@ -95,7 +94,6 @@ import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.co
     AnthropometryComponent,
     AchievementsComponent,
     PersonalComponent,
-    PhysiologyComponent,
     ContactComponent,
     TestsResultsComponent,
     EventsComponent,

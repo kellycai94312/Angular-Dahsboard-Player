@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonAnthropometry } from '../../../../data/remote/model/person-anthropometry';
 import { ListRequest } from '../../../../data/remote/request/list-request';
-import { AnthropometryRequest } from '../../../../data/remote/request/anthropometry-request';
 import { PersonService } from '../person.service';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { SportType } from '../../../../data/remote/model/sport-type';
@@ -32,10 +31,8 @@ export class AnthropometryComponent implements OnInit {
 
   async save() {
     if (this._sportTypeId) {
-      const request: AnthropometryRequest = new AnthropometryRequest();
-      request.anthropometry = new ListRequest(this.anthropometry);
-      request.sportTypeId = this._sportTypeId;
-      this.anthropometry = await this._participantRestApiService.changeAnthropometry(request);
+      const listRequest: ListRequest<PersonAnthropometry> = new ListRequest(this.anthropometry);
+      this.anthropometry = await this._participantRestApiService.updateAnthropometry(listRequest, {}, {sportTypeId: this._sportTypeId});
     }
   }
 
