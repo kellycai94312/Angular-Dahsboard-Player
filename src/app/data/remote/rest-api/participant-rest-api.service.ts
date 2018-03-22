@@ -183,7 +183,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/anthropometry'
+    path: '/person/{!id}/anthropometry/{!sportTypeId}'
   })
   getAnthropometry: IRestMethod<{ id: number, sportTypeId: number }, PersonAnthropometry[]>;
 

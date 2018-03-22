@@ -4,7 +4,7 @@ import { Rank } from './rank';
 export class PersonRank extends IdentifiedObject {
   rank: Rank;
   assignee: string;
-  date: Date;
+  date: any;
   orderNumber: string;
   certificateNumber: string;
 }
