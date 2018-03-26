@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PageQuery } from '../../../../../../data/remote/rest-api/page-query';
 import { MeasureHistoryService } from '../measure-history.service';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
 
 @Component({
   selector: 'app-table-history',

@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import { ActivatedRoute } from '@angular/router';
 import { MeasureHistoryService } from './measure-history.service';
-import { ExerciseMeasure } from '../../../../../data/remote/model/exercise/exercise-measure';
-import { PropertyConstant } from '../../../../../data/local/property-constant';
-import { PersonService } from '../../person.service';
-import { Tab } from '../../../../../data/local/tab';
-import { TranslateService } from '@ngx-translate/core';
+import { ExerciseMeasure } from '../../data/remote/model/exercise/exercise-measure';
+import { PersonService } from '../../pages/person-page/person-page/person.service';
+import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
+import { PropertyConstant } from '../../data/local/property-constant';
+import { Tab } from '../../data/local/tab';
 
 @Component({
   selector: 'app-measure-history',
@@ -21,8 +20,7 @@ export class MeasureHistoryComponent implements OnInit {
   constructor(private _route: ActivatedRoute,
               private _measureHistoryService: MeasureHistoryService,
               private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService,
-              private _translateService: TranslateService) {
+              private _participantRestApiService: ParticipantRestApiService) {
     this._measureHistoryService.measureQuery.count = PropertyConstant.pageSize;
     this._measureHistoryService.measureQuery.personId = this._personService.shared.person.id;
   }
@@ -34,17 +32,6 @@ export class MeasureHistoryComponent implements OnInit {
     this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({
       exerciseMeasureId: this._measureHistoryService.measureQuery.exerciseMeasureId
     });
-
-    this.tabs = [];
-    const tableTab = new Tab();
-    tableTab.name = await this._translateService.get('table').toPromise();
-    tableTab.routerLink = 'table';
-    this.tabs.push(tableTab);
-
-    const chartTab = new Tab();
-    chartTab.name = await this._translateService.get('chart').toPromise();
-    chartTab.routerLink = 'chart';
-    this.tabs.push(chartTab);
   }
 
   async onDateFromChange(event: any) {

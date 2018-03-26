@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { MeasureTemplateQuery } from '../../../../../data/remote/rest-api/query/measure-template-query';
-import { AppHelper } from '../../../../../utils/app-helper';
-import { ParticipantRestApiService } from '../../../../../data/remote/rest-api/participant-rest-api.service';
-import { ExerciseExecMeasureValue } from '../../../../../data/remote/model/training/exercise-exec-measure-value';
-import { PropertyConstant } from '../../../../../data/local/property-constant';
 import { Subject } from 'rxjs/Subject';
+import { ExerciseExecMeasureValue } from '../../data/remote/model/training/exercise-exec-measure-value';
+import { MeasureTemplateQuery } from '../../data/remote/rest-api/query/measure-template-query';
+import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
+import { PropertyConstant } from '../../data/local/property-constant';
+import { AppHelper } from '../../utils/app-helper';
 
 @Injectable()
 export class MeasureHistoryService {

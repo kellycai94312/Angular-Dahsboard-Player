@@ -1,7 +1,7 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { MeasureHistoryService } from '../measure-history.service';
 import { DatePipe } from '@angular/common';
-import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
   selector: 'app-chart-history',
@@ -41,6 +41,7 @@ export class ChartHistoryComponent implements OnInit {
         },
         width: this._measureHistoryService.measureValues.length * .1
       }];
+      console.log(data);
       Plotly.newPlot(element, data, layout);
     })
   }

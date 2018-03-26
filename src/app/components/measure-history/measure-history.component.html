@@ -22,4 +22,17 @@
     </dx-date-box>
   </div>
 </div>
-<app-tab [tabs]="tabs"></app-tab>
+<div class="mt-2">
+  <ngb-tabset>
+    <ngb-tab title="{{'table' | translate}}">
+      <ng-template ngbTabContent>
+        <app-table-history></app-table-history>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="{{'chart' | translate}}">
+      <ng-template ngbTabContent>
+        <app-chart-history></app-chart-history>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
