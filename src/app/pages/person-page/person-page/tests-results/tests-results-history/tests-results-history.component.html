@@ -1,1 +1,11 @@
-<app-measure-history></app-measure-history>
+<app-measure-history [(measureValues)]="measureValues"
+                     [measureQuery]="measureQuery"
+                     [setup]="setup"
+                     [updateListAsync]="updateListAsync"
+                     [setDateFrom]="setDateFrom"
+                     [setDateTo]="setDateTo"
+                     [dateSubject]="dateSubject"
+                     [getDate]="getDate"
+                     [getUnits]="getUnits"
+                     [getValue]="getValue">
+</app-measure-history>

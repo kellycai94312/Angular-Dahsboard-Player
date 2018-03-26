@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { MeasureHistoryService } from '../measure-history.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { PageQuery } from '../../../data/remote/rest-api/page-query';
 
 @Component({
@@ -9,15 +8,37 @@ import { PageQuery } from '../../../data/remote/rest-api/page-query';
 })
 export class TableHistoryComponent implements OnInit {
 
-  constructor(public measureHistoryService: MeasureHistoryService) {
-    this.measureHistoryService.setup();
+  @Input()
+  measureValues: any[];
+
+  @Output()
+  measureValuesChange: EventEmitter<any>;
+
+  @Input()
+  setup: Function;
+
+  @Input()
+  updateListAsync: Function;
+
+  @Input()
+  getDate: Function;
+
+  @Input()
+  getUnits: Function;
+
+  @Input()
+  getValue: Function;
+
+  constructor() {
+    this.measureValuesChange = new EventEmitter<any>();
   }
 
   ngOnInit() {
+    this.setup();
   }
 
   public async onNextPage(pageQuery: PageQuery) {
-    await this.measureHistoryService.updateListAsync(pageQuery.from);
+    await this.updateListAsync(pageQuery.from);
   }
 
 }

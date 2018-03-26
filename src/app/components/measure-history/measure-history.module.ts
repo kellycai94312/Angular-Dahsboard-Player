@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ChartHistoryComponent } from './chart-history/chart-history.component';
 import { TableHistoryComponent } from './table-history/table-history.component';
 import { MeasureHistoryComponent } from './measure-history.component';
-import { MeasureHistoryService } from './measure-history.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { DxDateBoxModule } from 'devextreme-angular';
 import { FormsModule } from '@angular/forms';
@@ -25,9 +24,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MeasureHistoryComponent,
     TableHistoryComponent,
     ChartHistoryComponent
-  ],
-  providers: [
-    MeasureHistoryService
   ],
   exports: [
     MeasureHistoryComponent,

@@ -1,7 +1,7 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { MeasureHistoryService } from '../measure-history.service';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-chart-history',
@@ -13,37 +13,30 @@ export class ChartHistoryComponent implements OnInit {
   @ViewChild('chart')
   public el: ElementRef;
 
+  @Input()
+  measureValues: any[];
+
+  @Output()
+  measureValuesChange: EventEmitter<any>;
+
+  @Input()
+  dateSubject: Subject<any[]>;
+
+  @Input()
+  setup: Function;
+
+  @Input()
+  getDate: Function;
+
+  @Input()
+  getValue: Function;
+
   private _maxBars: number;
 
-  constructor(private _measureHistoryService: MeasureHistoryService,
-              private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _participantRestApiService: ParticipantRestApiService,
               private _datePipe: DatePipe) {
     this._maxBars = 5;
-    const colors = ['#008ef9', '#2ECC40', '#FFDC00', '#FF851B', '#AAAAAA'];
-    this._measureHistoryService.dateSubject.subscribe(() => {
-      const element = this.el.nativeElement;
-      const layout = {
-        font: {
-          size: 13,
-          color: '#000'
-        }
-      };
-      const yValues = this._measureHistoryService.measureValues.map(mv => mv.value);
-      const data = [{
-        x: this._measureHistoryService.measureValues.map(mv => this._datePipe.transform(mv.created, 'yyyy.MM.dd HH:mm')),
-        y: yValues,
-        type: 'bar',
-        hoverinfo: 'none',
-        text: yValues,
-        textposition: 'auto',
-        marker: {
-          color: this._measureHistoryService.measureValues.map((mv, index) => colors[index]),
-        },
-        width: this._measureHistoryService.measureValues.length * .1
-      }];
-      console.log(data);
-      Plotly.newPlot(element, data, layout);
-    })
+    this.measureValuesChange = new EventEmitter<any>();
   }
 
   @HostListener('window:resize', ['$event'])
@@ -53,7 +46,34 @@ export class ChartHistoryComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this._measureHistoryService.setup(true, this._maxBars);
+    await this.setup(true, this._maxBars);
+    this.drawChart(this.measureValues);
+    this.dateSubject.subscribe((measureValues) => this.drawChart(measureValues));
+  }
+
+  drawChart(measureValues: any[]) {
+    const colors = ['#008ef9', '#2ECC40', '#FFDC00', '#FF851B', '#AAAAAA'];
+    const element = this.el.nativeElement;
+    const layout = {
+      font: {
+        size: 13,
+        color: '#000'
+      }
+    };
+    const yValues = measureValues.map(mv => this.getValue(mv));
+    const data = [{
+      x: measureValues.map(mv => this._datePipe.transform(this.getDate(mv), 'yyyy.MM.dd HH:mm')),
+      y: yValues,
+      type: 'bar',
+      hoverinfo: 'none',
+      text: yValues,
+      textposition: 'auto',
+      marker: {
+        color: measureValues.map((mv, index) => colors[index]),
+      },
+      width: measureValues.length * .1
+    }];
+    Plotly.newPlot(element, data, layout);
   }
 
 }
