@@ -1,0 +1,20 @@
+<div class="input-group input-group-sm">
+  <div *ngIf="isNumber;then numberInput else textInput"></div>
+  <ng-template #numberInput>
+    <input type="number" step="{{step}}" class="form-control"
+           placeholder="{{anthropometry.measure.measureParameter.name}}" aria-describedby="measure-input"
+           [ngModel]="anthropometry.value | round:this.precision"
+           (ngModelChange)="anthropometry.value=$event"
+           [disabled]="disabled">
+  </ng-template>
+  <ng-template #textInput>
+    <input type="text" class="form-control"
+           placeholder="{{anthropometry.measure.measureParameter.name}}" aria-describedby="measure-input"
+           [ngModel]="anthropometry.value"
+           (ngModelChange)="anthropometry.value=$event"
+           [disabled]="disabled">
+  </ng-template>
+  <div class="input-group-append">
+    <span id="measure-input" class="input-group-text">{{anthropometry.measure.measureUnit.shortName}}</span>
+  </div>
+</div>

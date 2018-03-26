@@ -55,6 +55,7 @@ import { SportTypeItemModule } from '../../components/sport-type-item/sport-type
 import { UserRoleItemModule } from '../../components/user-role-item/user-role-item.module';
 import { RanksComponent } from './person-page/ranks/ranks.component';
 import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.component';
+import { MeasureInputModule } from '../../components/measure-input/measure-input.module';
 
 @NgModule({
   imports: [
@@ -85,7 +86,8 @@ import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.co
     SportTypeItemModule,
     UserRoleItemModule,
     DxCheckBoxModule,
-    TabModule
+    TabModule,
+    MeasureInputModule
   ],
   declarations: [
     PersonPageComponent,
