@@ -7,7 +7,6 @@ export class RoundPipe implements PipeTransform {
 
   transform(value: number, precision: number): number {
     const multiplier = Math.pow(10, precision) * 1.;
-    console.log(Math.round(value * multiplier) / multiplier);
     return Math.round(value * multiplier) / multiplier;
   }
 
