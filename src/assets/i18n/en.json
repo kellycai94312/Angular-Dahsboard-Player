@@ -31,7 +31,10 @@
         "city": "City"
       },
       "anthropometry": {
-        "section": "Anthropometry"
+        "section": "Anthropometry",
+        "history": {
+          "title": "History for parameter "
+        }
       },
       "ranks": {
         "section": "Ranks"

@@ -14,8 +14,8 @@ import { TrainerNoteComponent } from './person-page/my-region/trainer-note/train
 import { AgentNoteComponent } from './person-page/my-region/agent-note/agent-note.component';
 import { AchievementsComponent } from './person-page/achievements/achievements.component';
 import { RanksComponent } from './person-page/ranks/ranks.component';
-import { AnthropometryHistoryComponent } from './person-page/anthropometry/anthropometry-history/anthropometry-history.component';
-import { TestsResultsHistoryComponent } from './person-page/tests-results/tests-results-history/tests-results-history.component';
+import { AnthropometryHistoryComponent } from './person-page/anthropometry-history/anthropometry-history.component';
+import { TestsResultsHistoryComponent } from './person-page/tests-results-history/tests-results-history.component';
 
 
 const routes: Routes = [
@@ -31,19 +31,20 @@ const routes: Routes = [
       {path: 'events', component: EventsComponent},
       {path: 'personal', component: PersonalComponent},
       {path: 'tests_results', component: TestsResultsComponent},
-      {path: 'tests_results/:id', component: TestsResultsHistoryComponent}
+      {path: 'tests_results/:id', component: TestsResultsHistoryComponent},
+      {path: 'achievements', component: AchievementsComponent},
+      {path: 'groups', component: GroupsComponent},
+      {
+        path: 'my_region', component: MyRegionComponent, children: [
+          {path: '', redirectTo: 'school', pathMatch: 'full'},
+          {path: 'school', component: SchoolNoteComponent},
+          {path: 'trainer', component: TrainerNoteComponent},
+          {path: 'agent', component: AgentNoteComponent}
+        ]
+      }
     ]
   },
-  {path: 'groups', component: GroupsComponent},
-  {
-    path: 'my_region', component: MyRegionComponent, children: [
-      {path: '', redirectTo: 'school', pathMatch: 'full'},
-      {path: 'school', component: SchoolNoteComponent},
-      {path: 'trainer', component: TrainerNoteComponent},
-      {path: 'agent', component: AgentNoteComponent}
-    ]
-  },
-  {path: 'achievements', component: AchievementsComponent}
+
 ];
 
 @NgModule({

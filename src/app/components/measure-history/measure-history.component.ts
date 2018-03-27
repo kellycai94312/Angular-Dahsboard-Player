@@ -1,11 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ExerciseMeasure } from '../../data/remote/model/exercise/exercise-measure';
-import { PersonService } from '../../pages/person-page/person-page/person.service';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../data/local/property-constant';
-import { Tab } from '../../data/local/tab';
 import { Subject } from 'rxjs/Subject';
+import { MeasureHistoryService } from './measure-history.service';
 
 @Component({
   selector: 'app-measure-history',
@@ -13,9 +8,6 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./measure-history.component.scss']
 })
 export class MeasureHistoryComponent implements OnInit {
-
-  public tabs: Tab[];
-  public exerciseMeasure: ExerciseMeasure;
 
   @Input()
   measureValues: any[];
@@ -45,30 +37,20 @@ export class MeasureHistoryComponent implements OnInit {
   getValue: Function;
 
   @Input()
-  dateSubject: Subject<any[]>;
+  isNumber: boolean;
 
-  constructor(private _route: ActivatedRoute,
-              private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _measureHistoryService: MeasureHistoryService) {
   }
 
   async ngOnInit() {
-    this.measureQuery.count = PropertyConstant.pageSize;
-    this.measureQuery.personId = this._personService.shared.person.id;
-    this._route.params.subscribe(params => {
-      this.measureQuery.exerciseMeasureId = +params.id;
-    });
-    this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({
-      exerciseMeasureId: this.measureQuery.exerciseMeasureId
-    });
   }
 
   async onDateFromChange(event: any) {
-    await this.setDateFrom(event.value);
+    this._measureHistoryService.dateSubject.next(await this.setDateFrom(event.value));
   }
 
   async onDateToChange(event: any) {
-    await this.setDateTo(event.value);
+    this._measureHistoryService.dateSubject.next(await this.setDateTo(event.value));
   }
 
 }

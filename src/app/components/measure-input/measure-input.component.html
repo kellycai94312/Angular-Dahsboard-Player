@@ -18,6 +18,8 @@
     <span id="measure-input" class="input-group-text">{{anthropometry.measure.measureUnit.shortName}}</span>
   </div>
   <div class="ml-2">
-    <button class="btn btn-outline-secondary btn-sm">Show history</button>
+    <button class="btn btn-outline-secondary btn-sm" [routerLink]="[anthropometry.measure.id]">
+      {{'showHistory' | translate}}
+    </button>
   </div>
 </div>

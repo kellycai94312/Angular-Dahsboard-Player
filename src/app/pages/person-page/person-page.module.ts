@@ -52,9 +52,10 @@ import { UserRoleItemModule } from '../../components/user-role-item/user-role-it
 import { RanksComponent } from './person-page/ranks/ranks.component';
 import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.component';
 import { MeasureInputModule } from '../../components/measure-input/measure-input.module';
-import { AnthropometryHistoryComponent } from './person-page/anthropometry/anthropometry-history/anthropometry-history.component';
-import { TestsResultsHistoryComponent } from './person-page/tests-results/tests-results-history/tests-results-history.component';
+import { AnthropometryHistoryComponent } from './person-page/anthropometry-history/anthropometry-history.component';
+import { TestsResultsHistoryComponent } from './person-page/tests-results-history/tests-results-history.component';
 import { MeasureHistoryModule } from '../../components/measure-history/measure-history.module';
+import { RoundPipe } from '../../pipes/round.pipe';
 
 @NgModule({
   imports: [
@@ -115,7 +116,8 @@ import { MeasureHistoryModule } from '../../components/measure-history/measure-h
   providers: [
     PersonService,
     MyRegionService,
-    DatePipe
+    DatePipe,
+    RoundPipe
   ],
   entryComponents: [
     ModalSelectPageComponent,

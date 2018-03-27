@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { Subject } from 'rxjs/Subject';
+import { MeasureHistoryService } from '../measure-history.service';
 
 @Component({
   selector: 'app-chart-history',
@@ -20,9 +19,6 @@ export class ChartHistoryComponent implements OnInit {
   measureValuesChange: EventEmitter<any>;
 
   @Input()
-  dateSubject: Subject<any[]>;
-
-  @Input()
   setup: Function;
 
   @Input()
@@ -33,10 +29,11 @@ export class ChartHistoryComponent implements OnInit {
 
   private _maxBars: number;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _datePipe: DatePipe) {
+  constructor(private _datePipe: DatePipe,
+              private _measureHistoryService: MeasureHistoryService) {
     this._maxBars = 5;
     this.measureValuesChange = new EventEmitter<any>();
+    this._measureHistoryService.dateSubject.subscribe((measureValues) => this.drawChart(measureValues));
   }
 
   @HostListener('window:resize', ['$event'])
@@ -46,12 +43,12 @@ export class ChartHistoryComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.setup(true, this._maxBars);
+    this.measureValues = await this.setup(true, this._maxBars);
     this.drawChart(this.measureValues);
-    this.dateSubject.subscribe((measureValues) => this.drawChart(measureValues));
   }
 
-  drawChart(measureValues: any[]) {
+  drawChart(values: any[]) {
+    const measureValues = values.slice().reverse();
     const colors = ['#008ef9', '#2ECC40', '#FFDC00', '#FF851B', '#AAAAAA'];
     const element = this.el.nativeElement;
     const layout = {
@@ -62,7 +59,7 @@ export class ChartHistoryComponent implements OnInit {
     };
     const yValues = measureValues.map(mv => this.getValue(mv));
     const data = [{
-      x: measureValues.map(mv => this._datePipe.transform(this.getDate(mv), 'yyyy.MM.dd HH:mm')),
+      x: measureValues.map(mv => this._datePipe.transform(this.getDate(mv), 'yyyy.MM.dd HH:mm:ss')),
       y: yValues,
       type: 'bar',
       hoverinfo: 'none',

@@ -32,7 +32,10 @@
         "city": "Город"
       },
       "anthropometry": {
-        "section": "Антропометрия"
+        "section": "Антропометрия",
+        "history": {
+          "title": "История по параметру "
+        }
       },
       "ranks": {
         "section": "Спорт разряды"

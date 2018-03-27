@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { TabModule } from '../tab/tab.module';
 import { InfiniteListModule } from '../infinite-list/infinite-list.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { MeasureHistoryService } from './measure-history.service';
 
 @NgModule({
   imports: [
@@ -29,6 +30,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MeasureHistoryComponent,
     TableHistoryComponent,
     ChartHistoryComponent
+  ],
+  providers: [
+    MeasureHistoryService
   ]
 })
 export class MeasureHistoryModule {
