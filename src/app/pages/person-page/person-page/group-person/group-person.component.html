@@ -32,7 +32,7 @@
     <app-person *ngIf="data?.mentor" [person]="data.mentor.person"></app-person>
   </td>
   <td class="col-sm-1" *ngIf="isEditAllow && data">
-    <button class="btn btn-outline-danger btn-sm" (click)="onRemove()">
+    <button class="btn btn-outline-danger" (click)="onRemove()">
       <i class="fa fa-times"></i>
     </button>
   </td>
