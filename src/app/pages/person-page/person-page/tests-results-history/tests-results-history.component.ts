@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { PersonService } from '../person.service';
 import { ExerciseMeasure } from '../../../../data/remote/model/exercise/exercise-measure';
 import { UnitTypeEnum } from '../../../../data/remote/misc/unit-type-enum';
+import { RoundPipe } from '../../../../pipes/round.pipe';
 
 @Component({
   selector: 'app-tests-results-history',
@@ -19,10 +20,12 @@ export class TestsResultsHistoryComponent implements OnInit {
   public readonly query: MeasureTemplateQuery;
   public exerciseMeasure: ExerciseMeasure;
   public isNumber: boolean;
+  public precision: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _roundPipe: RoundPipe) {
     this.measureValues = [];
     this.query = new MeasureTemplateQuery();
   }
@@ -67,7 +70,7 @@ export class TestsResultsHistoryComponent implements OnInit {
   };
 
   public getValue = (item: ExerciseExecMeasureValue) => {
-    return item.value;
+    return this.isNumber ? this._roundPipe.transform(parseFloat(item.value), this.precision) : item.value;
   };
 
   async ngOnInit() {
@@ -78,7 +81,11 @@ export class TestsResultsHistoryComponent implements OnInit {
     this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({
       exerciseMeasureId: this.query.exerciseMeasureId
     });
-    this.isNumber = this.exerciseMeasure.measure.measureUnit.unitTypeEnum.toString() === UnitTypeEnum[UnitTypeEnum.NUMBER];
+    const measureUnit = this.exerciseMeasure.measure.measureUnit;
+    this.isNumber = measureUnit.unitTypeEnum.toString() === UnitTypeEnum[UnitTypeEnum.NUMBER];
+    if (this.isNumber) {
+      this.precision = measureUnit.precision;
+    }
   }
 
 }
