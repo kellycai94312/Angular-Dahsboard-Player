@@ -74,6 +74,7 @@ export class MembersComponent implements OnInit, AfterViewInit {
   public onEdit(groupPersonViewModel: GroupPersonViewModel) {
     const modalRef = this._modalService.open(GroupPersonModalComponent, {size: 'lg'});
     modalRef.componentInstance.groupPerson = groupPersonViewModel.groupPerson;
+    modalRef.componentInstance.onChange = async () => this.initCustomStore();
   }
 
 }
