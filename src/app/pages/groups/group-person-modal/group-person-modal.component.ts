@@ -22,6 +22,9 @@ export class GroupPersonModalComponent implements OnInit {
   @Input()
   public groupPerson: GroupPerson;
 
+  @Input()
+  public onChange: Function;
+
   public baseGroupPerson: GroupPerson;
   public userRoles: UserRole[];
   public readonly pageSize: number;
@@ -138,6 +141,7 @@ export class GroupPersonModalComponent implements OnInit {
     }
 
     this.closeModal();
+    this.onChange();
   }
 
   public async onRemove() {
@@ -146,6 +150,7 @@ export class GroupPersonModalComponent implements OnInit {
       personId: this.groupPerson.person.id
     });
     this.closeModal();
+    this.onChange();
   }
 
   public onCancel() {
