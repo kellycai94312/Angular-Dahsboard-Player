@@ -1,13 +1,9 @@
 <div class="row"
      *ngFor="let pa of anthropometry">
-  <div class="col-6" *ngIf="pa.value || isEditAllow">
-    <div class="form-group p-1">
-      <label for="measure">{{pa.measure.measureParameter.name}}</label>
-      <dx-text-box id="measure"
-                   [(value)]="pa.value"
-                   class="w-100"
-                   [readOnly]="!isEditAllow">
-      </dx-text-box>
+  <div class="col-lg-4 col-md-6 col-sm-12">
+    <div class="form-group p-1 mb-0">
+      <label>{{pa.measure.measureParameter.name}}</label>
+      <app-measure-input [anthropometry]="pa" [disabled]="!isEditAllow"></app-measure-input>
     </div>
   </div>
 </div>

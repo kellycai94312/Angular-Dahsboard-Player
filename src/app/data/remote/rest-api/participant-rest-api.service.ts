@@ -55,6 +55,8 @@ import { Note } from '../model/note/base/note';
 import { TestingPersonalReport } from '../bean/testing-personal-report';
 import { NamedQuery } from './named-query';
 import { PersonRank } from '../model/person-rank';
+import { Measure } from '../model/measure';
+import { AnthropometryQuery } from './query/anthropometry-query';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -231,6 +233,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}/exerciseValue/{!exerciseMeasureId}/history',
   })
   getExerciseValueHistory: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseExecMeasureValue>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/anthropometry/{!measureId}/history',
+  })
+  getAnthropometryHistory: IRestMethod<AnthropometryQuery, PageContainer<PersonAnthropometry>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -615,6 +623,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/exerciseMeasure/{!exerciseMeasureId}',
   })
   getExerciseMeasureById: IRestMethod<{ exerciseMeasureId: number }, ExerciseMeasure>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/measure/{!id}',
+  })
+  getMeasureById: IRestMethod<{ id: number }, Measure>;
 
   @RestAction({
     method: RestRequestMethod.Get,

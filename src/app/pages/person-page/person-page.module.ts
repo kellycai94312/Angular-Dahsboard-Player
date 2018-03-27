@@ -35,15 +35,11 @@ import { GroupsComponent } from './person-page/groups/groups.component';
 import { GroupPageModule } from '../groups/group-page.module';
 import { GroupPersonComponent } from './person-page/group-person/group-person.component';
 import { PersonModule } from '../../components/person/person.module';
-import { MeasureHistoryComponent } from './person-page/tests-results/measure-history/measure-history.component';
 import { ModalSelectPageComponent } from '../../components/modal-select-page/modal-select-page.component';
 import { ModalSelectPageModule } from '../../components/modal-select-page/modal-select-page.module';
 import { ExerciseMeasureItemModule } from '../../components/exercise-measure-item/exercise-measure-item.module';
 import { EventModalComponent } from './person-page/events/event-modal/event-modal.component';
-import { TableHistoryComponent } from './person-page/tests-results/measure-history/table-history/table-history.component';
-import { ChartHistoryComponent } from './person-page/tests-results/measure-history/chart-history/chart-history.component';
 import { TabModule } from '../../components/tab/tab.module';
-import { MeasureHistoryService } from './person-page/tests-results/measure-history/measure-history.service';
 import { MyRegionComponent } from './person-page/my-region/my-region.component';
 import { SchoolNoteComponent } from './person-page/my-region/school-note/school-note.component';
 import { TrainerNoteComponent } from './person-page/my-region/trainer-note/trainer-note.component';
@@ -55,6 +51,11 @@ import { SportTypeItemModule } from '../../components/sport-type-item/sport-type
 import { UserRoleItemModule } from '../../components/user-role-item/user-role-item.module';
 import { RanksComponent } from './person-page/ranks/ranks.component';
 import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.component';
+import { MeasureInputModule } from '../../components/measure-input/measure-input.module';
+import { AnthropometryHistoryComponent } from './person-page/anthropometry-history/anthropometry-history.component';
+import { TestsResultsHistoryComponent } from './person-page/tests-results-history/tests-results-history.component';
+import { MeasureHistoryModule } from '../../components/measure-history/measure-history.module';
+import { RoundPipe } from '../../pipes/round.pipe';
 
 @NgModule({
   imports: [
@@ -85,7 +86,9 @@ import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.co
     SportTypeItemModule,
     UserRoleItemModule,
     DxCheckBoxModule,
-    TabModule
+    TabModule,
+    MeasureInputModule,
+    MeasureHistoryModule
   ],
   declarations: [
     PersonPageComponent,
@@ -99,23 +102,22 @@ import { RankModalComponent } from './person-page/ranks/rank-modal/rank-modal.co
     EventsComponent,
     GroupsComponent,
     GroupPersonComponent,
-    MeasureHistoryComponent,
     EventModalComponent,
-    TableHistoryComponent,
-    ChartHistoryComponent,
     MyRegionComponent,
     SchoolNoteComponent,
     TrainerNoteComponent,
     AgentNoteComponent,
     NoteModalComponent,
     RanksComponent,
-    RankModalComponent
+    RankModalComponent,
+    TestsResultsHistoryComponent,
+    AnthropometryHistoryComponent
   ],
   providers: [
     PersonService,
-    MeasureHistoryService,
     MyRegionService,
-    DatePipe
+    DatePipe,
+    RoundPipe
   ],
   entryComponents: [
     ModalSelectPageComponent,

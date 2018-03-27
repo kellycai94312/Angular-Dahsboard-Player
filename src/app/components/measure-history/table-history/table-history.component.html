@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-sm">
+<table class="table table-bordered table-hover table-sm mt-2">
   <thead>
   <tr class="d-flex">
     <th class="col-4">{{ 'date' | translate }}</th>
@@ -7,13 +7,13 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list [items]="measureHistoryService.measureValues"
+  <app-infinite-list [items]="measureValues"
                      (nextPage)="onNextPage($event)">
     <ng-template let-item>
       <tr class="d-flex">
-        <td class="col-sm-4">{{item?.created | date:'yyyy.MM.dd HH:mm'}}</td>
-        <td class="col-sm-4">{{item?.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.name}}</td>
-        <td class="col-sm-4">{{item?.value}}</td>
+        <td class="col-sm-4">{{getDate(item) | date:'yyyy.MM.dd HH:mm'}}</td>
+        <td class="col-sm-4">{{getUnits(item)}}</td>
+        <td class="col-sm-4">{{getValue(item)}}</td>
       </tr>
     </ng-template>
   </app-infinite-list>

@@ -1,5 +1,5 @@
 <div>
-  <button class="btn btn-outline-success btn-sm" (click)="myRegionService.add()">
+  <button class="btn btn-outline-success" (click)="myRegionService.add()">
     <i class="fa fa-plus"></i>
     <span> {{'add' | translate}}</span>
   </button>
@@ -49,10 +49,10 @@
         <td class="col-sm-3">{{item?.email}}</td>
         <td class="col-sm-1">
           <div class="text-center">
-            <button class="btn btn-outline-primary btn-sm" (click)="myRegionService.edit(item)">
+            <button class="btn btn-outline-primary" (click)="myRegionService.edit(item)">
               <i class="fa fa-edit"></i>
             </button>
-            <button class="btn btn-outline-danger btn-sm" (click)="myRegionService.remove(item)">
+            <button class="btn btn-outline-danger" (click)="myRegionService.remove(item)">
               <i class="fa fa-remove"></i>
             </button>
           </div>

@@ -1,0 +1,15 @@
+<div class="text-light bg-primary p-1 mb-2">{{'persons.person.testsResults.history.titleStart' | translate}}
+  "{{exerciseMeasure?.baseExercise.name}}" {{'persons.person.testsResults.history.titleEnd' | translate}}
+  "{{exerciseMeasure?.measure.measureParameter.name}}"
+</div>
+<app-measure-history [(measureValues)]="measureValues"
+                     [measureQuery]="query"
+                     [setup]="setup"
+                     [updateListAsync]="updateListAsync"
+                     [setDateFrom]="setDateFrom"
+                     [setDateTo]="setDateTo"
+                     [getDate]="getDate"
+                     [getUnits]="getUnits"
+                     [getValue]="getValue"
+                     [isNumber]="isNumber">
+</app-measure-history>

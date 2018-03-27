@@ -27,6 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RestApiInterceptor } from './guard/rest-api-interceptor';
 import { InfiniteListModule } from './components/infinite-list/infinite-list.module';
 import { AssetsService } from './data/remote/rest-api/assets.service';
+import { RoundPipeModule } from './pipes/round-pipe.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -56,7 +57,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     FormsModule,
-    InfiniteListModule
+    InfiniteListModule,
+    RoundPipeModule.forRoot()
   ],
   providers: [
     LayoutService,

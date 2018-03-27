@@ -13,6 +13,7 @@ $logo-size-lg: 80px; /*lists*/
 $logo-size-sm: 40px; /*navbar*/
 
 $scroll-block-max-height: 500px;
+$input-height: 34px; //devexpress input height
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');

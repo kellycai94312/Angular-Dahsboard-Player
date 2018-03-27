@@ -3,8 +3,9 @@
 $color: #333;
 $color-active: #eee;
 $color-hover: #111;
+$color-empty: #989896;
 $background-color-active: $light-blue;
-$background-color-hover: #ccc;
+$background-color-hover: #e6e6e6;
 
 .wrapper {
   display: flex;
@@ -19,13 +20,16 @@ $background-color-hover: #ccc;
         border-bottom-right-radius: 0;
         border-bottom-left-radius: 0;
       }
+      &.empty {
+        color: $color-empty;
+      }
     }
     > .fa-caret-down {
       position: absolute;
       font-weight: 100;
       margin: 0;
       padding: 0;
-      top: 12px;
+      top: 10px;
       float: right;
       right: 10px;
 
@@ -65,8 +69,8 @@ $background-color-hover: #ccc;
         background-color: $light-blue;
       }
 
-      &.empty {
-        color: #888;
+      &.default {
+        color: $color-empty;
         &.active {
           color: $color-active;
         }

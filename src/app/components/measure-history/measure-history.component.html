@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col">
+    <dx-date-box id="dateFrom"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateFromChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateTo"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateToChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+</div>
+<div class="mt-2">
+  <ngb-tabset>
+    <ngb-tab title="{{'table' | translate}}">
+      <ng-template ngbTabContent>
+        <app-table-history [setup]="setup" [updateListAsync]="updateListAsync" [(measureValues)]="measureValues"
+        [getDate]="getDate" [getUnits]="getUnits" [getValue]="getValue">
+        </app-table-history>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="{{'chart' | translate}}" *ngIf="isNumber">
+      <ng-template ngbTabContent>
+        <app-chart-history [setup]="setup" [(measureValues)]="measureValues"
+                           [getDate]="getDate" [getValue]="getValue">
+        </app-chart-history>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>
