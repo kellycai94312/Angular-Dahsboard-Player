@@ -157,15 +157,22 @@ h5 {
   color: #999;
 }
 
-.form-control {
-  height: $input-height;
+.input-font {
   font-family: 'Helvetica Neue', 'Segoe UI', Helvetica, Verdana, sans-serif;
   font-size: 14px;
-  line-height: 1.35715;
   color: #333;
 }
 
-.btn {
+.input-height {
   height: $input-height;
   line-height: 1.35715;
+}
+
+.form-control {
+  @extend .input-font;
+  @extend .input-height;
+}
+
+.btn {
+  @extend .input-height;
 }

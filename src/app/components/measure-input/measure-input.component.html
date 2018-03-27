@@ -1,4 +1,4 @@
-<div class="input-group input-group-sm">
+<div class="input-group">
   <div *ngIf="isNumber;then numberInput else textInput"></div>
   <ng-template #numberInput>
     <input type="number" step="{{step}}" class="form-control"
@@ -14,7 +14,7 @@
            (ngModelChange)="anthropometry.value=$event"
            [disabled]="disabled">
   </ng-template>
-  <div class="input-group-append">
+  <div class="input-group-append input-height">
     <span id="measure-input" class="input-group-text">{{anthropometry.measure.measureUnit.shortName}}</span>
   </div>
   <div class="ml-2">

@@ -7,11 +7,13 @@
            [(ngModel)]="value"
            (focus)="showList()"
            (keyup)="searchData($event)"
-           [disabled]="disabled">
+           [disabled]="disabled"
+           [ngClass]="{'empty' : !active && model == null}">
   </div>
   <app-scroll class="menu" [fetchMore]="fetchMore" *ngIf="active">
-    <li class="empty" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>
-    <li *ngFor="let item of data"
+    <li class="input-font default" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>
+    <li class="input-font"
+        *ngFor="let item of data"
         (click)="select(item)"
         [ngClass]="{'active' : model && getKey(item) === getKey(model)}">
       {{getName(item)}}
