@@ -1,3 +1,26 @@
-<p>
-  events-page works!
-</p>
+<div class="input-group mb-2">
+  <input type="text"
+         class="form-control"
+         [(ngModel)]="baseTrainingQuery.name"
+         (keyup)="onKeyUp()"
+         placeholder="{{'search' | translate}}">
+  <div class="input-group-append">
+    <button class="btn btn-primary text-uppercase"
+            type="button"
+            (click)="onCreate()">{{'create' | translate}}
+    </button>
+  </div>
+</div>
+<app-infinite-list class="list-group-flush"
+                   [items]="baseTrainings"
+                   (nextPage)="onNextPage($event)">
+  <ng-template let-item>
+    <a routerLink="{{item.id}}"
+       routerLinkActive="active"
+       class="list-group-item list-group-item-action p-0 pt-2 pb-2">{{item.name}}<br>
+      {{item.description}}
+    </a>
+  </ng-template>
+</app-infinite-list>
+
+
