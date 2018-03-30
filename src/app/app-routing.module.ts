@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from './guard/auth.guard';
-import { LayoutService } from './layout/shared/layout.service';
-import { AuthDenyGuard } from './guard/auth-deny.guard';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {AuthGuard} from './guard/auth.guard';
+import {LayoutService} from './layout/shared/layout.service';
+import {AuthDenyGuard} from './guard/auth-deny.guard';
 
 const routes: Routes = [
   {
@@ -10,11 +10,15 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-
   {
     path: 'login',
     loadChildren: './pages/login-page/login-page.module#LoginPageModule',
     canActivate: [AuthDenyGuard]
+  },
+  {
+    path: 'event',
+    loadChildren: './pages/event/event.module#EventModule',
+    canActivate: [AuthGuard, LayoutService]
   },
   {
     path: 'registration',
