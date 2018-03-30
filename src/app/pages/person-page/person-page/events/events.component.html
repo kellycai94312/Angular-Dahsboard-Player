@@ -63,7 +63,7 @@
         </td>
         <td class="col-sm-2">
           <div class="text-center">
-            <button class="btn btn-outline-primary" (click)="editPublic(item)">
+            <button class="btn btn-outline-primary" (click)="editPublic(item)" *ngIf="isEditAllow">
               <i class="fa fa-edit"></i>
             </button>
             <button class="btn btn-outline-success" (click)="downloadReport(item)">
