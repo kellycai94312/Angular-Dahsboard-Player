@@ -8,6 +8,7 @@ import {Subject} from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
+import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
 
 @Component({
   selector: 'app-events-page',
@@ -22,10 +23,11 @@ export class EventsPageComponent implements OnInit {
   private searchTextChanges: Subject<PageQuery>;
 
   constructor(private _router: Router,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
-    // TODO: this.baseTrainingQuery.discriminator = TrainingDiscriminator.GAME;
+    this.baseTrainingQuery.discriminator = TrainingDiscriminator.GAME;
 
     this.searchTextChanges = new Subject<PageQuery>();
     this.searchTextChanges.debounceTime(PropertyConstant.searchDebounceTime).subscribe(async x => {
@@ -53,7 +55,7 @@ export class EventsPageComponent implements OnInit {
     this.baseTrainingQuery.from = from;
 
     const pageContainer = await this._participantRestApiService.getBaseTrainings(this.baseTrainingQuery);
-    this.baseTrainings = AppHelper.pushItemsInList(from, this.baseTrainings, pageContainer);
+    this.baseTrainings = this._appHelper.pushItemsInList(from, this.baseTrainings, pageContainer);
   }
 
 }

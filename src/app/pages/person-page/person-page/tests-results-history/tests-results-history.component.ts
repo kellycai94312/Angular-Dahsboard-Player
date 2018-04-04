@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { MeasureTemplateQuery } from '../../../../data/remote/rest-api/query/measure-template-query';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { ExerciseExecMeasureValue } from '../../../../data/remote/model/training/exercise-exec-measure-value';
-import { ActivatedRoute } from '@angular/router';
-import { PersonService } from '../person.service';
-import { ExerciseMeasure } from '../../../../data/remote/model/exercise/exercise-measure';
-import { UnitTypeEnum } from '../../../../data/remote/misc/unit-type-enum';
-import { RoundPipe } from '../../../../pipes/round.pipe';
+import {Component, OnInit} from '@angular/core';
+import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measure-template-query';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {ExerciseExecMeasureValue} from '../../../../data/remote/model/training/exercise-exec-measure-value';
+import {ActivatedRoute} from '@angular/router';
+import {PersonService} from '../person.service';
+import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
+import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
+import {RoundPipe} from '../../../../pipes/round.pipe';
 
 @Component({
   selector: 'app-tests-results-history',
@@ -25,7 +25,8 @@ export class TestsResultsHistoryComponent implements OnInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,
               private _personService: PersonService,
-              private _roundPipe: RoundPipe) {
+              private _roundPipe: RoundPipe,
+              private _appHelper: AppHelper) {
     this.measureValues = [];
     this.query = new MeasureTemplateQuery();
   }
@@ -57,7 +58,7 @@ export class TestsResultsHistoryComponent implements OnInit {
   public updateListAsync = async (from: number) => {
     this.query.from = from;
     const container = await this._participantRestApiService.getExerciseValueHistory(this.query);
-    this.measureValues = AppHelper.pushItemsInList(from, this.measureValues, container);
+    this.measureValues = this._appHelper.pushItemsInList(from, this.measureValues, container);
     return this.measureValues;
   };
 

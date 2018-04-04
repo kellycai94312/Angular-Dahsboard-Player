@@ -1,21 +1,21 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PersonService } from '../person.service';
-import { ExerciseResult } from '../../../../data/remote/bean/exercise-result';
-import { ExerciseExecMeasureValue } from '../../../../data/remote/model/training/exercise-exec-measure-value';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { MeasureTemplateQuery } from '../../../../data/remote/rest-api/query/measure-template-query';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalSelectPageComponent } from '../../../../components/modal-select-page/modal-select-page.component';
-import { TranslateService } from '@ngx-translate/core';
-import { ExerciseMeasureItemComponent } from '../../../../components/exercise-measure-item/exercise-measure-item.component';
-import { DictionaryType } from '../../../../data/remote/misc/dictionary-type';
-import { HashSet } from '../../../../data/local/hash-set';
-import { ExerciseMeasure } from '../../../../data/remote/model/exercise/exercise-measure';
-import { ListRequest } from '../../../../data/remote/request/list-request';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {PersonService} from '../person.service';
+import {ExerciseResult} from '../../../../data/remote/bean/exercise-result';
+import {ExerciseExecMeasureValue} from '../../../../data/remote/model/training/exercise-exec-measure-value';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measure-template-query';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
+import {TranslateService} from '@ngx-translate/core';
+import {ExerciseMeasureItemComponent} from '../../../../components/exercise-measure-item/exercise-measure-item.component';
+import {DictionaryType} from '../../../../data/remote/misc/dictionary-type';
+import {HashSet} from '../../../../data/local/hash-set';
+import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
+import {ListRequest} from '../../../../data/remote/request/list-request';
 
 @Component({
   selector: 'app-tests-results',
@@ -38,7 +38,8 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
               private _modalService: NgbModal,
-              private _translate: TranslateService) {
+              private _translate: TranslateService,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
 
@@ -67,24 +68,23 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
   public async showMoreValues(result: ExerciseResult) {
     if (result) {
       const groupId = result.group.id;
-      let list = result.exerciseValues.list;
+      const list = result.exerciseValues.list;
       const container = await this._participantRestApiService.getExerciseValue({
         personId: this._personService.shared.person.id,
         groupId: groupId,
         from: list.length
       });
-      AppHelper.pushItemsInList(list.length, list, container);
+      this._appHelper.pushItemsInList(list.length, list, container);
     } else {
       const container = await this._participantRestApiService.getExerciseValue({
         personId: this._personService.shared.person.id,
         from: this.personMeasureValues.length
       });
-      AppHelper.pushItemsInList(this.personMeasureValues.length, this.personMeasureValues, container);
+      this._appHelper.pushItemsInList(this.personMeasureValues.length, this.personMeasureValues, container);
     }
   }
 
   public async editPersonal() {
-
     const measureQuery = new MeasureTemplateQuery();
     measureQuery.from = 0;
     measureQuery.count = PropertyConstant.pageSize;
@@ -113,7 +113,7 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
   private async updateListAsync(from: number = 0) {
     this._measureQuery.from = from;
     const pageContainer = await this._participantRestApiService.getGroupsMeasureTemplate(this._measureQuery);
-    this.groupResults = AppHelper.pushItemsInList(from, this.groupResults, pageContainer);
+    this.groupResults = this._appHelper.pushItemsInList(from, this.groupResults, pageContainer);
   }
 
 }

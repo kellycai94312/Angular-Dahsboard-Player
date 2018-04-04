@@ -51,6 +51,7 @@ import {Measure} from '../model/measure';
 import {AnthropometryQuery} from './query/anthropometry-query';
 import {BaseTrainingQuery} from './query/base-training-query';
 import {BaseTraining} from '../model/training/base/base-training';
+import {TrainingPart} from '../model/training/training-part';
 import {GameReport} from '../bean/game/game-report';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
@@ -576,6 +577,69 @@ export class ParticipantRestApiService extends Rest {
     path: '/baseTraining'
   })
   getBaseTrainings: IRestMethod<BaseTrainingQuery, PageContainer<BaseTraining>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!id}'
+  })
+  getBaseTraining: IRestMethod<{ id: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining'
+  })
+  createBaseTraining: IRestMethod<BaseTraining, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!id}'
+  })
+  updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
+
+  //#region Group
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!baseTrainingId}/group'
+  })
+  getGroupsByBaseTraining: IRestMethod<{ baseTrainingId: number }, Group[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/group'
+  })
+  updateGroupsByBaseTraining: IRestMethodStrict<ListRequest<Group>, any, { baseTrainingId: number }, TrainingGroup[]>;
+
+  //#endregion
+
+  //#region TrainingPart
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!id}/part'
+  })
+  getTrainingParts: IRestMethod<{ id: number }, TrainingPart[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/part'
+  })
+  createTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number }, TrainingPart>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
+  })
+  updateTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number, trainingPartId: number }, TrainingPart>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
+  })
+  removeTrainingPart: IRestMethod<{ baseTrainingId: number, trainingPartId: number }, TrainingPart>;
+
+  //#endregion
+
 
   //#region Testing
 

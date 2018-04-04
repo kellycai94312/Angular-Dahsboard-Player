@@ -1,3 +1,108 @@
-<p>
-  game-step-base-page works!
-</p>
+<div class="row">
+  <div class="col">
+    <label>{{'name' | translate }}</label>
+    <dx-text-box [(value)]="game.name">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+    <label class="mt-2">{{'description' | translate }}</label>
+    <dx-text-area [(value)]="game.description">
+    </dx-text-area>
+    <label class="mt-2">{{'location' | translate }}</label>
+    <dx-select-box [items]="locations"
+                   displayExpr="name"
+                   [(value)]="game.location"
+                   acceptCustomValue="true"
+                   placeholder="{{'location' | translate}}">
+    </dx-select-box>
+    <label class="mt-2">{{'sportType' | translate }}</label>
+    <dx-select-box [items]="sportTypes"
+                   displayExpr="name"
+                   [(value)]="game.sportType"
+                   acceptCustomValue="true"
+                   placeholder="{{'sportType' | translate}}">
+    </dx-select-box>
+    <dx-button type="default"
+               class="mt-2 text-uppercase"
+               (onClick)="onSave()"
+               text="{{ 'save' | translate }}">
+    </dx-button>
+  </div>
+  <div class="col pl-0">
+    <label>{{'startDateAndTime' | translate }}</label>
+    <dx-date-box class="w-100"
+                 [(value)]="game.startTime"
+                 type="datetime">
+    </dx-date-box>
+
+    <label class="mt-2">{{'parts' | translate }}</label>
+    <div class="row mb-2"
+         *ngFor="let item of trainingParts">
+      <div class="col-6 pr-0">
+        <dx-text-box class="w-100"
+                     [(value)]="item.name">
+          <dx-validator>
+            <dxi-validation-rule type="required"></dxi-validation-rule>
+          </dx-validator>
+        </dx-text-box>
+      </div>
+      <div class="col-3 pr-0">
+        <dx-date-box
+          class="w-100"
+          [value]="onGetTrainingPartDuration(item)"
+          (onValueChanged)="onSetTrainingPartDuration(item,$event.value)"
+          displayFormat="HH:mm"
+          type="time">
+        </dx-date-box>
+      </div>
+      <div class="col-3 pl-3">
+        <dx-button type="danger"
+                   class="text-uppercase w-100"
+                   (onClick)="onRemoveTrainingPart(item)"
+                   text="{{ 'remove' | translate }}">
+        </dx-button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-6 pr-0">
+        <dx-text-box class="w-100"
+                     [(value)]="trainingPart.name">
+        </dx-text-box>
+      </div>
+      <div class="col-3 pr-0">
+        <dx-date-box
+          class="w-100"
+          [value]="onGetTrainingPartDuration(trainingPart)"
+          (onValueChanged)="onSetTrainingPartDuration(trainingPart,$event.value)"
+          displayFormat="HH:mm"
+          type="time">
+        </dx-date-box>
+      </div>
+      <div class="col-3 pl-3">
+        <dx-button type="success"
+                   class="text-uppercase w-100"
+                   (onClick)="onAddTrainingPart(trainingPart)"
+                   text="{{ 'add' | translate }}"
+                   [disabled]="!isValidTrainingPart(trainingPart)">
+        </dx-button>
+      </div>
+    </div>
+
+  </div>
+  <div class="col pl-0">
+    <label class="w-100">{{'groups.section' | translate }}</label>
+    <dx-button type="default"
+               class="text-uppercase"
+               (onClick)="onEditGroups()"
+               text="{{ 'edit' | translate }}"
+               [disabled]="appHelper.isNewObject(game)">
+    </dx-button>
+    <div class="mt-2 list-group-flush">
+      <a *ngFor="let item of groups"
+         class="list-group-item list-group-item-action p-0 pt-2 pb-2">{{item.name}}
+      </a>
+    </div>
+  </div>
+</div>

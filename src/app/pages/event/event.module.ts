@@ -11,6 +11,19 @@ import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-pe
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
 import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-manager-page/game-steps-manager-page.component';
 import {TabModule} from '../../components/tab/tab.module';
+import {
+  DxButtonModule,
+  DxDateBoxModule,
+  DxNumberBoxModule,
+  DxSelectBoxModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxValidatorModule
+} from 'devextreme-angular';
+import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
+import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
+import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
+import {NamedObjectItemComponent} from '../../components/named-object-item/named-object-item.component';
 
 @NgModule({
   imports: [
@@ -19,7 +32,16 @@ import {TabModule} from '../../components/tab/tab.module';
     TranslateModule.forChild(),
     InfiniteListModule,
     FormsModule,
-    TabModule
+    TabModule,
+    DxDateBoxModule,
+    DxTextAreaModule,
+    DxValidatorModule,
+    DxTextBoxModule,
+    DxSelectBoxModule,
+    DxButtonModule,
+    DxNumberBoxModule,
+    ModalSelectPageModule,
+    NamedObjectItemModule
   ],
   declarations: [
     EventPageComponent,
@@ -28,6 +50,10 @@ import {TabModule} from '../../components/tab/tab.module';
     GameStepPersonsPageComponent,
     GameStepExecutionPageComponent,
     GameStepsManagerPageComponent
+  ],
+  entryComponents: [
+    ModalSelectPageComponent,
+    NamedObjectItemComponent
   ]
 })
 export class EventModule {

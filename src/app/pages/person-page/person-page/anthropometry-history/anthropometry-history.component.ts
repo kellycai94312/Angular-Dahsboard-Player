@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { PersonService } from '../person.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { ActivatedRoute } from '@angular/router';
-import { Measure } from '../../../../data/remote/model/measure';
-import { AnthropometryQuery } from '../../../../data/remote/rest-api/query/anthropometry-query';
-import { PersonAnthropometry } from '../../../../data/remote/model/person-anthropometry';
-import { UnitTypeEnum } from '../../../../data/remote/misc/unit-type-enum';
-import { RoundPipe } from '../../../../pipes/round.pipe';
+import {Component, OnInit} from '@angular/core';
+import {PersonService} from '../person.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {ActivatedRoute} from '@angular/router';
+import {Measure} from '../../../../data/remote/model/measure';
+import {AnthropometryQuery} from '../../../../data/remote/rest-api/query/anthropometry-query';
+import {PersonAnthropometry} from '../../../../data/remote/model/person-anthropometry';
+import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
+import {RoundPipe} from '../../../../pipes/round.pipe';
 
 @Component({
   selector: 'app-anthropometry-history',
@@ -26,7 +26,8 @@ export class AnthropometryHistoryComponent implements OnInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,
               private _personService: PersonService,
-              private _roundPipe: RoundPipe) {
+              private _roundPipe: RoundPipe,
+              private _appHelper: AppHelper) {
     this.anthropometries = [];
     this.query = new AnthropometryQuery();
   }
@@ -58,7 +59,7 @@ export class AnthropometryHistoryComponent implements OnInit {
   public updateListAsync = async (from: number) => {
     this.query.from = from;
     const container = await this._participantRestApiService.getAnthropometryHistory(this.query);
-    this.anthropometries = AppHelper.pushItemsInList(from, this.anthropometries, container);
+    this.anthropometries = this._appHelper.pushItemsInList(from, this.anthropometries, container);
     return this.anthropometries;
   };
 

@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { GroupType } from '../../../data/remote/model/group/base/group-type';
-import { SportType } from '../../../data/remote/model/sport-type';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { GroupTypeEnum } from '../../../data/remote/model/group/base/group-type-enum';
-import { GroupTeam } from '../../../data/remote/model/group/team/group-team';
-import { GroupAgency } from '../../../data/remote/model/group/agency/group-agency';
-import { Group } from '../../../data/remote/model/group/base/group';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {GroupType} from '../../../data/remote/model/group/base/group-type';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
+import {GroupTeam} from '../../../data/remote/model/group/team/group-team';
+import {GroupAgency} from '../../../data/remote/model/group/agency/group-agency';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {Router} from '@angular/router';
 import notify from 'devextreme/ui/notify';
-import { TranslateService } from '@ngx-translate/core';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-new-group-page',
@@ -39,7 +39,7 @@ export class NewGroupPageComponent implements OnInit {
     const result = event.validationGroup.validate();
     if (result.isValid) {
       let group: any;
-      switch (+GroupTypeEnum[this.selectedGroupType.groupTypeEnum]) {
+      switch (GroupTypeEnum[this.selectedGroupType.groupTypeEnum]) {
         case GroupTypeEnum.TEAM:
           group = new GroupTeam();
           group.name = this.groupName;

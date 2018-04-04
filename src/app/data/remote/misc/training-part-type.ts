@@ -1,5 +1,5 @@
 export enum TrainingPartType {
-  WARM_UP,
-  BASIC,
-  COOL_DOWN
+  WARM_UP = 'WARM_UP',
+  BASIC = 'BASIC',
+  COOL_DOWN = 'COOL_DOWN'
 }

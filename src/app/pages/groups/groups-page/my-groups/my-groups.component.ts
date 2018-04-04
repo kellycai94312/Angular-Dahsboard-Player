@@ -28,7 +28,8 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   private _selectedGroupType: GroupType;
   private _selectedUserRole: UserRole;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
     this._groupQuery = new GroupQuery();
     this._groupQuery.from = 0;
     this._groupQuery.count = PropertyConstant.pageSize;
@@ -78,7 +79,7 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
     }
 
     const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
-    this.groups = AppHelper.pushItemsInList(from, this.groups, pageContainer);
+    this.groups = this._appHelper.pushItemsInList(from, this.groups, pageContainer);
   }
 
 }

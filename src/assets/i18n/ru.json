@@ -217,5 +217,9 @@
   "event": "Событие",
   "events": "События",
   "information": "Информация",
-  "execution": "Проведение"
+  "execution": "Проведение",
+  "startDateAndTime": "Дата и время начала",
+  "saved": "Сохранено",
+  "saveError": "Ошибка сохранения",
+  "parts": "Части"
 }

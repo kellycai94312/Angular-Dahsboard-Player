@@ -216,5 +216,9 @@
   "event": "Event",
   "events": "Events",
   "information": "Information",
-  "execution": "Execution"
+  "execution": "Execution",
+  "startDateAndTime": "Start date and time",
+  "saved": "Saved",
+  "saveError": "Save error",
+  "parts": "Parts"
 }
