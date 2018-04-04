@@ -215,5 +215,7 @@
   "orderNumber": "№ приказа, распоряжения",
   "certificateNumber": "№ удостоверения",
   "event": "Событие",
-  "events": "События"
+  "events": "События",
+  "information": "Информация",
+  "execution": "Проведение"
 }

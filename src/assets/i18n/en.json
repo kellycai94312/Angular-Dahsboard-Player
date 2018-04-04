@@ -214,5 +214,7 @@
   "orderNumber": "Order №",
   "certificateNumber": "Certificate №",
   "event": "Event",
-  "events": "Events"
+  "events": "Events",
+  "information": "Information",
+  "execution": "Execution"
 }

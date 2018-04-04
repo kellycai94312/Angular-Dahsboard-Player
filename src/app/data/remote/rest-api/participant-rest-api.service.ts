@@ -49,6 +49,8 @@ import {NamedQuery} from './named-query';
 import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
 import {AnthropometryQuery} from './query/anthropometry-query';
+import {BaseTrainingQuery} from './query/base-training-query';
+import {BaseTraining} from '../model/training/base/base-training';
 import {GameReport} from '../bean/game/game-report';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
@@ -567,19 +569,25 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //region BaseTraining
-
-  //region Testing
+  //#region BaseTraining
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}',
+    path: '/baseTraining'
+  })
+  getBaseTrainings: IRestMethod<BaseTrainingQuery, PageContainer<BaseTraining>>;
+
+  //#region Testing
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}'
   })
   getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
 
-  //endregion
+  //#endregion
 
-  //region Game
+  //#region Game
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -587,9 +595,9 @@ export class ParticipantRestApiService extends Rest {
   })
   getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
 
-  //endregion
+  //#endregion
 
-  //endregion
+  //#endregion
 
   @RestAction({
     method: RestRequestMethod.Get,
