@@ -57,6 +57,7 @@ import { NamedQuery } from './named-query';
 import { PersonRank } from '../model/person-rank';
 import { Measure } from '../model/measure';
 import { AnthropometryQuery } from './query/anthropometry-query';
+import { GameReport } from "../bean/game/game-report";
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -583,6 +584,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/testing/{!testingId}/report/personal/{!trainingPersonId}',
   })
   getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
+
+  //endregion
+
+  //region Game
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/game/{!gameId}/group/{!trainingGroupId}/report',
+  })
+  getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
 
   //endregion
 

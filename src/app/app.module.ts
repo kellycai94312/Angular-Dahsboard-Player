@@ -28,6 +28,7 @@ import { RestApiInterceptor } from './guard/rest-api-interceptor';
 import { InfiniteListModule } from './components/infinite-list/infinite-list.module';
 import { AssetsService } from './data/remote/rest-api/assets.service';
 import { RoundPipeModule } from './pipes/round-pipe.module';
+import { ReportsService } from "./shared/reports.service";
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -70,6 +71,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     TranslateObjectService,
     LocalStorageService,
     ImageService,
+    ReportsService,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
