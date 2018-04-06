@@ -16,6 +16,12 @@ export class AssetsService extends Rest {
   })
   getPersonalReport: IRestMethod<void, any>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/game.mrt',
+  })
+  getGameReport: IRestMethod<void, any>;
+
   constructor(restHandler: RestHandler,
               private http: HttpClient) {
     super(restHandler);
