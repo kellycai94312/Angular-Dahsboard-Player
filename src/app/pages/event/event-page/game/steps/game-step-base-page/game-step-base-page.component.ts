@@ -30,10 +30,8 @@ export class GameStepBasePageComponent implements OnInit {
   public trainingParts: TrainingPart[];
   public trainingPart: TrainingPart;
   public groups: Group[];
-
   public locations: Location[];
   public sportTypes: SportType[];
-
 
   constructor(public appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
@@ -56,7 +54,7 @@ export class GameStepBasePageComponent implements OnInit {
     if (id != 0) {
       this.game = (await this._participantRestApiService.getBaseTraining({id: id})) as Game;
       this.trainingParts = await this._participantRestApiService.getTrainingParts({id: this.game.id});
-      this.groups = await this._participantRestApiService.getGroupsByBaseTraining({baseTrainingId: this.game.id});
+      this.groups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.game.id})).map(x => x.group);
     }
 
     this.locations = (await this._participantRestApiService.getLocations({count: 999999})).list;

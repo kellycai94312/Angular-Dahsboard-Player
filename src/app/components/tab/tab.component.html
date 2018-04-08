@@ -5,7 +5,8 @@
       <a *ngIf="tab"
          class="nav-link text-uppercase"
          routerLink="{{tab.routerLink}}"
-         routerLinkActive="active">
+         routerLinkActive="active"
+         [queryParams]="tab.queryParams">
         {{tab.name != null ? (tab.name) : (tab.nameKey | translate)}}
       </a>
     </li>

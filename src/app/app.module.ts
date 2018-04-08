@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {LocationStrategy, PathLocationStrategy} from '@angular/common';
+import {Injector, NgModule} from '@angular/core';
+import {DatePipe, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -29,6 +29,7 @@ import {InfiniteListModule} from './components/infinite-list/infinite-list.modul
 import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
+import {DynamicComponentService} from './shared/dynamic-component.service';
 import {ReportsService} from './shared/reports.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -75,6 +76,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DatePipe,
     AppHelper,
     ReportsService,
+    DynamicComponentService,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
@@ -88,4 +90,11 @@ export function HttpLoaderFactory(http: HttpClient) {
   bootstrap: [AppComponent]
 })
 export class AppModule {
+
+  public static injector: Injector;
+
+  constructor(private _injector: Injector) {
+    AppModule.injector = _injector;
+  }
+
 }

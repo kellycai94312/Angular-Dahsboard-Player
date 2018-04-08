@@ -220,5 +220,7 @@
   "startDateAndTime": "Start date and time",
   "saved": "Saved",
   "saveError": "Save error",
-  "parts": "Parts"
+  "parts": "Parts",
+  "athletes": "Athletes",
+  "trainers": "Trainers"
 }

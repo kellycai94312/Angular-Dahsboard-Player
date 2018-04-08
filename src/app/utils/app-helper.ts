@@ -41,6 +41,24 @@ export class AppHelper {
     return this._datePipe.transform(dateWithTimezone, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';
   }
 
+  // TODO: Use optimized algorithm
+  public except<T>(first: T[], second: T[]): T[] {
+    const items = [];
+    for (let i = 0; i < first.length; i++) {
+      let unique = true;
+      for (let j = 0; j < second.length; j++) {
+        if (first[i] === second[j]) {
+          unique = false;
+          break;
+        }
+      }
+      if (!unique) {
+        continue;
+      }
+      items.push(first[i]);
+    }
+    return items;
+  }
 
   public async showErrorMessage(messageKey: string): Promise<void> {
     const message = await this._translateService.get(messageKey).toPromise();

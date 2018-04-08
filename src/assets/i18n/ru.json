@@ -221,5 +221,7 @@
   "startDateAndTime": "Дата и время начала",
   "saved": "Сохранено",
   "saveError": "Ошибка сохранения",
-  "parts": "Части"
+  "parts": "Части",
+  "athletes": "Атлеты",
+  "trainers": "Тренеры"
 }

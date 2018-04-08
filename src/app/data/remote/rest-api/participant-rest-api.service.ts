@@ -52,6 +52,7 @@ import {AnthropometryQuery} from './query/anthropometry-query';
 import {BaseTrainingQuery} from './query/base-training-query';
 import {BaseTraining} from '../model/training/base/base-training';
 import {TrainingPart} from '../model/training/training-part';
+import {TrainingPersonQuery} from './query/training-person-query';
 import {GameReport} from '../bean/game/game-report';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
@@ -602,7 +603,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/baseTraining/{!baseTrainingId}/group'
   })
-  getGroupsByBaseTraining: IRestMethod<{ baseTrainingId: number }, Group[]>;
+  getTrainingGroupsByBaseTraining: IRestMethod<{ baseTrainingId: number }, TrainingGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -640,7 +641,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-
   //#region Testing
 
   @RestAction({
@@ -658,6 +658,34 @@ export class ParticipantRestApiService extends Rest {
     path: '/game/{!gameId}/group/{!trainingGroupId}/report',
   })
   getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
+
+  //#endregion
+
+  //#region TrainingPerson
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!baseTrainingId}/person'
+  })
+  getTrainingPersons: IRestMethodStrict<any, TrainingPersonQuery, { baseTrainingId: number }, PageContainer<TrainingPerson>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/person'
+  })
+  createTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number }, TrainingPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
+  })
+  updateTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
+  })
+  removeTrainingPerson: IRestMethod<{ baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
 
   //#endregion
 

@@ -24,6 +24,8 @@ import {ModalSelectPageComponent} from '../../components/modal-select-page/modal
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {NamedObjectItemComponent} from '../../components/named-object-item/named-object-item.component';
+import {TrainingPersonsSelectionModule} from '../../components/training-persons-selection/training-persons-selection.module';
+import {TrainingPersonModule} from '../../components/training-person/training-person.module';
 
 @NgModule({
   imports: [
@@ -41,7 +43,9 @@ import {NamedObjectItemComponent} from '../../components/named-object-item/named
     DxButtonModule,
     DxNumberBoxModule,
     ModalSelectPageModule,
-    NamedObjectItemModule
+    NamedObjectItemModule,
+    TrainingPersonModule,
+    TrainingPersonsSelectionModule
   ],
   declarations: [
     EventPageComponent,

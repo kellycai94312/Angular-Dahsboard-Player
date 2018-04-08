@@ -1,20 +1,20 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { GroupQuery } from '../../../data/remote/rest-api/query/group-query';
-import { PropertyConstant } from '../../../data/local/property-constant';
-import { PersonQuery } from '../../../data/remote/rest-api/query/person-query';
-import { PersonViewModel } from '../../../data/local/view-model/person-view-model';
-import { Sex } from '../../../data/local/sex';
-import { SexEnum } from '../../../data/remote/misc/sex-enum';
-import { TranslateObjectService } from '../../../shared/translate-object.service';
-import { UserRole } from '../../../data/remote/model/user-role';
-import { IdentifiedObject } from '../../../data/remote/base/identified-object';
-import { Group } from '../../../data/remote/model/group/base/group';
-import { SportType } from '../../../data/remote/model/sport-type';
-import { City } from '../../../data/remote/model/city';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
+import {PersonItemViewModel} from '../../../data/local/view-model/person-item-view-model';
+import {Sex} from '../../../data/local/sex';
+import {SexEnum} from '../../../data/remote/misc/sex-enum';
+import {TranslateObjectService} from '../../../shared/translate-object.service';
+import {UserRole} from '../../../data/remote/model/user-role';
+import {IdentifiedObject} from '../../../data/remote/base/identified-object';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {City} from '../../../data/remote/model/city';
 import CustomStore from 'devextreme/data/custom_store';
-import { NamedObject } from '../../../data/remote/base/named-object';
+import {NamedObject} from '../../../data/remote/base/named-object';
 
 @Component({
   selector: 'app-persons-page',
@@ -81,10 +81,10 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
     this._personQuery.fullName = this._searchText;
 
     const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
-    const data: PersonViewModel[] = [];
+    const data: PersonItemViewModel[] = [];
 
     for (const person of pageContainer.list) {
-      const personViewModel = new PersonViewModel(person, this._participantRestApiService);
+      const personViewModel = new PersonItemViewModel(person, this._participantRestApiService);
       await personViewModel.init();
       data.push(personViewModel);
     }
