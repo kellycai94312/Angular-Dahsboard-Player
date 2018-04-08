@@ -54,6 +54,8 @@ import {BaseTraining} from '../model/training/base/base-training';
 import {TrainingPart} from '../model/training/training-part';
 import {TrainingPersonQuery} from './query/training-person-query';
 import {GameReport} from '../bean/game/game-report';
+import {PersonMeasure} from '../bean/person-measure';
+import {PersonMeasureValue} from '../bean/person-measure-value';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -641,6 +643,22 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region ExerciseExecMeasureValue
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/exerciseExecMeasureValue'
+  })
+  createExerciseExecMeasureValue: IRestMethodStrict<ExerciseExecMeasureValue, any, { baseTrainingId: number }, ExerciseExecMeasureValue>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!baseTrainingId}/exerciseExecMeasureValue/{!exerciseExecMeasureValueId}'
+  })
+  updateExerciseExecMeasureValue: IRestMethodStrict<ExerciseExecMeasureValue, any, { baseTrainingId: number, exerciseExecMeasureValueId: number }, ExerciseExecMeasureValue>;
+
+  //#endregion
+
   //#region Testing
 
   @RestAction({
@@ -658,6 +676,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/game/{!gameId}/group/{!trainingGroupId}/report',
   })
   getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/game/{!gameId}/group/{!trainingGroupId}/part/{!trainingPartId}/personMeasure',
+  })
+  getPersonMeasures: IRestMethod<{ gameId: number, trainingGroupId: number, trainingPartId: number }, PersonMeasure<ExerciseExecMeasureValue>[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/game/{!gameId}/group/{!trainingGroupId}/personMeasure',
+  })
+  getTotalPersonMeasures: IRestMethod<{ gameId: number, trainingGroupId: number }, PersonMeasure<PersonMeasureValue>[]>;
 
   //#endregion
 
