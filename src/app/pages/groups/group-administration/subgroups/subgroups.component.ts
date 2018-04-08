@@ -19,7 +19,8 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   public name: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
+              private _groupService: GroupService,
+              private _appHelper: AppHelper) {
     this.name = '';
   }
 
@@ -45,7 +46,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   }
 
   onRemove = (subgroup: SubGroup) => {
-    AppHelper.removeItem(this.subgroups, subgroup);
+    this._appHelper.removeItem(this.subgroups, subgroup);
   };
 
 }

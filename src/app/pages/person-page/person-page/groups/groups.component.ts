@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { GroupType } from '../../../../data/remote/model/group/base/group-type';
-import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PersonService } from '../person.service';
-import { UserRole } from '../../../../data/remote/model/user-role';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import {Component, OnInit} from '@angular/core';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {GroupType} from '../../../../data/remote/model/group/base/group-type';
+import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PersonService} from '../person.service';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 
 @Component({
   selector: 'app-groups',
@@ -29,7 +29,8 @@ export class GroupsComponent implements OnInit {
   private readonly _groupQuery: GroupQuery;
 
   constructor(private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
     this.isEditAllow = _personService.shared.isEditAllow;
     this.groupPersons = [];
 
@@ -92,7 +93,7 @@ export class GroupsComponent implements OnInit {
     }
 
     const pageContainer = await this._participantRestApiService.getPersonGroups(this._groupQuery);
-    this.groupPersons = AppHelper.pushItemsInList(from, this.groupPersons, pageContainer);
+    this.groupPersons = this._appHelper.pushItemsInList(from, this.groupPersons, pageContainer);
   }
 
   async onChange(data: GroupPerson) {
@@ -114,7 +115,7 @@ export class GroupsComponent implements OnInit {
       select: true,
       userRoleId: this.selectedPublicUserRole.id,
     });
-  }
+  };
 
   getKey(item: GroupPerson) {
     return item.id;

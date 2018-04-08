@@ -1,30 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { Person } from '../../../data/remote/model/person';
-import { TranslateService } from '@ngx-translate/core';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { UserRole } from '../../../data/remote/model/user-role';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SportType } from '../../../data/remote/model/sport-type';
-import { Image } from '../../../data/remote/model/image';
-import { ImageClass } from '../../../data/remote/misc/image-class';
-import { ImageService } from '../../../shared/image.service';
-import { PersonService } from './person.service';
-import { LocalStorageService } from '../../../shared/local-storage.service';
-import { ProfileService } from '../../../layout/shared/profile.service';
-import { Tab } from './tab';
-import { UserRoleEnum } from '../../../data/remote/model/user-role-enum';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ListRequest } from '../../../data/remote/request/list-request';
+import {Component, OnInit} from '@angular/core';
+import {Person} from '../../../data/remote/model/person';
+import {TranslateService} from '@ngx-translate/core';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {UserRole} from '../../../data/remote/model/user-role';
+import {ActivatedRoute, Params, Router} from '@angular/router';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {Image} from '../../../data/remote/model/image';
+import {ImageClass} from '../../../data/remote/misc/image-class';
+import {ImageService} from '../../../shared/image.service';
+import {PersonService} from './person.service';
+import {LocalStorageService} from '../../../shared/local-storage.service';
+import {ProfileService} from '../../../layout/shared/profile.service';
+import {Tab} from './tab';
+import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ListRequest} from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
-import { UserRoleItemComponent } from '../../../components/user-role-item/user-role-item.component';
-import { GroupPerson } from '../../../data/remote/model/group/group-person';
-import { ImageType } from '../../../data/remote/model/image-type';
-import { ModalSelectPageComponent } from '../../../components/modal-select-page/modal-select-page.component';
-import { PropertyConstant } from '../../../data/local/property-constant';
-import { SportTypeItemComponent } from '../../../components/sport-type-item/sport-type-item.component';
-import { HashSet } from '../../../data/local/hash-set';
-import { NamedQuery } from '../../../data/remote/rest-api/named-query';
-import { PageContainer } from '../../../data/remote/bean/page-container';
+import {UserRoleItemComponent} from '../../../components/user-role-item/user-role-item.component';
+import {GroupPerson} from '../../../data/remote/model/group/group-person';
+import {ImageType} from '../../../data/remote/model/image-type';
+import {ModalSelectPageComponent} from '../../../components/modal-select-page/modal-select-page.component';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
+import {HashSet} from '../../../data/local/hash-set';
+import {NamedQuery} from '../../../data/remote/rest-api/named-query';
+import {PageContainer} from '../../../data/remote/bean/page-container';
 
 @Component({
   selector: 'app-person-page',
@@ -122,7 +122,7 @@ export class PersonPageComponent implements OnInit {
   isTabOpen(tab: Tab): boolean {
     return tab
       && (!tab.private || this.isEditAllow)
-      && (!tab.hasAnyRole || this.roleToggle && tab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) < 0);
+      && (!tab.hasAnyRole || this.roleToggle && tab.restrictedRoles.indexOf(UserRoleEnum[this.roleToggle.userRoleEnum]) < 0);
   }
 
   async onLogoChange(event) {
@@ -200,7 +200,7 @@ export class PersonPageComponent implements OnInit {
     this.queryParams['userRole'] = this.roleToggle ? this.roleToggle.id : null;
     /*redirect to personal tab when user selects role in restrictedRoles array*/
     const currentTab = this.tabs.filter(t => this.router.url.includes(t.route))[0];
-    if (!this.roleToggle || currentTab && currentTab.restrictedRoles.indexOf(+UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
+    if (!this.roleToggle || currentTab && currentTab.restrictedRoles.indexOf(UserRoleEnum[this.roleToggle.userRoleEnum]) > -1) {
       this.router.navigate(['./'], {relativeTo: this.route, queryParams: this.queryParams});
     } else {
       this.router.navigate([], {queryParams: this.queryParams});
@@ -292,8 +292,6 @@ export class PersonPageComponent implements OnInit {
               this.onSportTypeChange();
             }
           });
-
-
       });
     });
   }

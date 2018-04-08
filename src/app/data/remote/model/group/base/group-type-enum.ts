@@ -1,6 +1,6 @@
 export enum GroupTypeEnum {
-  TEAM,
-  COMMUNITY,
-  COMPANY,
-  AGENCY
+  TEAM = 'TEAM',
+  COMMUNITY = 'COMMUNITY',
+  COMPANY = 'COMPANY',
+  AGENCY = 'AGENCY'
 }

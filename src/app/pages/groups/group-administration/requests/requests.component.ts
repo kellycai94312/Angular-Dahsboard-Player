@@ -21,7 +21,8 @@ export class RequestsComponent implements OnInit {
   private readonly _groupPersonQuery: GroupPersonQuery;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
+              private _groupService: GroupService,
+              private _appHelper: AppHelper) {
     this.groupPersons = [];
     this._searchText = '';
 
@@ -45,12 +46,12 @@ export class RequestsComponent implements OnInit {
     this._groupPersonQuery.fullName = this._searchText;
 
     const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(this._groupPersonQuery);
-    this.groupPersons = AppHelper.pushItemsInList(from, this.groupPersons, pageContainer);
+    this.groupPersons = this._appHelper.pushItemsInList(from, this.groupPersons, pageContainer);
   }
 
   public async onAdd(groupPerson: GroupPerson) {
     await this._participantRestApiService.putApprovePersonInGroup({id: this._groupService.getGroup().id, personId: groupPerson.person.id});
-    AppHelper.removeItem(this.groupPersons, groupPerson);
+    this._appHelper.removeItem(this.groupPersons, groupPerson);
   }
 
   public async onRemove(groupPerson: GroupPerson) {
@@ -58,6 +59,6 @@ export class RequestsComponent implements OnInit {
       id: this._groupService.getGroup().id,
       personId: groupPerson.person.id
     });
-    AppHelper.removeItem(this.groupPersons, groupPerson);
+    this._appHelper.removeItem(this.groupPersons, groupPerson);
   }
 }

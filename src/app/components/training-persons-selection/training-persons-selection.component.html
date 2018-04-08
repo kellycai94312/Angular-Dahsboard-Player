@@ -1,0 +1,21 @@
+<div class="d-flex flex-wrap mt-2 selected-content">
+  <app-training-person *ngFor="let item of selectedItems"
+                       [data]="item"
+                       (dblClick)="onUnselected($event)"></app-training-person>
+</div>
+<dx-text-box #searchDxTextBoxComponent
+             class="w-100"
+             placeholder="{{'search' | translate}}"
+             mode="search"
+             showClearButton="true">
+</dx-text-box>
+<div class="mt-2">
+  <app-infinite-list [items]="items"
+                     (nextPage)="onNextPage()"
+                     wrap="true">
+    <ng-template let-item>
+      <app-training-person [data]="item"
+                           (dblClick)="onSelected($event)"></app-training-person>
+    </ng-template>
+  </app-infinite-list>
+</div>

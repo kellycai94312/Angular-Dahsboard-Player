@@ -1,8 +1,8 @@
 import {GroupPerson} from '../../remote/model/group/group-person';
-import {PersonViewModel} from './person-view-model';
+import {PersonItemViewModel} from './person-item-view-model';
 import {ParticipantRestApiService} from '../../remote/rest-api/participant-rest-api.service';
 
-export class GroupPersonViewModel extends PersonViewModel {
+export class GroupPersonViewModel extends PersonItemViewModel {
 
   public groupPerson: GroupPerson;
   protected participantRestApiService: ParticipantRestApiService;

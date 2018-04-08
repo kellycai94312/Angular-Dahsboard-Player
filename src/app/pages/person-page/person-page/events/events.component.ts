@@ -1,16 +1,17 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { Location } from '../../../../data/remote/model/location';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { TrainingQuery } from '../../../../data/remote/rest-api/query/training-query';
-import { PersonService } from '../person.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { TrainingPerson } from '../../../../data/remote/model/training/training-person';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventModalComponent } from './event-modal/event-modal.component';
-import { ReportsService } from "../../../../shared/reports.service";
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Location} from '../../../../data/remote/model/location';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
+import {PersonService} from '../person.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EventModalComponent} from './event-modal/event-modal.component';
+import {TranslateService} from '@ngx-translate/core';
+import {ReportsService} from '../../../../shared/reports.service';
 
 @Component({
   selector: 'app-events',
@@ -31,7 +32,9 @@ export class EventsComponent implements OnInit, AfterViewInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _reportsService: ReportsService,
               private _personService: PersonService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _translate: TranslateService,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
     this._trainingQuery = new TrainingQuery();
@@ -119,7 +122,7 @@ export class EventsComponent implements OnInit, AfterViewInit {
   private async updateListAsync(from: number = 0) {
     this._trainingQuery.from = from;
     const container = await this._participantRestApiService.getPersonTrainings(this._trainingQuery);
-    this.trainingPersons = AppHelper.pushItemsInList(from, this.trainingPersons, container);
+    this.trainingPersons = this._appHelper.pushItemsInList(from, this.trainingPersons, container);
   }
 
 }

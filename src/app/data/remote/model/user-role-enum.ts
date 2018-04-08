@@ -1,6 +1,6 @@
 export enum UserRoleEnum {
-  ADMIN,
-  TRAINER,
-  SCOUT,
-  ATHLETE
+  ADMIN = 'ADMIN',
+  TRAINER = 'TRAINER',
+  SCOUT = 'SCOUT',
+  ATHLETE = 'ATHLETE'
 }

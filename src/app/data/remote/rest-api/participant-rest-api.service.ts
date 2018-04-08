@@ -1,63 +1,59 @@
-import { Injectable } from '@angular/core';
-import {
-  IRestMethod,
-  IRestMethodStrict,
-  Rest,
-  RestAction,
-  RestHandler,
-  RestParams,
-  RestRequestMethod
-} from 'rest-core';
-import { Session } from '../model/session';
-import { Auth } from '../model/auth';
-import { PageContainer } from '../bean/page-container';
-import { Country } from '../model/country';
-import { Region } from '../model/region';
-import { City } from '../model/city';
-import { User } from '../model/user';
-import { VerificationRequest } from '../model/verification-request';
-import { IdentifiedObject } from '../base/identified-object';
-import { Person } from '../model/person';
-import { QueryParams } from './query-params';
-import { UserRole } from '../model/user-role';
-import { ListRequest } from '../request/list-request';
-import { SportType } from '../model/sport-type';
-import { HttpClient } from '@angular/common/http';
-import { Image } from '../model/image';
-import { Address } from '../model/address';
-import { PersonAnthropometry } from '../model/person-anthropometry';
-import { EmailRequest } from '../request/email-request';
-import { environment } from '../../../../environments/environment';
-import { GroupType } from '../model/group/base/group-type';
-import { Group } from '../model/group/base/group';
-import { GroupQuery } from './query/group-query';
-import { ImageQuery } from './query/image-query';
-import { GroupPerson } from '../model/group/group-person';
-import { SubGroup } from '../model/group/sub-group';
-import { GroupPersonQuery } from './query/group-person-query';
-import { RoleQuery } from './query/role-query';
-import { TeamType } from '../model/group/team/team-type';
-import { League } from '../model/group/team/league';
-import { AgeGroup } from '../model/age-group';
-import { PersonQuery } from './query/person-query';
-import { SportRole } from '../model/sport-role';
-import { MeasureTemplateQuery } from './query/measure-template-query';
-import { ExerciseResult } from '../bean/exercise-result';
-import { ExerciseExecMeasureValue } from '../model/training/exercise-exec-measure-value';
-import { ExerciseMeasure } from '../model/exercise/exercise-measure';
-import { Location } from '../model/location';
-import { TrainingQuery } from './query/training-query';
-import { TrainingPerson } from '../model/training/training-person';
-import { TrainingGroup } from '../model/training-group';
-import { TrainingAccess } from '../misc/training-access';
-import { NoteQuery } from './query/note-query';
-import { Note } from '../model/note/base/note';
-import { TestingPersonalReport } from '../bean/testing-personal-report';
-import { NamedQuery } from './named-query';
-import { PersonRank } from '../model/person-rank';
-import { Measure } from '../model/measure';
-import { AnthropometryQuery } from './query/anthropometry-query';
-import { GameReport } from "../bean/game/game-report";
+import {Injectable} from '@angular/core';
+import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {Session} from '../model/session';
+import {Auth} from '../model/auth';
+import {PageContainer} from '../bean/page-container';
+import {Country} from '../model/country';
+import {Region} from '../model/region';
+import {City} from '../model/city';
+import {User} from '../model/user';
+import {VerificationRequest} from '../model/verification-request';
+import {IdentifiedObject} from '../base/identified-object';
+import {Person} from '../model/person';
+import {QueryParams} from './query-params';
+import {UserRole} from '../model/user-role';
+import {ListRequest} from '../request/list-request';
+import {SportType} from '../model/sport-type';
+import {HttpClient} from '@angular/common/http';
+import {Image} from '../model/image';
+import {Address} from '../model/address';
+import {PersonAnthropometry} from '../model/person-anthropometry';
+import {EmailRequest} from '../request/email-request';
+import {environment} from '../../../../environments/environment';
+import {GroupType} from '../model/group/base/group-type';
+import {Group} from '../model/group/base/group';
+import {GroupQuery} from './query/group-query';
+import {ImageQuery} from './query/image-query';
+import {GroupPerson} from '../model/group/group-person';
+import {SubGroup} from '../model/group/sub-group';
+import {GroupPersonQuery} from './query/group-person-query';
+import {RoleQuery} from './query/role-query';
+import {TeamType} from '../model/group/team/team-type';
+import {League} from '../model/group/team/league';
+import {AgeGroup} from '../model/age-group';
+import {PersonQuery} from './query/person-query';
+import {SportRole} from '../model/sport-role';
+import {MeasureTemplateQuery} from './query/measure-template-query';
+import {ExerciseResult} from '../bean/exercise-result';
+import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
+import {ExerciseMeasure} from '../model/exercise/exercise-measure';
+import {Location} from '../model/location';
+import {TrainingQuery} from './query/training-query';
+import {TrainingPerson} from '../model/training/training-person';
+import {TrainingGroup} from '../model/training-group';
+import {TrainingAccess} from '../misc/training-access';
+import {NoteQuery} from './query/note-query';
+import {Note} from '../model/note/base/note';
+import {TestingPersonalReport} from '../bean/testing-personal-report';
+import {NamedQuery} from './named-query';
+import {PersonRank} from '../model/person-rank';
+import {Measure} from '../model/measure';
+import {AnthropometryQuery} from './query/anthropometry-query';
+import {BaseTrainingQuery} from './query/base-training-query';
+import {BaseTraining} from '../model/training/base/base-training';
+import {TrainingPart} from '../model/training/training-part';
+import {TrainingPersonQuery} from './query/training-person-query';
+import {GameReport} from '../bean/game/game-report';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -215,7 +211,7 @@ export class ParticipantRestApiService extends Rest {
   getNotes: IRestMethod<NoteQuery, PageContainer<Note>>;
 
 
-  //region MeasureTemplate
+  //#region MeasureTemplate
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -247,7 +243,7 @@ export class ParticipantRestApiService extends Rest {
   })
   getPersonTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingPerson>>;
 
-  //endregion
+  //#endregion
 
   //#endregion
 
@@ -295,7 +291,7 @@ export class ParticipantRestApiService extends Rest {
   })
   addNote: IRestMethod<Note, Note>;
 
-  //region MeasureTemplate
+  //#region MeasureTemplate
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -309,7 +305,7 @@ export class ParticipantRestApiService extends Rest {
   })
   updatePersonMeasureTemplate: IRestMethod<ListRequest<ExerciseMeasure>, ExerciseMeasure[]>;
 
-  //endregion
+  //#endregion
 
   //#endregion
 
@@ -575,19 +571,87 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //region BaseTraining
-
-  //region Testing
+  //#region BaseTraining
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}',
+    path: '/baseTraining'
+  })
+  getBaseTrainings: IRestMethod<BaseTrainingQuery, PageContainer<BaseTraining>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!id}'
+  })
+  getBaseTraining: IRestMethod<{ id: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining'
+  })
+  createBaseTraining: IRestMethod<BaseTraining, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!id}'
+  })
+  updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
+
+  //#region Group
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!baseTrainingId}/group'
+  })
+  getTrainingGroupsByBaseTraining: IRestMethod<{ baseTrainingId: number }, TrainingGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/group'
+  })
+  updateGroupsByBaseTraining: IRestMethodStrict<ListRequest<Group>, any, { baseTrainingId: number }, TrainingGroup[]>;
+
+  //#endregion
+
+  //#region TrainingPart
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!id}/part'
+  })
+  getTrainingParts: IRestMethod<{ id: number }, TrainingPart[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/part'
+  })
+  createTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number }, TrainingPart>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
+  })
+  updateTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number, trainingPartId: number }, TrainingPart>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
+  })
+  removeTrainingPart: IRestMethod<{ baseTrainingId: number, trainingPartId: number }, TrainingPart>;
+
+  //#endregion
+
+  //#region Testing
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}'
   })
   getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
 
-  //endregion
+  //#endregion
 
-  //region Game
+  //#region Game
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -595,9 +659,37 @@ export class ParticipantRestApiService extends Rest {
   })
   getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
 
-  //endregion
+  //#endregion
 
-  //endregion
+  //#region TrainingPerson
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!baseTrainingId}/person'
+  })
+  getTrainingPersons: IRestMethodStrict<any, TrainingPersonQuery, { baseTrainingId: number }, PageContainer<TrainingPerson>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!baseTrainingId}/person'
+  })
+  createTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number }, TrainingPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
+  })
+  updateTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
+  })
+  removeTrainingPerson: IRestMethod<{ baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
+
+  //#endregion
+
+  //#endregion
 
   @RestAction({
     method: RestRequestMethod.Get,

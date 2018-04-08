@@ -1,0 +1,31 @@
+<div *ngIf="data"
+     class="d-flex align-items-center pr-2 pb-2"
+     style="width: 400px"
+     (dblclick)="onDblClick()">
+  <div class="img-fluid logo-lg-circle"
+       [ngStyle]="{'background-image': 'url('+ data.personViewModel.imageLogoUrl +')'}">
+  </div>
+  <div class="d-flex flex-column ml-2 mr-2 w-100">
+    <div>{{data.personViewModel.data.firstName}}</div>
+    <div>{{data.personViewModel.data.lastName}}</div>
+    <div>{{data.personViewModel.data?.patronymic}}</div>
+    <div>{{data.personViewModel.data.sex + ' ' + data.personViewModel.data.birthDate}}</div>
+  </div>
+  <div *ngIf="data.assigned"
+       class="d-flex flex-column">
+    <dx-select-box [items]="data.numbers"
+                   [(value)]="data.data.number"
+                   acceptCustomValue="true"
+                   (onValueChanged)="onValueChanged()"
+                   [disabled]="data.allowEdit">
+    </dx-select-box>
+    <dx-select-box class="mt-2"
+                   [items]="data.sportRoles"
+                   [(value)]="data.data.sportRole"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   (onValueChanged)="onValueChanged()"
+                   [disabled]="data.allowEdit">
+    </dx-select-box>
+  </div>
+</div>

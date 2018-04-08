@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Note } from '../../../../data/remote/model/note/base/note';
-import { NoteQuery } from '../../../../data/remote/rest-api/query/note-query';
-import { NoteType } from '../../../../data/remote/model/note/base/note-type';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { AppHelper } from '../../../../utils/app-helper';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { NoteModalComponent } from './note-modal/note-modal.component';
-import { ModalEvent } from '../../../../data/local/modal-event';
+import {Injectable} from '@angular/core';
+import {Note} from '../../../../data/remote/model/note/base/note';
+import {NoteQuery} from '../../../../data/remote/rest-api/query/note-query';
+import {NoteType} from '../../../../data/remote/model/note/base/note-type';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {AppHelper} from '../../../../utils/app-helper';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NoteModalComponent} from './note-modal/note-modal.component';
+import {ModalEvent} from '../../../../data/local/modal-event';
 
 @Injectable()
 export class MyRegionService {
@@ -18,7 +18,8 @@ export class MyRegionService {
   private _noteQuery: NoteQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
   }
 
@@ -30,7 +31,7 @@ export class MyRegionService {
       await this._participantRestApiService.addNote(item);
       await this.updateListAsync();
       ref.dismiss();
-    }
+    };
   }
 
   public async edit(item: Note) {
@@ -42,7 +43,7 @@ export class MyRegionService {
       await this._participantRestApiService.updateNote(newItem, null, {id: item.id});
       await this.updateListAsync();
       ref.dismiss();
-    }
+    };
   }
 
   public async remove(item: Note) {
@@ -95,7 +96,7 @@ export class MyRegionService {
   private async updateListAsync(from: number = 0) {
     this._noteQuery.from = from;
     const container = await this._participantRestApiService.getNotes(this._noteQuery);
-    this.notes = AppHelper.pushItemsInList(from, this.notes, container);
+    this.notes = this._appHelper.pushItemsInList(from, this.notes, container);
   }
 
 }

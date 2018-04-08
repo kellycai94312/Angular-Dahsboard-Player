@@ -1,23 +1,23 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Location } from '../../../data/remote/model/location';
-import { AppHelper } from '../../../utils/app-helper';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { TrainingQuery } from '../../../data/remote/rest-api/query/training-query';
-import { PropertyConstant } from '../../../data/local/property-constant';
-import { PageQuery } from '../../../data/remote/rest-api/page-query';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GroupService } from '../group.service';
-import { TrainingGroup } from '../../../data/remote/model/training-group';
-import { GroupEventModalComponent } from './group-event-modal/group-event-modal.component';
-import { TrainingAccess } from '../../../data/remote/misc/training-access';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Location} from '../../../data/remote/model/location';
+import {AppHelper} from '../../../utils/app-helper';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {TrainingQuery} from '../../../data/remote/rest-api/query/training-query';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {GroupService} from '../group.service';
+import {TrainingGroup} from '../../../data/remote/model/training-group';
+import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
+import {TrainingAccess} from '../../../data/remote/misc/training-access';
 
 @Component({
   selector: 'app-group-events',
   templateUrl: './group-events.component.html',
   styleUrls: ['./group-events.component.scss']
 })
-export class GroupEventsComponent implements OnInit {
+export class GroupEventsComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -32,7 +32,8 @@ export class GroupEventsComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = this._groupService.isEditAllow();
     this._groupId = this._groupService.getGroup().id;
@@ -116,7 +117,7 @@ export class GroupEventsComponent implements OnInit {
   private async updateListAsync(from: number = 0) {
     this._trainingQuery.from = from;
     const container = await this._participantRestApiService.getGroupTrainings(this._trainingQuery);
-    this.trainingGroups = AppHelper.pushItemsInList(from, this.trainingGroups, container);
+    this.trainingGroups = this._appHelper.pushItemsInList(from, this.trainingGroups, container);
   }
 
 }

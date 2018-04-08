@@ -1,8 +1,8 @@
 export enum TrainingState {
-  DRAFT,
-  PLAN,
-  START,
-  PAUSE,
-  RESUME,
-  STOP
+  DRAFT = 'DRAFT',
+  PLAN = 'PLAN',
+  START = 'START',
+  PAUSE = 'PAUSE',
+  RESUME = 'RESUME',
+  STOP = 'STOP'
 }

@@ -198,7 +198,6 @@
   "public": "Public",
   "moreInfo": "More info",
   "description": "Description",
-  "events": "Events",
   "groupOnly": "Group only",
   "trainersOnly": "Trainers only",
   "trainingAccess": "Training access",
@@ -213,5 +212,15 @@
   "rank": "Rank",
   "assignee": "Assignee",
   "orderNumber": "Order №",
-  "certificateNumber": "Certificate №"
+  "certificateNumber": "Certificate №",
+  "event": "Event",
+  "events": "Events",
+  "information": "Information",
+  "execution": "Execution",
+  "startDateAndTime": "Start date and time",
+  "saved": "Saved",
+  "saveError": "Save error",
+  "parts": "Parts",
+  "athletes": "Athletes",
+  "trainers": "Trainers"
 }

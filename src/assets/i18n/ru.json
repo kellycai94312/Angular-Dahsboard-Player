@@ -199,7 +199,6 @@
   "public": "Публичное",
   "moreInfo": "Подробнее",
   "description": "Описание",
-  "events": "События",
   "groupOnly": "Только для команды",
   "trainersOnly": "Только для тренеров",
   "trainingAccess": "Видимость тренировки",
@@ -214,5 +213,15 @@
   "rank": "Разряд, звание",
   "assignee": "Кем присвоен(о)",
   "orderNumber": "№ приказа, распоряжения",
-  "certificateNumber": "№ удостоверения"
+  "certificateNumber": "№ удостоверения",
+  "event": "Событие",
+  "events": "События",
+  "information": "Информация",
+  "execution": "Проведение",
+  "startDateAndTime": "Дата и время начала",
+  "saved": "Сохранено",
+  "saveError": "Ошибка сохранения",
+  "parts": "Части",
+  "athletes": "Атлеты",
+  "trainers": "Тренеры"
 }

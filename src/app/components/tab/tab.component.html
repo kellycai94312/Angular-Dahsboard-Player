@@ -1,12 +1,13 @@
-<div *ngIf="tabs"
-     class="mt-3">
+<div *ngIf="tabs">
   <ul class="nav nav-tabs">
     <li class="nav-item"
         *ngFor="let tab of tabs">
-      <a *ngIf="tab" class="nav-link"
+      <a *ngIf="tab"
+         class="nav-link text-uppercase"
          routerLink="{{tab.routerLink}}"
-         routerLinkActive="active">
-        {{tab.name | uppercase }}
+         routerLinkActive="active"
+         [queryParams]="tab.queryParams">
+        {{tab.name != null ? (tab.name) : (tab.nameKey | translate)}}
       </a>
     </li>
   </ul>
