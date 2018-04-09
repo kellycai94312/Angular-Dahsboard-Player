@@ -23,6 +23,7 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
   public gameId: number;
   public userRoleEnum: UserRoleEnum;
   public trainingGroup: TrainingGroup;
+  public valid: boolean;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _participantRestApiService: ParticipantRestApiService,
@@ -31,74 +32,86 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
     this.userRoleTabs = [];
 
     this.userRoleEnum = UserRoleEnum.ATHLETE;
+    this.valid = false;
   }
 
   ngOnInit() {
   }
 
   async ngAfterViewInit() {
-    this.gameId = await this._activatedRoute.snapshot.parent.parent.params.id;
+    try {
+      this.gameId = await this._activatedRoute.snapshot.parent.parent.params.id;
+      if (!this.gameId) {
+        return;
+      }
 
-    const trainingGroups = await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId});
-    const defaultGroupId = trainingGroups[0].group.id;
-    const baseRouterLink = '/event/' + this.gameId + '/game/step/2';
-    this.trainingGroup = trainingGroups.find(x => x.group.id == defaultGroupId);
+      const trainingGroups = await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId});
+      if (trainingGroups.length < 1) {
+        return;
+      }
+      const defaultGroupId = trainingGroups[0].group.id;
 
-    for (let i = 0; i < trainingGroups.length; i++) {
-      const trainingGroup = trainingGroups[i];
+      const baseRouterLink = '/event/' + this.gameId + '/game/step/2';
+      this.trainingGroup = trainingGroups.find(x => x.group.id == defaultGroupId);
 
-      const groupTab = new Tab();
-      groupTab.name = trainingGroup.group.name;
-      groupTab.routerLink = baseRouterLink;
-      groupTab.queryParams = {groupId: trainingGroup.group.id};
+      for (let i = 0; i < trainingGroups.length; i++) {
+        const trainingGroup = trainingGroups[i];
 
-      this.groupTabs.push(groupTab);
-    }
+        const groupTab = new Tab();
+        groupTab.name = trainingGroup.group.name;
+        groupTab.routerLink = baseRouterLink;
+        groupTab.queryParams = {groupId: trainingGroup.group.id};
 
-    this.queryParamsSubscription = this._activatedRoute.queryParams.subscribe(async params => {
-      // TODO: Fix double call this method
-      const groupId = params['groupId'];
-      const userRoleEnum = params['userRoleEnum'];
+        this.groupTabs.push(groupTab);
+      }
 
-      let navigate = false;
+      this.queryParamsSubscription = this._activatedRoute.queryParams.subscribe(async params => {
+        // TODO: Fix double call this method
+        const groupId = params['groupId'];
+        const userRoleEnum = params['userRoleEnum'];
 
-      if (!groupId) {
-        this._groupId = defaultGroupId;
-        this.trainingGroup = trainingGroups.find(x => x.group.id == this._groupId);
-        this.updateUserRoleTabs(baseRouterLink);
-        navigate = true;
-      } else {
-        if (this._groupId != groupId) {
-          this._groupId = groupId;
+        let navigate = false;
+
+        if (!groupId) {
+          this._groupId = defaultGroupId;
           this.trainingGroup = trainingGroups.find(x => x.group.id == this._groupId);
           this.updateUserRoleTabs(baseRouterLink);
           navigate = true;
+        } else {
+          if (this._groupId != groupId) {
+            this._groupId = groupId;
+            this.trainingGroup = trainingGroups.find(x => x.group.id == this._groupId);
+            this.updateUserRoleTabs(baseRouterLink);
+            navigate = true;
+          }
         }
-      }
-      if (!userRoleEnum) {
-        if (!this.userRoleEnum) {
-          this.userRoleEnum = UserRoleEnum.ATHLETE;
-        }
-        navigate = true;
-      } else {
-        if (this.userRoleEnum !== userRoleEnum) {
-          this.userRoleEnum = userRoleEnum;
+        if (!userRoleEnum) {
+          if (!this.userRoleEnum) {
+            this.userRoleEnum = UserRoleEnum.ATHLETE;
+          }
           navigate = true;
+        } else {
+          if (this.userRoleEnum !== userRoleEnum) {
+            this.userRoleEnum = userRoleEnum;
+            navigate = true;
+          }
         }
-      }
 
-      if (navigate) {
-        await this._router.navigate([], {
-          relativeTo: this._activatedRoute,
-          queryParams: {groupId: this._groupId, userRoleEnum: this.userRoleEnum}
-        });
+        if (navigate) {
+          await this._router.navigate([], {
+            relativeTo: this._activatedRoute,
+            queryParams: {groupId: this._groupId, userRoleEnum: this.userRoleEnum}
+          });
 
-        this.trainingPersonsSelectionComponent.userRoleEnum = this.userRoleEnum;
-        this.trainingPersonsSelectionComponent.trainingId = this.gameId;
-        this.trainingPersonsSelectionComponent.trainingGroup = this.trainingGroup;
-        await this.trainingPersonsSelectionComponent.initialize();
-      }
-    });
+          this.trainingPersonsSelectionComponent.userRoleEnum = this.userRoleEnum;
+          this.trainingPersonsSelectionComponent.trainingId = this.gameId;
+          this.trainingPersonsSelectionComponent.trainingGroup = this.trainingGroup;
+          await this.trainingPersonsSelectionComponent.initialize();
+        }
+      });
+      this.valid = true;
+    } catch (e) {
+    }
   }
 
   private updateUserRoleTabs(routerLink: string): void {
@@ -116,7 +129,9 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
   }
 
   ngOnDestroy(): void {
-    this.queryParamsSubscription.unsubscribe();
+    if (this.queryParamsSubscription) {
+      this.queryParamsSubscription.unsubscribe();
+    }
   }
 
 }

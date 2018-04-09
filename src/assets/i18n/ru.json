@@ -224,5 +224,8 @@
   "parts": "Части",
   "athletes": "Атлеты",
   "trainers": "Тренеры",
-  "total": "Итог"
+  "total": "Итог",
+  "addError": "Ошибка добавления",
+  "removeError": "Ошибка удаления",
+  "gameMustHaveTwoTeams": "В игре должно быть две команды"
 }

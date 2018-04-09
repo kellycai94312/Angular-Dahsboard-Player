@@ -51,12 +51,13 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
   }
 
   async ngAfterViewInit() {
-    super.ngAfterViewInit();
   }
 
   public async initialize() {
     this.query.userRole = this.userRoleEnum;
     this.query.groupId = this.trainingGroup.group.id;
+
+    super.ngAfterViewInit();
 
     this._userRole = this._userRoles.find(x => x.userRoleEnum === this.userRoleEnum);
 
@@ -153,7 +154,7 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
       if (item.data.number !== undefined && item.data.number != null) {
         numbers.push(item.data.number);
       }
-      item.numbers = numbers.sort(x => x);
+      item.numbers = numbers.sort();
     }
   }
 

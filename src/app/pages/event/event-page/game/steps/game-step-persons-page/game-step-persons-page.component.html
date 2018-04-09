@@ -1,24 +1,25 @@
-<ul class="nav nav-tabs mt-2">
-  <li class="nav-item" *ngFor="let item of groupTabs">
-    <a class="nav-link text-uppercase"
-       [routerLink]="item.routerLink"
-       [queryParams]="item.queryParams"
-       routerLinkActive="active">
-      {{item.name}}
-    </a>
-  </li>
-</ul>
-
-<ul class="nav nav-tabs mt-2">
-  <li class="nav-item"
-      *ngFor="let item of userRoleTabs">
-    <a class="nav-link text-uppercase"
-       [routerLink]="item.routerLink"
-       [queryParams]="item.queryParams"
-       routerLinkActive="active">
-      {{item.nameKey | translate }}
-    </a>
-  </li>
-</ul>
-
+<div *ngIf="valid">
+  <ul class="nav nav-tabs mt-2">
+    <li *ngFor="let item of groupTabs"
+        class="nav-item">
+      <a class="nav-link text-uppercase"
+         [routerLink]="item.routerLink"
+         [queryParams]="item.queryParams"
+         routerLinkActive="active">
+        {{item.name}}
+      </a>
+    </li>
+  </ul>
+  <ul class="nav nav-tabs mt-2">
+    <li *ngFor="let item of userRoleTabs"
+        class="nav-item">
+      <a class="nav-link text-uppercase"
+         [routerLink]="item.routerLink"
+         [queryParams]="item.queryParams"
+         routerLinkActive="active">
+        {{item.nameKey | translate }}
+      </a>
+    </li>
+  </ul>
+</div>
 <app-training-persons-selection></app-training-persons-selection>

@@ -223,5 +223,8 @@
   "parts": "Parts",
   "athletes": "Athletes",
   "trainers": "Trainers",
-  "total": "Total"
+  "total": "Total",
+  "addError": "Add error",
+  "removeError": "Remove error",
+  "gameMustHaveTwoTeams": "Game must have two teams"
 }
