@@ -45,15 +45,22 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.gameId = await this._activatedRoute.snapshot.parent.parent.params.id;
+
+    if (!this.gameId) {
+      return;
+    }
+
     const baseRouterLink = '/event/' + this.gameId + '/game/step/3';
 
-    await this.initTrainingPartTabs(baseRouterLink);
+    if (!(await this.initTrainingPartTabs(baseRouterLink))) {
+      return;
+    }
 
     this._trainingGroups = await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId});
-    let defaultTrainingGroupId: number;
-    if (this._trainingGroups.length > 0) {
-      defaultTrainingGroupId = this._trainingGroups[0].id;
+    if (this._trainingGroups.length < 1) {
+      return;
     }
+    const defaultTrainingGroupId = this._trainingGroups[0].id;
 
     this._queryParamsSubscription = this._activatedRoute.queryParams.subscribe(async params => {
       // TODO: Fix double call this method
@@ -113,6 +120,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
 
   public async updateContent() {
     if (this.trainingPartId != this.totalTrainingPartId) {
+      this.personMeasures = [];
       this.personMeasures = await this._participantRestApiService.getPersonMeasures({
         gameId: this.gameId,
         trainingGroupId: this.trainingGroupId,
@@ -123,6 +131,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
         this.tableColumns = this.personMeasures[0].measureValues.map(x => x.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name);
       }
     } else {
+      this.personMeasures = [];
       this.personMeasures = await this._participantRestApiService.getTotalPersonMeasures({
         gameId: this.gameId,
         trainingGroupId: this.trainingGroupId
@@ -135,7 +144,9 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._queryParamsSubscription.unsubscribe();
+    if (this._queryParamsSubscription) {
+      this._queryParamsSubscription.unsubscribe();
+    }
   }
 
   public async onUpdateExerciseExecMeasureValue(trainingPerson: TrainingPerson, exerciseExecMeasureValue: ExerciseExecMeasureValue) {
@@ -178,6 +189,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
     totalTrainingPartTab.routerLink = routerLink;
     totalTrainingPartTab.queryParams = {trainingPartId: this.totalTrainingPartId};
     this.trainingPartTabs.push(totalTrainingPartTab);
+    return true;
   }
 
 }

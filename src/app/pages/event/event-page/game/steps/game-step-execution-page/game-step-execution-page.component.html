@@ -1,55 +1,57 @@
-<ul class="nav nav-tabs mt-2">
-  <li *ngFor="let item of trainingPartTabs"
-      class="nav-item">
-    <a class="nav-link text-uppercase"
-       [routerLink]="item.routerLink"
-       [queryParams]="item.queryParams"
-       routerLinkActive="active">
-      {{item.name ? (item.name) : (item.nameKey | translate)}}
-    </a>
-  </li>
-</ul>
-<ul class="nav nav-tabs mt-2">
-  <li *ngFor="let item of trainingGroupTabs"
-      class="nav-item">
-    <a class="nav-link text-uppercase"
-       [routerLink]="item.routerLink"
-       [queryParams]="item.queryParams"
-       routerLinkActive="active">
-      {{item.name}}
-    </a>
-  </li>
-</ul>
+<div *ngIf="trainingPartTabs && trainingGroupTabs && trainingPartTabs.length && trainingGroupTabs.length">
+  <ul class="nav nav-tabs mt-2">
+    <li *ngFor="let item of trainingPartTabs"
+        class="nav-item">
+      <a class="nav-link text-uppercase"
+         [routerLink]="item.routerLink"
+         [queryParams]="item.queryParams"
+         routerLinkActive="active">
+        {{item.name ? (item.name) : (item.nameKey | translate)}}
+      </a>
+    </li>
+  </ul>
+  <ul class="nav nav-tabs mt-2">
+    <li *ngFor="let item of trainingGroupTabs"
+        class="nav-item">
+      <a class="nav-link text-uppercase"
+         [routerLink]="item.routerLink"
+         [queryParams]="item.queryParams"
+         routerLinkActive="active">
+        {{item.name}}
+      </a>
+    </li>
+  </ul>
 
-<table *ngIf="personMeasures && this.tableColumns && personMeasures.length"
-       class="table mt-2">
-  <thead>
-  <tr class="text-uppercase">
-    <th scope="col">{{'person' | translate}}</th>
-    <th scope="col">{{'number' | translate}}</th>
-    <th scope="col">{{'sportRole' | translate}}</th>
-    <th *ngFor="let item of this.tableColumns"
-        scope="col">{{item}}
-    </th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let item of personMeasures">
-    <td>
-      {{item.trainingPerson.person.firstName}}
-      {{item.trainingPerson.person.lastName}}
-      {{item.trainingPerson.person?.patronymic}}
-    </td>
-    <td>{{item.trainingPerson.number}}</td>
-    <td>{{item.trainingPerson.sportRole.shortName}}</td>
-    <td *ngFor="let measure of item.measureValues">
-      <input *ngIf="totalTrainingPartId!=trainingPartId;else total"
-             [type]="measure.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.unitTypeEnum"
-             class="form-control"
-             [(ngModel)]="measure.value"
-             (change)="onUpdateExerciseExecMeasureValue(item.trainingPerson,measure)">
-      <ng-template #total>{{measure.value}}</ng-template>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <table *ngIf="personMeasures && this.tableColumns && personMeasures.length"
+         class="table mt-2">
+    <thead>
+    <tr class="text-uppercase">
+      <th scope="col">{{'person' | translate}}</th>
+      <th scope="col">{{'number' | translate}}</th>
+      <th scope="col">{{'sportRole' | translate}}</th>
+      <th *ngFor="let item of this.tableColumns"
+          scope="col">{{item}}
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of personMeasures">
+      <td>
+        {{item.trainingPerson.person.firstName}}
+        {{item.trainingPerson.person.lastName}}
+        {{item.trainingPerson.person?.patronymic}}
+      </td>
+      <td>{{item.trainingPerson.number}}</td>
+      <td>{{item.trainingPerson.sportRole.shortName}}</td>
+      <td *ngFor="let measure of item.measureValues">
+        <input *ngIf="totalTrainingPartId!=trainingPartId;else total"
+               [type]="measure.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.unitTypeEnum"
+               class="form-control"
+               [(ngModel)]="measure.value"
+               (change)="onUpdateExerciseExecMeasureValue(item.trainingPerson,measure)">
+        <ng-template #total>{{measure.value}}</ng-template>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
