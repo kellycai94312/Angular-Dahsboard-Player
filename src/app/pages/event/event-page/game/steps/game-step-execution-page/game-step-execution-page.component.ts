@@ -7,6 +7,7 @@ import {PersonMeasure} from '../../../../../../data/remote/bean/person-measure';
 import {ExerciseExecMeasureValue} from '../../../../../../data/remote/model/training/exercise-exec-measure-value';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {TrainingPerson} from '../../../../../../data/remote/model/training/training-person';
+import {ReportsService} from '../../../../../../shared/reports.service';
 
 @Component({
   selector: 'app-game-step-execution-page',
@@ -34,7 +35,8 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _router: Router,
-              private _activatedRoute: ActivatedRoute) {
+              private _activatedRoute: ActivatedRoute,
+              private _reportsService: ReportsService) {
     this._trainingGroups = [];
     this.totalTrainingPartId = 0;
     this.trainingPartTabs = [];
@@ -164,6 +166,10 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
       });
       exerciseExecMeasureValue.version = savedExerciseExecMeasureValue.version;
     }
+  }
+
+  public async onGetReport() {
+    await this._reportsService.downloadGameReport(this.gameId, this.trainingGroupId);
   }
 
   private async initTrainingPartTabs(routerLink: string): Promise<boolean> {
