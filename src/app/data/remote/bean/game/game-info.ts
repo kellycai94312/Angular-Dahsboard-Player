@@ -1,3 +1,6 @@
 export class GameInfo {
-  name: string;
+  gameName: string;
+  groupName: string;
+  date: Date;
+  location: string;
 }

@@ -3,6 +3,7 @@ import { AssetsService } from "../data/remote/rest-api/assets.service";
 import notify from "devextreme/ui/notify";
 import { ParticipantRestApiService } from "../data/remote/rest-api/participant-rest-api.service";
 import { TranslateService } from "@ngx-translate/core";
+import { MeasureParameterEnum } from "../data/remote/misc/measure-parameter-enum";
 
 @Injectable()
 export class ReportsService {
@@ -73,7 +74,8 @@ export class ReportsService {
     const reportJson = await this._assetsService.getGameReport();
     let gameReport = await this._participantRestApiService.getGameReport({
       gameId: gameId,
-      trainingGroupId: trainingGroupId
+      trainingGroupId: trainingGroupId,
+      measureParameter: MeasureParameterEnum[MeasureParameterEnum.GOALS]
     });
 
     const report = new Stimulsoft.Report.StiReport();
@@ -83,7 +85,7 @@ export class ReportsService {
     report.regData('game', 'game', gameReport);
     report.render();
 
-    await this.download(report, gameReport.gameInfo.name);
+    await this.download(report, gameReport.gameInfo.gameName + ' - ' + gameReport.gameInfo.groupName);
   }
 
   private async download(report: any, fileName: string) {
