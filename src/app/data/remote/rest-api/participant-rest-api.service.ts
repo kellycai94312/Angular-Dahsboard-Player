@@ -591,9 +591,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/game/{!gameId}/group/{!trainingGroupId}/report',
+    path: '/game/{!gameId}/group/{!trainingGroupId}/report?measureParameter={!measureParameter}',
   })
-  getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number }, GameReport>;
+  getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number, measureParameter: string }, GameReport>;
 
   //endregion
 

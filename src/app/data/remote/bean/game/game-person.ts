@@ -1,5 +1,6 @@
 export class GamePerson {
   id: number;
   fullName: string;
-  partId: number;
+  number: string;
+  sportRole: string;
 }
