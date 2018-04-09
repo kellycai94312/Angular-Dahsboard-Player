@@ -38,7 +38,8 @@ export class GameStepBasePageComponent implements OnInit {
               private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _translateService: TranslateService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _appHelper: AppHelper) {
     this.game = new Game();
     this.game.startTime = new Date(Date.now() + 15 * 60 * 1000);
     this.trainingParts = [];
@@ -50,6 +51,10 @@ export class GameStepBasePageComponent implements OnInit {
   }
 
   async ngOnInit() {
+    await this.initialize();
+  }
+
+  private async initialize(): Promise<void> {
     const id = this._activatedRoute.snapshot.parent.parent.params.id;
     if (id != 0) {
       this.game = (await this._participantRestApiService.getBaseTraining({id: id})) as Game;
@@ -74,16 +79,19 @@ export class GameStepBasePageComponent implements OnInit {
       } else {
         this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
         this.game = (await this._participantRestApiService.updateBaseTraining(this.game, null, {id: this.game.id})) as Game;
+        await this.initialize();
       }
-
       await  this.appHelper.showSuccessMessage('saved');
     } catch (e) {
       await this.appHelper.showErrorMessage('saveError');
     }
   }
 
-  public onSetTrainingPartDuration(trainingPart: TrainingPart, value: Date) {
+  public async onSetTrainingPartDuration(trainingPart: TrainingPart, value: Date) {
     trainingPart.durationMs = (value.getHours() * 60 + value.getMinutes()) * 60 * 1000;
+    if (!this._appHelper.isNewObject(trainingPart)) {
+      await this.onUpdateTrainingPart(trainingPart);
+    }
   }
 
   public onGetTrainingPartDuration(trainingPart: TrainingPart): Date {
@@ -91,19 +99,38 @@ export class GameStepBasePageComponent implements OnInit {
   }
 
   public async onAddTrainingPart(item: TrainingPart) {
-    item.type = TrainingPartType[TrainingPartType.BASIC];
-    const trainingPart = await this._participantRestApiService.createTrainingPart(item, {}, {baseTrainingId: this.game.id});
-    this.trainingParts.push(trainingPart);
-    item.name = null;
-    item.durationMs = 5 * 60 * 1000;
+    try {
+      item.type = TrainingPartType[TrainingPartType.BASIC];
+      const trainingPart = await this._participantRestApiService.createTrainingPart(item, {}, {baseTrainingId: this.game.id});
+      this.trainingParts.push(trainingPart);
+      item.name = null;
+      item.durationMs = 5 * 60 * 1000;
+    } catch (e) {
+      await this._appHelper.showErrorMessage('addError');
+    }
+  }
+
+  public async onUpdateTrainingPart(item: TrainingPart) {
+    try {
+      await this._participantRestApiService.updateTrainingPart(item, {}, {
+        baseTrainingId: this.game.id,
+        trainingPartId: item.id
+      });
+    } catch (e) {
+      await this._appHelper.showErrorMessage('saveError');
+    }
   }
 
   public async onRemoveTrainingPart(item: TrainingPart) {
-    await this._participantRestApiService.removeTrainingPart({
-      baseTrainingId: item.baseTraining.id,
-      trainingPartId: item.id
-    });
-    this.appHelper.removeItem(this.trainingParts, item);
+    try {
+      await this._participantRestApiService.removeTrainingPart({
+        baseTrainingId: item.baseTraining.id,
+        trainingPartId: item.id
+      });
+      this.appHelper.removeItem(this.trainingParts, item);
+    } catch (e) {
+      await this._appHelper.showErrorMessage('removeError');
+    }
   }
 
   public isValidTrainingPart(item: TrainingPart): boolean {
@@ -133,11 +160,15 @@ export class GameStepBasePageComponent implements OnInit {
       return await this._participantRestApiService.getGroups(groupQuery);
     };
     ref.componentInstance.onSave = async () => {
-      const items = await this._participantRestApiService.updateGroupsByBaseTraining(new ListRequest(selectedSet.data),
-        {},
-        {baseTrainingId: this.game.id});
-      this.groups = items.map(x => x.group);
-      ref.dismiss();
+      try {
+        const items = await this._participantRestApiService.updateGroupsByBaseTraining(new ListRequest(selectedSet.data),
+          {},
+          {baseTrainingId: this.game.id});
+        this.groups = items.map(x => x.group);
+        ref.dismiss();
+      } catch (e) {
+        await this._appHelper.showErrorMessage('gameMustHaveTwoTeams');
+      }
     };
   }
 

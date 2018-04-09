@@ -41,7 +41,8 @@
          *ngFor="let item of trainingParts">
       <div class="col-6 pr-0">
         <dx-text-box class="w-100"
-                     [(value)]="item.name">
+                     [(value)]="item.name"
+                     (onValueChanged)="onUpdateTrainingPart(item)">
           <dx-validator>
             <dxi-validation-rule type="required"></dxi-validation-rule>
           </dx-validator>
@@ -68,6 +69,7 @@
     <div class="row">
       <div class="col-6 pr-0">
         <dx-text-box class="w-100"
+                     valueChangeEvent="keyup"
                      [(value)]="trainingPart.name">
         </dx-text-box>
       </div>
@@ -75,7 +77,7 @@
         <dx-date-box
           class="w-100"
           [value]="onGetTrainingPartDuration(trainingPart)"
-          (onValueChanged)="onSetTrainingPartDuration(trainingPart,$event.value)"
+          (onChange)="onSetTrainingPartDuration(trainingPart,$event.value)"
           displayFormat="HH:mm"
           type="time">
         </dx-date-box>

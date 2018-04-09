@@ -7,7 +7,7 @@
          routerLink="{{tab.routerLink}}"
          routerLinkActive="active"
          [queryParams]="tab.queryParams">
-        {{tab.name != null ? (tab.name) : (tab.nameKey | translate)}}
+        {{tab.name ? (tab.name) : (tab.nameKey | translate)}}
       </a>
     </li>
   </ul>

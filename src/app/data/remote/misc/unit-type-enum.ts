@@ -1,4 +1,4 @@
 export enum UnitTypeEnum {
-  NUMBER,
-  TEXT
+  NUMBER = 'NUMBER',
+  TEXT = 'TEXT'
 }

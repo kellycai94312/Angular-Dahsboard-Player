@@ -222,5 +222,9 @@
   "saveError": "Save error",
   "parts": "Parts",
   "athletes": "Athletes",
-  "trainers": "Trainers"
+  "trainers": "Trainers",
+  "total": "Total",
+  "addError": "Add error",
+  "removeError": "Remove error",
+  "gameMustHaveTwoTeams": "Game must have two teams"
 }
