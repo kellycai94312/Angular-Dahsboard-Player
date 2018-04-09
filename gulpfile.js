@@ -1,9 +1,12 @@
 const gulp = require('gulp'),
-  uglify = require('gulp-uglify'),
-  notify = require('gulp-notify'),
-  rename = require('gulp-rename');
-gulp.task('minify-stimulsoft', function () {
+      replace = require('gulp-replace'),
+      uglify = require('gulp-uglify'),
+      notify = require('gulp-notify'),
+      rename = require('gulp-rename');
+
+gulp.task('crack-and-minify-stimulsoft', function () {
   return gulp.src('node_modules/stimulsoft-reports-js/stimulsoft.reports.js')
+    .pipe(replace('!t.Base.Licenses.StiLicenseKeyValidator.isValidOnJS()', 't.Base.Licenses.StiLicenseKeyValidator.isValidOnJS()'))
     .pipe(uglify()
       .on('error', function (e) {
         console.log(e);
