@@ -176,3 +176,9 @@ h5 {
 .btn, .dx-button {
   @extend .input-height;
 }
+
+.table {
+  tbody tr:nth-of-type(odd) {
+    background-color: #eee;
+  }
+}
