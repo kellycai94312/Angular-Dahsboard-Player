@@ -28,9 +28,8 @@
   <div class="col">
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
-  <div class="mr-4">
-    <button class="btn btn-primary text-uppercase"
-            type="button" *ngIf="canCreateEvent"
+  <div class="mr-4" *ngIf="canCreateEvent">
+    <button class="btn btn-primary text-uppercase" type="button"
             (click)="onCreate()">{{'create' | translate}}
     </button>
   </div>
