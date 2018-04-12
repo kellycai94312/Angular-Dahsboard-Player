@@ -26,6 +26,7 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
 import {NamedObjectItemComponent} from '../../components/named-object-item/named-object-item.component';
 import {TrainingPersonsSelectionModule} from '../../components/training-persons-selection/training-persons-selection.module';
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
+import { InputSelectModule } from "../../components/input-select/input-select.module";
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import {TrainingPersonModule} from '../../components/training-person/training-pe
     ModalSelectPageModule,
     NamedObjectItemModule,
     TrainingPersonModule,
-    TrainingPersonsSelectionModule
+    TrainingPersonsSelectionModule,
+    InputSelectModule
   ],
   declarations: [
     EventPageComponent,
