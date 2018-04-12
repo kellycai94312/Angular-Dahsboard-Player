@@ -1,5 +1,6 @@
-import {PageQuery} from '../page-query';
-import {GroupTypeEnum} from '../../model/group/base/group-type-enum';
+import { PageQuery } from '../page-query';
+import { GroupTypeEnum } from '../../model/group/base/group-type-enum';
+import { UserRoleEnum } from "../../model/user-role-enum";
 
 export class GroupQuery extends PageQuery {
   public id?: number;
@@ -10,6 +11,7 @@ export class GroupQuery extends PageQuery {
   public ageGroupId?: number;
   public leagueId?: number;
   public userRoleId?: number;
+  public userRoleEnum?: UserRoleEnum;
   public all?: boolean;
   public approved?: boolean;
   public select?: boolean;

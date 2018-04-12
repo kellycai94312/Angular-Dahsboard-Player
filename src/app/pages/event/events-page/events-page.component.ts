@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {AppHelper} from '../../../utils/app-helper';
-import {Subject} from 'rxjs/Subject';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BaseTrainingQuery } from '../../../data/remote/rest-api/query/base-training-query';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import { AppHelper } from '../../../utils/app-helper';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
-import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { BaseTraining } from '../../../data/remote/model/training/base/base-training';
+import { MeasureParameterEnum } from "../../../data/remote/misc/measure-parameter-enum";
 
 @Component({
   selector: 'app-events-page',
@@ -27,7 +27,7 @@ export class EventsPageComponent implements OnInit {
               private _appHelper: AppHelper) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
-    this.baseTrainingQuery.discriminator = TrainingDiscriminator.GAME;
+    this.baseTrainingQuery.measureParameter = MeasureParameterEnum[MeasureParameterEnum.GOALS];
 
     this.searchTextChanges = new Subject<PageQuery>();
     this.searchTextChanges.debounceTime(PropertyConstant.searchDebounceTime).subscribe(async x => {

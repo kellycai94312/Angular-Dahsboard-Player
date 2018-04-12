@@ -23,27 +23,27 @@
   </ul>
 
   <div *ngIf="personMeasures && this.tableColumns && personMeasures.length">
-    <table class="table mt-2">
+    <table class="table mt-2" [class.table-bordered]="totalTrainingPartId==trainingPartId">
       <thead>
       <tr class="text-uppercase">
-        <th scope="col">{{'person' | translate}}</th>
-        <th scope="col">{{'number' | translate}}</th>
-        <th scope="col">{{'sportRole' | translate}}</th>
-        <th *ngFor="let item of this.tableColumns"
+        <th scope="col" class="text-center">{{'person' | translate}}</th>
+        <th scope="col" class="text-center">{{'number' | translate}}</th>
+        <th scope="col" class="text-center">{{'sportRole' | translate}}</th>
+        <th *ngFor="let item of this.tableColumns" class="text-center"
             scope="col">{{item}}
         </th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let item of personMeasures">
-        <td>
+        <td class="text-center">
           {{item.trainingPerson.person.firstName}}
           {{item.trainingPerson.person.lastName}}
           {{item.trainingPerson.person?.patronymic}}
         </td>
-        <td>{{item.trainingPerson.number}}</td>
-        <td>{{item.trainingPerson.sportRole.shortName}}</td>
-        <td *ngFor="let measure of item.measureValues">
+        <td class="text-center">{{item.trainingPerson.number}}</td>
+        <td class="text-center">{{item.trainingPerson.sportRole.shortName}}</td>
+        <td *ngFor="let measure of item.measureValues" class="text-center">
           <input *ngIf="totalTrainingPartId!=trainingPartId;else total"
                  [type]="measure.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.unitTypeEnum"
                  class="form-control"

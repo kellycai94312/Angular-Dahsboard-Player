@@ -9,6 +9,11 @@
     <label class="mt-2">{{'description' | translate }}</label>
     <dx-text-area [(value)]="game.description">
     </dx-text-area>
+    <label class="mt-2">{{'startDateAndTime' | translate }}</label>
+    <dx-date-box class="w-100"
+                 [(value)]="game.startTime"
+                 type="datetime">
+    </dx-date-box>
     <label class="mt-2">{{'location' | translate }}</label>
     <dx-select-box [items]="locations"
                    displayExpr="name"
@@ -30,12 +35,6 @@
     </dx-button>
   </div>
   <div class="col pl-0">
-    <label>{{'startDateAndTime' | translate }}</label>
-    <dx-date-box class="w-100"
-                 [(value)]="game.startTime"
-                 type="datetime">
-    </dx-date-box>
-
     <label class="mt-2">{{'parts' | translate }}</label>
     <div class="row mb-2"
          *ngFor="let item of trainingParts">
@@ -52,7 +51,7 @@
         <dx-date-box
           class="w-100"
           [value]="onGetTrainingPartDuration(item)"
-          (onValueChanged)="onSetTrainingPartDuration(item,$event.value)"
+          (onValueChanged)="onSetTrainingPartDuration(item, $event.value)"
           displayFormat="HH:mm"
           type="time">
         </dx-date-box>
@@ -77,7 +76,7 @@
         <dx-date-box
           class="w-100"
           [value]="onGetTrainingPartDuration(trainingPart)"
-          (onChange)="onSetTrainingPartDuration(trainingPart,$event.value)"
+          (onChange)="onSetTrainingPartDuration(trainingPart, $event.value)"
           displayFormat="HH:mm"
           type="time">
         </dx-date-box>

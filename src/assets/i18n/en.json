@@ -226,5 +226,7 @@
   "total": "Total",
   "addError": "Add error",
   "removeError": "Remove error",
-  "gameMustHaveTwoTeams": "Game must have two teams"
+  "gameMustHaveTwoTeams": "Game must have two teams",
+  "trainingType" : "Training type",
+  "score": "Score"
 }
