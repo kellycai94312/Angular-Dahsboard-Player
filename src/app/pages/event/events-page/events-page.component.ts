@@ -9,6 +9,8 @@ import 'rxjs/add/operator/debounceTime';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { BaseTraining } from '../../../data/remote/model/training/base/base-training';
 import { MeasureParameterEnum } from "../../../data/remote/misc/measure-parameter-enum";
+import { ProfileService } from "../../../shared/profile.service";
+import { UserRoleEnum } from "../../../data/remote/model/user-role-enum";
 
 @Component({
   selector: 'app-events-page',
@@ -19,12 +21,14 @@ export class EventsPageComponent implements OnInit {
 
   public baseTrainingQuery: BaseTrainingQuery;
   public baseTrainings: BaseTraining[];
+  public canCreateEvent: boolean;
 
   private searchTextChanges: Subject<PageQuery>;
 
   constructor(private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _profileService: ProfileService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
     this.baseTrainingQuery.measureParameter = MeasureParameterEnum[MeasureParameterEnum.GOALS];
@@ -37,6 +41,7 @@ export class EventsPageComponent implements OnInit {
 
   async ngOnInit() {
     await this.updateListAsync();
+    this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
   }
 
   public async onCreate() {

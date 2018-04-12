@@ -6,7 +6,7 @@
          placeholder="{{'search' | translate}}">
   <div class="input-group-append">
     <button class="btn btn-primary text-uppercase"
-            type="button"
+            type="button" *ngIf="canCreateEvent"
             (click)="onCreate()">{{'create' | translate}}
     </button>
   </div>

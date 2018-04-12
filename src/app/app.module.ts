@@ -21,7 +21,7 @@ import {CookieModule} from 'ngx-cookie';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ImageService} from './shared/image.service';
-import {ProfileService} from './layout/shared/profile.service';
+import {ProfileService} from './shared/profile.service';
 import {FormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RestApiInterceptor} from './guard/rest-api-interceptor';

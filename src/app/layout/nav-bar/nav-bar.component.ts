@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 import {LayoutService} from '../shared/layout.service';
 import {ImageService} from '../../shared/image.service';
 import {ImageClass} from '../../data/remote/misc/image-class';
-import {ProfileService} from '../shared/profile.service';
+import {ProfileService} from '../../shared/profile.service';
 
 @Component({
   selector: 'app-nav-bar',

@@ -5,7 +5,7 @@ import { ParticipantRestApiService } from '../../data/remote/rest-api/participan
 import { Router } from '@angular/router';
 import { Session } from '../../data/remote/model/session';
 import { LocalStorageService } from '../../shared/local-storage.service';
-import { ProfileService } from '../../layout/shared/profile.service';
+import { ProfileService } from '../../shared/profile.service';
 
 @Component({
   selector: 'app-login-page',
