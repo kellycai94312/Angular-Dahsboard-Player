@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { BaseTrainingQuery } from '../../../data/remote/rest-api/query/base-training-query';
 import { PropertyConstant } from '../../../data/local/property-constant';
@@ -11,14 +11,17 @@ import { BaseTraining } from '../../../data/remote/model/training/base/base-trai
 import { MeasureParameterEnum } from "../../../data/remote/misc/measure-parameter-enum";
 import { ProfileService } from "../../../shared/profile.service";
 import { UserRoleEnum } from "../../../data/remote/model/user-role-enum";
+import { DxTextBoxComponent } from "devextreme-angular";
 
 @Component({
   selector: 'app-events-page',
   templateUrl: './events-page.component.html',
   styleUrls: ['./events-page.component.scss']
 })
-export class EventsPageComponent implements OnInit {
+export class EventsPageComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('searchDxTextBoxComponent')
+  public searchDxTextBoxComponent: DxTextBoxComponent;
   public baseTrainingQuery: BaseTrainingQuery;
   public baseTrainings: BaseTraining[];
   public canCreateEvent: boolean;
@@ -44,12 +47,43 @@ export class EventsPageComponent implements OnInit {
     this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
   }
 
+  async ngAfterViewInit() {
+    this.searchDxTextBoxComponent.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+      .subscribe(event => {
+        this.baseTrainingQuery.name = event.value;
+        this.updateListAsync();
+      });
+  }
+
   public async onCreate() {
     await this._router.navigate(['/event/0']);
   }
 
-  public onKeyUp(): void {
-    this.searchTextChanges.next(this.baseTrainingQuery);
+  public async onLocationChange(e: any) {
+    if (e.current) {
+      this.baseTrainingQuery.locationId = e.current.id;
+    } else {
+      delete this.baseTrainingQuery.locationId;
+    }
+    await this.updateListAsync();
+  }
+
+  async onDateFromChange(event: any) {
+    if (event.value) {
+      this.baseTrainingQuery.dateFrom = this._appHelper.getGmtDate(event.value);
+    } else {
+      delete this.baseTrainingQuery.dateFrom;
+    }
+    await this.updateListAsync();
+  }
+
+  async onDateToChange(event: any) {
+    if (event.value) {
+      this.baseTrainingQuery.dateTo = this._appHelper.getGmtDate(event.value);
+    } else {
+      delete this.baseTrainingQuery.dateTo;
+    }
+    await this.updateListAsync();
   }
 
   public async onNextPage(pageQuery: PageQuery) {

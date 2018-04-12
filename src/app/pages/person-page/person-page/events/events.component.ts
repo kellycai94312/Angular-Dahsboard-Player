@@ -1,17 +1,17 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Location} from '../../../../data/remote/model/location';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
-import {PersonService} from '../person.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {DxTextBoxComponent} from 'devextreme-angular';
-import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EventModalComponent} from './event-modal/event-modal.component';
-import {TranslateService} from '@ngx-translate/core';
-import {ReportsService} from '../../../../shared/reports.service';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { TrainingQuery } from '../../../../data/remote/rest-api/query/training-query';
+import { PersonService } from '../person.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { DxTextBoxComponent } from 'devextreme-angular';
+import { TrainingPerson } from '../../../../data/remote/model/training/training-person';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventModalComponent } from './event-modal/event-modal.component';
+import { TranslateService } from '@ngx-translate/core';
+import { ReportsService } from '../../../../shared/reports.service';
+import { TrainingDiscriminator } from "../../../../data/remote/model/training/base/training-discriminator";
 
 @Component({
   selector: 'app-events',
@@ -81,22 +81,6 @@ export class EventsComponent implements OnInit, AfterViewInit {
     await this.updateListAsync();
   }
 
-  getKey(location: Location) {
-    return location.id;
-  }
-
-  getName(location: Location) {
-    return location.name;
-  }
-
-  loadLocations = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getLocations({
-      from: from,
-      count: this.pageSize,
-      name: searchText
-    });
-  };
-
   async onNextPage(pageQuery: PageQuery) {
     await this.updateListAsync(pageQuery.from);
   }
@@ -116,7 +100,11 @@ export class EventsComponent implements OnInit, AfterViewInit {
   }
 
   async downloadReport(item: TrainingPerson) {
-    await this._reportsService.downloadPersonalReport(item.baseTraining.id, item.id);
+    if (item.baseTraining.discriminator === TrainingDiscriminator.GAME) {
+      await this._reportsService.downloadGameReport(item.baseTraining.id, item.trainingGroup.id);
+    } else {
+      await this._reportsService.downloadPersonalReport(item.baseTraining.id, item.id);
+    }
   }
 
   private async updateListAsync(from: number = 0) {

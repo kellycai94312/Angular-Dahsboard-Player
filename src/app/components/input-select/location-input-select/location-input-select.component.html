@@ -1,0 +1,10 @@
+<app-input-select
+  id="location"
+  [loadData]="loadLocations"
+  [pageSize]="pageSize"
+  (onChange)="onSelect($event)"
+  [getKey]="getKey"
+  [getName]="getName"
+  placeholder="Select a location"
+  ngDefaultControl>
+</app-input-select>

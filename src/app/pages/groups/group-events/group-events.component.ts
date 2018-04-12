@@ -81,22 +81,6 @@ export class GroupEventsComponent implements OnInit, AfterViewInit {
     await this.updateListAsync();
   }
 
-  getKey(location: Location) {
-    return location.id;
-  }
-
-  getName(location: Location) {
-    return location.name;
-  }
-
-  loadLocations = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getLocations({
-      from: from,
-      count: this.pageSize,
-      name: searchText
-    });
-  };
-
   async onNextPage(pageQuery: PageQuery) {
     await this.updateListAsync(pageQuery.from);
   }

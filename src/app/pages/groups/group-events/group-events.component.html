@@ -25,16 +25,7 @@
     </dx-date-box>
   </div>
   <div class="col">
-    <app-input-select
-      id="location"
-      [loadData]="loadLocations"
-      [pageSize]="pageSize"
-      (onChange)="onLocationChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a location"
-      ngDefaultControl>
-    </app-input-select>
+    <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
 </div>
 <table class="table table-bordered table-hover table-sm mt-1">

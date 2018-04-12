@@ -25,24 +25,16 @@
     </dx-date-box>
   </div>
   <div class="col">
-    <app-input-select
-      id="location"
-      [loadData]="loadLocations"
-      [pageSize]="pageSize"
-      (onChange)="onLocationChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a location"
-      ngDefaultControl>
-    </app-input-select>
+    <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
 </div>
 <table class="table table-bordered table-hover table-sm mt-1">
   <thead>
   <tr class="d-flex">
-    <th class="col-2">{{ 'date' | translate }}</th>
     <th class="col-4">{{ 'name' | translate }}</th>
-    <th class="col-3">{{ 'location' | translate }}</th>
+    <th class="col-1">{{ 'trainingType' | translate }}</th>
+    <th class="col-2">{{ 'startDateAndTime' | translate }}</th>
+    <th class="col-2">{{ 'location' | translate }}</th>
     <th class="col-1">{{ 'public' | translate }}</th>
     <th class="col-2"></th>
   </tr>
@@ -52,9 +44,10 @@
                      (nextPage)="onNextPage($event)">
     <ng-template let-item>
       <tr class="d-flex">
-        <td class="col-sm-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
         <td class="col-sm-4">{{item?.baseTraining.name}}</td>
-        <td class="col-sm-3">{{item?.baseTraining.location?.name}}</td>
+        <td class="col-sm-1">{{item?.baseTraining.discriminator}}</td>
+        <td class="col-sm-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td class="col-sm-2">{{item?.baseTraining.location?.name}}</td>
         <td class="col-sm-1">
           <dx-check-box class="mt-2"
                         [(value)]="item.visible"

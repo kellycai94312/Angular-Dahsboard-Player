@@ -4,6 +4,7 @@ import { InputSelectComponent } from './input-select.component';
 import { ScrollComponent } from './scroll/scroll.component';
 import { ScrollService } from './scroll/scroll.service';
 import { FormsModule } from '@angular/forms';
+import { LocationInputSelectComponent } from './location-input-select/location-input-select.component';
 
 @NgModule({
   imports: [
@@ -11,11 +12,13 @@ import { FormsModule } from '@angular/forms';
     FormsModule
   ],
   exports: [
-    InputSelectComponent
+    InputSelectComponent,
+    LocationInputSelectComponent
   ],
   declarations: [
     InputSelectComponent,
-    ScrollComponent
+    ScrollComponent,
+    LocationInputSelectComponent
   ],
   providers: [
     ScrollService
