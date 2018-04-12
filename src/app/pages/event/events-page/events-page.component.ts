@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
-import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {AppHelper} from '../../../utils/app-helper';
-import {Subject} from 'rxjs/Subject';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { BaseTrainingQuery } from '../../../data/remote/rest-api/query/base-training-query';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import { AppHelper } from '../../../utils/app-helper';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
-import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { BaseTraining } from '../../../data/remote/model/training/base/base-training';
+import { MeasureParameterEnum } from "../../../data/remote/misc/measure-parameter-enum";
+import { ProfileService } from "../../../shared/profile.service";
+import { UserRoleEnum } from "../../../data/remote/model/user-role-enum";
 
 @Component({
   selector: 'app-events-page',
@@ -19,15 +21,17 @@ export class EventsPageComponent implements OnInit {
 
   public baseTrainingQuery: BaseTrainingQuery;
   public baseTrainings: BaseTraining[];
+  public canCreateEvent: boolean;
 
   private searchTextChanges: Subject<PageQuery>;
 
   constructor(private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _profileService: ProfileService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
-    this.baseTrainingQuery.discriminator = TrainingDiscriminator.GAME;
+    this.baseTrainingQuery.measureParameter = MeasureParameterEnum[MeasureParameterEnum.GOALS];
 
     this.searchTextChanges = new Subject<PageQuery>();
     this.searchTextChanges.debounceTime(PropertyConstant.searchDebounceTime).subscribe(async x => {
@@ -37,6 +41,7 @@ export class EventsPageComponent implements OnInit {
 
   async ngOnInit() {
     await this.updateListAsync();
+    this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
   }
 
   public async onCreate() {

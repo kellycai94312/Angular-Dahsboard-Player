@@ -6,21 +6,36 @@
          placeholder="{{'search' | translate}}">
   <div class="input-group-append">
     <button class="btn btn-primary text-uppercase"
-            type="button"
+            type="button" *ngIf="canCreateEvent"
             (click)="onCreate()">{{'create' | translate}}
     </button>
   </div>
 </div>
-<app-infinite-list class="list-group-flush"
-                   [items]="baseTrainings"
-                   (nextPage)="onNextPage($event)">
-  <ng-template let-item>
-    <a routerLink="{{item.id}}"
-       routerLinkActive="active"
-       class="list-group-item list-group-item-action p-0 pt-2 pb-2"><strong>{{item.name}}</strong><br>
-      {{item.description}}
-    </a>
-  </ng-template>
-</app-infinite-list>
-
-
+<table class="table">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-3">{{'name' | translate}}</th>
+    <th class="col-1">{{'trainingType' | translate}}</th>
+    <th class="col-2">{{'startDateAndTime' | translate}}</th>
+    <th class="col-2">{{'location' | translate}}</th>
+    <th class="col-3">{{'groups.section' | translate}}</th>
+    <th class="col-1">{{'score' | translate}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush"
+                     [items]="baseTrainings"
+                     (nextPage)="onNextPage($event)">
+    <ng-template let-item>
+      <tr class="d-flex" routerLink="{{item.id}}" [class.disabled]="item.discriminator !== 'GAME'">
+        <td class="col-sm-3">{{item.name}}</td>
+        <td class="col-sm-1">{{item.discriminator}}</td>
+        <td class="col-sm-2">{{item.startTime | date:'M/d/yy, h:mm a'}}</td>
+        <td class="col-sm-2">{{item.location != null ? item.location.name : ''}}</td>
+        <td class="col-sm-3">{{item.discriminator === 'GAME' ? item.teams : ''}}</td>
+        <td class="col-sm-1">{{item.discriminator === 'GAME' ? item.score : ''}}</td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>

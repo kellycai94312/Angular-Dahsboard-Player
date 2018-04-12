@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { LocalStorageService } from '../../shared/local-storage.service';
-import { Person } from '../../data/remote/model/person';
+import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
+import { LocalStorageService } from './local-storage.service';
+import { Person } from '../data/remote/model/person';
+import { UserRoleEnum } from "../data/remote/model/user-role-enum";
 
 @Injectable()
 export class ProfileService {
@@ -42,6 +43,11 @@ export class ProfileService {
     } else {
       return this._participantRestApiService.getPerson({id: id});
     }
+  }
+
+  async hasUserRole(userRoleEnum: UserRoleEnum) {
+    const roles = await this._participantRestApiService.getUserRolesByUser({id: this._localStorageService.getCurrentUserId()});
+    return roles.filter(role => role.userRoleEnum === userRoleEnum).length != 0;
   }
 
 }

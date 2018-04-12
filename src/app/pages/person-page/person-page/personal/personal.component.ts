@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {PersonService} from '../person.service';
-import {Person} from '../../../../data/remote/model/person';
-import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {Address} from '../../../../data/remote/model/address';
-import {ProfileService} from '../../../../layout/shared/profile.service';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {NamedObject} from '../../../../data/remote/base/named-object';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {UserRole} from '../../../../data/remote/model/user-role';
+import { Component, OnInit } from '@angular/core';
+import { PersonService } from '../person.service';
+import { Person } from '../../../../data/remote/model/person';
+import { SexEnum } from '../../../../data/remote/misc/sex-enum';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { Address } from '../../../../data/remote/model/address';
+import { ProfileService } from '../../../../shared/profile.service';
+import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
+import { NamedObject } from '../../../../data/remote/base/named-object';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { UserRole } from '../../../../data/remote/model/user-role';
 
 @Component({
   selector: 'app-personal',

@@ -1,23 +1,24 @@
-import {Component, OnInit} from '@angular/core';
-import {Game} from '../../../../../../data/remote/model/training/game/game';
-import {Location} from '../../../../../../data/remote/model/location';
-import {SportType} from '../../../../../../data/remote/model/sport-type';
-import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {AppHelper} from '../../../../../../utils/app-helper';
-import {TrainingState} from '../../../../../../data/remote/misc/training-state';
-import {TrainingPart} from '../../../../../../data/remote/model/training/training-part';
-import {TrainingPartType} from '../../../../../../data/remote/misc/training-part-type';
-import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {ListRequest} from '../../../../../../data/remote/request/list-request';
-import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {HashSet} from '../../../../../../data/local/hash-set';
-import {TranslateService} from '@ngx-translate/core';
-import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-query';
-import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
-import {NamedObjectItemComponent} from '../../../../../../components/named-object-item/named-object-item.component';
+import { Component, OnInit } from '@angular/core';
+import { Game } from '../../../../../../data/remote/model/training/game/game';
+import { Location } from '../../../../../../data/remote/model/location';
+import { SportType } from '../../../../../../data/remote/model/sport-type';
+import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppHelper } from '../../../../../../utils/app-helper';
+import { TrainingState } from '../../../../../../data/remote/misc/training-state';
+import { TrainingPart } from '../../../../../../data/remote/model/training/training-part';
+import { TrainingPartType } from '../../../../../../data/remote/misc/training-part-type';
+import { Group } from '../../../../../../data/remote/model/group/base/group';
+import { ListRequest } from '../../../../../../data/remote/request/list-request';
+import { ModalSelectPageComponent } from '../../../../../../components/modal-select-page/modal-select-page.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { HashSet } from '../../../../../../data/local/hash-set';
+import { TranslateService } from '@ngx-translate/core';
+import { PropertyConstant } from '../../../../../../data/local/property-constant';
+import { GroupQuery } from '../../../../../../data/remote/rest-api/query/group-query';
+import { GroupTypeEnum } from '../../../../../../data/remote/model/group/base/group-type-enum';
+import { NamedObjectItemComponent } from '../../../../../../components/named-object-item/named-object-item.component';
+import { UserRoleEnum } from "../../../../../../data/remote/model/user-role-enum";
 
 @Component({
   selector: 'app-game-step-base-page',
@@ -148,6 +149,7 @@ export class GameStepBasePageComponent implements OnInit {
     groupQuery.from = 0;
     groupQuery.count = PropertyConstant.pageSize;
     groupQuery.groupTypeEnum = GroupTypeEnum[GroupTypeEnum.TEAM];
+    groupQuery.userRoleEnum = UserRoleEnum[UserRoleEnum.TRAINER];
     groupQuery.all = false;
 
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
