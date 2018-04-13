@@ -1,5 +1,8 @@
 import {Group} from '../../remote/model/group/base/group';
 
+/*
+  * @deprecated Use GroupViewModel
+  */
 export class GroupViewModel {
 
   public imageLogoUrl: string;

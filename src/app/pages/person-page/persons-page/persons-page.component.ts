@@ -1,10 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
-import {PersonItemViewModel} from '../../../data/local/view-model/person-item-view-model';
 import {Sex} from '../../../data/local/sex';
 import {SexEnum} from '../../../data/remote/misc/sex-enum';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
@@ -13,8 +11,11 @@ import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
-import CustomStore from 'devextreme/data/custom_store';
 import {NamedObject} from '../../../data/remote/base/named-object';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
+import {PageContainer} from '../../../data/remote/bean/page-container';
+import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 
 @Component({
   selector: 'app-persons-page',
@@ -23,34 +24,32 @@ import {NamedObject} from '../../../data/remote/base/named-object';
 })
 export class PersonsPageComponent implements OnInit, AfterViewInit {
 
+  public readonly personQuery: PersonQuery;
+  public readonly pageSize: number;
+
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public dataSource: any;
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
 
   public sexItems: Sex[];
   public userRoles: UserRole[];
-  public pageSize: number;
-
-  private _searchText: string;
-  private readonly _personQuery: PersonQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService) {
-    this._searchText = '';
+    this.personQuery = new PersonQuery();
+    this.personQuery.name = '';
+    this.personQuery.from = 0;
+    this.personQuery.count = PropertyConstant.pageSize;
+
     this.pageSize = PropertyConstant.pageSize;
-
-    this._personQuery = new GroupQuery();
-    this._personQuery.from = 0;
-    this._personQuery.count = PropertyConstant.pageSize;
-
-    this.initCustomStore();
+    this.sexItems = [];
+    this.userRoles = [];
   }
 
   async ngOnInit() {
     const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    this.sexItems = [];
-
     for (let i = 0; i < temp.length; i++) {
       const sex = new Sex();
       sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
@@ -63,127 +62,118 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._searchText = value;
-        this.initCustomStore();
+      .subscribe(async value => {
+        this.personQuery.fullName = value;
+        await this.updateItems();
       });
   }
 
-  private initCustomStore() {
-    this.dataSource = {};
-    this.dataSource.store = new CustomStore({
-      load: this.loadData
-    });
-  }
+//#region Filter
 
-  loadData = async (loadOptions: any): Promise<any> => {
-    this._personQuery.from = loadOptions.skip;
-    this._personQuery.fullName = this._searchText;
-
-    const pageContainer = await this._participantRestApiService.getPersons(this._personQuery);
-    const data: PersonItemViewModel[] = [];
-
-    for (const person of pageContainer.list) {
-      const personViewModel = new PersonItemViewModel(person, this._participantRestApiService);
-      await personViewModel.init();
-      data.push(personViewModel);
-    }
-
-    return {
-      data: data,
-      totalCount: pageContainer.total
-    };
-  };
-
-  public onYearBirthChanged(value: Date) {
+  public async onYearBirthChanged(value: Date) {
     if (value != null) {
-      this._personQuery.yearBirth = value.getFullYear();
+      this.personQuery.yearBirth = value.getFullYear();
     } else {
-      delete this._personQuery.yearBirth;
+      delete this.personQuery.yearBirth;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  public onSexChanged(value: Sex) {
+  public async onSexChanged(value: Sex) {
     if (value != null) {
-      this._personQuery.sex = SexEnum[value.sexEnum].toString();
+      this.personQuery.sex = SexEnum[value.sexEnum].toString();
     } else {
-      delete this._personQuery.sex;
+      delete this.personQuery.sex;
     }
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  public onUserRoleChanged(value: UserRole) {
+  public async onUserRoleChanged(value: UserRole) {
     if (value != null) {
-      this._personQuery.userRoleId = value.id;
+      this.personQuery.userRoleId = value.id;
     } else {
-      delete this._personQuery.userRoleId;
+      delete this.personQuery.userRoleId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  loadGroups = async (from: number, searchText: string) => {
+  public loadGroups = async (from: number, searchText: string) => {
     return this._participantRestApiService.getGroups({
       from: from,
-      count: this.pageSize,
+      count: PropertyConstant.pageSize,
       name: searchText
     });
   };
 
-  loadCities = async (from: number, searchText: string) => {
+  public loadCities = async (from: number, searchText: string) => {
     return this._participantRestApiService.getCities({
       from: from,
-      count: this.pageSize,
+      count: PropertyConstant.pageSize,
       name: searchText
     });
   };
 
-  loadSportTypes = async (from: number, searchText: string) => {
+  public loadSportTypes = async (from: number, searchText: string) => {
     return this._participantRestApiService.getSportTypes({
       name: searchText,
       from: from,
-      count: this.pageSize
+      count: PropertyConstant.pageSize
     });
   };
 
-  public onGroupChanged(value: Group) {
+  public async onGroupChanged(value: Group) {
     if (value != null) {
-      this._personQuery.groupId = value.id;
+      this.personQuery.groupId = value.id;
     } else {
-      delete this._personQuery.groupId;
+      delete this.personQuery.groupId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  public onCityChanged(value: City) {
+  public async onCityChanged(value: City) {
     if (value != null) {
-      this._personQuery.cityId = value.id;
+      this.personQuery.cityId = value.id;
     } else {
-      delete this._personQuery.cityId;
+      delete this.personQuery.cityId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  public onSportTypeChanged(value: SportType) {
+  public async onSportTypeChanged(value: SportType) {
     if (value != null) {
-      this._personQuery.sportTypeId = value.id;
+      this.personQuery.sportTypeId = value.id;
     } else {
-      delete this._personQuery.sportTypeId;
+      delete this.personQuery.sportTypeId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  getKey(item: IdentifiedObject) {
+  public getKey(item: IdentifiedObject) {
     return item.id;
   }
 
-  getName(item: NamedObject) {
+  public getName(item: NamedObject) {
     return item.name;
+  }
+
+// #endregion
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getPersons(pageQuery);
+    const items = await Promise.all(pageContainer.list.map(async x => {
+      const personViewModel = new PersonViewModel(x);
+      await personViewModel.initialize();
+      return personViewModel;
+    }));
+
+    const newPageContainer = new PageContainer(items);
+    newPageContainer.size = pageContainer.size;
+    newPageContainer.total = pageContainer.total;
+    return newPageContainer;
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
   }
 
 }

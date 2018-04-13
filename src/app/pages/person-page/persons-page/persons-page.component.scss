@@ -1,0 +1,13 @@
+.row {
+  margin: 0;
+}
+
+.col {
+  padding: 0;
+  margin-right: 0.5rem;
+}
+
+div[class*=col]:last-child {
+  padding: 0;
+  margin-right: 0;
+}

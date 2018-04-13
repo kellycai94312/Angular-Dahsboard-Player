@@ -4,6 +4,9 @@ import {UserRole} from '../../remote/model/user-role';
 import {Person} from '../../remote/model/person';
 import {ParticipantRestApiService} from '../../remote/rest-api/participant-rest-api.service';
 
+/*
+  * @deprecated Use PersonViewModel
+  */
 export class PersonItemViewModel {
   public readonly person: Person;
   public readonly url: string;
