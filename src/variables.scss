@@ -8,12 +8,15 @@ $dark-blue: #1C1D1F;
 $white: #f9f9f9;
 $white-light: #fff;
 
-$logo-size-xl: 150px; /*profiles*/
+$logo-size-xl: 130px; /*profiles*/
 $logo-size-lg: 80px; /*lists*/
 $logo-size-sm: 40px; /*navbar*/
+$logo-border-width: 2px;
 
 $scroll-block-max-height: 500px;
 $input-height: 34px; //devexpress input height
+$input-height-sm: 30px;
+$font-size: 14px;
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');

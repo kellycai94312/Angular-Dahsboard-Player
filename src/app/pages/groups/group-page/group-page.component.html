@@ -1,33 +1,20 @@
 <div *ngIf="group!=null">
   <!-- group head -->
   <div class="d-flex flex-row">
-    <div class="p-2">
-      <div class="d-flex flex-column">
-        <img class="logo-xl" [src]="imageLogoUrl">
-        <button *ngIf="groupService.isEditAllow()"
-                class="btn btn-default btn-file mt-2">
-          <i class="fa fa-pencil-square-o"></i>
-          <span>
-      <p>{{'persons.person.changeAvatar' | translate | uppercase}}</p>
-      <input type="file"
-             (change)="onLogoChange($event)"
-             accept="image/*">
-      </span>
-        </button>
-        <dx-button *ngIf="!groupService.isOwner()"
-                   type="default"
-                   class="mt-2"
-                   (onClick)="onGroupPersonState()"
-                   text="{{ textStateInGroup | translate | uppercase}}">
-        </dx-button>
+    <img class="logo-xl" [src]="imageLogoUrl">
+    <div class="logo-change" *ngIf="groupService.isEditAllow()">
+      <div class="logo-content">
+        <input type="file"
+               (change)="onLogoChange($event)" accept="image/*">
+        <p>{{'persons.person.uploadAvatar' | translate | uppercase}}</p>
+        <i class="fa fa-pencil-square-o"></i>
       </div>
     </div>
     <div class="p-2">
-      <h1>{{group.name}}</h1>
+      <h4>{{group.name}}</h4>
       <p>{{'groupType' | translate }} - {{group.groupType.name}}</p>
       <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
         <p>{{'sportType' | translate }} - {{group.sportType.name}}</p>
-
         <p *ngIf="group.teamType!=null">{{'teamType' | translate }} - {{group.teamType.name}}</p>
         <p *ngIf="group.league!=null">{{'league' | translate }} - {{group.league.name}}</p>
         <p *ngIf="group.ageGroup!=null">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
