@@ -39,12 +39,12 @@ export class PersonPageComponent implements OnInit {
   public queryParams: Params;
   public tabs: Tab[];
 
-  private userRoles: UserRole[] = [];
-  private personSportTypes: SportType[];
+  public userRoles: UserRole[] = [];
+  public personSportTypes: SportType[];
 
-  private logo: string;
-  private roleToggle: UserRole;
-  private sportTypeToggle: SportType;
+  public logo: string;
+  public roleToggle: UserRole;
+  public sportTypeToggle: SportType;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,

@@ -7,7 +7,7 @@
   "persons": {
     "section": "Persons",
     "person": {
-      "changeAvatar": "Change avatar",
+      "uploadAvatar": "Upload avatar",
       "roles": {
         "section": "Roles",
         "conflict": "You should quit groups with appropriate roles before you remove its"

@@ -39,14 +39,6 @@
 $fa-font-path: "~font-awesome/fonts/";
 @import "~font-awesome/scss/font-awesome";
 
-// Added link in .angular-cli.json
-// @import "~linearicons/dist/web-font/style.css";
-
-/*dev express*/
-// Added link in .angular-cli.json
-//@import "~devextreme/dist/css/dx.common.css";
-//@import "~devextreme/dist/css/dx.light.css";
-
 $max-width-content: 400px;
 
 html, body {
@@ -59,6 +51,10 @@ html, body {
   p {
     margin: 0;
     padding: 0;
+  }
+
+  a, p, label {
+    font-size: $font-size;
   }
 
   label {
@@ -116,9 +112,10 @@ html, body {
   min-height: $logo-size-xl;
 
   @media (max-width: max-width-sm()) {
-    width: $logo-size-lg;
-    height: $logo-size-lg;
-    min-width: $logo-size-lg;
+    width: $logo-size-lg !important;
+    height: $logo-size-lg !important;
+    min-width: $logo-size-lg !important;
+    min-height: $logo-size-lg !important;
   }
 
 }
@@ -133,13 +130,13 @@ html, body {
 .logo-xl-circle {
   @extend .logo-xl;
   @extend .circle;
-  border: 2px solid $light-blue;
+  border: $logo-border-width solid $light-blue;
 }
 
 .logo-lg-circle {
   @extend .logo-lg;
   @extend .circle;
-  border: 2px solid $light-blue;
+  border: $logo-border-width solid $light-blue;
 }
 
 .logo-sm-circle {
@@ -147,7 +144,7 @@ html, body {
   @extend .circle;
 }
 
-h5 {
+h5, .fa-pencil-square-o {
   color: $light-blue;
 }
 
@@ -168,6 +165,11 @@ h5 {
   line-height: 1.35715;
 }
 
+.input-height-sm {
+  height: $input-height-sm;
+  line-height: 1;
+}
+
 .form-control {
   @extend .input-font;
   @extend .input-height;
@@ -180,5 +182,101 @@ h5 {
 .table {
   tbody tr:nth-of-type(odd) {
     background-color: #eee;
+  }
+}
+
+.nav-tabs {
+  @extend .pt-2;
+  $active-color: #007bff;
+  line-height: 1;
+  a.nav-link {
+    padding: 8px 12px;
+    border-width: thin;
+    &.active {
+      color: $active-color;
+      border-color: $active-color !important;
+      border-bottom-color: transparent !important;
+    }
+    &:not(.active) {
+      color: #495057;
+      border-bottom-color: $active-color !important;
+    }
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+label[for],
+input[type=radio],
+input[type=checkbox],
+button,
+input[type=reset],
+input[type=button],
+input[type=submit] {
+  cursor: pointer;
+}
+
+input[type=file]::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+input[type=file] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  opacity: 0;
+  display: none;
+}
+
+.logo-content {
+  text-align: center;
+  background-color: rgba(0, 0, 0, .7);
+  $change-height: $logo-size-xl/2;
+  margin-top: $change-height*.5;
+  height: $change-height*.5;
+  > p {
+    display: none;
+  }
+  > i {
+    display: block;
+    line-height: $change-height*.5;
+    font-size: 20px;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, .8);
+    height: $logo-size-xl;
+    margin-top: 0;
+    line-height: $logo-size-xl;
+    input[type=file] {
+      display: block;
+    }
+    > p {
+      display: block;
+      font-size: 12px;
+    }
+    > i {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: max-width-sm()) {
+  .logo-content {
+    $change-height: $logo-size-lg/2;
+    margin-top: $change-height*.3;
+    height: $change-height*.7;
+    > p {
+      font-size: 8px !important;
+    }
+    > i {
+      font-size: 14px;
+    }
+    &:hover {
+      height: $logo-size-lg;
+      line-height: $logo-size-lg;
+    }
   }
 }
