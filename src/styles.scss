@@ -187,7 +187,17 @@ h5, .fa-pencil-square-o {
 
 .table {
   tbody tr:nth-of-type(odd) {
-    background-color: #eee;
+    background-color: $odd-item-color;
+  }
+}
+
+.list-group-item {
+  &:nth-child(odd) {
+    background-color: $odd-item-color;
+  }
+
+  &:hover {
+    background-color: $odd-item-color;
   }
 }
 

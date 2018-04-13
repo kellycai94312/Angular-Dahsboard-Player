@@ -1,14 +1,12 @@
-<div class="row mt-3">
-  <div class="col-12
-              col-md pr-md-0">
+<div class="row mt-2">
+  <div class="col-8">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
                  mode="search"
                  showClearButton="true">
     </dx-text-box>
   </div>
-  <div class="col-12 mt-2
-              col-md-3 mt-md-0 pr-md-0">
+  <div class="col-2">
     <dx-select-box [items]="groupTypes"
                    displayExpr="name"
                    (onValueChanged)="onGroupTypeChanged($event.value)"
@@ -16,8 +14,7 @@
                    showClearButton="true">
     </dx-select-box>
   </div>
-  <div class="col-12 mt-2
-              col-md-3 mt-md-0">
+  <div class="col-2">
     <dx-select-box [items]="userRoles"
                    displayExpr="name"
                    (onValueChanged)="onUserRoleChanged($event.value)"
@@ -27,11 +24,12 @@
   </div>
 </div>
 
-<app-infinite-list [items]="groups"
-                   (nextPage)="onNextPage($event)">
+<app-infinite-list class="list-group list-group-flush mt-2"
+                   [query]="groupQuery"
+                   [getItems]="getItems">
   <ng-template let-item>
-    <div class="mt-2">
-      <app-group-item [data]="item"></app-group-item>
+    <div class="list-group-item pb-2">
+      <app-group-item [data]="item.data"></app-group-item>
     </div>
   </ng-template>
 </app-infinite-list>

@@ -24,7 +24,6 @@ import {PersonViewModel} from '../../../data/local/view-model/person-view-model'
 })
 export class PersonsPageComponent implements OnInit, AfterViewInit {
 
-  public readonly personQuery: PersonQuery;
   public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
@@ -32,6 +31,8 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
 
   @ViewChild(InfiniteListComponent)
   public infiniteListComponent: InfiniteListComponent;
+
+  public personQuery: PersonQuery;
 
   public sexItems: Sex[];
   public userRoles: UserRole[];

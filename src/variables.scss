@@ -18,6 +18,8 @@ $input-height: 34px; //devexpress input height
 $input-height-sm: 30px;
 $font-size: 14px;
 
+$odd-item-color: #eee;
+
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');
 }

@@ -1,21 +1,22 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { GroupType } from '../../../../data/remote/model/group/base/group-type';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
-import { DxTextBoxComponent } from 'devextreme-angular';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {GroupType} from '../../../../data/remote/model/group/base/group-type';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
+import {DxTextBoxComponent} from 'devextreme-angular';
 import 'rxjs/add/operator/debounceTime';
-import { SportType } from '../../../../data/remote/model/sport-type';
-import { AgeGroup } from '../../../../data/remote/model/age-group';
-import { League } from '../../../../data/remote/model/group/team/league';
-import { City } from '../../../../data/remote/model/city';
-import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
-import { Country } from '../../../../data/remote/model/country';
-import { Region } from '../../../../data/remote/model/region';
-import CustomStore from 'devextreme/data/custom_store';
-import { ImageType } from '../../../../data/remote/model/image-type';
-import { GroupViewModel } from '../../../../data/local/view-model/group-view-model';
-import { NamedObject } from '../../../../data/remote/base/named-object';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {AgeGroup} from '../../../../data/remote/model/age-group';
+import {League} from '../../../../data/remote/model/group/team/league';
+import {City} from '../../../../data/remote/model/city';
+import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
+import {Country} from '../../../../data/remote/model/country';
+import {Region} from '../../../../data/remote/model/region';
+import {NamedObject} from '../../../../data/remote/base/named-object';
+import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
+import {PageContainer} from '../../../../data/remote/bean/page-container';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {GroupViewModel} from '../../../../data/local/view-model/group/group-view-model';
 
 @Component({
   selector: 'app-all-groups',
@@ -24,9 +25,15 @@ import { NamedObject } from '../../../../data/remote/base/named-object';
 })
 export class AllGroupsComponent implements OnInit, AfterViewInit {
 
+  public readonly pageSize: number;
+
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
-  public dataSource: any;
+
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
+
+  public groupQuery: GroupQuery;
 
   public groupTypes: GroupType[];
   public ageGroups: AgeGroup[];
@@ -36,92 +43,56 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public selectedRegion: Region;
   public selectedCity: City;
 
-  public readonly pageSize: number;
-
-  private _searchText: string;
-  private readonly _groupQuery: GroupQuery;
-
   constructor(private _participantRestApiService: ParticipantRestApiService) {
     this.pageSize = PropertyConstant.pageSize;
 
-    this._groupQuery = new GroupQuery();
-    this._groupQuery.from = 0;
-    this._groupQuery.count = PropertyConstant.pageSize;
-
-    this.initCustomStore();
+    this.groupQuery = new GroupQuery();
+    this.groupQuery.name = '';
+    this.groupQuery.from = 0;
+    this.groupQuery.count = PropertyConstant.pageSize;
   }
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.ageGroups = await this._participantRestApiService.getAgeGroups();
+    this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
     this.leagues = await this._participantRestApiService.getLeagues();
   }
 
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._searchText = value;
-        this.initCustomStore();
+      .subscribe(async value => {
+        this.groupQuery.name = value;
+        await this.updateItems();
       });
   }
 
-  private initCustomStore() {
-    this.dataSource = {};
-    this.dataSource.pageSize = this.pageSize;
-    this.dataSource.store = new CustomStore({
-      load: this.loadData
-    });
+  //#region Filters
+
+  public async onGroupTypeChanged(value: GroupType) {
+    if (value != null) {
+      this.groupQuery.groupTypeId = value.id;
+    } else {
+      delete this.groupQuery.groupTypeId;
+    }
+    await this.updateItems();
   }
 
-  loadData = async (loadOptions: any): Promise<any> => {
-    this._groupQuery.from = loadOptions.skip;
-    this._groupQuery.name = this._searchText;
-
-    const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
-    const data: GroupViewModel[] = [];
-    for (let i = 0; i < pageContainer.list.length; i++) {
-      const imageLogoUrl = this._participantRestApiService.getImageUrl({
-        clazz: 'group',
-        id: pageContainer.list[i].id,
-        type: ImageType.LOGO
-      });
-      data.push(new GroupViewModel(pageContainer.list[i], imageLogoUrl));
-    }
-
-    return {
-      data: data,
-      totalCount: pageContainer.total
-    };
-  };
-
-  public onGroupTypeChanged(value: GroupType) {
+  public async onAgeGroupChanged(value: AgeGroup) {
     if (value != null) {
-      this._groupQuery.groupTypeId = value.id;
+      this.groupQuery.ageGroupId = value.id;
     } else {
-      delete this._groupQuery.groupTypeId;
+      delete this.groupQuery.ageGroupId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
-  public onAgeGroupChanged(value: AgeGroup) {
+  public async onLeagueChanged(value: League) {
     if (value != null) {
-      this._groupQuery.ageGroupId = value.id;
+      this.groupQuery.leagueId = value.id;
     } else {
-      delete this._groupQuery.ageGroupId;
+      delete this.groupQuery.leagueId;
     }
-
-    this.initCustomStore();
-  }
-
-  public onLeagueChanged(value: League) {
-    if (value != null) {
-      this._groupQuery.leagueId = value.id;
-    } else {
-      delete this._groupQuery.leagueId;
-    }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
   //#region Country filter
@@ -142,20 +113,20 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public onCountryChanged(value: Country) {
+  public async onCountryChanged(value: Country) {
     if (value != null) {
-      this._groupQuery.countryId = value.id;
+      this.groupQuery.countryId = value.id;
     } else {
-      delete this._groupQuery.countryId;
+      delete this.groupQuery.countryId;
     }
 
-    delete this._groupQuery.regionId;
-    delete this._groupQuery.cityId;
+    delete this.groupQuery.regionId;
+    delete this.groupQuery.cityId;
 
     this.selectedRegion = null;
     this.selectedCity = null;
 
-    this.initCustomStore();
+    await this.updateItems();
   }
 
   //#endregion
@@ -167,7 +138,7 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
       from: from,
       count: this.pageSize,
       name: searchText,
-      countryId: this._groupQuery.countryId
+      countryId: this.groupQuery.countryId
     });
   };
 
@@ -179,16 +150,16 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public onRegionChanged(value: Region) {
+  public async onRegionChanged(value: Region) {
     if (value != null) {
-      this._groupQuery.regionId = value.id;
+      this.groupQuery.regionId = value.id;
     } else {
-      delete this._groupQuery.regionId;
+      delete this.groupQuery.regionId;
     }
-    delete this._groupQuery.cityId;
+    delete this.groupQuery.cityId;
     this.selectedCity = null;
 
-    this.initCustomStore();
+    await this.updateItems();
   }
 
   //#endregion
@@ -200,8 +171,8 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
       from: from,
       count: this.pageSize,
       name: searchText,
-      countryId: this._groupQuery.countryId,
-      regionId: this._groupQuery.regionId
+      countryId: this.groupQuery.countryId,
+      regionId: this.groupQuery.regionId
     });
   };
 
@@ -213,14 +184,13 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public onCityChanged(value: City) {
+  public async onCityChanged(value: City) {
     if (value != null) {
-      this._groupQuery.cityId = value.id;
+      this.groupQuery.cityId = value.id;
     } else {
-      delete this._groupQuery.cityId;
+      delete this.groupQuery.cityId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
   //#endregion
@@ -243,16 +213,35 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     return item.name;
   }
 
-  public onSportTypeChanged(value: SportType) {
+  public async onSportTypeChanged(value: SportType) {
     if (value != null) {
-      this._groupQuery.sportTypeId = value.id;
+      this.groupQuery.sportTypeId = value.id;
     } else {
-      delete this._groupQuery.sportTypeId;
+      delete this.groupQuery.sportTypeId;
     }
-
-    this.initCustomStore();
+    await this.updateItems();
   }
 
   //#endregion
+
+  //#endregion
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getGroups(pageQuery);
+    const items = await Promise.all(pageContainer.list.map(async x => {
+      const groupViewModel = new GroupViewModel(x);
+      await groupViewModel.initialize();
+      return groupViewModel;
+    }));
+
+    const newPageContainer = new PageContainer(items);
+    newPageContainer.size = pageContainer.size;
+    newPageContainer.total = pageContainer.total;
+    return newPageContainer;
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
+  }
 
 }
