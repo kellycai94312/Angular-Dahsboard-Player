@@ -6,3 +6,12 @@ tbody tr {
     pointer-events: none;
   }
 }
+
+.row {
+  margin: 0;
+}
+
+.col {
+  padding: 0;
+  margin-right: 0.5rem !important;
+}

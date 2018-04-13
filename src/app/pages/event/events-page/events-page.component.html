@@ -28,15 +28,16 @@
   <div class="col">
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
-  <div class="mr-4" *ngIf="canCreateEvent">
-    <button class="btn btn-primary text-uppercase" type="button"
+  <div *ngIf="canCreateEvent">
+    <button class="btn btn-primary"
+            type="button"
             (click)="onCreate()">{{'create' | translate}}
     </button>
   </div>
 </div>
 <table class="table table-hover mt-2">
   <thead>
-  <tr class="d-flex">
+  <tr class="d-flex text-uppercase">
     <th class="col-3">{{'name' | translate}}</th>
     <th class="col-1">{{'trainingType' | translate}}</th>
     <th class="col-2">{{'startDateAndTime' | translate}}</th>
@@ -47,8 +48,8 @@
   </thead>
   <tbody>
   <app-infinite-list class="list-group-flush"
-                     [items]="baseTrainings"
-                     (nextPage)="onNextPage($event)">
+                     [(query)]="baseTrainingQuery"
+                     [getItems]="getItems">
     <ng-template let-item>
       <tr class="d-flex" routerLink="{{item.id}}" [class.disabled]="item.discriminator !== 'GAME'">
         <td class="col-sm-3">{{item.name}}</td>

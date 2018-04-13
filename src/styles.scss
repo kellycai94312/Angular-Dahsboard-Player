@@ -177,6 +177,7 @@ h5, .fa-pencil-square-o {
 
 .btn, .dx-button {
   @extend .input-height;
+  text-transform: uppercase;
 }
 
 .table {
