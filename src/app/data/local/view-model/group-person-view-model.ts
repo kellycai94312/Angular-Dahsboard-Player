@@ -1,16 +1,26 @@
 import {GroupPerson} from '../../remote/model/group/group-person';
-import {PersonItemViewModel} from './person-item-view-model';
-import {ParticipantRestApiService} from '../../remote/rest-api/participant-rest-api.service';
+import {BaseViewModel} from './base/base-view-model';
+import {PersonViewModel} from './person-view-model';
 
-export class GroupPersonViewModel extends PersonItemViewModel {
+export class GroupPersonViewModel extends BaseViewModel<GroupPerson> {
 
-  public groupPerson: GroupPerson;
-  protected participantRestApiService: ParticipantRestApiService;
+  public personViewModel: PersonViewModel;
 
-  constructor(groupPerson: GroupPerson, participantRestApiService: ParticipantRestApiService) {
-    super(groupPerson.person, participantRestApiService);
-    this.participantRestApiService = participantRestApiService;
-    this.groupPerson = groupPerson;
+  constructor(data: GroupPerson) {
+    super(data);
+    this.update(data, true);
+  }
+
+  update(data: GroupPerson, initialize: boolean = false): void {
+    if (!initialize) {
+      super.update(data, initialize);
+    }
+    this.personViewModel = new PersonViewModel(data.person);
+  }
+
+  async initialize() {
+    super.initialize();
+    await this.personViewModel.initialize();
   }
 
 }

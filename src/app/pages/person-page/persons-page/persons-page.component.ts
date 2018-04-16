@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -22,7 +22,7 @@ import {PersonViewModel} from '../../../data/local/view-model/person-view-model'
   templateUrl: './persons-page.component.html',
   styleUrls: ['./persons-page.component.scss']
 })
-export class PersonsPageComponent implements OnInit, AfterViewInit {
+export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public readonly pageSize: number;
 
@@ -67,6 +67,10 @@ export class PersonsPageComponent implements OnInit, AfterViewInit {
         this.personQuery.fullName = value;
         await this.updateItems();
       });
+  }
+
+  ngOnDestroy(): void {
+    this.searchDxTextBoxComponent.textChange.unsubscribe();
   }
 
 //#region Filter

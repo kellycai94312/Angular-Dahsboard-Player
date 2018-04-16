@@ -1,90 +1,103 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import CustomStore from 'devextreme/data/custom_store';
 import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-view-model';
 import {GroupService} from '../group.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GroupPersonModalComponent} from '../group-person-modal/group-person-modal.component';
+import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {PageContainer} from '../../../data/remote/bean/page-container';
 
 @Component({
   selector: 'app-group-persons',
   templateUrl: './group-persons.component.html',
   styleUrls: ['./group-persons.component.scss']
 })
-export class GroupPersonsComponent implements OnInit, AfterViewInit {
+export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
-  public dataSource: any;
 
-  private _groupPersonQuery: GroupPersonQuery;
-  private _searchText: string;
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
+
+  @Input()
+  public groupId: number;
+
+  public groupPersonQuery: GroupPersonQuery;
 
   constructor(private _modalService: NgbModal,
               private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
               public groupService: GroupService) {
-    this._activatedRoute.params.subscribe(async params => {
-      this._searchText = '';
+    this.groupPersonQuery = new GroupPersonQuery();
 
-      const groupId = this._activatedRoute.parent.snapshot.params.id;
+    this._activatedRoute.params.subscribe(async params => {
       const subGroupId: number = +params.id;
 
-      this._groupPersonQuery = new GroupPersonQuery();
-      this._groupPersonQuery.from = 0;
-      this._groupPersonQuery.count = PropertyConstant.pageSize;
-      this._groupPersonQuery.id = groupId;
-      if (subGroupId !== 0) {
-        this._groupPersonQuery.subGroupId = subGroupId;
+      this.groupPersonQuery.fullName = '';
+      this.groupPersonQuery.from = 0;
+      this.groupPersonQuery.count = PropertyConstant.pageSize;
+
+      if (subGroupId) {
+        this.groupPersonQuery.subGroupId = subGroupId;
+      } else {
+        delete this.groupPersonQuery.subGroupId;
       }
-      this.initCustomStore();
+      await this.updateItems();
     });
   }
 
   ngOnInit() {
   }
 
-  ngAfterViewInit(): void {
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._searchText = value;
-        this.initCustomStore();
-      });
-  }
-
-  private initCustomStore() {
-    this.dataSource = {};
-    this.dataSource.store = new CustomStore({
-      load: this.loadData
-    });
-  }
-
-  loadData = async (loadOptions: any): Promise<any> => {
-    this._groupPersonQuery.from = loadOptions.skip;
-    this._groupPersonQuery.fullName = this._searchText;
-
-    const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(this._groupPersonQuery);
-    const data: GroupPersonViewModel[] = [];
-    for (let i = 0; i < pageContainer.list.length; i++) {
-      const groupPersonViewModel = new GroupPersonViewModel(pageContainer.list[i], this._participantRestApiService);
-      await groupPersonViewModel.init();
-      data.push(groupPersonViewModel);
+  async ngAfterViewInit() {
+    if (this.groupId) {
+      this.groupPersonQuery.id = this.groupId;
+    } else {
+      this.groupPersonQuery.id = this._activatedRoute.parent.snapshot.params.id;
     }
 
-    return {
-      data: data,
-      totalCount: pageContainer.total
-    };
-  };
+    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+      .subscribe(async value => {
+        this.groupPersonQuery.fullName = value;
+        await this.updateItems();
+      });
+    await this.infiniteListComponent.initialize();
+  }
+
+  ngOnDestroy(): void {
+    this.searchDxTextBoxComponent.textChange.unsubscribe();
+  }
 
   public onEdit(groupPersonViewModel: GroupPersonViewModel) {
     const modalRef = this._modalService.open(GroupPersonModalComponent, {size: 'lg'});
-    modalRef.componentInstance.groupPerson = groupPersonViewModel.groupPerson;
-    modalRef.componentInstance.onChange = async () => this.initCustomStore();
+    modalRef.componentInstance.groupPerson = groupPersonViewModel.data;
+    modalRef.componentInstance.onChange = async () => this.updateItems();
+  }
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
+    const items = await Promise.all(pageContainer.list.map(async x => {
+      const groupPersonViewModel = new GroupPersonViewModel(x);
+      await groupPersonViewModel.initialize();
+      return groupPersonViewModel;
+    }));
+
+    const newPageContainer = new PageContainer(items);
+    newPageContainer.size = pageContainer.size;
+    newPageContainer.total = pageContainer.total;
+    return newPageContainer;
+  };
+
+  private async updateItems() {
+    if (this.infiniteListComponent) {
+      await this.infiniteListComponent.update(true);
+    }
   }
 
 }
