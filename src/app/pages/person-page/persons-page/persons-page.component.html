@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row cols-padding">
   <div class="col">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
@@ -68,7 +68,7 @@
 </div>
 <table class="table table-hover mt-2">
   <thead>
-  <tr class="d-flex text-uppercase">
+  <tr class="d-flex">
     <th class="col-1">{{'image' | translate}}</th>
     <th class="col-4">{{'fullName' | translate}}</th>
     <th class="col-2">{{'yearBirth' | translate}}</th>
@@ -82,24 +82,24 @@
                      [getItems]="getItems">
     <ng-template let-item>
       <tr class="d-flex" routerLink="{{item.data.id}}">
-        <td class="col-sm-1">
+        <td class="col-1">
           <div *ngIf="item.imageLogoUrl"
                class="img-fluid logo-lg-circle"
                [ngStyle]="{'background-image': 'url('+ item.imageLogoUrl +')'}">
           </div>
         </td>
-        <td class="col-sm-4 d-flex align-items-center">
+        <td class="col-4">
           <h5>{{item.data?.firstName}}<br>
             {{item.data?.lastName}}<br>
             {{item.data?.patronymic}}</h5>
         </td>
-        <td class="col-sm-2 d-flex align-items-center">
+        <td class="col-2">
           <h5>{{item.data?.birthDate | date:'yyyy'}}</h5>
         </td>
-        <td class="col-sm-2 d-flex align-items-center">
+        <td class="col-2">
           <h5>{{item.baseUserRole?.name}}</h5>
         </td>
-        <td class="col-sm-3">
+        <td class="col-3">
           <app-group *ngIf="item.baseGroupViewModel"
                      [data]="item.baseGroupViewModel.data"></app-group>
         </td>

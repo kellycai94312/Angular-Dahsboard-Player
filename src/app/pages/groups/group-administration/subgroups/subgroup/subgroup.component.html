@@ -1,17 +1,17 @@
-<div *ngIf="subgroup!=null"
-     class="row mt-2">
-  <div class="col">
+<div *ngIf="subgroup"
+     class="row mt-2 cols-padding">
+  <div class="col-10">
     <dx-text-box [(value)]="subgroup.name">
       <dx-validator>
         <dxi-validation-rule type="required"></dxi-validation-rule>
       </dx-validator>
     </dx-text-box>
   </div>
-  <div class="col">
+  <div class="col-2">
     <div class="d-flex flex-row">
-      <div *ngIf="defaultName!==subgroup.name"
-           class="mr-2">
+      <div *ngIf="defaultName!==subgroup.name">
         <dx-button type="success"
+                   class="mr-2"
                    (onClick)="onSave()"
                    [disabled]="subgroup.name.trim().length===0"
                    text="{{'save' | translate | uppercase}}">

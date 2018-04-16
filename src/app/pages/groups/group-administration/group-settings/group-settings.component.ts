@@ -34,7 +34,7 @@ export class GroupSettingsComponent implements OnInit {
   async ngOnInit() {
     this.group = this._groupService.getGroup();
 
-    if (this.group.groupType.groupTypeEnum.toString() === GroupTypeEnum[+GroupTypeEnum.TEAM]) {
+    if (this.group.groupType.groupTypeEnum === GroupTypeEnum.TEAM) {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({id: (this.group as GroupTeam).sportType.id});
       this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
       this.teamTypes = await this._participantRestApiService.getTeamTypes();

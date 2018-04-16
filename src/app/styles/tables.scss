@@ -33,3 +33,35 @@
     background-color: $odd-item-color;
   }
 }
+
+thead > tr {
+  text-transform: uppercase;
+  color: #adadad;
+}
+
+td, th {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -ms-flex-align: center !important;
+  align-items: center !important;
+}
+
+.cols-padding {
+  margin: 0;
+
+  .row {
+    margin: 0;
+  }
+
+  div[class^="col"] {
+    padding: 0;
+    padding-right: 0.5rem;
+  }
+
+  div[class^="col"]:last-child {
+    padding: 0;
+    padding-right: 0;
+  }
+}

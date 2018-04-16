@@ -1,4 +1,4 @@
-<div class="row mt-2">
+<div class="row mt-2 cols-padding">
   <div class="col">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
@@ -79,16 +79,16 @@
 
 <table class="table table-hover mt-2">
   <thead>
-  <tr class="d-flex text-uppercase">
-    <th class="col-1 d-flex align-items-center">{{'image' | translate}}</th>
-    <th class="col-3 d-flex align-items-center">{{'name' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'groupType' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'sportType' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'ageGroup' | translate}}</th>
-    <th class="col-2 d-flex align-items-center">{{'league' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'country' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'region' | translate}}</th>
-    <th class="col-1 d-flex align-items-center">{{'city' | translate}}</th>
+  <tr class="d-flex">
+    <th class="col-1">{{'image' | translate}}</th>
+    <th class="col-3">{{'name' | translate}}</th>
+    <th class="col-1">{{'groupType' | translate}}</th>
+    <th class="col-1">{{'sportType' | translate}}</th>
+    <th class="col-1">{{'ageGroup' | translate}}</th>
+    <th class="col-2">{{'league' | translate}}</th>
+    <th class="col-1">{{'country' | translate}}</th>
+    <th class="col-1">{{'region' | translate}}</th>
+    <th class="col-1">{{'city' | translate}}</th>
   </tr>
   </thead>
   <tbody>
@@ -102,28 +102,28 @@
           <img class="logo-lg"
                [src]="item.imageLogoUrl"/>
         </td>
-        <td class="col-sm-3 d-flex align-items-center">
+        <td class="col-sm-3">
           <h5>{{item.data.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data.groupType.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data?.sportType?.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data?.ageGroup?.name}}</h5>
         </td>
-        <td class="col-sm-2 d-flex align-items-center">
+        <td class="col-sm-2">
           <h5>{{item.data?.league?.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data?.address?.country?.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data?.address?.region?.name}}</h5>
         </td>
-        <td class="col-sm-1 d-flex align-items-center">
+        <td class="col-sm-1">
           <h5>{{item.data?.address?.city?.name}}</h5>
         </td>
       </tr>
