@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupService} from '../../group.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
@@ -7,51 +7,45 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
+import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
 
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
   styleUrls: ['./requests.component.scss']
 })
-export class RequestsComponent implements OnInit {
+export class RequestsComponent implements OnInit, AfterViewInit {
 
-  public groupPersons: GroupPerson[];
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
 
-  private _searchText: string;
-  private readonly _groupPersonQuery: GroupPersonQuery;
+  public groupPersonQuery: GroupPersonQuery;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
               private _appHelper: AppHelper) {
-    this.groupPersons = [];
-    this._searchText = '';
-
-    this._groupPersonQuery = new GroupQuery();
-    this._groupPersonQuery.from = 0;
-    this._groupPersonQuery.count = PropertyConstant.pageSize;
-    this._groupPersonQuery.id = this._groupService.getGroup().id;
-    this._groupPersonQuery.approved = false;
+    this.groupPersonQuery = new GroupQuery();
+    this.groupPersonQuery.name = '';
+    this.groupPersonQuery.from = 0;
+    this.groupPersonQuery.count = PropertyConstant.pageSize;
+    this.groupPersonQuery.id = this._groupService.getGroup().id;
+    this.groupPersonQuery.approved = false;
   }
 
-  async ngOnInit() {
-    await this.updateListAsync();
+  ngOnInit() {
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
-
-  public async updateListAsync(from: number = 0) {
-    this._groupPersonQuery.from = from;
-    this._groupPersonQuery.fullName = this._searchText;
-
-    const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(this._groupPersonQuery);
-    this.groupPersons = this._appHelper.pushItemsInList(from, this.groupPersons, pageContainer);
+  async ngAfterViewInit() {
+    await this.infiniteListComponent.initialize();
   }
 
   public async onAdd(groupPerson: GroupPerson) {
-    await this._participantRestApiService.putApprovePersonInGroup({id: this._groupService.getGroup().id, personId: groupPerson.person.id});
-    this._appHelper.removeItem(this.groupPersons, groupPerson);
+    await this._participantRestApiService.putApprovePersonInGroup(
+      {
+        id: this._groupService.getGroup().id,
+        personId: groupPerson.person.id
+      });
+    this._appHelper.removeItem(this.infiniteListComponent.items, groupPerson);
   }
 
   public async onRemove(groupPerson: GroupPerson) {
@@ -59,6 +53,15 @@ export class RequestsComponent implements OnInit {
       id: this._groupService.getGroup().id,
       personId: groupPerson.person.id
     });
-    this._appHelper.removeItem(this.groupPersons, groupPerson);
+    this._appHelper.removeItem(this.infiniteListComponent.items, groupPerson);
   }
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    return await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
+  }
+
 }

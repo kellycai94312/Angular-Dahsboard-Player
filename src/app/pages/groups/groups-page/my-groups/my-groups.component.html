@@ -1,4 +1,4 @@
-<div class="row mt-2 cols-padding">
+<div class="row cols-padding mb-2">
   <div class="col-8">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
@@ -24,11 +24,11 @@
   </div>
 </div>
 
-<app-infinite-list class="list-group list-group-flush mt-2"
+<app-infinite-list class="list-group-flush"
                    [query]="groupQuery"
                    [getItems]="getItems">
   <ng-template let-item>
-    <div class="list-group-item pb-2">
+    <div class="list-group-item pb-2 cols-padding px-2">
       <app-group [data]="item.data"></app-group>
     </div>
   </ng-template>
