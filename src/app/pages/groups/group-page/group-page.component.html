@@ -2,7 +2,7 @@
   <!-- group head -->
   <div class="d-flex flex-row">
     <img class="logo-xl" [src]="imageLogoUrl">
-    <div class="logo-change" *ngIf="groupService.isEditAllow()">
+    <div class="logo-xl-change" *ngIf="groupService.isEditAllow()">
       <div class="logo-content">
         <input type="file"
                (change)="onLogoChange($event)" accept="image/*">

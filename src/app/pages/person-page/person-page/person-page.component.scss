@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@import "../../../styles/variables";
 @import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
@@ -78,32 +78,3 @@ a {
   }
 }
 
-.logo-change {
-  position: absolute;
-  margin-left: $logo-border-width;
-  width: $logo-size-xl - $logo-border-width*2;
-  height: $logo-size-xl/2 - $logo-border-width;
-  margin-top: $logo-size-xl/2;
-  border-bottom-left-radius: $logo-size-xl - $logo-border-width;
-  border-bottom-right-radius: $logo-size-xl - $logo-border-width;
-  overflow: hidden;
-  transition: all .05s;
-
-  &:hover {
-    margin-top: $logo-border-width;
-    height: $logo-size-xl - $logo-border-width * 2;
-    border-radius: $logo-size-xl - $logo-border-width;
-  }
-
-  @media (max-width: max-width-sm()) {
-    width: $logo-size-lg - $logo-border-width * 2;
-    height: $logo-size-lg/2 - $logo-border-width;
-    margin-top: $logo-size-lg/2;
-    border-bottom-left-radius: $logo-size-lg - $logo-border-width;
-    border-bottom-right-radius: $logo-size-lg - $logo-border-width;
-    &:hover {
-      height: $logo-size-lg - $logo-border-width*2;
-      border-radius: $logo-size-lg - $logo-border-width;
-    }
-  }
-}
