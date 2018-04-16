@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Tab } from '../../../../data/local/tab';
 import { TranslateService } from '@ngx-translate/core';
+import { MyRegionService } from "./my-region.service";
 
 @Component({
   selector: 'app-my-region',
@@ -11,7 +12,8 @@ export class MyRegionComponent implements OnInit {
 
   public tabs: Tab[];
 
-  constructor(private _translateService: TranslateService) {
+  constructor(private _translateService: TranslateService,
+              public myRegionService: MyRegionService) {
   }
 
   async ngOnInit() {

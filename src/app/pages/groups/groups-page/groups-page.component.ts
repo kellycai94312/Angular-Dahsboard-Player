@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Tab } from '../../../data/local/tab';
 import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
   selector: 'app-groups-page',
@@ -11,7 +12,9 @@ export class GroupsPageComponent implements OnInit {
 
   public tabs: Tab[];
 
-  constructor(private _translateService: TranslateService) {
+  constructor(private _translateService: TranslateService,
+              private _route: ActivatedRoute,
+              private _router: Router) {
   }
 
   async ngOnInit() {
@@ -26,5 +29,7 @@ export class GroupsPageComponent implements OnInit {
     myTab.routerLink = 'my';
     this.tabs.push(myTab);
   }
+
+  openNewGroupPage = async () => this._router.navigate(['new'], {relativeTo: this._route});
 
 }
