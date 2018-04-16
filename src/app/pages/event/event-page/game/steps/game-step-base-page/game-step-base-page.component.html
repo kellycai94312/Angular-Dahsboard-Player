@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row cols-padding">
   <div class="col">
     <label>{{'name' | translate }}</label>
     <dx-text-box [(value)]="game.name">
@@ -34,11 +34,11 @@
                text="{{ 'save' | translate }}">
     </dx-button>
   </div>
-  <div class="col pl-0">
-    <label class="mt-2">{{'parts' | translate }}</label>
+  <div class="col">
+    <label>{{'parts' | translate }}</label>
     <div class="row mb-2"
          *ngFor="let item of trainingParts">
-      <div class="col-6 pr-0">
+      <div class="col-6">
         <dx-text-box class="w-100"
                      [(value)]="item.name"
                      (onValueChanged)="onUpdateTrainingPart(item)">
@@ -47,7 +47,7 @@
           </dx-validator>
         </dx-text-box>
       </div>
-      <div class="col-3 pr-0">
+      <div class="col-3">
         <dx-date-box
           class="w-100"
           [value]="onGetTrainingPartDuration(item)"
@@ -56,7 +56,7 @@
           type="time">
         </dx-date-box>
       </div>
-      <div class="col-3 pl-3">
+      <div class="col-3">
         <dx-button type="danger"
                    class="text-uppercase w-100"
                    (onClick)="onRemoveTrainingPart(item)"
@@ -66,13 +66,13 @@
     </div>
 
     <div class="row">
-      <div class="col-6 pr-0">
+      <div class="col-6">
         <dx-text-box class="w-100"
                      valueChangeEvent="keyup"
                      [(value)]="trainingPart.name">
         </dx-text-box>
       </div>
-      <div class="col-3 pr-0">
+      <div class="col-3">
         <dx-date-box
           class="w-100"
           [value]="onGetTrainingPartDuration(trainingPart)"
@@ -81,7 +81,7 @@
           type="time">
         </dx-date-box>
       </div>
-      <div class="col-3 pl-3">
+      <div class="col-3">
         <dx-button type="success"
                    class="text-uppercase w-100"
                    (onClick)="onAddTrainingPart(trainingPart)"
@@ -92,18 +92,18 @@
     </div>
 
   </div>
-  <div class="col pl-0">
+  <div class="col">
     <label class="w-100">{{'groups.section' | translate }}</label>
+    <div class="list-group-flush">
+      <app-group *ngFor="let item of groups"
+                 class="list-group-item p-2"
+                 [data]="item"></app-group>
+    </div>
     <dx-button type="default"
-               class="text-uppercase"
+               [ngClass]="{'mt-2':groups.length>0}"
                (onClick)="onEditGroups()"
                text="{{ 'edit' | translate }}"
                [disabled]="appHelper.isNewObject(game)">
     </dx-button>
-    <div class="mt-2 list-group-flush">
-      <a *ngFor="let item of groups"
-         class="list-group-item list-group-item-action p-0 pt-2 pb-2">{{item.name}}
-      </a>
-    </div>
   </div>
 </div>
