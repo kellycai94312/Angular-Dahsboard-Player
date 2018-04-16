@@ -1,4 +1,4 @@
-<div class="row mt-3">
+<div class="row mt-2">
   <div class="col">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
@@ -76,59 +76,58 @@
     </app-input-select>
   </div>
 </div>
-<dx-data-grid class="mt-2"
-              [dataSource]="dataSource"
-              rowTemplate="rowTemplateName"
-              columnAutoWidth="true">
 
-  <dxi-column caption="{{ 'image' | translate }}"
-              width="80">
-  </dxi-column>
-  <dxi-column caption="{{ 'name' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'groupType' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'sportType' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'ageGroup' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'league' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'country' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'region' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'city' | translate }}"></dxi-column>
-
-  <dxo-load-panel [enabled]="true"></dxo-load-panel>
-  <dxo-scrolling mode="infinite"></dxo-scrolling>
-  <dxo-sorting mode="none"></dxo-sorting>
-  <dxo-remote-operations [sorting]="false"
-                         [paging]="true">
-  </dxo-remote-operations>
-
-  <tbody *dxTemplate="let row of 'rowTemplateName'">
-  <tr [routerLink]="row.data.url">
-    <td>
-      <img class="logo-lg" [src]="row.data.imageLogoUrl"/>
-    </td>
-    <td>
-      <h5>{{row.data.group?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.groupType?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.sportType?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.ageGroup?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.league?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.address?.country?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.address?.region?.name}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.group?.address?.city?.name}}</h5>
-    </td>
+<table class="table table-hover mt-2">
+  <thead>
+  <tr class="d-flex text-uppercase">
+    <th class="col-1 d-flex align-items-center">{{'image' | translate}}</th>
+    <th class="col-3 d-flex align-items-center">{{'name' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'groupType' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'sportType' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'ageGroup' | translate}}</th>
+    <th class="col-2 d-flex align-items-center">{{'league' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'country' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'region' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'city' | translate}}</th>
   </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush"
+                     [(query)]="groupQuery"
+                     [getItems]="getItems">
+    <ng-template let-item>
+      <tr class="d-flex"
+          routerLink="/group/{{item.data.id}}">
+        <td class="col-sm-1">
+          <img class="logo-lg"
+               [src]="item.imageLogoUrl"/>
+        </td>
+        <td class="col-sm-3 d-flex align-items-center">
+          <h5>{{item.data.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data.groupType.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data?.sportType?.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data?.ageGroup?.name}}</h5>
+        </td>
+        <td class="col-sm-2 d-flex align-items-center">
+          <h5>{{item.data?.league?.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data?.address?.country?.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data?.address?.region?.name}}</h5>
+        </td>
+        <td class="col-sm-1 d-flex align-items-center">
+          <h5>{{item.data?.address?.city?.name}}</h5>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
   </tbody>
-</dx-data-grid>
+</table>

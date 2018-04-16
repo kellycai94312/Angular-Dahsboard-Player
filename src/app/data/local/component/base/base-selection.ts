@@ -61,7 +61,7 @@ export class BaseSelection<T, TQuery extends PageQuery> implements AfterViewInit
 
     const pageContainer = await this.getItems(this.query);
     if (pageContainer.total != null) {
-      if (this._total !== pageContainer.total != null || pageContainer.total < 1) {
+      if (this._total != pageContainer.total || pageContainer.total < 1) {
         this.query.from = this.query.count;
         this.items = [];
       } else {

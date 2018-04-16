@@ -3,11 +3,12 @@ import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {AppHelper} from '../../../../utils/app-helper';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import {Group} from '../../../../data/remote/model/group/base/group';
+import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
+import {GroupViewModel} from '../../../../data/local/view-model/group/group-view-model';
+import {PageContainer} from '../../../../data/remote/bean/page-container';
 
 @Component({
   selector: 'app-my-groups',
@@ -19,21 +20,20 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
+
+  public groupQuery: GroupQuery;
+
   public groupTypes: GroupType[];
   public userRoles: UserRole[];
-  public groups: Group[];
 
-  private _searchText: string;
-  private readonly _groupQuery: GroupQuery;
-  private _selectedGroupType: GroupType;
-  private _selectedUserRole: UserRole;
-
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
-    this._groupQuery = new GroupQuery();
-    this._groupQuery.from = 0;
-    this._groupQuery.count = PropertyConstant.pageSize;
-    this._groupQuery.all = false;
+  constructor(private _participantRestApiService: ParticipantRestApiService) {
+    this.groupQuery = new GroupQuery();
+    this.groupQuery.name = '';
+    this.groupQuery.from = 0;
+    this.groupQuery.count = PropertyConstant.pageSize;
+    this.groupQuery.all = false;
   }
 
   async ngOnInit() {
@@ -44,42 +44,45 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this._searchText = value;
-        await this.updateListAsync();
+        this.groupQuery.name = value;
+        await this.updateItems();
       });
   }
 
-  public async onGroupTypeChanged(groupType: GroupType) {
-    this._selectedGroupType = groupType;
-    await this.updateListAsync();
-  }
-
-  public async onUserRoleChanged(userRole: UserRole) {
-    this._selectedUserRole = userRole;
-    await this.updateListAsync();
-  }
-
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
-
-  public async updateListAsync(from: number = 0) {
-    this._groupQuery.from = from;
-    this._groupQuery.name = this._searchText;
-
-    if (this._selectedGroupType != null) {
-      this._groupQuery.groupTypeId = this._selectedGroupType.id;
+  public async onGroupTypeChanged(value: GroupType) {
+    if (value != null) {
+      this.groupQuery.groupTypeId = value.id;
     } else {
-      delete this._groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeId;
     }
-    if (this._selectedUserRole != null) {
-      this._groupQuery.userRoleId = this._selectedUserRole.id;
-    } else {
-      delete  this._groupQuery.userRoleId;
-    }
+    await this.updateItems();
+  }
 
-    const pageContainer = await this._participantRestApiService.getGroups(this._groupQuery);
-    this.groups = this._appHelper.pushItemsInList(from, this.groups, pageContainer);
+  public async onUserRoleChanged(value: UserRole) {
+    if (value != null) {
+      this.groupQuery.userRoleId = value.id;
+    } else {
+      delete this.groupQuery.userRoleId;
+    }
+    await this.updateItems();
+  }
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getGroups(pageQuery);
+    const items = await Promise.all(pageContainer.list.map(async x => {
+      const groupViewModel = new GroupViewModel(x);
+      await groupViewModel.initialize();
+      return groupViewModel;
+    }));
+
+    const newPageContainer = new PageContainer(items);
+    newPageContainer.size = pageContainer.size;
+    newPageContainer.total = pageContainer.total;
+    return newPageContainer;
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
   }
 
 }

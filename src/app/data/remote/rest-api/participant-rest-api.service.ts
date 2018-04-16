@@ -56,6 +56,7 @@ import {TrainingPersonQuery} from './query/training-person-query';
 import {GameReport} from '../bean/game/game-report';
 import {PersonMeasure} from '../bean/person-measure';
 import {PersonMeasureValue} from '../bean/person-measure-value';
+import {PageQuery} from './page-query';
 
 export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
 
@@ -743,7 +744,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/ageGroup',
   })
-  getAgeGroups: IRestMethod<void, AgeGroup[]>;
+  getAgeGroups: IRestMethod<PageQuery, PageContainer<AgeGroup>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

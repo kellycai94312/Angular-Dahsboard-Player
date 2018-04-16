@@ -66,50 +66,45 @@
     </app-input-select>
   </div>
 </div>
-
-<dx-data-grid class="mt-2"
-              [dataSource]="dataSource"
-              rowTemplate="rowTemplateName"
-              columnAutoWidth="true">
-
-  <dxi-column caption="{{ 'image' | translate }}"
-              width="80">
-  </dxi-column>
-  <dxi-column caption="{{ 'fullName' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'yearBirth' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'role' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'group' | translate }}"></dxi-column>
-
-  <dxo-load-panel [enabled]="true"></dxo-load-panel>
-  <dxo-scrolling mode="infinite"></dxo-scrolling>
-  <dxo-sorting mode="none"></dxo-sorting>
-  <dxo-remote-operations [sorting]="false"
-                         [paging]="true">
-  </dxo-remote-operations>
-
-  <tbody *dxTemplate="let row of 'rowTemplateName'">
-  <tr [routerLink]="row.data.url">
-    <td>
-      <div *ngIf="row.data.imagePersonLogoUrl!==null"
-           class="img-fluid logo-lg-circle"
-           [ngStyle]="{'background-image': 'url('+ row.data.imagePersonLogoUrl +')'}">
-      </div>
-    </td>
-    <td>
-      <h5>{{row.data.person?.firstName}}<br>
-        {{row.data.person?.lastName}}<br>
-        {{row.data.person?.patronymic}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data.person?.birthDate | date:'yyyy'}}</h5>
-    </td>
-    <td>
-      <h5>{{row.data?.baseUserRole?.name}}</h5></td>
-    <td>
-      <app-group-item *ngIf="row.data.baseGroup"
-                      [data]="row.data.baseGroup">
-      </app-group-item>
-    </td>
+<table class="table table-hover mt-2">
+  <thead>
+  <tr class="d-flex text-uppercase">
+    <th class="col-1">{{'image' | translate}}</th>
+    <th class="col-4">{{'fullName' | translate}}</th>
+    <th class="col-2">{{'yearBirth' | translate}}</th>
+    <th class="col-2">{{'role' | translate}}</th>
+    <th class="col-3">{{'group' | translate}}</th>
   </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush"
+                     [(query)]="personQuery"
+                     [getItems]="getItems">
+    <ng-template let-item>
+      <tr class="d-flex" routerLink="{{item.data.id}}">
+        <td class="col-sm-1">
+          <div *ngIf="item.imageLogoUrl"
+               class="img-fluid logo-lg-circle"
+               [ngStyle]="{'background-image': 'url('+ item.imageLogoUrl +')'}">
+          </div>
+        </td>
+        <td class="col-sm-4 d-flex align-items-center">
+          <h5>{{item.data?.firstName}}<br>
+            {{item.data?.lastName}}<br>
+            {{item.data?.patronymic}}</h5>
+        </td>
+        <td class="col-sm-2 d-flex align-items-center">
+          <h5>{{item.data?.birthDate | date:'yyyy'}}</h5>
+        </td>
+        <td class="col-sm-2 d-flex align-items-center">
+          <h5>{{item.baseUserRole?.name}}</h5>
+        </td>
+        <td class="col-sm-3">
+          <app-group *ngIf="item.baseGroupViewModel"
+                     [data]="item.baseGroupViewModel.data"></app-group>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
   </tbody>
-</dx-data-grid>
+</table>

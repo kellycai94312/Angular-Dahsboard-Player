@@ -13,8 +13,8 @@
       <app-person [person]="groupPerson.person"></app-person>
     </div>
     <div class="col">
-      <app-group-item *ngIf="baseGroupPerson"
-                      [data]="baseGroupPerson.group"></app-group-item>
+      <app-group *ngIf="baseGroupPerson"
+                 [data]="baseGroupPerson.group"></app-group>
     </div>
   </div>
 
