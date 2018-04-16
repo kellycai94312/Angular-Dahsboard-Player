@@ -1,7 +1,7 @@
-<div *ngIf="group!=null" class="row">
+<div *ngIf="group"
+     class="row">
   <div class="col-12 col-md-6 col-lg-4">
     <h5>{{'basicInformation' | translate }}</h5>
-
     <label>{{'name' | translate }}</label>
     <dx-text-box [(value)]="group.name">
       <dx-validator>
@@ -10,10 +10,8 @@
     </dx-text-box>
 
     <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
-
-      <label>{{'teamType' | translate }}</label>
-      <dx-select-box class="mt-2"
-                     [items]="teamTypes"
+      <label class="mt-2">{{'teamType' | translate }}</label>
+      <dx-select-box [items]="teamTypes"
                      [(value)]="group.teamType"
                      displayExpr="name"
                      acceptCustomValue="true"
@@ -24,7 +22,6 @@
           </dxi-validation-rule>
         </dx-validator>
       </dx-select-box>
-
     </div>
   </div>
 
@@ -34,8 +31,7 @@
     <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
 
       <label>{{'league' | translate }}</label>
-      <dx-select-box class="mt-2"
-                     [items]="leagues"
+      <dx-select-box [items]="leagues"
                      [(value)]="group.league"
                      displayExpr="name"
                      acceptCustomValue="true"
@@ -47,9 +43,8 @@
         </dx-validator>
       </dx-select-box>
 
-      <label>{{'ageGroup' | translate }}</label>
-      <dx-select-box class="mt-2"
-                     [items]="ageGroups"
+      <label class="mt-2">{{'ageGroup' | translate }}</label>
+      <dx-select-box [items]="ageGroups"
                      [(value)]="group.ageGroup"
                      displayExpr="name"
                      acceptCustomValue="true"
@@ -63,7 +58,8 @@
 
     </div>
 
-    <label for="country">{{'persons.person.personal.country' | translate}}</label>
+    <label for="country"
+           class="mt-2">{{'persons.person.personal.country' | translate}}</label>
     <app-input-select
       id="country"
       [loadData]="loadCountries"
@@ -76,7 +72,8 @@
       ngDefaultControl>
     </app-input-select>
 
-    <label for="region">{{'persons.person.personal.region' | translate}}</label>
+    <label for="region"
+           class="mt-2">{{'persons.person.personal.region' | translate}}</label>
     <app-input-select
       id="region"
       [loadData]="loadRegions"
@@ -90,7 +87,8 @@
       ngDefaultControl>
     </app-input-select>
 
-    <label for="city">{{'persons.person.personal.city' | translate}}</label>
+    <label for="city"
+           class="mt-2">{{'persons.person.personal.city' | translate}}</label>
     <app-input-select
       id="city"
       [loadData]="loadCities"
@@ -109,5 +107,5 @@
 <dx-button type="default"
            class="mt-2"
            (onClick)="onApply()"
-           text="{{'save' | translate | uppercase}}">
+           text="{{'save' | translate}}">
 </dx-button>

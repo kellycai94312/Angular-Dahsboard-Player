@@ -47,3 +47,21 @@ td, th {
   -ms-flex-align: center !important;
   align-items: center !important;
 }
+
+.cols-padding {
+  margin: 0;
+
+  .row {
+    margin: 0;
+  }
+
+  div[class^="col"] {
+    padding: 0;
+    padding-right: 0.5rem;
+  }
+
+  div[class^="col"]:last-child {
+    padding: 0;
+    padding-right: 0;
+  }
+}
