@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Note} from '../../../../data/remote/model/note/base/note';
-import {NoteQuery} from '../../../../data/remote/rest-api/query/note-query';
-import {NoteType} from '../../../../data/remote/model/note/base/note-type';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {NoteModalComponent} from './note-modal/note-modal.component';
-import {ModalEvent} from '../../../../data/local/modal-event';
+import { Injectable } from '@angular/core';
+import { Note } from '../../../../data/remote/model/note/base/note';
+import { NoteQuery } from '../../../../data/remote/rest-api/query/note-query';
+import { NoteType } from '../../../../data/remote/model/note/base/note-type';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { AppHelper } from '../../../../utils/app-helper';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NoteModalComponent } from './note-modal/note-modal.component';
+import { ModalEvent } from '../../../../data/local/modal-event';
 
 @Injectable()
 export class MyRegionService {
@@ -23,7 +23,7 @@ export class MyRegionService {
     this.pageSize = PropertyConstant.pageSize;
   }
 
-  public async add() {
+  public add = async () => {
     const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});
     ref.componentInstance.modalEvent = ModalEvent[ModalEvent.ADD];
     ref.componentInstance.noteType = this._noteQuery.noteType;
@@ -32,7 +32,7 @@ export class MyRegionService {
       await this.updateListAsync();
       ref.dismiss();
     };
-  }
+  };
 
   public async edit(item: Note) {
     const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});

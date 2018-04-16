@@ -11,10 +11,17 @@ export class TabComponent implements OnInit {
   @Input()
   public tabs: Tab[];
 
+  @Input()
+  public newElement: Function;
+
   constructor() {
   }
 
   ngOnInit() {
+  }
+
+  onClickApply = () => {
+    this.newElement();
   }
 
 }
