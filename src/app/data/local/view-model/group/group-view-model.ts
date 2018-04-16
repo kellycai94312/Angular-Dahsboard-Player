@@ -9,6 +9,7 @@ export class GroupViewModel extends BaseViewModel<Group> {
   initialize() {
     super.initialize();
 
+    this.url = `/group/${this.data.id}`;
     this.imageLogoUrl = this.participantRestApiService.getImageUrl({
       id: this.data.id,
       type: ImageType.LOGO,

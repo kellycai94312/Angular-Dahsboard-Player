@@ -1,0 +1,11 @@
+<div *ngIf="data"
+     [routerLink]="url">
+  <div class="d-flex flex-row align-items-center">
+    <img [src]="imageLogoUrl"
+         [class]="logoSizeClass">
+    <div class="d-flex flex-column ml-2">
+      <h5>{{data.name}}</h5>
+      <p>{{data.groupType.name}}</p>
+    </div>
+  </div>
+</div>

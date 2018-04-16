@@ -36,9 +36,8 @@
       <h5>{{row.data.person?.birthDate | date:'yyyy'}}</h5>
     </td>
     <td>
-      <app-group-item *ngIf="row.data.baseGroup"
-                      [data]="row.data.baseGroup">
-      </app-group-item>
+      <app-group *ngIf="row.data.baseGroup"
+                 [data]="row.data.baseGroup"></app-group>
     </td>
     <td>
       <h5>{{row.data.groupPerson?.userRole?.name}}</h5>

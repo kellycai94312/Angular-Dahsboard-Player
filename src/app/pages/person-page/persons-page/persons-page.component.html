@@ -100,9 +100,8 @@
           <h5>{{item.baseUserRole?.name}}</h5>
         </td>
         <td class="col-sm-3">
-          <app-group-item *ngIf="item.baseGroupViewModel"
-                          [data]="item.baseGroupViewModel.data">
-          </app-group-item>
+          <app-group *ngIf="item.baseGroupViewModel"
+                     [data]="item.baseGroupViewModel.data"></app-group>
         </td>
       </tr>
     </ng-template>
