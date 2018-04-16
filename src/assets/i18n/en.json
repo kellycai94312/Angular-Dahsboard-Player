@@ -228,5 +228,6 @@
   "removeError": "Remove error",
   "gameMustHaveTwoTeams": "Game must have two teams",
   "trainingType" : "Training type",
-  "score": "Score"
+  "score": "Score",
+  "access": "Access"
 }

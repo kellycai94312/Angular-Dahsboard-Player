@@ -229,5 +229,6 @@
   "removeError": "Ошибка удаления",
   "gameMustHaveTwoTeams": "В игре должно быть две команды",
   "trainingType": "Вид события",
-  "score": "Счет"
+  "score": "Счет",
+  "access": "Доступ"
 }
