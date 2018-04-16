@@ -4,60 +4,60 @@
              showClearButton="true">
 </dx-text-box>
 
-<dx-data-grid class="mt-2"
-              [dataSource]="dataSource"
-              rowTemplate="rowTemplateName"
-              columnAutoWidth="true">
-
-  <dxi-column caption="{{ 'person' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'yearBirth' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'group' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'userRole' | translate }}"></dxi-column>
-  <dxi-column caption="{{ 'sportRole' | translate }}"
-              [visible]="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"></dxi-column>
-  <dxi-column caption="{{ 'mentor' | translate }}"></dxi-column>
-  <dxi-column [visible]="groupService.isEditAllow()"></dxi-column>
-
-  <dxo-load-panel [enabled]="true"></dxo-load-panel>
-  <dxo-scrolling mode="infinite"></dxo-scrolling>
-  <dxo-sorting mode="none"></dxo-sorting>
-  <dxo-remote-operations [sorting]="false"
-                         [paging]="true">
-  </dxo-remote-operations>
-
-  <tbody *dxTemplate="let row of 'rowTemplateName'">
-  <tr>
-    <td>
-      <app-person *ngIf="row.data.groupPerson.person"
-                  [person]="row.data.groupPerson.person">
-      </app-person>
-    </td>
-    <td>
-      <h5>{{row.data.person?.birthDate | date:'yyyy'}}</h5>
-    </td>
-    <td>
-      <app-group *ngIf="row.data.baseGroup"
-                 [data]="row.data.baseGroup"></app-group>
-    </td>
-    <td>
-      <h5>{{row.data.groupPerson?.userRole?.name}}</h5>
-    </td>
-
-    <td *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'">
-      <h5>{{row.data.groupPerson?.sportRole?.name}}</h5>
-    </td>
-    <td>
-      <app-person *ngIf="row.data.groupPerson.mentor"
-                  [person]="row.data.groupPerson.mentor.person">
-      </app-person>
-    </td>
-    <td *ngIf="groupService.isEditAllow()">
-      <dx-button type="default"
-                 class="ml-4"
-                 (onClick)="onEdit(row.data)"
-                 text="{{ 'edit' | translate | uppercase}}">
-      </dx-button>
-    </td>
+<table class="table table-hover mt-2">
+  <thead>
+  <tr class="d-flex text-uppercase">
+    <th class="col-3 d-flex align-items-center">{{'person' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'yearBirth' | translate}}</th>
+    <th class="col-2 d-flex align-items-center">{{'group' | translate}}</th>
+    <th class="col-1 d-flex align-items-center">{{'userRole' | translate}}</th>
+    <th *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"
+        class="col-1 d-flex align-items-center">{{'sportRole' | translate}}
+    </th>
+    <th class="{{groupService.isEditAllow()? 'col-3':'col-4'}} d-flex align-items-center">{{'mentor' | translate}}
+    </th>
+    <th *ngIf="groupService.isEditAllow()"
+        class="col-1"></th>
   </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush"
+                     [(query)]="groupPersonQuery"
+                     [getItems]="getItems">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-3">
+          <app-person *ngIf="item.data.person"
+                      [data]="item.data.person"></app-person>
+        </td>
+        <td class="col-1 d-flex align-items-center">
+          <h5>{{item.data.person?.birthDate | date:'yyyy'}}</h5>
+        </td>
+        <td class="col-2 d-flex align-items-center">
+          <app-group *ngIf="item.personViewModel?.baseGroupViewModel?.data"
+                     [data]="item.personViewModel.baseGroupViewModel.data"></app-group>
+        </td>
+        <td class="col-1 d-flex align-items-center">
+          <h5>{{item.data?.userRole?.name}}</h5>
+        </td>
+        <td *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"
+            class="col-1 d-flex align-items-center">
+          <h5>{{item.data?.sportRole?.name}}</h5>
+        </td>
+        <td class="{{groupService.isEditAllow()? 'col-3':'col-4'}} d-flex align-items-center">
+          <app-person *ngIf="item.data?.mentor"
+                      [data]="item.data.mentor.person"></app-person>
+        </td>
+        <td *ngIf="groupService.isEditAllow()"
+            class="col-1 d-flex align-items-center">
+          <dx-button type="default"
+                     class="w-100"
+                     (onClick)="onEdit(item)"
+                     text="{{ 'edit' | translate }}">
+          </dx-button>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
   </tbody>
-</dx-data-grid>
+</table>

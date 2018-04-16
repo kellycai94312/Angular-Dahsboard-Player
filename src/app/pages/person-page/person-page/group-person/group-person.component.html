@@ -6,18 +6,18 @@
     <a routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
       <p>{{data?.group.name}}</p>
     </a>
-        <div *ngIf="isEditAllow">
-          <app-input-select
-            [loadData]="loadData"
-            [(model)]="data"
-            [pageSize]="pageSize"
-            (onChange)="onGroupChange($event)"
-            [getKey]="getKey"
-            [getName]="getName"
-            placeholder="Select a group"
-            ngDefaultControl>
-          </app-input-select>
-        </div>
+    <div *ngIf="isEditAllow">
+      <app-input-select
+        [loadData]="loadData"
+        [(model)]="data"
+        [pageSize]="pageSize"
+        (onChange)="onGroupChange($event)"
+        [getKey]="getKey"
+        [getName]="getName"
+        placeholder="Select a group"
+        ngDefaultControl>
+      </app-input-select>
+    </div>
   </td>
   <td class="col-sm-2">
     <p>{{data?.group.groupType.name}}</p>
@@ -29,7 +29,8 @@
     <p *ngIf="data?.sportRole">{{data.sportRole.sportType.sportTypeEnum}}</p>
   </td>
   <td class="col-sm-2">
-    <app-person *ngIf="data?.mentor" [person]="data.mentor.person"></app-person>
+    <app-person *ngIf="data?.mentor?.person"
+                [data]="data.mentor.person"></app-person>
   </td>
   <td class="col-sm-1" *ngIf="isEditAllow && data">
     <button class="btn btn-outline-danger" (click)="onRemove()">

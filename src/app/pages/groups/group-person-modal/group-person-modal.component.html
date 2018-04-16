@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">{{ 'member' | translate | uppercase}}</h4>
+  <h4 class="modal-title text-uppercase">{{ 'member' | translate }}</h4>
   <button type="button"
           class="close"
           aria-label="Close"
@@ -10,7 +10,8 @@
 <div class="modal-body">
   <div class="row">
     <div class="col">
-      <app-person [person]="groupPerson.person"></app-person>
+      <app-person *ngIf="groupPerson?.person"
+                  [data]="groupPerson.person"></app-person>
     </div>
     <div class="col">
       <app-group *ngIf="baseGroupPerson"
@@ -18,9 +19,8 @@
     </div>
   </div>
 
-  <label class="mt-4">{{'subgroup' | translate }}</label>
-  <dx-select-box class="mt-2"
-                 [items]="subgroups"
+  <label class="mt-3">{{'subgroup' | translate }}</label>
+  <dx-select-box [items]="subgroups"
                  [(value)]="groupPerson.subGroup"
                  displayExpr="name"
                  acceptCustomValue="true"
@@ -29,8 +29,7 @@
   </dx-select-box>
 
   <label class="mt-2">{{'userRole' | translate }}</label>
-  <dx-select-box class="mt-2"
-                 [items]="userRoles"
+  <dx-select-box [items]="userRoles"
                  [(value)]="groupPerson.userRole"
                  displayExpr="name"
                  acceptCustomValue="true"
@@ -39,8 +38,7 @@
                  placeholder="{{'userRole' | translate}}">
   </dx-select-box>
 
-  <div
-    *ngIf="groupPerson.userRole !== null && groupPerson.userRole !== undefined && groupPerson.userRole.userRoleEnum.toString() ==='ATHLETE'">
+  <div *ngIf="groupPerson.userRole && groupPerson.userRole.userRoleEnum.toString() ==='ATHLETE'">
     <label class="mt-2">{{'mentor' | translate}}</label>
     <app-input-select
       [loadData]="loadMentors"
@@ -73,15 +71,15 @@
 <div class="modal-footer">
   <button type="button"
           class="btn btn-success"
-          (click)="onSave()">{{ 'save' | translate | uppercase}}
+          (click)="onSave()">{{ 'save' | translate}}
   </button>
   <button *ngIf="!isOwner"
           type="button"
           class="btn btn-danger"
-          (click)="onRemove()">{{ 'remove' | translate | uppercase}}
+          (click)="onRemove()">{{ 'remove' | translate}}
   </button>
   <button type="button"
           class="btn btn-primary"
-          (click)="onCancel()">{{ 'cancel' | translate | uppercase}}
+          (click)="onCancel()">{{ 'cancel' | translate}}
   </button>
 </div>

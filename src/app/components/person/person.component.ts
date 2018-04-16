@@ -1,30 +1,23 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, Component, OnInit} from '@angular/core';
 import {Person} from '../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
-import {ImageType} from '../../data/remote/model/image-type';
+import {PersonViewModel} from '../../data/local/view-model/person-view-model';
 
 @Component({
   selector: 'app-person',
   templateUrl: './person.component.html',
   styleUrls: ['./person.component.scss']
 })
-export class PersonComponent implements OnInit {
+export class PersonComponent extends PersonViewModel implements OnInit, AfterContentInit {
 
-  @Input()
-  public person: Person;
-
-  public imageLogoUrl: string;
-
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor() {
+    super(new Person());
   }
 
   ngOnInit() {
-    this.imageLogoUrl = this._participantRestApiService.getImageUrl({
-      clazz: 'person',
-      id: this.person.id,
-      type: ImageType.LOGO,
-      full: false
-    });
+  }
+
+  async ngAfterContentInit() {
+    await this.initialize();
   }
 
 }
