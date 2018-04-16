@@ -13,6 +13,7 @@ export class PersonViewModel extends BaseViewModel<Person> {
   async initialize() {
     super.initialize();
 
+    this.url = `/person/${this.data.id}`;
     this.imageLogoUrl = this.participantRestApiService.getImageUrl({
       id: this.data.id,
       type: ImageType.LOGO,

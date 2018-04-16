@@ -29,8 +29,7 @@
   <tr>
     <td>
       <app-person *ngIf="row.data.groupPerson.person"
-                  [person]="row.data.groupPerson.person">
-      </app-person>
+                  [data]="row.data.groupPerson.person"></app-person>
     </td>
     <td>
       <h5>{{row.data.person?.birthDate | date:'yyyy'}}</h5>
@@ -47,9 +46,8 @@
       <h5>{{row.data.groupPerson?.sportRole?.name}}</h5>
     </td>
     <td>
-      <app-person *ngIf="row.data.groupPerson.mentor"
-                  [person]="row.data.groupPerson.mentor.person">
-      </app-person>
+      <app-person *ngIf="row.data?.groupPerson?.mentor"
+                  [data]="row.data.groupPerson.mentor.person"></app-person>
     </td>
     <td *ngIf="groupService.isEditAllow()">
       <dx-button type="default"
