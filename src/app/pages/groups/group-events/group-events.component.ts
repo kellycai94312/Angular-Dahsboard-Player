@@ -1,6 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {Location} from '../../../data/remote/model/location';
-import {AppHelper} from '../../../utils/app-helper';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {TrainingQuery} from '../../../data/remote/rest-api/query/training-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -11,36 +9,37 @@ import {GroupService} from '../group.service';
 import {TrainingGroup} from '../../../data/remote/model/training-group';
 import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
 import {TrainingAccess} from '../../../data/remote/misc/training-access';
+import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 
 @Component({
   selector: 'app-group-events',
   templateUrl: './group-events.component.html',
   styleUrls: ['./group-events.component.scss']
 })
-export class GroupEventsComponent implements OnInit, AfterViewInit {
+export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  public readonly isEditAllow: boolean;
+  public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public pageSize: number;
-  public trainingGroups: TrainingGroup[];
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
 
-  readonly isEditAllow: boolean;
-  private readonly _trainingQuery: TrainingQuery;
-  private readonly _groupId: number;
-
+  public trainingQuery: TrainingQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
-              private _modalService: NgbModal,
-              private _appHelper: AppHelper) {
+              private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = this._groupService.isEditAllow();
-    this._groupId = this._groupService.getGroup().id;
-    this._trainingQuery = new TrainingQuery();
-    this._trainingQuery.from = 0;
-    this._trainingQuery.count = this.pageSize;
-    this._trainingQuery.groupId = this._groupId;
+
+    this.trainingQuery = new TrainingQuery();
+    this.trainingQuery.name = '';
+    this.trainingQuery.from = 0;
+    this.trainingQuery.count = this.pageSize;
+    this.trainingQuery.groupId = this._groupService.getGroup().id;
   }
 
   ngOnInit() {
@@ -48,49 +47,53 @@ export class GroupEventsComponent implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._trainingQuery.name = value;
-        this.updateListAsync();
+      .subscribe(async value => {
+        this.trainingQuery.name = value;
+        await this.updateItems();
       });
   }
 
+  ngOnDestroy(): void {
+    this.searchDxTextBoxComponent.textChange.unsubscribe();
+  }
+
+  //#region Filter
+
   async onDateFromChange(event: any) {
     if (event.value) {
-      this._trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
     } else {
-      delete this._trainingQuery.dateFrom;
+      delete this.trainingQuery.dateFrom;
     }
-    await this.updateListAsync();
+    await this.updateItems();
   }
 
   async onDateToChange(event: any) {
     if (event.value) {
-      this._trainingQuery.dateTo = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateTo = event.value.toISOString().split('T')[0];
     } else {
-      delete this._trainingQuery.dateTo;
+      delete this.trainingQuery.dateTo;
     }
-    await this.updateListAsync();
+    await this.updateItems();
   }
 
   async onLocationChange(e: any) {
     if (e.current) {
-      this._trainingQuery.locationId = e.current.id;
+      this.trainingQuery.locationId = e.current.id;
     } else {
-      delete this._trainingQuery.locationId;
+      delete this.trainingQuery.locationId;
     }
-    await this.updateListAsync();
+    await this.updateItems();
   }
 
-  async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
+  //#endregion
 
   async editAccess(item: TrainingGroup) {
     const ref = this._modalService.open(GroupEventModalComponent, {size: 'lg'});
     ref.componentInstance.trainingGroup = Object.assign({}, item);
     ref.componentInstance.onSave = async (access: TrainingAccess) => {
       await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
-        groupId: this._groupId,
+        groupId: this.trainingQuery.groupId,
         trainingId: item.baseTraining.id
       });
       item.access = access;
@@ -98,10 +101,12 @@ export class GroupEventsComponent implements OnInit, AfterViewInit {
     };
   }
 
-  private async updateListAsync(from: number = 0) {
-    this._trainingQuery.from = from;
-    const container = await this._participantRestApiService.getGroupTrainings(this._trainingQuery);
-    this.trainingGroups = this._appHelper.pushItemsInList(from, this.trainingGroups, container);
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    return await this._participantRestApiService.getGroupTrainings(pageQuery);
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
   }
 
 }
