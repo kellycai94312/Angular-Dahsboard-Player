@@ -1,4 +1,4 @@
-@import "../../../../variables";
+@import "../../../styles/variables";
 @import "~bootstrap/scss/_functions";
 @import "~bootstrap/scss/_variables";
 
@@ -52,30 +52,6 @@ a {
     padding-right: 0;
     p {
       display: none;
-    }
-  }
-
-}
-
-.logo-change {
-  position: absolute;
-  width: $logo-size-xl;
-  height: $logo-size-xl/2;
-  margin-top: $logo-size-xl/2;
-  overflow: hidden;
-  transition: all .05s;
-
-  &:hover {
-    margin-top: 0;
-    height: $logo-size-xl;
-  }
-
-  @media (max-width: max-width-sm()) {
-    width: $logo-size-lg;
-    height: $logo-size-lg/2;
-    margin-top: $logo-size-lg/2;
-    &:hover {
-      height: $logo-size-lg;
     }
   }
 

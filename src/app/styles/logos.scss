@@ -1,0 +1,230 @@
+@import "variables";
+
+$logo-sm-border-radius: 2px;
+$logo-lg-border-radius: 2px;
+$logo-xl-border-radius: 3px;
+
+$logo-change-transition: .5s;
+$logo-change-content-background: rgba(0, 0, 0, .7);
+$logo-change-content-background-hover: rgba(0, 0, 0, .8);
+
+.logo-sm {
+  width: $logo-size-sm;
+  height: $logo-size-sm;
+  min-width: $logo-size-sm;
+  min-height: $logo-size-sm;
+  border-radius: $logo-sm-border-radius;
+}
+
+.logo-lg {
+  width: $logo-size-lg;
+  height: $logo-size-lg;
+  min-width: $logo-size-lg;
+  min-height: $logo-size-lg;
+  border-radius: $logo-lg-border-radius;
+}
+
+.logo-xl {
+  width: $logo-size-xl;
+  height: $logo-size-xl;
+  min-width: $logo-size-xl;
+  min-height: $logo-size-xl;
+  border-radius: $logo-xl-border-radius;
+  transition: all $logo-change-transition;
+
+  @media (max-width: max-width-sm()) {
+    width: $logo-size-lg !important;
+    height: $logo-size-lg !important;
+    min-width: $logo-size-lg !important;
+    min-height: $logo-size-lg !important;
+    border-radius: $logo-lg-border-radius;
+  }
+
+}
+
+.circle {
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  background-size: cover;
+  background-position: center center;
+}
+
+.logo-xl-circle {
+  @extend .logo-xl;
+  @extend .circle;
+  border: $logo-border-width solid $light-blue;
+}
+
+.logo-lg-circle {
+  @extend .logo-lg;
+  @extend .circle;
+  border: $logo-border-width solid $light-blue;
+}
+
+.logo-sm-circle {
+  @extend .logo-sm;
+  @extend .circle;
+}
+
+.logo-xl-change {
+  position: absolute;
+  width: $logo-size-xl;
+  height: $logo-size-xl/2;
+  margin-top: $logo-size-xl/2;
+  overflow: hidden;
+  transition: all $logo-change-transition;
+  border-bottom-right-radius: $logo-xl-border-radius;
+  border-bottom-left-radius: $logo-xl-border-radius;
+
+  &:hover {
+    margin-top: 0;
+    height: $logo-size-xl;
+    border-radius: $logo-xl-border-radius;
+    .logo-content {
+      background-color: $logo-change-content-background-hover;
+      height: $logo-size-xl;
+      margin-top: 0;
+      line-height: $logo-size-xl;
+      input[type=file] {
+        display: block;
+      }
+      > p {
+        display: block;
+        font-size: 12px;
+      }
+      > i {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: max-width-sm()) {
+    width: $logo-size-lg;
+    height: $logo-size-lg/2;
+    margin-top: $logo-size-lg/2;
+    border-bottom-right-radius: $logo-lg-border-radius;
+    border-bottom-left-radius: $logo-lg-border-radius;
+    &:hover {
+      height: $logo-size-lg;
+      border-radius: $logo-lg-border-radius;
+      .logo-content {
+        height: $logo-size-lg;
+        line-height: $logo-size-lg;
+      }
+    }
+  }
+
+  .logo-content {
+    text-align: center;
+    background-color: $logo-change-content-background;
+    $change-height: $logo-size-xl/2;
+    margin-top: $change-height*.5;
+    height: $change-height*.5;
+    transition: all $logo-change-transition;
+    > p {
+      display: none;
+    }
+    > i {
+      display: block;
+      line-height: $change-height*.5;
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: max-width-sm()) {
+    .logo-content {
+      $change-height: $logo-size-lg/2;
+      margin-top: $change-height*.3;
+      height: $change-height*.7;
+      > p {
+        font-size: 8px !important;
+      }
+      > i {
+        font-size: 14px;
+      }
+    }
+  }
+
+}
+
+.logo-xl-circle-change {
+  position: absolute;
+  margin-left: $logo-border-width;
+  width: $logo-size-xl - $logo-border-width*2;
+  height: $logo-size-xl/2 - $logo-border-width;
+  margin-top: $logo-size-xl/2;
+  border-bottom-left-radius: $logo-size-xl - $logo-border-width;
+  border-bottom-right-radius: $logo-size-xl - $logo-border-width;
+  overflow: hidden;
+  transition: all $logo-change-transition;
+
+  &:hover {
+    margin-top: $logo-border-width;
+    height: $logo-size-xl - $logo-border-width * 2;
+    border-radius: $logo-size-xl - $logo-border-width;
+    .logo-content {
+      background-color: $logo-change-content-background-hover;
+      height: $logo-size-xl;
+      margin-top: 0;
+      line-height: $logo-size-xl;
+      input[type=file] {
+        display: block;
+      }
+      > p {
+        display: block;
+        font-size: 12px;
+      }
+      > i {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: max-width-sm()) {
+    width: $logo-size-lg - $logo-border-width * 2;
+    height: $logo-size-lg/2 - $logo-border-width;
+    margin-top: $logo-size-lg/2;
+    border-bottom-left-radius: $logo-size-lg - $logo-border-width;
+    border-bottom-right-radius: $logo-size-lg - $logo-border-width;
+    &:hover {
+      height: $logo-size-lg - $logo-border-width*2;
+      border-radius: $logo-size-lg - $logo-border-width;
+      .logo-content {
+        height: $logo-size-lg;
+        line-height: $logo-size-lg;
+      }
+    }
+  }
+
+  .logo-content {
+    text-align: center;
+    background-color: $logo-change-content-background;
+    $change-height: $logo-size-xl/2;
+    margin-top: $change-height*.5;
+    height: $change-height*.5;
+    transition: all $logo-change-transition;
+    > p {
+      display: none;
+    }
+    > i {
+      display: block;
+      line-height: $change-height*.5;
+      font-size: 20px;
+    }
+  }
+
+  @media (max-width: max-width-sm()) {
+    .logo-content {
+      $change-height: $logo-size-lg/2;
+      margin-top: $change-height*.3;
+      height: $change-height*.7;
+      > p {
+        font-size: 8px !important;
+      }
+      > i {
+        font-size: 14px;
+      }
+    }
+  }
+
+}

@@ -5,7 +5,7 @@
       <div class="img-fluid logo-xl-circle"
            [ngStyle]="{'background-image': 'url('+ logo +')'}">
       </div>
-      <div class="logo-change" *ngIf="isEditAllow">
+      <div class="logo-xl-circle-change" *ngIf="isEditAllow">
         <div class="logo-content">
           <input type="file"
                  (change)="onLogoChange($event)" accept="image/*">

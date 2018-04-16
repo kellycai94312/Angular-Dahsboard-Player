@@ -1,5 +1,5 @@
-@import "~bootstrap/scss/_functions";
-@import "~bootstrap/scss/_variables";
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
 
 /* colors */
 $light-blue: #0091F1;
@@ -19,6 +19,7 @@ $input-height-sm: 30px;
 $font-size: 14px;
 
 $odd-item-color: #eee;
+$max-width-content: 400px;
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');

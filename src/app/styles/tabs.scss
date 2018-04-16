@@ -1,0 +1,18 @@
+.nav-tabs {
+  @extend .pt-2;
+  $active-color: #007bff;
+  line-height: 1;
+  a.nav-link {
+    padding: 8px 12px;
+    border-width: thin;
+    &.active {
+      color: $active-color;
+      border-color: $active-color !important;
+      border-bottom-color: transparent !important;
+    }
+    &:not(.active) {
+      color: #495057;
+      border-bottom-color: $active-color !important;
+    }
+  }
+}

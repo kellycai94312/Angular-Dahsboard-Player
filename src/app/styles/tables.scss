@@ -1,0 +1,35 @@
+@import "variables";
+
+.table-header {
+  text-align: center;
+  text-transform: uppercase;
+  color: #999;
+}
+
+.table {
+  tbody tr:nth-of-type(odd) {
+    background-color: $odd-item-color;
+  }
+  tbody tr {
+    cursor: pointer;
+    p, h1, h2, h3, h4, h5, h6 {
+      color: $light-blue !important;
+    }
+    &:hover {
+      background-color: darken($odd-item-color, 3%);
+      p, h1, h2, h3, h4, h5, h6 {
+        color: darken($light-blue, 10%) !important;
+      }
+    }
+  }
+}
+
+.list-group-item {
+  &:nth-child(odd) {
+    background-color: $odd-item-color;
+  }
+
+  &:hover {
+    background-color: $odd-item-color;
+  }
+}
