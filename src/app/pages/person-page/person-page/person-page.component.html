@@ -53,7 +53,7 @@
       </div>
     </div>
     <div *ngIf="isEditAllow"
-         class="ml-1 align-self-center">
+         class="ml-2 align-self-center">
       <button class="btn btn-default input-height-sm"
               (click)="editUserRoles()">
         <i class="fa fa-pencil-square-o"></i>
@@ -62,7 +62,7 @@
   </div>
 
   <!-- sport types -->
-  <div class="d-flex flex-row mt-1">
+  <div class="d-flex flex-row my-2">
     <div class="align-self-center">
       <p>{{'persons.person.sportTypes.section' | translate | uppercase}}</p>
     </div>
@@ -82,7 +82,7 @@
       </div>
     </div>
     <div *ngIf="isEditAllow"
-         class="ml-1 align-self-center">
+         class="ml-2 align-self-center">
       <button class="btn btn-default input-height-sm"
               (click)="editSportTypes()">
         <i class="fa fa-pencil-square-o"></i>
@@ -91,18 +91,6 @@
   </div>
 
   <!-- tabs -->
-  <ul class="nav nav-tabs">
-    <li class="nav-item" *ngFor="let tab of tabs">
-      <a class="nav-link"
-         routerLink="{{tab.route}}"
-         [queryParams]="queryParams"
-         routerLinkActive="active"
-         *ngIf="isTabOpen(tab)">
-        {{tab.name | translate | uppercase }}
-      </a>
-    </li>
-  </ul>
-  <div class="pt-2">
-    <router-outlet></router-outlet>
-  </div>
+  <app-tab [tabs]="tabs"
+           [visible]="isTabVisible"></app-tab>
 </div>

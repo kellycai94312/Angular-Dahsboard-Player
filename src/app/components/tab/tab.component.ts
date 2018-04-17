@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Tab } from '../../data/local/tab';
+import {Component, Input, OnInit} from '@angular/core';
+import {Tab} from '../../data/local/tab';
 
 @Component({
   selector: 'app-tab',
@@ -14,6 +14,9 @@ export class TabComponent implements OnInit {
   @Input()
   public newElement: Function;
 
+  @Input()
+  public visible: Function;
+
   constructor() {
   }
 
@@ -22,6 +25,13 @@ export class TabComponent implements OnInit {
 
   onClickApply = () => {
     this.newElement();
+  };
+
+  public onCheckingVisible(item: Tab): boolean {
+    if (this.visible) {
+      return this.visible(item);
+    }
+    return true;
   }
 
 }
