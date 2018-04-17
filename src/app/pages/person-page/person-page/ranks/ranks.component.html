@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-sm mt-1">
+<table class="table table-bordered table-hover table-sm mt-2">
   <thead>
   <tr class="d-flex">
     <th class="col-2">{{ 'rank' | translate }}</th>
@@ -6,26 +6,31 @@
     <th class="col-1">{{ 'date' | translate }}</th>
     <th class="col-3">{{ 'orderNumber' | translate }}</th>
     <th class="col-2">{{ 'certificateNumber' | translate }}</th>
-    <th class="col-1" *ngIf="isEditAllow"></th>
+    <th *ngIf="isEditAllow"
+        class="col-1"></th>
   </tr>
   </thead>
   <tbody>
-      <tr class="d-flex" *ngFor="let personRank of personRanks; let index = index">
-        <td class="col-sm-2">{{personRank.rank.name}}</td>
-        <td [ngClass]="{'col-sm-3' : isEditAllow, 'col-sm-4' : !isEditAllow}">{{personRank.assignee}}</td>
-        <td class="col-sm-1">{{personRank.date | date: 'dd.MM.yyyy'}}</td>
-        <td class="col-sm-3">{{personRank.orderNumber}}</td>
-        <td class="col-sm-2">{{personRank.certificateNumber}}</td>
-        <td class="col-sm-1" *ngIf="isEditAllow">
-          <div class="text-center">
-            <button class="btn btn-outline-primary" (click)="editRank(index)">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-outline-warning" (click)="removeRank(index)">
-              <i class="fa fa-eraser"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
+  <tr *ngFor="let personRank of personRanks; let index = index"
+      class="d-flex">
+    <td class="col-2">{{personRank.rank.name}}</td>
+    <td [ngClass]="{'col-3' : isEditAllow, 'col-4' : !isEditAllow}">{{personRank.assignee}}</td>
+    <td class="col-1">{{personRank.date | date: 'dd.MM.yyyy'}}</td>
+    <td class="col-3">{{personRank.orderNumber}}</td>
+    <td class="col-2">{{personRank.certificateNumber}}</td>
+    <td *ngIf="isEditAllow"
+        class="col-1">
+      <div class="text-center">
+        <button class="btn btn-outline-primary"
+                (click)="editRank(index)">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button class="btn btn-outline-warning"
+                (click)="removeRank(index)">
+          <i class="fa fa-eraser"></i>
+        </button>
+      </div>
+    </td>
+  </tr>
   </tbody>
 </table>
