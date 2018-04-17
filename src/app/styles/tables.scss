@@ -7,6 +7,8 @@
 }
 
 .table {
+  margin: 0;
+
   tbody tr:nth-of-type(odd) {
     background-color: $odd-item-color;
   }
@@ -36,16 +38,13 @@
 
 thead > tr {
   text-transform: uppercase;
-  color: #adadad;
+  color: $light-blue;
 }
 
 td, th {
-  display: -webkit-box !important;
-  display: -ms-flexbox !important;
-  display: flex !important;
-  -webkit-box-align: center !important;
-  -ms-flex-align: center !important;
-  align-items: center !important;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem !important;
 }
 
 .cols-padding {
@@ -56,12 +55,10 @@ td, th {
   }
 
   div[class^="col"] {
-    padding: 0;
-    padding-right: 0.5rem;
+    padding: 0 0.5rem 0 0;
   }
 
   div[class^="col"]:last-child {
     padding: 0;
-    padding-right: 0;
   }
 }

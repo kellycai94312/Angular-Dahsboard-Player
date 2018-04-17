@@ -1,20 +1,21 @@
-<app-infinite-list [items]="groupPersons"
-                   (nextPage)="onNextPage($event)">
+<app-infinite-list [query]="groupPersonQuery"
+                   [getItems]="getItems"
+                   class="list-group-flush">
   <ng-template let-item>
-    <div class="d-flex flex-row">
-      <div>
-        <app-person [data]="item.person"></app-person>
-      </div>
-      <div class="align-self-center ml-2">
-        <div class="d-flex flex-column">
+    <div class="list-group-item cols-padding px-2">
+      <div class="row">
+        <div class="col-11">
+          <app-person [data]="item.person"></app-person>
+        </div>
+        <div class="col-1 d-flex flex-column">
           <dx-button type="success"
                      (onClick)="onAdd(item)"
-                     text="{{ 'add' | translate | uppercase}}">
+                     text="{{ 'add' | translate }}">
           </dx-button>
           <dx-button type="danger"
                      class="mt-2"
                      (onClick)="onRemove(item)"
-                     text="{{ 'remove' | translate | uppercase}}">
+                     text="{{ 'remove' | translate }}">
           </dx-button>
         </div>
       </div>
