@@ -1,6 +1,6 @@
-<div *ngIf="group!=null">
+<div *ngIf="group">
   <!-- group head -->
-  <div class="d-flex flex-row">
+  <div class="d-flex flex-row mb-2">
     <img class="logo-xl" [src]="imageLogoUrl">
     <div class="logo-xl-change" *ngIf="groupService.isEditAllow()">
       <div class="logo-content">
