@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { Tab } from '../../../../data/local/tab';
-import { TranslateService } from '@ngx-translate/core';
-import { MyRegionService } from "./my-region.service";
+import {Component, OnInit} from '@angular/core';
+import {Tab} from '../../../../data/local/tab';
+import {MyRegionService} from './my-region.service';
 
 @Component({
   selector: 'app-my-region',
@@ -12,28 +11,26 @@ export class MyRegionComponent implements OnInit {
 
   public tabs: Tab[];
 
-  constructor(private _translateService: TranslateService,
-              public myRegionService: MyRegionService) {
+  constructor(public myRegionService: MyRegionService) {
   }
 
   async ngOnInit() {
     this.tabs = [];
 
     const schoolTab = new Tab();
-    schoolTab.name = await this._translateService.get('persons.person.myRegion.school.section').toPromise();
+    schoolTab.nameKey = 'persons.person.myRegion.school.section';
     schoolTab.routerLink = 'school';
     this.tabs.push(schoolTab);
 
     const trainerTab = new Tab();
-    trainerTab.name = await this._translateService.get('persons.person.myRegion.trainer.section').toPromise();
+    trainerTab.nameKey = 'persons.person.myRegion.trainer.section';
     trainerTab.routerLink = 'trainer';
     this.tabs.push(trainerTab);
 
     const agentTab = new Tab();
-    agentTab.name = await this._translateService.get('persons.person.myRegion.agent.section').toPromise();
+    agentTab.nameKey = 'persons.person.myRegion.agent.section';
     agentTab.routerLink = 'agent';
     this.tabs.push(agentTab);
-
   }
 
 }

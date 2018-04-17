@@ -1,4 +1,4 @@
-<div class="row mt-2">
+<div class="row mt-2 cols-padding">
   <div class="col">
     <dx-text-box #name
                  placeholder="{{'fullName' | translate}}"
@@ -40,7 +40,7 @@
     </dx-text-box>
   </div>
 </div>
-<table class="table table-bordered table-hover table-sm mt-1">
+<table class="table table-bordered table-hover table-sm mt-2">
   <thead>
   <tr class="d-flex">
     <th class="col-4">{{ 'name' | translate }}</th>
@@ -56,12 +56,12 @@
                      (nextPage)="myRegionService.onNextPage($event)">
     <ng-template let-item>
       <tr class="d-flex">
-        <td class="col-sm-4">{{item?.name}}</td>
-        <td class="col-sm-2">{{item?.phone}}</td>
-        <td class="col-sm-2">{{item?.email}}</td>
-        <td class="col-sm-2">{{item?.club}}</td>
-        <td class="col-sm-1">{{item?.age}}</td>
-        <td class="col-sm-1">
+        <td class="col-4">{{item?.name}}</td>
+        <td class="col-2">{{item?.phone}}</td>
+        <td class="col-2">{{item?.email}}</td>
+        <td class="col-2">{{item?.club}}</td>
+        <td class="col-1">{{item?.age}}</td>
+        <td class="col-1">
           <div class="text-center">
             <button class="btn btn-outline-primary" (click)="myRegionService.edit(item)">
               <i class="fa fa-edit"></i>
