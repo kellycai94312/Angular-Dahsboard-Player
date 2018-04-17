@@ -77,7 +77,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
   public onEdit(groupPersonViewModel: GroupPersonViewModel) {
     const modalRef = this._modalService.open(GroupPersonModalComponent, {size: 'lg'});
     modalRef.componentInstance.groupPerson = groupPersonViewModel.data;
-    modalRef.componentInstance.onChange = async () => this.updateItems();
+    modalRef.componentInstance.onChangeGroupPerson = async () => this.updateItems();
   }
 
   public getItems: Function = async (pageQuery: PageQuery) => {
