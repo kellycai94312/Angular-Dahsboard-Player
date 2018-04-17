@@ -1,6 +1,6 @@
-<div class="row">
+<div class="row cols-padding">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
       <dx-text-box id="lastName"
                    [(value)]="person.lastName"
@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
       <dx-text-box id="firstName"
                    [(value)]="person.firstName"
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label for="middleName">{{'persons.person.personal.middleName' | translate}}</label>
       <dx-text-box id="middleName"
                    [(value)]="person.patronymic"
@@ -34,9 +34,9 @@
     </div>
   </div>
 </div>
-<div class="row">
+<div class="row cols-padding">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label for="birthDate">{{'persons.person.personal.birthDate' | translate}}</label>
       <dx-date-box id="birthDate"
                    [(value)]="person.birthDate"
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
       <dx-select-box id="sex"
                      [items]="sexEnumValues"
@@ -63,7 +63,7 @@
     </div>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group p-1">
+    <div class="form-group">
       <label>{{'baseUserRole' | translate}}</label>
       <dx-select-box [items]="userRoles"
                      [(value)]="baseUserRole"
@@ -75,54 +75,52 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="person.address">
+<div *ngIf="person.address"
+     class="row cols-padding">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="country">{{'persons.person.personal.country' | translate}}</label>
-    <app-input-select
-      id="country"
-      [loadData]="loadCountries"
-      [(model)]="person.address.country"
-      [pageSize]="pageSize"
-      [disabled]="!isEditAllow"
-      (onChange)="onCountryChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a country"
-      ngDefaultControl>
+    <app-input-select id="country"
+                      [loadData]="loadCountries"
+                      [(model)]="person.address.country"
+                      [pageSize]="pageSize"
+                      [disabled]="!isEditAllow"
+                      (onChange)="onCountryChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a country"
+                      ngDefaultControl>
     </app-input-select>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="region">{{'persons.person.personal.region' | translate}}</label>
-    <app-input-select
-      id="region"
-      [loadData]="loadRegions"
-      [(model)]="person.address.region"
-      [pageSize]="pageSize"
-      [disabled]="!isEditAllow || person.address.country == null"
-      (onChange)="onRegionChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a region"
-      ngDefaultControl>
+    <app-input-select id="region"
+                      [loadData]="loadRegions"
+                      [(model)]="person.address.region"
+                      [pageSize]="pageSize"
+                      [disabled]="!isEditAllow || person.address.country == null"
+                      (onChange)="onRegionChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a region"
+                      ngDefaultControl>
     </app-input-select>
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <label for="city">{{'persons.person.personal.city' | translate}}</label>
-    <app-input-select
-      id="city"
-      [loadData]="loadCities"
-      [(model)]="person.address.city"
-      [pageSize]="pageSize"
-      [disabled]="!isEditAllow || person.address.region == null"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a city"
-      ngDefaultControl>
+    <app-input-select id="city"
+                      [loadData]="loadCities"
+                      [(model)]="person.address.city"
+                      [pageSize]="pageSize"
+                      [disabled]="!isEditAllow || person.address.region == null"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a city"
+                      ngDefaultControl>
     </app-input-select>
   </div>
 </div>
 <button *ngIf="isEditAllow"
         type="button"
-        class="btn btn-outline-success mt-3"
+        class="btn btn-outline-success mt-2"
         (click)="savePersonal()">{{'persons.person.save' | translate}}
 </button>

@@ -1,14 +1,15 @@
-<div class="row"
-     *ngFor="let pa of anthropometry">
+<div *ngFor="let item of anthropometry"
+     class="row">
   <div class="col-xl-6 col-lg-6 col-md-10 col-sm-12">
-    <div class="form-group p-1 mb-0">
-      <label>{{pa.measure.measureParameter.name}}</label>
-      <app-measure-input [anthropometry]="pa" [disabled]="!isEditAllow"></app-measure-input>
+    <div class="form-group mb-2">
+      <label>{{item.measure.measureParameter.name}}</label>
+      <app-measure-input [anthropometry]="item"
+                         [disabled]="!isEditAllow"></app-measure-input>
     </div>
   </div>
 </div>
 <button *ngIf="isEditAllow"
         type="button"
-        class="btn btn-outline-success mt-3"
-        (click)="save()">{{'persons.person.save' | translate}}
+        class="btn btn-success"
+        (click)="onSave()">{{'persons.person.save' | translate}}
 </button>

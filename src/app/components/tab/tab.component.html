@@ -1,8 +1,8 @@
 <div *ngIf="tabs">
   <ul class="nav nav-tabs">
-    <li class="nav-item"
-        *ngFor="let tab of tabs">
-      <a *ngIf="tab"
+    <li *ngFor="let tab of tabs"
+        class="nav-item">
+      <a *ngIf="tab && onCheckingVisible(tab)"
          class="nav-link text-uppercase"
          routerLink="{{tab.routerLink}}"
          routerLinkActive="active"
@@ -10,7 +10,8 @@
         {{tab.name ? (tab.name) : (tab.nameKey | translate)}}
       </a>
     </li>
-    <li class="new-element" *ngIf="newElement != null">
+    <li *ngIf="newElement"
+        class="new-element">
       <app-btn-add [onClick]="onClickApply"></app-btn-add>
     </li>
   </ul>

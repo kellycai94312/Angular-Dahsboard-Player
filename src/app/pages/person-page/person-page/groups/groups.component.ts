@@ -1,108 +1,104 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {AppHelper} from '../../../../utils/app-helper';
 import {PersonService} from '../person.service';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
+import {ISubscription} from 'rxjs/src/Subscription';
 
 @Component({
   selector: 'app-groups',
   templateUrl: './groups.component.html',
   styleUrls: ['./groups.component.scss']
 })
-export class GroupsComponent implements OnInit {
+export class GroupsComponent implements OnInit, OnDestroy {
+
+  public readonly isEditAllow: boolean;
+  public readonly pageSize: number;
+
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
+
   public groupTypes: GroupType[];
-
-  public groupPersons: GroupPerson[];
   public newGroup: GroupPerson;
-  public pageSize = PropertyConstant.pageSize;
-  readonly isEditAllow;
-  private _searchText = '';
+  public groupQuery: GroupQuery;
 
-  private _selectedGroupType: GroupType;
   public selectedPublicUserRole: UserRole;
   public selectedBaseGroup: GroupPerson;
-  private readonly _groupQuery: GroupQuery;
+
+  private readonly userRoleSelectSubscription: ISubscription;
+  private readonly baseGroupSelectSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _participantRestApiService: ParticipantRestApiService) {
     this.isEditAllow = _personService.shared.isEditAllow;
-    this.groupPersons = [];
+    this.pageSize = PropertyConstant.pageSize;
 
-    this._groupQuery = new GroupQuery();
-    this._groupQuery.from = 0;
-    this._groupQuery.count = PropertyConstant.pageSize;
-    this._groupQuery.id = _personService.shared.person.id;
-    this._personService.userRoleSelectEmitted$.subscribe(userRole => {
+    this.groupQuery = new GroupQuery();
+    this.groupQuery.from = 0;
+    this.groupQuery.count = PropertyConstant.pageSize;
+    this.groupQuery.id = _personService.shared.person.id;
+
+    this.userRoleSelectSubscription = this._personService.userRoleSelectEmitted$.subscribe(async userRole => {
       this.selectedPublicUserRole = userRole;
-      this.updateListAsync();
+
+      if (userRole) {
+        this.groupQuery.userRoleId = userRole.id;
+      } else {
+        if (this._personService.userRoleSelectDefault) {
+          this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
+          this.groupQuery.userRoleId = this._personService.userRoleSelectDefault.id;
+        } else {
+          delete this.groupQuery.userRoleId;
+        }
+      }
+
+      await this.updateItems();
     });
-    this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
+    this.baseGroupSelectSubscription = this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
       this.selectedBaseGroup = groupPerson;
     });
   }
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    if (this._personService.userRoleSelectDefault) {
-      this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
-      this.updateListAsync();
-    }
     this.selectedBaseGroup = this._personService.baseGroupSelectDefault;
   }
 
-  async onGroupTypeChanged(groupType: GroupType) {
-    this._selectedGroupType = groupType;
-    await this.updateListAsync();
+  ngOnDestroy(): void {
+    this.userRoleSelectSubscription.unsubscribe();
+    this.baseGroupSelectSubscription.unsubscribe();
   }
 
-  async onNameChanged(name: string) {
-    this._searchText = name;
-    await this.updateListAsync();
+  //#region Filter
+
+  public async onNameChanged(name: string) {
+    this.groupQuery.name = name;
+    await this.updateItems();
   }
 
-
-  async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
-
-  async updateListAsync(from: number = 0) {
-    if (this.selectedPublicUserRole === null) {
-      this.groupPersons = [];
-      return;
-    }
-
-    this._groupQuery.from = from;
-    this._groupQuery.name = this._searchText;
-
-    if (this._selectedGroupType != null) {
-      this._groupQuery.groupTypeId = this._selectedGroupType.id;
+  public async onGroupTypeChanged(value: GroupType) {
+    if (value) {
+      this.groupQuery.groupTypeId = value.id;
     } else {
-      delete this._groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeId;
     }
-
-    if (this.selectedPublicUserRole != null) {
-      this._groupQuery.userRoleId = this.selectedPublicUserRole.id;
-    } else {
-      delete this._groupQuery.userRoleId;
-    }
-
-    const pageContainer = await this._participantRestApiService.getPersonGroups(this._groupQuery);
-    this.groupPersons = this._appHelper.pushItemsInList(from, this.groupPersons, pageContainer);
+    await this.updateItems();
   }
 
-  async onChange(data: GroupPerson) {
-    const index = this.groupPersons.indexOf(data);
+  //#endregion
+
+  public async onChangeGroupPerson(groupPerson: GroupPerson) {
+    const index = this.infiniteListComponent.items.indexOf(groupPerson);
     if (index === -1) {
-      this.selectedBaseGroup = data;
+      this.selectedBaseGroup = groupPerson;
       this._personService.emitBaseGroupChange(this.selectedBaseGroup);
     } else {
-      this.groupPersons.splice(index, 1);
+      this.infiniteListComponent.items.splice(index, 1);
     }
   }
 
@@ -117,21 +113,31 @@ export class GroupsComponent implements OnInit {
     });
   };
 
-  getKey(item: GroupPerson) {
+  public getKey(item: GroupPerson) {
     return item.id;
   }
 
-  getName(item: GroupPerson) {
+  public getName(item: GroupPerson) {
     return item.group.name;
   }
 
-  async addGroup() {
+  public async addGroup() {
     await this._participantRestApiService.addPublicRole({
       id: this.newGroup.group.id,
       userRoleId: this.selectedPublicUserRole.id
     });
-    this.groupPersons.push(this.newGroup);
+    this.infiniteListComponent.items.push(this.newGroup);
     this.newGroup = null;
+  }
+
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    return await this._participantRestApiService.getPersonGroups(pageQuery);
+  };
+
+  private async updateItems() {
+    if (this.infiniteListComponent) {
+      await this.infiniteListComponent.update(true);
+    }
   }
 
 }

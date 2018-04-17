@@ -1,39 +1,40 @@
 <tr class="d-flex">
-  <td class="col-sm-1">
+  <td class="col-1">
     <img class="logo-lg" *ngIf="data && imageUrl" [src]="imageUrl"/>
   </td>
-  <td [ngClass]="{'col-sm-2' : isEditAllow, 'col-sm-3' : !isEditAllow}">
+  <td [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">
     <a routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
       <p>{{data?.group.name}}</p>
     </a>
     <div *ngIf="isEditAllow">
-      <app-input-select
-        [loadData]="loadData"
-        [(model)]="data"
-        [pageSize]="pageSize"
-        (onChange)="onGroupChange($event)"
-        [getKey]="getKey"
-        [getName]="getName"
-        placeholder="Select a group"
-        ngDefaultControl>
+      <app-input-select [loadData]="loadData"
+                        [(model)]="data"
+                        [pageSize]="pageSize"
+                        (onChange)="onGroupChange($event)"
+                        [getKey]="getKey"
+                        [getName]="getName"
+                        placeholder="Select a group"
+                        ngDefaultControl>
       </app-input-select>
     </div>
   </td>
-  <td class="col-sm-2">
+  <td class="col-2">
     <p>{{data?.group.groupType.name}}</p>
   </td>
-  <td class="col-sm-2">
+  <td class="col-2">
     <p *ngIf="data?.sportRole">{{data.sportRole.name}}</p>
   </td>
-  <td class="col-sm-2">
+  <td class="col-2">
     <p *ngIf="data?.sportRole">{{data.sportRole.sportType.sportTypeEnum}}</p>
   </td>
-  <td class="col-sm-2">
+  <td class="col-2">
     <app-person *ngIf="data?.mentor?.person"
                 [data]="data.mentor.person"></app-person>
   </td>
-  <td class="col-sm-1" *ngIf="isEditAllow && data">
-    <button class="btn btn-outline-danger" (click)="onRemove()">
+  <td *ngIf="isEditAllow && data"
+      class="col-1">
+    <button class="btn btn-outline-danger"
+            (click)="onRemove()">
       <i class="fa fa-times"></i>
     </button>
   </td>

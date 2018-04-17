@@ -1,14 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { PersonService } from '../person.service';
-import { Person } from '../../../../data/remote/model/person';
-import { SexEnum } from '../../../../data/remote/misc/sex-enum';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { Address } from '../../../../data/remote/model/address';
-import { ProfileService } from '../../../../shared/profile.service';
-import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
-import { NamedObject } from '../../../../data/remote/base/named-object';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { UserRole } from '../../../../data/remote/model/user-role';
+import {Component, OnInit} from '@angular/core';
+import {PersonService} from '../person.service';
+import {Person} from '../../../../data/remote/model/person';
+import {SexEnum} from '../../../../data/remote/misc/sex-enum';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {Address} from '../../../../data/remote/model/address';
+import {ProfileService} from '../../../../shared/profile.service';
+import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
+import {NamedObject} from '../../../../data/remote/base/named-object';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {UserRole} from '../../../../data/remote/model/user-role';
 
 @Component({
   selector: 'app-personal',
@@ -17,21 +17,23 @@ import { UserRole } from '../../../../data/remote/model/user-role';
 })
 export class PersonalComponent implements OnInit {
 
+  public readonly isEditAllow: boolean;
+  public readonly person: Person;
+  public readonly pageSize: number;
+  public readonly sexEnumValues: SexEnum[];
+
   public userRoles: UserRole[];
   public baseUserRole: UserRole;
-
-  person: Person;
-  isEditAllow: boolean;
-  public pageSize = PropertyConstant.pageSize;
-  readonly sexEnumValues: SexEnum[] = Object.keys(SexEnum)
-    .filter(e => parseInt(e, 10) >= 0)
-    .map(k => SexEnum[k]);
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
               private _profileService: ProfileService) {
     this.isEditAllow = _personService.shared.isEditAllow;
+    this.pageSize = PropertyConstant.pageSize;
     this.person = _personService.shared.person;
+    this.sexEnumValues = Object.keys(SexEnum)
+      .filter(e => parseInt(e, 10) >= 0)
+      .map(k => SexEnum[k]);
   }
 
   async ngOnInit() {
@@ -63,14 +65,10 @@ export class PersonalComponent implements OnInit {
     await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
     this._profileService.emitFullNameChange(this.person);
 
-    let baseUserRoleId = null;
-    if (this.baseUserRole != null) {
-      baseUserRoleId = this.baseUserRole.id;
-    }
-
     try {
-      await this._participantRestApiService.postBaseUserRoleByUser({id: baseUserRoleId});
-
+      if (this.baseUserRole) {
+        await this._participantRestApiService.postBaseUserRoleByUser({id: this.baseUserRole.id});
+      }
     } catch (e) {
     }
   }

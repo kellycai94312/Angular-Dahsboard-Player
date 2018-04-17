@@ -8,24 +8,25 @@
   </button>
 </div>
 <div class="modal-body">
-
   <label for="rank">{{'rank' | translate}}</label>
   <dx-text-box id="rank"
-               [(value)]="personRank.rank.name" [disabled]="true">
+               [(value)]="personRank.rank.name"
+               [disabled]="true">
   </dx-text-box>
 
-  <label for="assignee">{{'assignee' | translate}}</label>
+  <label class="mt-2"
+         for="assignee">{{'assignee' | translate}}</label>
   <dx-text-box id="assignee"
-               class="mt-1"
                [(value)]="personRank.assignee">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dx-validator>
   </dx-text-box>
 
-  <label for="date">{{'date' | translate}}</label>
+  <label class="mt-2"
+         for="date">{{'date' | translate}}</label>
   <dx-date-box id="date"
-               class="w-100 mt-1"
+               class="w-100"
                [(value)]="personRank.date"
                type="date">
     <dx-validator>
@@ -33,18 +34,18 @@
     </dx-validator>
   </dx-date-box>
 
-  <label for="orderNumber">{{'orderNumber' | translate}}</label>
+  <label class="mt-2"
+         for="orderNumber">{{'orderNumber' | translate}}</label>
   <dx-text-box id="orderNumber"
-               class="mt-1"
                [(value)]="personRank.orderNumber">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dx-validator>
   </dx-text-box>
 
-  <label for="certificateNumber">{{'certificateNumber' | translate}}</label>
+  <label class="mt-2"
+         for="certificateNumber">{{'certificateNumber' | translate}}</label>
   <dx-text-box id="certificateNumber"
-               class="mt-1"
                [(value)]="personRank.certificateNumber">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -57,7 +58,9 @@
              class="btn-outline-primary"
              text="{{'save' | translate}}"
              (onClick)="savePersonRank($event)"></dx-button>
-  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">
+  <button type="button"
+          class="btn btn-outline-dark"
+          (click)="modal.dismiss()">
     {{'modal.cancel' | translate }}
   </button>
 </div>

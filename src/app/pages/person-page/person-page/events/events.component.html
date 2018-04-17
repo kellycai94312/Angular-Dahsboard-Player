@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row cols-padding">
   <div class="col">
     <dx-text-box #searchDxTextBoxComponent
                  placeholder="{{'search' | translate}}"
@@ -7,28 +7,26 @@
     </dx-text-box>
   </div>
   <div class="col">
-    <dx-date-box id="dateFrom"
+    <dx-date-box class="w-100"
                  type="date"
                  placeholder="{{'from' | translate}}"
                  [showClearButton]="true"
-                 (onValueChanged)="onDateFromChange($event)"
-                 class="w-100">
+                 (onValueChanged)="onDateFromChange($event)">
     </dx-date-box>
   </div>
   <div class="col">
-    <dx-date-box id="dateTo"
+    <dx-date-box class="w-100"
                  type="date"
                  placeholder="{{'to' | translate}}"
                  [showClearButton]="true"
-                 (onValueChanged)="onDateToChange($event)"
-                 class="w-100">
+                 (onValueChanged)="onDateToChange($event)">
     </dx-date-box>
   </div>
   <div class="col">
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
 </div>
-<table class="table table-bordered table-hover table-sm mt-1">
+<table class="table table-bordered table-hover table-sm mt-2">
   <thead>
   <tr class="d-flex">
     <th class="col-4">{{ 'name' | translate }}</th>
@@ -40,26 +38,28 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list [items]="trainingPersons"
-                     (nextPage)="onNextPage($event)">
+  <app-infinite-list [query]="trainingQuery"
+                     [getItems]="getItems">
     <ng-template let-item>
       <tr class="d-flex">
-        <td class="col-sm-4">{{item?.baseTraining.name}}</td>
-        <td class="col-sm-1">{{item?.baseTraining.discriminator}}</td>
-        <td class="col-sm-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
-        <td class="col-sm-2">{{item?.baseTraining.location?.name}}</td>
-        <td class="col-sm-1">
-          <dx-check-box class="mt-2"
-                        [(value)]="item.visible"
+        <td class="col-4">{{item?.baseTraining.name}}</td>
+        <td class="col-1">{{item?.baseTraining.discriminator}}</td>
+        <td class="col-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td class="col-2">{{item?.baseTraining.location?.name}}</td>
+        <td class="col-1">
+          <dx-check-box [(value)]="item.visible"
                         [disabled]="true">
           </dx-check-box>
         </td>
-        <td class="col-sm-2">
+        <td class="col-2">
           <div class="text-center">
-            <button class="btn btn-outline-primary" (click)="editPublic(item)" *ngIf="isEditAllow">
+            <button *ngIf="isEditAllow"
+                    class="btn btn-outline-primary"
+                    (click)="editPublic(item)">
               <i class="fa fa-edit"></i>
             </button>
-            <button class="btn btn-outline-success" (click)="downloadReport(item)">
+            <button class="btn btn-outline-success"
+                    (click)="downloadReport(item)">
               <i class="fa fa-download"></i> {{'report' | translate}}
             </button>
           </div>
