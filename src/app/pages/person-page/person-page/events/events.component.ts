@@ -1,91 +1,94 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { TrainingQuery } from '../../../../data/remote/rest-api/query/training-query';
-import { PersonService } from '../person.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { PageQuery } from '../../../../data/remote/rest-api/page-query';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { TrainingPerson } from '../../../../data/remote/model/training/training-person';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { EventModalComponent } from './event-modal/event-modal.component';
-import { TranslateService } from '@ngx-translate/core';
-import { ReportsService } from '../../../../shared/reports.service';
-import { TrainingDiscriminator } from "../../../../data/remote/model/training/base/training-discriminator";
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
+import {PersonService} from '../person.service';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EventModalComponent} from './event-modal/event-modal.component';
+import {ReportsService} from '../../../../shared/reports.service';
+import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
+import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
-export class EventsComponent implements OnInit, AfterViewInit {
+export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
+
+  public readonly isEditAllow: boolean;
+  public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public pageSize: number;
-  public trainingPersons: TrainingPerson[];
+  @ViewChild(InfiniteListComponent)
+  public infiniteListComponent: InfiniteListComponent;
 
-  readonly isEditAllow: boolean;
-  private readonly _trainingQuery: TrainingQuery;
+  public trainingQuery: TrainingQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _reportsService: ReportsService,
               private _personService: PersonService,
-              private _modalService: NgbModal,
-              private _translate: TranslateService,
-              private _appHelper: AppHelper) {
+              private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
-    this._trainingQuery = new TrainingQuery();
-    this._trainingQuery.from = 0;
-    this._trainingQuery.count = this.pageSize;
-    this._trainingQuery.personId = _personService.shared.person.id;
+    this.trainingQuery = new TrainingQuery();
+    this.trainingQuery.from = 0;
+    this.trainingQuery.count = this.pageSize;
+    this.trainingQuery.personId = _personService.shared.person.id;
   }
 
   ngOnInit() {
   }
 
-  async ngAfterViewInit() {
+  ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._trainingQuery.name = value;
-        this.updateListAsync();
+      .subscribe(async value => {
+        this.trainingQuery.name = value;
+        await this.updateItems();
       });
   }
 
-  async onDateFromChange(event: any) {
-    if (event.value) {
-      this._trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
-    } else {
-      delete this._trainingQuery.dateFrom;
-    }
-    await this.updateListAsync();
+  ngOnDestroy(): void {
+    this.searchDxTextBoxComponent.textChange.unsubscribe();
   }
 
-  async onDateToChange(event: any) {
+  //#region Filter
+
+  public async onDateFromChange(event: any) {
     if (event.value) {
-      this._trainingQuery.dateTo = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
     } else {
-      delete this._trainingQuery.dateTo;
+      delete this.trainingQuery.dateFrom;
     }
-    await this.updateListAsync();
+    await this.updateItems();
   }
 
-  async onLocationChange(e: any) {
+  public async onDateToChange(event: any) {
+    if (event.value) {
+      this.trainingQuery.dateTo = event.value.toISOString().split('T')[0];
+    } else {
+      delete this.trainingQuery.dateTo;
+    }
+    await this.updateItems();
+  }
+
+  public async onLocationChange(e: any) {
     if (e.current) {
-      this._trainingQuery.locationId = e.current.id;
+      this.trainingQuery.locationId = e.current.id;
     } else {
-      delete this._trainingQuery.locationId;
+      delete this.trainingQuery.locationId;
     }
-    await this.updateListAsync();
+    await this.updateItems();
   }
 
-  async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
+  //#endregion
 
-  async editPublic(item: TrainingPerson) {
+  public async editPublic(item: TrainingPerson) {
     const ref = this._modalService.open(EventModalComponent, {size: 'lg'});
     ref.componentInstance.trainingPerson = Object.assign({}, item);
     ref.componentInstance.onSave = async (visible: boolean) => {
@@ -99,7 +102,7 @@ export class EventsComponent implements OnInit, AfterViewInit {
     };
   }
 
-  async downloadReport(item: TrainingPerson) {
+  public async downloadReport(item: TrainingPerson) {
     if (item.baseTraining.discriminator === TrainingDiscriminator.GAME) {
       await this._reportsService.downloadGameReport(item.baseTraining.id, item.trainingGroup.id);
     } else {
@@ -107,10 +110,12 @@ export class EventsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  private async updateListAsync(from: number = 0) {
-    this._trainingQuery.from = from;
-    const container = await this._participantRestApiService.getPersonTrainings(this._trainingQuery);
-    this.trainingPersons = this._appHelper.pushItemsInList(from, this.trainingPersons, container);
+  public getItems: Function = async (pageQuery: PageQuery) => {
+    return await this._participantRestApiService.getPersonTrainings(pageQuery);
+  };
+
+  private async updateItems() {
+    await this.infiniteListComponent.update(true);
   }
 
 }
