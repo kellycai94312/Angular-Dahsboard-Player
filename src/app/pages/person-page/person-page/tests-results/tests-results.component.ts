@@ -24,16 +24,16 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 })
 export class TestsResultsComponent implements OnInit, AfterViewInit {
 
+  public readonly isEditAllow: boolean;
+  public readonly pageSize: number;
+
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  readonly isEditAllow: boolean;
+  public groupResults: ExerciseResult[];
+  public personMeasureValues: ExerciseExecMeasureValue[];
 
-  groupResults: ExerciseResult[];
-  personMeasureValues: ExerciseExecMeasureValue[];
-
-  public readonly pageSize: number;
-  private readonly _measureQuery: MeasureTemplateQuery;
+  private readonly _measureTemplateQuery: MeasureTemplateQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
@@ -43,10 +43,10 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
 
-    this._measureQuery = new MeasureTemplateQuery();
-    this._measureQuery.from = 0;
-    this._measureQuery.count = PropertyConstant.pageSize;
-    this._measureQuery.personId = this._personService.shared.person.id;
+    this._measureTemplateQuery = new MeasureTemplateQuery();
+    this._measureTemplateQuery.from = 0;
+    this._measureTemplateQuery.count = PropertyConstant.pageSize;
+    this._measureTemplateQuery.personId = this._personService.shared.person.id;
   }
 
   async ngOnInit() {
@@ -55,9 +55,9 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
 
   async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(value => {
-        this._measureQuery.name = value;
-        this.updateListAsync();
+      .subscribe(async value => {
+        this._measureTemplateQuery.name = value;
+        await this.updateListAsync();
       });
   }
 
@@ -111,8 +111,8 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
   }
 
   private async updateListAsync(from: number = 0) {
-    this._measureQuery.from = from;
-    const pageContainer = await this._participantRestApiService.getGroupsMeasureTemplate(this._measureQuery);
+    this._measureTemplateQuery.from = from;
+    const pageContainer = await this._participantRestApiService.getGroupsMeasureTemplate(this._measureTemplateQuery);
     this.groupResults = this._appHelper.pushItemsInList(from, this.groupResults, pageContainer);
   }
 
