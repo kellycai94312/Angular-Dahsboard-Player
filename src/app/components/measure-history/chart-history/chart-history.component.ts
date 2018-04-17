@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { MeasureHistoryService } from '../measure-history.service';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {DatePipe} from '@angular/common';
+import {MeasureHistoryService} from '../measure-history.service';
 
 @Component({
   selector: 'app-chart-history',
@@ -55,6 +55,12 @@ export class ChartHistoryComponent implements OnInit {
       font: {
         size: 13,
         color: '#000'
+      },
+      margin: {
+        l: 20,
+        r: 0,
+        b: 20,
+        t: 0
       }
     };
     const yValues = measureValues.map(mv => this.getValue(mv));
