@@ -26,7 +26,12 @@
       </div>
     </div>
   </div>
-
+  <dx-button *ngIf="!groupService.isOwner()"
+             type="default"
+             class="mb-2"
+             (onClick)="onGroupPersonState()"
+             text="{{ textStateInGroup | translate | uppercase}}">
+  </dx-button>
   <!-- group body -->
   <app-tab [tabs]="tabs"></app-tab>
 </div>
