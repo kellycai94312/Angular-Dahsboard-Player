@@ -19,7 +19,6 @@ import {Image} from '../model/image';
 import {Address} from '../model/address';
 import {PersonAnthropometry} from '../model/person-anthropometry';
 import {EmailRequest} from '../request/email-request';
-import {environment} from '../../../../environments/environment';
 import {GroupType} from '../model/group/base/group-type';
 import {Group} from '../model/group/base/group';
 import {GroupQuery} from './query/group-query';
@@ -57,15 +56,19 @@ import {GameReport} from '../bean/game/game-report';
 import {PersonMeasure} from '../bean/person-measure';
 import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
-
-export const RestUrl = environment.production ? 'https://api.rsi205.ru/sp/v2' : 'http://localhost:8082';
+import {PropertyConstant} from '../../local/property-constant';
 
 @Injectable()
 @RestParams({
-  url: RestUrl,
+  url: PropertyConstant.restUrl,
   withCredentials: true
 })
 export class ParticipantRestApiService extends Rest {
+
+  constructor(restHandler: RestHandler,
+              private http: HttpClient) {
+    super(restHandler);
+  }
 
   //#region Auth
 
@@ -557,7 +560,7 @@ export class ParticipantRestApiService extends Rest {
   //#region Image
 
   getImageUrl(imageQuery: ImageQuery): string {
-    let url = `${RestUrl}/image/download?clazz=${imageQuery.clazz}&id=${imageQuery.id}&type=${imageQuery.type}`;
+    let url = `${PropertyConstant.restUrl}/image/download?clazz=${imageQuery.clazz}&id=${imageQuery.id}&type=${imageQuery.type}`;
     if (imageQuery.full != null) {
       url += `&full=${imageQuery.full}`;
     }
@@ -568,7 +571,7 @@ export class ParticipantRestApiService extends Rest {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
     formData.append('image', new Blob([JSON.stringify(image)], {type: 'application/json'}));
-    return this.http.post<Image>(`${RestUrl}/image`, formData, {withCredentials: true})
+    return this.http.post<Image>(`${PropertyConstant.restUrl}/image`, formData, {withCredentials: true})
       .toPromise();
   }
 
@@ -769,10 +772,5 @@ export class ParticipantRestApiService extends Rest {
     path: '/location/filter',
   })
   getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
-
-  constructor(restHandler: RestHandler,
-              private http: HttpClient) {
-    super(restHandler);
-  }
 
 }
