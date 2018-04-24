@@ -41,10 +41,12 @@ thead > tr {
   color: $light-blue;
 }
 
-td, th {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem !important;
+.table {
+  td, th {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem !important;
+  }
 }
 
 .cols-padding {
