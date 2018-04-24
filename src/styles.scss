@@ -39,6 +39,9 @@
 $fa-font-path: "~font-awesome/fonts/";
 @import "~font-awesome/scss/font-awesome";
 
+/* ngx-toastr */
+@import "~ngx-toastr/toastr.css";
+
 @import "../src/app/styles/main";
 @import "../src/app/styles/logos";
 @import "../src/app/styles/tables";

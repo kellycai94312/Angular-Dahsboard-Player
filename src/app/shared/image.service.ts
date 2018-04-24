@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {ImageClass} from '../data/remote/misc/image-class';
-import {RestUrl} from '../data/remote/rest-api/participant-rest-api.service';
 import {ImageType} from '../data/remote/model/image-type';
+import {PropertyConstant} from '../data/local/property-constant';
 
 @Injectable()
 export class ImageService {
@@ -10,7 +10,7 @@ export class ImageService {
   }
 
   public getLogo(clazz: ImageClass, id: number): string {
-    return `${RestUrl}/image/download`
+    return `${PropertyConstant.restUrl}/image/download`
       + `?clazz=${ImageClass[clazz]}`
       + `&id=${id}`
       + `&type=${ImageType[ImageType.LOGO]}`

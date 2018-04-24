@@ -5,6 +5,12 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/h
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {RestModule} from 'rest-ngx';
+import {FormsModule} from '@angular/forms';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {CookieModule} from 'ngx-cookie';
+import {StompConfig, StompService} from '@stomp/ng2-stompjs';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ToastrModule} from 'ngx-toastr';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
@@ -17,13 +23,9 @@ import {ParticipantRestApiService} from './data/remote/rest-api/participant-rest
 import {TranslateObjectService} from './shared/translate-object.service';
 import {LocalStorageService} from './shared/local-storage.service';
 import {AuthGuard} from './guard/auth.guard';
-import {CookieModule} from 'ngx-cookie';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ImageService} from './shared/image.service';
 import {ProfileService} from './shared/profile.service';
-import {FormsModule} from '@angular/forms';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RestApiInterceptor} from './guard/rest-api-interceptor';
 import {InfiniteListModule} from './components/infinite-list/infinite-list.module';
 import {AssetsService} from './data/remote/rest-api/assets.service';
@@ -31,6 +33,8 @@ import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
 import {DynamicComponentService} from './shared/dynamic-component.service';
 import {ReportsService} from './shared/reports.service';
+import {stompConfig} from './data/config/stomp-config';
+import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -49,6 +53,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      enableHtml:true
+    }),
     NgbModule.forRoot(),
     RestModule.forRoot(),
     CookieModule.forRoot(),
@@ -77,6 +84,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppHelper,
     ReportsService,
     DynamicComponentService,
+    ParticipantStompService,
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy
@@ -85,6 +93,11 @@ export function HttpLoaderFactory(http: HttpClient) {
       provide: HTTP_INTERCEPTORS,
       useClass: RestApiInterceptor,
       multi: true
+    },
+    StompService,
+    {
+      provide: StompConfig,
+      useValue: stompConfig
     }
   ],
   bootstrap: [AppComponent]
