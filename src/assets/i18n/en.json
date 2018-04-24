@@ -134,9 +134,7 @@
   "messages": {
     "section": "Messages"
   },
-  "notifications": {
-    "section": "Notifications"
-  },
+  "notifications": "Notifications",
   "modal": {
     "cancel": "Cancel",
     "save": "Save"
@@ -227,7 +225,7 @@
   "addError": "Add error",
   "removeError": "Remove error",
   "gameMustHaveTwoTeams": "Game must have two teams",
-  "trainingType" : "Training type",
+  "trainingType": "Training type",
   "score": "Score",
   "access": "Access"
 }

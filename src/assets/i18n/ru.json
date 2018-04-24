@@ -135,9 +135,7 @@
   "messages": {
     "section": "Сообщения"
   },
-  "notifications": {
-    "section": "Уведомления"
-  },
+  "notifications": "Уведомления",
   "modal": {
     "cancel": "Отмена",
     "save": "Сохранить"
