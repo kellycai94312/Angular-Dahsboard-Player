@@ -11,6 +11,7 @@ import {EventModalComponent} from './event-modal/event-modal.component';
 import {ReportsService} from '../../../../shared/reports.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
+import {ISubscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-events',
@@ -30,6 +31,8 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public trainingQuery: TrainingQuery;
 
+  private readonly userRoleSubscription: ISubscription;
+
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _reportsService: ReportsService,
               private _personService: PersonService,
@@ -40,6 +43,18 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trainingQuery.from = 0;
     this.trainingQuery.count = this.pageSize;
     this.trainingQuery.personId = _personService.shared.person.id;
+    if (this._personService.userRoleSelectDefault) {
+      this.trainingQuery.userRoleEnum = this._personService.userRoleSelectDefault.userRoleEnum;
+    }
+
+    this.userRoleSubscription = this._personService.userRoleSelectEmitted$.subscribe(async x => {
+      if (x) {
+        this.trainingQuery.userRoleEnum = x.userRoleEnum;
+      } else {
+        delete this.trainingQuery.userRoleEnum;
+      }
+      await this.updateItems();
+    });
   }
 
   ngOnInit() {
@@ -55,6 +70,7 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
+    this.userRoleSubscription.unsubscribe();
   }
 
   //#region Filter
