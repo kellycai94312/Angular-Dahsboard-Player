@@ -11,9 +11,9 @@ export class BaseViewModel<T> {
   public url: string;
 
   constructor(data: T) {
-    this.update(data);
-
     this.participantRestApiService = AppModule.injector.get(ParticipantRestApiService);
+
+    this.update(data);
   }
 
   public update(data: T, initialize: boolean = false) {

@@ -41,6 +41,10 @@ export class AppHelper {
     return this._datePipe.transform(dateWithTimezone, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';
   }
 
+  public dateByFormat(date: Date, format: string): any {
+    return this._datePipe.transform(date, format);
+  }
+
   // TODO: Use optimized algorithm
   public except<T>(first: T[], second: T[]): T[] {
     const items = [];

@@ -38,18 +38,18 @@ export class AnthropometryHistoryComponent implements OnInit {
     return await this.updateListAsync(0);
   };
 
-  public setDateFrom = async (value: any) => {
+  public setDateFrom = async (value: Date) => {
     if (value) {
-      this.query.dateFrom = value.toISOString().split('T')[0];
+      this.query.dateFrom = this._appHelper.dateByFormat(value, PropertyConstant.dateFormat);
     } else {
       delete this.query.dateFrom;
     }
     return await this.updateListAsync(0);
   };
 
-  public setDateTo = async (value: any) => {
+  public setDateTo = async (value: Date) => {
     if (value) {
-      this.query.dateTo = value.toISOString().split('T')[0];
+      this.query.dateTo = this._appHelper.dateByFormat(value, PropertyConstant.dateFormat);
     } else {
       delete this.query.dateTo;
     }
