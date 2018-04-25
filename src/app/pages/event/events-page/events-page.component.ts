@@ -69,7 +69,7 @@ export class EventsPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public async onDateFromChange(event: any) {
     if (event.value) {
-      this.baseTrainingQuery.dateFrom = this._appHelper.getGmtDate(event.value);
+      this.baseTrainingQuery.dateFrom = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.baseTrainingQuery.dateFrom;
     }
@@ -78,7 +78,7 @@ export class EventsPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public async onDateToChange(event: any) {
     if (event.value) {
-      this.baseTrainingQuery.dateTo = this._appHelper.getGmtDate(event.value);
+      this.baseTrainingQuery.dateTo = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.baseTrainingQuery.dateTo;
     }

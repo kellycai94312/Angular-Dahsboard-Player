@@ -10,6 +10,7 @@ import {TrainingGroup} from '../../../data/remote/model/training-group';
 import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
 import {TrainingAccess} from '../../../data/remote/misc/training-access';
 import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-group-events',
@@ -31,6 +32,7 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
+              private _appHelper: AppHelper,
               private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = this._groupService.isEditAllow();
@@ -61,7 +63,7 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async onDateFromChange(event: any) {
     if (event.value) {
-      this.trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateFrom = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.trainingQuery.dateFrom;
     }
@@ -70,7 +72,7 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async onDateToChange(event: any) {
     if (event.value) {
-      this.trainingQuery.dateTo = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateTo = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.trainingQuery.dateTo;
     }

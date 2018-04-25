@@ -12,6 +12,7 @@ import {ReportsService} from '../../../../shared/reports.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
 import {ISubscription} from 'rxjs/Subscription';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-events',
@@ -36,6 +37,7 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _reportsService: ReportsService,
               private _personService: PersonService,
+              private _appHelper: AppHelper,
               private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
@@ -77,7 +79,7 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public async onDateFromChange(event: any) {
     if (event.value) {
-      this.trainingQuery.dateFrom = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateFrom = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.trainingQuery.dateFrom;
     }
@@ -86,7 +88,7 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public async onDateToChange(event: any) {
     if (event.value) {
-      this.trainingQuery.dateTo = event.value.toISOString().split('T')[0];
+      this.trainingQuery.dateTo = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.trainingQuery.dateTo;
     }
