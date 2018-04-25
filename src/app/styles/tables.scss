@@ -47,6 +47,12 @@ thead > tr {
     align-items: center;
     padding: 0.5rem !important;
   }
+
+  thead th {
+    font-size: 12px;
+    font-weight: normal;
+    color: $active-color;
+  }
 }
 
 .cols-padding {
