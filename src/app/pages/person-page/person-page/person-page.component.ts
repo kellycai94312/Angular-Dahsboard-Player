@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Person} from '../../../data/remote/model/person';
 import {TranslateService} from '@ngx-translate/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
@@ -25,13 +25,18 @@ import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-
 import {HashSet} from '../../../data/local/hash-set';
 import {NamedQuery} from '../../../data/remote/rest-api/named-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
+import {GroupComponent} from '../../groups/group/group.component';
+import {ISubscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-person-page',
   templateUrl: './person-page.component.html',
   styleUrls: ['./person-page.component.scss']
 })
-export class PersonPageComponent implements OnInit {
+export class PersonPageComponent implements OnInit, OnDestroy {
+
+  @ViewChild(GroupComponent)
+  public groupComponent: GroupComponent;
 
   public person: Person;
   public baseGroup: GroupPerson;
@@ -45,6 +50,8 @@ export class PersonPageComponent implements OnInit {
   public logo: string;
   public roleToggle: UserRole;
   public sportTypeToggle: SportType;
+
+  private readonly baseGroupSubscription: ISubscription;
 
   constructor(public translate: TranslateService,
               private participantRestApiService: ParticipantRestApiService,
@@ -70,11 +77,13 @@ export class PersonPageComponent implements OnInit {
     this.tabs.push(this.createPersonTab('events', 'events', [], true));
     this.tabs.push(this.createPersonTab('persons.person.groups.section', 'groups', [], true));
 
-    this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {
-      this.baseGroup = groupPerson;
+    this.baseGroupSubscription = this._personService.baseGroupChangeEmitted$.subscribe(x => {
+      this.baseGroup = x;
+      if (this.baseGroup && this.groupComponent) {
+        this.groupComponent.update(this.baseGroup.group);
+      }
     });
   }
-
 
   isTabVisible = (item: PersonTab): boolean => {
     return item
@@ -178,6 +187,10 @@ export class PersonPageComponent implements OnInit {
       this.baseGroup = null;
     }
 
+    if (this.baseGroup && this.groupComponent) {
+      this.groupComponent.update(this.baseGroup.group);
+    }
+
     this._personService.emitBaseGroupSelect(this.baseGroup);
   }
 
@@ -251,6 +264,10 @@ export class PersonPageComponent implements OnInit {
           });
       });
     });
+  }
+
+  ngOnDestroy(): void {
+    this.baseGroupSubscription.unsubscribe();
   }
 
   private createPersonTab(nameKey: string, routerLink: string, restrictedRoles: UserRoleEnum[], hasAnyRole: boolean = false, privateTab: boolean = false): PersonTab {
