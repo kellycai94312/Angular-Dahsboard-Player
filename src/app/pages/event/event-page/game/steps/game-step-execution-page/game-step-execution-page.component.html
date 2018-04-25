@@ -44,6 +44,7 @@
         <td *ngFor="let measure of item.measureValues">
           <input *ngIf="totalTrainingPartId!=trainingPartId;else total"
                  [type]="measure.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.unitTypeEnum"
+                 min="0"
                  class="form-control"
                  [(ngModel)]="measure.value"
                  (change)="onUpdateExerciseExecMeasureValue(item.trainingPerson,measure)">

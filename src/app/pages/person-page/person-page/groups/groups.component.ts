@@ -67,6 +67,10 @@ export class GroupsComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
     this.selectedBaseGroup = this._personService.baseGroupSelectDefault;
+    this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
+    this.groupQuery.userRoleId = this._personService.userRoleSelectDefault.id;
+
+    await this.updateItems();
   }
 
   ngOnDestroy(): void {

@@ -67,7 +67,7 @@ export class PersonPageComponent implements OnInit {
     this.tabs.push(this.createPersonTab('persons.person.myRegion.section', 'my_region', [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
     this.tabs.push(this.createPersonTab('persons.person.contact.section', 'contact', []));
     this.tabs.push(this.createPersonTab('persons.person.testsResults.section', 'tests_results', [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(this.createPersonTab('events', 'events', [UserRoleEnum.TRAINER], true));
+    this.tabs.push(this.createPersonTab('events', 'events', [], true));
     this.tabs.push(this.createPersonTab('persons.person.groups.section', 'groups', [], true));
 
     this._personService.baseGroupChangeEmitted$.subscribe(groupPerson => {

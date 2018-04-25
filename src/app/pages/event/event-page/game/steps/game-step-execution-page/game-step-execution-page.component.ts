@@ -152,6 +152,9 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
   }
 
   public async onUpdateExerciseExecMeasureValue(trainingPerson: TrainingPerson, exerciseExecMeasureValue: ExerciseExecMeasureValue) {
+    if (+exerciseExecMeasureValue.value < 0) {
+      exerciseExecMeasureValue.value = '0';
+    }
     if (this._appHelper.isNewObject(exerciseExecMeasureValue)) {
       exerciseExecMeasureValue.trainingPerson = trainingPerson;
       const savedExerciseExecMeasureValue = await this._participantRestApiService.createExerciseExecMeasureValue(exerciseExecMeasureValue, {}, {
