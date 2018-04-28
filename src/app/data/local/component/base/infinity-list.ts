@@ -13,7 +13,9 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
   public getItems: Function;
 
   @Input()
-  public items: T[];
+  public items: Array<T>;
+
+  protected rear: number;
 
   constructor() {
     this._total = 0;
@@ -22,7 +24,7 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
       from: 0,
       count: PropertyConstant.pageSize
     };
-
+    this.rear = Number.MAX_VALUE;
     this.items = [];
   }
 
@@ -47,7 +49,7 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
       const pageContainer = await this.getItems(this.query);
       if (pageContainer.total != null) {
         if (this._total != pageContainer.total || pageContainer.total < 1) {
-          this.query.from = this.query.count;
+          this.query.from = this.query.from;
           this.items = [];
         } else {
           this.query.from += this.query.count;
@@ -60,6 +62,12 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
       } else {
         this._total = 0;
         this.query.from = 0;
+      }
+
+      if (!this.query.from) {
+        this.rear = 0;
+      } else {
+        this.rear = Math.min(this.rear, this.query.from);
       }
     } catch (e) {
       return false;

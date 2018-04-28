@@ -228,5 +228,6 @@
   "gameMustHaveTwoTeams": "В игре должно быть две команды",
   "trainingType": "Вид события",
   "score": "Счет",
-  "access": "Доступ"
+  "access": "Доступ",
+  "showPrevious": "Показать предыдущий"
 }

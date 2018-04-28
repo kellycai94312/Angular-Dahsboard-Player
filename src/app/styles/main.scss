@@ -99,6 +99,11 @@ input[type=submit] {
   cursor: pointer;
 }
 
+input[type=button],
+input[type=submit] {
+  text-transform: uppercase
+}
+
 input[type=file]::-webkit-file-upload-button {
   cursor: pointer;
 }

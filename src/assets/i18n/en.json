@@ -227,5 +227,6 @@
   "gameMustHaveTwoTeams": "Game must have two teams",
   "trainingType": "Training type",
   "score": "Score",
-  "access": "Access"
+  "access": "Access",
+  "showPrevious": "Show previous"
 }

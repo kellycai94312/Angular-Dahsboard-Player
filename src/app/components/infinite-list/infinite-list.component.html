@@ -1,9 +1,10 @@
-<div infiniteScroll
+<div infinite-scroll
      [ngClass]="{'scroll-block' : scrollBlock,'d-flex':wrap,'flex-wrap':wrap}"
      infiniteScrollDistance="2"
-     infiniteScrollUpDistance="1.5"
-     infiniteScrollThrottle="50"
+     infiniteScrollUpDistance="8"
+     infiniteScrollThrottle="0"
      [scrollWindow]="!scrollBlock"
+     (scrolledUp)="onScrollUp()"
      (scrolled)="onScrollDown()">
   <ng-template ngFor
                [ngForOf]="items"
