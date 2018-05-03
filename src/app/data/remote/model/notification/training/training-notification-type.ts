@@ -7,6 +7,7 @@ export enum TrainingNotificationType {
   ADD_GROUP = 'ADD_GROUP', // добавили группу в тренировку
   DELETE_PERSON = 'DELETE_PERSON', // пользователя исключили
   DELETE_PERSON_SELF = 'DELETE_PERSON_SELF', // вас исключили из тренировки
+  DELETE_TRAINING = 'DELETE_TRAINING', // создатель тренировки удалил тренировку
   APPROVE_PERSON = 'APPROVE_PERSON', // пользователь подтвердил участие
   APPROVE_GROUP = 'APPROVE_GROUP', // тренер группы подтвердил участие
   REFUSE_PERSON = 'REFUSE_PERSON', // пользователь отказался от участия
