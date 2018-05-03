@@ -58,8 +58,8 @@ import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
 import {PropertyConstant} from '../../local/property-constant';
 import {BaseNotification} from '../model/notification/base/base-notification';
-import {IntegerWrapper} from '../bean/integer-wrapper';
-import {DateWrapper} from '../bean/date-wrapper';
+import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
+import {DateWrapper} from '../bean/wrapper/date-wrapper';
 
 @Injectable()
 @RestParams({

@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {Locale} from './data/index';
 import {LocalStorageService} from './shared/local-storage.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {ISubscription} from 'rxjs/Subscription';
-import {BaseNotification} from './data/remote/model/notification/base/base-notification';
 import {AuthorizationService} from './shared/authorization.service';
+import {NotificationWrapper} from './data/remote/bean/wrapper/notification-wrapper';
+import {Locale} from './data/remote/misc/locale';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private _authorizationService: AuthorizationService) {
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
       this._notificationSubscription = this._participantStompService.subscribeNotification()
-        .map(message => this._participantStompService.messageToObject<BaseNotification>(message))
+        .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
         .subscribe(notification => {
           // TODO: Show notification
           console.log(notification);
