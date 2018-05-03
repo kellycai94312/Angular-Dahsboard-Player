@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { Locale } from '../data/remote/misc/locale';
-import { TranslateService } from '@ngx-translate/core';
-import { CookieService } from 'ngx-cookie';
+import {Injectable} from '@angular/core';
+import {Locale} from '../data/remote/misc/locale';
+import {TranslateService} from '@ngx-translate/core';
+import {CookieService} from 'ngx-cookie';
 
 @Injectable()
 export class LocalStorageService {
@@ -27,18 +27,30 @@ export class LocalStorageService {
     this.cookieService.remove(this.sessionId);
   }
 
+  /**
+   * @deprecated Use AuthorizationService
+   */
   public saveUserId(id: number): void {
     localStorage.setItem(this.userId, id.toString());
   }
 
+  /**
+   * @deprecated Use AuthorizationService
+   */
   public savePersonId(id: number): void {
     localStorage.setItem(this.personId, id.toString());
   }
 
+  /**
+   * @deprecated Use AuthorizationService
+   */
   public getCurrentUserId(): number {
     return +localStorage.getItem(this.userId);
   }
 
+  /**
+   * @deprecated Use AuthorizationService
+   */
   public getCurrentPersonId(): number {
     return +localStorage.getItem(this.personId);
   }

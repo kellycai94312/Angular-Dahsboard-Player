@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
-import { Auth } from '../../data/remote/model/auth';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { Router } from '@angular/router';
-import { Session } from '../../data/remote/model/session';
-import { LocalStorageService } from '../../shared/local-storage.service';
-import { ProfileService } from '../../shared/profile.service';
+import {Component, OnInit} from '@angular/core';
+import {TranslateService} from '@ngx-translate/core';
+import {Auth} from '../../data/remote/model/auth';
+import {Router} from '@angular/router';
+import {Session} from '../../data/remote/model/session';
+import {ProfileService} from '../../shared/profile.service';
+import {AuthorizationService} from '../../shared/authorization.service';
 
 @Component({
   selector: 'app-login-page',
@@ -17,8 +16,7 @@ export class LoginPageComponent implements OnInit {
   public auth: Auth;
 
   constructor(public translate: TranslateService,
-              private participantRestApiService: ParticipantRestApiService,
-              private localStorageService: LocalStorageService,
+              private _authorizationService: AuthorizationService,
               private _profileService: ProfileService,
               private router: Router) {
     this.auth = new Auth();
@@ -30,21 +28,15 @@ export class LoginPageComponent implements OnInit {
   public async onApply(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      try {
-        const session: Session = await this.participantRestApiService.login(this.auth);
-        if (session != null) {
-          this.localStorageService.saveUserId(session.userId);
-          if (session.personId != null) {
-            this.localStorageService.savePersonId(session.personId);
-            this._profileService.init();
-            await this.router.navigate(['/person', session.personId]);
-          } else {
-            await this.router.navigate(['/registration/person']);
-          }
+      const session: Session = await this._authorizationService.logIn(this.auth);
+      if (session) {
+        if (session.personId) {
+          this._profileService.init();
+          await this.router.navigate(['/person', session.personId]);
         } else {
-          this.invalidCredentials(event);
+          await this.router.navigate(['/registration/person']);
         }
-      } catch (Error) {
+      } else {
         this.invalidCredentials(event);
       }
     }

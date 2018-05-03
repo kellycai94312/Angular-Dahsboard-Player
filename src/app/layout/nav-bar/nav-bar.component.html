@@ -6,10 +6,11 @@
   <nav>
     <div ngbDropdown>
       <div class="nav-bar-dropdown-toggle"
-           id="dropdownManual"
            ngbDropdownToggle>
         <div class="dropdown-toggle-content">
-          <div class="logo-sm-circle" *ngIf="logo" [ngStyle]="{'background-image': 'url('+ logo +')'}">
+          <div *ngIf="logo"
+               class="logo-sm-circle"
+               [ngStyle]="{'background-image': 'url('+ logo +')'}">
           </div>
           <div class="fullname">
             <p>{{person.firstName}}</p>
@@ -18,12 +19,12 @@
         </div>
       </div>
       <div ngbDropdownMenu
-           aria-labelledby="dropdownManual" class="menu">
+           class="menu">
         <button class="dropdown-item"
-                routerLink="{{personProfileRouterLink}}">{{'profile' | translate | uppercase}}
+                routerLink="{{personProfileRouterLink}}">{{'profile' | translate }}
         </button>
         <button class="dropdown-item"
-                (click)="signOut($event)">{{'signOut' | translate | uppercase}}
+                (click)="signOut()">{{'signOut' | translate }}
         </button>
       </div>
     </div>

@@ -7,13 +7,15 @@ import {Observable} from 'rxjs/Observable';
 @Injectable()
 export class ParticipantStompService {
 
+  private readonly baseQuery: string = '/user/ws';
+
   constructor(private _stompService: StompService) {
   }
 
   //#region Notification
 
   public subscribeNotification(): Observable<Message> {
-    return this._stompService.subscribe('/user/notification');
+    return this._stompService.subscribe(`${this.baseQuery}/notification`);
   }
 
   //#endregion

@@ -1,5 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
-import {Injector, NgModule} from '@angular/core';
+import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
 import {DatePipe, LocationStrategy, PathLocationStrategy} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
@@ -35,6 +35,7 @@ import {DynamicComponentService} from './shared/dynamic-component.service';
 import {ReportsService} from './shared/reports.service';
 import {stompConfig} from './data/config/stomp-config';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
+import {AuthorizationService} from './shared/authorization.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -54,7 +55,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppRoutingModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      enableHtml:true
+      enableHtml: true
     }),
     NgbModule.forRoot(),
     RestModule.forRoot(),
@@ -85,6 +86,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     ReportsService,
     DynamicComponentService,
     ParticipantStompService,
+    AuthorizationService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: (as: AuthorizationService) => function () {
+        return as.initialize();
+      },
+      deps: [AuthorizationService],
+      multi: true
+    },
     {
       provide: LocationStrategy,
       useClass: PathLocationStrategy

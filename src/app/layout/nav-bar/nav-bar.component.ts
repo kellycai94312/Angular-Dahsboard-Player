@@ -1,50 +1,58 @@
-import {Component, OnInit} from '@angular/core';
-import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
-import {LocalStorageService} from '../../shared/local-storage.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Person} from '../../data/remote/model/person';
 import {Router} from '@angular/router';
-import {LayoutService} from '../shared/layout.service';
 import {ImageService} from '../../shared/image.service';
 import {ImageClass} from '../../data/remote/misc/image-class';
 import {ProfileService} from '../../shared/profile.service';
+import {ISubscription} from 'rxjs/Subscription';
+import {AuthorizationService} from '../../shared/authorization.service';
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnDestroy {
 
   public person: Person;
   public personProfileRouterLink: string;
   public logo: string;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _localStorageService: LocalStorageService,
-              private _router: Router,
-              private _layoutService: LayoutService,
+  private readonly _fullNameChangeSubscription: ISubscription;
+  private readonly _logoChangeSubscription: ISubscription;
+
+  constructor(private _router: Router,
               private _logoService: ImageService,
-              private _profileService: ProfileService) {
+              private _profileService: ProfileService,
+              private _authorizationService: AuthorizationService) {
     this.person = new Person();
-    this.personProfileRouterLink = '/person/' + this._localStorageService.getCurrentPersonId();
-    _profileService.fullNameChangeEmitted$.subscribe(person => this.person.firstName = person.firstName);
-    _profileService.logoChangeEmitted$.subscribe(logo => this.logo = logo);
+
+    // TODO: Use PersonViewModel
+    this._fullNameChangeSubscription = _profileService.fullNameChangeEmitted$
+      .subscribe(person => this.person.firstName = person.firstName);
+    this._logoChangeSubscription = _profileService.logoChangeEmitted$
+      .subscribe(logo => this.logo = logo);
   }
 
   async ngOnInit() {
-    const personId = this._localStorageService.getCurrentPersonId();
-    if (personId === 0) {
-      this._router.navigate(['/registration/person']);
+    // TODO: Use PersonViewModel
+    const personId = this._authorizationService.session.personId;
+    if (personId) {
+      this.personProfileRouterLink = '/person/' + personId;
+      this.person = await this._profileService.getPerson(personId);
+      this.logo = this._logoService.getLogo(ImageClass.PERSON, this.person.id);
+    } else {
+      await this._router.navigate(['/registration/person']);
     }
-    this.person = await this._profileService.getPerson(personId);
-    this.logo = this._logoService.getLogo(ImageClass.PERSON, this.person.id);
   }
 
-  public async signOut(event: any) {
-    await this._participantRestApiService.logout();
-    this._layoutService.hidden.next(true);
-    this._localStorageService.signOut();
-    await this._router.navigate(['/login']);
+  ngOnDestroy(): void {
+    this._fullNameChangeSubscription.unsubscribe();
+    this._logoChangeSubscription.unsubscribe();
+  }
+
+  public async signOut() {
+    await this._authorizationService.logOut();
   }
 
 }

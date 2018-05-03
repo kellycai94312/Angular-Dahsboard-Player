@@ -76,6 +76,12 @@ export class ParticipantRestApiService extends Rest {
   //#region Auth
 
   @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/auth'
+  })
+  getSession: IRestMethod<void, Session>;
+
+  @RestAction({
     method: RestRequestMethod.Post,
     path: '/auth'
   })
