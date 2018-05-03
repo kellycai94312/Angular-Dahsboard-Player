@@ -23,13 +23,10 @@ export class AppComponent implements OnInit, OnDestroy {
               private _localStorageService: LocalStorageService,
               private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService) {
+    this.notificationSubscribe();
+
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
-      this._notificationSubscription = this._participantStompService.subscribeNotification()
-        .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
-        .subscribe(notification => {
-          // TODO: Show notification
-          console.log(notification);
-        });
+      this.notificationSubscribe();
     });
 
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
@@ -49,6 +46,19 @@ export class AppComponent implements OnInit, OnDestroy {
     }
     this._logInSubscription.unsubscribe();
     this._logOutSubscription.unsubscribe();
+  }
+
+  private notificationSubscribe(): void {
+    if (this._notificationSubscription || !this._authorizationService.session) {
+      return;
+    }
+
+    this._notificationSubscription = this._participantStompService.subscribeNotification()
+      .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
+      .subscribe(notification => {
+        // TODO: Show notification
+        console.log(notification);
+      });
   }
 
   private initLangs(): void {

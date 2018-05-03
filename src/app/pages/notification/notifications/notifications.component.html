@@ -1,3 +1,5 @@
-<p>
-  notifications works!
-</p>
+<app-infinite-list>
+  <ng-template let-item>
+    <p>{{item | json}}</p>
+  </ng-template>
+</app-infinite-list>
