@@ -1,6 +1,6 @@
 import {BaseNotification} from '../../model/notification/base/base-notification';
 
 export class NotificationWrapper {
-  public baseNotification: BaseNotification;
+  public notification: BaseNotification;
   public unread: number;
 }

@@ -229,5 +229,14 @@
   "trainingType": "Вид события",
   "score": "Счет",
   "access": "Доступ",
-  "showPrevious": "Показать предыдущий"
+  "showPrevious": "Показать предыдущий",
+  "trainingNotification": {
+    "scheduledEvent": "Скоро начнетса событие '{{event}}'",
+    "updateDate": "Обновлена дата в событии '{{event}}'",
+    "updateLocation": "Обновлено местоположение в событии '{{event}}'"
+  },
+  "approve": "Подтвердить",
+  "refuse": "Отказаться",
+  "error":"Ошибка",
+  "success":"Применено"
 }

@@ -1,0 +1,18 @@
+<div *ngIf="viewModel">
+  <p class="date">{{viewModel.data.created | date:'dd.MM.yyyy HH:mm'}}</p>
+  <div [innerHTML]="viewModel.body | safeHtml"
+       (click)="onDataClick($event)"></div>
+  <div *ngIf="viewModel.data.action&&!viewModel.data.approved"
+       class="mt-2">
+    <button type="button"
+            class="btn btn-primary"
+            (click)="onApprove()">
+      {{'approve' | translate}}
+    </button>
+    <button type="button"
+            class="btn btn-primary"
+            (click)="onRefuse()">
+      {{'refuse' | translate}}
+    </button>
+  </div>
+</div>

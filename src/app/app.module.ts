@@ -36,6 +36,7 @@ import {ReportsService} from './shared/reports.service';
 import {stompConfig} from './data/config/stomp-config';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
+import {NotificationService} from './shared/notification.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -87,6 +88,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DynamicComponentService,
     ParticipantStompService,
     AuthorizationService,
+    NotificationService,
     {
       provide: APP_INITIALIZER,
       useFactory: (as: AuthorizationService) => function () {

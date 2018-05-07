@@ -3,9 +3,12 @@ import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageService} from './shared/local-storage.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {ISubscription} from 'rxjs/Subscription';
+import {ToastrService} from 'ngx-toastr';
+
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationWrapper} from './data/remote/bean/wrapper/notification-wrapper';
 import {Locale} from './data/remote/misc/locale';
+import {NotificationService} from './shared/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private _translate: TranslateService,
               private _localStorageService: LocalStorageService,
               private _participantStompService: ParticipantStompService,
-              private _authorizationService: AuthorizationService) {
+              private _authorizationService: AuthorizationService,
+              private _notificationService: NotificationService,
+              private _toastrService: ToastrService) {
     this.notificationSubscribe();
 
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
@@ -55,9 +60,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this._notificationSubscription = this._participantStompService.subscribeNotification()
       .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
-      .subscribe(notification => {
+      .subscribe(async notification => {
         // TODO: Show notification
         console.log(notification);
+        const viewModel = this._notificationService.createNotificationViewModel(notification.notification);
+        await viewModel.build();
+        console.log(viewModel.body);
+        this._toastrService.info(viewModel.body, '', {
+          enableHtml: true
+        });
       });
   }
 

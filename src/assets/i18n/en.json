@@ -228,5 +228,14 @@
   "trainingType": "Training type",
   "score": "Score",
   "access": "Access",
-  "showPrevious": "Show previous"
+  "showPrevious": "Show previous",
+  "trainingNotification": {
+    "scheduledEvent": "Event will soon start '{{event}}'",
+    "updateDate": "Updated date in event '{{event}}'",
+    "updateLocation": "Updated location in event '{{event}}'"
+  },
+  "approve": "Approve",
+  "refuse": "Refuse",
+  "error":"Error",
+  "success":"Success"
 }

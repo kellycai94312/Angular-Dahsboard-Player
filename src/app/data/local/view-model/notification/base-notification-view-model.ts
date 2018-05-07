@@ -1,0 +1,33 @@
+import {BaseNotification} from '../../../remote/model/notification/base/base-notification';
+import {INotificationViewModel} from './i-notification-view-model';
+import {TranslateService} from '@ngx-translate/core';
+import {ISubscription} from 'rxjs/Subscription';
+import {AppModule} from '../../../../app.module';
+import {BaseViewModel} from '../base/base-view-model';
+
+export class BaseNotificationViewModel<T extends BaseNotification> extends BaseViewModel<T> implements INotificationViewModel {
+
+  public title: string;
+  public body: string;
+
+  protected readonly translateService: TranslateService;
+  private readonly translateServiceSubscription: ISubscription;
+
+  constructor(data: T) {
+    super(data);
+
+    this.translateService = AppModule.injector.get(TranslateService);
+    this.translateServiceSubscription = this.translateService.onLangChange.subscribe(async x => {
+      await this.build();
+    });
+  }
+
+  build(): Promise<void> {
+    return null;
+  }
+
+  public unsubscribe(): void {
+    this.translateServiceSubscription.unsubscribe();
+  }
+
+}
