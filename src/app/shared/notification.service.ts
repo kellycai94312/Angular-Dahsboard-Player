@@ -55,6 +55,7 @@ export class NotificationService implements OnDestroy {
   public unsubscribe() {
     if (this._notificationSubscription) {
       this._notificationSubscription.unsubscribe();
+      delete this._notificationSubscription;
     }
   }
 
