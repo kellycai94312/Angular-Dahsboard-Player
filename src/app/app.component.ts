@@ -1,12 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageService} from './shared/local-storage.service';
-import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {ISubscription} from 'rxjs/Subscription';
 import {ToastrService} from 'ngx-toastr';
 
 import {AuthorizationService} from './shared/authorization.service';
-import {NotificationWrapper} from './data/remote/bean/wrapper/notification-wrapper';
 import {Locale} from './data/remote/misc/locale';
 import {NotificationService} from './shared/notification.service';
 
@@ -20,24 +18,25 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _logInSubscription: ISubscription;
   private readonly _logOutSubscription: ISubscription;
 
-  private _notificationSubscription: ISubscription;
+  private readonly _notificationSubscription: ISubscription;
 
   constructor(private _translate: TranslateService,
               private _localStorageService: LocalStorageService,
-              private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService,
               private _notificationService: NotificationService,
               private _toastrService: ToastrService) {
-    this.notificationSubscribe();
-
-    this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
-      this.notificationSubscribe();
+    this._notificationService.subscribe();
+    this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
+      this._toastrService.info(x.body, null, {
+        enableHtml: true,
+        tapToDismiss: false
+      });
     });
-
+    this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
+      this._notificationService.subscribe();
+    });
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
-      if (this._notificationSubscription) {
-        this._notificationSubscription.unsubscribe();
-      }
+      this._notificationService.unsubscribe();
     });
   }
 
@@ -46,31 +45,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._notificationSubscription) {
-      this._notificationSubscription.unsubscribe();
-    }
+    this._notificationService.unsubscribe();
+    this._notificationSubscription.unsubscribe();
     this._logInSubscription.unsubscribe();
     this._logOutSubscription.unsubscribe();
-  }
-
-  private notificationSubscribe(): void {
-    if (this._notificationSubscription || !this._authorizationService.session) {
-      return;
-    }
-
-    this._notificationSubscription = this._participantStompService.subscribeNotification()
-      .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
-      .subscribe(async notification => {
-        // TODO: Show notification
-        console.log(notification);
-        const viewModel = this._notificationService.createNotificationViewModel(notification.notification);
-        await viewModel.build();
-        console.log(viewModel.body);
-        this._toastrService.info(viewModel.body, '', {
-          enableHtml: true,
-          tapToDismiss: false
-        });
-      });
   }
 
   private initLangs(): void {
