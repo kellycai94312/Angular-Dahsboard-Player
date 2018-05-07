@@ -232,10 +232,25 @@
   "trainingNotification": {
     "scheduledEvent": "Event will soon start '{{event}}'",
     "updateDate": "Updated date in event '{{event}}'",
-    "updateLocation": "Updated location in event '{{event}}'"
+    "updateLocation": "Updated location in event '{{event}}'",
+    "updateExercises": "Updated exercises in event '{{event}}'",
+    "addPerson": "You were added in event '{{event}}'",
+    "addGroup": "Your group has been added in event '{{event}}'",
+    "deletePerson": "{{sender}} excluded from the event '{{event}}' {{person}}",
+    "deletePersonSelf": "You were expelled from event '{{event}}' {{sender}}",
+    "deleteTraining": "{{sender}} removed the event '{{event}}'",
+    "approvePerson": "{{person}} approved participation in the event '{{event}}'",
+    "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
+  },
+  "groupNotification": {
+    "addPerson": "{{sender}} added {{person}} in group '{{group}}'",
+    "addPersonSelf": "{{sender}} added you to a group '{{group}}'",
+    "deletePerson": "{{sender}} removed {{person}} from the group '{{group}}'",
+    "deletePersonSelf": "{{sender}} removed you from a group '{{group}}'",
+    "joinPerson": "{{person}} applied to the group '{{group}}'"
   },
   "approve": "Approve",
   "refuse": "Refuse",
-  "error":"Error",
-  "success":"Success"
+  "error": "Error",
+  "success": "Success"
 }
