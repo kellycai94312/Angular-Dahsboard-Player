@@ -1,8 +1,7 @@
-<app-infinite-list>
+<app-infinite-list class="list-group-flush">
   <ng-template let-item>
-    <div class="mb-2">
-      <app-notification [data]="item"
-                        class="list-group-item"></app-notification>
+    <div class="list-group-item">
+      <app-notification [data]="item"></app-notification>
     </div>
   </ng-template>
 </app-infinite-list>

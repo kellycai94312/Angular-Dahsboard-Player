@@ -9,12 +9,12 @@ export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupN
 
     let sender: string;
     if (this.data.sender) {
-      sender = `<a class="link" link="/person/${this.data.sender.id}">${this.data.sender.firstName} ${this.data.sender.lastName} ${this.data.sender.patronymic}</a>`;
+      sender = this.getPersonLink(this.data.sender);
     }
 
     let person: string;
     if (this.data.person) {
-      person = `<a class="link" link="/person/${this.data.person.id}">${this.data.person.firstName} ${this.data.person.lastName} ${this.data.person.patronymic}</a>`;
+      person = this.getPersonLink(this.data.person);
     }
     switch (this.data.groupNotificationType) {
       case GroupNotificationType.ADD_PERSON:

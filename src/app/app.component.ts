@@ -67,7 +67,8 @@ export class AppComponent implements OnInit, OnDestroy {
         await viewModel.build();
         console.log(viewModel.body);
         this._toastrService.info(viewModel.body, '', {
-          enableHtml: true
+          enableHtml: true,
+          tapToDismiss: false
         });
       });
   }

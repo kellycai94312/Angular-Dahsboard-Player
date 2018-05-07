@@ -4,6 +4,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ISubscription} from 'rxjs/Subscription';
 import {AppModule} from '../../../../app.module';
 import {BaseViewModel} from '../base/base-view-model';
+import {Person} from '../../../remote/model/person';
 
 export class BaseNotificationViewModel<T extends BaseNotification> extends BaseViewModel<T> implements INotificationViewModel {
 
@@ -28,6 +29,14 @@ export class BaseNotificationViewModel<T extends BaseNotification> extends BaseV
 
   public unsubscribe(): void {
     this.translateServiceSubscription.unsubscribe();
+  }
+
+  public getPersonLink(person: Person): string {
+    let fullName = `${person.firstName} ${person.lastName}`;
+    if (person.patronymic) {
+      fullName += ` ${person.patronymic}`;
+    }
+    return `<a class="link" link="/person/${person.id}">${fullName}</a>`;
   }
 
 }
