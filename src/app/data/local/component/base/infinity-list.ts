@@ -17,6 +17,9 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
 
   protected rear?: number;
 
+  // TODO: Needed for don't duplicates items in infinity list
+  protected initialized: boolean;
+
   constructor() {
     this._total = 0;
     this.query = <TQuery>{
@@ -30,8 +33,10 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
   }
 
   public async initialize(): Promise<void> {
+    this.initialized = false;
     this.items = [];
     await this.update(true);
+    this.initialized = true;
   }
 
   public async update(withReset: boolean = false): Promise<boolean> {

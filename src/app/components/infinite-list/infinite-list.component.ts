@@ -37,7 +37,7 @@ export class InfiniteListComponent extends InfinityList<any, PageQuery> implemen
   }
 
   public async onScrollUp() {
-    if (!this.rear) {
+    if (!this.rear || !this.initialized) {
       return;
     }
 
@@ -65,6 +65,9 @@ export class InfiniteListComponent extends InfinityList<any, PageQuery> implemen
   }
 
   public async onScrollDown() {
+    if (!this.initialized) {
+      return;
+    }
     if (this.getItems) {
       await this.update();
     } else {
