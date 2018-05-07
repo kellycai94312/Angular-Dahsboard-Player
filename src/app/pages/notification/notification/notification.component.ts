@@ -51,7 +51,7 @@ export class NotificationComponent implements OnInit, AfterContentInit, AfterVie
       await this._participantRestApiService.approveNotification({id: this.data.id});
       this.data.approved = true;
 
-      this._toastrService.error(await this.translateByKey('success'));
+      this._toastrService.success(await this.translateByKey('success'));
     } catch (e) {
       this._toastrService.error(await this.translateByKey('error'));
     }
@@ -62,7 +62,7 @@ export class NotificationComponent implements OnInit, AfterContentInit, AfterVie
       await this._participantRestApiService.refuseNotification({id: this.data.id});
       this.data.approved = false;
 
-      this._toastrService.error(await this.translateByKey('success'));
+      this._toastrService.success(await this.translateByKey('success'));
     } catch (e) {
       this._toastrService.error(await this.translateByKey('error'));
     }
