@@ -60,6 +60,7 @@ import {PropertyConstant} from '../../local/property-constant';
 import {BaseNotification} from '../model/notification/base/base-notification';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
+import {TrainingStateRequest} from '../request/training-state-request';
 
 @Injectable()
 @RestParams({
@@ -611,6 +612,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/baseTraining/{!id}'
   })
   updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!id}/state'
+  })
+  updateBaseTrainingState: IRestMethodStrict<TrainingStateRequest, any, { id: number }, BaseTraining>;
 
   //#region Group
 
