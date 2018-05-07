@@ -41,15 +41,20 @@ export class InfiniteListComponent extends InfinityList<any, PageQuery> implemen
       return;
     }
 
-    this.rear = this.rear - PropertyConstant.pageSize;
+    const tempCount = this.query.count;
+    this.rear = this.rear - this.query.count;
     if (this.rear < 0) {
+      this.query.count = this.rear + this.query.count;
       this.rear = 0;
     }
 
     const tempFrom = this.query.from;
     this.query.from = this.rear;
+
     const pageContainer = await this.getItems(this.query);
+
     this.query.from = tempFrom;
+    this.query.count = tempCount;
 
     if (pageContainer && pageContainer.list) {
       for (let i = pageContainer.list.length - 1; i >= 0; i--) {

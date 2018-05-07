@@ -15,16 +15,14 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
   @Input()
   public items: Array<T>;
 
-  protected rear: number;
+  protected rear?: number;
 
   constructor() {
     this._total = 0;
     this.query = <TQuery>{
       name: '',
-      from: 0,
       count: PropertyConstant.pageSize
     };
-    this.rear = Number.MAX_VALUE;
     this.items = [];
   }
 
@@ -41,15 +39,14 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
       return false;
     }
     if (withReset) {
-      this._total = 0;
-      this.query.from = 0;
+      this.resetFilter();
     }
 
     try {
       const pageContainer = await this.getItems(this.query);
       if (pageContainer) {
+        this.query.from = pageContainer.from;
         if (this._total != pageContainer.total || pageContainer.total < 1) {
-          this.query.from = pageContainer.from;
           this.items = [];
         }
 
@@ -62,19 +59,29 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
         }
         this._total = pageContainer.total;
       } else {
-        this._total = 0;
-        this.query.from = 0;
+        this.resetFilter();
       }
 
       if (!this.query.from) {
-        this.rear = 0;
+        this.rear = null;
+        this.rear = Number.MAX_VALUE;
       } else {
-        this.rear = Math.min(this.rear, this.query.from);
+        if (this.rear) {
+          this.rear = Math.min(this.rear, this.query.from);
+        } else {
+          this.rear = this.query.from;
+        }
       }
     } catch (e) {
       return false;
     }
     return true;
+  }
+
+  private resetFilter(): void {
+    this.rear = null;
+    this._total = 0;
+    delete this.query.from;
   }
 
 }

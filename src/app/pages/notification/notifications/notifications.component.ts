@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
@@ -11,13 +11,12 @@ import {PropertyConstant} from '../../../data/local/property-constant';
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class NotificationsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(InfiniteListComponent)
   public infiniteListComponent: InfiniteListComponent;
 
   private readBefore: Date;
-  private _isListInited: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
@@ -27,22 +26,13 @@ export class NotificationsComponent implements OnInit, AfterContentInit, AfterVi
   async ngOnInit(): Promise<void> {
   }
 
-  async ngAfterContentInit(): Promise<void> {
+  async ngAfterViewInit(): Promise<void> {
     this.infiniteListComponent.getItems = this.getItems;
     await this.infiniteListComponent.initialize();
   }
 
-  ngAfterViewInit(): void {
-  }
-
   public getItems: Function = async (pageQuery: PageQuery) => {
-    if (pageQuery.from == 0 && !this._isListInited) {
-      this._isListInited = true;
-      delete pageQuery.from;
-    }
-
     const pageContainer = await this._participantRestApiService.getNotifications(pageQuery);
-
     for (let i = 0; i < pageContainer.list.length; i++) {
       const item = pageContainer.list[i];
       const time = Date.parse(item.created.toString());
