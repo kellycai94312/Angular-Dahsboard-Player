@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, Input, OnInit} from '@angular/core';
 import {NotificationService} from '../../../shared/notification.service';
 import {INotificationViewModel} from '../../../data/local/view-model/notification/i-notification-view-model';
 import {Router} from '@angular/router';
@@ -6,13 +6,14 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {BaseNotification} from '../../../data/remote/model/notification/base/base-notification';
 import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
+import {BaseNotificationViewModel} from '../../../data/local/view-model/notification/base-notification-view-model';
 
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })
-export class NotificationComponent implements OnInit, AfterViewInit {
+export class NotificationComponent implements OnInit, AfterContentInit, AfterViewInit {
 
   @Input()
   public data: BaseNotification;
@@ -24,15 +25,18 @@ export class NotificationComponent implements OnInit, AfterViewInit {
               private _participantRestApiService: ParticipantRestApiService,
               private _toastrService: ToastrService,
               private _translateService: TranslateService) {
+    this.viewModel = new BaseNotificationViewModel(new BaseNotification());
   }
 
   ngOnInit() {
   }
 
-  async ngAfterViewInit() {
+  async ngAfterContentInit() {
     this.viewModel = this._notificationService.createNotificationViewModel(this.data);
     await this.viewModel.build();
-    console.log(this.viewModel);
+  }
+
+  ngAfterViewInit() {
   }
 
   public async onDataClick(event: any) {

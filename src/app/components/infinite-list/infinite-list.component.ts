@@ -55,7 +55,7 @@ export class InfiniteListComponent extends InfinityList<any, PageQuery> implemen
       for (let i = pageContainer.list.length - 1; i >= 0; i--) {
         this.items.unshift(pageContainer.list[i]);
       }
-      window.scrollTo(0, window.screen.availHeight / 8.);
+      window.scrollTo(0, window.screen.availHeight);
     }
   }
 

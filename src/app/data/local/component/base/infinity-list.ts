@@ -47,11 +47,13 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
 
     try {
       const pageContainer = await this.getItems(this.query);
-      if (pageContainer.total != null) {
+      if (pageContainer) {
         if (this._total != pageContainer.total || pageContainer.total < 1) {
-          this.query.from = this.query.from;
+          this.query.from = pageContainer.from;
           this.items = [];
-        } else {
+        }
+
+        if (this.query.from < this._total) {
           this.query.from += this.query.count;
         }
 
