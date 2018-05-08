@@ -49,7 +49,7 @@ export class TrainingNotificationViewModel extends BaseNotificationViewModel<Tra
         this.body = await this.translateService.get('trainingNotification.deleteTraining', {event: event, sender: sender}).toPromise();
         break;
       case TrainingNotificationType.APPROVE_PERSON :
-        this.body = await this.translateService.get('trainingNotification.approvePerson', {event: event, sender: sender}).toPromise();
+        this.body = await this.translateService.get('trainingNotification.approvePerson', {event: event, person: person}).toPromise();
         break;
       case TrainingNotificationType.APPROVE_GROUP :
         // TODO: Not implemented in server

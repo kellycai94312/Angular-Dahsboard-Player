@@ -240,7 +240,7 @@
     "deletePerson": "{{sender}} исключил из события '{{event}}' {{person}}",
     "deletePersonSelf": "Вас исключили из события '{{event}}' {{sender}}",
     "deleteTraining": "{{sender}} удалил событие '{{event}}'",
-    "approvePerson": "{{sender}} подтвердил участие в событии '{{event}}'",
+    "approvePerson": "{{person}} подтвердил участие в событии '{{event}}'",
     "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
   },
   "groupNotification": {
@@ -253,5 +253,7 @@
   "approve": "Подтвердить",
   "refuse": "Отказаться",
   "error": "Ошибка",
-  "success": "Применено"
+  "success": "Применено",
+  "youApproved": "Вы одобрили",
+  "youRefused": "Вы отказались"
 }
