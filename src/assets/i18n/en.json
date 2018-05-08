@@ -239,7 +239,7 @@
     "deletePerson": "{{sender}} excluded from the event '{{event}}' {{person}}",
     "deletePersonSelf": "You were expelled from event '{{event}}' {{sender}}",
     "deleteTraining": "{{sender}} removed the event '{{event}}'",
-    "approvePerson": "{{person}} approved participation in the event '{{event}}'",
+    "approvePerson": "{{sender}} approved participation in the event '{{event}}'",
     "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
   },
   "groupNotification": {
