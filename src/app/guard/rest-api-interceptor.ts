@@ -1,18 +1,15 @@
-import { Injectable, Injector } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
-import { Router } from '@angular/router';
-import { LayoutService } from '../layout/shared/layout.service';
-import { LocalStorageService } from '../shared/local-storage.service';
+import {AuthorizationService} from '../shared/authorization.service';
 
 @Injectable()
 export class RestApiInterceptor implements HttpInterceptor {
 
-  constructor(private _router: Router,
-              private _injector: Injector) {
+  constructor(private _authorizationService: AuthorizationService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -22,11 +19,8 @@ export class RestApiInterceptor implements HttpInterceptor {
         if (err instanceof HttpErrorResponse) {
           switch (err.status) {
             case 401:
-              this._injector.get(LocalStorageService).signOut();
-              this._injector.get(LayoutService).toggleLayout('login');
-              if (this._router.url !== '/login') {
-                this._router.navigate(['login']);
-              }
+              this._authorizationService.logOut();
+              break;
           }
           return Observable.throw(err);
         }

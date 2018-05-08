@@ -13,16 +13,19 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
   public getItems: Function;
 
   @Input()
-  public items: T[];
+  public items: Array<T>;
+
+  protected rear?: number;
+
+  // TODO: Needed for don't duplicates items in infinity list
+  protected initialized: boolean;
 
   constructor() {
     this._total = 0;
     this.query = <TQuery>{
       name: '',
-      from: 0,
       count: PropertyConstant.pageSize
     };
-
     this.items = [];
   }
 
@@ -30,8 +33,10 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
   }
 
   public async initialize(): Promise<void> {
+    this.initialized = false;
     this.items = [];
     await this.update(true);
+    this.initialized = true;
   }
 
   public async update(withReset: boolean = false): Promise<boolean> {
@@ -39,17 +44,14 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
       return false;
     }
     if (withReset) {
-      this._total = 0;
-      this.query.from = 0;
+      this.resetFilter();
     }
 
     try {
       const pageContainer = await this.getItems(this.query);
-      if (pageContainer.total != null) {
-        if (this._total != pageContainer.total || pageContainer.total < 1) {
-          this.query.from = this.query.count;
-          this.items = [];
-        } else {
+      if (pageContainer) {
+        this.query.from = pageContainer.from;
+        if (this.query.from < this._total) {
           this.query.from += this.query.count;
         }
 
@@ -58,13 +60,30 @@ export class InfinityList<T, TQuery extends PageQuery> implements AfterViewInit 
         }
         this._total = pageContainer.total;
       } else {
-        this._total = 0;
-        this.query.from = 0;
+        this.resetFilter();
+      }
+
+      if (!this.query.from) {
+        this.rear = null;
+        this.rear = Number.MAX_VALUE;
+      } else {
+        if (this.rear) {
+          this.rear = Math.min(this.rear, this.query.from);
+        } else {
+          this.rear = this.query.from;
+        }
       }
     } catch (e) {
       return false;
     }
     return true;
+  }
+
+  private resetFilter(): void {
+    this.rear = null;
+    this._total = 0;
+    delete this.query.from;
+    this.items = [];
   }
 
 }

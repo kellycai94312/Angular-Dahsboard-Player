@@ -8,11 +8,11 @@
     <ul class="sidebar-menu">
       <li *ngFor="let item of menuItems"
           class="menu-item"
-          routerLink="{{item.routerLink}}"
+          [routerLink]="item.routerLink"
           routerLinkActive="active">
         <a>
-          <i class="{{item.iconClassName}}"></i>
-          <span class="text-uppercase">{{item.nameKey | translate }}</span>
+          <i [class]="item.iconClassName"></i>
+          <span>{{item.nameKey | translate }}</span>
         </a>
       </li>
     </ul>

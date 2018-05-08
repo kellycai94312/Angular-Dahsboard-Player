@@ -41,12 +41,14 @@ export class EventsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
   }
 
-  async ngAfterViewInit() {
+  async ngAfterViewInit(): Promise<void> {
     this.searchDxTextBoxComponent.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async event => {
         this.baseTrainingQuery.name = event.value;
         await this.updateItems();
       });
+    this.infiniteListComponent.query = this.baseTrainingQuery;
+    this.infiniteListComponent.getItems = this.getItems;
     await this.infiniteListComponent.initialize();
   }
 

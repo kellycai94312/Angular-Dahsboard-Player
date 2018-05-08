@@ -135,9 +135,7 @@
   "messages": {
     "section": "Сообщения"
   },
-  "notifications": {
-    "section": "Уведомления"
-  },
+  "notifications": "Уведомления",
   "modal": {
     "cancel": "Отмена",
     "save": "Сохранить"
@@ -230,5 +228,30 @@
   "gameMustHaveTwoTeams": "В игре должно быть две команды",
   "trainingType": "Вид события",
   "score": "Счет",
-  "access": "Доступ"
+  "access": "Доступ",
+  "showPrevious": "Показать предыдущий",
+  "trainingNotification": {
+    "scheduledEvent": "Скоро начнетса событие '{{event}}'",
+    "updateDate": "Обновлена дата в событии '{{event}}'",
+    "updateLocation": "Обновлено местоположение в событии '{{event}}'",
+    "updateExercises": "Обновлен список упражнений в событии '{{event}}'",
+    "addPerson": "Вас добавили в событие '{{event}}'",
+    "addGroup": "Ваша группа добавлена в событие '{{event}}'",
+    "deletePerson": "{{sender}} исключил из события '{{event}}' {{person}}",
+    "deletePersonSelf": "Вас исключили из события '{{event}}' {{sender}}",
+    "deleteTraining": "{{sender}} удалил событие '{{event}}'",
+    "approvePerson": "{{sender}} подтвердил участие в событии '{{event}}'",
+    "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
+  },
+  "groupNotification": {
+    "addPerson": "{{sender}} добавил {{person}} в группу '{{group}}'",
+    "addPersonSelf": "{{sender}} добавил вас в группу '{{group}}'",
+    "deletePerson": "{{sender}} исключил {{person}} из группы '{{group}}'",
+    "deletePersonSelf": "{{sender}} исключил вас из группы '{{group}}'",
+    "joinPerson": "{{person}} подал заявку в группу '{{group}}'"
+  },
+  "approve": "Подтвердить",
+  "refuse": "Отказаться",
+  "error": "Ошибка",
+  "success": "Применено"
 }

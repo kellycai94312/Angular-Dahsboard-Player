@@ -13,6 +13,7 @@ const routes: Routes = [
     path: ':id', component: EventPageComponent,
     children: [
       {path: '', redirectTo: 'game/step', pathMatch: 'full'},
+      {path: 'game', redirectTo: 'game/step', pathMatch: 'full'},
       {
         path: 'game/step', component: GameStepsManagerPageComponent,
         children: [

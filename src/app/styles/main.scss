@@ -99,6 +99,11 @@ input[type=submit] {
   cursor: pointer;
 }
 
+input[type=button],
+input[type=submit] {
+  text-transform: uppercase
+}
+
 input[type=file]::-webkit-file-upload-button {
   cursor: pointer;
 }
@@ -110,4 +115,16 @@ input[type=file] {
   left: 0;
   opacity: 0;
   display: none;
+}
+
+.link {
+  color: #007bff !important;
+
+  &:hover {
+    color: rgba(51, 122, 183, .4) !important;
+  }
+
+  &:focus {
+    color: #337ab7 !important;
+  }
 }

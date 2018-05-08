@@ -57,6 +57,10 @@ import {PersonMeasure} from '../bean/person-measure';
 import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
 import {PropertyConstant} from '../../local/property-constant';
+import {BaseNotification} from '../model/notification/base/base-notification';
+import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
+import {DateWrapper} from '../bean/wrapper/date-wrapper';
+import {TrainingStateRequest} from '../request/training-state-request';
 
 @Injectable()
 @RestParams({
@@ -71,6 +75,12 @@ export class ParticipantRestApiService extends Rest {
   }
 
   //#region Auth
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/auth'
+  })
+  getSession: IRestMethod<void, Session>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -603,6 +613,12 @@ export class ParticipantRestApiService extends Rest {
   })
   updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!id}/state'
+  })
+  updateBaseTrainingState: IRestMethodStrict<TrainingStateRequest, any, { id: number }, BaseTraining>;
+
   //#region Group
 
   @RestAction({
@@ -722,6 +738,40 @@ export class ParticipantRestApiService extends Rest {
   removeTrainingPerson: IRestMethod<{ baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
 
   //#endregion
+
+  //#endregion
+
+  //#region Notification
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/notification'
+  })
+  getNotifications: IRestMethod<PageQuery, PageContainer<BaseNotification>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/notification/unread'
+  })
+  getUnreadCountNotifications: IRestMethod<void, IntegerWrapper>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/notification/read'
+  })
+  createReadNotifications: IRestMethod<DateWrapper, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/notification/{!id}/approve'
+  })
+  approveNotification: IRestMethod<{ id: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/notification/{!id}/refuse'
+  })
+  refuseNotification: IRestMethod<{ id: number }, void>;
 
   //#endregion
 

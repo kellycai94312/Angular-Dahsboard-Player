@@ -74,9 +74,10 @@ $sidebar-item-submenu-transition: .2s;
       flex-direction: column;
 
       > li.menu-item {
+        display: flex;
+        align-items: center;
         width: 100%;
         cursor: pointer;
-        height: $sidebar-item-menu-height;
         border-left: 3px solid transparent;
 
         > a {
@@ -84,12 +85,13 @@ $sidebar-item-submenu-transition: .2s;
           flex-direction: row;
           overflow: hidden;
           color: $sidebar-item-menu-color;
-          padding: 12px 5px 12px 15px;
+          padding: 6px 5px 6px 15px;
           text-decoration: none;
 
           > span {
             padding-left: 5px;
           }
+
           > .pull-right-container > i.lnr-chevron-left {
             font-size: 8px;
             padding: 0;

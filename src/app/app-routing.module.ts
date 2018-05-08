@@ -21,6 +21,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, LayoutService]
   },
   {
+    path: 'notification',
+    loadChildren: './pages/notification/notification.module#NotificationModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'registration',
     loadChildren: './pages/registration-page/registration-page.module#RegistrationPageModule'
   },

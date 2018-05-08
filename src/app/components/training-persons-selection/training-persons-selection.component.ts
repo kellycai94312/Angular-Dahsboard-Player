@@ -11,6 +11,7 @@ import {Game} from '../../data/remote/model/training/game/game';
 import {UserRole} from '../../data/remote/model/user-role';
 import {TrainingGroup} from '../../data/remote/model/training-group';
 import {TrainingPerson} from '../../data/remote/model/training/training-person';
+import {TrainingState} from '../../data/remote/misc/training-state';
 
 @Component({
   selector: 'app-training-persons-selection',
@@ -114,6 +115,11 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
       item.update(trainingPerson);
 
       super.onSelected(item);
+
+      // TODO: Add validation on server
+      if (trainingPerson.baseTraining.trainingState === TrainingState.DRAFT) {
+        await this._participantRestApiService.updateBaseTrainingState({trainingState: TrainingState.PLAN}, {}, {id: this.trainingId});
+      }
 
       if (this.userRoleEnum === UserRoleEnum.ATHLETE) {
         this.updateNumbers();

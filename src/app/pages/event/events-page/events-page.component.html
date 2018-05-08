@@ -47,9 +47,7 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list class="list-group-flush"
-                     [(query)]="baseTrainingQuery"
-                     [getItems]="getItems">
+  <app-infinite-list class="list-group-flush">
     <ng-template let-item>
       <tr class="d-flex" routerLink="{{item.id}}" [class.disabled]="item.discriminator !== 'GAME'">
         <td class="col-sm-3">{{item.name}}</td>

@@ -18,6 +18,7 @@ export class SideBarComponent implements OnInit {
     this.menuItems.push(this.createMenuItem('fa fa-users', 'persons.section', 'person'));
     this.menuItems.push(this.createMenuItem('fa fa-users', 'groups.section', 'group'));
     this.menuItems.push(this.createMenuItem('fa fa-calendar', 'events', 'event'));
+    this.menuItems.push(this.createMenuItem('fa fa-bell', 'notifications', 'notification'));
   }
 
   ngOnInit() {

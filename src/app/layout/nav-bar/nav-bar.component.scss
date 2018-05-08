@@ -63,7 +63,7 @@ $user-panel-width: 250px;
 .navbar-wrapper {
   user-select: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
   height: $navbar-height;
   background-color: $navbar-background;
