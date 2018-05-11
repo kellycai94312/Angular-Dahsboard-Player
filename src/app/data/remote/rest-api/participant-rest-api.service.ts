@@ -61,6 +61,7 @@ import {BaseNotification} from '../model/notification/base/base-notification';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
 import {TrainingStateRequest} from '../request/training-state-request';
+import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
 
 @Injectable()
 @RestParams({
@@ -772,6 +773,34 @@ export class ParticipantRestApiService extends Rest {
     path: '/notification/{!id}/refuse'
   })
   refuseNotification: IRestMethod<{ id: number }, void>;
+
+  //#endregion
+
+  //#region Connection
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/connection'
+  })
+  getPersonConnections: IRestMethod<PersonQuery, PageContainer<Person>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/connection'
+  })
+  createConnection: IRestMethodStrict<{ id: number }, any, any, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/connection'
+  })
+  removeConnection: IRestMethodStrict<{ id: number }, any, any, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/connection/{!id}'
+  })
+  hasConnection: IRestMethod<{ id: number }, BooleanWrapper>;
 
   //#endregion
 

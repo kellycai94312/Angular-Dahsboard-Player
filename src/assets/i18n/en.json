@@ -254,5 +254,8 @@
   "error": "Error",
   "success": "Success",
   "youApproved": "You approved",
-  "youRefused": "You refused"
+  "youRefused": "You refused",
+  "addContact": "Add contact",
+  "removeContact": "Remove contact",
+  "pleaseWait": "Please, wait"
 }

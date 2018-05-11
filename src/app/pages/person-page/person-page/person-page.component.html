@@ -1,6 +1,6 @@
 <div *ngIf="person">
   <!-- person info -->
-  <div class="d-flex flex-row">
+  <div class="d-flex flex-row mb-2">
     <div class="d-flex flex-column">
       <div class="img-fluid logo-xl-circle"
            [ngStyle]="{'background-image': 'url('+ logo +')'}">
@@ -31,7 +31,9 @@
                  logoSizeClass="logo-xl"></app-group>
     </div>
   </div>
-
+  <app-busy-button *ngIf="canEditConnection"
+                   [nameKey]="editContactNameKey"
+                   [click]="onEditContactClick"></app-busy-button>
   <!-- roles -->
   <div class="d-flex flex-row mt-2">
     <div class="align-self-center">
