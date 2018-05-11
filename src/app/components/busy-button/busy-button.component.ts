@@ -14,9 +14,9 @@ export class BusyButtonComponent implements OnInit {
   @Input()
   public nameKey: string;
 
-  protected busy: boolean;
+  public busy: boolean;
 
-  private clicked: boolean;
+  private _clicked: boolean;
 
   constructor() {
   }
@@ -25,8 +25,8 @@ export class BusyButtonComponent implements OnInit {
   }
 
   public async onClick(): Promise<void> {
-    if (this.click && !this.clicked) {
-      this.clicked = true;
+    if (this.click && !this._clicked) {
+      this._clicked = true;
       const subscription = Observable.of([]).delay(200)
         .subscribe(() => {
           this.busy = true;
@@ -38,7 +38,7 @@ export class BusyButtonComponent implements OnInit {
       } finally {
         subscription.unsubscribe();
         this.busy = false;
-        this.clicked = false;
+        this._clicked = false;
       }
     }
   }
