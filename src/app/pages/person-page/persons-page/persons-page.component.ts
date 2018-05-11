@@ -64,7 +64,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this.personQuery.fullName = value;
+        this.personQuery.name = value;
         await this.updateItems();
       });
   }

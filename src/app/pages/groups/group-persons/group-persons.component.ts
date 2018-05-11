@@ -11,6 +11,7 @@ import {GroupPersonModalComponent} from '../group-person-modal/group-person-moda
 import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
+import {ISubscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-group-persons',
@@ -30,16 +31,18 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public groupPersonQuery: GroupPersonQuery;
 
+  private readonly _activatedRouteSubscription: ISubscription;
+
   constructor(private _modalService: NgbModal,
               private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
               public groupService: GroupService) {
     this.groupPersonQuery = new GroupPersonQuery();
 
-    this._activatedRoute.params.subscribe(async params => {
+    this._activatedRouteSubscription = this._activatedRoute.params.subscribe(async params => {
       const subGroupId: number = +params.id;
 
-      this.groupPersonQuery.fullName = '';
+      this.groupPersonQuery.name = '';
       this.groupPersonQuery.from = 0;
       this.groupPersonQuery.count = PropertyConstant.pageSize;
 
@@ -64,7 +67,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this.groupPersonQuery.fullName = value;
+        this.groupPersonQuery.name = value;
         await this.updateItems();
       });
     await this.infiniteListComponent.initialize();
@@ -72,6 +75,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
+    this._activatedRouteSubscription.unsubscribe();
   }
 
   public onEdit(groupPersonViewModel: GroupPersonViewModel) {

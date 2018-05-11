@@ -6,53 +6,17 @@ import {CookieService} from 'ngx-cookie';
 @Injectable()
 export class LocalStorageService {
 
-  private readonly userId: string;
-  private readonly personId: string;
-
   private readonly locale: string;
   private readonly sessionId: string;
 
   constructor(private translateService: TranslateService,
               private cookieService: CookieService) {
-    this.userId = 'user_id';
-    this.personId = 'person_id';
     this.locale = 'locale';
     this.sessionId = 'rsi';
   }
 
   public signOut(): void {
-    localStorage.removeItem(this.userId);
-    localStorage.removeItem(this.personId);
-
     this.cookieService.remove(this.sessionId);
-  }
-
-  /**
-   * @deprecated Use AuthorizationService
-   */
-  public saveUserId(id: number): void {
-    localStorage.setItem(this.userId, id.toString());
-  }
-
-  /**
-   * @deprecated Use AuthorizationService
-   */
-  public savePersonId(id: number): void {
-    localStorage.setItem(this.personId, id.toString());
-  }
-
-  /**
-   * @deprecated Use AuthorizationService
-   */
-  public getCurrentUserId(): number {
-    return +localStorage.getItem(this.userId);
-  }
-
-  /**
-   * @deprecated Use AuthorizationService
-   */
-  public getCurrentPersonId(): number {
-    return +localStorage.getItem(this.personId);
   }
 
   public setLocale(localeKey: string): void {

@@ -37,6 +37,7 @@ import {stompConfig} from './data/config/stomp-config';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
+import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -77,6 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ProfileService,
     AuthGuard,
     AuthDenyGuard,
+    RegistrationPersonPageGuard,
     ParticipantRestApiService,
     AssetsService,
     TranslateObjectService,

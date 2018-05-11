@@ -27,6 +27,7 @@ import {NamedQuery} from '../../../data/remote/rest-api/named-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
+import {AuthorizationService} from '../../../shared/authorization.service';
 
 @Component({
   selector: 'app-person-page',
@@ -62,6 +63,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: NgbModal,
+              private _authorizationService: AuthorizationService,
               private _translate: TranslateService) {
 
     this.isEditAllow = false;
@@ -211,7 +213,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       this._navbarService.getPerson(+params.id).then(person => {
         this.person = person;
         this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
-        this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
+        this.isEditAllow = person.id === this._authorizationService.session.personId;
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
         // load user roles

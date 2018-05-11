@@ -1,10 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
-import { LocalStorageService } from './local-storage.service';
-import { Person } from '../data/remote/model/person';
-import { UserRoleEnum } from "../data/remote/model/user-role-enum";
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
+import {Person} from '../data/remote/model/person';
+import {UserRoleEnum} from '../data/remote/model/user-role-enum';
+import {AuthorizationService} from './authorization.service';
 
+/**
+ * @deprecated Use PersonViewModel
+ */
 @Injectable()
 export class ProfileService {
 
@@ -16,7 +19,7 @@ export class ProfileService {
 
   private profile: Promise<Person>;
 
-  constructor(private _localStorageService: LocalStorageService,
+  constructor(private _authorizationService: AuthorizationService,
               private _participantRestApiService: ParticipantRestApiService) {
   }
 
@@ -33,7 +36,7 @@ export class ProfileService {
   }
 
   getPerson(id: number): Promise<Person> {
-    if (this._localStorageService.getCurrentPersonId() === id) {
+    if (this._authorizationService.session.personId == id) {
       if (this.profile) {
         return this.profile;
       } else {
@@ -46,7 +49,7 @@ export class ProfileService {
   }
 
   async hasUserRole(userRoleEnum: UserRoleEnum) {
-    const roles = await this._participantRestApiService.getUserRolesByUser({id: this._localStorageService.getCurrentUserId()});
+    const roles = await this._participantRestApiService.getUserRolesByUser({id: this._authorizationService.session.userId});
     return roles.filter(role => role.userRoleEnum === userRoleEnum).length != 0;
   }
 

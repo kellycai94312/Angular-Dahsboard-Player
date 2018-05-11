@@ -110,7 +110,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/user/{!id}'
   })
-  getUser: IRestMethod<IdentifiedObject, User>;
+  getUser: IRestMethod<{ id: number }, User>;
 
   @RestAction({
     method: RestRequestMethod.Get,
