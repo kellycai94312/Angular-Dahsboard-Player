@@ -27,6 +27,8 @@ import {NamedQuery} from '../../../data/remote/rest-api/named-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
+import {AuthorizationService} from '../../../shared/authorization.service';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
   selector: 'app-person-page',
@@ -51,6 +53,10 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public roleToggle: UserRole;
   public sportTypeToggle: SportType;
 
+  public editContactNameKey: string;
+  public canEditConnection: boolean;
+  public hasConnection: boolean;
+
   private readonly baseGroupSubscription: ISubscription;
 
   constructor(public translate: TranslateService,
@@ -62,7 +68,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: NgbModal,
-              private _translate: TranslateService) {
+              private _authorizationService: AuthorizationService,
+              private _translate: TranslateService,
+              private _toastrService: ToastrService) {
 
     this.isEditAllow = false;
 
@@ -84,6 +92,10 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  public onEditContactClick = async (): Promise<void> => {
+    await this.editConnection(this.person);
+  };
 
   isTabVisible = (item: PersonTab): boolean => {
     return item
@@ -208,10 +220,12 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.route.params.subscribe(params => {
-      this._navbarService.getPerson(+params.id).then(person => {
+      this._navbarService.getPerson(+params.id).then(async person => {
         this.person = person;
         this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
-        this.isEditAllow = person.id === this._localStorageService.getCurrentPersonId();
+        this.isEditAllow = person.id === this._authorizationService.session.personId;
+        await this.initializeConnection(person);
+
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 
         // load user roles
@@ -279,5 +293,37 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     personTab.private = privateTab;
     return personTab;
   }
+
+  //#region Connection
+
+  private async initializeConnection(person: Person) {
+    this.canEditConnection = person.id != this._authorizationService.session.personId;
+    if (!this.canEditConnection) {
+      return;
+    }
+
+    try {
+      this.hasConnection = (await this.participantRestApiService.hasConnection({id: person.id})).value;
+      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
+    } catch (e) {
+    }
+  }
+
+  private async editConnection(person: Person): Promise<void> {
+    try {
+      if (this.hasConnection) {
+        await this.participantRestApiService.removeConnection({id: person.id});
+      } else {
+        await this.participantRestApiService.createConnection({id: person.id});
+      }
+
+      this.hasConnection = !this.hasConnection;
+      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
+    } catch (e) {
+      this._toastrService.error('error');
+    }
+  }
+
+  //#endregion
 
 }

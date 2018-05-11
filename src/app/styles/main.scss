@@ -104,10 +104,6 @@ input[type=submit] {
   text-transform: uppercase
 }
 
-input[type=file]::-webkit-file-upload-button {
-  cursor: pointer;
-}
-
 input[type=file] {
   position: absolute;
   width: 100%;

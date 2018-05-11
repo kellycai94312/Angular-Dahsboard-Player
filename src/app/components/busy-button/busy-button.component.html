@@ -1,0 +1,9 @@
+<button class="btn btn-primary input-height-sm"
+        (click)="onClick()">
+  <span *ngIf="!busy; else elseTemplate">
+    {{ nameKey | translate}}</span>
+  <ng-template #elseTemplate>
+    <span class="is-busy"></span>
+    {{ 'pleaseWait' | translate}}
+  </ng-template>
+</button>

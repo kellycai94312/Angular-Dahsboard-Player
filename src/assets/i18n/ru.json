@@ -255,5 +255,8 @@
   "error": "Ошибка",
   "success": "Применено",
   "youApproved": "Вы одобрили",
-  "youRefused": "Вы отказались"
+  "youRefused": "Вы отказались",
+  "addContact": "Добавить контакт",
+  "removeContact": "Удалить контакт",
+  "pleaseWait": "Пожалуйста, подождите"
 }

@@ -31,13 +31,6 @@ export class AuthorizationService {
     try {
       this.session = await this._participantRestApiService.login(auth);
       if (this.session) {
-        if (this.session.userId) {
-          this._localStorageService.saveUserId(this.session.userId);
-        }
-        if (this.session.personId) {
-          this._localStorageService.savePersonId(this.session.personId);
-        }
-
         this.handleLogIn.next(this.session);
       }
     } catch (e) {
@@ -45,7 +38,8 @@ export class AuthorizationService {
     return this.session;
   }
 
-  public async logOut(): Promise<void> {
+  public async logOut(withNavigate: boolean = true): Promise<void> {
+    this.session = null;
     this.handleLogOut.next(true);
     try {
       await this._participantRestApiService.logout();
@@ -54,24 +48,28 @@ export class AuthorizationService {
     this._localStorageService.signOut();
     this._layoutService.hidden.next(true);
 
-    setTimeout(async () => {
+    if (withNavigate) {
       const router = this._injector.get(Router);
       if (router.url !== '/login') {
         await router.navigate(['login']);
       }
-    });
+    }
   }
 
-  private async checkSession(): Promise<boolean> {
-    if (this._localStorageService.getSessionId()) {
-      try {
-        this.session = await this._participantRestApiService.getSession();
-        return true;
-      } catch (e) {
-      }
+  public async updateSession(): Promise<Session> {
+    try {
+      this.session = await this._participantRestApiService.getSession();
+    } catch (e) {
     }
-    await this.logOut();
-    return false;
+    return this.session;
+  }
+
+  private async checkSession(): Promise<void> {
+    if (this._localStorageService.getSessionId()) {
+      await this.updateSession();
+    } else {
+      await this.logOut(false);
+    }
   }
 
 }

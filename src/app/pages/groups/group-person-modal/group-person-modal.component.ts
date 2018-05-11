@@ -78,7 +78,7 @@ export class GroupPersonModalComponent implements OnInit {
       userRoleId: this.mentorUserRole.id,
       from: from,
       count: this.pageSize,
-      fullName: searchText
+      name: searchText
     });
   };
 

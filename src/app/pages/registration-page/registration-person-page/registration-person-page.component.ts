@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {TranslateService} from '@ngx-translate/core';
 import notify from 'devextreme/ui/notify';
 
-import { SexEnum } from '../../../data/remote/misc/sex-enum';
-import { Sex } from '../../../data/local/sex';
-import { TranslateObjectService } from '../../../shared/translate-object.service';
-import { Person } from '../../../data/remote/model/person';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { LocalStorageService } from '../../../shared/local-storage.service';
-import { IdentifiedObject } from '../../../data/remote/base/identified-object';
+import {SexEnum} from '../../../data/remote/misc/sex-enum';
+import {Sex} from '../../../data/local/sex';
+import {TranslateObjectService} from '../../../shared/translate-object.service';
+import {Person} from '../../../data/remote/model/person';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {AuthorizationService} from '../../../shared/authorization.service';
 
 @Component({
   selector: 'app-registration-person-page',
@@ -26,13 +25,12 @@ export class RegistrationPersonPageComponent implements OnInit {
   public sexValues: Array<Sex>;
   public selectedSex: Sex;
 
-  private errorMessage: string;
-
-  constructor(public translate: TranslateService,
-              private translateObjectService: TranslateObjectService,
-              private participantRestApiService: ParticipantRestApiService,
-              private localStorageService: LocalStorageService,
-              private router: Router) {
+  constructor(private _translate: TranslateService,
+              private _translateObjectService: TranslateObjectService,
+              private _participantRestApiService: ParticipantRestApiService,
+              private _authorizationService: AuthorizationService,
+              private _router: Router) {
+    this.sexValues = [];
     this.person = new Person();
 
     this.dateMin = new Date();
@@ -44,19 +42,14 @@ export class RegistrationPersonPageComponent implements OnInit {
 
   async ngOnInit() {
     const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    this.sexValues = [];
-
     for (let i = 0; i < temp.length; i++) {
       const sex = new Sex();
-      sex.name = await this.translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
+      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
       sex.sexEnum = temp[i];
       this.sexValues.push(sex);
     }
-    const userId = new IdentifiedObject();
-    userId.id = this.localStorageService.getCurrentUserId();
-    this.person.user = await this.participantRestApiService.getUser(userId);
 
-    this.errorMessage = await this.translate.get('errors.errorWhileSaving').toPromise();
+    this.person.user = await this._participantRestApiService.getUser({id: this._authorizationService.session.userId});
   }
 
   public async onApply(event: any) {
@@ -64,21 +57,22 @@ export class RegistrationPersonPageComponent implements OnInit {
     if (result.isValid) {
       try {
         this.person.sex = this.selectedSex.sexEnum;
-        const newPerson = await this.participantRestApiService.createPerson(this.person);
-        if (newPerson != null) {
-          this.localStorageService.savePersonId(newPerson.id);
-          await this.router.navigate(['/person', newPerson.id]);
+        this.person = await this._participantRestApiService.createPerson(this.person);
+        if (this.person) {
+          await this._authorizationService.updateSession();
+          await this._router.navigate(['/person', this.person.id]);
         } else {
-          this.showErrorMessage();
+          await this.showErrorMessage();
         }
-      } catch (Error) {
-        this.showErrorMessage();
+      } catch (e) {
+        await this.showErrorMessage();
       }
     }
   }
 
-  private showErrorMessage(): void {
-    notify(this.errorMessage, 'error', 2000);
+  private async showErrorMessage(): Promise<void> {
+    const errorMessage = await this._translate.get('errors.errorWhileSaving').toPromise();
+    notify(errorMessage, 'error', 2000);
   }
 
 }
