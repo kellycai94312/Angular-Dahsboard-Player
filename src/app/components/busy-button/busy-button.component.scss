@@ -11,20 +11,11 @@
     border-left-color: white;
     border-radius: 50%;
     margin-right: 0.5em;
-    -webkit-animation: busy-spin 0.75s linear infinite;
     animation: busy-spin 0.75s linear infinite;
-  }
-
-  @-webkit-keyframes busy-spin {
-    to {
-      -webkit-transform: rotate(360deg);
-      transform: rotate(360deg);
-    }
   }
 
   @keyframes busy-spin {
     to {
-      -webkit-transform: rotate(360deg);
       transform: rotate(360deg);
     }
   }
