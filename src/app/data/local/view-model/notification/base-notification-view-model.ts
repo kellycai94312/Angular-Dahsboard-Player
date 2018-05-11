@@ -32,11 +32,7 @@ export class BaseNotificationViewModel<T extends BaseNotification> extends BaseV
   }
 
   public getPersonLink(person: Person): string {
-    let fullName = `${person.firstName} ${person.lastName}`;
-    if (person.patronymic) {
-      fullName += ` ${person.patronymic}`;
-    }
-    return `<a class="link" link="/person/${person.id}">${fullName}</a>`;
+    return `<a class="link" link="/person/${person.id}">${person.firstName} ${person.lastName}</a>`;
   }
 
 }

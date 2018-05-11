@@ -252,5 +252,7 @@
   "approve": "Approve",
   "refuse": "Refuse",
   "error": "Error",
-  "success": "Success"
+  "success": "Success",
+  "youApproved": "You approved",
+  "youRefused": "You refused"
 }
