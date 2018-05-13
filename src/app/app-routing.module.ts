@@ -40,6 +40,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, LayoutService]
   },
   {
+    path: 'connection',
+    loadChildren: './pages/connection/connection.module#ConnectionModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]
