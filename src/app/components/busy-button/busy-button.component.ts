@@ -12,6 +12,9 @@ export class BusyButtonComponent implements OnInit {
   public click: Function;
 
   @Input()
+  public parameter: any;
+
+  @Input()
   public nameKey: string;
 
   public busy: boolean;
@@ -24,7 +27,7 @@ export class BusyButtonComponent implements OnInit {
   ngOnInit() {
   }
 
-  public async onClick(): Promise<void> {
+  public async onClick(event: Event): Promise<void> {
     if (this.click && !this._clicked) {
       this._clicked = true;
       const subscription = Observable.of([]).delay(200)
@@ -33,7 +36,11 @@ export class BusyButtonComponent implements OnInit {
         });
 
       try {
-        await this.click();
+        if (this.parameter) {
+          await this.click(event, this.parameter);
+        } else {
+          await this.click(event);
+        }
       } catch (e) {
       } finally {
         subscription.unsubscribe();

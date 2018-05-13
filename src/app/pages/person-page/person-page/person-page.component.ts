@@ -224,9 +224,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
         this.person = person;
         this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
         this.isEditAllow = person.id === this._authorizationService.session.personId;
-        await this.initializeConnection(person);
-
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
+
+        await this.initializeConnection(person);
 
         // load user roles
         this.participantRestApiService.getUserRolesByUser({id: person.user.id})
