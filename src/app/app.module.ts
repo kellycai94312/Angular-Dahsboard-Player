@@ -38,6 +38,7 @@ import {ParticipantStompService} from './data/remote/web-socket/participant-stom
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
+import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -55,6 +56,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    NgxVirtualScrollModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       enableHtml: true
