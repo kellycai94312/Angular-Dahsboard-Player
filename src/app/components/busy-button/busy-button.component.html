@@ -1,5 +1,5 @@
 <button class="btn btn-primary input-height-sm"
-        (click)="onClick()">
+        (click)="onClick($event)">
   <span *ngIf="!busy; else elseTemplate">
     {{ nameKey | translate}}</span>
   <ng-template #elseTemplate>

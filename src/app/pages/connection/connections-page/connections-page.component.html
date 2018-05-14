@@ -1,0 +1,112 @@
+<div class="row cols-padding">
+  <div class="col">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 type="date"
+                 placeholder="{{'yearBirth' | translate}}"
+                 showClearButton="true"
+                 displayFormat="year"
+                 maxZoomLevel="decade"
+                 minZoomLevel="century"
+                 (onValueChanged)="onYearBirthChanged($event.value)">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sexItems"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   placeholder="{{'sex' | translate}}"
+                   (onSelectionChanged)="onSexChanged($event.selectedItem)">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="userRoles"
+                   displayExpr="name"
+                   acceptCustomValue="true"
+                   showClearButton="true"
+                   (onSelectionChanged)="onUserRoleChanged($event.selectedItem)"
+                   placeholder="{{'userRole' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadGroups"
+                      [pageSize]="pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'group' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onGroupChanged($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadSportTypes"
+                      [pageSize]="pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'sportType' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onSportTypeChanged($event.current)">
+    </app-input-select>
+  </div>
+</div>
+
+<table class="table table-hover mt-2">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-1">{{'image' | translate}}</th>
+    <th class="col-4">{{'fullName' | translate}}</th>
+    <th class="col-1">{{'yearBirth' | translate}}</th>
+    <th class="col-2">{{'role' | translate}}</th>
+    <th class="col-3">{{'group' | translate}}</th>
+    <th class="col-1"></th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush"
+                     [(query)]="personQuery"
+                     [getItems]="getItems">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-1"
+            [routerLink]="item.url">
+          <div *ngIf="item.imageLogoUrl"
+               class="img-fluid logo-lg-circle"
+               [ngStyle]="{'background-image': 'url('+ item.imageLogoUrl +')'}">
+          </div>
+        </td>
+        <td class="col-4"
+            [routerLink]="item.url">
+          <h5>{{item.data?.firstName}}<br>
+            {{item.data?.lastName}}<br>
+            {{item.data?.patronymic}}</h5>
+        </td>
+        <td class="col-1"
+            [routerLink]="item.url">
+          <h5>{{item.data?.birthDate | date:'yyyy'}}</h5>
+        </td>
+        <td class="col-2"
+            [routerLink]="item.url">
+          <h5>{{item.baseUserRole?.name}}</h5>
+        </td>
+        <td class="col-3"
+            [routerLink]="item.url">
+          <app-group *ngIf="item.baseGroupViewModel"
+                     [data]="item.baseGroupViewModel.data"></app-group>
+        </td>
+        <td class="col-1">
+          <app-busy-button nameKey="remove"
+                           [click]="onRemoveConnection"
+                           [parameter]="item"></app-busy-button>
+        </td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>
