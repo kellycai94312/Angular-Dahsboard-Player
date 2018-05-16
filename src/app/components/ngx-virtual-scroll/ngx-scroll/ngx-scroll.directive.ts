@@ -1,10 +1,13 @@
-import {AfterContentChecked, Directive, ElementRef, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output} from '@angular/core';
 import {Direction} from '../model/direction';
+import {Observable} from 'rxjs';
+import {ISubscription} from 'rxjs/Subscription';
+
 
 @Directive({
   selector: '[ngxScroll]'
 })
-export class NgxScrollDirective implements AfterContentChecked {
+export class NgxScrollDirective implements OnDestroy {
 
   @Input()
   public attachedYOffset: number;
@@ -24,6 +27,8 @@ export class NgxScrollDirective implements AfterContentChecked {
   private _isAttached: boolean;
   private _lastScrollTop: number;
 
+  private readonly _timerSubscription: ISubscription;
+
   @HostListener('scroll')
   public onScroll(): void {
     if (this.authScroll) {
@@ -36,22 +41,21 @@ export class NgxScrollDirective implements AfterContentChecked {
         if (0 == this._elementRef.nativeElement.scrollTop && this._rearScrollHeight != this._elementRef.nativeElement.scrollHeight) {
           this._rearScrollHeight = this._elementRef.nativeElement.scrollHeight;
           this.scrollUp.emit();
-          // TODO: Add scroll to start new items
         }
         break;
       case Direction.DOWN:
         if (this._frontPosition < this._elementRef.nativeElement.scrollTop) {
-          this._frontPosition = this._elementRef.nativeElement.scrollTop + this._elementRef.nativeElement.clientHeight;
+          this._frontPosition = this._elementRef.nativeElement.scrollTop + this._elementRef.nativeElement.clientHeight + 1;
           this.scrollDown.emit();
-          // TODO: Add scroll to start new items
         }
         break;
     }
+
   }
 
   constructor(private _elementRef: ElementRef) {
     this.attachedYOffset = 3;
-    this.authScroll = true;
+    this.authScroll = false;
     this._isAttached = false;
 
     this._rearScrollHeight = Number.MIN_VALUE;
@@ -59,16 +63,24 @@ export class NgxScrollDirective implements AfterContentChecked {
 
     this.scrollUp = new EventEmitter<void>();
     this.scrollDown = new EventEmitter<void>();
+
+    this._timerSubscription = Observable.timer(0, 500).subscribe(x => {
+      if (this.authScroll && this._isAttached) {
+        this.scrollToDown();
+      }
+    });
   }
 
-  ngAfterContentChecked(): void {
-    if (this.authScroll && this._isAttached) {
-      this.scrollToDown();
-    }
+  ngOnDestroy(): void {
+    this._timerSubscription.unsubscribe();
   }
 
   public scrollToDown(): void {
-    this.scrollTo(this._elementRef.nativeElement.scrollHeight);
+    if (this._elementRef.nativeElement.scrollTop == this._elementRef.nativeElement.scrollHeight - this._elementRef.nativeElement.clientHeight) {
+      return;
+    }
+
+    this.scrollTo(this._elementRef.nativeElement.scrollHeight - this._elementRef.nativeElement.clientHeight);
   }
 
   public scrollTo(position: number): void {

@@ -1,6 +1,7 @@
-import {AfterViewInit, Component, ContentChild, Input, OnInit, TemplateRef} from '@angular/core';
+import {AfterViewInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
+import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
 
 @Component({
   selector: 'ngx-virtual-scroll',
@@ -11,6 +12,9 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
 
   @ContentChild(TemplateRef)
   public templateRef: TemplateRef<any>;
+
+  @ViewChild(NgxScrollDirective)
+  public ngxScrollDirective: NgxScrollDirective;
 
   @Input()
   public query: Query;
@@ -39,10 +43,13 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
     this._rearCount = this.query.count;
 
     await this.onScrollDown();
+    setTimeout(() => {
+      this.ngxScrollDirective.scrollToDown();
+    });
   }
 
   public async onScrollUp() {
-    if (!this.getItems || !this._rear) {
+    if (!this.getItems || !this._rear || !this.query.from) {
       return;
     }
 
