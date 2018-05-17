@@ -1,0 +1,9 @@
+<div class="ngx-virtual-scroll-content"
+     ngxScroll
+     (scrollUp)="onScrollUp()"
+     (scrollDown)="onScrollDown()">
+  <ng-template ngFor
+               [ngForOf]="items"
+               [ngForTemplate]="templateRef">
+  </ng-template>
+</div>
