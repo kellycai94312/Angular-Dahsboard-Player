@@ -1,3 +1,21 @@
-<p>
-  conversations-page works!
-</p>
+<!-- filters -->
+<div class="input-group">
+  <input #searchInput
+         type="text"
+         class="form-control input-height-sm"
+         placeholder="{{'search' | translate}}">
+  <div class="input-group-append">
+    <button type="button"
+            class="btn btn-primary input-height-sm">{{'create' | translate}}
+    </button>
+  </div>
+</div>
+
+<!-- content -->
+<ngx-virtual-scroll [getItems]="getItems"
+                    [query]="query">
+  <ng-template let-item>
+    <!-- TODO: Input item -->
+    <p>{{item | json}}</p>
+  </ng-template>
+</ngx-virtual-scroll>
