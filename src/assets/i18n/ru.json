@@ -259,5 +259,6 @@
   "addContact": "Добавить контакт",
   "removeContact": "Удалить контакт",
   "pleaseWait": "Пожалуйста, подождите",
-  "contacts": "Контакты"
+  "contacts": "Контакты",
+  "conversations": "Беседы"
 }
