@@ -178,6 +178,16 @@ export class ParticipantRestApiService extends Rest {
 
   //#region Person
 
+  //#region Dialogue
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/dialogue'
+  })
+  getDialogue: IRestMethod<{ personId: number }, Dialogue>;
+
+  //#endregion
+
   //#region GET
 
   @RestAction({
@@ -836,7 +846,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/conversation/{!conversationId}/message'
   })
-  getMessages: IRestMethodStrict<void, PageQuery, { conversationId: number }, PageContainer<BaseMessage>>;
+  getMessages: IRestMethodStrict<any, PageQuery, { conversationId: number }, PageContainer<BaseMessage>>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
@@ -867,16 +877,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/conversation/{!id}'
   })
   removeConversation: IRestMethod<{ id: number }, void>;
-
-  //#region Dialogue
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/conversation/person/{!personId}'
-  })
-  getDialogue: IRestMethod<{ personId: number }, Dialogue>;
-
-  //#endregion
 
   //#region Chat
 

@@ -259,5 +259,9 @@
   "removeContact": "Remove contact",
   "pleaseWait": "Please, wait",
   "contacts": "Contacts",
-  "conversations": "Conversations"
+  "conversations": "Conversations",
+  "send": "Send",
+  "writeMessage": "Write a message...",
+  "sendError": "Send error",
+  "sendMessage": "Send message"
 }

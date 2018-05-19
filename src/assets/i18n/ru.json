@@ -260,5 +260,9 @@
   "removeContact": "Удалить контакт",
   "pleaseWait": "Пожалуйста, подождите",
   "contacts": "Контакты",
-  "conversations": "Беседы"
+  "conversations": "Беседы",
+  "send": "Отправить",
+  "writeMessage": "Напишите сообщение...",
+  "sendError": "Ошибка при отправки",
+  "sendMessage": "Отправить сообщение"
 }

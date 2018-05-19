@@ -15,6 +15,9 @@ export class BusyButtonComponent implements OnInit {
   public parameter: any;
 
   @Input()
+  public checkPressedEnter: boolean;
+
+  @Input()
   public nameKey: string;
 
   public busy: boolean;
@@ -47,6 +50,12 @@ export class BusyButtonComponent implements OnInit {
         this.busy = false;
         this._clicked = false;
       }
+    }
+  }
+
+  public async onKeyUp(event: any): Promise<void> {
+    if (this.checkPressedEnter && event.keyCode == 13) {
+      await this.onClick(event);
     }
   }
 

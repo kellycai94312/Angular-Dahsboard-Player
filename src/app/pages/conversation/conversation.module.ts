@@ -5,15 +5,23 @@ import {ConversationPageComponent} from './conversation-page/conversation-page.c
 import {ConversationRoutingModule} from './conversation-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
+import {FormsModule} from '@angular/forms';
+import {AutosizeModule} from 'ngx-autosize';
+import {MessageComponent} from './message/message.component';
+import {ConversationComponent} from './conversation/conversation.component';
 
 @NgModule({
   imports: [
     CommonModule,
     ConversationRoutingModule,
     TranslateModule.forChild(),
-    NgxVirtualScrollModule
+    NgxVirtualScrollModule,
+    BusyButtonModule,
+    FormsModule,
+    AutosizeModule
   ],
-  declarations: [ConversationsPageComponent, ConversationPageComponent]
+  declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent]
 })
 export class ConversationModule {
 }

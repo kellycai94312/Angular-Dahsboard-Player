@@ -1,5 +1,5 @@
 <!-- filters -->
-<div class="input-group">
+<div class="input-group mb-2">
   <input #searchInput
          type="text"
          class="form-control input-height-sm"
@@ -12,10 +12,12 @@
 </div>
 
 <!-- content -->
-<ngx-virtual-scroll [getItems]="getItems"
+<ngx-virtual-scroll class="list-group-flush"
+                    [getItems]="getItems"
                     [query]="query">
   <ng-template let-item>
-    <!-- TODO: Input item -->
-    <p>{{item | json}}</p>
+    <div class="list-group-item p-0">
+      <app-conversation [messageWrapper]="item"></app-conversation>
+    </div>
   </ng-template>
 </ngx-virtual-scroll>

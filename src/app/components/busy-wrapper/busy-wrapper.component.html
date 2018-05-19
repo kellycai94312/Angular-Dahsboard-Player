@@ -1,0 +1,7 @@
+<div *ngIf="!isBusy; else elseTemplate">
+  <ng-content></ng-content>
+</div>
+<ng-template #elseTemplate>
+  <span class="is-busy"></span>
+  {{ 'pleaseWait' | translate}}
+</ng-template>

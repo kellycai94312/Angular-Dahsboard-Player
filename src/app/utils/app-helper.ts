@@ -4,11 +4,15 @@ import {DatePipe} from '@angular/common';
 import {Injectable} from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import {TranslateService} from '@ngx-translate/core';
+import {ImageType} from '../data/remote/model/image-type';
+import {Person} from '../data/remote/model/person';
+import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 
 @Injectable()
 export class AppHelper {
 
   constructor(private _datePipe: DatePipe,
+              private _participantRestApiService: ParticipantRestApiService,
               private _translateService: TranslateService) {
   }
 
@@ -72,6 +76,14 @@ export class AppHelper {
   public async showSuccessMessage(messageKey: string): Promise<void> {
     const message = await this._translateService.get(messageKey).toPromise();
     notify(message, 'success', 1500);
+  }
+
+  public getPersonImageUrl(person: Person): string {
+    return this._participantRestApiService.getImageUrl({
+      id: person.id,
+      type: ImageType.LOGO,
+      clazz: 'Person'
+    });
   }
 
 }

@@ -6,6 +6,6 @@ export class Chat extends BaseConversation {
 
   constructor() {
     super();
-    this.discrimination = BaseConversationType.CHAT;
+    this.discriminator = BaseConversationType.CHAT;
   }
 }

@@ -1,0 +1,19 @@
+.name {
+  color: #222;
+  font-weight: bold;
+}
+
+.date {
+  font-size: 12px;
+  text-align: right;
+  color: #656565;
+  min-width: 90px;
+}
+
+.message {
+  white-space: nowrap;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: #656565;
+}

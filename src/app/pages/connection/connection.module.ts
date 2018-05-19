@@ -9,6 +9,8 @@ import {InputSelectModule} from '../../components/input-select/input-select.modu
 import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupPageModule} from '../groups/group-page.module';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
+import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
+import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.module';
 
 @NgModule({
   imports: [
@@ -21,7 +23,9 @@ import {BusyButtonModule} from '../../components/busy-button/busy-button.module'
     InfiniteListModule,
     GroupPageModule,
     TranslateModule.forChild(),
-    BusyButtonModule
+    BusyButtonModule,
+    NgbDropdownModule,
+    BusyWrapperModule
   ],
   declarations: [ConnectionsPageComponent]
 })
