@@ -7,6 +7,7 @@ import {ToastrService} from 'ngx-toastr';
 import {AuthorizationService} from './shared/authorization.service';
 import {Locale} from './data/remote/misc/locale';
 import {NotificationService} from './shared/notification.service';
+import {ConversationService} from './shared/conversation.service';
 
 @Component({
   selector: 'app-root',
@@ -24,19 +25,25 @@ export class AppComponent implements OnInit, OnDestroy {
               private _localStorageService: LocalStorageService,
               private _authorizationService: AuthorizationService,
               private _notificationService: NotificationService,
-              private _toastrService: ToastrService) {
+              private _toastrService: ToastrService,
+              private _conversationService: ConversationService) {
     this._notificationService.subscribe();
+    this._conversationService.messageSubscribe();
+
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
       this._toastrService.info(x.body, null, {
         enableHtml: true,
         tapToDismiss: false
       });
     });
+
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
       this._notificationService.subscribe();
+      this._conversationService.messageSubscribe();
     });
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
       this._notificationService.unsubscribe();
+      this._conversationService.messageUnsubscribe();
     });
   }
 

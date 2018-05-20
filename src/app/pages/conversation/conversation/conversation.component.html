@@ -17,7 +17,7 @@
       </div>
       <p class="message p-2"
          [ngClass]="{'unread-message':messageWrapper.unread}">
-        {{messageWrapper.message.content.name}}
+        {{messageWrapper.message.content.content}}
       </p>
       <div *ngIf="messageWrapper.unread"
            class="ml-auto">

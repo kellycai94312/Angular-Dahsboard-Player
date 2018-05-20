@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
@@ -10,7 +10,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
   templateUrl: './ngx-virtual-scroll.component.html',
   styleUrls: ['./ngx-virtual-scroll.component.scss']
 })
-export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
+export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
 
   @ContentChild(TemplateRef)
   public templateRef: TemplateRef<any>;
@@ -20,9 +20,6 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
 
   @Input()
   public query: PageQuery;
-
-  @Input()
-  public items: Array<any>[];
 
   @Input()
   public getItems: Function;
@@ -37,6 +34,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
   public autoScroll: boolean;
 
   public isBusy: boolean;
+  public items: Array<any>[];
 
   private _rear?: number;
   private _rearCount?: number;
@@ -51,9 +49,21 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
-  async ngAfterViewInit(): Promise<void> {
+  async ngAfterContentInit(): Promise<void> {
     await this.reset();
   }
+
+  public addItem(item: any) {
+    if (!this._front) {
+      this._front = 0;
+      this._total = 0;
+    }
+    // TODO: Add increment to total and front
+
+    this.items.push(item);
+  }
+
+  //#region Scroll
 
   public async onScrollUp() {
     if (!this.getItems || !this._rear || !this.query.from) {
@@ -77,6 +87,9 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
       for (let i = pageContainer.list.length - 1; i >= 0; i--) {
         this.items.unshift(pageContainer.list[i]);
       }
+      // TODO: Calc item height
+      this.ngxScrollDirective.scrollTo(65 * pageContainer.size);
+
 
       this._rear = this._rear - this.count;
       if (this._rear < 0) {
@@ -84,7 +97,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
         this._rear = 0;
       }
     } finally {
-      this.isBusy = true;
+      this.isBusy = false;
     }
   }
 
@@ -107,6 +120,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
       }
 
       this._total = pageContainer.total;
+      this.query.from = pageContainer.from;
 
       for (let i = 0; i < pageContainer.list.length; i++) {
         this.items.push(pageContainer.list[i]);
@@ -118,9 +132,17 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
       }
 
     } finally {
-      this.isBusy = true;
+      this.isBusy = false;
     }
   }
+
+  public scrollDown() {
+    setTimeout(() => {
+      this.ngxScrollDirective.scrollToDown();
+    });
+  }
+
+  //#endregion
 
   public async reset(): Promise<void> {
     this._rear = Number.MAX_VALUE;
@@ -130,11 +152,6 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
     this.items = [];
 
     await this.onScrollDown();
-    if (this.autoScroll) {
-      setTimeout(() => {
-        this.ngxScrollDirective.scrollToDown();
-      });
-    }
   }
 
 }

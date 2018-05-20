@@ -39,6 +39,7 @@ import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
 import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {ConversationService} from './shared/conversation.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -93,6 +94,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ParticipantStompService,
     AuthorizationService,
     NotificationService,
+    ConversationService,
     {
       provide: APP_INITIALIZER,
       useFactory: (as: AuthorizationService) => function () {

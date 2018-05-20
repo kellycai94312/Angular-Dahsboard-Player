@@ -15,6 +15,15 @@ export class NgxScrollDirective implements OnDestroy {
   @Input()
   public authScroll: boolean;
 
+  @Input()
+  public scrollUpDistance: number;
+
+  @Input()
+  public scrollDownDistance: number;
+
+  @Input()
+  public scrollWithSmooth: boolean;
+
   @Output()
   public readonly scrollUp: EventEmitter<void>;
 
@@ -24,39 +33,44 @@ export class NgxScrollDirective implements OnDestroy {
   private _rearScrollHeight: number;
   private _frontPosition: number;
 
-  private _isAttached: boolean;
   private _lastScrollTop: number;
+  private _isInitScrolled: boolean;
 
   private readonly _timerSubscription: ISubscription;
 
+  // TODO: Use window:scroll for window
   @HostListener('scroll')
   public onScroll(): void {
-    if (this.authScroll) {
-      const scrollBottomPosition = this._elementRef.nativeElement.scrollHeight - this._elementRef.nativeElement.scrollTop - this._elementRef.nativeElement.clientHeight;
-      this._isAttached = this.attachedYOffset > scrollBottomPosition;
-    }
-
     switch (this.getScrollDirection()) {
       case Direction.UP:
-        if (0 == this._elementRef.nativeElement.scrollTop && this._rearScrollHeight != this._elementRef.nativeElement.scrollHeight) {
-          this._rearScrollHeight = this._elementRef.nativeElement.scrollHeight;
+        if (this.getScrollYPositionInPercent() < this.scrollUpDistance && this._rearScrollHeight != this.getHeight()) {
+          // console.log('UP');
+          this._rearScrollHeight = this.getHeight();
           this.scrollUp.emit();
         }
         break;
       case Direction.DOWN:
-        if (this._frontPosition < this._elementRef.nativeElement.scrollTop) {
-          this._frontPosition = this._elementRef.nativeElement.scrollTop + this._elementRef.nativeElement.clientHeight + 1;
+        if (this._frontPosition < this.getScrollYPosition() && this.scrollDownDistance < this.getScrollYPositionInPercent()) {
+          // console.log('DOWN');
+          this._frontPosition = this.getHeight();
           this.scrollDown.emit();
         }
         break;
     }
 
+    // console.log('getHeight: ' + this.getHeight());
+    // console.log('getScrollYPosition: ' + this.getScrollYPosition());
+    // console.log('getViewPortHeight: ' + this.getViewPortHeight());
+    // console.log('getDistanceToBottom: ' + this.getDistanceToBottom());
+    // console.log('getScrollYPositionInPercent: ' + this.getScrollYPositionInPercent());
   }
 
   constructor(private _elementRef: ElementRef) {
-    this.attachedYOffset = 3;
-    this.authScroll = false;
-    this._isAttached = false;
+    this.attachedYOffset = 50;
+    this.authScroll = true;
+
+    this.scrollUpDistance = 20;
+    this.scrollDownDistance = 80;
 
     this._rearScrollHeight = Number.MIN_VALUE;
     this._frontPosition = Number.MIN_VALUE;
@@ -65,8 +79,13 @@ export class NgxScrollDirective implements OnDestroy {
     this.scrollDown = new EventEmitter<void>();
 
     this._timerSubscription = Observable.timer(0, 500).subscribe(x => {
-      if (this.authScroll && this._isAttached) {
+      if (this.authScroll && this.attachedYOffset > this.getDistanceToBottom()) {
         this.scrollToDown();
+      } else {
+        if (!this._isInitScrolled) {
+          this._isInitScrolled = true;
+          this.scrollToDown();
+        }
       }
     });
   }
@@ -76,20 +95,29 @@ export class NgxScrollDirective implements OnDestroy {
   }
 
   public scrollToDown(): void {
-    if (this._elementRef.nativeElement.scrollTop == this._elementRef.nativeElement.scrollHeight - this._elementRef.nativeElement.clientHeight) {
+    if (!this.getDistanceToBottom()) {
       return;
     }
 
-    this.scrollTo(this._elementRef.nativeElement.scrollHeight - this._elementRef.nativeElement.clientHeight);
+    this.scrollTo(this.getHeight());
   }
 
   public scrollTo(position: number): void {
-    this._elementRef.nativeElement.scrollTop = position;
+    setTimeout(() => {
+      /* TODO: For window
+      const scrollToOptions: ScrollToOptions = {left: 0, top: position};
+      if (this.scrollWithSmooth) {
+        scrollToOptions.behavior = 'smooth';
+      }
+      window.scrollTo(scrollToOptions);*/
+
+      this._elementRef.nativeElement.scrollTop = position;
+    });
   }
 
   private getScrollDirection(): Direction {
     let direction: Direction;
-    const scrollTop = this._elementRef.nativeElement.scrollTop;
+    const scrollTop = this.getScrollYPosition();
     if (scrollTop < this._lastScrollTop) {
       direction = Direction.UP;
     } else {
@@ -97,6 +125,28 @@ export class NgxScrollDirective implements OnDestroy {
     }
     this._lastScrollTop = scrollTop;
     return direction;
+  }
+
+  private getScrollYPositionInPercent(): number {
+    return 100.0 * (this.getScrollYPosition() + this.getViewPortHeight()) / (this.getHeight());
+  }
+
+  private getHeight(): number {
+    return this._elementRef.nativeElement.scrollHeight;
+  }
+
+  private getScrollYPosition(): number {
+    return Math.round(this._elementRef.nativeElement.scrollTop);
+    // TODO: return window.pageYOffset || document.documentElement.scrollTop;
+  }
+
+  private getViewPortHeight(): number {
+    return this._elementRef.nativeElement.clientHeight;
+    // TODO: return window.innerHeight;
+  }
+
+  private getDistanceToBottom() {
+    return Math.round(this.getHeight() - this.getViewPortHeight() - this.getScrollYPosition());
   }
 
 }
