@@ -28,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private _toastrService: ToastrService,
               private _conversationService: ConversationService) {
     this._notificationService.subscribe();
-    this._conversationService.messageSubscribe();
+    this._conversationService.subscribe();
 
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
       this._toastrService.info(x.body, null, {
@@ -39,11 +39,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
       this._notificationService.subscribe();
-      this._conversationService.messageSubscribe();
+      this._conversationService.subscribe();
     });
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
       this._notificationService.unsubscribe();
-      this._conversationService.messageUnsubscribe();
+      this._conversationService.unsubscribe();
     });
   }
 
@@ -56,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this._notificationSubscription.unsubscribe();
     this._logInSubscription.unsubscribe();
     this._logOutSubscription.unsubscribe();
+    this._conversationService.unsubscribe();
   }
 
   private initLangs(): void {

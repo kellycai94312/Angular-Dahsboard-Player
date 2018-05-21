@@ -34,7 +34,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
   public autoScroll: boolean;
 
   public isBusy: boolean;
-  public items: Array<any>[];
+  public items: Array<any>;
 
   private _rear?: number;
   private _rearCount?: number;
@@ -53,7 +53,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
     await this.reset();
   }
 
-  public addItem(item: any) {
+  public addItem(item: any, scroll: boolean = false) {
     if (!this._front) {
       this._front = 0;
       this._total = 0;
@@ -61,12 +61,15 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
     // TODO: Add increment to total and front
 
     this.items.push(item);
+    if (scroll) {
+      this.scrollDown();
+    }
   }
 
   //#region Scroll
 
   public async onScrollUp() {
-    if (!this.getItems || !this._rear || !this.query.from) {
+    if (!this.getItems || !this._rear || !this.query.from || this.isBusy) {
       return;
     }
 
@@ -88,7 +91,7 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
         this.items.unshift(pageContainer.list[i]);
       }
       // TODO: Calc item height
-      this.ngxScrollDirective.scrollTo(65 * pageContainer.size);
+      this.ngxScrollDirective.scrollTo(98 * pageContainer.size);
 
 
       this._rear = this._rear - this.count;

@@ -12,8 +12,8 @@
 
 .message {
   white-space: nowrap;
-  width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
+  max-width: 400px;
   color: #656565;
 }

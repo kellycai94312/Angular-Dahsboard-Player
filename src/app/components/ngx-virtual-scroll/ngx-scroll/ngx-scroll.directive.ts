@@ -42,19 +42,24 @@ export class NgxScrollDirective implements OnDestroy {
   @HostListener('scroll')
   public onScroll(): void {
     switch (this.getScrollDirection()) {
-      case Direction.UP:
-        if (this.getScrollYPositionInPercent() < this.scrollUpDistance && this._rearScrollHeight != this.getHeight()) {
+      case Direction.UP: {
+        const yPositionInPercent = 100.0 * this.getScrollYPosition() / (this.getHeight());
+        if (yPositionInPercent < this.scrollUpDistance && this._rearScrollHeight != this.getHeight()) {
           // console.log('UP');
           this._rearScrollHeight = this.getHeight();
           this.scrollUp.emit();
         }
+      }
         break;
-      case Direction.DOWN:
-        if (this._frontPosition < this.getScrollYPosition() && this.scrollDownDistance < this.getScrollYPositionInPercent()) {
+      case Direction.DOWN: {
+        const yPositionInPercent = 100.0 * (this.getScrollYPosition() + this.getViewPortHeight()) / (this.getHeight());
+        if (this._frontPosition < this.getScrollYPosition() && this.scrollDownDistance < yPositionInPercent) {
           // console.log('DOWN');
           this._frontPosition = this.getHeight();
           this.scrollDown.emit();
         }
+      }
+
         break;
     }
 
@@ -62,11 +67,10 @@ export class NgxScrollDirective implements OnDestroy {
     // console.log('getScrollYPosition: ' + this.getScrollYPosition());
     // console.log('getViewPortHeight: ' + this.getViewPortHeight());
     // console.log('getDistanceToBottom: ' + this.getDistanceToBottom());
-    // console.log('getScrollYPositionInPercent: ' + this.getScrollYPositionInPercent());
   }
 
   constructor(private _elementRef: ElementRef) {
-    this.attachedYOffset = 50;
+    this.attachedYOffset = 80;
     this.authScroll = true;
 
     this.scrollUpDistance = 20;
@@ -125,10 +129,6 @@ export class NgxScrollDirective implements OnDestroy {
     }
     this._lastScrollTop = scrollTop;
     return direction;
-  }
-
-  private getScrollYPositionInPercent(): number {
-    return 100.0 * (this.getScrollYPosition() + this.getViewPortHeight()) / (this.getHeight());
   }
 
   private getHeight(): number {

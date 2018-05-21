@@ -1,6 +1,8 @@
 import {AfterContentInit, Component, Input, OnInit} from '@angular/core';
 import {BaseMessage} from '../../../data/remote/model/chat/message/base/base-message';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
+import {AuthorizationService} from '../../../shared/authorization.service';
+import {Person} from '../../../data/remote/model/person';
 
 @Component({
   selector: 'app-message',
@@ -13,11 +15,13 @@ export class MessageComponent implements OnInit, AfterContentInit {
   public baseMessage: BaseMessage;
 
   public personViewModel: PersonViewModel;
+  public person: Person;
 
-  constructor() {
+  constructor(private _authorizationService: AuthorizationService) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.person = await this._authorizationService.getPerson();
   }
 
   async ngAfterContentInit() {

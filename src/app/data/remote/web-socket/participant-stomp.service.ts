@@ -30,8 +30,12 @@ export class ParticipantStompService {
     return this.subscribe(`${this.baseQuery}/conversation/read`);
   }
 
+  public subscribeConversationError(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/errors`);
+  }
+
   public publishConversationRead(conversationReadRequest: ConversationReadRequest): void {
-    this.publish(`${this.baseQuery}/conversation/read`, JSON.stringify(conversationReadRequest));
+    this.publish('/ws/conversation/read', JSON.stringify(conversationReadRequest));
   }
 
   //#endregion

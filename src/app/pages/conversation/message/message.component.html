@@ -1,5 +1,5 @@
 <div class="d-flex flex-row p-2"
-     [ngClass]="{'unread-message':baseMessage.read||!baseMessage.read}">
+     [ngClass]="{'unread-message': (!baseMessage.read &&!baseMessage.sender.person&&!person && baseMessage.sender.person.id == person.id) || !baseMessage.read}">
   <div *ngIf="personViewModel?.imageLogoUrl"
        [routerLink]="personViewModel.url"
        class="logo-lg-circle"
@@ -7,7 +7,7 @@
   </div>
   <div class="d-flex flex-column ml-2">
     <p>{{baseMessage.sender.person.firstName}}<span
-      class="date ml-2">{{baseMessage.created | date:'dd.MM.yyyy HH:mm'}}</span></p>
+      class="date ml-2">{{baseMessage.content.created | date:'dd.MM.yyyy HH:mm'}}</span></p>
     <p>{{baseMessage.content.content}}</p>
   </div>
 </div>
