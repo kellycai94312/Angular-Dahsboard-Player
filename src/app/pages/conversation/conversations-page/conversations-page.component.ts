@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
 import {ISubscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
@@ -9,13 +9,15 @@ import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {ConversationService} from '../../../shared/conversation.service';
+import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper';
 
 @Component({
   selector: 'app-conversations-page',
   templateUrl: './conversations-page.component.html',
   styleUrls: ['./conversations-page.component.scss']
 })
-export class ConversationsPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('searchInput')
   public searchInputElementRef: ElementRef;
@@ -26,12 +28,27 @@ export class ConversationsPageComponent implements OnInit, AfterViewInit, OnDest
   public query: PageQuery;
 
   private _searchInputSubscription: ISubscription;
+  private readonly _messageSubscription: ISubscription;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _conversationService: ConversationService) {
     this.query = new PageQuery();
-  }
 
-  ngOnInit(): void {
+    this._messageSubscription = this._conversationService.messageHandle.subscribe(value => {
+      if (!this.ngxVirtualScrollComponent) {
+        return;
+      }
+
+      const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].message.baseConversation.id == value.message.baseConversation.id) {
+          items.splice(i, 1);
+          items.unshift(value);
+          return;
+        }
+      }
+      items.push(value);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -45,6 +62,7 @@ export class ConversationsPageComponent implements OnInit, AfterViewInit, OnDest
 
   ngOnDestroy(): void {
     this._searchInputSubscription.unsubscribe();
+    this._messageSubscription.unsubscribe();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
