@@ -1,9 +1,10 @@
-import {BaseMessage} from './base/base-message';
-import {BaseMessageType} from './base/base-message-type';
+import {IdentifiedObject} from '../../../base/identified-object';
+import {Participant} from '../participant';
+import {BaseMessageContent} from './base/base-message-content';
 
-export class Message extends BaseMessage {
-  constructor() {
-    super();
-    this.discriminator = BaseMessageType.MESSAGE;
-  }
+export class Message extends IdentifiedObject {
+  sender: Participant;
+  receiver: Participant;
+  content: BaseMessageContent;
+  read: boolean;
 }

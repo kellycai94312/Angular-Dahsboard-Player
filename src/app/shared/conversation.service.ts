@@ -26,6 +26,8 @@ export class ConversationService implements OnDestroy {
     this.unsubscribe();
   }
 
+  //#region Message
+
   public messageSubscribe() {
     if (this._messageSubscription) {
       return;
@@ -42,8 +44,15 @@ export class ConversationService implements OnDestroy {
   }
 
   public messageUnsubscribe() {
-    this.unsubscribeFrom(this._messageSubscription);
+    if (this._messageSubscription) {
+      this._messageSubscription.unsubscribe();
+      delete this._messageSubscription;
+    }
   }
+
+  //#endregion
+
+  //#region ReadMessage
 
   private readMessageSubscribe() {
     if (this._readMessageSubscription) {
@@ -61,20 +70,15 @@ export class ConversationService implements OnDestroy {
   }
 
   private readMessageUnsubscribe() {
-    this.unsubscribeFrom(this._readMessageSubscription);
+    if (this._readMessageSubscription) {
+      this._readMessageSubscription.unsubscribe();
+      delete this._readMessageSubscription;
+    }
   }
 
-  public subscribe() {
-    this.errorSubscribe();
-    this.messageSubscribe();
-    this.readMessageSubscribe();
-  }
+  //#endregion
 
-  public unsubscribe() {
-    this.messageUnsubscribe();
-    this.readMessageUnsubscribe();
-    this.errorUnsubscribe();
-  }
+  //#region Error
 
   private errorSubscribe() {
     if (this._errorSubscription) {
@@ -91,14 +95,24 @@ export class ConversationService implements OnDestroy {
   }
 
   private errorUnsubscribe() {
-    this.unsubscribeFrom(this._errorSubscription);
+    if (this._errorSubscription) {
+      this._errorSubscription.unsubscribe();
+      delete this._errorSubscription;
+    }
   }
 
-  private unsubscribeFrom(subscription: ISubscription) {
-    if (subscription) {
-      subscription.unsubscribe();
-      subscription = null;
-    }
+  //#endregion
+
+  public subscribe() {
+    this.errorSubscribe();
+    this.messageSubscribe();
+    this.readMessageSubscribe();
+  }
+
+  public unsubscribe() {
+    this.messageUnsubscribe();
+    this.readMessageUnsubscribe();
+    this.errorUnsubscribe();
   }
 
 }

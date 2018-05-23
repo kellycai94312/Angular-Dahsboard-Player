@@ -1,5 +1,5 @@
 <div class="d-flex w-100 p-2"
-     [routerLink]="messageWrapper.message.baseConversation.id">
+     [routerLink]="messageWrapper.message.content.baseConversation.id">
   <div *ngIf="conversationImageUrl"
        class="logo-lg-circle"
        [ngStyle]="{'background-image': 'url('+ conversationImageUrl +')'}">

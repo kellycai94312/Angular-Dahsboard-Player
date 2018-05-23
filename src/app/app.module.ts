@@ -8,7 +8,7 @@ import {RestModule} from 'rest-ngx';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CookieModule} from 'ngx-cookie';
-import {StompConfig, StompService} from '@stomp/ng2-stompjs';
+import {StompRService} from '@stomp/ng2-stompjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 
@@ -33,7 +33,6 @@ import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
 import {DynamicComponentService} from './shared/dynamic-component.service';
 import {ReportsService} from './shared/reports.service';
-import {stompConfig} from './data/config/stomp-config';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
@@ -112,11 +111,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: RestApiInterceptor,
       multi: true
     },
-    StompService,
-    {
-      provide: StompConfig,
-      useValue: stompConfig
-    }
+    StompRService
   ],
   bootstrap: [AppComponent]
 })

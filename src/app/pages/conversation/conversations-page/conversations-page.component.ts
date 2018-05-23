@@ -41,7 +41,7 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
 
       const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].message.baseConversation.id == value.message.baseConversation.id) {
+        if (items[i].message.content.baseConversation.id == value.message.content.baseConversation.id) {
           items.splice(i, 1);
           items.unshift(value);
           return;

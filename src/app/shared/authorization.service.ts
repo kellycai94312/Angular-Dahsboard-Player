@@ -49,12 +49,12 @@ export class AuthorizationService {
     } catch (e) {
     }
     this._localStorageService.signOut();
-    this._layoutService.hidden.next(true);
 
     if (withNavigate) {
       const router = this._injector.get(Router);
       if (router.url !== '/login') {
         await router.navigate(['login']);
+        this._layoutService.hidden.next(true);
       }
     }
   }
@@ -72,6 +72,13 @@ export class AuthorizationService {
       this.person = await this._participantRestApiService.getPerson({id: this.session.personId});
     }
     return this.person;
+  }
+
+  public isAuthenticated(): boolean {
+    if (this.session) {
+      return true;
+    }
+    return false;
   }
 
   private async checkSession(): Promise<void> {

@@ -3,7 +3,6 @@ import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute} from '@angular/router';
-import {MessageContent} from '../../../data/remote/model/chat/message/base/message-content';
 import {AppHelper} from '../../../utils/app-helper';
 import {ISubscription} from 'rxjs/Subscription';
 import {ConversationService} from '../../../shared/conversation.service';
@@ -13,6 +12,7 @@ import {Message} from '../../../data/remote/model/chat/message/message';
 import {Person} from '../../../data/remote/model/person';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Participant} from '../../../data/remote/model/chat/participant';
+import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
 
 @Component({
   selector: 'app-conversation-page',

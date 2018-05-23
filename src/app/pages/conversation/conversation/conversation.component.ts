@@ -28,7 +28,7 @@ export class ConversationComponent implements OnInit, AfterContentInit {
   }
 
   async ngAfterContentInit() {
-    switch (this.messageWrapper.message.baseConversation.discriminator) {
+    switch (this.messageWrapper.message.content.baseConversation.discriminator) {
       case BaseConversationType.DIALOGUE:
         if (this._authorizationService.session.personId == this.messageWrapper.message.sender.person.id) {
           this.conversationImageUrl = this._appHelper.getPersonImageUrl(this.messageWrapper.message.receiver.person);

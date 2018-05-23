@@ -65,10 +65,9 @@ import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
 import {Dialogue} from '../model/chat/conversation/dialogue';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {Chat} from '../model/chat/conversation/chat';
-import {MessageContent} from '../model/chat/message/base/message-content';
 import {MessageWrapper} from '../bean/wrapper/message-wrapper';
-import {BaseMessage} from '../model/chat/message/base/base-message';
 import {Message} from '../model/chat/message/message';
+import {MessageContent} from '../model/chat/message/message-content';
 
 @Injectable()
 @RestParams({
@@ -846,7 +845,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/conversation/{!conversationId}/message'
   })
-  getMessages: IRestMethodStrict<any, PageQuery, { conversationId: number }, PageContainer<BaseMessage>>;
+  getMessages: IRestMethodStrict<any, PageQuery, { conversationId: number }, PageContainer<Message>>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
