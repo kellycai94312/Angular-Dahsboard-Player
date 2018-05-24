@@ -13,6 +13,8 @@
         <a>
           <i [class]="item.iconClassName"></i>
           <span>{{item.nameKey | translate }}</span>
+          <span *ngIf="item.count"
+                class="badge badge-primary p-1 ml-2">{{item.count}}</span>
         </a>
       </li>
     </ul>

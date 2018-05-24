@@ -59,6 +59,10 @@ export class ParticipantStompService {
     return this.subscribe(`${this.baseQuery}/conversation/errors`);
   }
 
+  public subscribeConversationUnreadTotal(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/unread/total`);
+  }
+
   public publishConversationRead(conversationReadRequest: ConversationReadRequest): void {
     this.publish('/ws/conversation/read', JSON.stringify(conversationReadRequest));
   }

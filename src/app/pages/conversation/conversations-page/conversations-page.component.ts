@@ -29,6 +29,7 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
 
   private _searchInputSubscription: ISubscription;
   private readonly _messageSubscription: ISubscription;
+  private readonly _readMessageSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService) {
@@ -48,6 +49,20 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
       }
       items.unshift(value);
     });
+
+    this._readMessageSubscription = this._conversationService.readMessageHandle.subscribe(value => {
+      if (!this.ngxVirtualScrollComponent) {
+        return;
+      }
+
+      const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].message.content.baseConversation.id == value.message.content.baseConversation.id) {
+          items[i] = value;
+          break;
+        }
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -62,6 +77,7 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this._searchInputSubscription.unsubscribe();
     this._messageSubscription.unsubscribe();
+    this._readMessageSubscription.unsubscribe();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
