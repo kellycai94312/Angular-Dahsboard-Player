@@ -1,14 +1,16 @@
-import {AfterViewInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'ngx-virtual-scroll',
   templateUrl: './ngx-virtual-scroll.component.html',
   styleUrls: ['./ngx-virtual-scroll.component.scss']
 })
-export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
+export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
 
   @ContentChild(TemplateRef)
   public templateRef: TemplateRef<any>;
@@ -17,15 +19,22 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
   public ngxScrollDirective: NgxScrollDirective;
 
   @Input()
-  public query: Query;
-
-  @Input()
-  public items: Array<any>[];
+  public query: PageQuery;
 
   @Input()
   public getItems: Function;
 
+  @Input()
+  public from: number;
+
+  @Input()
+  public count: number;
+
+  @Input()
+  public autoScroll: boolean;
+
   public isBusy: boolean;
+  public items: Array<any>;
 
   private _rear?: number;
   private _rearCount?: number;
@@ -33,31 +42,45 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
   private _total: number;
 
   constructor() {
-    this.reset();
+    this.count = PropertyConstant.pageSize;
+    this.items = [];
   }
 
-  async ngOnInit() {
+  ngOnInit() {
   }
 
-  async ngAfterViewInit(): Promise<void> {
-    this._rearCount = this.query.count;
-
-    await this.onScrollDown();
-    setTimeout(() => {
-      this.ngxScrollDirective.scrollToDown();
-    });
+  async ngAfterContentInit(): Promise<void> {
+    await this.reset();
   }
+
+  public addItem(item: any, scroll: boolean = false) {
+    if (!this._front) {
+      this._front = 0;
+      this._total = 0;
+    }
+    // TODO: Add increment to total and front
+
+    this.items.push(item);
+    if (scroll) {
+      this.scrollDown();
+    }
+  }
+
+  //#region Scroll
 
   public async onScrollUp() {
-    if (!this.getItems || !this._rear || !this.query.from) {
+    if (!this.getItems || !this._rear || !this.query.from || this.isBusy) {
       return;
     }
 
     this.isBusy = true;
+
     this._rear = Math.min(this._rear, this.query.from);
+    this.query.from = this._rear;
+    this.query.count = this.count;
 
     try {
-      const pageContainer: PageContainer<any> = await this.getItems(Direction.UP, {from: this._rear, count: this._rearCount});
+      const pageContainer: PageContainer<any> = await this.getItems(Direction.UP, this.query);
       if (!pageContainer) {
         return;
       }
@@ -67,14 +90,17 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
       for (let i = pageContainer.list.length - 1; i >= 0; i--) {
         this.items.unshift(pageContainer.list[i]);
       }
+      // TODO: Calc item height
+      this.ngxScrollDirective.scrollTo(98 * pageContainer.size);
 
-      this._rear = this._rear - this.query.count;
+
+      this._rear = this._rear - this.count;
       if (this._rear < 0) {
-        this._rearCount = this._rear + this.query.count;
+        this._rearCount = this._rear + this.count;
         this._rear = 0;
       }
     } finally {
-      this.isBusy = true;
+      this.isBusy = false;
     }
   }
 
@@ -84,49 +110,51 @@ export class NgxVirtualScrollComponent implements OnInit, AfterViewInit {
     }
 
     this.isBusy = true;
-    this._front = Math.max(this._front, this.query.from);
+
+    if (this.query.from) {
+      this.query.from = this._front;
+    }
+    this.query.count = this.count;
 
     try {
-      const pageContainer: PageContainer<any> = await this.getItems(Direction.DOWN, {from: this._front, count: this.query.count});
+      const pageContainer: PageContainer<any> = await this.getItems(Direction.DOWN, this.query);
       if (!pageContainer) {
         return;
       }
 
       this._total = pageContainer.total;
+      this.query.from = pageContainer.from;
 
       for (let i = 0; i < pageContainer.list.length; i++) {
         this.items.push(pageContainer.list[i]);
       }
 
-      this._front = this._front + this.query.count;
+      this._front = pageContainer.from + this.count;
       if (this._total < this._front) {
         this._front = this._total;
       }
 
     } finally {
-      this.isBusy = true;
+      this.isBusy = false;
     }
   }
 
-  private reset() {
-    this._rear = Number.MAX_VALUE;
-    this._rearCount = 30;
-    this._front = 0;
-    this._total = Number.MIN_VALUE;
-    this.query = new Query();
-    this.items = [];
+  public scrollDown() {
+    setTimeout(() => {
+      this.ngxScrollDirective.scrollToDown();
+    });
   }
 
-}
+  //#endregion
 
-export class Query {
+  public async reset(): Promise<void> {
+    this._rear = Number.MAX_VALUE;
+    this._rearCount = this.count;
+    this._front = 0;
+    this._total = Number.MIN_VALUE;
+    this.items = [];
 
-  public from: number;
-  public count: number;
-
-  constructor(from?: number, count?: number) {
-    this.from = from || 0;
-    this.count = count || 30;
+    await this.onScrollDown();
   }
 
 }

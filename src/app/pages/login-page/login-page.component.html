@@ -3,7 +3,8 @@
     <app-locale></app-locale>
   </div>
   <div class="mb-auto">
-    <div class="m-2 form">
+    <div class="m-2 form"
+         (keyup.enter)="busyButton.onKeyUp($event)">
       <img src="/assets/img/athlete-readiness-logo.png" alt="">
       <dx-text-box placeholder="{{'login.enterEmailOrPhoneNumber' | translate}}"
                    [(value)]="auth.email"
@@ -20,10 +21,11 @@
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <dx-button class="mt-2 w-100"
-                 type="default"
-                 text="{{'login.signIn' | translate | uppercase}}"
-                 (onClick)="onApply($event)"></dx-button>
+      <app-busy-button #busyButton
+                       classes="mt-2 w-100"
+                       [click]="signIn"
+                       checkPressedEnter="true"
+                       nameKey="login.signIn"></app-busy-button>
       <div class="mt-2 text-center">
         <p>{{'registration.notRegistered'| translate}}
           <a routerLink="/registration"

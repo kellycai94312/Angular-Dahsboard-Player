@@ -62,6 +62,12 @@ import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
 import {TrainingStateRequest} from '../request/training-state-request';
 import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
+import {Dialogue} from '../model/chat/conversation/dialogue';
+import {StringWrapper} from '../bean/wrapper/string-wrapper';
+import {Chat} from '../model/chat/conversation/chat';
+import {MessageWrapper} from '../bean/wrapper/message-wrapper';
+import {Message} from '../model/chat/message/message';
+import {MessageContent} from '../model/chat/message/message-content';
 
 @Injectable()
 @RestParams({
@@ -170,6 +176,16 @@ export class ParticipantRestApiService extends Rest {
   //#endregion
 
   //#region Person
+
+  //#region Dialogue
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/dialogue'
+  })
+  getDialogue: IRestMethod<{ personId: number }, Dialogue>;
+
+  //#endregion
 
   //#region GET
 
@@ -801,6 +817,94 @@ export class ParticipantRestApiService extends Rest {
     path: '/connection/{!id}'
   })
   hasConnection: IRestMethod<{ id: number }, BooleanWrapper>;
+
+  //#endregion
+
+
+  //#region Conversation
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/conversation/{!conversationId}/messageContent'
+  })
+  createMessage: IRestMethodStrict<MessageContent, any, { conversationId: number }, MessageContent>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/conversation/{!conversationId}/messageContent/{!messageContent}'
+  })
+  updateMessage: IRestMethodStrict<MessageContent, any, { conversationId: number, messageContent: number }, MessageContent>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/conversation/message/active'
+  })
+  getActiveMessages: IRestMethod<PageQuery, PageContainer<MessageWrapper>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/conversation/{!conversationId}/message'
+  })
+  getMessages: IRestMethodStrict<any, PageQuery, { conversationId: number }, PageContainer<Message>>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/conversation/{!conversationId}/messageContent'
+  })
+  removeMessages: IRestMethodStrict<ListRequest<Message>, { deleteForReceiver?: boolean }, { conversationId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/conversation/{!conversationId}/message/all'
+  })
+  removeAllMessages: IRestMethodStrict<void, any, { conversationId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/conversation/{!conversationId}/disable'
+  })
+  disableMessageNotifications: IRestMethodStrict<void, any, { conversationId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/conversation/{!conversationId}/enable'
+  })
+  enableMessageNotifications: IRestMethodStrict<void, any, { conversationId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/conversation/{!id}'
+  })
+  removeConversation: IRestMethod<{ id: number }, void>;
+
+  //#region Chat
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/conversation'
+  })
+  createChat: IRestMethod<StringWrapper, Chat>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/conversation/{!conversationId}'
+  })
+  updateChat: IRestMethodStrict<StringWrapper, any, { conversationId: number }, Chat>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/conversation/{!conversationId}/participant'
+  })
+  updateParticipants: IRestMethodStrict<ListRequest<Person>, any, { conversationId: number }, Person[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/conversation/{!conversationId}/quit'
+  })
+  quitChat: IRestMethodStrict<void, any, { conversationId: number }, void>;
+
+  //#endregion
+
 
   //#endregion
 

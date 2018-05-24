@@ -7,6 +7,8 @@ import {ToastrService} from 'ngx-toastr';
 import {AuthorizationService} from './shared/authorization.service';
 import {Locale} from './data/remote/misc/locale';
 import {NotificationService} from './shared/notification.service';
+import {ConversationService} from './shared/conversation.service';
+import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 
 @Component({
   selector: 'app-root',
@@ -24,31 +26,52 @@ export class AppComponent implements OnInit, OnDestroy {
               private _localStorageService: LocalStorageService,
               private _authorizationService: AuthorizationService,
               private _notificationService: NotificationService,
-              private _toastrService: ToastrService) {
-    this._notificationService.subscribe();
+              private _toastrService: ToastrService,
+              private _conversationService: ConversationService,
+              private _participantStompService: ParticipantStompService) {
+    this.subscribe();
+
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
       this._toastrService.info(x.body, null, {
         enableHtml: true,
         tapToDismiss: false
       });
     });
+
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
-      this._notificationService.subscribe();
+      this.subscribe();
     });
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
-      this._notificationService.unsubscribe();
+      this.unsubscribe();
     });
   }
 
-  ngOnInit() {
+  private subscribe(): void {
+    if (this._authorizationService.isAuthenticated()) {
+      this._participantStompService.connect();
+
+      this._notificationService.subscribe();
+      this._conversationService.subscribe();
+    }
+  }
+
+  private unsubscribe(): void {
+    this._notificationService.unsubscribe();
+    this._conversationService.unsubscribe();
+
+    this._participantStompService.disconnect();
+  }
+
+  ngOnInit(): void {
     this.initLangs();
   }
 
   ngOnDestroy(): void {
-    this._notificationService.unsubscribe();
     this._notificationSubscription.unsubscribe();
     this._logInSubscription.unsubscribe();
     this._logOutSubscription.unsubscribe();
+
+    this.unsubscribe();
   }
 
   private initLangs(): void {

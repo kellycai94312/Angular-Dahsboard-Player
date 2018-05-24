@@ -1,0 +1,18 @@
+$conversation-footer-height: 60px;
+$margin: 0.5rem;
+// TODO: Set dynamic calc
+$nav-bar-height: 70px;
+
+textarea {
+  min-height: 60px;
+  max-height: 60px;
+}
+
+.conversation-content {
+  height: calc(100vh - (#{$conversation-footer-height} + #{$margin} + #{$nav-bar-height}));
+}
+
+.conversation-footer {
+  margin-top: $margin;
+  height: $conversation-footer-height;
+}

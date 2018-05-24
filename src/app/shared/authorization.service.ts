@@ -6,6 +6,7 @@ import {ParticipantRestApiService} from '../data/remote/rest-api/participant-res
 import {LocalStorageService} from './local-storage.service';
 import {LayoutService} from '../layout/shared/layout.service';
 import {Router} from '@angular/router';
+import {Person} from '../data/remote/model/person';
 
 @Injectable()
 export class AuthorizationService {
@@ -14,6 +15,7 @@ export class AuthorizationService {
   public readonly handleLogOut: Subject<boolean>;
 
   public session: Session;
+  private person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _layoutService: LayoutService,
@@ -40,18 +42,19 @@ export class AuthorizationService {
 
   public async logOut(withNavigate: boolean = true): Promise<void> {
     this.session = null;
+    this.person = null;
     this.handleLogOut.next(true);
     try {
       await this._participantRestApiService.logout();
     } catch (e) {
     }
     this._localStorageService.signOut();
-    this._layoutService.hidden.next(true);
 
     if (withNavigate) {
       const router = this._injector.get(Router);
       if (router.url !== '/login') {
         await router.navigate(['login']);
+        this._layoutService.hidden.next(true);
       }
     }
   }
@@ -62,6 +65,20 @@ export class AuthorizationService {
     } catch (e) {
     }
     return this.session;
+  }
+
+  public async getPerson() {
+    if (!this.person && this.session) {
+      this.person = await this._participantRestApiService.getPerson({id: this.session.personId});
+    }
+    return this.person;
+  }
+
+  public isAuthenticated(): boolean {
+    if (this.session) {
+      return true;
+    }
+    return false;
   }
 
   private async checkSession(): Promise<void> {

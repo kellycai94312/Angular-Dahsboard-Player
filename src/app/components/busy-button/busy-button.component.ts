@@ -8,11 +8,18 @@ import {Observable} from 'rxjs/Observable';
 })
 export class BusyButtonComponent implements OnInit {
 
+  // TODO: Use host binding
+  @Input()
+  public classes: any;
+
   @Input()
   public click: Function;
 
   @Input()
   public parameter: any;
+
+  @Input()
+  public checkPressedEnter: boolean;
 
   @Input()
   public nameKey: string;
@@ -47,6 +54,12 @@ export class BusyButtonComponent implements OnInit {
         this.busy = false;
         this._clicked = false;
       }
+    }
+  }
+
+  public async onKeyUp(event: any): Promise<void> {
+    if (this.checkPressedEnter && event.keyCode == 13) {
+      await this.onClick(event);
     }
   }
 

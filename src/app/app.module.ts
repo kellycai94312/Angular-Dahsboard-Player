@@ -8,7 +8,7 @@ import {RestModule} from 'rest-ngx';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CookieModule} from 'ngx-cookie';
-import {StompConfig, StompService} from '@stomp/ng2-stompjs';
+import {StompRService} from '@stomp/ng2-stompjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
 
@@ -33,12 +33,12 @@ import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
 import {DynamicComponentService} from './shared/dynamic-component.service';
 import {ReportsService} from './shared/reports.service';
-import {stompConfig} from './data/config/stomp-config';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
 import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {ConversationService} from './shared/conversation.service';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -59,7 +59,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxVirtualScrollModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      enableHtml: true
+      enableHtml: true,
+      positionClass: 'toast-bottom-right',
+      timeOut: 3000,
+      maxOpened: 7
     }),
     NgbModule.forRoot(),
     RestModule.forRoot(),
@@ -93,6 +96,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ParticipantStompService,
     AuthorizationService,
     NotificationService,
+    ConversationService,
     {
       provide: APP_INITIALIZER,
       useFactory: (as: AuthorizationService) => function () {
@@ -110,11 +114,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       useClass: RestApiInterceptor,
       multi: true
     },
-    StompService,
-    {
-      provide: StompConfig,
-      useValue: stompConfig
-    }
+    StompRService
   ],
   bootstrap: [AppComponent]
 })

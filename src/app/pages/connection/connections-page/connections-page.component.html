@@ -61,11 +61,11 @@
   <thead>
   <tr class="d-flex">
     <th class="col-1">{{'image' | translate}}</th>
-    <th class="col-4">{{'fullName' | translate}}</th>
+    <th class="col-3">{{'fullName' | translate}}</th>
     <th class="col-1">{{'yearBirth' | translate}}</th>
     <th class="col-2">{{'role' | translate}}</th>
     <th class="col-3">{{'group' | translate}}</th>
-    <th class="col-1"></th>
+    <th class="col-2"></th>
   </tr>
   </thead>
   <tbody>
@@ -81,7 +81,7 @@
                [ngStyle]="{'background-image': 'url('+ item.imageLogoUrl +')'}">
           </div>
         </td>
-        <td class="col-4"
+        <td class="col-3"
             [routerLink]="item.url">
           <h5>{{item.data?.firstName}}<br>
             {{item.data?.lastName}}<br>
@@ -100,10 +100,25 @@
           <app-group *ngIf="item.baseGroupViewModel"
                      [data]="item.baseGroupViewModel.data"></app-group>
         </td>
-        <td class="col-1">
-          <app-busy-button nameKey="remove"
-                           [click]="onRemoveConnection"
-                           [parameter]="item"></app-busy-button>
+        <td class="col-2">
+          <app-busy-wrapper #busyWrapper>
+            <div class="btn-group">
+              <button class="btn btn-primary"
+                      (click)="busyWrapper.invoke($event,onSendMessage,item)">{{'sendMessage' | translate}}
+              </button>
+              <div class="btn-group"
+                   ngbDropdown>
+                <button class="btn btn-primary dropdown-toggle-split"
+                        ngbDropdownToggle></button>
+                <div class="dropdown-menu"
+                     ngbDropdownMenu>
+                  <button class="dropdown-item"
+                          (click)="busyWrapper.invoke($event,onRemoveConnection,item)">{{'remove' | translate}}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </app-busy-wrapper>
         </td>
       </tr>
     </ng-template>

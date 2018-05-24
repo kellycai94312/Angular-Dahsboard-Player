@@ -1,0 +1,29 @@
+<div class="conversation-content">
+  <ngx-virtual-scroll class="list-group-flush"
+                      [getItems]="getItems"
+                      [query]="query"
+                      autoScroll="true">
+    <ng-template let-item>
+      <div class="list-group-item p-0">
+        <app-message [message]="item"></app-message>
+      </div>
+    </ng-template>
+  </ngx-virtual-scroll>
+</div>
+
+<div class="conversation-footer mt-2"
+     (keyup.enter)="busyButton.onKeyUp($event)"
+     (keyup.shift.enter)="addNewRow()">
+  <div class="d-flex flex-row">
+   <textarea type="text"
+             [(ngModel)]="messageContent.content"
+             class="form-control input-height-sm w-100 mr-2"
+             rows="3"
+             placeholder="{{'writeMessage' | translate}}"></textarea>
+    <app-busy-button #busyButton
+                     nameKey="send"
+                     checkPressedEnter="true"
+                     [click]="sendMessage">
+    </app-busy-button>
+  </div>
+</div>

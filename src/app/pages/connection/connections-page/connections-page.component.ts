@@ -16,6 +16,8 @@ import {Group} from '../../../data/remote/model/group/base/group';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {AppHelper} from '../../../utils/app-helper';
+import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-connections-page',
@@ -39,7 +41,8 @@ export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestro
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _router: Router) {
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
     this.personQuery.from = 0;
@@ -159,6 +162,14 @@ export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestro
     newPageContainer.size = pageContainer.size;
     newPageContainer.total = pageContainer.total;
     return newPageContainer;
+  };
+
+  public onSendMessage: Function = async (event: Event, parameter: PersonViewModel) => {
+    try {
+      const dialogue: Dialogue = await this._participantRestApiService.getDialogue({personId: parameter.data.id});
+      await this._router.navigate(['/conversation', dialogue.id]);
+    } catch (e) {
+    }
   };
 
   public onRemoveConnection: Function = async (event: Event, parameter: PersonViewModel) => {
