@@ -59,7 +59,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxVirtualScrollModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
-      enableHtml: true
+      enableHtml: true,
+      positionClass: 'toast-bottom-right',
+      timeOut: 3000,
+      maxOpened: 7
     }),
     NgbModule.forRoot(),
     RestModule.forRoot(),

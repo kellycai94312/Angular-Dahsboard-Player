@@ -263,5 +263,6 @@
   "send": "Send",
   "writeMessage": "Write a message...",
   "sendError": "Send error",
-  "sendMessage": "Send message"
+  "sendMessage": "Send message",
+  "wrongLoginOrPassword": "Wrong login or password"
 }

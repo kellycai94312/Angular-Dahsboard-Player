@@ -8,6 +8,10 @@ import {Observable} from 'rxjs/Observable';
 })
 export class BusyButtonComponent implements OnInit {
 
+  // TODO: Use host binding
+  @Input()
+  public classes: any;
+
   @Input()
   public click: Function;
 

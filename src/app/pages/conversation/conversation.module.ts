@@ -7,7 +7,6 @@ import {TranslateModule} from '@ngx-translate/core';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {FormsModule} from '@angular/forms';
-import {AutosizeModule} from 'ngx-autosize';
 import {MessageComponent} from './message/message.component';
 import {ConversationComponent} from './conversation/conversation.component';
 
@@ -18,8 +17,7 @@ import {ConversationComponent} from './conversation/conversation.component';
     TranslateModule.forChild(),
     NgxVirtualScrollModule,
     BusyButtonModule,
-    FormsModule,
-    AutosizeModule
+    FormsModule
   ],
   declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent]
 })

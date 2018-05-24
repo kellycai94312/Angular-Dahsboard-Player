@@ -1,4 +1,4 @@
-<button class="btn btn-primary input-height-sm"
+<button class="btn btn-primary input-height-sm {{classes}}"
         (click)="onClick($event)"
         (keyup.enter)="onKeyUp($event)">
   <span *ngIf="!busy; else elseTemplate">
