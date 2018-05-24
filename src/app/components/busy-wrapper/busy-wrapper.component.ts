@@ -20,13 +20,10 @@ export class BusyWrapperComponent implements OnInit {
 
   public async invoke(event: Event, callback: Function, parameter: any): Promise<void> {
     if (callback && !this._isLocked) {
-      console.log('invoke');
-
       this._isLocked = true;
       const subscription = Observable.of([]).delay(200)
         .subscribe(() => {
           this.isBusy = true;
-          console.log(this.isBusy);
         });
 
       try {
