@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, Component, Input} from '@angular/core';
 import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseConversationType} from '../../../data/remote/model/chat/conversation/base/base-conversation-type';
@@ -10,7 +10,7 @@ import {AppHelper} from '../../../utils/app-helper';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.scss']
 })
-export class ConversationComponent implements OnInit, AfterContentInit {
+export class ConversationComponent implements AfterContentInit {
 
   @Input()
   public messageWrapper: MessageWrapper;
@@ -22,9 +22,6 @@ export class ConversationComponent implements OnInit, AfterContentInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
-  }
-
-  ngOnInit() {
   }
 
   async ngAfterContentInit() {

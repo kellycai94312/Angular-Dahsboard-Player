@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ContentChild, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, ContentChild, Input, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
@@ -10,7 +10,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
   templateUrl: './ngx-virtual-scroll.component.html',
   styleUrls: ['./ngx-virtual-scroll.component.scss']
 })
-export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
+export class NgxVirtualScrollComponent implements AfterContentInit {
 
   @ContentChild(TemplateRef)
   public templateRef: TemplateRef<any>;
@@ -44,9 +44,6 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
   constructor() {
     this.count = PropertyConstant.pageSize;
     this.items = [];
-  }
-
-  ngOnInit() {
   }
 
   async ngAfterContentInit(): Promise<void> {
@@ -86,13 +83,11 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
       }
 
       this._total = pageContainer.total;
-
       for (let i = pageContainer.list.length - 1; i >= 0; i--) {
         this.items.unshift(pageContainer.list[i]);
       }
       // TODO: Calc item height
       this.ngxScrollDirective.scrollTo(98 * pageContainer.size);
-
 
       this._rear = this._rear - this.count;
       if (this._rear < 0) {
@@ -155,6 +150,16 @@ export class NgxVirtualScrollComponent implements OnInit, AfterContentInit {
     this.items = [];
 
     await this.onScrollDown();
+
+    const tempAutoScroll = this.autoScroll;
+    this.autoScroll = false;
+    
+    this.scrollDown();
+
+    // TODO: Need for skip auto scroll first loaded items
+    setTimeout(() => {
+      this.autoScroll = tempAutoScroll;
+    }, 1000);
   }
 
 }

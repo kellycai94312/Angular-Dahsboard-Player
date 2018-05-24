@@ -1,8 +1,5 @@
 import {Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output} from '@angular/core';
 import {Direction} from '../model/direction';
-import {Observable} from 'rxjs';
-import {ISubscription} from 'rxjs/Subscription';
-
 
 @Directive({
   selector: '[ngxScroll]'
@@ -13,7 +10,7 @@ export class NgxScrollDirective implements OnDestroy {
   public attachedYOffset: number;
 
   @Input()
-  public authScroll: boolean;
+  public autoScroll: boolean;
 
   @Input()
   public scrollUpDistance: number;
@@ -34,13 +31,15 @@ export class NgxScrollDirective implements OnDestroy {
   private _frontPosition: number;
 
   private _lastScrollTop: number;
-  private _isInitScrolled: boolean;
+  private _attached: boolean;
 
-  private readonly _timerSubscription: ISubscription;
+  private readonly mutationObserver: MutationObserver;
 
   // TODO: Use window:scroll for window
   @HostListener('scroll')
   public onScroll(): void {
+    this._attached = this.autoScroll && this.attachedYOffset >= this.getDistanceToBottom();
+
     switch (this.getScrollDirection()) {
       case Direction.UP: {
         const yPositionInPercent = 100.0 * this.getScrollYPosition() / (this.getHeight());
@@ -59,7 +58,6 @@ export class NgxScrollDirective implements OnDestroy {
           this.scrollDown.emit();
         }
       }
-
         break;
     }
 
@@ -70,11 +68,10 @@ export class NgxScrollDirective implements OnDestroy {
   }
 
   constructor(private _elementRef: ElementRef) {
-    this.attachedYOffset = 80;
-    this.authScroll = true;
+    this.attachedYOffset = 1;
 
     this.scrollUpDistance = 20;
-    this.scrollDownDistance = 80;
+    this.scrollDownDistance = 95;
 
     this._rearScrollHeight = Number.MIN_VALUE;
     this._frontPosition = Number.MIN_VALUE;
@@ -82,20 +79,19 @@ export class NgxScrollDirective implements OnDestroy {
     this.scrollUp = new EventEmitter<void>();
     this.scrollDown = new EventEmitter<void>();
 
-    this._timerSubscription = Observable.timer(0, 500).subscribe(x => {
-      if (this.authScroll && this.attachedYOffset > this.getDistanceToBottom()) {
+    this.mutationObserver = new MutationObserver(() => {
+      if (this._attached) {
         this.scrollToDown();
-      } else {
-        if (!this._isInitScrolled) {
-          this._isInitScrolled = true;
-          this.scrollToDown();
-        }
       }
+    });
+    this.mutationObserver.observe(this._elementRef.nativeElement, {
+      childList: true,
+      subtree: true
     });
   }
 
   ngOnDestroy(): void {
-    this._timerSubscription.unsubscribe();
+    this.mutationObserver.disconnect();
   }
 
   public scrollToDown(): void {
@@ -107,16 +103,14 @@ export class NgxScrollDirective implements OnDestroy {
   }
 
   public scrollTo(position: number): void {
-    setTimeout(() => {
-      /* TODO: For window
-      const scrollToOptions: ScrollToOptions = {left: 0, top: position};
-      if (this.scrollWithSmooth) {
-        scrollToOptions.behavior = 'smooth';
-      }
-      window.scrollTo(scrollToOptions);*/
+    /* TODO: For window
+    const scrollToOptions: ScrollToOptions = {left: 0, top: position};
+    if (this.scrollWithSmooth) {
+      scrollToOptions.behavior = 'smooth';
+    }
+    window.scrollTo(scrollToOptions);*/
 
-      this._elementRef.nativeElement.scrollTop = position;
-    });
+    this._elementRef.nativeElement.scrollTop = position;
   }
 
   private getScrollDirection(): Direction {
