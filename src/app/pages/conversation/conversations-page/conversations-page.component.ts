@@ -43,11 +43,10 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
       for (let i = 0; i < items.length; i++) {
         if (items[i].message.content.baseConversation.id == value.message.content.baseConversation.id) {
           items.splice(i, 1);
-          items.unshift(value);
-          return;
+          break;
         }
       }
-      items.push(value);
+      items.unshift(value);
     });
   }
 
