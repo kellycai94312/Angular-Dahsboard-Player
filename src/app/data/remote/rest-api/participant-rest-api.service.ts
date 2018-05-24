@@ -820,7 +820,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-
   //#region Conversation
 
   @RestAction({
@@ -846,6 +845,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/conversation/{!conversationId}/message'
   })
   getMessages: IRestMethodStrict<any, PageQuery, { conversationId: number }, PageContainer<Message>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/conversation/unread'
+  })
+  getUnreadTotalMessages: IRestMethod<void, IntegerWrapper>;
 
   @RestAction({
     method: RestRequestMethod.Delete,

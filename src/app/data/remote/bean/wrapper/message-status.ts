@@ -3,5 +3,6 @@ export enum MessageStatus {
   UPDATE = 'UPDATE',
   DELETE = 'DELETE',
   GET = 'GET',
-  EMPTY = 'EMPTY'
+  EMPTY = 'EMPTY',
+  READ = 'READ'
 }

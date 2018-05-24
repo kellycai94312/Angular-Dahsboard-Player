@@ -3,13 +3,12 @@ import {ParticipantStompService} from '../data/remote/web-socket/participant-sto
 import {Subject} from 'rxjs/Subject';
 import {ISubscription} from 'rxjs/Subscription';
 import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
-import {Message} from '../data/remote/model/chat/message/message';
 
 @Injectable()
 export class ConversationService implements OnDestroy {
 
   public readonly messageHandle: Subject<MessageWrapper>;
-  public readonly readMessageHandle: Subject<Message>;
+  public readonly readMessageHandle: Subject<MessageWrapper>;
   public readonly errorHandle: Subject<any>;
 
   private _messageSubscription: ISubscription;
@@ -18,7 +17,7 @@ export class ConversationService implements OnDestroy {
 
   constructor(private _participantStompService: ParticipantStompService) {
     this.messageHandle = new Subject<MessageWrapper>();
-    this.readMessageHandle = new Subject<Message>();
+    this.readMessageHandle = new Subject<MessageWrapper>();
     this.errorHandle = new Subject<any>();
   }
 
@@ -61,7 +60,7 @@ export class ConversationService implements OnDestroy {
 
     try {
       this._readMessageSubscription = this._participantStompService.subscribeConversationRead()
-        .map(message => this._participantStompService.messageToObject<Message>(message))
+        .map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
         .subscribe(async message => {
           this.readMessageHandle.next(message);
         });

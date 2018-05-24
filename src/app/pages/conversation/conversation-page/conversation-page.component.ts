@@ -56,8 +56,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       const items: Array<Message> = this.ngxVirtualScrollComponent.items;
       // TODO: Optimize read message algorithm!
       for (let i = 0; i < items.length; i++) {
-        if (items[i].content.id == x.content.id) {
-          items[i] = x;
+        if (items[i].content.id == x.message.content.id) {
+          items[i] = x.message;
           return;
         }
       }
