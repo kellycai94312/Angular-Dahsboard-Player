@@ -44,11 +44,19 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.query = new PageQuery();
     this._maxMessageDate = new Date();
     this._messageSubscription = this._conversationService.messageHandle.subscribe(x => {
+      if (x.message.content.baseConversation.id != this._conversationId) {
+        return;
+      }
+
       this.readMessageFrom(x.message.created);
       x.message.read = true;
       this.ngxVirtualScrollComponent.addItem(x.message);
     });
     this._readMessageSubscription = this._conversationService.readMessageHandle.subscribe(x => {
+      if (x.message.content.baseConversation.id != this._conversationId) {
+        return;
+      }
+
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
