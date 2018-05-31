@@ -264,5 +264,7 @@
   "writeMessage": "Write a message...",
   "sendError": "Send error",
   "sendMessage": "Send message",
-  "wrongLoginOrPassword": "Wrong login or password"
+  "wrongLoginOrPassword": "Wrong login or password",
+  "list": "List",
+  "calendar": "Calendar"
 }

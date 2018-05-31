@@ -11,15 +11,7 @@ import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-pe
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
 import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-manager-page/game-steps-manager-page.component';
 import {TabModule} from '../../components/tab/tab.module';
-import {
-  DxButtonModule,
-  DxDateBoxModule,
-  DxNumberBoxModule,
-  DxSelectBoxModule,
-  DxTextAreaModule,
-  DxTextBoxModule,
-  DxValidatorModule
-} from 'devextreme-angular';
+import {DxButtonModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -28,6 +20,10 @@ import {TrainingPersonsSelectionModule} from '../../components/training-persons-
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupPageModule} from '../groups/group-page.module';
+import {CalendarUtilsModule} from '../../components/calendar-utils/calendar-utils.module';
+import {CalendarModule} from 'angular-calendar';
+import {EventsListComponent} from './events-page/events-list/events-list.component';
+import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
 
 @NgModule({
   imports: [
@@ -49,7 +45,9 @@ import {GroupPageModule} from '../groups/group-page.module';
     TrainingPersonModule,
     TrainingPersonsSelectionModule,
     InputSelectModule,
-    GroupPageModule
+    GroupPageModule,
+    CalendarModule.forRoot(),
+    CalendarUtilsModule
   ],
   declarations: [
     EventPageComponent,
@@ -57,7 +55,9 @@ import {GroupPageModule} from '../groups/group-page.module';
     GameStepBasePageComponent,
     GameStepPersonsPageComponent,
     GameStepExecutionPageComponent,
-    GameStepsManagerPageComponent
+    GameStepsManagerPageComponent,
+    EventsListComponent,
+    EventsCalendarComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,

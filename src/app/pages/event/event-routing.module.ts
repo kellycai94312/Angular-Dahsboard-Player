@@ -6,9 +6,18 @@ import {GameStepBasePageComponent} from './event-page/game/steps/game-step-base-
 import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-persons-page/game-step-persons-page.component';
 import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-manager-page/game-steps-manager-page.component';
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
+import {EventsListComponent} from './events-page/events-list/events-list.component';
+import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
 
 const routes: Routes = [
-  {path: '', component: EventsPageComponent},
+  {
+    path: '', component: EventsPageComponent,
+    children: [
+      {path: '', redirectTo: 'list', pathMatch: 'full'},
+      {path: 'list', component: EventsListComponent},
+      {path: 'calendar', component: EventsCalendarComponent}
+    ]
+  },
   {
     path: ':id', component: EventPageComponent,
     children: [

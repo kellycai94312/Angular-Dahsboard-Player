@@ -8,6 +8,6 @@ export class BaseTrainingQuery extends PageQuery {
   public discriminator?: TrainingDiscriminator;
   public measureParameter?: string;
   public locationId?: number;
-  public dateFrom?: Date;
-  public dateTo?: Date;
+  public dateFrom?: string;
+  public dateTo?: string;
 }
