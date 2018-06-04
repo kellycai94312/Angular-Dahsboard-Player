@@ -28,37 +28,29 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
   public query: PageQuery;
 
   private _searchInputSubscription: ISubscription;
-  private readonly _messageSubscription: ISubscription;
-  private readonly _readMessageSubscription: ISubscription;
+
+  private readonly _messageCreateSubscription: ISubscription;
+  private readonly _messageUpdateSubscription: ISubscription;
+  private readonly _messageReadSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService) {
     this.query = new PageQuery();
-
-    this._messageSubscription = this._conversationService.messageHandle.subscribe(value => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-
-      const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].message.content.baseConversation.id == value.message.content.baseConversation.id) {
-          items.splice(i, 1);
-          break;
-        }
-      }
-      items.unshift(value);
+    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
+      this.updateItem(x);
     });
-
-    this._readMessageSubscription = this._conversationService.readMessageHandle.subscribe(value => {
+    this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {
+      this.updateItem(x);
+    });
+    this._messageReadSubscription = this._conversationService.messageReadHandle.subscribe(x => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
 
       const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
       for (let i = 0; i < items.length; i++) {
-        if (items[i].message.content.baseConversation.id == value.message.content.baseConversation.id) {
-          items[i] = value;
+        if (items[i].message.content.baseConversation.id == x.content.baseConversation.id) {
+          items[i].message = x;
           break;
         }
       }
@@ -76,8 +68,9 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this._searchInputSubscription.unsubscribe();
-    this._messageSubscription.unsubscribe();
-    this._readMessageSubscription.unsubscribe();
+    this._messageCreateSubscription.unsubscribe();
+    this._messageUpdateSubscription.unsubscribe();
+    this._messageReadSubscription.unsubscribe();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
@@ -86,6 +79,21 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
 
   private async resetItems(): Promise<void> {
     await this.ngxVirtualScrollComponent.reset();
+  }
+
+  private updateItem(messageWrapper: MessageWrapper): void {
+    if (!this.ngxVirtualScrollComponent) {
+      return;
+    }
+
+    const items: Array<MessageWrapper> = this.ngxVirtualScrollComponent.items;
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].message.content.baseConversation.id == messageWrapper.message.content.baseConversation.id) {
+        items.splice(i, 1);
+        break;
+      }
+    }
+    items.unshift(messageWrapper);
   }
 
 }

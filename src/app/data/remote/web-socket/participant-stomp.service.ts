@@ -6,6 +6,7 @@ import {ConversationReadRequest} from '../request/conversation-read-request';
 import * as SockJS from 'sockjs-client';
 import {PropertyConstant} from '../../local/property-constant';
 import {environment} from '../../../../environments/environment';
+import {IdRequest} from '../request/id-request';
 
 @Injectable()
 export class ParticipantStompService {
@@ -47,12 +48,28 @@ export class ParticipantStompService {
 
   //#region Conversation
 
-  public subscribeConversation(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation`);
+  public subscribeConversationCreate(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/create`);
+  }
+
+  public subscribeConversationUpdate(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/update`);
+  }
+
+  public subscribeConversationDelete(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/delete`);
   }
 
   public subscribeConversationRead(): Observable<Message> {
     return this.subscribe(`${this.baseQuery}/conversation/read`);
+  }
+
+  public subscribeConversationTyping(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/conversation/typing`);
+  }
+
+  public publishConversationTyping(conversationId: IdRequest): void {
+    this.publish('/ws/conversation/typing', JSON.stringify(conversationId));
   }
 
   public subscribeConversationError(): Observable<Message> {

@@ -265,10 +265,12 @@
   "sendError": "Send error",
   "sendMessage": "Send message",
   "wrongLoginOrPassword": "Wrong login or password",
+  "isTypingAMessage": "Is typing a message...",
+  "areTypingMessages": "Are typing messages...",
   "list": "List",
   "calendar": "Calendar",
-  "today" : "Today",
-  "month" : "Month",
-  "week" : "Week",
-  "day" : "Day"
+  "today": "Today",
+  "month": "Month",
+  "week": "Week",
+  "day": "Day"
 }

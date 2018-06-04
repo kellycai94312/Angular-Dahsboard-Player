@@ -14,11 +14,27 @@
 <div class="conversation-footer mt-2"
      (keyup.enter)="busyButton.onKeyUp($event)"
      (keyup.shift.enter)="addNewRow()">
-  <div class="d-flex flex-row">
+  <div class="typing-container">
+    <div *ngIf="participantsTyping.length"
+         class="text-typing">
+      <div *ngIf="participantsTyping.length==1;else multiTyping">
+        {{participantsTyping[0].person.firstName}} {{'isTypingAMessage' | translate | lowercase}}
+      </div>
+      <ng-template #multiTyping>
+        <div *ngFor="let item of participantsTyping">
+          {{item.person.firstName}},
+        </div>
+        {{'areTypingMessages' | translate | lowercase}}
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row align-self-end">
    <textarea type="text"
              [(ngModel)]="messageContent.content"
              class="form-control input-height-sm w-100 mr-2"
              rows="3"
+             (input)="onTyping()"
              placeholder="{{'writeMessage' | translate}}"></textarea>
     <app-busy-button #busyButton
                      nameKey="send"
@@ -26,4 +42,5 @@
                      [click]="sendMessage">
     </app-busy-button>
   </div>
+
 </div>
