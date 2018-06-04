@@ -24,6 +24,7 @@ import {CalendarUtilsModule} from '../../components/calendar-utils/calendar-util
 import {CalendarModule} from 'angular-calendar';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
 import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
+import {EventCalendarItemComponent} from './events-page/events-calendar/event-calendar-item/event-calendar-item.component';
 
 @NgModule({
   imports: [
@@ -57,7 +58,8 @@ import {EventsCalendarComponent} from './events-page/events-calendar/events-cale
     GameStepExecutionPageComponent,
     GameStepsManagerPageComponent,
     EventsListComponent,
-    EventsCalendarComponent
+    EventsCalendarComponent,
+    EventCalendarItemComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,

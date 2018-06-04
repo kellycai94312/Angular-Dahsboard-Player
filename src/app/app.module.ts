@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {APP_INITIALIZER, Injector, NgModule} from '@angular/core';
-import {DatePipe, LocationStrategy, PathLocationStrategy} from '@angular/common';
+import {DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -39,6 +39,10 @@ import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
 import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {ConversationService} from './shared/conversation.service';
+
+import localeRu from '@angular/common/locales/ru';
+
+registerLocaleData(localeRu);
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

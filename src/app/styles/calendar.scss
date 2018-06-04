@@ -1,0 +1,22 @@
+$calendar-height: 50px;
+
+.cal-month-view {
+  .cal-day-badge {
+    background-color: #1e90ff !important;
+  }
+  .cal-cell-top {
+    min-height: 50px !important; //month number height
+    height: 50px; //month number height
+  }
+}
+
+.cal-week-view {
+  .cal-events-row {
+    height: $calendar-height + 2px !important;
+  }
+  .cal-event {
+    padding: 3px 0 !important;
+    height: $calendar-height !important;
+    line-height: normal !important;
+  }
+}

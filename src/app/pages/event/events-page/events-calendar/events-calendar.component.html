@@ -2,38 +2,60 @@
   [(view)]="view"
   [(viewDate)]="viewDate"
   (viewDateChange)="loadEvents()"
-  (viewChange)="loadEvents()">
+  (viewChange)="loadEvents()"
+  [locale]="locale">
 </app-calendar-header>
 
-<ng-template #loading>
-  <div class="text-center">
-    <i class="fa fa-spin fa-spinner fa-5x"></i>
-    <br>
-    Loading events...
+<ng-template #eventItemTemplate let-event="event" let-locale="locale">
+  <app-event-calendar-item [event]="event" [displayDateInline]="true"></app-event-calendar-item>
+</ng-template>
+
+<ng-template #dayEventItemTemplate let-event="event" let-locale="locale">
+  <app-event-calendar-item [event]="event" [displayInline]="true"></app-event-calendar-item>
+</ng-template>
+
+<ng-template #monthCellTemplate let-day="day" let-locale="locale">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+  </div>
+  <div *ngFor="let event of day.events; let i = index">
+    <div *ngIf="i < 2" [style.background-color]="event.color.primary">
+      <app-event-calendar-item [event]="event"></app-event-calendar-item>
+    </div>
   </div>
 </ng-template>
 
-<div *ngIf="events$ | async; else loading; let events">
+<div *ngIf="events">
   <div [ngSwitch]="view">
     <mwl-calendar-month-view
       *ngSwitchCase="'month'"
       [viewDate]="viewDate"
       [events]="events"
+      [locale]="locale"
+      [weekStartsOn]="weekStartsOn"
       [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="onDaySelected($event.day)"
-      (eventClicked)="onEventClicked($event.event)">
+      (eventClicked)="onEventClicked($event.event)"
+      [cellTemplate]="monthCellTemplate"
+      [eventTitleTemplate]="eventItemTemplate">
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
       *ngSwitchCase="'week'"
       [viewDate]="viewDate"
       [events]="events"
-      (eventClicked)="onEventClicked($event.event)">
+      [locale]="locale"
+      [weekStartsOn]="weekStartsOn"
+      (eventClicked)="onEventClicked($event.event)"
+      [eventTitleTemplate]="eventItemTemplate">
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
       *ngSwitchCase="'day'"
       [viewDate]="viewDate"
       [events]="events"
-      (eventClicked)="onEventClicked($event.event)">
+      (eventClicked)="onEventClicked($event.event)"
+      [eventWidth]="250"
+      [eventTitleTemplate]="dayEventItemTemplate">
     </mwl-calendar-day-view>
   </div>
 </div>

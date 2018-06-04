@@ -266,5 +266,10 @@
   "sendMessage": "Send message",
   "wrongLoginOrPassword": "Wrong login or password",
   "list": "List",
-  "calendar": "Calendar"
+  "calendar": "Calendar",
+  "previous" : "Previous",
+  "today" : "Today",
+  "month" : "Month",
+  "week" : "Week",
+  "day" : "Day"
 }

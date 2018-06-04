@@ -11,14 +11,13 @@ export class CalendarHeaderComponent {
 
   @Input() viewDate: Date;
 
-  @Input() locale: string = 'en';
+  @Input() locale;
 
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
 
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();
 
   constructor() {
-    //fixme change locale
   }
 
 
