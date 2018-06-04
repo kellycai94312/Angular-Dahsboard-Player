@@ -12,6 +12,8 @@ import {Sort} from '../../../../data/remote/rest-api/sort';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {CustomDateFormatter} from '../../../../components/calendar-utils/custom-date-formatter.prodiver';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
 
 @Component({
   selector: 'app-events-calendar',
@@ -34,14 +36,14 @@ export class EventsCalendarComponent implements OnInit {
 
   events: Array<CalendarEvent<{ event: BaseTraining }>>;
 
-  activeDayIsOpen = false;
-
   weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
 
   private _trainingQuery: BaseTrainingQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _localStorageService: LocalStorageService,
+              private _dateFormatter: CustomDateFormatter,
+              private _modalService: NgbModal,
               private _router: Router) {
     this._trainingQuery = new BaseTrainingQuery();
     this._trainingQuery.from = 0;
@@ -81,17 +83,9 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   async onDaySelected({date, events}: { date: Date; events: Array<CalendarEvent<{ film: BaseTraining }>>; }) {
-    if (isSameMonth(date, this.viewDate)) {
-      if (
-        (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-        this.viewDate = date;
-      }
-    }
+    const ref = this._modalService.open(EventCalendarMonthModalComponent);
+    ref.componentInstance.date = this._dateFormatter.dayViewTitle({date: date});
+    ref.componentInstance.events = events;
   }
 
   async onEventClicked(calendarEvent: CalendarEvent<{ event: BaseTraining }>) {

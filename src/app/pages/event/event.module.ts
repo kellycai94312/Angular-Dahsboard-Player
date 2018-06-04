@@ -25,6 +25,8 @@ import {CalendarModule} from 'angular-calendar';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
 import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
 import {EventCalendarItemComponent} from './events-page/events-calendar/event-calendar-item/event-calendar-item.component';
+import {EventCalendarMonthModalComponent} from './events-page/events-calendar/event-calendar-month-modal/event-calendar-month-modal.component';
+import {CustomDateFormatter} from '../../components/calendar-utils/custom-date-formatter.prodiver';
 
 @NgModule({
   imports: [
@@ -59,11 +61,16 @@ import {EventCalendarItemComponent} from './events-page/events-calendar/event-ca
     GameStepsManagerPageComponent,
     EventsListComponent,
     EventsCalendarComponent,
-    EventCalendarItemComponent
+    EventCalendarItemComponent,
+    EventCalendarMonthModalComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,
-    NamedObjectItemComponent
+    NamedObjectItemComponent,
+    EventCalendarMonthModalComponent
+  ],
+  providers: [
+    CustomDateFormatter
   ]
 })
 export class EventModule {

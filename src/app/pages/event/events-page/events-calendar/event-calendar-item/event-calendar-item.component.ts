@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BaseTraining} from '../../../../../data/remote/model/training/base/base-training';
 import {CalendarEvent} from 'angular-calendar';
 
@@ -7,23 +7,29 @@ import {CalendarEvent} from 'angular-calendar';
   templateUrl: './event-calendar-item.component.html',
   styleUrls: ['./event-calendar-item.component.scss']
 })
-export class EventCalendarItemComponent implements OnInit {
+export class EventCalendarItemComponent {
 
   @Input()
   event: CalendarEvent<{ event: BaseTraining }>;
 
   @Input()
-  displayDateInline: boolean;
-
-  @Input()
   displayInline: boolean;
 
+  @Input()
+  displayBorderBottom: boolean;
+
+  @Input()
+  onOpenEvent: Function;
+
   constructor() {
-    this.displayDateInline = false;
     this.displayInline = false;
+    this.displayBorderBottom = false;
   }
 
-  ngOnInit() {
+  onOpenEventClick() {
+    if (this.onOpenEvent) {
+      this.onOpenEvent();
+    }
   }
 
 }
