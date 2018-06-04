@@ -2,27 +2,27 @@
   <div class="col-md-4">
     <div class="btn-group">
       <div
-        class="btn btn-primary"
+        class="btn btn-primary input-height-sm"
         mwlCalendarPreviousView
         [view]="view"
         [(viewDate)]="viewDate"
         (viewDateChange)="viewDateChange.next(viewDate)">
-        {{'previous' | translate}}
+        <i class="fa fa-caret-left"></i>
       </div>
       <div
-        class="btn btn-outline-secondary"
+        class="btn btn-outline-secondary input-height-sm"
         mwlCalendarToday
         [(viewDate)]="viewDate"
         (viewDateChange)="viewDateChange.next(viewDate)">
         {{'today' | translate}}
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-primary input-height-sm"
         mwlCalendarNextView
         [view]="view"
         [(viewDate)]="viewDate"
         (viewDateChange)="viewDateChange.next(viewDate)">
-        {{'next' | translate}}
+        <i class="fa fa-caret-right"></i>
       </div>
     </div>
   </div>
@@ -32,19 +32,19 @@
   <div class="col-md-4">
     <div class="btn-group">
       <div
-        class="btn btn-primary"
+        class="btn btn-primary input-height-sm"
         (click)="viewChange.emit('month')"
         [class.active]="view === 'month'">
         {{'month' | translate}}
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-primary input-height-sm"
         (click)="viewChange.emit('week')"
         [class.active]="view === 'week'">
         {{'week' | translate}}
       </div>
       <div
-        class="btn btn-primary"
+        class="btn btn-primary input-height-sm"
         (click)="viewChange.emit('day')"
         [class.active]="view === 'day'">
         {{'day' | translate}}
