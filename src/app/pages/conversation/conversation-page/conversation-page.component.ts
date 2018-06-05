@@ -154,7 +154,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     if (!this.messageContent.content || !this.messageContent.content.trim()) {
       return;
     }
-
+    this.messageContent.content = this.messageContent.content.trim();
     try {
       const messageContent = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
       this.addSendMessageInList(messageContent);

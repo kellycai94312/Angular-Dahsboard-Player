@@ -8,6 +8,6 @@
   <div class="d-flex flex-column ml-2">
     <p>{{message.sender.person.firstName}}<span
       class="date ml-2">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</span></p>
-    <p>{{message.content.content}}</p>
+    <p [innerHTML]="message.content.content | urlParser"></p>
   </div>
 </div>

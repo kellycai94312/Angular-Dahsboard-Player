@@ -9,6 +9,7 @@ import {BusyButtonModule} from '../../components/busy-button/busy-button.module'
 import {FormsModule} from '@angular/forms';
 import {MessageComponent} from './message/message.component';
 import {ConversationComponent} from './conversation/conversation.component';
+import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {ConversationComponent} from './conversation/conversation.component';
     TranslateModule.forChild(),
     NgxVirtualScrollModule,
     BusyButtonModule,
-    FormsModule
+    FormsModule,
+    UrlParserModule
   ],
   declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent]
 })
