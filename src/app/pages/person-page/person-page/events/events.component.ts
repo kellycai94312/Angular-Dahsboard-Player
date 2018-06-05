@@ -62,12 +62,13 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
   }
 
-  ngAfterViewInit() {
+  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.trainingQuery.name = value;
         await this.updateItems();
       });
+    await this.updateItems();
   }
 
   ngOnDestroy(): void {

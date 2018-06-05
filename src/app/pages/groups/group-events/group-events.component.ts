@@ -53,6 +53,7 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.trainingQuery.name = value;
         await this.updateItems();
       });
+    await this.updateItems();
   }
 
   ngOnDestroy(): void {

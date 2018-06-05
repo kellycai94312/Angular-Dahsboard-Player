@@ -26,12 +26,18 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public messageContent: MessageContent;
   public query: PageQuery;
-
-  private _conversationId: number;
   private _maxMessageDate: Date;
+  private _typingTimeout: any;
+  private _receiveTypingTimeout: any;
 
-  private readonly _messageSubscription: ISubscription;
-  private readonly _readMessageSubscription: ISubscription;
+  public readonly participantsTyping: Participant[];
+  private readonly _conversationId: number;
+  private readonly _messageCreateSubscription: ISubscription;
+  private readonly _messageUpdateSubscription: ISubscription;
+  private readonly _messageDeleteSubscription: ISubscription;
+  private readonly _messageReadSubscription: ISubscription;
+  private readonly _typingSubscription: ISubscription;
+
   private person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -40,11 +46,14 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService) {
+    this._conversationId = this._activatedRoute.snapshot.params.id;
     this.messageContent = new MessageContent();
     this.query = new PageQuery();
     this._maxMessageDate = new Date();
-    this._messageSubscription = this._conversationService.messageHandle.subscribe(x => {
-      if (x.message.content.baseConversation.id != this._conversationId) {
+    this.participantsTyping = [];
+
+    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
+      if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
         return;
       }
 
@@ -52,12 +61,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       x.message.read = true;
       this.ngxVirtualScrollComponent.addItem(x.message);
     });
-    this._readMessageSubscription = this._conversationService.readMessageHandle.subscribe(x => {
-      if (x.message.content.baseConversation.id != this._conversationId) {
-        return;
-      }
-
-      if (!this.ngxVirtualScrollComponent) {
+    this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {
+      if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
         return;
       }
 
@@ -66,32 +71,82 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       for (let i = 0; i < items.length; i++) {
         if (items[i].content.id == x.message.content.id) {
           items[i] = x.message;
-          return;
+          break;
         }
       }
+    });
+    this._messageDeleteSubscription = this._conversationService.messageDeleteHandle.subscribe(x => {
+      if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
+        return;
+      }
+
+      const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+      // TODO: Optimize read message algorithm!
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].content.id == x.message.content.id) {
+          items.splice(i, 1);
+          break;
+        }
+      }
+    });
+    this._messageReadSubscription = this._conversationService.messageReadHandle.subscribe(x => {
+      if (x.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
+        return;
+      }
+
+      const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+      // TODO: Optimize read message algorithm!
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (!item.read && item.content.created <= x.content.created) {
+          item.read = true;
+        }
+      }
+    });
+    this._typingSubscription = this._conversationService.typingHandle.subscribe(async participant => {
+      if (participant.baseConversation.id != this._conversationId) {
+        return;
+      }
+
+      const index = this.participantsTyping.findIndex(x => x.id == participant.id);
+      if (0 <= index) {
+        clearTimeout(this._receiveTypingTimeout);
+      } else {
+        this.participantsTyping.push(participant);
+      }
+      this._receiveTypingTimeout = setTimeout(() => {
+        this.participantsTyping.splice(this.participantsTyping.indexOf(participant), 1);
+      }, 1500);
     });
   }
 
   async ngOnInit() {
-    this._conversationId = this._activatedRoute.snapshot.params.id;
     this.person = await this._authorizationService.getPerson();
   }
 
   ngOnDestroy(): void {
-    this._messageSubscription.unsubscribe();
-    this._readMessageSubscription.unsubscribe();
+    this._messageCreateSubscription.unsubscribe();
+    this._messageUpdateSubscription.unsubscribe();
+    this._messageDeleteSubscription.unsubscribe();
+    this._messageReadSubscription.unsubscribe();
+    this._typingSubscription.unsubscribe();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
     const pageContainer = (await this._participantRestApiService.getMessages({}, query, {conversationId: this._conversationId}));
-    // TODO: Optimize read message algorithm!
-    this.readMessageFrom(new Date());
+
+    let lastUnreadMessage: Date;
     pageContainer.list = pageContainer.list.map(x => {
-      if (x.receiver.person.id == this.person.id) {
+      if (x.receiver.person.id == this.person.id && !x.read) {
         x.read = true;
+        lastUnreadMessage = x.content.created;
       }
       return x;
     });
+
+    if (lastUnreadMessage) {
+      this.readMessageFrom(lastUnreadMessage);
+    }
     return pageContainer;
   };
 
@@ -99,18 +154,29 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     if (!this.messageContent.content || !this.messageContent.content.trim()) {
       return;
     }
-
+    this.messageContent.content = this.messageContent.content.trim();
     try {
       const messageContent = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
+      this.addSendMessageInList(messageContent);
       this.messageContent.content = null;
 
-      this.addSendMessageInList(messageContent);
       // TODO: Optimize read message algorithm!
-      this.readMessageFrom(new Date());
+      this.readMessageFrom(messageContent.created);
     } catch (e) {
       await this._appHelper.showErrorMessage('sendError');
     }
   };
+
+  public addNewRow() {
+    // TODO: Add new row
+  }
+
+  public onTyping() {
+    clearTimeout(this._typingTimeout);
+    this._typingTimeout = setTimeout(() => {
+      this._participantStompService.publishConversationTyping({id: this._conversationId});
+    }, 150);
+  }
 
   private addSendMessageInList(messageContent: MessageContent) {
     const participant = new Participant();
@@ -128,10 +194,6 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       id: this._conversationId,
       lastDate: this._appHelper.getGmtDate(date)
     });
-  }
-
-  public addNewRow() {
-    // TODO: Add new row
   }
 
 }
