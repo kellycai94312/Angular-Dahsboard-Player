@@ -43,6 +43,7 @@
     "rxjs-compat": "^6.2.0",
     "sockjs-client": "^1.1.4",
     "stimulsoft-reports-js": "^2018.2.1",
+    "typescript": "^2.7.2",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {
@@ -54,7 +55,7 @@
     "@angular/language-service": "6.0.3",
     "@types/jasmine": "~2.8.6",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "~10.1.4",
+    "@types/node": "~10.3.1",
     "codelyzer": "~4.3.0",
     "gulp": "^3.9.1",
     "gulp-notify": "^3.2.0",
@@ -72,8 +73,7 @@
     "ngx-cookie": "^4.0.2",
     "protractor": "~5.3.1",
     "rest-core": "^0.2.2",
-    "ts-node": "~6.0.0",
-    "tslint": "~5.10.0",
-    "typescript": "2.7.2"
+    "ts-node": "~6.1.0",
+    "tslint": "~5.10.0"
   }
 }
