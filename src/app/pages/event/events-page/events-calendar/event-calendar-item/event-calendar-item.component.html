@@ -1,0 +1,12 @@
+<div class="event-calendar-item"
+     [ngClass]="{'d-inline' : displayInline, 'bordered' : displayBorderBottom}">
+  <p class="d-inline" [ngStyle]="{'color' : event.color.font}">{{event.start | date:'HH:mm'}}</p>
+  <p class="d-inline" [ngStyle]="{'color' : event.color.font}" *ngIf="event.end"> - {{event.meta.event.finishTime |
+    date:'HH:mm'}}</p>
+  <p [ngClass]="{'pl-1' : displayInline, 'd-inline' : displayInline}">
+    <a routerLink="/event/{{event.meta.event.id}}"
+       [ngStyle]="{'color' : event.color.font}"
+       [class.disabled]="event.meta.event.discriminator !== 'GAME'"
+       (click)="onOpenEventClick()">{{event.title}}</a>
+  </p>
+</div>

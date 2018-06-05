@@ -1,0 +1,10 @@
+.event-calendar-item {
+  padding: 2px 4px;
+  a.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+  &.bordered {
+    border-bottom: 1px solid #ddd;
+  }
+}

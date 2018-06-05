@@ -10,4 +10,5 @@ export class BaseTrainingQuery extends PageQuery {
   public locationId?: number;
   public dateFrom?: Date;
   public dateTo?: Date;
+  public sort?: string;
 }

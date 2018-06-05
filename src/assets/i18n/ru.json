@@ -265,5 +265,11 @@
   "writeMessage": "Напишите сообщение...",
   "sendError": "Ошибка при отправки",
   "sendMessage": "Отправить сообщение",
-  "wrongLoginOrPassword": "Неправильный логин или пароль"
+  "wrongLoginOrPassword": "Неправильный логин или пароль",
+  "list": "Список",
+  "calendar": "Календарь",
+  "today" : "Сегодня",
+  "month" : "Месяц",
+  "week" : "Неделя",
+  "day" : "День"
 }

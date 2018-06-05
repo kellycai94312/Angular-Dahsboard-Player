@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col">
+    <dx-text-box #searchDxTextBoxComponent
+                 placeholder="{{'search' | translate}}"
+                 mode="search"
+                 valueChangeEvent="keyup"
+                 showClearButton="true">
+    </dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateFrom"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateFromChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box id="dateTo"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 [showClearButton]="true"
+                 (onValueChanged)="onDateToChange($event)"
+                 class="w-100">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
+  </div>
+  <div *ngIf="canCreateEvent">
+    <button class="btn btn-primary"
+            type="button"
+            (click)="onCreate()">{{'create' | translate}}
+    </button>
+  </div>
+</div>
+<table class="table table-hover mt-2">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-3">{{'name' | translate}}</th>
+    <th class="col-1">{{'trainingType' | translate}}</th>
+    <th class="col-2">{{'startDateAndTime' | translate}}</th>
+    <th class="col-2">{{'location' | translate}}</th>
+    <th class="col-3">{{'groups.section' | translate}}</th>
+    <th class="col-1">{{'score' | translate}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <app-infinite-list class="list-group-flush">
+    <ng-template let-item>
+      <tr class="d-flex" routerLink="/event/{{item.id}}" [class.disabled]="item.discriminator !== 'GAME'">
+        <td class="col-sm-3">{{item.name}}</td>
+        <td class="col-sm-1">{{item.discriminator}}</td>
+        <td class="col-sm-2">{{item.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
+        <td class="col-sm-2">{{item.location != null ? item.location.name : ''}}</td>
+        <td class="col-sm-3">{{item.discriminator === 'GAME' ? item.teams : ''}}</td>
+        <td class="col-sm-1">{{item.discriminator === 'GAME' ? item.score : ''}}</td>
+      </tr>
+    </ng-template>
+  </app-infinite-list>
+  </tbody>
+</table>

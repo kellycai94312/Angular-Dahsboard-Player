@@ -1,0 +1,60 @@
+<app-calendar-header
+  [(view)]="view"
+  [(viewDate)]="viewDate"
+  (viewDateChange)="loadEvents()"
+  (viewChange)="loadEvents()"
+  [locale]="locale">
+</app-calendar-header>
+
+<ng-template #monthTemplate let-day="day" let-locale="locale">
+  <div class="cal-cell-top">
+    <span class="cal-day-badge" *ngIf="day.badgeTotal > 2" (click)="onDaySelected(day)">{{ day.badgeTotal }}</span>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+  </div>
+  <div *ngFor="let event of day.events; let i = index">
+    <div *ngIf="i < 2" [style.background-color]="event.color.primary" class="month-event">
+      <app-event-calendar-item [event]="event" [displayBorderBottom]="true"></app-event-calendar-item>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #weekEventTemplate let-event="event" let-locale="locale">
+  <app-event-calendar-item [event]="event"></app-event-calendar-item>
+</ng-template>
+
+<ng-template #dayEventTemplate let-event="event" let-locale="locale">
+  <app-event-calendar-item [event]="event"
+                           [displayInline]="true"></app-event-calendar-item>
+</ng-template>
+
+<div *ngIf="events">
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="'month'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [locale]="locale"
+      [weekStartsOn]="weekStartsOn"
+      [activeDayIsOpen]="false"
+      (eventClicked)="onEventClicked($event.event)"
+      [cellTemplate]="monthTemplate">
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="'week'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [locale]="locale"
+      [weekStartsOn]="weekStartsOn"
+      (eventClicked)="onEventClicked($event.event)"
+      [eventTitleTemplate]="weekEventTemplate">
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="'day'"
+      [viewDate]="viewDate"
+      [events]="events"
+      (eventClicked)="onEventClicked($event.event)"
+      [eventWidth]="250"
+      [eventTitleTemplate]="dayEventTemplate">
+    </mwl-calendar-day-view>
+  </div>
+</div>
