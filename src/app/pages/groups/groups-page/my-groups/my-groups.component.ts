@@ -41,12 +41,13 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
     this.userRoles = await this._participantRestApiService.getUserRoles();
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.groupQuery.name = value;
         await this.updateItems();
       });
+    await this.updateItems();
   }
 
   public async onGroupTypeChanged(value: GroupType) {

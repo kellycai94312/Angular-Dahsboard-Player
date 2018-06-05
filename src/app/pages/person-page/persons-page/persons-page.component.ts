@@ -61,12 +61,13 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userRoles = await this._participantRestApiService.getUserRoles();
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.personQuery.name = value;
         await this.updateItems();
       });
+    await this.updateItems();
   }
 
   ngOnDestroy(): void {

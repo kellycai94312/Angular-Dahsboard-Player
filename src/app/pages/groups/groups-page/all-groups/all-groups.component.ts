@@ -58,12 +58,13 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
     this.leagues = await this._participantRestApiService.getLeagues();
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.groupQuery.name = value;
         await this.updateItems();
       });
+    await this.updateItems();
   }
 
   //#region Filters

@@ -35,12 +35,13 @@ export class BaseSelection<T, TQuery extends PageQuery> implements AfterViewInit
     this._total = 0;
   }
 
-  public ngAfterViewInit() {
+  public async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.query.name = value;
         await this.update(true);
       });
+    await this.update(true);
   }
 
   ngOnDestroy(): void {

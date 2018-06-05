@@ -59,6 +59,7 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
         this._measureTemplateQuery.name = value;
         await this.updateListAsync();
       });
+    await this.updateListAsync();
   }
 
   public async onNextPage(pageQuery: PageQuery) {

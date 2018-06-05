@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, Type, ViewChild } from '@angular/core';
-import { PropertyConstant } from '../../data/local/property-constant';
-import { DxTextBoxComponent } from 'devextreme-angular';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { HashSet } from '../../data/local/hash-set';
-import { IdentifiedObject } from '../../data/remote/base/identified-object';
-import { PageQuery } from '../../data/remote/rest-api/page-query';
+import {Component, Input, OnInit, Type, ViewChild} from '@angular/core';
+import {PropertyConstant} from '../../data/local/property-constant';
+import {DxTextBoxComponent} from 'devextreme-angular';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {HashSet} from '../../data/local/hash-set';
+import {IdentifiedObject} from '../../data/remote/base/identified-object';
+import {PageQuery} from '../../data/remote/rest-api/page-query';
 
 @Component({
   selector: 'app-modal-select-page',
@@ -43,8 +43,9 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this._searchText = value;
-        this.updateListAsync();
+        await this.updateListAsync();
       });
+    await this.updateListAsync();
   }
 
   async onRemove(obj: any) {
