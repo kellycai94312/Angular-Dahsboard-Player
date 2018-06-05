@@ -116,7 +116,7 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   private async formatDate(date: Date) {
-    return this._datePipe.transform(date, 'yyyy-MM-dd');
+    return this._datePipe.transform(date, PropertyConstant.dateFormat);
   }
 
   private getTrainingColor(event: BaseTraining) {
