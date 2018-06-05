@@ -5,7 +5,6 @@ import {ActivatedRoute} from '@angular/router';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {GroupPersonState} from '../../../data/local/group-person-state';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
-import {TranslateService} from '@ngx-translate/core';
 import {Tab} from '../../../data/local/tab';
 import {GroupService} from '../group.service';
 import {Image} from '../../../data/remote/model/image';
@@ -29,7 +28,6 @@ export class GroupPageComponent implements OnInit {
   public tabs: Tab[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateService: TranslateService,
               private _activatedRoute: ActivatedRoute,
               public groupService: GroupService) {
     this.groupService.groupSubject.subscribe(group => {
@@ -73,20 +71,20 @@ export class GroupPageComponent implements OnInit {
       this.tabs.push(tab);
     }
     const defaultTab = new Tab();
-    defaultTab.name = await this._translateService.get('members').toPromise();
+    defaultTab.nameKey = 'members';
     defaultTab.routerLink = this.getSubGroupRouterLink(0);
     this.tabs.push(defaultTab);
 
     if (this.groupService.isEditAllow()) {
       const managementTab = new Tab();
-      managementTab.name = await this._translateService.get('administration').toPromise();
+      managementTab.nameKey = 'administration';
       managementTab.routerLink = 'administration';
       this.tabs.push(managementTab);
     }
 
     if (this.groupService.hasEvents()) {
       const eventsTab = new Tab();
-      eventsTab.name = await this._translateService.get('events').toPromise();
+      eventsTab.nameKey = 'events';
       eventsTab.routerLink = 'events';
       this.tabs.push(eventsTab);
     }

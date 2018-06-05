@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {CalendarDateFormatter, CalendarEvent, DAYS_OF_WEEK} from 'angular-calendar';
-import {endOfDay, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
+import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -14,6 +14,7 @@ import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {CustomDateFormatter} from '../../../../components/calendar-utils/custom-date-formatter.prodiver';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-events-calendar',
@@ -44,6 +45,7 @@ export class EventsCalendarComponent implements OnInit {
               private _localStorageService: LocalStorageService,
               private _dateFormatter: CustomDateFormatter,
               private _modalService: NgbModal,
+              private _datePipe: DatePipe,
               private _router: Router) {
     this._trainingQuery = new BaseTrainingQuery();
     this._trainingQuery.from = 0;
@@ -60,8 +62,8 @@ export class EventsCalendarComponent implements OnInit {
     const start = await this.getDateFrom();
     const end = await this.getDateTo();
     end.setDate(end.getDate() + 1);
-    const dateFrom = await this.formatDate(start);
-    const dateTo = await this.formatDate(end);
+    const dateFrom: any = await this.formatDate(start);
+    const dateTo: any = await this.formatDate(end);
 
     this._trainingQuery.dateFrom = dateFrom;
     this._trainingQuery.dateTo = dateTo;
@@ -114,7 +116,7 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   private async formatDate(date: Date) {
-    return format(date, 'YYYY-MM-DD');
+    return this._datePipe.transform(date, 'yyyy-MM-dd');
   }
 
   private getTrainingColor(event: BaseTraining) {
