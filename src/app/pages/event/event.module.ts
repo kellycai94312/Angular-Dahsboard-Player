@@ -27,6 +27,7 @@ import {EventsCalendarComponent} from './events-page/events-calendar/events-cale
 import {EventCalendarItemComponent} from './events-page/events-calendar/event-calendar-item/event-calendar-item.component';
 import {EventCalendarMonthModalComponent} from './events-page/events-calendar/event-calendar-month-modal/event-calendar-month-modal.component';
 import {CustomDateFormatter} from '../../components/calendar-utils/custom-date-formatter.prodiver';
+import {EventsCalendarService} from './events-page/events-calendar/events-calendar.service';
 
 @NgModule({
   imports: [
@@ -70,7 +71,8 @@ import {CustomDateFormatter} from '../../components/calendar-utils/custom-date-f
     EventCalendarMonthModalComponent
   ],
   providers: [
-    CustomDateFormatter
+    CustomDateFormatter,
+    EventsCalendarService
   ]
 })
 export class EventModule {

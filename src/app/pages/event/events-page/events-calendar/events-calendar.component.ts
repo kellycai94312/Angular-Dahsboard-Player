@@ -6,15 +6,14 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {calendarColors} from '../../../../components/calendar-utils/calendar-colors';
 import {Router} from '@angular/router';
 import {Sort} from '../../../../data/remote/rest-api/sort';
-import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {CustomDateFormatter} from '../../../../components/calendar-utils/custom-date-formatter.prodiver';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
 import {DatePipe} from '@angular/common';
+import {EventsCalendarService} from './events-calendar.service';
 
 @Component({
   selector: 'app-events-calendar',
@@ -42,6 +41,7 @@ export class EventsCalendarComponent implements OnInit {
   private _trainingQuery: BaseTrainingQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _eventsCalendarService: EventsCalendarService,
               private _localStorageService: LocalStorageService,
               private _dateFormatter: CustomDateFormatter,
               private _modalService: NgbModal,
@@ -75,7 +75,7 @@ export class EventsCalendarComponent implements OnInit {
             title: event.name,
             start: new Date(event.startTime),
             end: event.finishTime ? new Date(event.finishTime) : null,
-            color: this.getTrainingColor(event),
+            color: this._eventsCalendarService.getTrainingColor(event),
             meta: {
               event
             }
@@ -117,17 +117,6 @@ export class EventsCalendarComponent implements OnInit {
 
   private async formatDate(date: Date) {
     return this._datePipe.transform(date, PropertyConstant.dateFormat);
-  }
-
-  private getTrainingColor(event: BaseTraining) {
-    switch (event.discriminator) {
-      case TrainingDiscriminator.TESTING:
-        return calendarColors.blue;
-      case TrainingDiscriminator.TRAINING:
-        return calendarColors.yellow;
-      case TrainingDiscriminator.GAME:
-        return calendarColors.green;
-    }
   }
 
 }
