@@ -29,7 +29,7 @@ import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {ToastrService} from 'ngx-toastr';
-import {ImageDimension} from '../../../data/local/image-dimension';
+import {ImageComponent} from '../../../components/image/image.component';
 
 @Component({
   selector: 'app-person-page',
@@ -50,7 +50,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public userRoles: UserRole[] = [];
   public personSportTypes: SportType[];
 
-  public logo: string;
+  @ViewChild('logo')
+  public logo: ImageComponent;
   public roleToggle: UserRole;
   public sportTypeToggle: SportType;
 
@@ -113,7 +114,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       image.objectId = this.person.id;
       image.type = ImageType.LOGO;
       await this.participantRestApiService.uploadImage(file, image);
-      this.updateLogo();
+      this.logo.refresh();
+      this._navbarService.emitLogoChange(true);
     }
   }
 
@@ -213,29 +215,16 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     await this.router.navigate([], {queryParams: this.queryParams});
   }
 
-  updateLogo() {
-    this.logo = this._imageService.rebuildUrl({
-      clazz: ImageClass.PERSON,
-      id: this.person.id,
-      type: ImageType.LOGO,
-      dimension: ImageDimension.W130xH130
-    });
-    this._navbarService.emitLogoChange(this.logo);
-  }
-
   async ngOnInit() {
     this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.route.params.subscribe(params => {
       this._navbarService.getPerson(+params.id).then(async person => {
         this.person = person;
-        this.logo = this._imageService.buildUrl({
-          clazz: ImageClass.PERSON,
-          id: this.person.id,
-          type: ImageType.LOGO,
-          dimension: ImageDimension.W130xH130
-        });
         this.isEditAllow = person.id === this._authorizationService.session.personId;
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
+        if (this.logo) {
+          this.logo.refresh(person.id);
+        }
 
         await this.initializeConnection(person);
 

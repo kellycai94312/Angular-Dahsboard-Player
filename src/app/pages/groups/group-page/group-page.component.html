@@ -1,7 +1,12 @@
 <div *ngIf="group">
   <!-- group head -->
   <div class="d-flex flex-row mb-2">
-    <img class="logo-xl" [src]="imageLogoUrl">
+    <app-image #logo
+               [type]="'LOGO'"
+               [clazz]="'GROUP'"
+               [id]="group.id"
+               [dimension]="'W130xH130'"
+               [format]="'SQUARE'"></app-image>
     <div class="logo-xl-change" *ngIf="groupService.isEditAllow()">
       <div class="logo-content">
         <input type="file"
@@ -21,7 +26,8 @@
       </div>
       <div class="d-flex flex-row">
         <p *ngIf="group.address?.country!=null">{{'country' | translate }} - {{group.address.country.name}}</p>
-        <p *ngIf="group.address?.region!=null" class="ml-1">{{'region' | translate }} - {{group.address.region.name}}</p>
+        <p *ngIf="group.address?.region!=null" class="ml-1">{{'region' | translate }} -
+          {{group.address.region.name}}</p>
         <p *ngIf="group.address?.city!=null" class="ml-1">{{'city' | translate }} - {{group.address.city.name}}</p>
       </div>
     </div>

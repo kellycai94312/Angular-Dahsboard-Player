@@ -3,12 +3,8 @@ import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {DatePipe} from '@angular/common';
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {ImageType} from '../data/remote/model/image-type';
-import {Person} from '../data/remote/model/person';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {ToastrService} from 'ngx-toastr';
-import {ImageDimension} from '../data/local/image-dimension';
-import {ImageService} from '../shared/image.service';
 
 @Injectable()
 export class AppHelper {
@@ -16,8 +12,7 @@ export class AppHelper {
   constructor(private _datePipe: DatePipe,
               private _participantRestApiService: ParticipantRestApiService,
               private _toastrService: ToastrService,
-              private _translateService: TranslateService,
-              private _imageService: ImageService) {
+              private _translateService: TranslateService) {
   }
 
   public pushItemsInList<T>(from: number, items: T[], pageContainer: PageContainer<T>): T[] {
@@ -80,15 +75,6 @@ export class AppHelper {
   public async showSuccessMessage(messageKey: string): Promise<void> {
     const message = await this._translateService.get(messageKey).toPromise();
     this._toastrService.success(message);
-  }
-
-  public getPersonImageUrl(person: Person): string {
-    return this._imageService.buildUrl({
-      id: person.id,
-      type: ImageType.LOGO,
-      clazz: 'Person',
-      dimension: ImageDimension.W80xH80
-    });
   }
 
   public delay(ms: number): Promise<void> {

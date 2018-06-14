@@ -11,6 +11,7 @@ import {GroupPageModule} from '../groups/group-page.module';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.module';
+import {ImageModule} from '../../components/image/image.module';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.modu
     TranslateModule.forChild(),
     BusyButtonModule,
     NgbDropdownModule,
-    BusyWrapperModule
+    BusyWrapperModule,
+    ImageModule
   ],
   declarations: [ConnectionsPageComponent]
 })

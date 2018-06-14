@@ -76,10 +76,11 @@
       <tr class="d-flex">
         <td class="col-1"
             [routerLink]="item.url">
-          <div *ngIf="item.imageLogoUrl"
-               class="img-fluid logo-lg-circle"
-               [ngStyle]="{'background-image': 'url('+ item.imageLogoUrl +')'}">
-          </div>
+          <app-image [type]="'LOGO'"
+                     [clazz]="'PERSON'"
+                     [id]="item.data.id"
+                     [dimension]="'W80xH80'"
+                     [format]="'CIRCLE'"></app-image>
         </td>
         <td class="col-3"
             [routerLink]="item.url">

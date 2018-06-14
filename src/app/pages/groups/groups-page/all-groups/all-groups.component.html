@@ -99,8 +99,11 @@
       <tr class="d-flex"
           routerLink="/group/{{item.data.id}}">
         <td class="col-sm-1">
-          <img class="logo-lg"
-               [src]="item.imageLogoUrl"/>
+          <app-image [type]="'LOGO'"
+                     [clazz]="'GROUP'"
+                     [id]="item.data.id"
+                     [dimension]="'W80xH80'"
+                     [format]="'SQUARE'"></app-image>
         </td>
         <td class="col-sm-3">
           <h5>{{item.data.name}}</h5>

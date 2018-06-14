@@ -1,10 +1,12 @@
 <div *ngIf="data"
      [routerLink]="url">
   <div class="d-flex flex-row align-items-center">
-    <div *ngIf="imageLogoUrl"
-         class="logo-lg-circle"
-         [ngStyle]="{'background-image': 'url('+ imageLogoUrl +')'}">
-    </div>
+    <app-image
+      [type]="'LOGO'"
+      [clazz]="'PERSON'"
+      [id]="data.id"
+      [dimension]="'W80xH80'"
+      [format]="'CIRCLE'"></app-image>
     <div class="d-flex flex-column ml-2">
       <h5>{{data.lastName}}</h5>
       <h5>{{data.firstName}}</h5>

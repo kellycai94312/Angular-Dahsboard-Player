@@ -2,9 +2,12 @@
   <!-- person info -->
   <div class="d-flex flex-row mb-2">
     <div class="d-flex flex-column">
-      <div class="img-fluid logo-xl-circle"
-           [ngStyle]="{'background-image': 'url('+ logo +')'}">
-      </div>
+      <app-image #logo
+                 [type]="'LOGO'"
+                 [clazz]="'PERSON'"
+                 [id]="person.id"
+                 [dimension]="'W130xH130'"
+                 [format]="'CIRCLE'"></app-image>
       <div class="logo-xl-circle-change" *ngIf="isEditAllow">
         <div class="logo-content">
           <input type="file"
@@ -28,7 +31,7 @@
     <div class="d-flex flex-column ml-4">
       <app-group *ngIf="baseGroup"
                  [data]="baseGroup.group"
-                 logoSizeClass="logo-xl"></app-group>
+                 [dimension]="'W130xH130'"></app-group>
     </div>
   </div>
   <app-busy-button *ngIf="canEditConnection"

@@ -1,10 +1,10 @@
 <div class="d-flex flex-row p-2"
      [ngClass]="{'unread-message': (!message.read &&!message.sender.person&&!person && message.sender.person.id == person.id) || !message.read}">
-  <div *ngIf="personViewModel?.imageLogoUrl"
-       [routerLink]="personViewModel.url"
-       class="logo-lg-circle"
-       [ngStyle]="{'background-image': 'url('+ personViewModel.imageLogoUrl +')'}">
-  </div>
+  <app-image [type]="'LOGO'"
+             [clazz]="'PERSON'"
+             [id]="this.message.sender.person.id"
+             [dimension]="'W80xH80'"
+             [format]="'CIRCLE'"></app-image>
   <div class="d-flex flex-column ml-2">
     <p>{{message.sender.person.firstName}}<span
       class="date ml-2">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</span></p>
