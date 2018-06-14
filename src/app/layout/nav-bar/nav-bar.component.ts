@@ -6,6 +6,8 @@ import {ImageClass} from '../../data/remote/misc/image-class';
 import {ProfileService} from '../../shared/profile.service';
 import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../shared/authorization.service';
+import {ImageDimension} from '../../data/local/image-dimension';
+import {ImageType} from '../../data/remote/model/image-type';
 
 @Component({
   selector: 'app-nav-bar',
@@ -22,7 +24,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
   private readonly _logoChangeSubscription: ISubscription;
 
   constructor(private _router: Router,
-              private _logoService: ImageService,
+              private _imageService: ImageService,
               private _profileService: ProfileService,
               private _authorizationService: AuthorizationService) {
     this.person = new Person();
@@ -40,7 +42,12 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (personId) {
       this.personProfileRouterLink = '/person/' + personId;
       this.person = await this._profileService.getPerson(personId);
-      this.logo = this._logoService.getLogo(ImageClass.PERSON, this.person.id);
+      this.logo = this._imageService.buildUrl({
+        clazz: ImageClass.PERSON,
+        id: this.person.id,
+        type: ImageType.LOGO,
+        dimension: ImageDimension.W40xH40
+      });
     } else {
       await this._router.navigate(['/registration/person']);
     }

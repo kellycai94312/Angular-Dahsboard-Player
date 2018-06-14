@@ -1,6 +1,7 @@
 import {BaseViewModel} from '../base/base-view-model';
 import {Group} from '../../../remote/model/group/base/group';
 import {ImageType} from '../../../remote/model/image-type';
+import {ImageDimension} from '../../image-dimension';
 
 export class GroupViewModel extends BaseViewModel<Group> {
 
@@ -23,10 +24,11 @@ export class GroupViewModel extends BaseViewModel<Group> {
 
     if (this.data) {
       this.url = `/group/${this.data.id}`;
-      this.imageLogoUrl = this.participantRestApiService.getImageUrl({
+      this.imageLogoUrl = this.imageService.buildUrl({
         id: this.data.id,
         type: ImageType.LOGO,
-        clazz: 'Group'
+        clazz: 'Group',
+        dimension: ImageDimension.W80xH80
       });
     }
   }

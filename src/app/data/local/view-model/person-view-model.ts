@@ -3,6 +3,7 @@ import {ImageType} from '../../remote/model/image-type';
 import {Person} from '../../remote/model/person';
 import {UserRole} from '../../remote/model/user-role';
 import {GroupViewModel} from './group/group-view-model';
+import {ImageDimension} from '../image-dimension';
 
 export class PersonViewModel extends BaseViewModel<Person> {
 
@@ -14,10 +15,11 @@ export class PersonViewModel extends BaseViewModel<Person> {
     super.initialize();
 
     this.url = `/person/${this.data.id}`;
-    this.imageLogoUrl = this.participantRestApiService.getImageUrl({
+    this.imageLogoUrl = this.imageService.buildUrl({
       id: this.data.id,
       type: ImageType.LOGO,
-      clazz: 'Person'
+      clazz: 'Person',
+      dimension: ImageDimension.W80xH80
     });
 
     try {

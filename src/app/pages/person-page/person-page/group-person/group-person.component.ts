@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { ImageType } from '../../../../data/remote/model/image-type';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { PersonService } from '../person.service';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { UserRole } from '../../../../data/remote/model/user-role';
+import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {ImageType} from '../../../../data/remote/model/image-type';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {PersonService} from '../person.service';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {ImageDimension} from '../../../../data/local/image-dimension';
+import {ImageService} from '../../../../shared/image.service';
 
 // TODO: Remove this component. See app-group-person-new!
 @Component({
@@ -34,17 +36,19 @@ export class GroupPersonComponent implements OnChanges {
   public pageSize = PropertyConstant.pageSize;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _imageService: ImageService) {
     this.isEditAllow = _personService.shared.isEditAllow;
     this.change = new EventEmitter<GroupPerson>();
   }
 
   ngOnChanges(model: any) {
     if (this.data) {
-      this.imageUrl = this._participantRestApiService.getImageUrl({
+      this.imageUrl = this._imageService.buildUrl({
         clazz: 'group',
         id: this.data.group.id,
-        type: ImageType.LOGO
+        type: ImageType.LOGO,
+        dimension: ImageDimension.W80xH80
       });
       this.groupUrl = `/group/${this.data.group.id}`;
     }

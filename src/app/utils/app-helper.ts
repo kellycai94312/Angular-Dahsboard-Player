@@ -7,6 +7,8 @@ import {ImageType} from '../data/remote/model/image-type';
 import {Person} from '../data/remote/model/person';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {ToastrService} from 'ngx-toastr';
+import {ImageDimension} from '../data/local/image-dimension';
+import {ImageService} from '../shared/image.service';
 
 @Injectable()
 export class AppHelper {
@@ -14,7 +16,8 @@ export class AppHelper {
   constructor(private _datePipe: DatePipe,
               private _participantRestApiService: ParticipantRestApiService,
               private _toastrService: ToastrService,
-              private _translateService: TranslateService) {
+              private _translateService: TranslateService,
+              private _imageService: ImageService) {
   }
 
   public pushItemsInList<T>(from: number, items: T[], pageContainer: PageContainer<T>): T[] {
@@ -80,10 +83,11 @@ export class AppHelper {
   }
 
   public getPersonImageUrl(person: Person): string {
-    return this._participantRestApiService.getImageUrl({
+    return this._imageService.buildUrl({
       id: person.id,
       type: ImageType.LOGO,
-      clazz: 'Person'
+      clazz: 'Person',
+      dimension: ImageDimension.W80xH80
     });
   }
 

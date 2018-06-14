@@ -10,6 +10,8 @@ import {GroupService} from '../group.service';
 import {Image} from '../../../data/remote/model/image';
 import {ImageClass} from '../../../data/remote/misc/image-class';
 import {ImageType} from '../../../data/remote/model/image-type';
+import {ImageDimension} from '../../../data/local/image-dimension';
+import {ImageService} from '../../../shared/image.service';
 
 @Component({
   selector: 'app-group-page',
@@ -29,6 +31,7 @@ export class GroupPageComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
+              private _imageService: ImageService,
               public groupService: GroupService) {
     this.groupService.groupSubject.subscribe(group => {
       this.group = group;
@@ -50,10 +53,11 @@ export class GroupPageComponent implements OnInit {
   }
 
   async baseInit() {
-    this.imageLogoUrl = this._participantRestApiService.getImageUrl({
+    this.imageLogoUrl = this._imageService.buildUrl({
       clazz: 'group',
       id: this.group.id,
-      type: ImageType.LOGO
+      type: ImageType.LOGO,
+      dimension: ImageDimension.W130xH130
     });
 
     this.groupPerson = await this.groupService.getCurrentGroupPerson();
@@ -105,10 +109,11 @@ export class GroupPageComponent implements OnInit {
       image.type = ImageType.LOGO;
       await this._participantRestApiService.uploadImage(file, image);
 
-      this.imageLogoUrl = this._participantRestApiService.getImageUrl({
+      this.imageLogoUrl = this._imageService.buildUrl({
         clazz: 'group',
         id: this.group.id,
-        type: ImageType.LOGO
+        type: ImageType.LOGO,
+        dimension: ImageDimension.W130xH130
       });
 
       this.imageLogoUrl = `${this.imageLogoUrl}&date=${new Date().getTime()}`;

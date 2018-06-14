@@ -29,6 +29,7 @@ import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {ToastrService} from 'ngx-toastr';
+import {ImageDimension} from '../../../data/local/image-dimension';
 
 @Component({
   selector: 'app-person-page',
@@ -64,7 +65,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private router: Router,
               private route: ActivatedRoute,
               private _localStorageService: LocalStorageService,
-              private logoService: ImageService,
+              private _imageService: ImageService,
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: NgbModal,
@@ -213,7 +214,12 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   }
 
   updateLogo() {
-    this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
+    this.logo = this._imageService.rebuildUrl({
+      clazz: ImageClass.PERSON,
+      id: this.person.id,
+      type: ImageType.LOGO,
+      dimension: ImageDimension.W130xH130
+    });
     this._navbarService.emitLogoChange(this.logo);
   }
 
@@ -222,7 +228,12 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     this.route.params.subscribe(params => {
       this._navbarService.getPerson(+params.id).then(async person => {
         this.person = person;
-        this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
+        this.logo = this._imageService.buildUrl({
+          clazz: ImageClass.PERSON,
+          id: this.person.id,
+          type: ImageType.LOGO,
+          dimension: ImageDimension.W130xH130
+        });
         this.isEditAllow = person.id === this._authorizationService.session.personId;
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
 

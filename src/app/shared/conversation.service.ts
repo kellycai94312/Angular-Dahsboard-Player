@@ -208,7 +208,7 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._errorSubscription = this._participantStompService.subscribeConversationError()
+      this._errorSubscription = this._participantStompService.subscribeError()
         .subscribe(async message => {
           this.errorHandle.next(message);
         });
