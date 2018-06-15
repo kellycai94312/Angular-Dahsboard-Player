@@ -1,4 +1,4 @@
 export enum ImageFormat {
-  CIRCLE,
-  SQUARE
+  CIRCLE = 'CIRCLE',
+  SQUARE = 'SQUARE'
 }

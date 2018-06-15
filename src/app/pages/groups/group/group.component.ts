@@ -11,11 +11,11 @@ import {ImageDimension} from '../../../data/local/image-dimension';
 export class GroupComponent extends GroupViewModel implements OnInit, AfterContentInit {
 
   @Input()
-  public dimension: any;
+  public dimension: ImageDimension;
 
   constructor() {
     super(new Group());
-    this.dimension = ImageDimension[ImageDimension.W80xH80];
+    this.dimension = ImageDimension.W80xH80;
   }
 
   ngOnInit() {

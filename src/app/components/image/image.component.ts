@@ -34,24 +34,21 @@ export class ImageComponent implements OnInit {
   }
 
   ngOnInit() {
-    const dimension: any = ImageDimension[this.dimension];
-    const format: any = ImageFormat[this.format];
     this.url = this._imageService.buildUrl({
       clazz: this.clazz,
       id: this.id,
       type: this.type,
-      dimension: dimension
+      dimension: this.dimension
     });
-    this.style = this._imageService.getImageStyle(format, dimension);
+    this.style = this._imageService.getImageStyle(this.format, this.dimension);
   }
 
   public refresh(id: any = this.id) {
-    const dimension: any = ImageDimension[this.dimension];
     this.url = this._imageService.rebuildUrl({
       clazz: this.clazz,
       id: id,
       type: this.type,
-      dimension: dimension
+      dimension: this.dimension
     });
   }
 
