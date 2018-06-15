@@ -1,10 +1,12 @@
 import {ParticipantRestApiService} from '../../../remote/rest-api/participant-rest-api.service';
 import {AppModule} from '../../../../app.module';
 import {Input} from '@angular/core';
+import {ImageService} from '../../../../shared/image.service';
 
 export class BaseViewModel<T> {
 
-  protected participantRestApiService: ParticipantRestApiService;
+  participantRestApiService: ParticipantRestApiService;
+  imageService: ImageService;
 
   @Input()
   public data: T;
@@ -12,6 +14,7 @@ export class BaseViewModel<T> {
 
   constructor(data: T) {
     this.participantRestApiService = AppModule.injector.get(ParticipantRestApiService);
+    this.imageService = AppModule.injector.get(ImageService);
 
     this.update(data);
   }

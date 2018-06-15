@@ -57,6 +57,7 @@ import {TestsResultsHistoryComponent} from './person-page/tests-results-history/
 import {MeasureHistoryModule} from '../../components/measure-history/measure-history.module';
 import {RoundPipe} from '../../pipes/round.pipe';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
+import {ImageModule} from '../../components/image/image.module';
 
 @NgModule({
   imports: [
@@ -90,7 +91,8 @@ import {BusyButtonModule} from '../../components/busy-button/busy-button.module'
     TabModule,
     MeasureInputModule,
     MeasureHistoryModule,
-    BusyButtonModule
+    BusyButtonModule,
+    ImageModule
   ],
   declarations: [
     PersonPageComponent,

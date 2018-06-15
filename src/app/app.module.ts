@@ -41,6 +41,7 @@ import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtua
 import {ConversationService} from './shared/conversation.service';
 
 import localeRu from '@angular/common/locales/ru';
+import {ImageModule} from './components/image/image.module';
 
 registerLocaleData(localeRu);
 
@@ -80,7 +81,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     FormsModule,
     InfiniteListModule,
-    RoundPipeModule.forRoot()
+    RoundPipeModule.forRoot(),
+    ImageModule
   ],
   providers: [
     LayoutService,

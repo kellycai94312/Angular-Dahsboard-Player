@@ -1,6 +1,10 @@
 <tr class="d-flex">
   <td class="col-1">
-    <img class="logo-lg" *ngIf="data && imageUrl" [src]="imageUrl"/>
+    <app-image [type]="'LOGO'"
+               [clazz]="'GROUP'"
+               [id]="data.group.id"
+               [dimension]="'W80xH80'"
+               [format]="'SQUARE'"></app-image>
   </td>
   <td [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">
     <a routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">

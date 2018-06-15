@@ -59,7 +59,7 @@ export class UrlParserPipe implements PipeTransform {
   }
 
   private getHtmlLinkTag(url: string): string {
-    return `<a href="${url}">${url}</a>`;
+    return `<a target="_blank" href="${url}">${url}</a>`;
   }
 
 }

@@ -8,10 +8,13 @@
       <div class="nav-bar-dropdown-toggle"
            ngbDropdownToggle>
         <div class="dropdown-toggle-content">
-          <div *ngIf="logo"
-               class="logo-sm-circle"
-               [ngStyle]="{'background-image': 'url('+ logo +')'}">
-          </div>
+          <app-image #logo
+                     *ngIf="person.id"
+                     [type]="'LOGO'"
+                     [clazz]="'PERSON'"
+                     [id]="person.id"
+                     [dimension]="'W40xH40'"
+                     [format]="'CIRCLE'"></app-image>
           <div class="fullname">
             <p>{{person.firstName}}</p>
           </div>

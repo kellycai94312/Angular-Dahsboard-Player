@@ -1,12 +1,10 @@
 import {BaseViewModel} from './base/base-view-model';
-import {ImageType} from '../../remote/model/image-type';
 import {Person} from '../../remote/model/person';
 import {UserRole} from '../../remote/model/user-role';
 import {GroupViewModel} from './group/group-view-model';
 
 export class PersonViewModel extends BaseViewModel<Person> {
 
-  public imageLogoUrl: string;
   public baseUserRole: UserRole;
   public baseGroupViewModel: GroupViewModel;
 
@@ -14,11 +12,6 @@ export class PersonViewModel extends BaseViewModel<Person> {
     super.initialize();
 
     this.url = `/person/${this.data.id}`;
-    this.imageLogoUrl = this.participantRestApiService.getImageUrl({
-      id: this.data.id,
-      type: ImageType.LOGO,
-      clazz: 'Person'
-    });
 
     try {
       this.baseUserRole = await this.participantRestApiService.getBaseUserRoleByUser({id: this.data.user.id});

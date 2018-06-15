@@ -2,9 +2,12 @@
      class="d-flex align-items-center pr-2 pb-2"
      style="width: 400px"
      (dblclick)="onDblClick()">
-  <div class="img-fluid logo-lg-circle"
-       [ngStyle]="{'background-image': 'url('+ data.personViewModel.imageLogoUrl +')'}">
-  </div>
+  <app-image
+    [type]="'LOGO'"
+    [clazz]="'PERSON'"
+    [id]="data.personViewModel.data.id"
+    [dimension]="'W80xH80'"
+    [format]="'CIRCLE'"></app-image>
   <div class="d-flex flex-column ml-2 mr-2 w-100">
     <div>{{data.personViewModel.data.firstName}}</div>
     <div>{{data.personViewModel.data.lastName}}</div>

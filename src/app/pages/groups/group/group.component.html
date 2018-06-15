@@ -1,8 +1,11 @@
 <div *ngIf="data"
      [routerLink]="url">
   <div class="d-flex flex-row align-items-center">
-    <img [src]="imageLogoUrl"
-         [class]="logoSizeClass">
+    <app-image [type]="'LOGO'"
+               [clazz]="'GROUP'"
+               [id]="data.id"
+               [dimension]="dimension"
+               [format]="'SQUARE'"></app-image>
     <div class="d-flex flex-column ml-2">
       <h5>{{data.name}}</h5>
       <p>{{data.groupType.name}}</p>

@@ -72,8 +72,8 @@ export class ParticipantStompService {
     this.publish('/ws/conversation/typing', JSON.stringify(conversationId));
   }
 
-  public subscribeConversationError(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/errors`);
+  public subscribeError(): Observable<Message> {
+    return this.subscribe(`${this.baseQuery}/error`);
   }
 
   public subscribeConversationUnreadTotal(): Observable<Message> {

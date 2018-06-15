@@ -22,7 +22,6 @@ import {EmailRequest} from '../request/email-request';
 import {GroupType} from '../model/group/base/group-type';
 import {Group} from '../model/group/base/group';
 import {GroupQuery} from './query/group-query';
-import {ImageQuery} from './query/image-query';
 import {GroupPerson} from '../model/group/group-person';
 import {SubGroup} from '../model/group/sub-group';
 import {GroupPersonQuery} from './query/group-person-query';
@@ -585,14 +584,6 @@ export class ParticipantRestApiService extends Rest {
   //#endregion
 
   //#region Image
-
-  getImageUrl(imageQuery: ImageQuery): string {
-    let url = `${PropertyConstant.restUrl}/image/download?clazz=${imageQuery.clazz}&id=${imageQuery.id}&type=${imageQuery.type}`;
-    if (imageQuery.full != null) {
-      url += `&full=${imageQuery.full}`;
-    }
-    return url;
-  }
 
   uploadImage(file: File, image: Image): Promise<Image> {
     const formData: FormData = new FormData();

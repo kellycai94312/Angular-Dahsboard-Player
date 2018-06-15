@@ -29,6 +29,7 @@ import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {ToastrService} from 'ngx-toastr';
+import {ImageComponent} from '../../../components/image/image.component';
 
 @Component({
   selector: 'app-person-page',
@@ -49,7 +50,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public userRoles: UserRole[] = [];
   public personSportTypes: SportType[];
 
-  public logo: string;
+  @ViewChild('logo')
+  public logo: ImageComponent;
   public roleToggle: UserRole;
   public sportTypeToggle: SportType;
 
@@ -64,7 +66,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private router: Router,
               private route: ActivatedRoute,
               private _localStorageService: LocalStorageService,
-              private logoService: ImageService,
+              private _imageService: ImageService,
               private _personService: PersonService,
               private _navbarService: ProfileService,
               private _modalService: NgbModal,
@@ -112,7 +114,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       image.objectId = this.person.id;
       image.type = ImageType.LOGO;
       await this.participantRestApiService.uploadImage(file, image);
-      this.updateLogo();
+      this.logo.refresh();
+      this._navbarService.emitLogoChange(true);
     }
   }
 
@@ -212,19 +215,16 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     await this.router.navigate([], {queryParams: this.queryParams});
   }
 
-  updateLogo() {
-    this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
-    this._navbarService.emitLogoChange(this.logo);
-  }
-
   async ngOnInit() {
     this.queryParams = Object.assign({}, this.route.snapshot.queryParams);
     this.route.params.subscribe(params => {
       this._navbarService.getPerson(+params.id).then(async person => {
         this.person = person;
-        this.logo = this.logoService.getLogo(ImageClass.PERSON, this.person.id);
         this.isEditAllow = person.id === this._authorizationService.session.personId;
         this._personService.shared = {person: person, isEditAllow: this.isEditAllow};
+        if (this.logo) {
+          this.logo.refresh(person.id);
+        }
 
         await this.initializeConnection(person);
 

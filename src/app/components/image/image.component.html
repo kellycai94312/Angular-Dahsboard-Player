@@ -1,0 +1,10 @@
+<div *ngIf="format && url">
+
+  <div *ngIf="format.toString() == 'CIRCLE'; else square" class="img-fluid"
+       [class]="style" [ngStyle]="{'background-image': 'url('+ url +')'}"></div>
+
+  <ng-template #square>
+    <img [class]="style" [src]="url"/>
+  </ng-template>
+
+</div>

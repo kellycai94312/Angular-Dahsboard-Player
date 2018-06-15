@@ -8,17 +8,7 @@ import {GroupPageRoutingModule} from './group-page-routing.module';
 import {LayoutService} from '../../layout/shared/layout.service';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {
-  DxButtonModule,
-  DxCheckBoxModule,
-  DxDataGridModule,
-  DxDateBoxModule,
-  DxSelectBoxModule,
-  DxTemplateModule,
-  DxTextAreaModule,
-  DxTextBoxModule,
-  DxValidatorModule
-} from 'devextreme-angular';
+import {DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
 import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
@@ -41,6 +31,7 @@ import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/
 import {GroupEventsComponent} from './group-events/group-events.component';
 import {GroupEventModalComponent} from './group-events/group-event-modal/group-event-modal.component';
 import {GroupComponent} from './group/group.component';
+import {ImageModule} from '../../components/image/image.module';
 
 @NgModule({
   imports: [
@@ -62,7 +53,8 @@ import {GroupComponent} from './group/group.component';
     ModalSelectPageModule,
     ExerciseMeasureItemModule,
     DxDateBoxModule,
-    DxTextAreaModule
+    DxTextAreaModule,
+    ImageModule
   ],
   exports: [
     GroupComponent

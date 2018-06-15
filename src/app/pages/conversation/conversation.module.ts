@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import {MessageComponent} from './message/message.component';
 import {ConversationComponent} from './conversation/conversation.component';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
+import {ImageModule} from '../../components/image/image.module';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     NgxVirtualScrollModule,
     BusyButtonModule,
     FormsModule,
-    UrlParserModule
+    UrlParserModule,
+    ImageModule
   ],
   declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent]
 })

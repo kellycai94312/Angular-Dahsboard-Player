@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute} from '@angular/router';
@@ -10,6 +10,7 @@ import {GroupService} from '../group.service';
 import {Image} from '../../../data/remote/model/image';
 import {ImageClass} from '../../../data/remote/misc/image-class';
 import {ImageType} from '../../../data/remote/model/image-type';
+import {ImageComponent} from '../../../components/image/image.component';
 
 @Component({
   selector: 'app-group-page',
@@ -22,8 +23,10 @@ export class GroupPageComponent implements OnInit {
   public groupPerson: GroupPerson;
   public subGroups: SubGroup[];
 
-  public imageLogoUrl: string;
   public textStateInGroup: string;
+
+  @ViewChild('logo')
+  public logo: ImageComponent;
 
   public tabs: Tab[];
 
@@ -50,11 +53,6 @@ export class GroupPageComponent implements OnInit {
   }
 
   async baseInit() {
-    this.imageLogoUrl = this._participantRestApiService.getImageUrl({
-      clazz: 'group',
-      id: this.group.id,
-      type: ImageType.LOGO
-    });
 
     this.groupPerson = await this.groupService.getCurrentGroupPerson();
     this.textStateInGroup = this.groupService.getKeyNamePersonStateInGroup(this.groupService.getGroupPersonState());
@@ -105,13 +103,7 @@ export class GroupPageComponent implements OnInit {
       image.type = ImageType.LOGO;
       await this._participantRestApiService.uploadImage(file, image);
 
-      this.imageLogoUrl = this._participantRestApiService.getImageUrl({
-        clazz: 'group',
-        id: this.group.id,
-        type: ImageType.LOGO
-      });
-
-      this.imageLogoUrl = `${this.imageLogoUrl}&date=${new Date().getTime()}`;
+      this.logo.refresh();
     }
   }
 
