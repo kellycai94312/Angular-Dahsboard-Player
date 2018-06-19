@@ -58,6 +58,7 @@ import {MeasureHistoryModule} from '../../components/measure-history/measure-his
 import {RoundPipe} from '../../pipes/round.pipe';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {ImageModule} from '../../components/image/image.module';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -92,7 +93,8 @@ import {ImageModule} from '../../components/image/image.module';
     MeasureInputModule,
     MeasureHistoryModule,
     BusyButtonModule,
-    ImageModule
+    ImageModule,
+    NgxVirtualScrollModule
   ],
   declarations: [
     PersonPageComponent,

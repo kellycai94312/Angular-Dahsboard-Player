@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, ContentChild, Input, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ContentChild, Input, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
@@ -10,7 +10,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
   templateUrl: './ngx-virtual-scroll.component.html',
   styleUrls: ['./ngx-virtual-scroll.component.scss']
 })
-export class NgxVirtualScrollComponent implements AfterContentInit {
+export class NgxVirtualScrollComponent {
 
   @ContentChild(TemplateRef)
   public templateRef: TemplateRef<any>;
@@ -33,6 +33,9 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
   @Input()
   public autoScroll: boolean;
 
+  @Input()
+  public windowScroll: boolean;
+
   public isBusy: boolean;
   public items: Array<any>;
 
@@ -43,11 +46,7 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
 
   constructor() {
     this.count = PropertyConstant.pageSize;
-    this.items = [];
-  }
-
-  async ngAfterContentInit(): Promise<void> {
-    await this.reset();
+    this.initialize();
   }
 
   public addItem(item: any, scroll: boolean = false) {
@@ -72,8 +71,7 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
 
     this.isBusy = true;
 
-    this._rear = Math.min(this._rear, this.query.from);
-    this.query.from = this._rear;
+    this.query.from = this.updateRear();
     this.query.count = this.count;
 
     try {
@@ -106,7 +104,7 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
 
     this.isBusy = true;
 
-    if (this.query.from) {
+    if (this.query.from || this.query.from == 0) {
       this.query.from = this._front;
     }
     this.query.count = this.count;
@@ -120,6 +118,8 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
       this._total = pageContainer.total;
       this.query.from = pageContainer.from;
 
+      this.updateRear();
+
       for (let i = 0; i < pageContainer.list.length; i++) {
         this.items.push(pageContainer.list[i]);
       }
@@ -128,7 +128,6 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
       if (this._total < this._front) {
         this._front = this._total;
       }
-
     } finally {
       this.isBusy = false;
     }
@@ -142,24 +141,38 @@ export class NgxVirtualScrollComponent implements AfterContentInit {
 
   //#endregion
 
+
   public async reset(): Promise<void> {
+    this.initialize();
+
+    await this.onScrollDown();
+
+    if (this.autoScroll) {
+      const tempAutoScroll = this.autoScroll;
+      this.autoScroll = false;
+
+      this.scrollDown();
+
+      // TODO: Need for skip auto scroll first loaded items
+      setTimeout(() => {
+        this.autoScroll = tempAutoScroll;
+      }, 1000);
+    }
+  }
+
+  private initialize() {
     this._rear = Number.MAX_VALUE;
     this._rearCount = this.count;
     this._front = 0;
     this._total = Number.MIN_VALUE;
     this.items = [];
+  }
 
-    await this.onScrollDown();
-
-    const tempAutoScroll = this.autoScroll;
-    this.autoScroll = false;
-    
-    this.scrollDown();
-
-    // TODO: Need for skip auto scroll first loaded items
-    setTimeout(() => {
-      this.autoScroll = tempAutoScroll;
-    }, 1000);
+  private updateRear(): number {
+    if (this.query.from || this.query.from == 0) {
+      this._rear = Math.min(this._rear, this.query.from);
+    }
+    return this._rear;
   }
 
 }

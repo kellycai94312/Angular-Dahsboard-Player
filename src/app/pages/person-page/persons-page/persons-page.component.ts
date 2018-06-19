@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -13,24 +13,25 @@ import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
+import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 
 @Component({
   selector: 'app-persons-page',
   templateUrl: './persons-page.component.html',
   styleUrls: ['./persons-page.component.scss']
 })
-export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public personQuery: PersonQuery;
 
@@ -59,9 +60,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.userRoles = await this._participantRestApiService.getUserRoles();
-  }
 
-  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.personQuery.name = value;
@@ -74,7 +73,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
   }
 
-//#region Filter
+  //#region Filter
 
   public async onYearBirthChanged(value: Date) {
     if (value != null) {
@@ -162,10 +161,10 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     return item.name;
   }
 
-// #endregion
+  // #endregion
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
-    const pageContainer = await this._participantRestApiService.getPersons(pageQuery);
+  public getItems: Function = async (direction: Direction, query: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getPersons(query);
     const items = await Promise.all(pageContainer.list.map(async x => {
       const personViewModel = new PersonViewModel(x);
       await personViewModel.initialize();
@@ -175,11 +174,12 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     const newPageContainer = new PageContainer(items);
     newPageContainer.size = pageContainer.size;
     newPageContainer.total = pageContainer.total;
+    newPageContainer.from = pageContainer.from;
     return newPageContainer;
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }
