@@ -3,11 +3,11 @@
   <app-image [type]="'LOGO'"
              [clazz]="'PERSON'"
              [id]="this.message.sender.person.id"
-             [dimension]="'W80xH80'"
+             [dimension]="'W40xH40'"
              [format]="'CIRCLE'"></app-image>
   <div class="d-flex flex-column ml-2">
     <p>{{message.sender.person.firstName}}<span
       class="date ml-2">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</span></p>
-    <p [innerHTML]="message.content.content | urlParser"></p>
+    <p [innerHTML]="message.content.content | urlParser"></p> <!--fixme-->
   </div>
 </div>

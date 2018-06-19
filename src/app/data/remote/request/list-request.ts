@@ -1,6 +1,4 @@
-import { IdentifiedObject } from '../base/identified-object';
-
-export class ListRequest<T extends IdentifiedObject> {
+export class ListRequest<T> {
   list: T[];
 
   constructor(list: T[]) {

@@ -11,6 +11,8 @@ import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {ConversationService} from '../../../shared/conversation.service';
 import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 
 @Component({
   selector: 'app-conversations-page',
@@ -34,7 +36,8 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   private readonly _messageReadSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _conversationService: ConversationService) {
+              private _conversationService: ConversationService,
+              private _modalService: NgbModal) {
     this.query = new PageQuery();
     this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
       this.updateItem(x);
@@ -77,6 +80,10 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
     return await this._participantRestApiService.getActiveMessages(query);
   };
+
+  public createChat() {
+    this._modalService.open(ChatModalCreateComponent, {size: 'lg'});
+  }
 
   private async resetItems(): Promise<void> {
     setTimeout(async () => {

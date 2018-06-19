@@ -8,7 +8,6 @@
   "persons": {
     "section": "Пользователи",
     "person": {
-      "uploadAvatar": "Загрузить аватар",
       "roles": {
         "section": "Роли",
         "conflict": "Вам необходимо выйти из групп с соответствующими ролями, прежде чем удалять их"
@@ -273,5 +272,13 @@
   "today": "Сегодня",
   "month": "Месяц",
   "week": "Неделя",
-  "day": "День"
+  "day": "День",
+  "createChat": "Создать беседу",
+  "deleteChat": "Удалить беседу",
+  "quitChat": "Выйти из беседы",
+  "actions": "Действия",
+  "participants": "Участники",
+  "uploadAvatar": "Загрузить аватар",
+  "enableNotifications": "Включить уведомления",
+  "disableNotifications": "Отключить уведомления"
 }

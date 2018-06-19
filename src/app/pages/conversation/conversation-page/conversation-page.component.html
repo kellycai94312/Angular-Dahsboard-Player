@@ -1,46 +1,89 @@
-<div class="conversation-content">
-  <ngx-virtual-scroll class="list-group-flush"
-                      [getItems]="getItems"
-                      [query]="query"
-                      autoScroll="true">
-    <ng-template let-item>
-      <div class="list-group-item p-0">
-        <app-message [message]="item"></app-message>
-      </div>
-    </ng-template>
-  </ngx-virtual-scroll>
-</div>
-
-<div class="conversation-footer mt-2"
-     (keyup.enter)="busyButton.onKeyUp($event)"
-     (keyup.shift.enter)="addNewRow()">
-  <div class="typing-container">
-    <div *ngIf="participantsTyping.length"
-         class="text-typing">
-      <div *ngIf="participantsTyping.length==1;else multiTyping">
-        {{participantsTyping[0].person.firstName}} {{'isTypingAMessage' | translate | lowercase}}
-      </div>
-      <ng-template #multiTyping>
-        <div *ngFor="let item of participantsTyping">
-          {{item.person.firstName}},
+<div *ngIf="recipient">
+  <div class="conversation-header">
+    <div class="d-flex flex-row justify-content-between">
+      <div class="d-flex flex-row">
+        <div class="flex-column">
+          <app-image #logo
+                     [type]="'LOGO'"
+                     [clazz]="conversation.discriminator == 'DIALOGUE' ? 'PERSON' : 'CHAT'"
+                     [id]="conversation.discriminator == 'DIALOGUE' ? recipient.person.id : conversation.id"
+                     [dimension]="'W80xH80'"
+                     [format]="'CIRCLE'"></app-image>
         </div>
-        {{'areTypingMessages' | translate | lowercase}}
-      </ng-template>
+        <div class="flex-column align-self-center ml-2">
+          <div *ngIf="conversation.discriminator == 'DIALOGUE'; else chatHeader">
+            <h4>{{recipient.person.lastName}} {{recipient.person.firstName}}</h4>
+          </div>
+          <ng-template #chatHeader>
+            <h4>{{conversation.name}}</h4>
+          </ng-template>
+        </div>
+      </div>
+      <div class="flex-column mr-1" ngbDropdown placement="bottom-right" *ngIf="conversation.discriminator == 'CHAT'">
+        <button class="btn btn-outline-secondary" ngbDropdownToggle>{{'actions' | translate}}</button>
+        <div ngbDropdownMenu>
+          <button class="dropdown-item" (click)="editParticipants()">{{'participants' | translate}}</button>
+          <button class="dropdown-item" (click)="editChat()" *ngIf="conversation.owner.id == person.user.id">
+            {{'settings' | translate}}
+          </button>
+          <button class="dropdown-item" (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' :
+            'enableNotifications') | translate}}
+          </button>
+          <button class="dropdown-item" (click)="quitChat()" *ngIf="conversation.owner.id != person.user.id">
+            {{'quitChat' | translate}}
+          </button>
+          <button class="dropdown-item" (click)="deleteChat()" *ngIf="conversation.owner.id == person.user.id">
+            {{'deleteChat' | translate}}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="d-flex flex-row align-self-end">
+  <div class="conversation-content">
+    <ngx-virtual-scroll class="list-group-flush"
+                        [getItems]="getItems"
+                        [query]="query"
+                        autoScroll="true">
+      <ng-template let-item>
+        <div class="list-group-item p-0">
+          <app-message [message]="item"></app-message>
+        </div>
+      </ng-template>
+    </ngx-virtual-scroll>
+  </div>
+
+  <div class="conversation-footer mt-2"
+       (keyup.enter)="busyButton.onKeyUp($event)"
+       (keyup.shift.enter)="addNewRow()">
+    <div class="typing-container">
+      <div *ngIf="participantsTyping.length"
+           class="text-typing">
+        <div *ngIf="participantsTyping.length==1;else multiTyping">
+          {{participantsTyping[0].person.firstName}} {{'isTypingAMessage' | translate | lowercase}}
+        </div>
+        <ng-template #multiTyping>
+          <div *ngFor="let item of participantsTyping">
+            {{item.person.firstName}},
+          </div>
+          {{'areTypingMessages' | translate | lowercase}}
+        </ng-template>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row align-self-end">
    <textarea type="text"
              [(ngModel)]="messageContent.content"
              class="form-control input-height-sm w-100 mr-2"
              rows="3"
              (input)="onTyping()"
              placeholder="{{'writeMessage' | translate}}"></textarea>
-    <app-busy-button #busyButton
-                     nameKey="send"
-                     checkPressedEnter="true"
-                     [click]="sendMessage">
-    </app-busy-button>
-  </div>
+      <app-busy-button #busyButton
+                       nameKey="send"
+                       checkPressedEnter="true"
+                       [click]="sendMessage">
+      </app-busy-button>
+    </div>
 
+  </div>
 </div>

@@ -1,0 +1,69 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{'participants' | translate}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="row h-100">
+    <div class="col-6">
+      <dx-text-box #searchDxTextBoxComponent
+                   placeholder="{{'search' | translate}}"
+                   mode="search"
+                   showClearButton="true">
+      </dx-text-box>
+      <app-infinite-list [(items)]="persons.data"
+                         (nextPage)="onNextPage($event)"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-personWrapper>
+          <div class="default-item" (click)="setActive(personWrapper)" (dblclick)="onSelect()"
+               [ngClass]="{'active' : personWrapper === active}">
+            <div class="d-flex flex-row align-items-center">
+              <app-image
+                [type]="'LOGO'"
+                [clazz]="'PERSON'"
+                [id]="personWrapper.participant.person.id"
+                [dimension]="'W40xH40'"
+                [format]="'CIRCLE'"></app-image>
+              <div class="d-flex flex-column ml-2">
+                <h5>{{personWrapper.participant.person.lastName}} {{personWrapper.participant.person.firstName}}</h5>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+      </app-infinite-list>
+    </div>
+
+    <div class="col-6">
+      <app-infinite-list [items]="selectedPersons.data"
+                         [scrollBlock]="true" tabindex="1">
+        <ng-template let-personWrapper>
+          <li class="selected-item"
+              [ngClass]="{'unchangeable' : !personWrapper.canEdit}"
+              (click)="onRemove(personWrapper)">
+            <i class="fa fa-times"></i>
+            <div class="d-flex flex-row align-items-center">
+              <app-image
+                [type]="'LOGO'"
+                [clazz]="'PERSON'"
+                [id]="personWrapper.participant.person.id"
+                [dimension]="'W40xH40'"
+                [format]="'CIRCLE'"></app-image>
+              <div class="d-flex flex-column ml-2">
+                <h5>{{personWrapper.participant.person.lastName}} {{personWrapper.participant.person.firstName}}</h5>
+              </div>
+            </div>
+          </li>
+        </ng-template>
+      </app-infinite-list>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <dx-button type="default"
+             class="btn-outline-success"
+             text="{{'modal.save' | translate}}"
+             (onClick)="onSave($event)"></dx-button>
+  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+  </button>
+</div>

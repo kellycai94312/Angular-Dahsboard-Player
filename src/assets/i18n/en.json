@@ -7,7 +7,6 @@
   "persons": {
     "section": "Persons",
     "person": {
-      "uploadAvatar": "Upload avatar",
       "roles": {
         "section": "Roles",
         "conflict": "You should quit groups with appropriate roles before you remove its"
@@ -272,5 +271,13 @@
   "today": "Today",
   "month": "Month",
   "week": "Week",
-  "day": "Day"
+  "day": "Day",
+  "createChat": "Create chat",
+  "deleteChat" : "Delete chat",
+  "quitChat" : "Quit chat",
+  "actions": "Actions",
+  "participants": "Participants",
+  "uploadAvatar" : "Upload avatar",
+  "enableNotifications": "Enable notifications",
+  "disableNotifications": "Disable notifications"
 }
