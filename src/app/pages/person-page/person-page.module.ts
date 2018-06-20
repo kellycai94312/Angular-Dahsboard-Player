@@ -30,7 +30,6 @@ import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
 import {ModalModule} from 'ngx-bootstrap';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
@@ -79,7 +78,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     DxTemplateModule,
     FormsModule,
     InputSelectModule,
-    InfiniteListModule,
     ModalSelectPageModule,
     GroupPageModule,
     PersonModule,

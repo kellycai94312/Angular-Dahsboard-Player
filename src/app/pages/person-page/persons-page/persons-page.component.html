@@ -80,8 +80,8 @@
   <tbody>
   <ngx-virtual-scroll class="list-group-flush"
                       [getItems]="getItems"
-                      [query]="personQuery"
-                      [windowScroll]="true">
+                      [(query)]="personQuery"
+                      windowScroll="true">
     <ng-template let-item>
       <tr class="d-flex" routerLink="{{item.data.id}}">
         <td class="col-1">

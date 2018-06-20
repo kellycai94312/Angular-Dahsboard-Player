@@ -13,10 +13,10 @@ import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../data/remote/bean/page-container';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-persons-page',
@@ -26,6 +26,7 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
+  public readonly personQuery: PersonQuery;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -33,19 +34,19 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public personQuery: PersonQuery;
-
   public sexItems: Sex[];
   public userRoles: UserRole[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _appHelper: AppHelper) {
+    this.pageSize = PropertyConstant.pageSize;
+
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
     this.personQuery.from = 0;
-    this.personQuery.count = PropertyConstant.pageSize;
+    this.personQuery.count = this.pageSize;
 
-    this.pageSize = PropertyConstant.pageSize;
     this.sexItems = [];
     this.userRoles = [];
   }
@@ -165,17 +166,11 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
     const pageContainer = await this._participantRestApiService.getPersons(query);
-    const items = await Promise.all(pageContainer.list.map(async x => {
-      const personViewModel = new PersonViewModel(x);
+    return await this._appHelper.pageContainerConverter(pageContainer, async original => {
+      const personViewModel = new PersonViewModel(original);
       await personViewModel.initialize();
       return personViewModel;
-    }));
-
-    const newPageContainer = new PageContainer(items);
-    newPageContainer.size = pageContainer.size;
-    newPageContainer.total = pageContainer.total;
-    newPageContainer.from = pageContainer.from;
-    return newPageContainer;
+    });
   };
 
   private async updateItems() {
