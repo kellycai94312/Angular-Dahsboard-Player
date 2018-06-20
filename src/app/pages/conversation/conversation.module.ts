@@ -20,6 +20,7 @@ import {PersonModule} from '../../components/person/person.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
 import {ChatModalSettingsComponent} from './chat-modal/chat-modal-settings/chat-modal-settings.component';
 import {ChatModalParticipantsComponent} from './chat-modal/chat-modal-participants/chat-modal-participants.component';
+import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 
 @NgModule({
   imports: [
@@ -38,8 +39,8 @@ import {ChatModalParticipantsComponent} from './chat-modal/chat-modal-participan
     NgbDropdownModule,
     InfiniteListModule,
     ModalItemModule,
-    PersonModule
-
+    PersonModule,
+    SafeHtmlModule
   ],
   declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent, ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent],
   entryComponents: [ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent]

@@ -248,6 +248,14 @@
     "deletePersonSelf": "{{sender}} removed you from a group '{{group}}'",
     "joinPerson": "{{person}} applied to the group '{{group}}'"
   },
+  "conversationSystemMessage": {
+    "createChat": "{{sender}} created chat",
+    "updateName": "{{sender}} updated chat name",
+    "updateLogo": "{{sender}} updated chat logo",
+    "addParticipant": "{{sender}} added {{person}}",
+    "deleteParticipant": "{{sender}} removed {{person}}",
+    "quitParticipant": "{{sender}} quit chat"
+  },
   "approve": "Approve",
   "refuse": "Refuse",
   "error": "Error",

@@ -19,20 +19,25 @@
           </ng-template>
         </div>
       </div>
-      <div class="flex-column mr-1" ngbDropdown placement="bottom-right" *ngIf="conversation.discriminator == 'CHAT'">
+      <div class="flex-column mr-1" ngbDropdown placement="bottom-right">
         <button class="btn btn-outline-secondary" ngbDropdownToggle>{{'actions' | translate}}</button>
         <div ngbDropdownMenu>
-          <button class="dropdown-item" (click)="editParticipants()">{{'participants' | translate}}</button>
-          <button class="dropdown-item" (click)="editChat()" *ngIf="conversation.owner.id == person.user.id">
+          <button class="dropdown-item" *ngIf="conversation.discriminator == 'CHAT'" (click)="editParticipants()">
+            {{'participants' | translate}}
+          </button>
+          <button class="dropdown-item" (click)="editChat()"
+                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id == person.user.id">
             {{'settings' | translate}}
           </button>
           <button class="dropdown-item" (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' :
             'enableNotifications') | translate}}
           </button>
-          <button class="dropdown-item" (click)="quitChat()" *ngIf="conversation.owner.id != person.user.id">
+          <button class="dropdown-item" (click)="quitChat()"
+                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
             {{'quitChat' | translate}}
           </button>
-          <button class="dropdown-item" (click)="deleteChat()" *ngIf="conversation.owner.id == person.user.id">
+          <button class="dropdown-item" (click)="deleteChat()"
+                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id == person.user.id">
             {{'deleteChat' | translate}}
           </button>
         </div>
@@ -47,7 +52,7 @@
                         autoScroll="true">
       <ng-template let-item>
         <div class="list-group-item p-0">
-          <app-message [message]="item"></app-message>
+          <app-message [message]="item" [onlyContent]="false"></app-message>
         </div>
       </ng-template>
     </ngx-virtual-scroll>

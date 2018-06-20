@@ -230,7 +230,7 @@
   "access": "Доступ",
   "showPrevious": "Показать предыдущий",
   "trainingNotification": {
-    "scheduledEvent": "Скоро начнетса событие '{{event}}'",
+    "scheduledEvent": "Скоро начнется событие '{{event}}'",
     "updateDate": "Обновлена дата в событии '{{event}}'",
     "updateLocation": "Обновлено местоположение в событии '{{event}}'",
     "updateExercises": "Обновлен список упражнений в событии '{{event}}'",
@@ -248,6 +248,14 @@
     "deletePerson": "{{sender}} исключил {{person}} из группы '{{group}}'",
     "deletePersonSelf": "{{sender}} исключил вас из группы '{{group}}'",
     "joinPerson": "{{person}} подал заявку в группу '{{group}}'"
+  },
+  "conversationSystemMessage": {
+    "createChat": "{{sender}} создал беседу",
+    "updateName": "{{sender}} обновил наименование беседы",
+    "updateLogo": "{{sender}} обновил фотографию беседы",
+    "addParticipant": "{{sender}} добавил {{person}}",
+    "deleteParticipant": "{{sender}} удалил {{person}}",
+    "quitParticipant": "{{sender}} покинул беседу"
   },
   "approve": "Подтвердить",
   "refuse": "Отказаться",

@@ -1,8 +1,9 @@
 import {AfterContentInit, Component, Input, OnInit} from '@angular/core';
-import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
 import {Message} from '../../../data/remote/model/chat/message/message';
+import {ConversationMessageViewModel} from '../../../data/local/view-model/conversation/conversation-message-view-model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-message',
@@ -14,10 +15,15 @@ export class MessageComponent implements OnInit, AfterContentInit {
   @Input()
   public message: Message;
 
-  public personViewModel: PersonViewModel;
+  @Input()
+  public onlyContent: boolean = false;
+
+  public messageViewModel: ConversationMessageViewModel;
+
   public person: Person;
 
-  constructor(private _authorizationService: AuthorizationService) {
+  constructor(private _authorizationService: AuthorizationService,
+              private _router: Router) {
   }
 
   async ngOnInit() {
@@ -25,8 +31,15 @@ export class MessageComponent implements OnInit, AfterContentInit {
   }
 
   async ngAfterContentInit() {
-    this.personViewModel = new PersonViewModel(this.message.sender.person);
-    await this.personViewModel.initialize();
+    this.messageViewModel = new ConversationMessageViewModel(this.message);
+    await this.messageViewModel.build();
+  }
+
+  public async onDataClick(event: any) {
+    if (event.target.tagName.toLowerCase() === 'a') {
+      const link = event.target.getAttribute('link');
+      await this._router.navigate([link]);
+    }
   }
 
 }

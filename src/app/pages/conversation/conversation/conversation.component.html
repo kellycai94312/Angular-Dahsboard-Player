@@ -1,5 +1,4 @@
-<div class="d-flex w-100 p-2"
-     [routerLink]="messageWrapper.message.content.baseConversation.id">
+<div class="d-flex w-100 p-2" [routerLink]="messageWrapper.message.content.baseConversation.id">
 
   <app-image
     *ngIf="conversation"
@@ -14,21 +13,18 @@
       <p class="name">{{conversationName}}</p>
       <p class="date ml-auto">{{messageWrapper.message.created | date:'dd.MM.yyyy HH:mm'}}</p>
     </div>
-    <div class="d-flex flex-row align-items-center h-100">
-      <div *ngIf="senderPerson" class="mr-2">
-        <app-image
-          [type]="'LOGO'"
-          [clazz]="'PERSON'"
-          [id]="senderPerson.id"
-          [dimension]="'W40xH40'"
-          [format]="'CIRCLE'"></app-image>
+    <div class="d-flex flex-row align-items-center p-2" [ngClass]="{'unread-message': !messageWrapper.message.read}">
+      <div *ngIf="messageWrapper.message.content.discriminator == 'MESSAGE_CONTENT' && senderPerson" class="mr-2">
+        <app-image [type]="'LOGO'"
+                   [clazz]="'PERSON'"
+                   [id]="senderPerson.id"
+                   [dimension]="'W40xH40'"
+                   [format]="'CIRCLE'"></app-image>
       </div>
-      <p class="message p-2"
-         [ngClass]="{'unread-message':!messageWrapper.message.read}">
-        {{messageWrapper.message.content.content}}
-      </p>
-      <div *ngIf="messageWrapper.unread"
-           class="ml-auto">
+      <div class="message">
+        <app-message [message]="messageWrapper.message" [onlyContent]="true"></app-message>
+      </div>
+      <div *ngIf="messageWrapper.unread" class="ml-auto">
         <span class="badge badge-primary p-1 ml-2">{{messageWrapper.unread}}</span>
       </div>
     </div>

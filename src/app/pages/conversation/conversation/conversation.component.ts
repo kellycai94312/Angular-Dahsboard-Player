@@ -67,6 +67,9 @@ export class ConversationComponent implements AfterContentInit {
           this.conversationImageClazz = ImageClass.CHAT;
           this.conversationImageId = this.conversation.id;
           this.conversationName = (<Chat> this.conversation).name;
+          if (!this.senderPerson) {
+            this.senderPerson = this.messageWrapper.message.sender.person;
+          }
       }
 
     }

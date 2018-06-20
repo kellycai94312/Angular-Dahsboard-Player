@@ -115,6 +115,7 @@ input[type=file] {
 
 .link {
   color: #007bff !important;
+  cursor: pointer;
 
   &:hover {
     color: rgba(51, 122, 183, .4) !important;
