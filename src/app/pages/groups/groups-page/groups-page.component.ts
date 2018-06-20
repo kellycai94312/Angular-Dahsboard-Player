@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
 import {ActivatedRoute, Router} from '@angular/router';
 
@@ -7,15 +7,12 @@ import {ActivatedRoute, Router} from '@angular/router';
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss']
 })
-export class GroupsPageComponent implements OnInit {
+export class GroupsPageComponent {
 
-  public tabs: Tab[];
+  public readonly tabs: Tab[];
 
   constructor(private _route: ActivatedRoute,
               private _router: Router) {
-  }
-
-  async ngOnInit() {
     this.tabs = [];
     const allTab = new Tab();
     allTab.nameKey = 'groups.all';
@@ -28,6 +25,6 @@ export class GroupsPageComponent implements OnInit {
     this.tabs.push(myTab);
   }
 
-  openNewGroupPage = async () => this._router.navigate(['new'], {relativeTo: this._route});
+  public openNewGroupPage = async () => this._router.navigate(['new'], {relativeTo: this._route});
 
 }

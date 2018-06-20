@@ -92,9 +92,11 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list class="list-group-flush"
-                     [(query)]="groupQuery"
-                     [getItems]="getItems">
+
+  <ngx-virtual-scroll class="list-group-flush"
+                      [(query)]="groupQuery"
+                      [getItems]="getItems"
+                      windowScroll="true">
     <ng-template let-item>
       <tr class="d-flex"
           routerLink="/group/{{item.data.id}}">
@@ -131,6 +133,6 @@
         </td>
       </tr>
     </ng-template>
-  </app-infinite-list>
+  </ngx-virtual-scroll>
   </tbody>
 </table>
