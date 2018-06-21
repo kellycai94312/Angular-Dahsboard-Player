@@ -25,8 +25,6 @@ export class ConversationComponent implements AfterContentInit {
   public conversationName: string;
   public senderPerson: Person;
 
-  /*тот, кто отправил сообщение*/
-
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {

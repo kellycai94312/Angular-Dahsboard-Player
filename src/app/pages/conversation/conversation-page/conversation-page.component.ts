@@ -20,6 +20,12 @@ import {AuthorizationService} from '../../../shared/authorization.service';
 import {ChatModalParticipantsComponent} from '../chat-modal/chat-modal-participants/chat-modal-participants.component';
 import {ImageComponent} from '../../../components/image/image.component';
 import {Chat} from '../../../data/remote/model/chat/conversation/chat';
+import {HashSet} from '../../../data/local/hash-set';
+import {ChatModalDeleteMessageConfirmComponent} from '../chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
+import {ListRequest} from '../../../data/remote/request/list-request';
+import {IdRequest} from '../../../data/remote/request/id-request';
+import {ModalConfirmDangerComponent} from '../../../components/modal-confirm/modal-confirm-danger.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-conversation-page',
@@ -51,6 +57,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public conversation: BaseConversation;
   public recipient: Participant;
   public enabled: boolean;
+  public selectedMessages: HashSet<Message>;
+  public editedMessage: Message;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -58,6 +66,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService,
+              private _translateService: TranslateService,
               private _modalService: NgbModal,
               private _router: Router) {
     this._conversationId = this._activatedRoute.snapshot.params.id;
@@ -65,6 +74,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.query = new PageQuery();
     this._maxMessageDate = new Date();
     this.participantsTyping = [];
+    this.selectedMessages = new HashSet<Message>();
 
     this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
       if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
@@ -187,15 +197,28 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       return;
     }
     this.messageContent.content = this.messageContent.content.trim();
-    try {
-      const messageContent = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
-      this.addSendMessageInList(messageContent);
-      this.messageContent.content = null;
 
-      // TODO: Optimize read message algorithm!
-      this.readMessageFrom(messageContent.created);
-    } catch (e) {
-      await this._appHelper.showErrorMessage('sendError');
+    if (this.editedMessage) {
+      //update message
+      try {
+        this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {conversationId: this._conversationId, messageContentId: this.messageContent.id});
+        this.cancelEditMessage();
+        this.messageContent.content = null;
+      } catch (e) {
+        await this._appHelper.showErrorMessage('sendError');
+      }
+    } else {
+      //create message
+      try {
+        const message = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
+        this.addSendMessageInList(message);
+        this.messageContent.content = null;
+
+        // TODO: Optimize read message algorithm!
+        this.readMessageFrom(message.content.created);
+      } catch (e) {
+        await this._appHelper.showErrorMessage('sendError');
+      }
     }
   };
 
@@ -226,14 +249,68 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     };
   }
 
+  public toggleSelectMessage = (message: Message) => {
+    if (this.isMessageSelected(message)) {
+      this.selectedMessages.remove(message);
+    } else {
+      this.selectedMessages.add(message);
+    }
+  };
+
+  public isMessageSelected(message: Message) {
+    return this.selectedMessages.contains(message);
+  }
+
+  public editMessage = (message: Message) => {
+    this.editedMessage = message;
+    this.messageContent = Object.assign({}, message.content as MessageContent);
+  };
+
+  public cancelEditMessage() {
+    this.editedMessage = undefined;
+    this.messageContent = new MessageContent();
+  }
+
+  public async deleteSelectedMessages() {
+    const messages: Message[] = this.selectedMessages.data;
+    const ref = this._modalService.open(ChatModalDeleteMessageConfirmComponent);
+    ref.componentInstance.messages = messages;
+    ref.componentInstance.onDelete = async (deleteForReceiver: boolean) => {
+      const listRequest = new ListRequest(messages.map(message => new IdRequest(message.content.id)));
+      await this._participantRestApiService.removeMessages(listRequest, {deleteForReceiver: deleteForReceiver}, {conversationId: this._conversationId});
+      //fixme remove from collection
+      this.selectedMessages.removeAll();
+    };
+  }
+
+  public async deleteMessages() {
+    const ref = this._modalService.open(ModalConfirmDangerComponent);
+    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    ref.componentInstance.dangerBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    ref.componentInstance.onConfirm = async () => {
+      await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
+      //fixme remove from collection
+    };
+  }
+
   public async quitChat() {
-    await this._participantRestApiService.quitChat({conversationId: this._conversationId});
-    await this._router.navigate(['/conversation']);
+    const ref = this._modalService.open(ModalConfirmDangerComponent);
+    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    ref.componentInstance.dangerBtnTitle = await this._translateService.get('quitChat').toPromise();
+    ref.componentInstance.onConfirm = async () => {
+      await this._participantRestApiService.quitChat({conversationId: this._conversationId});
+      await this._router.navigate(['/conversation']);
+    };
   }
 
   public async deleteChat() {
-    await this._participantRestApiService.deleteChat({conversationId: this._conversationId});
-    await this._router.navigate(['/conversation']);
+    const ref = this._modalService.open(ModalConfirmDangerComponent);
+    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    ref.componentInstance.dangerBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    ref.componentInstance.onConfirm = async () => {
+      await this._participantRestApiService.deleteChat({conversationId: this._conversationId});
+      await this._router.navigate(['/conversation']);
+    };
   }
 
   public async toggleNotifications() {
@@ -245,14 +322,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.enabled = !this.enabled;
   }
 
-  private addSendMessageInList(messageContent: MessageContent) {
-    const participant = new Participant();
-    participant.person = this.person;
-
-    const message = new Message();
-    message.sender = participant;
-    message.content = messageContent;
-
+  private addSendMessageInList(message: Message) {
     this.ngxVirtualScrollComponent.addItem(message, true);
   }
 

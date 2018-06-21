@@ -127,7 +127,7 @@ input[type=file] {
 }
 
 .unread-message {
-  background: rgba(0, 145, 241, 0.1) !important;
+  background: $unread-message-background-color !important;
 }
 
 .text-typing {

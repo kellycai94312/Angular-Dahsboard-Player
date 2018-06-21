@@ -35,6 +35,8 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   private readonly _messageUpdateSubscription: ISubscription;
   private readonly _messageReadSubscription: ISubscription;
 
+  // private readonly _messageDeleteSubscription: ISubscription;
+
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
               private _modalService: NgbModal) {
@@ -58,6 +60,24 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
         }
       }
     });
+    //todo delete subscription
+    // this._messageDeleteSubscription = this._conversationService.messageDeleteHandle.subscribe(x => {
+    //
+    //   //find conversation
+    //
+    //   if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
+    //     return;
+    //   }
+    //
+    //   const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+    //   // TODO: Optimize read message algorithm!
+    //   for (let i = 0; i < items.length; i++) {
+    //     if (items[i].content.id == x.message.content.id) {
+    //       items.splice(i, 1);
+    //       break;
+    //     }
+    //   }
+    // });
   }
 
   async ngOnInit() {
@@ -75,6 +95,7 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
     this._messageCreateSubscription.unsubscribe();
     this._messageUpdateSubscription.unsubscribe();
     this._messageReadSubscription.unsubscribe();
+    // this._messageDeleteSubscription.unsubscribe();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {

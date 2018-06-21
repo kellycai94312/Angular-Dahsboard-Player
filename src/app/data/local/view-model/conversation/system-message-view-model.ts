@@ -8,7 +8,7 @@ import {SystemMessageContentType} from '../../../remote/model/chat/message/syste
 import {BaseMessageContentType} from '../../../remote/model/chat/message/base/base-message-content-type';
 import {SystemMessageContent} from '../../../remote/model/chat/message/system-message-content';
 
-export class ConversationMessageViewModel extends BaseViewModel<Message> {
+export class SystemMessageViewModel extends BaseViewModel<Message> {
 
   title: string;
   body: string;

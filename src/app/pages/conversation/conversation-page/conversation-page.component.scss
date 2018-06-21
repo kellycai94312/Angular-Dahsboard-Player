@@ -1,5 +1,8 @@
+@import "../../../styles/variables";
+
 $conversation-header-height: 80px;
 $conversation-footer-height: 80px;
+$conversation-edit-height: 40px;
 $margin: 0.5rem;
 // TODO: Set dynamic calc
 $nav-bar-height: 70px;
@@ -11,6 +14,11 @@ textarea {
 
 .conversation-content {
   height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$margin*2} + #{$nav-bar-height}));
+
+  &.editable {
+    height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$conversation-edit-height} + #{$margin*2} + #{$nav-bar-height}));
+  }
+
 }
 
 .conversation-header {
@@ -23,6 +31,25 @@ textarea {
   height: $conversation-footer-height;
 }
 
+.conversation-edit {
+  height: $conversation-edit-height;
+  border-top: 1px solid #999;
+
+  .edit-label {
+    color: $light-blue !important;
+  }
+
+}
+
 .typing-container {
   height: 20px;
+}
+
+.message-wrapper {
+  cursor: pointer;
+
+  &.selected {
+    background-color: lighten($light-blue, 45%) !important;
+  }
+
 }

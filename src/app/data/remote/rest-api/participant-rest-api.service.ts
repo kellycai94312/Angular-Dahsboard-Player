@@ -827,13 +827,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/conversation/{!conversationId}/messageContent'
   })
-  createMessage: IRestMethodStrict<MessageContent, any, { conversationId: number }, MessageContent>;
+  createMessage: IRestMethodStrict<MessageContent, any, { conversationId: number }, Message>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/conversation/{!conversationId}/messageContent/{!messageContent}'
+    path: '/conversation/{!conversationId}/messageContent/{!messageContentId}'
   })
-  updateMessage: IRestMethodStrict<MessageContent, any, { conversationId: number, messageContent: number }, MessageContent>;
+  updateMessage: IRestMethodStrict<MessageContent, any, { conversationId: number, messageContentId: number }, MessageContent>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -857,13 +857,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Delete,
     path: '/conversation/{!conversationId}/messageContent'
   })
-  removeMessages: IRestMethodStrict<ListRequest<Message>, { deleteForReceiver?: boolean }, { conversationId: number }, void>;
+  removeMessages: IRestMethodStrict<ListRequest<IdRequest>, { deleteForReceiver?: boolean }, { conversationId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/conversation/{!conversationId}/message/all'
   })
-  removeAllMessages: IRestMethodStrict<void, any, { conversationId: number }, void>;
+  removeAllMessages: IRestMethod<{ conversationId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,

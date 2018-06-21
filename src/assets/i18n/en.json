@@ -136,7 +136,8 @@
   "notifications": "Notifications",
   "modal": {
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete"
   },
   "search": "Search",
   "groupType": "Group type",
@@ -281,11 +282,16 @@
   "week": "Week",
   "day": "Day",
   "createChat": "Create chat",
-  "deleteChat" : "Delete chat",
-  "quitChat" : "Quit chat",
+  "deleteChat": "Delete chat",
+  "quitChat": "Quit chat",
   "actions": "Actions",
   "participants": "Participants",
-  "uploadAvatar" : "Upload avatar",
+  "uploadAvatar": "Upload avatar",
   "enableNotifications": "Enable notifications",
-  "disableNotifications": "Disable notifications"
+  "disableNotifications": "Disable notifications",
+  "deleteSelectedMessages": "Delete selected messages",
+  "deleteForReceiver": "Delete messages for receiver",
+  "areYouSure": "Are you sure?",
+  "deleteMessages": "Delete messages",
+  "editMessage": "Edit message"
 }

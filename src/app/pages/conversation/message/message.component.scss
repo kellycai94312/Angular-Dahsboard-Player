@@ -1,13 +1,30 @@
-p {
-  word-break: break-all;
-}
+.wrapper {
 
-.date {
-  font-size: 12px;
-  color: #aaa;
-}
+  p {
+    word-break: break-all;
+  }
 
-.system-message {
-  font-size: 14px;
-  color: #888;
+  .date {
+    font-size: 12px;
+    color: #aaa;
+  }
+
+  .system-message {
+    font-size: 14px;
+    color: #888;
+  }
+
+  .btn-edit {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.2s linear;
+  }
+
+  :hover {
+    .btn-edit {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
 }
