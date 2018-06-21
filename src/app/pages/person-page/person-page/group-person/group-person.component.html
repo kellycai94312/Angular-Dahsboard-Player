@@ -1,5 +1,4 @@
-<tr *ngIf="data"
-    class="d-flex">
+<tr class="d-flex" *ngIf="data">
   <td class="col-1">
     <app-image [type]="'LOGO'"
                [clazz]="'GROUP'"
@@ -8,7 +7,7 @@
                [format]="'SQUARE'"></app-image>
   </td>
   <td [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">
-    <a routerLink="{{groupUrl}}" *ngIf="!isEditAllow && data">
+    <a routerLink="/group/{{data.group.id}}" *ngIf="!isEditAllow && data">
       <p>{{data?.group.name}}</p>
     </a>
     <div *ngIf="isEditAllow">
