@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Tab} from '../../../../data/local/tab';
 import {MyRegionService} from './my-region.service';
 
@@ -7,14 +7,11 @@ import {MyRegionService} from './my-region.service';
   templateUrl: './my-region.component.html',
   styleUrls: ['./my-region.component.scss']
 })
-export class MyRegionComponent implements OnInit {
+export class MyRegionComponent {
 
-  public tabs: Tab[];
+  public readonly tabs: Tab[];
 
   constructor(public myRegionService: MyRegionService) {
-  }
-
-  async ngOnInit() {
     this.tabs = [];
 
     const schoolTab = new Tab();

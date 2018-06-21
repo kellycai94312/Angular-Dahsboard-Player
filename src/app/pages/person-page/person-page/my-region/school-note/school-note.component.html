@@ -34,8 +34,9 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list [items]="myRegionService.notes"
-                     (nextPage)="myRegionService.onNextPage($event)">
+  <ngx-virtual-scroll [getItems]="myRegionService.getItems"
+                      [(query)]="myRegionService.noteQuery"
+                      windowScroll="true">
     <ng-template let-item>
       <tr class="d-flex">
         <td class="col-5">{{item?.name}}</td>
@@ -53,6 +54,6 @@
         </td>
       </tr>
     </ng-template>
-  </app-infinite-list>
+  </ngx-virtual-scroll>
   </tbody>
 </table>
