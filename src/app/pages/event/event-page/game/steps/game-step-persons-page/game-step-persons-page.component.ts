@@ -18,6 +18,7 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
 
   @ViewChild(TrainingPersonsSelectionComponent)
   public trainingPersonsSelectionComponent: TrainingPersonsSelectionComponent;
+
   public groupTabs: Tab[];
   public userRoleTabs: Tab[];
   public gameId: number;
@@ -119,12 +120,12 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
     athletesTab.nameKey = 'athletes';
     athletesTab.routerLink = routerLink;
     athletesTab.queryParams = {groupId: this._groupId, userRoleEnum: UserRoleEnum.ATHLETE};
-    this.userRoleTabs.push(athletesTab);
 
     const trainersTab = new Tab();
     trainersTab.nameKey = 'trainers';
     trainersTab.routerLink = routerLink;
     trainersTab.queryParams = {groupId: this._groupId, userRoleEnum: UserRoleEnum.TRAINER};
+
     this.userRoleTabs = [athletesTab, trainersTab];
   }
 

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
@@ -10,16 +10,17 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EventModalComponent} from './event-modal/event-modal.component';
 import {ReportsService} from '../../../../shared/reports.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
-import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
 import {ISubscription} from 'rxjs/Subscription';
 import {AppHelper} from '../../../../utils/app-helper';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.scss']
 })
-export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EventsComponent implements OnInit, OnDestroy {
 
   public readonly isEditAllow: boolean;
   public readonly pageSize: number;
@@ -27,8 +28,8 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public trainingQuery: TrainingQuery;
 
@@ -59,10 +60,7 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-  }
-
-  async ngAfterViewInit() {
+  async ngOnInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.trainingQuery.name = value;
@@ -129,12 +127,12 @@ export class EventsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getPersonTrainings(pageQuery);
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {TrainingQuery} from '../../../data/remote/rest-api/query/training-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -9,15 +9,16 @@ import {GroupService} from '../group.service';
 import {TrainingGroup} from '../../../data/remote/model/training-group';
 import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
 import {TrainingAccess} from '../../../data/remote/misc/training-access';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {AppHelper} from '../../../utils/app-helper';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-group-events',
   templateUrl: './group-events.component.html',
   styleUrls: ['./group-events.component.scss']
 })
-export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GroupEventsComponent implements OnInit, OnDestroy {
 
   public readonly isEditAllow: boolean;
   public readonly pageSize: number;
@@ -25,8 +26,8 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public trainingQuery: TrainingQuery;
 
@@ -44,10 +45,7 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.trainingQuery.groupId = this._groupService.getGroup().id;
   }
 
-  ngOnInit() {
-  }
-
-  async ngAfterViewInit() {
+  async ngOnInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.trainingQuery.name = value;
@@ -104,12 +102,12 @@ export class GroupEventsComponent implements OnInit, AfterViewInit, OnDestroy {
     };
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getGroupTrainings(pageQuery);
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

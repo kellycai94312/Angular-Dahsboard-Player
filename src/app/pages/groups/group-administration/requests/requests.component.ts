@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupService} from '../../group.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
@@ -7,17 +7,18 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
-import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-requests',
   templateUrl: './requests.component.html',
   styleUrls: ['./requests.component.scss']
 })
-export class RequestsComponent implements OnInit, AfterViewInit {
+export class RequestsComponent implements OnInit {
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public groupPersonQuery: GroupPersonQuery;
 
@@ -32,11 +33,8 @@ export class RequestsComponent implements OnInit, AfterViewInit {
     this.groupPersonQuery.approved = false;
   }
 
-  ngOnInit() {
-  }
-
-  async ngAfterViewInit() {
-    await this.infiniteListComponent.initialize();
+  async ngOnInit() {
+    await this.updateItems();
   }
 
   public async onAdd(groupPerson: GroupPerson) {
@@ -45,7 +43,7 @@ export class RequestsComponent implements OnInit, AfterViewInit {
         id: this._groupService.getGroup().id,
         personId: groupPerson.person.id
       });
-    this._appHelper.removeItem(this.infiniteListComponent.items, groupPerson);
+    this._appHelper.removeItem(this.ngxVirtualScrollComponent.items, groupPerson);
   }
 
   public async onRemove(groupPerson: GroupPerson) {
@@ -53,15 +51,17 @@ export class RequestsComponent implements OnInit, AfterViewInit {
       id: this._groupService.getGroup().id,
       personId: groupPerson.person.id
     });
-    this._appHelper.removeItem(this.infiniteListComponent.items, groupPerson);
+    this._appHelper.removeItem(this.ngxVirtualScrollComponent.items, groupPerson);
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    setTimeout(async () => {
+      await this.ngxVirtualScrollComponent.reset();
+    });
   }
 
 }

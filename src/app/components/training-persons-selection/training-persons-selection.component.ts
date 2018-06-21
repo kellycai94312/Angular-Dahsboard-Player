@@ -1,29 +1,29 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 import {UserRoleEnum} from '../../data/remote/model/user-role-enum';
 import {TrainingPersonQuery} from '../../data/remote/rest-api/query/training-person-query';
 import {BaseSelection} from '../../data/local/component/base/base-selection';
 import {AppHelper} from '../../utils/app-helper';
 import {TrainingPersonItemViewModel} from '../../data/local/view-model/event/training-person-item-view-model';
-import {PageContainer} from '../../data/remote/bean/page-container';
 import {SportRole} from '../../data/remote/model/sport-role';
 import {Game} from '../../data/remote/model/training/game/game';
 import {UserRole} from '../../data/remote/model/user-role';
 import {TrainingGroup} from '../../data/remote/model/training-group';
 import {TrainingPerson} from '../../data/remote/model/training/training-person';
 import {TrainingState} from '../../data/remote/misc/training-state';
+import {PageQuery} from '../../data/remote/rest-api/page-query';
+import {Direction} from '../ngx-virtual-scroll/model/direction';
+import {NgxVirtualScrollComponent} from '../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 
 @Component({
   selector: 'app-training-persons-selection',
   templateUrl: './training-persons-selection.component.html',
   styleUrls: ['./training-persons-selection.component.scss']
 })
-export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPersonItemViewModel, TrainingPersonQuery> implements OnInit, AfterViewInit {
+export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPersonItemViewModel, TrainingPersonQuery> implements OnInit {
 
-  private readonly _numbers: number[];
-  private _sportRoles: SportRole[];
-  private _userRole: UserRole;
-  private _userRoles: UserRole[];
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
   public trainingId: number;
@@ -34,31 +34,39 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
   @Input()
   public userRoleEnum: UserRoleEnum;
 
+  private readonly _numbers: number[];
+  private _sportRoles: SportRole[];
+  private _userRole: UserRole;
+  private _userRoles: UserRole[];
+
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              _appHelper: AppHelper) {
+              protected _appHelper: AppHelper) {
     super(_appHelper);
 
-    this.getItems = this.getTrainingPersons;
     this.query.unassigned = true;
     this._numbers = [];
-  }
-
-  async ngOnInit() {
     for (let i = 1001; i < 1300; i++) {
       this._numbers.push(i);
     }
+  }
+
+  async ngOnInit() {
+    super.ngOnInit();
 
     this._userRoles = await this._participantRestApiService.getUserRoles();
   }
 
-  async ngAfterViewInit() {
+  getItems(): TrainingPersonItemViewModel[] {
+    return this.ngxVirtualScrollComponent.items;
+  }
+
+  async resetItems() {
+    await this.ngxVirtualScrollComponent.reset();
   }
 
   public async initialize() {
     this.query.userRole = this.userRoleEnum;
     this.query.groupId = this.trainingGroup.group.id;
-
-    super.ngAfterViewInit();
 
     this._userRole = this._userRoles.find(x => x.userRoleEnum === this.userRoleEnum);
 
@@ -86,17 +94,17 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
     }));
   }
 
-  getTrainingPersons = async (pageQuery: TrainingPersonQuery) => {
+  public getItemsWithoutSelected: Function = async (direction: Direction, pageQuery: PageQuery) => {
     const trainingPersonPageContainer = await this._participantRestApiService.getTrainingPersons({}, pageQuery, {baseTrainingId: this.trainingId});
-    const pageContainer = new PageContainer(trainingPersonPageContainer.list.map(x => new TrainingPersonItemViewModel(x)));
-    pageContainer.size = trainingPersonPageContainer.size;
-    pageContainer.size = trainingPersonPageContainer.size;
+    const pageContainer = await this._appHelper.pageContainerConverter(trainingPersonPageContainer, original => {
+      return new TrainingPersonItemViewModel(original);
+    });
+
+    pageContainer.list = this._appHelper.except(pageContainer.list, this.selectedItems, (first, second) => {
+      return first.personViewModel.data.id == second.personViewModel.data.id;
+    });
     return pageContainer;
   };
-
-  public async onNextPage() {
-    await this.update();
-  }
 
   async onSelected(item: TrainingPersonItemViewModel) {
     try {

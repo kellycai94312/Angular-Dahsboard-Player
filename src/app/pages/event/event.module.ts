@@ -4,7 +4,6 @@ import {EventPageComponent} from './event-page/event-page.component';
 import {EventsPageComponent} from './events-page/events-page.component';
 import {EventRoutingModule} from './event-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {FormsModule} from '@angular/forms';
 import {GameStepBasePageComponent} from './event-page/game/steps/game-step-base-page/game-step-base-page.component';
 import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-persons-page/game-step-persons-page.component';
@@ -28,13 +27,14 @@ import {EventCalendarItemComponent} from './events-page/events-calendar/event-ca
 import {EventCalendarMonthModalComponent} from './events-page/events-calendar/event-calendar-month-modal/event-calendar-month-modal.component';
 import {CustomDateFormatter} from '../../components/calendar-utils/custom-date-formatter.prodiver';
 import {EventsCalendarService} from './events-page/events-calendar/events-calendar.service';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
     CommonModule,
     EventRoutingModule,
     TranslateModule.forChild(),
-    InfiniteListModule,
+    NgxVirtualScrollModule,
     FormsModule,
     TabModule,
     DxDateBoxModule,

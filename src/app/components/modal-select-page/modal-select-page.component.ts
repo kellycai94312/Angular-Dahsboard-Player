@@ -2,9 +2,12 @@ import {Component, Input, OnInit, Type, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {HashSet} from '../../data/local/hash-set';
 import {IdentifiedObject} from '../../data/remote/base/identified-object';
 import {PageQuery} from '../../data/remote/rest-api/page-query';
+import {Direction} from '../ngx-virtual-scroll/model/direction';
+import {PageContainer} from '../../data/remote/bean/page-container';
+import {NgxVirtualScrollComponent} from '../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {AppHelper} from '../../utils/app-helper';
 
 @Component({
   selector: 'app-modal-select-page',
@@ -13,72 +16,74 @@ import {PageQuery} from '../../data/remote/rest-api/page-query';
 })
 export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnInit {
 
-  @Input()
-  public header: string;
+  @ViewChild(NgxVirtualScrollComponent)
+  public itemsNgxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
-  public selectedSet: HashSet<T>;
+  public headerNameKey: string;
 
   @Input()
   public component: Type<any>;
 
   @Input()
-  public getListAsync: Function;
+  public getItems: (pageQuery: PageQuery) => Promise<PageContainer<T>>;
 
   @Input()
-  public onSave: Function;
+  public onSave: (items: T[]) => Promise<void>;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
+  public selectedItems: T[];
   public active: any;
-  public dataSet: HashSet<T>;
-  private _searchText: string;
+  public pageQuery: PageQuery;
 
-  constructor(public modal: NgbActiveModal) {
-    this.dataSet = new HashSet();
+  constructor(public modal: NgbActiveModal,
+              private _appHelper: AppHelper) {
+    this.pageQuery = new PageQuery();
+    this.pageQuery.name = '';
+    this.pageQuery.from = 0;
+    this.pageQuery.count = PropertyConstant.pageSize;
+  }
+
+  public async initialize(selectedItems: T[]) {
+    this.selectedItems = JSON.parse(JSON.stringify(selectedItems));
+    await this.updateItems();
   }
 
   async ngOnInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this._searchText = value;
-        await this.updateListAsync();
+        this.pageQuery.name = value;
+        await this.updateItems();
       });
-    await this.updateListAsync();
   }
 
-  async onRemove(obj: any) {
-    this.dataSet.add(obj);
-    this.selectedSet.remove(obj);
+  public onSelected(item: T) {
+    this._appHelper.removeItem(this.itemsNgxVirtualScrollComponent.items, item);
+    this.selectedItems.push(item);
   }
 
-  async onSelect() {
-    this.dataSet.remove(this.active);
-    this.selectedSet.add(this.active);
+  public onUnselected(item: T) {
+    this._appHelper.removeItem(this.selectedItems, item);
+    this.itemsNgxVirtualScrollComponent.items.push(item);
   }
 
   async setActive(obj: any) {
+    // TODO: Use this method
     this.active = obj;
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
+  public getItemsWithoutSelected: Function = async (direction: Direction, pageQuery: PageQuery) => {
+    const pageContainer = await this.getItems(pageQuery);
+    pageContainer.list = this._appHelper.except(pageContainer.list, this.selectedItems, (first, second) => {
+      return first.id == second.id;
+    });
+    return pageContainer;
+  };
 
-  public async updateListAsync(from: number = 0) {
-    const pageContainer = await this.getListAsync(this._searchText == undefined ? '' : this._searchText, from);
-    const list = pageContainer.list;
-    if (from == 0) {
-      this.dataSet.removeAll();
-    }
-
-    for (let i = 0; i < list.length; i++) {
-      if (!this.selectedSet.contains(list[i])) {
-        this.dataSet.add(list[i]);
-      }
-    }
-
+  private async updateItems() {
+    await this.itemsNgxVirtualScrollComponent.reset();
   }
 
 }

@@ -49,12 +49,12 @@ export class AppHelper {
   }
 
   // TODO: Use optimized algorithm
-  public except<T>(first: T[], second: T[]): T[] {
+  public except<T>(first: T[], second: T[], compare: (first: T, second: T) => boolean = (f: T, s: T) => this.defaultCompare(f, s)): T[] {
     const items = [];
     for (let i = 0; i < first.length; i++) {
       let unique = true;
       for (let j = 0; j < second.length; j++) {
-        if (first[i] === second[j]) {
+        if (compare(first[i], second[j])) {
           unique = false;
           break;
         }
@@ -65,6 +65,10 @@ export class AppHelper {
       items.push(first[i]);
     }
     return items;
+  }
+
+  private defaultCompare<T>(first: T, second: T): boolean {
+    return first === second;
   }
 
   public async showErrorMessage(messageKey: string): Promise<void> {
@@ -79,6 +83,22 @@ export class AppHelper {
 
   public delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>, instanceBuilder: (original: TInput) => Promise<TOutput> | TOutput): Promise<PageContainer<TOutput>> {
+    if (!original || !instanceBuilder) {
+      return;
+    }
+    const pageContainer = new PageContainer<TOutput>();
+    pageContainer.list = [];
+    for (let i = 0; i < original.list.length; i++) {
+      const result = await instanceBuilder(original.list[i]);
+      pageContainer.list.push(result);
+    }
+    pageContainer.from = original.from;
+    pageContainer.size = original.size;
+    pageContainer.total = original.total;
+    return pageContainer;
   }
 
 }

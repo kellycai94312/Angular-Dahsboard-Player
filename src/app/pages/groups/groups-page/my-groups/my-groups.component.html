@@ -24,12 +24,13 @@
   </div>
 </div>
 
-<app-infinite-list class="list-group-flush"
-                   [query]="groupQuery"
-                   [getItems]="getItems">
+<ngx-virtual-scroll class="list-group-flush"
+                    [(query)]="groupQuery"
+                    [getItems]="getItems"
+                    windowScroll="true">
   <ng-template let-item>
     <div class="list-group-item pb-2 cols-padding px-2">
       <app-group [data]="item.data"></app-group>
     </div>
   </ng-template>
-</app-infinite-list>
+</ngx-virtual-scroll>

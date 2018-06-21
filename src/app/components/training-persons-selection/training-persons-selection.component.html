@@ -9,13 +9,13 @@
              mode="search"
              showClearButton="true">
 </dx-text-box>
-<div class="mt-2">
-  <app-infinite-list [items]="items"
-                     (nextPage)="onNextPage()"
-                     wrap="true">
-    <ng-template let-item>
-      <app-training-person [data]="item"
-                           (dblClick)="onSelected($event)"></app-training-person>
-    </ng-template>
-  </app-infinite-list>
-</div>
+
+<ngx-virtual-scroll class="d-flex flex-wrap mt-2"
+                    [getItems]="getItemsWithoutSelected"
+                    [(query)]="query"
+                    windowScroll="true">
+  <ng-template let-item>
+    <app-training-person [data]="item"
+                         (dblClick)="onSelected($event)"></app-training-person>
+  </ng-template>
+</ngx-virtual-scroll>

@@ -5,7 +5,7 @@ import {DxTextBoxModule} from 'devextreme-angular';
 import {TrainingPersonModule} from '../training-person/training-person.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {ModalItemModule} from '../modal-item/modal-item.module';
-import {InfiniteListModule} from '../infinite-list/infinite-list.module';
+import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import {InfiniteListModule} from '../infinite-list/infinite-list.module';
     TrainingPersonModule,
     TranslateModule.forChild(),
     ModalItemModule,
-    InfiniteListModule
+    NgxVirtualScrollModule
   ],
   declarations: [TrainingPersonsSelectionComponent],
   exports: [TrainingPersonsSelectionComponent]

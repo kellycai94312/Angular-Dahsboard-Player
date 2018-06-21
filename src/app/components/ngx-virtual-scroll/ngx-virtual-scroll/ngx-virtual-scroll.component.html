@@ -1,6 +1,7 @@
-<div class="ngx-virtual-scroll-content"
+<div class="ngx-virtual-scroll-content {{class}}"
      ngxScroll
      [autoScroll]="autoScroll"
+     [windowScroll]="windowScroll"
      (scrollUp)="onScrollUp()"
      (scrollDown)="onScrollDown()">
   <ng-template ngFor

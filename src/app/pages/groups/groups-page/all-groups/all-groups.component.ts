@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -13,25 +13,26 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {Country} from '../../../../data/remote/model/country';
 import {Region} from '../../../../data/remote/model/region';
 import {NamedObject} from '../../../../data/remote/base/named-object';
-import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {GroupViewModel} from '../../../../data/local/view-model/group/group-view-model';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-all-groups',
   templateUrl: './all-groups.component.html',
   styleUrls: ['./all-groups.component.scss']
 })
-export class AllGroupsComponent implements OnInit, AfterViewInit {
+export class AllGroupsComponent implements OnInit {
 
   public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public groupQuery: GroupQuery;
 
@@ -43,22 +44,21 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
   public selectedRegion: Region;
   public selectedCity: City;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
 
     this.groupQuery = new GroupQuery();
     this.groupQuery.name = '';
     this.groupQuery.from = 0;
-    this.groupQuery.count = PropertyConstant.pageSize;
+    this.groupQuery.count = this.pageSize;
   }
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
     this.leagues = await this._participantRestApiService.getLeagues();
-  }
 
-  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.groupQuery.name = value;
@@ -227,22 +227,17 @@ export class AllGroupsComponent implements OnInit, AfterViewInit {
 
   //#endregion
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems = async (direction: Direction, pageQuery: PageQuery) => {
     const pageContainer = await this._participantRestApiService.getGroups(pageQuery);
-    const items = await Promise.all(pageContainer.list.map(async x => {
-      const groupViewModel = new GroupViewModel(x);
+    return await this._appHelper.pageContainerConverter(pageContainer, async original => {
+      const groupViewModel = new GroupViewModel(original);
       await groupViewModel.initialize();
       return groupViewModel;
-    }));
-
-    const newPageContainer = new PageContainer(items);
-    newPageContainer.size = pageContainer.size;
-    newPageContainer.total = pageContainer.total;
-    return newPageContainer;
+    });
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

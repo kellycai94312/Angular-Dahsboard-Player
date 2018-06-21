@@ -20,10 +20,7 @@ import {UserRoleItemComponent} from '../../../components/user-role-item/user-rol
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {ImageType} from '../../../data/remote/model/image-type';
 import {ModalSelectPageComponent} from '../../../components/modal-select-page/modal-select-page.component';
-import {PropertyConstant} from '../../../data/local/property-constant';
 import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
-import {HashSet} from '../../../data/local/hash-set';
-import {NamedQuery} from '../../../data/remote/rest-api/named-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {GroupComponent} from '../../groups/group/group.component';
 import {ISubscription} from 'rxjs/Subscription';
@@ -120,24 +117,23 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   }
 
   async editUserRoles() {
-    const selectedSet = new HashSet<UserRole>();
-    selectedSet.addAll(this.userRoles);
-
-    const roles = (await this.participantRestApiService.getUserRoles())
-      .filter(role =>
-        this.userRoles
-          .filter(uRole => uRole.id === role.id).length === 0);
-
+    const roles = await this.participantRestApiService.getUserRoles();
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    ref.componentInstance.header = await this._translate.get('edit').toPromise();
-    ref.componentInstance.component = UserRoleItemComponent;
-    ref.componentInstance.selectedSet = selectedSet;
-    ref.componentInstance.getListAsync = async (name: string, from: number) => {
-      return new PageContainer(roles.filter(userRole => userRole.userRoleEnum.toString().toLowerCase().indexOf(name) > -1));
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = UserRoleItemComponent;
+    componentInstance.getItems = async pageQuery => {
+      const items = roles.filter(userRole => userRole.userRoleEnum.toString().toLowerCase().indexOf(pageQuery.name) > -1);
+      const pageContainer = new PageContainer();
+      pageContainer.from = 0;
+      pageContainer.size = items.length;
+      pageContainer.total = items.length;
+      pageContainer.list = items;
+      return pageContainer;
     };
-    ref.componentInstance.onSave = async () => {
+    componentInstance.onSave = async selectedItems => {
       try {
-        this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(selectedSet.data));
+        this.userRoles = await this.participantRestApiService.changeRoles(new ListRequest(selectedItems));
         this.roleToggle = this.userRoles.length ? this.userRoles[0] : null;
         ref.dismiss();
         await this.onUserRoleChange();
@@ -150,31 +146,28 @@ export class PersonPageComponent implements OnInit, OnDestroy {
         }
       }
     };
+    await componentInstance.initialize(this.userRoles);
   }
 
   async editSportTypes() {
-    const namedQuery = new NamedQuery();
-    namedQuery.from = 0;
-    namedQuery.count = PropertyConstant.pageSize;
-
-    const selectedSet = new HashSet<SportType>();
-    selectedSet.addAll(this.personSportTypes);
-
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    ref.componentInstance.header = await this._translate.get('edit').toPromise();
-    ref.componentInstance.component = SportTypeItemComponent;
-    ref.componentInstance.selectedSet = selectedSet;
-    ref.componentInstance.getListAsync = async (name: string, from: number) => {
-      namedQuery.from = from;
-      namedQuery.name = name;
-      return await this.participantRestApiService.getSportTypes(namedQuery);
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = SportTypeItemComponent;
+    componentInstance.getItems = async pageQuery => {
+      return await this.participantRestApiService.getSportTypes(pageQuery);
     };
-    ref.componentInstance.onSave = async () => {
-      this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(selectedSet.data));
-      this.sportTypeToggle = this.personSportTypes.length ? this.personSportTypes[0] : null;
-      ref.dismiss();
+    componentInstance.onSave = async selectedItems => {
+      try {
+        this.personSportTypes = await this.participantRestApiService.changeSportTypes(new ListRequest(selectedItems));
+        this.sportTypeToggle = this.personSportTypes.length ? this.personSportTypes[0] : null;
+        ref.dismiss();
+      } catch (e) {
+      }
       await this.onSportTypeChange();
     };
+
+    await componentInstance.initialize(this.personSportTypes);
   }
 
   async onUserRoleChange() {

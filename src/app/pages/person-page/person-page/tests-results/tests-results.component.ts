@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PersonService} from '../person.service';
 import {ExerciseResult} from '../../../../data/remote/bean/exercise-result';
@@ -10,60 +10,51 @@ import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measu
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
-import {TranslateService} from '@ngx-translate/core';
 import {ExerciseMeasureItemComponent} from '../../../../components/exercise-measure-item/exercise-measure-item.component';
 import {DictionaryType} from '../../../../data/remote/misc/dictionary-type';
-import {HashSet} from '../../../../data/local/hash-set';
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {ListRequest} from '../../../../data/remote/request/list-request';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-tests-results',
   templateUrl: './tests-results.component.html',
   styleUrls: ['./tests-results.component.scss']
 })
-export class TestsResultsComponent implements OnInit, AfterViewInit {
+export class TestsResultsComponent implements OnInit {
 
-  public readonly isEditAllow: boolean;
-  public readonly pageSize: number;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public groupResults: ExerciseResult[];
-  public personMeasureValues: ExerciseExecMeasureValue[];
+  public readonly isEditAllow: boolean;
+  public readonly measureTemplateQuery: MeasureTemplateQuery;
 
-  private readonly _measureTemplateQuery: MeasureTemplateQuery;
+  public personMeasureValues: ExerciseExecMeasureValue[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
               private _modalService: NgbModal,
-              private _translate: TranslateService,
               private _appHelper: AppHelper) {
-    this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = _personService.shared.isEditAllow;
 
-    this._measureTemplateQuery = new MeasureTemplateQuery();
-    this._measureTemplateQuery.from = 0;
-    this._measureTemplateQuery.count = PropertyConstant.pageSize;
-    this._measureTemplateQuery.personId = this._personService.shared.person.id;
+    this.measureTemplateQuery = new MeasureTemplateQuery();
+    this.measureTemplateQuery.from = 0;
+    this.measureTemplateQuery.count = PropertyConstant.pageSize;
+    this.measureTemplateQuery.personId = this._personService.shared.person.id;
   }
 
   async ngOnInit() {
     this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.shared.person.id})).list;
-  }
-
-  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this._measureTemplateQuery.name = value;
-        await this.updateListAsync();
+        this.measureTemplateQuery.name = value;
+        await this.updateItems();
       });
-    await this.updateListAsync();
-  }
-
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
+    await this.updateItems();
   }
 
   public async showMoreValues(result: ExerciseResult) {
@@ -92,29 +83,33 @@ export class TestsResultsComponent implements OnInit, AfterViewInit {
     measureQuery.dictionaryType = DictionaryType[DictionaryType.SYSTEM].toString();
 
     const personMeasures: ExerciseMeasure[] = await this._participantRestApiService.getPersonMeasureTemplate();
-    const selectedSet = new HashSet<ExerciseMeasure>();
-    selectedSet.addAll(personMeasures);
 
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    ref.componentInstance.header = await this._translate.get('edit').toPromise();
-    ref.componentInstance.component = ExerciseMeasureItemComponent;
-    ref.componentInstance.selectedSet = selectedSet;
-    ref.componentInstance.getListAsync = async (name: string, from: number) => {
-      measureQuery.from = from;
-      measureQuery.name = name;
-      return await this._participantRestApiService.getExerciseMeasure(measureQuery);
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = ExerciseMeasureItemComponent;
+    componentInstance.pageQuery = measureQuery;
+    componentInstance.getItems = async pageQuery => {
+      return await this._participantRestApiService.getExerciseMeasure(pageQuery);
     };
-    ref.componentInstance.onSave = async () => {
-      await this._participantRestApiService.updatePersonMeasureTemplate(new ListRequest(selectedSet.data));
-      this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.shared.person.id})).list;
-      ref.dismiss();
+    componentInstance.onSave = async selectedItems => {
+      try {
+        await this._participantRestApiService.updatePersonMeasureTemplate(new ListRequest(selectedItems));
+        this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.shared.person.id})).list;
+        ref.dismiss();
+      } catch (e) {
+        // TODO: Show message
+      }
     };
+    await componentInstance.initialize(personMeasures);
   }
 
-  private async updateListAsync(from: number = 0) {
-    this._measureTemplateQuery.from = from;
-    const pageContainer = await this._participantRestApiService.getGroupsMeasureTemplate(this._measureTemplateQuery);
-    this.groupResults = this._appHelper.pushItemsInList(from, this.groupResults, pageContainer);
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
+    return await this._participantRestApiService.getGroupsMeasureTemplate(pageQuery);
+  };
+
+  private async updateItems() {
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

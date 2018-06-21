@@ -10,7 +10,6 @@ import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component'
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
 import {DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
-import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
@@ -32,6 +31,7 @@ import {GroupEventsComponent} from './group-events/group-events.component';
 import {GroupEventModalComponent} from './group-events/group-event-modal/group-event-modal.component';
 import {GroupComponent} from './group/group.component';
 import {ImageModule} from '../../components/image/image.module';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -42,7 +42,7 @@ import {ImageModule} from '../../components/image/image.module';
     DxValidatorModule,
     DxTextBoxModule,
     DxSelectBoxModule,
-    InfiniteListModule,
+    NgxVirtualScrollModule,
     TabModule,
     InputSelectModule,
     NgbModule,

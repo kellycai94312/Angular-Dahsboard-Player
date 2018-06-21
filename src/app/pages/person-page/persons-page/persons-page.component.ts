@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -13,38 +13,40 @@ import {SportType} from '../../../data/remote/model/sport-type';
 import {City} from '../../../data/remote/model/city';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
-import {PageContainer} from '../../../data/remote/bean/page-container';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
+import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-persons-page',
   templateUrl: './persons-page.component.html',
   styleUrls: ['./persons-page.component.scss']
 })
-export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public personQuery: PersonQuery;
-
   public sexItems: Sex[];
   public userRoles: UserRole[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _appHelper: AppHelper) {
+    this.pageSize = PropertyConstant.pageSize;
+
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
     this.personQuery.from = 0;
-    this.personQuery.count = PropertyConstant.pageSize;
+    this.personQuery.count = this.pageSize;
 
-    this.pageSize = PropertyConstant.pageSize;
     this.sexItems = [];
     this.userRoles = [];
   }
@@ -59,9 +61,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.userRoles = await this._participantRestApiService.getUserRoles();
-  }
 
-  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.personQuery.name = value;
@@ -74,7 +74,7 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
   }
 
-//#region Filter
+  //#region Filter
 
   public async onYearBirthChanged(value: Date) {
     if (value != null) {
@@ -162,24 +162,19 @@ export class PersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
     return item.name;
   }
 
-// #endregion
+  // #endregion
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
-    const pageContainer = await this._participantRestApiService.getPersons(pageQuery);
-    const items = await Promise.all(pageContainer.list.map(async x => {
-      const personViewModel = new PersonViewModel(x);
+  public getItems: Function = async (direction: Direction, query: PageQuery) => {
+    const pageContainer = await this._participantRestApiService.getPersons(query);
+    return await this._appHelper.pageContainerConverter(pageContainer, async original => {
+      const personViewModel = new PersonViewModel(original);
       await personViewModel.initialize();
       return personViewModel;
-    }));
-
-    const newPageContainer = new PageContainer(items);
-    newPageContainer.size = pageContainer.size;
-    newPageContainer.total = pageContainer.total;
-    return newPageContainer;
+    });
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

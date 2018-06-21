@@ -38,8 +38,9 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list [query]="trainingQuery"
-                     [getItems]="getItems">
+  <ngx-virtual-scroll [query]="trainingQuery"
+                      [getItems]="getItems"
+                      windowScroll="true">
     <ng-template let-item>
       <tr class="d-flex">
         <td class="col-4">{{item?.baseTraining.name}}</td>
@@ -66,6 +67,6 @@
         </td>
       </tr>
     </ng-template>
-  </app-infinite-list>
+  </ngx-virtual-scroll>
   </tbody>
 </table>

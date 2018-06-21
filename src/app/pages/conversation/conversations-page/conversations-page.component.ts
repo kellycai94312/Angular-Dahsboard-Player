@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ISubscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
@@ -17,7 +17,7 @@ import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper'
   templateUrl: './conversations-page.component.html',
   styleUrls: ['./conversations-page.component.scss']
 })
-export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
+export class ConversationsPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInput')
   public searchInputElementRef: ElementRef;
@@ -57,13 +57,14 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  ngAfterViewInit(): void {
+  async ngOnInit() {
     this._searchInputSubscription = Observable.fromEvent(this.searchInputElementRef.nativeElement, 'keyup')
       .debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async (event: any) => {
         this.query.name = event.target.value;
         await this.resetItems();
       });
+    await this.resetItems();
   }
 
   ngOnDestroy(): void {
@@ -78,7 +79,9 @@ export class ConversationsPageComponent implements AfterViewInit, OnDestroy {
   };
 
   private async resetItems(): Promise<void> {
-    await this.ngxVirtualScrollComponent.reset();
+    setTimeout(async () => {
+      await this.ngxVirtualScrollComponent.reset();
+    });
   }
 
   private updateItem(messageWrapper: MessageWrapper): void {

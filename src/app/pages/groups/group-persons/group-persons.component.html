@@ -21,9 +21,10 @@
   </tr>
   </thead>
   <tbody>
-  <app-infinite-list class="list-group-flush"
-                     [(query)]="groupPersonQuery"
-                     [getItems]="getItems">
+  <ngx-virtual-scroll class="list-group-flush"
+                      [query]="groupPersonQuery"
+                      [getItems]="getItems"
+                      windowScroll="true">
     <ng-template let-item>
       <tr class="d-flex">
         <td class="col-3">
@@ -58,6 +59,6 @@
         </td>
       </tr>
     </ng-template>
-  </app-infinite-list>
+  </ngx-virtual-scroll>
   </tbody>
 </table>

@@ -1,5 +1,5 @@
 export enum NoteType {
-  SCHOOL,
-  TRAINER,
-  AGENT
+  SCHOOL = 'SCHOOL',
+  TRAINER = 'TRAINER',
+  AGENT = 'AGENT'
 }

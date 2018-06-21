@@ -30,7 +30,6 @@ import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
 import {ModalModule} from 'ngx-bootstrap';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
@@ -58,6 +57,7 @@ import {MeasureHistoryModule} from '../../components/measure-history/measure-his
 import {RoundPipe} from '../../pipes/round.pipe';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {ImageModule} from '../../components/image/image.module';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -78,7 +78,6 @@ import {ImageModule} from '../../components/image/image.module';
     DxTemplateModule,
     FormsModule,
     InputSelectModule,
-    InfiniteListModule,
     ModalSelectPageModule,
     GroupPageModule,
     PersonModule,
@@ -92,7 +91,8 @@ import {ImageModule} from '../../components/image/image.module';
     MeasureInputModule,
     MeasureHistoryModule,
     BusyButtonModule,
-    ImageModule
+    ImageModule,
+    NgxVirtualScrollModule
   ],
   declarations: [
     PersonPageComponent,

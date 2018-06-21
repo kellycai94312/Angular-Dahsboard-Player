@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {GroupViewModel} from '../../../data/local/view-model/group/group-view-model';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {ImageDimension} from '../../../data/local/image-dimension';
@@ -8,7 +8,7 @@ import {ImageDimension} from '../../../data/local/image-dimension';
   templateUrl: './group.component.html',
   styleUrls: ['./group.component.scss']
 })
-export class GroupComponent extends GroupViewModel implements OnInit, AfterContentInit {
+export class GroupComponent extends GroupViewModel implements OnInit {
 
   @Input()
   public dimension: ImageDimension;
@@ -19,9 +19,6 @@ export class GroupComponent extends GroupViewModel implements OnInit, AfterConte
   }
 
   ngOnInit() {
-  }
-
-  ngAfterContentInit(): void {
     this.initialize();
   }
 

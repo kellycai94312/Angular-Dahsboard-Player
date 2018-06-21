@@ -122,6 +122,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.person = await this._authorizationService.getPerson();
+    await this.ngxVirtualScrollComponent.reset();
   }
 
   ngOnDestroy(): void {

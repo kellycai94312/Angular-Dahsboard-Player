@@ -1,7 +1,6 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {Sex} from '../../../data/local/sex';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {UserRole} from '../../../data/remote/model/user-role';
@@ -13,26 +12,27 @@ import {SportType} from '../../../data/remote/model/sport-type';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {Group} from '../../../data/remote/model/group/base/group';
-import {PageContainer} from '../../../data/remote/bean/page-container';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {AppHelper} from '../../../utils/app-helper';
 import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
 import {Router} from '@angular/router';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-connections-page',
   templateUrl: './connections-page.component.html',
   styleUrls: ['./connections-page.component.scss']
 })
-export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ConnectionsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public personQuery: PersonQuery;
 
@@ -63,9 +63,7 @@ export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestro
     }
 
     this.userRoles = await this._participantRestApiService.getUserRoles();
-  }
 
-  async ngAfterViewInit() {
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.personQuery.name = value;
@@ -151,18 +149,13 @@ export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestro
 
 // #endregion
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     const pageContainer = await this._participantRestApiService.getPersonConnections(pageQuery);
-    const items = await Promise.all(pageContainer.list.map(async x => {
-      const personViewModel = new PersonViewModel(x);
+    return await this._appHelper.pageContainerConverter(pageContainer, async original => {
+      const personViewModel = new PersonViewModel(original);
       await personViewModel.initialize();
       return personViewModel;
-    }));
-
-    const newPageContainer = new PageContainer(items);
-    newPageContainer.size = pageContainer.size;
-    newPageContainer.total = pageContainer.total;
-    return newPageContainer;
+    });
   };
 
   public onSendMessage: Function = async (event: Event, parameter: PersonViewModel) => {
@@ -177,14 +170,14 @@ export class ConnectionsPageComponent implements OnInit, AfterViewInit, OnDestro
     try {
       if (parameter) {
         await this._participantRestApiService.removeConnection({id: parameter.data.id});
-        this._appHelper.removeItem(this.infiniteListComponent.items, parameter);
+        this._appHelper.removeItem(this.ngxVirtualScrollComponent.items, parameter);
       }
     } catch (e) {
     }
   };
 
   private async updateItems() {
-    await this.infiniteListComponent.update(true);
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }
