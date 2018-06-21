@@ -56,8 +56,9 @@
     </tr>
     </thead>
     <tbody>
-    <app-infinite-list [query]="groupQuery"
-                       [getItems]="getItems">
+    <ngx-virtual-scroll [query]="groupQuery"
+                        [getItems]="getItems"
+                        windowScroll="true">
       <ng-template let-item>
         <app-group-person class="p-0"
                           [data]="item"
@@ -65,7 +66,7 @@
                           [baseGroup]="false"
                           (change)="onChangeGroupPerson($event)"></app-group-person>
       </ng-template>
-    </app-infinite-list>
+    </ngx-virtual-scroll>
     </tbody>
   </table>
   <div *ngIf="isEditAllow"

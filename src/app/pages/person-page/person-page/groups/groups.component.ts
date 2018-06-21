@@ -7,8 +7,9 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {PersonService} from '../person.service';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {InfiniteListComponent} from '../../../../components/infinite-list/infinite-list.component';
 import {ISubscription} from 'rxjs/src/Subscription';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-groups',
@@ -20,8 +21,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public readonly isEditAllow: boolean;
   public readonly pageSize: number;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public groupTypes: GroupType[];
   public newGroup: GroupPerson;
@@ -99,12 +100,12 @@ export class GroupsComponent implements OnInit, OnDestroy {
   //#endregion
 
   public async onChangeGroupPerson(groupPerson: GroupPerson) {
-    const index = this.infiniteListComponent.items.indexOf(groupPerson);
+    const index = this.ngxVirtualScrollComponent.items.indexOf(groupPerson);
     if (index === -1) {
       this.selectedBaseGroup = groupPerson;
       this._personService.emitBaseGroupChange(this.selectedBaseGroup);
     } else {
-      this.infiniteListComponent.items.splice(index, 1);
+      this.ngxVirtualScrollComponent.items.splice(index, 1);
     }
   }
 
@@ -132,18 +133,16 @@ export class GroupsComponent implements OnInit, OnDestroy {
       id: this.newGroup.group.id,
       userRoleId: this.selectedPublicUserRole.id
     });
-    this.infiniteListComponent.items.push(this.newGroup);
+    this.ngxVirtualScrollComponent.items.push(this.newGroup);
     this.newGroup = null;
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getPersonGroups(pageQuery);
   };
 
   private async updateItems() {
-    if (this.infiniteListComponent) {
-      await this.infiniteListComponent.update(true);
-    }
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }
