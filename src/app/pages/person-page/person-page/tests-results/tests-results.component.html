@@ -41,8 +41,9 @@
              showClearButton="true">
 </dx-text-box>
 
-<app-infinite-list [items]="groupResults"
-                   (nextPage)="onNextPage($event)">
+<ngx-virtual-scroll [getItems]="getItems"
+                    [query]="measureTemplateQuery"
+                    windowScroll="true">
   <ng-template let-item>
     <div class="mb-2">
       <div class="d-flex flex-row">
@@ -78,4 +79,5 @@
       </button>
     </div>
   </ng-template>
-</app-infinite-list>
+</ngx-virtual-scroll>
+

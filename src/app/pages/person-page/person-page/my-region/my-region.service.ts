@@ -14,7 +14,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 @Injectable()
 export class MyRegionService {
 
-  public readonly noteQuery: NoteQuery;
+  public noteQuery: NoteQuery;
 
   public reset: () => Promise<void>;
 
