@@ -1,6 +1,7 @@
-<app-infinite-list [query]="groupPersonQuery"
-                   [getItems]="getItems"
-                   class="list-group-flush">
+<ngx-virtual-scroll class="list-group-flush"
+                    [query]="groupPersonQuery"
+                    [getItems]="getItems"
+                    windowScroll="true">
   <ng-template let-item>
     <div class="list-group-item cols-padding px-2">
       <div class="row">
@@ -21,4 +22,4 @@
       </div>
     </div>
   </ng-template>
-</app-infinite-list>
+</ngx-virtual-scroll>

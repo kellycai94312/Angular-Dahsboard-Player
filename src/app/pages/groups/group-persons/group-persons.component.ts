@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
@@ -8,23 +8,24 @@ import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-
 import {GroupService} from '../group.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GroupPersonModalComponent} from '../group-person-modal/group-person-modal.component';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../data/remote/bean/page-container';
 import {ISubscription} from 'rxjs/Subscription';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-group-persons',
   templateUrl: './group-persons.component.html',
   styleUrls: ['./group-persons.component.scss']
 })
-export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class GroupPersonsComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
   public groupId: number;
@@ -36,6 +37,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private _modalService: NgbModal,
               private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
+              private _appHelper: AppHelper,
               public groupService: GroupService) {
     this.groupPersonQuery = new GroupPersonQuery();
 
@@ -55,10 +57,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-  }
-
-  async ngAfterViewInit() {
+  async ngOnInit() {
     if (this.groupId) {
       this.groupPersonQuery.id = this.groupId;
     } else {
@@ -70,7 +69,7 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.groupPersonQuery.name = value;
         await this.updateItems();
       });
-    await this.infiniteListComponent.initialize();
+    await this.updateItems();
   }
 
   ngOnDestroy(): void {
@@ -84,23 +83,18 @@ export class GroupPersonsComponent implements OnInit, AfterViewInit, OnDestroy {
     modalRef.componentInstance.onChangeGroupPerson = async () => this.updateItems();
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
-    const items = await Promise.all(pageContainer.list.map(async x => {
-      const groupPersonViewModel = new GroupPersonViewModel(x);
+    return await this._appHelper.pageContainerConverter(pageContainer, async original => {
+      const groupPersonViewModel = new GroupPersonViewModel(original);
       await groupPersonViewModel.initialize();
       return groupPersonViewModel;
-    }));
-
-    const newPageContainer = new PageContainer(items);
-    newPageContainer.size = pageContainer.size;
-    newPageContainer.total = pageContainer.total;
-    return newPageContainer;
+    });
   };
 
   private async updateItems() {
-    if (this.infiniteListComponent) {
-      await this.infiniteListComponent.update(true);
+    if (this.ngxVirtualScrollComponent) {
+      await this.ngxVirtualScrollComponent.reset();
     }
   }
 

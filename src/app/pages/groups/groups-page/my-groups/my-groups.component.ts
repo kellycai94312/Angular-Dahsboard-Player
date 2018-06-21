@@ -24,7 +24,7 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public readonly groupQuery: GroupQuery;
+  public groupQuery: GroupQuery;
 
   public groupTypes: GroupType[];
   public userRoles: UserRole[];
