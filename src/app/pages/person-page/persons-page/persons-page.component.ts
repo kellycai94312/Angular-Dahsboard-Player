@@ -26,7 +26,6 @@ import {AppHelper} from '../../../utils/app-helper';
 export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
-  public readonly personQuery: PersonQuery;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -34,6 +33,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  public personQuery: PersonQuery;
   public sexItems: Sex[];
   public userRoles: UserRole[];
 
