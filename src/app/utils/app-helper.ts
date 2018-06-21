@@ -49,12 +49,12 @@ export class AppHelper {
   }
 
   // TODO: Use optimized algorithm
-  public except<T>(first: T[], second: T[]): T[] {
+  public except<T>(first: T[], second: T[], compare: (first: T, second: T) => boolean = (f: T, s: T) => this.defaultCompare(f, s)): T[] {
     const items = [];
     for (let i = 0; i < first.length; i++) {
       let unique = true;
       for (let j = 0; j < second.length; j++) {
-        if (first[i] === second[j]) {
+        if (compare(first[i], second[j])) {
           unique = false;
           break;
         }
@@ -65,6 +65,10 @@ export class AppHelper {
       items.push(first[i]);
     }
     return items;
+  }
+
+  private defaultCompare<T>(first: T, second: T): boolean {
+    return first === second;
   }
 
   public async showErrorMessage(messageKey: string): Promise<void> {

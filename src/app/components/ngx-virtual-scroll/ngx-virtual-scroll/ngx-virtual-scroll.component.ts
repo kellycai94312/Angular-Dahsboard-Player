@@ -19,6 +19,9 @@ export class NgxVirtualScrollComponent {
   public ngxScrollDirective: NgxScrollDirective;
 
   @Input()
+  public class: string;
+
+  @Input()
   public query: PageQuery;
 
   @Input()
@@ -47,6 +50,7 @@ export class NgxVirtualScrollComponent {
   private _total: number;
 
   constructor() {
+    this.class = '';
     this.count = PropertyConstant.pageSize;
     this.initialize();
   }
@@ -114,6 +118,7 @@ export class NgxVirtualScrollComponent {
 
     try {
       const pageContainer: PageContainer<any> = await this.getItems(Direction.DOWN, this.query);
+      console.log(pageContainer);
       if (!pageContainer) {
         return;
       }

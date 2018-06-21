@@ -12,7 +12,6 @@ import {Group} from '../../../../../../data/remote/model/group/base/group';
 import {ListRequest} from '../../../../../../data/remote/request/list-request';
 import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {HashSet} from '../../../../../../data/local/hash-set';
 import {TranslateService} from '@ngx-translate/core';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-query';
@@ -142,28 +141,24 @@ export class GameStepBasePageComponent implements OnInit {
   }
 
   public async onEditGroups() {
-    const selectedSet = new HashSet<Group>();
-    selectedSet.addAll(this.groups);
-
     const groupQuery = new GroupQuery();
     groupQuery.from = 0;
     groupQuery.count = PropertyConstant.pageSize;
-    groupQuery.groupTypeEnum = GroupTypeEnum[GroupTypeEnum.TEAM];
-    groupQuery.userRoleEnum = UserRoleEnum[UserRoleEnum.TRAINER];
+    groupQuery.groupTypeEnum = GroupTypeEnum.TEAM;
+    groupQuery.userRoleEnum = UserRoleEnum.TRAINER;
     groupQuery.all = false;
 
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    ref.componentInstance.header = await this._translateService.get('edit').toPromise();
-    ref.componentInstance.component = NamedObjectItemComponent;
-    ref.componentInstance.selectedSet = selectedSet;
-    ref.componentInstance.getListAsync = async (name: string, from: number) => {
-      groupQuery.name = name;
-      groupQuery.from = from;
-      return await this._participantRestApiService.getGroups(groupQuery);
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = NamedObjectItemComponent;
+    componentInstance.pageQuery = groupQuery;
+    componentInstance.getItems = async pageQuery => {
+      return await this._participantRestApiService.getGroups(pageQuery);
     };
-    ref.componentInstance.onSave = async () => {
+    componentInstance.onSave = async selectedItems => {
       try {
-        const items = await this._participantRestApiService.updateGroupsByBaseTraining(new ListRequest(selectedSet.data),
+        const items = await this._participantRestApiService.updateGroupsByBaseTraining(new ListRequest(selectedItems),
           {},
           {baseTrainingId: this.game.id});
         this.groups = items.map(x => x.group);
@@ -172,6 +167,7 @@ export class GameStepBasePageComponent implements OnInit {
         await this._appHelper.showErrorMessage('gameMustHaveTwoTeams');
       }
     };
+    await componentInstance.initialize(this.groups);
   }
 
 }
