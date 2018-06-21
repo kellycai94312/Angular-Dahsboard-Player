@@ -6,16 +6,13 @@
     <th class="col">{{ 'value' | translate }}</th>
   </tr>
   </thead>
-  <tbody>
-  <app-infinite-list [items]="measureValues"
-                     (nextPage)="onNextPage($event)">
-    <ng-template let-item>
-      <tr class="d-flex">
-        <td class="col">{{getDate(item) | date:'yyyy.MM.dd HH:mm'}}</td>
-        <td class="col">{{getUnits(item)}}</td>
-        <td class="col">{{getValue(item)}}</td>
-      </tr>
-    </ng-template>
-  </app-infinite-list>
+  <tbody *ngFor="let item of measureValues"
+         ngxScroll
+         (scrollDown)="onNextPage($event)">
+  <tr class="d-flex">
+    <td class="col">{{getDate(item) | date:'yyyy.MM.dd HH:mm'}}</td>
+    <td class="col">{{getUnits(item)}}</td>
+    <td class="col">{{getValue(item)}}</td>
+  </tr>
   </tbody>
 </table>

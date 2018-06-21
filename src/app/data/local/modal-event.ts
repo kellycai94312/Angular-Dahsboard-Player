@@ -1,4 +1,4 @@
 export enum ModalEvent {
-  ADD,
-  EDIT
+  ADD = 'ADD',
+  EDIT = 'EDIT'
 }
