@@ -4,7 +4,7 @@
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-<div class="modal-body">
+<div class="modal-body" style="height: 500px !important;">
   <div class="row h-100">
     <div class="col-6">
       <dx-text-box #searchDxTextBoxComponent
@@ -12,11 +12,11 @@
                    mode="search"
                    showClearButton="true">
       </dx-text-box>
-      <app-infinite-list [(items)]="persons.data"
-                         (nextPage)="onNextPage($event)"
-                         [scrollBlock]="true" tabindex="1">
+      <ngx-virtual-scroll #unselectedItemsNgxVirtualScrollComponent
+                          [getItems]="getUnselectedItems"
+                          [query]="conversationQuery">
         <ng-template let-personWrapper>
-          <div class="default-item" (click)="setActive(personWrapper)" (dblclick)="onSelect()"
+          <div class="default-item" (click)="setActive(personWrapper)" (dblclick)="onSelect(personWrapper)"
                [ngClass]="{'active' : personWrapper === active}">
             <div class="d-flex flex-row align-items-center">
               <app-image
@@ -31,16 +31,15 @@
             </div>
           </div>
         </ng-template>
-      </app-infinite-list>
+      </ngx-virtual-scroll>
     </div>
 
     <div class="col-6">
-      <app-infinite-list [items]="selectedPersons.data"
-                         [scrollBlock]="true" tabindex="1">
+      <ngx-virtual-scroll #selectedItemsNgxVirtualScrollComponent [getItems]="getSelectedItems">
         <ng-template let-personWrapper>
           <li class="selected-item"
               [ngClass]="{'unchangeable' : !personWrapper.canEdit}"
-              (click)="onRemove(personWrapper)">
+              (click)="onUnselect(personWrapper)">
             <i class="fa fa-times"></i>
             <div class="d-flex flex-row align-items-center">
               <app-image
@@ -55,7 +54,7 @@
             </div>
           </li>
         </ng-template>
-      </app-infinite-list>
+      </ngx-virtual-scroll>
     </div>
   </div>
 </div>

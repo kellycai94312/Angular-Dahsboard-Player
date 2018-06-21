@@ -20,48 +20,44 @@
                    mode="search"
                    showClearButton="true">
       </dx-text-box>
-      <app-infinite-list [(items)]="persons.data"
-                         (nextPage)="onNextPage($event)"
-                         [scrollBlock]="true" tabindex="1">
-        <ng-template let-person>
-          <div class="default-item" (click)="setActive(person)" (dblclick)="onSelect()"
+      <ngx-virtual-scroll #itemsNgxVirtualScrollComponent
+                          [getItems]="getUnselectedPersons" [query]="personQuery">
+        <ng-template let-item>
+          <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect(item)"
                [ngClass]="{'active' : person === active}">
             <div class="d-flex flex-row align-items-center">
               <app-image
                 [type]="'LOGO'"
                 [clazz]="'PERSON'"
-                [id]="person.id"
+                [id]="item.id"
                 [dimension]="'W40xH40'"
                 [format]="'CIRCLE'"></app-image>
               <div class="d-flex flex-column ml-2">
-                <h5>{{person.lastName}} {{person.firstName}}</h5>
+                <h5>{{item.lastName}} {{item.firstName}}</h5>
               </div>
             </div>
           </div>
         </ng-template>
-      </app-infinite-list>
+      </ngx-virtual-scroll>
     </div>
 
     <div class="col-6">
-      <app-infinite-list [items]="selectedPersons.data"
-                         [scrollBlock]="true" tabindex="1">
-        <ng-template let-person>
-          <li class="selected-item" (click)="onRemove(person)">
-            <i class="fa fa-times"></i>
-            <div class="d-flex flex-row align-items-center">
-              <app-image
-                [type]="'LOGO'"
-                [clazz]="'PERSON'"
-                [id]="person.id"
-                [dimension]="'W40xH40'"
-                [format]="'CIRCLE'"></app-image>
-              <div class="d-flex flex-column ml-2">
-                <h5>{{person.lastName}} {{person.firstName}}</h5>
-              </div>
-            </div>
-          </li>
-        </ng-template>
-      </app-infinite-list>
+      <li *ngFor="let item of selectedItems"
+          class="selected-item"
+          (click)="onUnselect(item)">
+        <i class="fa fa-times"></i>
+        <div class="d-flex flex-row align-items-center">
+          <app-image
+            [type]="'LOGO'"
+            [clazz]="'PERSON'"
+            [id]="item.id"
+            [dimension]="'W40xH40'"
+            [format]="'CIRCLE'"></app-image>
+          <div class="d-flex flex-column ml-2">
+            <h5>{{item.lastName}} {{item.firstName}}</h5>
+          </div>
+        </div>
+      </li>
     </div>
   </div>
 </div>

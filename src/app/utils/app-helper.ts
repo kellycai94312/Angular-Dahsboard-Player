@@ -85,15 +85,20 @@ export class AppHelper {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>, instanceBuilder: (original: TInput) => Promise<TOutput> | TOutput): Promise<PageContainer<TOutput>> {
+  public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>,
+                                                       instanceBuilder: (obj: TInput) => Promise<TOutput> | TOutput,
+                                                       filter?: (original: TInput) => boolean): Promise<PageContainer<TOutput>> {
     if (!original || !instanceBuilder) {
       return;
     }
     const pageContainer = new PageContainer<TOutput>();
     pageContainer.list = [];
     for (let i = 0; i < original.list.length; i++) {
-      const result = await instanceBuilder(original.list[i]);
-      pageContainer.list.push(result);
+      const item = original.list[i];
+      if (!filter || filter(item)) {
+        const result = await instanceBuilder(item);
+        pageContainer.list.push(result);
+      }
     }
     pageContainer.from = original.from;
     pageContainer.size = original.size;

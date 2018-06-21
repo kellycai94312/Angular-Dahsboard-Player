@@ -14,7 +14,6 @@ import {ImageModule} from '../../components/image/image.module';
 import {ChatModalCreateComponent} from './chat-modal/chat-modal-create/chat-modal-create.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {DxButtonModule, DxCheckBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
-import {InfiniteListModule} from '../../components/infinite-list/infinite-list.module';
 import {ModalItemModule} from '../../components/modal-item/modal-item.module';
 import {PersonModule} from '../../components/person/person.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
@@ -40,7 +39,6 @@ import {ModalConfirmDangerModule} from '../../components/modal-confirm/modal-con
     DxTextBoxModule,
     DxValidatorModule,
     NgbDropdownModule,
-    InfiniteListModule,
     ModalItemModule,
     PersonModule,
     SafeHtmlModule,

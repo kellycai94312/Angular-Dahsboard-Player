@@ -6,12 +6,13 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ConversationQuery} from '../../../../data/remote/rest-api/query/conversation-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {HashSet} from '../../../../data/local/hash-set';
 import {ParticipantWrapper} from './participant-wrapper';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ListRequest} from '../../../../data/remote/request/list-request';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {AppHelper} from '../../../../utils/app-helper';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-chat-modal-add-participants',
@@ -22,90 +23,77 @@ export class ChatModalParticipantsComponent implements OnInit {
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
-  public readonly selectedPersons: HashSet<ParticipantWrapper>;
-  public readonly persons: HashSet<ParticipantWrapper>;
+  @ViewChild('unselectedItemsNgxVirtualScrollComponent')
+  public unselectedItemsNgxVirtualScrollComponent: NgxVirtualScrollComponent;
+  @ViewChild('selectedItemsNgxVirtualScrollComponent')
+  public selectedItemsNgxVirtualScrollComponent: NgxVirtualScrollComponent;
+  @Input()
+  public chat: Chat;
   public active: ParticipantWrapper;
   public person: Person;
-
-  @Input()
-  chat: Chat;
-
-  private readonly _conversationQuery: ConversationQuery;
-  private _searchText: string;
+  public conversationQuery: ConversationQuery;
 
   constructor(public modal: NgbActiveModal,
               private _authorizationService: AuthorizationService,
-              private _participantRestApiService: ParticipantRestApiService) {
-    this.selectedPersons = new HashSet<ParticipantWrapper>();
-    this.persons = new HashSet<ParticipantWrapper>();
-    this._conversationQuery = new ConversationQuery();
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
+    this.conversationQuery = new ConversationQuery();
   }
 
   async ngOnInit() {
     this.person = await this._authorizationService.getPerson();
-    this.selectedPersons.addAll(await this.getCurrentParticipants());
-    this._conversationQuery.conversationId = this.chat.id;
-    this._conversationQuery.unassigned = true;
+    this.conversationQuery.conversationId = this.chat.id;
+    this.conversationQuery.unassigned = true;
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
-        this._searchText = value;
-        await this.updateListAsync();
+        this.conversationQuery.name = value;
+        await this.updateItems();
       });
-    await this.updateListAsync();
+    await this.updateItems();
+    await this.selectedItemsNgxVirtualScrollComponent.reset();
   }
 
-  public async onRemove(obj: ParticipantWrapper) {
-    this.persons.add(obj);
-    this.selectedPersons.remove(obj);
+  public async onSelect(item: ParticipantWrapper) {
+    this._appHelper.removeItem(this.unselectedItemsNgxVirtualScrollComponent.items, item);
+    this.selectedItemsNgxVirtualScrollComponent.items.push(item);
   }
 
-  public async onSelect() {
-    this.persons.remove(this.active);
-    this.selectedPersons.add(this.active);
+  public async onUnselect(item: ParticipantWrapper) {
+    this._appHelper.removeItem(this.selectedItemsNgxVirtualScrollComponent.items, item);
+    this.unselectedItemsNgxVirtualScrollComponent.items.push(item);
   }
 
   public async setActive(obj: ParticipantWrapper) {
     this.active = obj;
   }
 
-  public async onNextPage(pageQuery: PageQuery) {
-    await this.updateListAsync(pageQuery.from);
-  }
+  public getUnselectedItems: Function = async (direction: Direction, pageQuery: ConversationQuery) => {
+    pageQuery.unassigned = true;
+    const pageContainer = await this._participantRestApiService.getParticipants(pageQuery);
+    return this._appHelper.pageContainerConverter(pageContainer, original => {
+      return new ParticipantWrapper(original, this.person);
+    });
+  };
 
-  public async updateListAsync(from: number = 0) {
-    this._conversationQuery.from = from;
-    this._conversationQuery.name = this._searchText == undefined ? '' : this._searchText;
-    const pageContainer = await this._participantRestApiService.getParticipants(this._conversationQuery);
-    const list = pageContainer.list;
-    if (from == 0) {
-      this.persons.removeAll();
-    }
-
-    for (let i = 0; i < list.length; i++) {
-      if (!this.selectedPersons.data
-        .filter(participantWrapper => participantWrapper.participant.person === list[i].person).length) {
-        this.persons.add(new ParticipantWrapper(list[i], this.person));
-      }
-    }
-  }
+  public getSelectedItems: Function = async (direction: Direction, pageQuery: ConversationQuery) => {
+    pageQuery.unassigned = false;
+    pageQuery.conversationId = this.chat.id;
+    const pageContainer = await this._participantRestApiService.getParticipants(pageQuery);
+    return this._appHelper.pageContainerConverter(pageContainer, original => {
+      return new ParticipantWrapper(original, this.person);
+    });
+  };
 
   public async onSave() {
-    if (this.selectedPersons.size() > 0) {
-      const listRequest: ListRequest<IdRequest> = new ListRequest(this.selectedPersons.data.map(participantWrapper => new IdRequest(participantWrapper.id)));
+    if (this.selectedItemsNgxVirtualScrollComponent.items.length > 0) {
+      const listRequest: ListRequest<IdRequest> = new ListRequest(this.selectedItemsNgxVirtualScrollComponent.items.map(participantWrapper => new IdRequest(participantWrapper.id)));
       await this._participantRestApiService.updateParticipants(listRequest, {}, {conversationId: this.chat.id});
       this.modal.dismiss();
     }
   }
 
-  private async getCurrentParticipants() {
-    const query: ConversationQuery = new ConversationQuery();
-    query.from = 0;
-    query.count = PropertyConstant.pageSizeMax;
-    query.unassigned = false;
-    query.conversationId = this.chat.id;
-    return (await this._participantRestApiService.getParticipants(query))
-      .list
-      .map(participant => new ParticipantWrapper(participant, this.person));
+  private async updateItems() {
+    await this.unselectedItemsNgxVirtualScrollComponent.reset();
   }
 
 }
