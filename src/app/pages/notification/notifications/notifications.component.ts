@@ -1,22 +1,23 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {InfiniteListComponent} from '../../../components/infinite-list/infinite-list.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {DateWrapper} from '../../../data/remote/bean/wrapper/date-wrapper';
 import {AppHelper} from '../../../utils/app-helper';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {ISubscription} from 'rxjs/Subscription';
 import {NotificationService} from '../../../shared/notification.service';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
   styleUrls: ['./notifications.component.scss']
 })
-export class NotificationsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NotificationsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(InfiniteListComponent)
-  public infiniteListComponent: InfiniteListComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   private readBefore: Date;
   private readonly _notificationSubscription: ISubscription;
@@ -26,39 +27,39 @@ export class NotificationsComponent implements OnInit, AfterViewInit, OnDestroy 
               private _notificationService: NotificationService) {
     this.readBefore = new Date(0);
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
-      this.infiniteListComponent.query.from++;
-      this.infiniteListComponent.items.push(x.data);
+      this.ngxVirtualScrollComponent.query.from++;
+      this.ngxVirtualScrollComponent.items.push(x.data);
       // TODO: Add read notification
     });
   }
 
-  async ngOnInit(): Promise<void> {
-  }
-
-  async ngAfterViewInit(): Promise<void> {
-    this.infiniteListComponent.getItems = this.getItems;
-    await this.infiniteListComponent.initialize();
+  async ngOnInit() {
+    // TODO: I don't understand why without setTimeout this method doesn't call!
+    setTimeout(async () => {
+      await this.ngxVirtualScrollComponent.reset();
+    });
   }
 
   ngOnDestroy(): void {
     this._notificationSubscription.unsubscribe();
   }
 
-  public getItems: Function = async (pageQuery: PageQuery) => {
+  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
+    // TODO: Use optimize algorithm
     const pageContainer = await this._participantRestApiService.getNotifications(pageQuery);
     for (let i = 0; i < pageContainer.list.length; i++) {
       const item = pageContainer.list[i];
+      if (item.read) {
+        continue;
+      }
       const time = Date.parse(item.created.toString());
       if (this.readBefore.getTime() < time) {
         this.readBefore = new Date(time);
       }
     }
-
     const dateWrapper = new DateWrapper();
     dateWrapper.date = this._appHelper.dateByFormat(this.readBefore, PropertyConstant.dateTimeFormat);
     await this._participantRestApiService.createReadNotifications(dateWrapper);
-
-    pageQuery.from = pageContainer.from;
     return pageContainer;
   };
 
