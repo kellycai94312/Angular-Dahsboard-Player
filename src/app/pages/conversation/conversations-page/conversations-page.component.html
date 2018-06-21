@@ -14,7 +14,8 @@
 <!-- content -->
 <ngx-virtual-scroll class="list-group-flush"
                     [getItems]="getItems"
-                    [query]="query">
+                    [(query)]="query"
+                    windowScroll="true">
   <ng-template let-item>
     <div class="list-group-item p-0">
       <app-conversation [messageWrapper]="item"></app-conversation>

@@ -27,7 +27,6 @@ import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {ImageService} from './shared/image.service';
 import {ProfileService} from './shared/profile.service';
 import {RestApiInterceptor} from './guard/rest-api-interceptor';
-import {InfiniteListModule} from './components/infinite-list/infinite-list.module';
 import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
@@ -80,7 +79,6 @@ export function HttpLoaderFactory(http: HttpClient) {
       }
     }),
     FormsModule,
-    InfiniteListModule,
     RoundPipeModule.forRoot(),
     ImageModule
   ],

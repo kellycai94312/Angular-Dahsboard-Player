@@ -22,7 +22,7 @@ export class NgxVirtualScrollComponent {
   public query: PageQuery;
 
   @Input()
-  public getItems: Function;
+  public getItems: (direction: Direction, pageQuery: PageQuery) => Promise<PageContainer<any>>;
 
   @Input()
   public from: number;
@@ -36,8 +36,10 @@ export class NgxVirtualScrollComponent {
   @Input()
   public windowScroll: boolean;
 
-  public isBusy: boolean;
+  @Input()
   public items: Array<any>;
+
+  public isBusy: boolean;
 
   private _rear?: number;
   private _rearCount?: number;
@@ -65,14 +67,20 @@ export class NgxVirtualScrollComponent {
   //#region Scroll
 
   public async onScrollUp() {
-    if (!this.getItems || !this._rear || !this.query.from || this.isBusy) {
+    if (!this.getItems || !this._rear || this.isBusy) {
       return;
     }
 
     this.isBusy = true;
 
+    this._rear = this._rear - this.count;
+    this._rearCount = this.count;
+    if (this._rear < 0) {
+      this._rearCount = this._rear + this.count;
+      this._rear = 0;
+    }
     this.query.from = this.updateRear();
-    this.query.count = this.count;
+    this.query.count = this._rearCount;
 
     try {
       const pageContainer: PageContainer<any> = await this.getItems(Direction.UP, this.query);
@@ -87,11 +95,6 @@ export class NgxVirtualScrollComponent {
       // TODO: Calc item height
       this.ngxScrollDirective.scrollTo(98 * pageContainer.size);
 
-      this._rear = this._rear - this.count;
-      if (this._rear < 0) {
-        this._rearCount = this._rear + this.count;
-        this._rear = 0;
-      }
     } finally {
       this.isBusy = false;
     }
@@ -146,17 +149,8 @@ export class NgxVirtualScrollComponent {
     this.initialize();
 
     await this.onScrollDown();
-
     if (this.autoScroll) {
-      const tempAutoScroll = this.autoScroll;
-      this.autoScroll = false;
-
       this.scrollDown();
-
-      // TODO: Need for skip auto scroll first loaded items
-      setTimeout(() => {
-        this.autoScroll = tempAutoScroll;
-      }, 1000);
     }
   }
 
