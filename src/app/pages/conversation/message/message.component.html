@@ -13,16 +13,11 @@
         </div>
         <div [innerHTML]="systemMessageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
       </div>
-      <div class="ml-auto" *ngIf="!onlyContent && message.sender && person && message.sender.person.id == person.id">
-        <button class="btn btn-secondary btn-edit input-height-sm mr-1" (click)="editMessage()">
-          <i class="fa fa-edit"></i>
-        </button>
-      </div>
     </div>
   </div>
 
   <ng-template #systemMessageContent>
-    <div class="d-flex flex-row">
+    <div class="d-flex flex-row w-100">
       <div class="d-flex flex-column">
         <p *ngIf="!onlyContent" class="date">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</p>
         <div *ngIf="systemMessageViewModel.body" class="system-message"

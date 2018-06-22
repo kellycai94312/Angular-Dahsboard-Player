@@ -26,6 +26,7 @@ import {ListRequest} from '../../../data/remote/request/list-request';
 import {IdRequest} from '../../../data/remote/request/id-request';
 import {ModalConfirmDangerComponent} from '../../../components/modal-confirm/modal-confirm-danger.component';
 import {TranslateService} from '@ngx-translate/core';
+import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 
 @Component({
   selector: 'app-conversation-page',
@@ -42,23 +43,23 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public messageContent: MessageContent;
   public person: Person;
   public query: PageQuery;
+  public conversation: BaseConversation;
+  public recipient: Participant;
+  public enabled: boolean;
+  public selectedMessages: HashSet<Message>;
+  public editedMessage: Message;
+  public canEditMessage: boolean;
+  public readonly participantsTyping: Participant[];
+
   private _maxMessageDate: Date;
   private _typingTimeout: any;
   private _receiveTypingTimeout: any;
-
-  public readonly participantsTyping: Participant[];
   private readonly _conversationId: number;
   private readonly _messageCreateSubscription: ISubscription;
   private readonly _messageUpdateSubscription: ISubscription;
   private readonly _messageDeleteSubscription: ISubscription;
   private readonly _messageReadSubscription: ISubscription;
   private readonly _typingSubscription: ISubscription;
-
-  public conversation: BaseConversation;
-  public recipient: Participant;
-  public enabled: boolean;
-  public selectedMessages: HashSet<Message>;
-  public editedMessage: Message;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -75,6 +76,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this._maxMessageDate = new Date();
     this.participantsTyping = [];
     this.selectedMessages = new HashSet<Message>();
+    this.canEditMessage = false;
 
     this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
       if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
@@ -203,7 +205,6 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       try {
         this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {conversationId: this._conversationId, messageContentId: this.messageContent.id});
         this.cancelEditMessage();
-        this.messageContent.content = null;
       } catch (e) {
         await this._appHelper.showErrorMessage('sendError');
       }
@@ -255,20 +256,23 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     } else {
       this.selectedMessages.add(message);
     }
+    this.updateCanEditMessage();
   };
 
   public isMessageSelected(message: Message) {
     return this.selectedMessages.contains(message);
   }
 
-  public editMessage = (message: Message) => {
-    this.editedMessage = message;
-    this.messageContent = Object.assign({}, message.content as MessageContent);
+  public startEditMessage = () => {
+    this.editedMessage = this.selectedMessages.data[0];
+    this.messageContent = Object.assign({}, this.editedMessage.content as MessageContent);
   };
 
   public cancelEditMessage() {
     this.editedMessage = undefined;
     this.messageContent = new MessageContent();
+    this.selectedMessages.removeAll();
+    this.updateCanEditMessage();
   }
 
   public async deleteSelectedMessages() {
@@ -278,8 +282,9 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     ref.componentInstance.onDelete = async (deleteForReceiver: boolean) => {
       const listRequest = new ListRequest(messages.map(message => new IdRequest(message.content.id)));
       await this._participantRestApiService.removeMessages(listRequest, {deleteForReceiver: deleteForReceiver}, {conversationId: this._conversationId});
-      //fixme remove from collection
+      this.ngxVirtualScrollComponent.items = this.ngxVirtualScrollComponent.items.filter(item => !messages.includes(item));
       this.selectedMessages.removeAll();
+      this.updateCanEditMessage();
     };
   }
 
@@ -289,8 +294,15 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     ref.componentInstance.dangerBtnTitle = await this._translateService.get('modal.delete').toPromise();
     ref.componentInstance.onConfirm = async () => {
       await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
-      //fixme remove from collection
+      this.ngxVirtualScrollComponent.items = [];
+      this.updateCanEditMessage();
     };
+  }
+
+  public updateCanEditMessage() {
+    this.canEditMessage = this.selectedMessages.size() == 1
+      && this.selectedMessages.data.filter(message => message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT
+        && message.sender.person.id == this.person.id).length == 1;
   }
 
   public async quitChat() {

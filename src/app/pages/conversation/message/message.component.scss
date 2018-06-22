@@ -14,17 +14,4 @@
     color: #888;
   }
 
-  .btn-edit {
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.2s linear;
-  }
-
-  :hover {
-    .btn-edit {
-      visibility: visible;
-      opacity: 1;
-    }
-  }
-
 }

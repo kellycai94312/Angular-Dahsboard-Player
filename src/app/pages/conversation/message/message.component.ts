@@ -18,12 +18,6 @@ export class MessageComponent implements OnInit, DoCheck {
   @Input()
   public onlyContent: boolean = false;
 
-  @Input()
-  public onSelectToggle: Function;
-
-  @Input()
-  public onEditMessage: Function;
-
   public systemMessageViewModel: SystemMessageViewModel;
   public person: Person;
   private differ: any;
@@ -55,20 +49,6 @@ export class MessageComponent implements OnInit, DoCheck {
     if (event.target.tagName.toLowerCase() === 'a') {
       const link = event.target.getAttribute('link');
       await this._router.navigate([link]);
-    } else {
-      this.select();
-    }
-  }
-
-  public editMessage() {
-    if (this.onEditMessage) {
-      this.onEditMessage(this.message);
-    }
-  }
-
-  private select() {
-    if (this.onSelectToggle) {
-      this.onSelectToggle(this.message);
     }
   }
 
