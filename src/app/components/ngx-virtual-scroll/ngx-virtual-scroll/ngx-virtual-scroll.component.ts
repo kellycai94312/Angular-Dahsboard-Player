@@ -45,7 +45,8 @@ export class NgxVirtualScrollComponent {
   @Output()
   public afterUpdateItems: EventEmitter<void>;
 
-  public isBusy: boolean;
+  public upBusy: boolean;
+  public downBusy: boolean;
 
   private _rear?: number;
   private _rearCount?: number;
@@ -79,11 +80,11 @@ export class NgxVirtualScrollComponent {
   //#region Scroll
 
   public async onScrollUp() {
-    if (!this.getItems || !this._rear || this.isBusy) {
+    if (!this.getItems || !this._rear) {
       return;
     }
 
-    this.isBusy = true;
+    this.upBusy = true;
 
     this._rear = this._rear - this.count;
     this._rearCount = this.count;
@@ -109,7 +110,7 @@ export class NgxVirtualScrollComponent {
 
       this.afterUpdateItems.emit();
     } finally {
-      this.isBusy = false;
+      this.upBusy = false;
     }
   }
 
@@ -118,7 +119,7 @@ export class NgxVirtualScrollComponent {
       return;
     }
 
-    this.isBusy = true;
+    this.downBusy = true;
 
     if (this.query.from || this.query.from == 0) {
       this.query.from = this._front;
@@ -147,7 +148,7 @@ export class NgxVirtualScrollComponent {
 
       this.afterUpdateItems.emit();
     } finally {
-      this.isBusy = false;
+      this.downBusy = false;
     }
   }
 
