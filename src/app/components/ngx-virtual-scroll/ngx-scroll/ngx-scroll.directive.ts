@@ -1,10 +1,10 @@
-import {Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, Output} from '@angular/core';
+import {Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Direction} from '../model/direction';
 
 @Directive({
   selector: '[ngxScroll]'
 })
-export class NgxScrollDirective implements OnDestroy {
+export class NgxScrollDirective implements OnInit, OnDestroy {
 
   @Input()
   public attachedYOffset: number;
@@ -35,6 +35,7 @@ export class NgxScrollDirective implements OnDestroy {
 
   private _lastScrollTop: number;
   private _attached: boolean;
+  private _previousHeight: number;
 
   private readonly mutationObserver: MutationObserver;
 
@@ -51,8 +52,8 @@ export class NgxScrollDirective implements OnDestroy {
   constructor(private _elementRef: ElementRef) {
     this.attachedYOffset = 1;
 
-    this.scrollUpDistance = 20;
-    this.scrollDownDistance = 80;
+    this.scrollUpDistance = 25;
+    this.scrollDownDistance = 75;
 
     this._rearScrollHeight = Number.MIN_VALUE;
     this._frontPosition = Number.MIN_VALUE;
@@ -64,11 +65,27 @@ export class NgxScrollDirective implements OnDestroy {
       if (this._attached) {
         this.scrollToDown();
       }
+
+      // Recalculate rear and front if the height has decreased
+      const currentHeight = this.getHeight();
+      if (this._previousHeight > currentHeight) {
+        if (this._rearScrollHeight > currentHeight) {
+          this._rearScrollHeight = currentHeight;
+        }
+        if (this._frontPosition > currentHeight) {
+          this._frontPosition = currentHeight;
+        }
+      }
+      this._previousHeight = currentHeight;
     });
     this.mutationObserver.observe(this._elementRef.nativeElement, {
       childList: true,
       subtree: true
     });
+  }
+
+  ngOnInit(): void {
+    this._previousHeight = this.getHeight();
   }
 
   ngOnDestroy(): void {

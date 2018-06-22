@@ -8,35 +8,40 @@
   </button>
 </div>
 <div class="modal-body">
-  <div class="row h-100">
-    <div class="col">
-      <dx-text-box #searchDxTextBoxComponent
-                   placeholder="{{'search' | translate}}"
-                   mode="search"
-                   showClearButton="true">
-      </dx-text-box>
-      <ngx-virtual-scroll [getItems]="getItemsWithoutSelected"
-                          [(query)]="pageQuery">
-        <ng-template let-item>
-          <div class="default-item"
-               (click)="setActive(item)"
-               (dblclick)="onSelected(item)"
-               [ngClass]="{'active' : item === active}">
-            <app-modal-item [component]="component"
-                            [data]="item"></app-modal-item>
-          </div>
-        </ng-template>
-      </ngx-virtual-scroll>
-    </div>
+  <dx-text-box #searchDxTextBoxComponent
+               placeholder="{{'search' | translate}}"
+               mode="search"
+               showClearButton="true"
+               class="mb-2">
+  </dx-text-box>
+  <div class="content">
+    <div class="row cols-padding">
+      <div class="col-6">
+        <ngx-virtual-scroll class="overflow-content"
+                            [getItems]="getItemsWithoutSelected"
+                            [(query)]="pageQuery"
+                            (afterUpdateItems)="onAfterUpdateItems()">
+          <ng-template let-item>
+            <div class="default-item"
+                 (click)="setActive(item)"
+                 (dblclick)="onSelected(item)"
+                 [ngClass]="{'active' : item === active}">
+              <app-modal-item [component]="component"
+                              [data]="item"></app-modal-item>
+            </div>
+          </ng-template>
+        </ngx-virtual-scroll>
+      </div>
 
-    <div class="col">
-      <li *ngFor="let item of selectedItems"
-          class="selected-item"
-          (click)="onUnselected(item)">
-        <i class="fa fa-times"></i>
-        <app-modal-item [component]="component"
-                        [data]="item"></app-modal-item>
-      </li>
+      <div class="col-6 overflow-content">
+        <li *ngFor="let item of selectedItems"
+            class="selected-item"
+            (click)="onUnselected(item)">
+          <i class="fa fa-times"></i>
+          <app-modal-item [component]="component"
+                          [data]="item"></app-modal-item>
+        </li>
+      </div>
     </div>
   </div>
 </div>

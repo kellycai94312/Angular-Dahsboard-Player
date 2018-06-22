@@ -59,9 +59,11 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
       });
   }
 
-  public onSelected(item: T) {
+  public async onSelected(item: T) {
     this._appHelper.removeItem(this.itemsNgxVirtualScrollComponent.items, item);
     this.selectedItems.push(item);
+
+    await this.onAfterUpdateItems();
   }
 
   public onUnselected(item: T) {
@@ -81,6 +83,12 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
     });
     return pageContainer;
   };
+
+  public async onAfterUpdateItems() {
+    if (this.itemsNgxVirtualScrollComponent.items.length < PropertyConstant.pageSize && this.itemsNgxVirtualScrollComponent.canScrollDown()) {
+      await this.itemsNgxVirtualScrollComponent.onScrollDown();
+    }
+  }
 
   private async updateItems() {
     await this.itemsNgxVirtualScrollComponent.reset();
