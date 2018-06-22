@@ -4,6 +4,13 @@
   user-select: none;
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 60vh !important;
+}
+
 $search-padding: 8px;
 $item-height: 35px;
 $item-bg-color-active: #c5e4f3;

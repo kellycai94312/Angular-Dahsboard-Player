@@ -1,4 +1,4 @@
-import {Component, ContentChild, Input, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ContentChild, EventEmitter, Input, Output, TemplateRef, ViewChild} from '@angular/core';
 import {Direction} from '../model/direction';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
@@ -42,6 +42,9 @@ export class NgxVirtualScrollComponent {
   @Input()
   public items: Array<any>;
 
+  @Output()
+  public afterUpdateItems: EventEmitter<void>;
+
   public isBusy: boolean;
 
   private _rear?: number;
@@ -54,6 +57,8 @@ export class NgxVirtualScrollComponent {
     this.count = PropertyConstant.pageSize;
     this.query = new PageQuery();
     this.query.count = this.count;
+
+    this.afterUpdateItems = new EventEmitter<void>();
 
     this.initialize();
   }
@@ -102,13 +107,14 @@ export class NgxVirtualScrollComponent {
       // TODO: Calc item height
       this.ngxScrollDirective.scrollTo(98 * pageContainer.size);
 
+      this.afterUpdateItems.emit();
     } finally {
       this.isBusy = false;
     }
   }
 
   public async onScrollDown() {
-    if (!this.getItems || this._front == this._total) {
+    if (!this.canScrollDown()) {
       return;
     }
 
@@ -138,6 +144,8 @@ export class NgxVirtualScrollComponent {
       if (this._total < this._front) {
         this._front = this._total;
       }
+
+      this.afterUpdateItems.emit();
     } finally {
       this.isBusy = false;
     }
@@ -151,6 +159,9 @@ export class NgxVirtualScrollComponent {
 
   //#endregion
 
+  public canScrollDown(): boolean {
+    return this.getItems && this._front != this._total;
+  }
 
   public async reset(): Promise<void> {
     this.initialize();
