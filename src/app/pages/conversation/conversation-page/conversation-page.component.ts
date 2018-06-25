@@ -88,7 +88,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       this.readMessageFrom(x.message.created);
       x.message.read = true;
 
-      if (x.message.content.discriminator == BaseMessageContentType.SYSTEM_MESSAGE_CONTENT) {
+      if (x.message.content.discriminator == BaseMessageContentType.SYSTEM_MESSAGE_CONTENT
+        && x.message.sender.person.id != this.person.id) { //exclude update duplication
         switch ((x.message.content as SystemMessageContent).systemMessageType) {
           case SystemMessageContentType.UPDATE_LOGO:
             this.logo.refresh();
