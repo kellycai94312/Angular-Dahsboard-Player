@@ -13,8 +13,9 @@
     <div class="d-flex">
       <p class="name">{{conversationName}}</p>
       <p class="date ml-auto" *ngIf="!conversationWrapper.messageWrapper.empty">
-        {{conversationWrapper.messageWrapper.message.created |
-        date:'dd.MM.yyyy HH:mm'}}</p>
+        {{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:'dd.MM.yyyy HH:mm') )
+        : (conversationWrapper.messageWrapper.message.created | date:'dd.MM.yyyy HH:mm')}}
+      </p>
     </div>
 
     <div class="d-flex flex-row align-items-center p-2"

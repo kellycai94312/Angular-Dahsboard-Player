@@ -8,6 +8,8 @@ import {BaseConversation} from '../../../data/remote/model/chat/conversation/bas
 import {Chat} from '../../../data/remote/model/chat/conversation/chat';
 import {ImageClass} from '../../../data/remote/misc/image-class';
 import {ConversationWrapper} from '../conversation-wrapper';
+import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
+import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 
 @Component({
   selector: 'app-conversation',
@@ -24,6 +26,7 @@ export class ConversationComponent implements OnInit {
   public conversationImageId: number;
   public conversationName: string;
   public senderPerson: Person;
+  public updated: Date;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
@@ -69,6 +72,10 @@ export class ConversationComponent implements OnInit {
           if (!this.senderPerson) {
             this.senderPerson = messageWrapper.message.sender.person;
           }
+      }
+
+      if (messageWrapper.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (messageWrapper.message.content as MessageContent).updated != undefined) {
+        this.updated = (messageWrapper.message.content as MessageContent).updated;
       }
 
     }

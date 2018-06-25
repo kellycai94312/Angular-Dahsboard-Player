@@ -4,6 +4,8 @@ import {Person} from '../../../data/remote/model/person';
 import {Message} from '../../../data/remote/model/chat/message/message';
 import {SystemMessageViewModel} from '../../../data/local/view-model/conversation/system-message-view-model';
 import {Router} from '@angular/router';
+import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
 
 @Component({
   selector: 'app-message',
@@ -20,6 +22,7 @@ export class MessageComponent implements OnInit, DoCheck {
 
   public systemMessageViewModel: SystemMessageViewModel;
   public person: Person;
+  public updated: Date;
   private differ: any;
 
   constructor(private _authorizationService: AuthorizationService,
@@ -55,6 +58,10 @@ export class MessageComponent implements OnInit, DoCheck {
   private async buildMessage() {
     this.systemMessageViewModel = new SystemMessageViewModel(this.message);
     await this.systemMessageViewModel.build();
+
+    if (this.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
+      this.updated = (this.message.content as MessageContent).updated;
+    }
   }
 
 }
