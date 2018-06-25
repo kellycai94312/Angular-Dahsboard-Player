@@ -305,7 +305,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public async deleteMessages() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
     ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.dangerBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    ref.componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
     ref.componentInstance.onConfirm = async () => {
       await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
       this.ngxVirtualScrollComponent.items = [];
@@ -322,7 +322,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public async quitChat() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
     ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.dangerBtnTitle = await this._translateService.get('quitChat').toPromise();
+    ref.componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
     ref.componentInstance.onConfirm = async () => {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
@@ -332,7 +332,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public async deleteChat() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
     ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.dangerBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    ref.componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
     ref.componentInstance.onConfirm = async () => {
       await this._participantRestApiService.deleteChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);

@@ -15,7 +15,7 @@ export class ChatModalDeleteMessageConfirmComponent implements OnInit {
   messages: Message[];
 
   @Input()
-  onDelete: Function;
+  onDelete: (deleteForReceiver) => Promise<void>;
 
   public canDeleteForReceiver: boolean = false;
   public deleteForReceiver: boolean = false;
@@ -36,8 +36,8 @@ export class ChatModalDeleteMessageConfirmComponent implements OnInit {
     this.canDeleteForReceiver = true;
   }
 
-  public delete() {
-    this.onDelete(this.deleteForReceiver);
+  public async delete() {
+    await this.onDelete(this.deleteForReceiver);
     this.modal.dismiss();
   }
 

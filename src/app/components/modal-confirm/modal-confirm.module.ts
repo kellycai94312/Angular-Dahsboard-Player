@@ -12,5 +12,5 @@ import {TranslateModule} from '@ngx-translate/core';
   exports: [ModalConfirmDangerComponent],
   entryComponents: [ModalConfirmDangerComponent]
 })
-export class ModalConfirmDangerModule {
+export class ModalConfirmModule {
 }

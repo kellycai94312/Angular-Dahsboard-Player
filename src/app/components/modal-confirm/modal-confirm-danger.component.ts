@@ -12,10 +12,10 @@ export class ModalConfirmDangerComponent implements OnInit {
   modalTitle: string;
 
   @Input()
-  dangerBtnTitle: string;
+  confirmBtnTitle: string;
 
   @Input()
-  onConfirm: Function;
+  onConfirm: () => Promise<void>;
 
   constructor(public modal: NgbActiveModal) { }
 

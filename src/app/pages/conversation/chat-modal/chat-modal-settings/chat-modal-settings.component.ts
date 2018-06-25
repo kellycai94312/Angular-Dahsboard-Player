@@ -21,10 +21,10 @@ export class ChatModalSettingsComponent implements OnInit {
   chat: Chat;
 
   @Input()
-  chatChange: Function;
+  chatChange: (chat: Chat) => Promise<void>;
 
   @Input()
-  logoChange: Function;
+  logoChange: () => Promise<void>;
 
   constructor(public modal: NgbActiveModal,
               private _participantRestApiService: ParticipantRestApiService) {
@@ -33,7 +33,7 @@ export class ChatModalSettingsComponent implements OnInit {
   ngOnInit() {
   }
 
-  async onLogoChange(event) {
+  public async onLogoChange(event) {
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
@@ -43,7 +43,7 @@ export class ChatModalSettingsComponent implements OnInit {
       image.type = ImageType.LOGO;
       await this._participantRestApiService.uploadImage(file, image);
       this.logo.refresh();
-      this.logoChange();
+      await this.logoChange();
     }
   }
 
@@ -51,7 +51,7 @@ export class ChatModalSettingsComponent implements OnInit {
     const result = event.validationGroup.validate();
     if (result.isValid) {
       this.chat = await this._participantRestApiService.updateChat(this.chat, {}, {conversationId: this.chat.id});
-      this.chatChange(this.chat);
+      await this.chatChange(this.chat);
       this.modal.dismiss();
     }
   }

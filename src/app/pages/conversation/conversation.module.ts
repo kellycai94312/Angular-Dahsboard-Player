@@ -21,7 +21,7 @@ import {ChatModalSettingsComponent} from './chat-modal/chat-modal-settings/chat-
 import {ChatModalParticipantsComponent} from './chat-modal/chat-modal-participants/chat-modal-participants.component';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
-import {ModalConfirmDangerModule} from '../../components/modal-confirm/modal-confirm-danger.module';
+import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
 
 @NgModule({
   imports: [
@@ -42,7 +42,7 @@ import {ModalConfirmDangerModule} from '../../components/modal-confirm/modal-con
     ModalItemModule,
     PersonModule,
     SafeHtmlModule,
-    ModalConfirmDangerModule
+    ModalConfirmModule
   ],
   declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent, ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent, ChatModalDeleteMessageConfirmComponent],
   entryComponents: [ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent, ChatModalDeleteMessageConfirmComponent]
