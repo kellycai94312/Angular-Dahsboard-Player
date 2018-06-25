@@ -21,10 +21,10 @@
                    showClearButton="true">
       </dx-text-box>
       <ngx-virtual-scroll #itemsNgxVirtualScrollComponent
-                          [getItems]="getUnselectedPersons" [query]="personQuery">
+                          [getItems]="getUnselectedItems" [query]="personQuery">
         <ng-template let-item>
           <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect(item)"
-               [ngClass]="{'active' : person === active}">
+               [ngClass]="{'active' : item == active}">
             <div class="d-flex flex-row align-items-center">
               <app-image
                 [type]="'LOGO'"

@@ -27,6 +27,8 @@ import {IdRequest} from '../../../data/remote/request/id-request';
 import {ModalConfirmDangerComponent} from '../../../components/modal-confirm/modal-confirm-danger.component';
 import {TranslateService} from '@ngx-translate/core';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
+import {SystemMessageContent} from '../../../data/remote/model/chat/message/system-message-content';
+import {SystemMessageContentType} from '../../../data/remote/model/chat/message/system-message-content-type';
 
 @Component({
   selector: 'app-conversation-page',
@@ -85,6 +87,17 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
       this.readMessageFrom(x.message.created);
       x.message.read = true;
+
+      if (x.message.content.discriminator == BaseMessageContentType.SYSTEM_MESSAGE_CONTENT) {
+        switch ((x.message.content as SystemMessageContent).systemMessageType) {
+          case SystemMessageContentType.UPDATE_LOGO:
+            this.logo.refresh();
+            break;
+          case SystemMessageContentType.UPDATE_NAME:
+            this.conversation = x.message.content.baseConversation;
+        }
+      }
+
       this.ngxVirtualScrollComponent.addItem(x.message);
     });
     this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {

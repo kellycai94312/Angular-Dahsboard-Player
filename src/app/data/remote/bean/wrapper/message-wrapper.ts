@@ -3,6 +3,7 @@ import {Participant} from '../../model/chat/participant';
 
 export class MessageWrapper {
   public message: Message;
+  public previousMessage: Message;
   public participant: Participant;
   public unread: number;
   public empty: boolean;
