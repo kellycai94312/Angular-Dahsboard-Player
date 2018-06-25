@@ -13,51 +13,59 @@
       </dx-validator>
     </dx-text-box>
   </div>
-  <div class="row h-100">
-    <div class="col-6">
-      <dx-text-box #searchDxTextBoxComponent
-                   placeholder="{{'search' | translate}}"
-                   mode="search"
-                   showClearButton="true">
-      </dx-text-box>
-      <ngx-virtual-scroll #itemsNgxVirtualScrollComponent
-                          [getItems]="getUnselectedItems" [query]="personQuery">
-        <ng-template let-item>
-          <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect(item)"
-               [ngClass]="{'active' : item == active}">
-            <div class="d-flex flex-row align-items-center">
-              <app-image
-                [type]="'LOGO'"
-                [clazz]="'PERSON'"
-                [id]="item.id"
-                [dimension]="'W40xH40'"
-                [format]="'CIRCLE'"></app-image>
-              <div class="d-flex flex-column ml-2">
-                <h5>{{item.lastName}} {{item.firstName}}</h5>
+  <div class="content">
+    <div class="row cols-padding">
+
+      <div class="col-6">
+        <dx-text-box #searchDxTextBoxComponent
+                     class="mb-2"
+                     placeholder="{{'search' | translate}}"
+                     mode="search"
+                     showClearButton="true">
+        </dx-text-box>
+        <ngx-virtual-scroll #itemsNgxVirtualScrollComponent
+                            class="overflow-content"
+                            [getItems]="getUnselectedItems"
+                            [query]="personQuery"
+                            (afterUpdateItems)="onAfterUpdateItems()">
+          <ng-template let-item>
+            <div class="default-item" (click)="setActive(item)" (dblclick)="onSelect(item)"
+                 [ngClass]="{'active' : item == active}">
+              <div class="d-flex flex-row align-items-center">
+                <app-image
+                  [type]="'LOGO'"
+                  [clazz]="'PERSON'"
+                  [id]="item.id"
+                  [dimension]="'W40xH40'"
+                  [format]="'CIRCLE'"></app-image>
+                <div class="d-flex flex-column ml-2">
+                  <h5>{{item.lastName}} {{item.firstName}}</h5>
+                </div>
               </div>
             </div>
-          </div>
-        </ng-template>
-      </ngx-virtual-scroll>
-    </div>
+          </ng-template>
+        </ngx-virtual-scroll>
+      </div>
 
-    <div class="col-6">
-      <li *ngFor="let item of selectedItems"
-          class="selected-item"
-          (click)="onUnselect(item)">
-        <i class="fa fa-times"></i>
-        <div class="d-flex flex-row align-items-center">
-          <app-image
-            [type]="'LOGO'"
-            [clazz]="'PERSON'"
-            [id]="item.id"
-            [dimension]="'W40xH40'"
-            [format]="'CIRCLE'"></app-image>
-          <div class="d-flex flex-column ml-2">
-            <h5>{{item.lastName}} {{item.firstName}}</h5>
+      <div class="col-6 overflow-content">
+        <li *ngFor="let item of selectedItems"
+            class="selected-item"
+            (click)="onUnselect(item)">
+          <i class="fa fa-times"></i>
+          <div class="d-flex flex-row align-items-center">
+            <app-image
+              [type]="'LOGO'"
+              [clazz]="'PERSON'"
+              [id]="item.id"
+              [dimension]="'W40xH40'"
+              [format]="'CIRCLE'"></app-image>
+            <div class="d-flex flex-column ml-2">
+              <h5>{{item.lastName}} {{item.firstName}}</h5>
+            </div>
           </div>
-        </div>
-      </li>
+        </li>
+      </div>
+
     </div>
   </div>
 </div>

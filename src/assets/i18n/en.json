@@ -293,5 +293,6 @@
   "deleteForReceiver": "Delete messages for receiver",
   "areYouSure": "Are you sure?",
   "deleteMessages": "Delete messages",
-  "editMessage": "Edit message"
+  "editMessage": "Edit message",
+  "chatMustContainOneParticipant": "Chat must contain at least 1 participant"
 }

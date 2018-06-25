@@ -294,5 +294,6 @@
   "deleteForReceiver": "Удалить сообщения у получателя",
   "areYouSure": "Вы уверены?",
   "deleteMessages": "Удалить сообщения",
-  "editMessage": "Редактировать сообщение"
+  "editMessage": "Редактировать сообщение",
+  "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника"
 }

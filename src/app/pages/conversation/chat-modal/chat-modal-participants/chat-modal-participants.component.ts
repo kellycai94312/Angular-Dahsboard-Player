@@ -56,11 +56,27 @@ export class ChatModalParticipantsComponent implements OnInit {
   public async onSelect(item: ParticipantWrapper) {
     this._appHelper.removeItem(this.unselectedItemsNgxVirtualScrollComponent.items, item);
     this.selectedItemsNgxVirtualScrollComponent.items.push(item);
+
+    await this.onAfterUpdateUnselectedItems();
   }
 
   public async onUnselect(item: ParticipantWrapper) {
     this._appHelper.removeItem(this.selectedItemsNgxVirtualScrollComponent.items, item);
     this.unselectedItemsNgxVirtualScrollComponent.items.push(item);
+
+    await this.onAfterUpdateSelectedItems();
+  }
+
+  public async onAfterUpdateUnselectedItems() {
+    if (this.unselectedItemsNgxVirtualScrollComponent.items.length < PropertyConstant.pageSize && this.unselectedItemsNgxVirtualScrollComponent.canScrollDown()) {
+      await this.unselectedItemsNgxVirtualScrollComponent.onScrollDown();
+    }
+  }
+
+  public async onAfterUpdateSelectedItems() {
+    if (this.selectedItemsNgxVirtualScrollComponent.items.length < PropertyConstant.pageSize && this.selectedItemsNgxVirtualScrollComponent.canScrollDown()) {
+      await this.selectedItemsNgxVirtualScrollComponent.onScrollDown();
+    }
   }
 
   public async setActive(obj: ParticipantWrapper) {
@@ -89,6 +105,8 @@ export class ChatModalParticipantsComponent implements OnInit {
       const listRequest: ListRequest<IdRequest> = new ListRequest(this.selectedItemsNgxVirtualScrollComponent.items.map(participantWrapper => new IdRequest(participantWrapper.id)));
       await this._participantRestApiService.updateParticipants(listRequest, {}, {conversationId: this.chat.id});
       this.modal.dismiss();
+    } else {
+      this._appHelper.showErrorMessage('chatMustContainOneParticipant');
     }
   }
 

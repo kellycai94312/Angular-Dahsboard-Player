@@ -32,7 +32,7 @@ export class BaseNotificationViewModel<T extends BaseNotification> extends BaseV
   }
 
   public getPersonLink(person: Person): string {
-    return `<a class="link" href="/person/${person.id}">${person.firstName} ${person.lastName}</a>`;
+    return `<a class="link" link="/person/${person.id}">${person.firstName} ${person.lastName}</a>`;
   }
 
 }

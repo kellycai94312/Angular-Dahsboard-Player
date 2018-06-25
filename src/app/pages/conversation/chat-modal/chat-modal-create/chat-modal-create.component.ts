@@ -54,11 +54,19 @@ export class ChatModalCreateComponent implements OnInit {
   public async onSelect(item: Person) {
     this._appHelper.removeItem(this.itemsNgxVirtualScrollComponent.items, item);
     this.selectedItems.push(item);
+
+    await this.onAfterUpdateItems();
   }
 
   public async onUnselect(item: Person) {
     this._appHelper.removeItem(this.selectedItems, item);
     this.itemsNgxVirtualScrollComponent.items.push(item);
+  }
+
+  public async onAfterUpdateItems() {
+    if (this.itemsNgxVirtualScrollComponent.items.length < PropertyConstant.pageSize && this.itemsNgxVirtualScrollComponent.canScrollDown()) {
+      await this.itemsNgxVirtualScrollComponent.onScrollDown();
+    }
   }
 
   public async setActive(obj: Person) {
@@ -76,13 +84,17 @@ export class ChatModalCreateComponent implements OnInit {
 
   public async onSave(event: any) {
     const result = event.validationGroup.validate();
-    if (result.isValid && this.selectedItems.length) {
-      const request = new ChatRequest();
-      request.name = this.chatName;
-      request.personIds = this.selectedItems.map(person => new IdRequest(person.id));
-      const chat = await this._participantRestApiService.createChat(request);
-      await this._router.navigate(['/conversation', chat.id]);
-      this.modal.dismiss();
+    if (result.isValid) {
+      if (this.selectedItems.length > 0) {
+        const request = new ChatRequest();
+        request.name = this.chatName;
+        request.personIds = this.selectedItems.map(person => new IdRequest(person.id));
+        const chat = await this._participantRestApiService.createChat(request);
+        await this._router.navigate(['/conversation', chat.id]);
+        this.modal.dismiss();
+      } else {
+        this._appHelper.showErrorMessage('chatMustContainOneParticipant');
+      }
     }
   }
 
