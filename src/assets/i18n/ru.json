@@ -295,5 +295,6 @@
   "areYouSure": "Вы уверены?",
   "deleteMessages": "Удалить сообщения",
   "editMessage": "Редактировать сообщение",
-  "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника"
+  "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника",
+  "edited": "Изменено"
 }

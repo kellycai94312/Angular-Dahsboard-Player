@@ -294,5 +294,6 @@
   "areYouSure": "Are you sure?",
   "deleteMessages": "Delete messages",
   "editMessage": "Edit message",
-  "chatMustContainOneParticipant": "Chat must contain at least one participant"
+  "chatMustContainOneParticipant": "Chat must contain at least one participant",
+  "edited": "Edited"
 }
