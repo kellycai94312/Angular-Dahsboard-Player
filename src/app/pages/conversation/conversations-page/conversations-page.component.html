@@ -6,7 +6,7 @@
          placeholder="{{'search' | translate}}">
   <div class="input-group-append">
     <button type="button"
-            class="btn btn-primary input-height-sm">{{'create' | translate}}
+            class="btn btn-primary input-height-sm" (click)="createChat()">{{'create' | translate}}
     </button>
   </div>
 </div>
@@ -18,7 +18,7 @@
                     windowScroll="true">
   <ng-template let-item>
     <div class="list-group-item p-0">
-      <app-conversation [messageWrapper]="item"></app-conversation>
+      <app-conversation [conversationWrapper]="item"></app-conversation>
     </div>
   </ng-template>
 </ngx-virtual-scroll>

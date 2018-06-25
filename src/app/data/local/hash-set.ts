@@ -1,23 +1,22 @@
-import { IdentifiedObject } from '../remote/base/identified-object';
+import {IdentifiedObject} from '../remote/base/identified-object';
 
 export class HashSet<T extends IdentifiedObject> {
-
-  public data: T[];
+  private _data: T[];
 
   constructor() {
-    this.data = [];
+    this._data = [];
   }
 
   public size(): number {
-    return this.data.length;
+    return this._data.length;
   }
 
   public add(item: T): void {
-    for (let i = 0; i < this.data.length; i++) {
-      if (item == this.data[i]) return;
-      if (this.data[i].id === item.id) return;
+    for (let i = 0; i < this._data.length; i++) {
+      if (item == this._data[i]) return;
+      if (this._data[i].id === item.id) return;
     }
-    this.data.push(item);
+    this._data.push(item);
   }
 
   public addAll(items: T[]): void {
@@ -27,23 +26,31 @@ export class HashSet<T extends IdentifiedObject> {
   }
 
   public removeAll(): void {
-    this.data.splice(0, this.data.length);
+    this._data.splice(0, this._data.length);
   }
 
   public remove(item: T): void {
-    const index = this.data.indexOf(item);
+    const index = this._data.indexOf(item);
     if (index >= 0) {
-      this.data.splice(index, 1);
+      this._data.splice(index, 1);
     }
   }
 
   public contains(item: T): boolean {
-    for (let i = 0; i < this.data.length; i++) {
-      if (this.data[i].id === item.id) {
+    for (let i = 0; i < this._data.length; i++) {
+      if (this._data[i].id === item.id) {
         return true;
       }
     }
     return false;
+  }
+
+  get data(): T[] {
+    return this._data;
+  }
+
+  set data(value: T[]) {
+    this._data = value;
   }
 
 }

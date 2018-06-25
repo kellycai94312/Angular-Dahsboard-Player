@@ -205,6 +205,7 @@ $logo-change-content-background-hover: rgba(0, 0, 0, .8);
     transition: all $logo-change-transition;
     > p {
       display: none;
+      color: $light-blue;
     }
     > i {
       display: block;

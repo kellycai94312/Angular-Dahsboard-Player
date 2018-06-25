@@ -7,7 +7,6 @@
   "persons": {
     "section": "Persons",
     "person": {
-      "uploadAvatar": "Upload avatar",
       "roles": {
         "section": "Roles",
         "conflict": "You should quit groups with appropriate roles before you remove its"
@@ -137,7 +136,8 @@
   "notifications": "Notifications",
   "modal": {
     "cancel": "Cancel",
-    "save": "Save"
+    "save": "Save",
+    "delete": "Delete"
   },
   "search": "Search",
   "groupType": "Group type",
@@ -249,6 +249,14 @@
     "deletePersonSelf": "{{sender}} removed you from a group '{{group}}'",
     "joinPerson": "{{person}} applied to the group '{{group}}'"
   },
+  "conversationSystemMessage": {
+    "createChat": "{{sender}} created chat",
+    "updateName": "{{sender}} updated chat name",
+    "updateLogo": "{{sender}} updated chat logo",
+    "addParticipant": "{{sender}} added {{person}}",
+    "deleteParticipant": "{{sender}} removed {{person}}",
+    "quitParticipant": "{{sender}} quit chat"
+  },
   "approve": "Approve",
   "refuse": "Refuse",
   "error": "Error",
@@ -272,5 +280,19 @@
   "today": "Today",
   "month": "Month",
   "week": "Week",
-  "day": "Day"
+  "day": "Day",
+  "createChat": "Create chat",
+  "deleteChat": "Delete chat",
+  "quitChat": "Quit chat",
+  "actions": "Actions",
+  "participants": "Participants",
+  "uploadAvatar": "Upload avatar",
+  "enableNotifications": "Enable notifications",
+  "disableNotifications": "Disable notifications",
+  "deleteSelectedMessages": "Delete selected messages",
+  "deleteForReceiver": "Delete messages for receiver",
+  "areYouSure": "Are you sure?",
+  "deleteMessages": "Delete messages",
+  "editMessage": "Edit message",
+  "chatMustContainOneParticipant": "Chat must contain at least one participant"
 }

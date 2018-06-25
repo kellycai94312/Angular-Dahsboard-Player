@@ -1,5 +1,9 @@
 @import "../../styles/variables";
 
+$search-padding: 8px;
+$item-height: 35px;
+$item-bg-color-active: #c5e4f3;
+
 * {
   user-select: none;
 }
@@ -10,10 +14,6 @@
   width: 100%;
   height: 60vh !important;
 }
-
-$search-padding: 8px;
-$item-height: 35px;
-$item-bg-color-active: #c5e4f3;
 
 .selected-item {
   list-style-type: none;

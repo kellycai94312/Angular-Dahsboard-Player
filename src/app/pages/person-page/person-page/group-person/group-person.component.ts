@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {PersonService} from '../person.service';
@@ -11,7 +11,7 @@ import {UserRole} from '../../../../data/remote/model/user-role';
   templateUrl: './group-person.component.html',
   styleUrls: ['./group-person.component.scss']
 })
-export class GroupPersonComponent implements OnChanges {
+export class GroupPersonComponent {
   @Input()
   public data: GroupPerson;
 
@@ -24,8 +24,6 @@ export class GroupPersonComponent implements OnChanges {
   @Output()
   public change: EventEmitter<GroupPerson>;
 
-  public groupUrl: string;
-
   public isEditAllow: boolean;
 
   public pageSize = PropertyConstant.pageSize;
@@ -34,12 +32,6 @@ export class GroupPersonComponent implements OnChanges {
               private _personService: PersonService) {
     this.isEditAllow = _personService.shared.isEditAllow;
     this.change = new EventEmitter<GroupPerson>();
-  }
-
-  ngOnChanges(model: any) {
-    if (this.data) {
-      this.groupUrl = `/group/${this.data.group.id}`;
-    }
   }
 
   loadData = async (from: number, searchText: string) => {

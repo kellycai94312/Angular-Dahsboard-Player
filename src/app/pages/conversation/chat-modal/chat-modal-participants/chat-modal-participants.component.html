@@ -1,0 +1,75 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{'participants' | translate}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="content">
+    <div class="row cols-padding">
+
+      <div class="col-6">
+        <dx-text-box #searchDxTextBoxComponent
+                     class="mb-2"
+                     placeholder="{{'search' | translate}}"
+                     mode="search"
+                     showClearButton="true">
+        </dx-text-box>
+        <ngx-virtual-scroll #unselectedItemsNgxVirtualScrollComponent
+                            class="overflow-content"
+                            [getItems]="getUnselectedItems"
+                            [query]="conversationQuery"
+                            (afterUpdateItems)="onAfterUpdateUnselectedItems()">
+          <ng-template let-personWrapper>
+            <div class="default-item" (click)="setActive(personWrapper)" (dblclick)="onSelect(personWrapper)"
+                 [ngClass]="{'active' : personWrapper === active}">
+              <div class="d-flex flex-row align-items-center">
+                <app-image
+                  [type]="'LOGO'"
+                  [clazz]="'PERSON'"
+                  [id]="personWrapper.participant.person.id"
+                  [dimension]="'W40xH40'"
+                  [format]="'CIRCLE'"></app-image>
+                <div class="d-flex flex-column ml-2">
+                  <h5>{{personWrapper.participant.person.lastName}} {{personWrapper.participant.person.firstName}}</h5>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-virtual-scroll>
+      </div>
+
+      <div class="col-6">
+        <ngx-virtual-scroll
+          #selectedItemsNgxVirtualScrollComponent
+          class="overflow-content"
+          [getItems]="getSelectedItems"
+          (afterUpdateItems)="onAfterUpdateSelectedItems()">
+          <ng-template let-personWrapper>
+            <li class="selected-item"
+                [ngClass]="{'unchangeable' : !personWrapper.canEdit}"
+                (click)="onUnselect(personWrapper)">
+              <i class="fa fa-times"></i>
+              <div class="d-flex flex-row align-items-center">
+                <app-image
+                  [type]="'LOGO'"
+                  [clazz]="'PERSON'"
+                  [id]="personWrapper.participant.person.id"
+                  [dimension]="'W40xH40'"
+                  [format]="'CIRCLE'"></app-image>
+                <div class="d-flex flex-column ml-2">
+                  <h5>{{personWrapper.participant.person.lastName}} {{personWrapper.participant.person.firstName}}</h5>
+                </div>
+              </div>
+            </li>
+          </ng-template>
+        </ngx-virtual-scroll>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-success" (click)="onSave()">{{'modal.save' | translate }}</button>
+  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}</button>
+</div>

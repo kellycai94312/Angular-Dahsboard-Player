@@ -8,7 +8,6 @@
   "persons": {
     "section": "Пользователи",
     "person": {
-      "uploadAvatar": "Загрузить аватар",
       "roles": {
         "section": "Роли",
         "conflict": "Вам необходимо выйти из групп с соответствующими ролями, прежде чем удалять их"
@@ -138,7 +137,8 @@
   "notifications": "Уведомления",
   "modal": {
     "cancel": "Отмена",
-    "save": "Сохранить"
+    "save": "Сохранить",
+    "delete": "Удалить"
   },
   "search": "Поиск",
   "groupType": "Тип группы",
@@ -231,7 +231,7 @@
   "access": "Доступ",
   "showPrevious": "Показать предыдущий",
   "trainingNotification": {
-    "scheduledEvent": "Скоро начнетса событие '{{event}}'",
+    "scheduledEvent": "Скоро начнется событие '{{event}}'",
     "updateDate": "Обновлена дата в событии '{{event}}'",
     "updateLocation": "Обновлено местоположение в событии '{{event}}'",
     "updateExercises": "Обновлен список упражнений в событии '{{event}}'",
@@ -249,6 +249,14 @@
     "deletePerson": "{{sender}} исключил {{person}} из группы '{{group}}'",
     "deletePersonSelf": "{{sender}} исключил вас из группы '{{group}}'",
     "joinPerson": "{{person}} подал заявку в группу '{{group}}'"
+  },
+  "conversationSystemMessage": {
+    "createChat": "{{sender}} создал беседу",
+    "updateName": "{{sender}} обновил наименование беседы",
+    "updateLogo": "{{sender}} обновил фотографию беседы",
+    "addParticipant": "{{sender}} добавил {{person}}",
+    "deleteParticipant": "{{sender}} удалил {{person}}",
+    "quitParticipant": "{{sender}} покинул беседу"
   },
   "approve": "Подтвердить",
   "refuse": "Отказаться",
@@ -273,5 +281,19 @@
   "today": "Сегодня",
   "month": "Месяц",
   "week": "Неделя",
-  "day": "День"
+  "day": "День",
+  "createChat": "Создать беседу",
+  "deleteChat": "Удалить беседу",
+  "quitChat": "Выйти из беседы",
+  "actions": "Действия",
+  "participants": "Участники",
+  "uploadAvatar": "Загрузить аватар",
+  "enableNotifications": "Включить уведомления",
+  "disableNotifications": "Отключить уведомления",
+  "deleteSelectedMessages": "Удалить выбранные сообщения",
+  "deleteForReceiver": "Удалить сообщения у получателя",
+  "areYouSure": "Вы уверены?",
+  "deleteMessages": "Удалить сообщения",
+  "editMessage": "Редактировать сообщение",
+  "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника"
 }
