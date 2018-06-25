@@ -32,7 +32,6 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   public query: PageQuery;
 
   private _searchInputSubscription: ISubscription;
-  private _receiveTypingTimeout: any;
   private readonly _messageCreateSubscription: ISubscription;
   private readonly _messageUpdateSubscription: ISubscription;
   private readonly _messageReadSubscription: ISubscription;
@@ -107,11 +106,11 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
         const participants = conversationWrapper.typingParticipants;
         const index = participants.findIndex(x => x.id == participant.id);
         if (0 <= index) {
-          clearTimeout(this._receiveTypingTimeout);
+          clearTimeout(conversationWrapper.receiveTypingTimeout);
         } else {
           participants.push(participant);
         }
-        this._receiveTypingTimeout = setTimeout(() => {
+        conversationWrapper.receiveTypingTimeout = setTimeout(() => {
           participants.splice(participants.indexOf(participant), 1);
         }, 1500);
       }
