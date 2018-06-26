@@ -128,12 +128,24 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._searchInputSubscription.unsubscribe();
-    this._messageCreateSubscription.unsubscribe();
-    this._messageUpdateSubscription.unsubscribe();
-    this._messageReadSubscription.unsubscribe();
-    this._messageDeleteSubscription.unsubscribe();
-    this._typingSubscription.unsubscribe();
+    if (this._searchInputSubscription) {
+      this._searchInputSubscription.unsubscribe();
+    }
+    if (this._messageCreateSubscription) {
+      this._messageCreateSubscription.unsubscribe();
+    }
+    if (this._messageUpdateSubscription) {
+      this._messageUpdateSubscription.unsubscribe();
+    }
+    if (this._messageReadSubscription) {
+      this._messageReadSubscription.unsubscribe();
+    }
+    if (this._messageDeleteSubscription) {
+      this._messageDeleteSubscription.unsubscribe();
+    }
+    if (this._typingSubscription) {
+      this._typingSubscription.unsubscribe();
+    }
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {

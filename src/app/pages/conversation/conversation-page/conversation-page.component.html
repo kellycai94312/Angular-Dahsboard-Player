@@ -44,6 +44,9 @@
             'enableNotifications') | translate}}
           </button>
           <button class="dropdown-item" (click)="deleteMessages()">{{'deleteMessages' | translate}}</button>
+          <button class="dropdown-item" (click)="createChat()" *ngIf="conversation.discriminator == 'DIALOGUE'">
+            {{'createChat' | translate}}
+          </button>
           <button class="dropdown-item" (click)="quitChat()"
                   *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
             {{'quitChat' | translate}}

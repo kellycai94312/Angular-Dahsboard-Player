@@ -15,7 +15,7 @@ export class ChatModalDeleteMessageConfirmComponent implements OnInit {
   messages: Message[];
 
   @Input()
-  onDelete: (deleteForReceiver) => Promise<void>;
+  onDelete: (deleteForReceiver: boolean) => void;
 
   public canDeleteForReceiver: boolean = false;
   public deleteForReceiver: boolean = false;
