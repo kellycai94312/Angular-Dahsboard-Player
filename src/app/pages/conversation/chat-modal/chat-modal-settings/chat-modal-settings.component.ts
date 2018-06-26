@@ -21,10 +21,10 @@ export class ChatModalSettingsComponent implements OnInit {
   chat: Chat;
 
   @Input()
-  chatChange: (chat: Chat) => Promise<void>;
+  chatChange: (chat: Chat) => void;
 
   @Input()
-  logoChange: () => Promise<void>;
+  logoChange: () => void;
 
   constructor(public modal: NgbActiveModal,
               private _participantRestApiService: ParticipantRestApiService) {

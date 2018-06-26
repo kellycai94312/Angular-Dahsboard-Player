@@ -15,7 +15,6 @@ import {ImageComponent} from '../../components/image/image.component';
 export class NavBarComponent implements OnInit, OnDestroy {
 
   public person: Person;
-  public personProfileRouterLink: string;
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -40,11 +39,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // TODO: Use PersonViewModel
     const personId = this._authorizationService.session.personId;
     if (personId) {
-      this.personProfileRouterLink = '/person/' + personId;
       this.person = await this._profileService.getPerson(personId);
     } else {
       await this._router.navigate(['/registration/person']);
     }
+  }
+
+  public async openProfile() {
+    //reload children when on the same state /person/:id
+    if (this._router.url.indexOf('/person/') == 0) {
+      await this._router.navigate(['/person']);
+    }
+    await this._router.navigate(['/person', this._authorizationService.session.personId]);
   }
 
   ngOnDestroy(): void {

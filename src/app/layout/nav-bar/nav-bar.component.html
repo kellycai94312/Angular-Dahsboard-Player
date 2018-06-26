@@ -23,12 +23,8 @@
       </div>
       <div ngbDropdownMenu
            class="menu">
-        <button class="dropdown-item"
-                routerLink="{{personProfileRouterLink}}">{{'profile' | translate }}
-        </button>
-        <button class="dropdown-item"
-                (click)="signOut()">{{'signOut' | translate }}
-        </button>
+        <button class="dropdown-item" (click)="openProfile()">{{'profile' | translate }}</button>
+        <button class="dropdown-item" (click)="signOut()">{{'signOut' | translate}}</button>
       </div>
     </div>
   </nav>

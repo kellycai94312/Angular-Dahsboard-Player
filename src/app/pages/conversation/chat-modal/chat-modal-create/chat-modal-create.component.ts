@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {Person} from '../../../../data/remote/model/person';
 import {DxTextBoxComponent} from 'devextreme-angular';
@@ -21,6 +21,8 @@ import {ConversationQuery} from '../../../../data/remote/rest-api/query/conversa
 })
 export class ChatModalCreateComponent implements OnInit {
 
+  @Input()
+  public selectedPerson: Person;
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
   @ViewChild('itemsNgxVirtualScrollComponent')
@@ -43,6 +45,9 @@ export class ChatModalCreateComponent implements OnInit {
 
   async ngOnInit() {
     this._person = await this._authorizationService.getPerson();
+    if (this.selectedPerson) {
+      this.selectedItems.push(this.selectedPerson);
+    }
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.personQuery.name = value;
@@ -90,6 +95,12 @@ export class ChatModalCreateComponent implements OnInit {
         request.name = this.chatName;
         request.personIds = this.selectedItems.map(person => new IdRequest(person.id));
         const chat = await this._participantRestApiService.createChat(request);
+
+        //reload children when on the same state /conversation/:id
+        if (this._router.url.indexOf('/conversation/') == 0) {
+          await this._router.navigate(['/conversation']);
+        }
+
         await this._router.navigate(['/conversation', chat.id]);
         this.modal.dismiss();
       } else {

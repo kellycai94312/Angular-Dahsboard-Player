@@ -29,6 +29,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 import {SystemMessageContent} from '../../../data/remote/model/chat/message/system-message-content';
 import {SystemMessageContentType} from '../../../data/remote/model/chat/message/system-message-content-type';
+import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 
 @Component({
   selector: 'app-conversation-page',
@@ -250,18 +251,16 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public editParticipants() {
     const ref = this._modalService.open(ChatModalParticipantsComponent, {size: 'lg'});
-    ref.componentInstance.chat = this.conversation;
+    const componentInstance = ref.componentInstance as ChatModalParticipantsComponent;
+    componentInstance.chat = this.conversation as Chat;
   }
 
   public editChat() {
     const ref = this._modalService.open(ChatModalSettingsComponent, {size: 'lg'});
-    ref.componentInstance.chat = Object.assign({}, this.conversation);
-    ref.componentInstance.chatChange = (chat: Chat) => {
-      this.conversation = chat;
-    };
-    ref.componentInstance.logoChange = () => {
-      this.logo.refresh();
-    };
+    const componentInstance = ref.componentInstance as ChatModalSettingsComponent;
+    componentInstance.chat = Object.assign({}, this.conversation as Chat);
+    componentInstance.chatChange = (chat: Chat) => this.conversation = chat;
+    componentInstance.logoChange = () => this.logo.refresh();
   }
 
   public toggleSelectMessage = (message: Message) => {
@@ -292,8 +291,9 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   public async deleteSelectedMessages() {
     const messages: Message[] = this.selectedMessages.data;
     const ref = this._modalService.open(ChatModalDeleteMessageConfirmComponent);
-    ref.componentInstance.messages = messages;
-    ref.componentInstance.onDelete = async (deleteForReceiver: boolean) => {
+    const componentInstance = ref.componentInstance as ChatModalDeleteMessageConfirmComponent;
+    componentInstance.messages = messages;
+    componentInstance.onDelete = async (deleteForReceiver: boolean) => {
       const listRequest = new ListRequest(messages.map(message => new IdRequest(message.content.id)));
       await this._participantRestApiService.removeMessages(listRequest, {deleteForReceiver: deleteForReceiver}, {conversationId: this._conversationId});
       this.ngxVirtualScrollComponent.items = this.ngxVirtualScrollComponent.items.filter(item => !messages.includes(item));
@@ -304,9 +304,10 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public async deleteMessages() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
-    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
-    ref.componentInstance.onConfirm = async () => {
+    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
+    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    componentInstance.onConfirm = async () => {
       await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
       this.ngxVirtualScrollComponent.items = [];
       this.updateCanEditMessage();
@@ -319,11 +320,18 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         && message.sender.person.id == this.person.id).length == 1;
   }
 
+  public async createChat() {
+    const ref = this._modalService.open(ChatModalCreateComponent, {size: 'lg'});
+    const componentInstance = ref.componentInstance as ChatModalCreateComponent;
+    componentInstance.selectedPerson = this.recipient.person;
+  }
+
   public async quitChat() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
-    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
-    ref.componentInstance.onConfirm = async () => {
+    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
+    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
+    componentInstance.onConfirm = async () => {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
     };
@@ -331,9 +339,10 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public async deleteChat() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
-    ref.componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    ref.componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
-    ref.componentInstance.onConfirm = async () => {
+    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
+    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
+    componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
+    componentInstance.onConfirm = async () => {
       await this._participantRestApiService.deleteChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
     };
