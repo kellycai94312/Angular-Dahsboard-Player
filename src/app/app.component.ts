@@ -9,6 +9,10 @@ import {Locale} from './data/remote/misc/locale';
 import {NotificationService} from './shared/notification.service';
 import {ConversationService} from './shared/conversation.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
+import {MessageToastrService} from './components/message-toastr/message-toastr.service';
+import {Router} from '@angular/router';
+import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
+import {Message} from './data/remote/model/chat/message/message';
 
 @Component({
   selector: 'app-root',
@@ -28,7 +32,9 @@ export class AppComponent implements OnInit, OnDestroy {
               private _notificationService: NotificationService,
               private _toastrService: ToastrService,
               private _conversationService: ConversationService,
-              private _participantStompService: ParticipantStompService) {
+              private _participantStompService: ParticipantStompService,
+              private _messageToastrService: MessageToastrService,
+              private _router: Router) {
     this.subscribe();
 
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
@@ -38,12 +44,50 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
+    this._conversationService.messageCreateHandle.subscribe(x => {
+      if (x.message.receiver.enabled) {
+        if (this._router.url.indexOf('/conversation/') == 0) {
+          const conversationId = +this._router.url.substring('/conversation/'.length);
+          if (x.message.content.baseConversation.id != conversationId) {
+            this.buildToast(x.message);
+          }
+        } else if (this._router.url.indexOf('/conversation') < 0) {
+          this.buildToast(x.message);
+        }
+      }
+    });
+
+    this._conversationService.messageUpdateHandle.subscribe(async x => {
+      if (x.message.receiver.enabled) {
+        await this._messageToastrService.updateToast(x.message);
+      }
+    });
+
+    this._conversationService.messageDeleteHandle.subscribe(x => {
+      if (x.message.receiver.enabled) {
+        this._messageToastrService.deleteToast(x.message);
+      }
+    });
+
     this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
       this.subscribe();
     });
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
       this.unsubscribe();
     });
+  }
+
+  private buildToast(message: Message): void {
+    const toast = this._toastrService.show(null, null,
+      {
+        toastComponent: MessageToastrComponent,
+        disableTimeOut: true,
+        tapToDismiss: false
+      }
+    );
+    const instance = toast.toastRef.componentInstance as MessageToastrComponent;
+    instance.message = message;
+    this._messageToastrService.addToast(message, toast);
   }
 
   private subscribe(): void {

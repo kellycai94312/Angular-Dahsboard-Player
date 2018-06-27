@@ -268,7 +268,6 @@
   "removeContact": "Удалить контакт",
   "pleaseWait": "Пожалуйста, подождите",
   "contacts": "Контакты",
-  "conversations": "Беседы",
   "send": "Отправить",
   "writeMessage": "Напишите сообщение...",
   "sendError": "Ошибка при отправки",
@@ -295,6 +294,7 @@
   "areYouSure": "Вы уверены?",
   "deleteMessages": "Удалить сообщения",
   "editMessage": "Редактировать сообщение",
+  "newMessage": "Новое сообщение",
   "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника",
   "edited": "Изменено"
 }

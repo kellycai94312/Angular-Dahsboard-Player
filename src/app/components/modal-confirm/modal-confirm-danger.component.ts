@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-modal-confirm',
+  selector: 'app-modal-confirm-danger',
   templateUrl: './modal-confirm-danger.component.html',
   styleUrls: ['./modal-confirm-danger.component.scss']
 })
@@ -17,7 +17,8 @@ export class ModalConfirmDangerComponent implements OnInit {
   @Input()
   onConfirm: () => Promise<void>;
 
-  constructor(public modal: NgbActiveModal) { }
+  constructor(public modal: NgbActiveModal) {
+  }
 
   ngOnInit() {
   }

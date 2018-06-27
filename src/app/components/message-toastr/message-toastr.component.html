@@ -1,0 +1,17 @@
+<div class="d-flex flex-row pb-1 justify-content-between">
+  <p class="message-label">{{'newMessage' | translate}}</p>
+  <button class="btn btn-transparent input-height-sm" (click)="remove()">
+    <i class="fa fa-times"></i>
+  </button>
+</div>
+<div class="d-flex flex-row message-wrapper" (click)="onDataClick($event)">
+  <app-image [type]="'LOGO'"
+             [clazz]="'PERSON'"
+             [id]="message.sender.person.id"
+             [dimension]="'W80xH80'"
+             [format]="'CIRCLE'"></app-image>
+  <div class="d-flex flex-column ml-1 message">
+    <p class="sender">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
+    <p class="content" [innerHTML]="messageViewModel.body | urlParser"></p>
+  </div>
+</div>

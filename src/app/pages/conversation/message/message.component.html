@@ -1,4 +1,4 @@
-<div class="wrapper p-2" *ngIf="systemMessageViewModel">
+<div class="wrapper p-2" *ngIf="messageViewModel">
   <div class="d-flex flex-row" *ngIf="message.content.discriminator == 'MESSAGE_CONTENT'; else systemMessageContent">
     <div class="d-flex flex-row w-100">
       <app-image *ngIf="!onlyContent" [type]="'LOGO'"
@@ -9,10 +9,11 @@
       <div class="d-flex flex-column ml-2">
         <div *ngIf="!onlyContent" class="d-flex flex-row align-content-center">
           <a class="link" routerLink="/person/{{message.sender.person.id}}">{{message.sender.person.firstName}}</a>
-          <p class="date ml-2">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:'dd.MM.yyyy HH:mm') )
+          <p class="date ml-2">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:'dd.MM.yyyy
+            HH:mm') )
             : (message.content.created | date:'dd.MM.yyyy HH:mm')}}</p>
         </div>
-        <div [innerHTML]="systemMessageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
+        <div [innerHTML]="messageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
       </div>
     </div>
   </div>
@@ -21,8 +22,8 @@
     <div class="d-flex flex-row w-100">
       <div class="d-flex flex-column">
         <p *ngIf="!onlyContent" class="date">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</p>
-        <div *ngIf="systemMessageViewModel.body" class="system-message"
-             [innerHTML]="systemMessageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
+        <div *ngIf="messageViewModel.body" class="system-message"
+             [innerHTML]="messageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
       </div>
     </div>
   </ng-template>

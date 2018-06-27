@@ -32,7 +32,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     this.menuItems.push(this.createMenuItem('fa fa-bell', 'notifications', 'notification'));
     this.menuItems.push(this.createMenuItem('fa fa-address-book', 'contacts', 'connection'));
 
-    this.conversationMenuItem = this.createMenuItem('fa fa-comments', 'conversations', 'conversation');
+    this.conversationMenuItem = this.createMenuItem('fa fa-comments', 'messages.section', 'conversation');
     this.menuItems.push(this.conversationMenuItem);
   }
 
