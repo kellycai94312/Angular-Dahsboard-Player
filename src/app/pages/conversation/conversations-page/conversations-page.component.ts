@@ -57,6 +57,7 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
       }
       const messageWrapper = this.findMessageWrapper(x);
       if (messageWrapper) {
+        x.unread = messageWrapper.unread;
         this.updateItem(x);
       }
     });
