@@ -41,6 +41,7 @@ import {ConversationService} from './shared/conversation.service';
 
 import localeRu from '@angular/common/locales/ru';
 import {ImageModule} from './components/image/image.module';
+import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
 
 registerLocaleData(localeRu);
 
@@ -80,7 +81,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     }),
     FormsModule,
     RoundPipeModule.forRoot(),
-    ImageModule
+    ImageModule,
+    MessageToastrModule
   ],
   providers: [
     LayoutService,

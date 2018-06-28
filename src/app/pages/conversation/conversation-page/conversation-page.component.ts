@@ -30,6 +30,7 @@ import {BaseMessageContentType} from '../../../data/remote/model/chat/message/ba
 import {SystemMessageContent} from '../../../data/remote/model/chat/message/system-message-content';
 import {SystemMessageContentType} from '../../../data/remote/model/chat/message/system-message-content-type';
 import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
+import {MessageToastrService} from '../../../components/message-toastr/message-toastr.service';
 
 @Component({
   selector: 'app-conversation-page',
@@ -71,6 +72,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
               private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService,
               private _translateService: TranslateService,
+              private _messageToastrService: MessageToastrService,
               private _modalService: NgbModal,
               private _router: Router) {
     this._conversationId = this._activatedRoute.snapshot.params.id;
@@ -165,6 +167,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.person = await this._authorizationService.getPerson();
     try {
       this.conversation = await this._participantRestApiService.getConversation({conversationId: this._conversationId});
+      this._messageToastrService.clearToasts(this.conversation.id);
       this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: this._conversationId})).value;
       switch (this.conversation.discriminator) {
         case BaseConversationType.DIALOGUE:

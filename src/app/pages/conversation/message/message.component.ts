@@ -2,7 +2,7 @@ import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core'
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
 import {Message} from '../../../data/remote/model/chat/message/message';
-import {SystemMessageViewModel} from '../../../data/local/view-model/conversation/system-message-view-model';
+import {MessageViewModel} from '../../../data/local/view-model/conversation/message-view-model';
 import {Router} from '@angular/router';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
@@ -20,7 +20,7 @@ export class MessageComponent implements OnInit, DoCheck {
   @Input()
   public onlyContent: boolean = false;
 
-  public systemMessageViewModel: SystemMessageViewModel;
+  public messageViewModel: MessageViewModel;
   public person: Person;
   public updated: Date;
   private differ: any;
@@ -56,8 +56,8 @@ export class MessageComponent implements OnInit, DoCheck {
   }
 
   private async buildMessage() {
-    this.systemMessageViewModel = new SystemMessageViewModel(this.message);
-    await this.systemMessageViewModel.build();
+    this.messageViewModel = new MessageViewModel(this.message);
+    await this.messageViewModel.build();
 
     if (this.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
       this.updated = (this.message.content as MessageContent).updated;

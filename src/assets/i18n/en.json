@@ -267,7 +267,6 @@
   "removeContact": "Remove contact",
   "pleaseWait": "Please, wait",
   "contacts": "Contacts",
-  "conversations": "Conversations",
   "send": "Send",
   "writeMessage": "Write a message...",
   "sendError": "Send error",
@@ -294,6 +293,7 @@
   "areYouSure": "Are you sure?",
   "deleteMessages": "Delete messages",
   "editMessage": "Edit message",
+  "newMessage": "New message",
   "chatMustContainOneParticipant": "Chat must contain at least one participant",
   "edited": "Edited"
 }
