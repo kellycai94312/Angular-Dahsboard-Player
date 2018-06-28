@@ -5,7 +5,7 @@ import {Message} from '../../data/remote/model/chat/message/message';
 @Injectable()
 export class MessageToastrService {
 
-  private readonly messages;
+  private readonly messages: Map<number, Array<ActiveToast<any>>>;
 
   constructor() {
     this.messages = new Map<number, Array<ActiveToast<any>>>();
@@ -31,6 +31,7 @@ export class MessageToastrService {
       while (index--) {
         if (toasts[index].toastRef.componentInstance.message.id == message.id) {
           await toasts[index].toastRef.componentInstance.buildMessageViewModal(message);
+          break;
         }
       }
     }
@@ -45,6 +46,7 @@ export class MessageToastrService {
         if (toasts[index].toastRef.componentInstance.message.id == message.id) {
           toasts[index].toastRef.manualClose();
           toasts.splice(index, 1);
+          break;
         }
       }
     }
