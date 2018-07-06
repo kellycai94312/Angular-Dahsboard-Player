@@ -6,10 +6,10 @@ import {AppHelper} from '../../../utils/app-helper';
 import {Person} from '../../../data/remote/model/person';
 import {BaseConversation} from '../../../data/remote/model/chat/conversation/base/base-conversation';
 import {Chat} from '../../../data/remote/model/chat/conversation/chat';
-import {ImageClass} from '../../../data/remote/misc/image-class';
 import {ConversationWrapper} from '../conversation-wrapper';
 import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-conversation',
@@ -22,7 +22,7 @@ export class ConversationComponent implements OnInit {
   public conversationWrapper: ConversationWrapper;
 
   public conversation: BaseConversation;
-  public conversationImageClazz: ImageClass;
+  public conversationImageClazz: FileClass;
   public conversationImageId: number;
   public conversationName: string;
   public senderPerson: Person;
@@ -42,7 +42,7 @@ export class ConversationComponent implements OnInit {
 
       switch (this.conversation.discriminator) {
         case BaseConversationType.CHAT:
-          this.conversationImageClazz = ImageClass.CHAT;
+          this.conversationImageClazz = FileClass.CHAT;
           this.conversationImageId = this.conversation.id;
           this.conversationName = (<Chat> this.conversation).name;
       }
@@ -56,7 +56,7 @@ export class ConversationComponent implements OnInit {
 
       switch (this.conversation.discriminator) {
         case BaseConversationType.DIALOGUE:
-          this.conversationImageClazz = ImageClass.PERSON;
+          this.conversationImageClazz = FileClass.PERSON;
           if (this._authorizationService.session.personId == messageWrapper.message.sender.person.id) {
             this.conversationImageId = messageWrapper.message.receiver.person.id;
             this.conversationName = this.getPersonFullName(messageWrapper.message.receiver.person);
@@ -66,7 +66,7 @@ export class ConversationComponent implements OnInit {
           }
           break;
         case BaseConversationType.CHAT:
-          this.conversationImageClazz = ImageClass.CHAT;
+          this.conversationImageClazz = FileClass.CHAT;
           this.conversationImageId = this.conversation.id;
           this.conversationName = (<Chat> this.conversation).name;
           if (!this.senderPerson) {

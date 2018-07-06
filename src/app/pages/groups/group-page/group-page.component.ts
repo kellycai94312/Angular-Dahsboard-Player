@@ -7,10 +7,10 @@ import {GroupPersonState} from '../../../data/local/group-person-state';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
 import {Tab} from '../../../data/local/tab';
 import {GroupService} from '../group.service';
-import {Image} from '../../../data/remote/model/image';
-import {ImageClass} from '../../../data/remote/misc/image-class';
-import {ImageType} from '../../../data/remote/model/image-type';
 import {ImageComponent} from '../../../components/image/image.component';
+import {Image} from '../../../data/remote/model/file/image/image';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-group-page',
@@ -93,15 +93,15 @@ export class GroupPageComponent implements OnInit {
   }
 
   public async onLogoChange(event) {
+    // TODO: Upload in image component
     const fileList: FileList = event.target.files;
-
     if (fileList.length > 0) {
       const file: File = fileList[0];
       const image: Image = new Image();
-      image.clazz = ImageClass.GROUP;
+      image.clazz = FileClass.GROUP;
       image.objectId = this.group.id;
       image.type = ImageType.LOGO;
-      await this._participantRestApiService.uploadImage(file, image);
+      await this._participantRestApiService.uploadFile(image, [file]);
 
       this.logo.refresh();
     }

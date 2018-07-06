@@ -15,7 +15,6 @@ import {UserRole} from '../model/user-role';
 import {ListRequest} from '../request/list-request';
 import {SportType} from '../model/sport-type';
 import {HttpClient} from '@angular/common/http';
-import {Image} from '../model/image';
 import {Address} from '../model/address';
 import {PersonAnthropometry} from '../model/person-anthropometry';
 import {EmailRequest} from '../request/email-request';
@@ -71,6 +70,10 @@ import {Participant} from '../model/chat/participant';
 import {ConversationQuery} from './query/conversation-query';
 import {ChatRequest} from '../request/chat-request';
 import {IdRequest} from '../request/id-request';
+import {PersonRefereeCategory} from '../model/referee-category/person-referee-category';
+import {BaseFile} from '../model/file/base/base-file';
+import {ImageQuery} from './query/file/image-query';
+import {DocumentQuery} from './query/file/document-query';
 
 @Injectable()
 @RestParams({
@@ -187,6 +190,23 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}/dialogue'
   })
   getDialogue: IRestMethod<{ personId: number }, Dialogue>;
+
+  //#endregion
+
+  //#region RefereeCategory
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/refereeCategory/{!sportTypeId}'
+  })
+  getPersonRefereeCategories: IRestMethod<{ personId: number, sportTypeId: number }, PersonRefereeCategory[]>;
+
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/refereeCategory/{!sportTypeId}'
+  })
+  updatePersonRefereeCategories: IRestMethodStrict<PersonRefereeCategory, any, { personId: number, sportTypeId: number }, PersonRefereeCategory>;
 
   //#endregion
 
@@ -587,14 +607,27 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Image
+  //#region File
 
-  uploadImage(file: File, image: Image): Promise<Image> {
-    const formData: FormData = new FormData();
-    formData.append('file', file, file.name);
-    formData.append('image', new Blob([JSON.stringify(image)], {type: 'application/json'}));
-    return this.http.post<Image>(`${PropertyConstant.restUrl}/image`, formData, {withCredentials: true})
-      .toPromise();
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/file/download/image',
+  })
+  downloadImage: IRestMethod<ImageQuery, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/file/download/document',
+  })
+  downloadDocument: IRestMethod<DocumentQuery, void>;
+
+  uploadFile<T extends BaseFile>(baseFile: T, files: File[]): Promise<T[]> {
+    const formData = new FormData();
+    for (let i = 0; i < files.length; i++) {
+      formData.append('file', files[i], files[i].name);
+    }
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+    return this.http.post<T[]>(`${PropertyConstant.restUrl}/file`, formData, {withCredentials: true}).toPromise();
   }
 
   //#endregion

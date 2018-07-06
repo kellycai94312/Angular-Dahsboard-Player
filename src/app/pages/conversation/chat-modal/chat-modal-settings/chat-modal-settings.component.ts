@@ -1,11 +1,11 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {Image} from '../../../../data/remote/model/image';
-import {ImageType} from '../../../../data/remote/model/image-type';
-import {ImageClass} from '../../../../data/remote/misc/image-class';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ImageComponent} from '../../../../components/image/image.component';
+import {Image} from '../../../../data/remote/model/file/image/image';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 
 @Component({
   selector: 'app-chat-modal-edit',
@@ -34,14 +34,15 @@ export class ChatModalSettingsComponent implements OnInit {
   }
 
   public async onLogoChange(event) {
+    // TODO: Upload in image component
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       const image: Image = new Image();
-      image.clazz = ImageClass.CHAT;
+      image.clazz = FileClass.CHAT;
       image.objectId = this.chat.id;
       image.type = ImageType.LOGO;
-      await this._participantRestApiService.uploadImage(file, image);
+      await this._participantRestApiService.uploadFile(image, [file]);
       this.logo.refresh();
       await this.logoChange();
     }

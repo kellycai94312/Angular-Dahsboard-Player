@@ -5,8 +5,6 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {UserRole} from '../../../data/remote/model/user-role';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {SportType} from '../../../data/remote/model/sport-type';
-import {Image} from '../../../data/remote/model/image';
-import {ImageClass} from '../../../data/remote/misc/image-class';
 import {ImageService} from '../../../shared/image.service';
 import {PersonService} from './person.service';
 import {LocalStorageService} from '../../../shared/local-storage.service';
@@ -18,7 +16,6 @@ import {ListRequest} from '../../../data/remote/request/list-request';
 import notify from 'devextreme/ui/notify';
 import {UserRoleItemComponent} from '../../../components/user-role-item/user-role-item.component';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
-import {ImageType} from '../../../data/remote/model/image-type';
 import {ModalSelectPageComponent} from '../../../components/modal-select-page/modal-select-page.component';
 import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
 import {PageContainer} from '../../../data/remote/bean/page-container';
@@ -27,6 +24,9 @@ import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {ToastrService} from 'ngx-toastr';
 import {ImageComponent} from '../../../components/image/image.component';
+import {Image} from '../../../data/remote/model/file/image/image';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-person-page',
@@ -103,14 +103,15 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   };
 
   async onLogoChange(event) {
+    // TODO: Upload in image component
     const fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       const file: File = fileList[0];
       const image: Image = new Image();
-      image.clazz = ImageClass.PERSON;
+      image.clazz = FileClass.PERSON;
       image.objectId = this.person.id;
       image.type = ImageType.LOGO;
-      await this.participantRestApiService.uploadImage(file, image);
+      await this.participantRestApiService.uploadFile(image, [file]);
       this.logo.refresh();
       this._navbarService.emitLogoChange(true);
     }
