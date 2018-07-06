@@ -71,6 +71,7 @@ import {Participant} from '../model/chat/participant';
 import {ConversationQuery} from './query/conversation-query';
 import {ChatRequest} from '../request/chat-request';
 import {IdRequest} from '../request/id-request';
+import {PersonRefereeCategory} from '../model/referee-category/person-referee-category';
 
 @Injectable()
 @RestParams({
@@ -187,6 +188,23 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}/dialogue'
   })
   getDialogue: IRestMethod<{ personId: number }, Dialogue>;
+
+  //#endregion
+
+  //#region RefereeCategory
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/refereeCategory/{!sportTypeId}'
+  })
+  getPersonRefereeCategories: IRestMethod<{ personId: number, sportTypeId: number }, PersonRefereeCategory[]>;
+
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/refereeCategory/{!sportTypeId}'
+  })
+  updatePersonRefereeCategories: IRestMethodStrict<PersonRefereeCategory, any, { personId: number, sportTypeId: number }, PersonRefereeCategory>;
 
   //#endregion
 
