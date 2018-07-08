@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Person } from '../../../data/remote/model/person';
-import { Subject } from 'rxjs/Subject';
-import { SportType } from '../../../data/remote/model/sport-type';
-import { UserRole } from '../../../data/remote/model/user-role';
-import { GroupPerson } from '../../../data/remote/model/group/group-person';
+import {Injectable} from '@angular/core';
+import {Person} from '../../../data/remote/model/person';
+import {Subject} from 'rxjs/Subject';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {UserRole} from '../../../data/remote/model/user-role';
+import {GroupPerson} from '../../../data/remote/model/group/group-person';
 
 @Injectable()
 export class PersonService {
@@ -30,6 +30,7 @@ export class PersonService {
   baseGroupChangeEmitted$ = this.baseGroupChange.asObservable();
 
   emitSportTypeSelect(change: SportType) {
+    this.sportTypeSelectDefault = change;
     this.sportTypeSelect.next(change);
   }
 

@@ -75,14 +75,15 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
     this.tabs = [];
     this.tabs.push(this.createPersonTab('persons.person.personal.section', 'personal', []));
-    this.tabs.push(this.createPersonTab('persons.person.anthropometry.section', 'anthropometry', [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(this.createPersonTab('persons.person.ranks.section', 'ranks', [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(this.createPersonTab('persons.person.achievements.section', 'achievements', [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
-    this.tabs.push(this.createPersonTab('persons.person.myRegion.section', 'my_region', [UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
+    this.tabs.push(this.createPersonTab('persons.person.anthropometry.section', 'anthropometry', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
+    this.tabs.push(this.createPersonTab('persons.person.ranks.section', 'ranks', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
+    this.tabs.push(this.createPersonTab('persons.person.achievements.section', 'achievements', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
+    this.tabs.push(this.createPersonTab('persons.person.myRegion.section', 'my_region', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
     this.tabs.push(this.createPersonTab('persons.person.contact.section', 'contact', []));
-    this.tabs.push(this.createPersonTab('persons.person.testsResults.section', 'tests_results', [UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(this.createPersonTab('events', 'events', [], true));
+    this.tabs.push(this.createPersonTab('persons.person.testsResults.section', 'tests_results', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
+    this.tabs.push(this.createPersonTab('events', 'events', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR], true));
     this.tabs.push(this.createPersonTab('persons.person.groups.section', 'groups', [], true));
+    this.tabs.push(this.createPersonTab('categories', 'category', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER], true));
 
     this.baseGroupSubscription = this._personService.baseGroupChangeEmitted$.subscribe(x => {
       this.baseGroup = x;
