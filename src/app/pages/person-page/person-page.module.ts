@@ -58,6 +58,8 @@ import {RoundPipe} from '../../pipes/round.pipe';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
+import {RefereeCategoryModalComponent} from './person-page/category/referee-category-modal/referee-category-modal.component';
 
 @NgModule({
   imports: [
@@ -115,7 +117,9 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     RanksComponent,
     RankModalComponent,
     TestsResultsHistoryComponent,
-    AnthropometryHistoryComponent
+    AnthropometryHistoryComponent,
+    RefereeCategoriesComponent,
+    RefereeCategoryModalComponent
   ],
   providers: [
     PersonService,
@@ -127,7 +131,8 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     ModalSelectPageComponent,
     EventModalComponent,
     NoteModalComponent,
-    RankModalComponent
+    RankModalComponent,
+    RefereeCategoryModalComponent
   ]
 })
 export class PersonPageModule {

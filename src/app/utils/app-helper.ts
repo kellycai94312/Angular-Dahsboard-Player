@@ -106,4 +106,8 @@ export class AppHelper {
     return pageContainer;
   }
 
+  public cloneObject<T>(obj: T): T {
+    return <T>JSON.parse(JSON.stringify(obj));
+  }
+
 }

@@ -295,5 +295,12 @@
   "editMessage": "Edit message",
   "newMessage": "New message",
   "chatMustContainOneParticipant": "Chat must contain at least one participant",
-  "edited": "Edited"
+  "edited": "Edited",
+  "categories": "Categories",
+  "category": "Category",
+  "assignedBy": "Assigned by",
+  "documentNumber": "Document number",
+  "documentType": "Document type",
+  "identityNumber": "Identity number",
+  "uploadFile": "Upload file"
 }

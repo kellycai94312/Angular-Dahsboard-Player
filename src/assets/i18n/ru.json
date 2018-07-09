@@ -296,5 +296,12 @@
   "editMessage": "Редактировать сообщение",
   "newMessage": "Новое сообщение",
   "chatMustContainOneParticipant": "Чат должен включать минимум одного собеседника",
-  "edited": "Изменено"
+  "edited": "Изменено",
+  "categories": "Категории",
+  "category": "Категория",
+  "assignedBy": "Кем присвоено",
+  "documentNumber": "Номер документа",
+  "documentType": "Тип документа",
+  "identityNumber": "Номер удостоверения",
+  "uploadFile": "Загрузить файл"
 }

@@ -3,5 +3,6 @@ export enum FileClass {
   GROUP,
   EXERCISE,
   TEST,
-  CHAT
+  CHAT,
+  PERSON_REFEREE_CATEGORY
 }

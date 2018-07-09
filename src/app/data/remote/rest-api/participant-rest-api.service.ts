@@ -74,6 +74,8 @@ import {PersonRefereeCategory} from '../model/referee-category/person-referee-ca
 import {BaseFile} from '../model/file/base/base-file';
 import {ImageQuery} from './query/file/image-query';
 import {DocumentQuery} from './query/file/document-query';
+import {Image} from '../model/file/image/image';
+import {Document} from '../model/file/document/document';
 
 @Injectable()
 @RestParams({
@@ -206,7 +208,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Put,
     path: '/person/{!personId}/refereeCategory/{!sportTypeId}'
   })
-  updatePersonRefereeCategories: IRestMethodStrict<PersonRefereeCategory, any, { personId: number, sportTypeId: number }, PersonRefereeCategory>;
+  updatePersonRefereeCategory: IRestMethodStrict<PersonRefereeCategory, any, { personId: number, sportTypeId: number }, PersonRefereeCategory>;
 
   //#endregion
 
@@ -621,13 +623,45 @@ export class ParticipantRestApiService extends Rest {
   })
   downloadDocument: IRestMethod<DocumentQuery, void>;
 
-  uploadFile<T extends BaseFile>(baseFile: T, files: File[]): Promise<T[]> {
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/file/image',
+  })
+  getImages: IRestMethod<ImageQuery, PageContainer<Image>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/file/document',
+  })
+  getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
+
+  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      formData.append('file', files[i], files[i].name);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        const item = files[i];
+        if (!item) {
+          continue;
+        }
+        formData.append('file', item, item.name);
+      }
     }
+
     formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
     return this.http.post<T[]>(`${PropertyConstant.restUrl}/file`, formData, {withCredentials: true}).toPromise();
+  }
+
+  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
+    const formData = new FormData();
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+    return this.http.put<T>(`${PropertyConstant.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
+  }
+
+  getFileUrl(documentQuery: DocumentQuery): string {
+    return `${PropertyConstant.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}&type=${documentQuery.type}`;
   }
 
   //#endregion

@@ -1,0 +1,35 @@
+<table class="table table-bordered table-hover table-sm mt-2">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-2">{{ 'name' | translate }}</th>
+    <th class="col-3">{{ 'assignedBy' | translate }}</th>
+    <th class="col-1">{{ 'date' | translate }}</th>
+    <th class="col-2">{{ 'documentNumber' | translate }}</th>
+    <th class="col-2">{{ 'documentType' | translate }}</th>
+    <th class="col-2">{{ 'identityNumber' | translate }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of personRefereeCategoryViewModels"
+      (dblclick)="onEdit(item)"
+      class="d-flex">
+    <td class="col-2">{{item?.data.refereeCategory.name}}</td>
+    <td class="col-3">
+      <div *ngIf="item.data.personAssignedBy">
+        {{item.data.personAssignedBy.firstName+' '+item.data.personAssignedBy.lastName}}
+      </div>
+    </td>
+    <td class="col-1">{{item?.data.assignDate | date:'dd.MM.yyyy'}}</td>
+    <td class="col-2">
+      <div *ngIf="item?.document?.resource; else elseTemplate">
+        <a [href]="item.documentUrl">{{item?.document?.number}}</a>
+      </div>
+      <ng-template #elseTemplate>
+        {{item?.document?.number}}
+      </ng-template>
+    </td>
+    <td class="col-2">{{item?.document?.type}}</td>
+    <td class="col-2">{{item?.data?.certificationNumber}}</td>
+  </tr>
+  </tbody>
+</table>
