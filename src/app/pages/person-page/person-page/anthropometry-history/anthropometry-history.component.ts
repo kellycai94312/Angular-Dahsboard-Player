@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PersonService} from '../person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -16,7 +16,7 @@ import {ISubscription} from 'rxjs-compat/Subscription';
   templateUrl: './anthropometry-history.component.html',
   styleUrls: ['./anthropometry-history.component.scss']
 })
-export class AnthropometryHistoryComponent implements OnInit {
+export class AnthropometryHistoryComponent implements OnInit, OnDestroy {
 
   public anthropometries: PersonAnthropometry[];
   public readonly query: AnthropometryQuery;
@@ -47,6 +47,10 @@ export class AnthropometryHistoryComponent implements OnInit {
     if (this.isNumber) {
       this.precision = this.measure.measureUnit.precision;
     }
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._paramsSubscription);
   }
 
   public setup = async (isNumeric: boolean = false, count: number = PropertyConstant.pageSize) => {

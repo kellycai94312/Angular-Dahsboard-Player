@@ -1,13 +1,14 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnDestroy} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 import {ISubscription} from 'rxjs-compat/Subscription';
+import {AppHelper} from '../../utils/app-helper';
 
 @Component({
   selector: 'app-busy-wrapper',
   templateUrl: './busy-wrapper.component.html',
   styleUrls: ['./busy-wrapper.component.scss']
 })
-export class BusyWrapperComponent {
+export class BusyWrapperComponent implements OnDestroy {
 
   @Input()
   public startDebounce: number;
@@ -17,8 +18,12 @@ export class BusyWrapperComponent {
   private _isLocked: boolean;
   private _startBusySubscription: ISubscription;
 
-  public constructor() {
+  public constructor(private _appHelper: AppHelper) {
     this.startDebounce = 200;
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._startBusySubscription);
   }
 
   public setState(busy: boolean) {
