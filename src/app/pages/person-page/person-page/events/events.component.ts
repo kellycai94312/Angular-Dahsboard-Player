@@ -22,8 +22,8 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 })
 export class EventsComponent implements OnInit, OnDestroy {
 
-  public readonly isEditAllow: boolean;
   public readonly pageSize: number;
+  public readonly allowEdit: boolean;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -40,17 +40,19 @@ export class EventsComponent implements OnInit, OnDestroy {
               private _personService: PersonService,
               private _appHelper: AppHelper,
               private _modalService: NgbModal) {
+    this.allowEdit = this._personService.allowEdit();
+
     this.pageSize = PropertyConstant.pageSize;
-    this.isEditAllow = _personService.shared.isEditAllow;
     this.trainingQuery = new TrainingQuery();
     this.trainingQuery.from = 0;
     this.trainingQuery.count = this.pageSize;
-    this.trainingQuery.personId = _personService.shared.person.id;
-    if (this._personService.userRoleSelectDefault) {
-      this.trainingQuery.userRoleEnum = this._personService.userRoleSelectDefault.userRoleEnum;
+    this.trainingQuery.personId = this._personService.personViewModel.data.id;
+
+    if (this._personService.selectedUserRole) {
+      this.trainingQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
     }
 
-    this.userRoleSubscription = this._personService.userRoleSelectEmitted$.subscribe(async x => {
+    this.userRoleSubscription = this._personService.userRoleHandler.subscribe(async x => {
       if (x) {
         this.trainingQuery.userRoleEnum = x.userRoleEnum;
       } else {
@@ -70,8 +72,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.searchDxTextBoxComponent.textChange.unsubscribe();
-    this.userRoleSubscription.unsubscribe();
+    this._appHelper.unsubscribe(this.searchDxTextBoxComponent.textChange);
+    this._appHelper.unsubscribe(this.userRoleSubscription);
   }
 
   //#region Filter

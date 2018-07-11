@@ -18,8 +18,8 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 })
 export class GroupsComponent implements OnInit, OnDestroy {
 
-  public readonly isEditAllow: boolean;
   public readonly pageSize: number;
+  public readonly canEdit: boolean;
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
@@ -31,54 +31,52 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public selectedPublicUserRole: UserRole;
   public selectedBaseGroup: GroupPerson;
 
-  private readonly userRoleSelectSubscription: ISubscription;
-  private readonly baseGroupSelectSubscription: ISubscription;
+  private readonly _userRoleSubscription: ISubscription;
+  private readonly _baseGroupSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {
-    this.isEditAllow = _personService.shared.isEditAllow;
+    this.canEdit = this._personService.allowEdit();
     this.pageSize = PropertyConstant.pageSize;
 
     this.groupQuery = new GroupQuery();
     this.groupQuery.from = 0;
     this.groupQuery.count = PropertyConstant.pageSize;
-    this.groupQuery.id = _personService.shared.person.id;
+    this.groupQuery.id = this._personService.personViewModel.data.id;
 
-    this.userRoleSelectSubscription = this._personService.userRoleSelectEmitted$.subscribe(async userRole => {
+    this._userRoleSubscription = this._personService.userRoleHandler.subscribe(async userRole => {
       this.selectedPublicUserRole = userRole;
-
       if (userRole) {
         this.groupQuery.userRoleId = userRole.id;
       } else {
-        if (this._personService.userRoleSelectDefault) {
-          this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
-          this.groupQuery.userRoleId = this._personService.userRoleSelectDefault.id;
+        if (this._personService.selectedUserRole) {
+          this.selectedPublicUserRole = this._personService.selectedUserRole;
+          this.groupQuery.userRoleId = this._personService.selectedUserRole.id;
         } else {
           delete this.groupQuery.userRoleId;
         }
       }
-
       await this.updateItems();
     });
-    this.baseGroupSelectSubscription = this._personService.baseGroupSelectEmitted$.subscribe(groupPerson => {
+    this._baseGroupSubscription = this._personService.baseGroupHandler.subscribe(groupPerson => {
       this.selectedBaseGroup = groupPerson;
     });
   }
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.selectedBaseGroup = this._personService.baseGroupSelectDefault;
-    this.selectedPublicUserRole = this._personService.userRoleSelectDefault;
+    this.selectedBaseGroup = this._personService.baseGroup;
+    this.selectedPublicUserRole = this._personService.selectedUserRole;
 
-    if (this._personService.userRoleSelectDefault) {
-      this.groupQuery.userRoleId = this._personService.userRoleSelectDefault.id;
+    if (this._personService.selectedUserRole) {
+      this.groupQuery.userRoleId = this._personService.selectedUserRole.id;
       await this.updateItems();
     }
   }
 
   ngOnDestroy(): void {
-    this.userRoleSelectSubscription.unsubscribe();
-    this.baseGroupSelectSubscription.unsubscribe();
+    this._userRoleSubscription.unsubscribe();
+    this._baseGroupSubscription.unsubscribe();
   }
 
   //#region Filter
@@ -102,8 +100,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public async onChangeGroupPerson(groupPerson: GroupPerson) {
     const index = this.ngxVirtualScrollComponent.items.indexOf(groupPerson);
     if (index === -1) {
-      this.selectedBaseGroup = groupPerson;
-      this._personService.emitBaseGroupChange(this.selectedBaseGroup);
+      this._personService.setBaseGroup(groupPerson);
     } else {
       this.ngxVirtualScrollComponent.items.splice(index, 1);
     }
@@ -111,7 +108,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   loadData = async (from: number, searchText: string) => {
     return await this._participantRestApiService.getPersonGroups({
-      id: this._personService.shared.person.id,
+      id: this._personService.personViewModel.data.id,
       from: from,
       count: this.pageSize,
       name: searchText,

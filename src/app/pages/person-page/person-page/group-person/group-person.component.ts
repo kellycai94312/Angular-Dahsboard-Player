@@ -12,6 +12,7 @@ import {UserRole} from '../../../../data/remote/model/user-role';
   styleUrls: ['./group-person.component.scss']
 })
 export class GroupPersonComponent {
+
   @Input()
   public data: GroupPerson;
 
@@ -24,19 +25,19 @@ export class GroupPersonComponent {
   @Output()
   public change: EventEmitter<GroupPerson>;
 
-  public isEditAllow: boolean;
+  public allowEdit: boolean;
 
   public pageSize = PropertyConstant.pageSize;
 
-  constructor(private  _participantRestApiService: ParticipantRestApiService,
+  constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService) {
-    this.isEditAllow = _personService.shared.isEditAllow;
+    this.allowEdit = this._personService.allowEdit();
     this.change = new EventEmitter<GroupPerson>();
   }
 
   loadData = async (from: number, searchText: string) => {
     const container = await this._participantRestApiService.getPersonGroups({
-      id: this._personService.shared.person.id,
+      id: this._personService.personViewModel.data.id,
       from: from,
       count: this.pageSize,
       name: searchText,

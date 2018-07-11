@@ -15,14 +15,14 @@ import {AppHelper} from '../../../../utils/app-helper';
 export class AnthropometryComponent implements OnInit, OnDestroy {
 
   public anthropometry: PersonAnthropometry[];
-  public allowEdit: boolean;
+  public readonly allowEdit: boolean;
 
   private readonly _sportTypeSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
-    this.allowEdit = _personService.allowEdit();
+    this.allowEdit = this._personService.allowEdit();
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(sportType => this.load(sportType));
   }
 

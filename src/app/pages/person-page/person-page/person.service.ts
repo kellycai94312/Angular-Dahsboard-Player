@@ -105,6 +105,11 @@ export class PersonService implements OnDestroy {
     this.sportTypeHandler.next(sportType);
   }
 
+  public setBaseGroup(baseGroup: GroupPerson) {
+    this.baseGroup = baseGroup;
+    this.baseGroupHandler.next(baseGroup);
+  }
+
   public subscribe() {
   }
 

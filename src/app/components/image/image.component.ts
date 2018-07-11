@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {ImageService} from '../../shared/image.service';
 import {ImageDimension} from '../../data/local/image-dimension';
 import {ImageFormat} from '../../data/local/image-format';
@@ -10,7 +10,7 @@ import {FileClass} from '../../data/remote/model/file/base/file-class';
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
-export class ImageComponent implements OnInit {
+export class ImageComponent implements OnInit, OnChanges {
 
   @Input()
   type: ImageType;
@@ -44,6 +44,11 @@ export class ImageComponent implements OnInit {
       type: this.type
     });
     this.style = this._imageService.getImageStyle(this.format, this.dimension);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // TODO: Optimize refresh image data
+    this.refresh();
   }
 
 }

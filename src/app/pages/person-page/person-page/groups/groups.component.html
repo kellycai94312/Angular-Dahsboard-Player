@@ -1,15 +1,15 @@
-<div *ngIf="isEditAllow || selectedBaseGroup">
+<div *ngIf="canEdit || selectedBaseGroup">
   <label for="selectedBaseGroup">{{'persons.person.groups.baseGroup' | translate}}</label>
   <table class="table table-sm">
     <thead>
     <tr class="d-flex">
       <th class="col-1">{{'image' | translate}}</th>
-      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">{{'name' | translate}}</th>
+      <th [ngClass]="{'col-2' : canEdit, 'col-3' : !canEdit}">{{'name' | translate}}</th>
       <th class="col-2">{{'groupType' | translate}}</th>
       <th class="col-2">{{'sportRole' | translate}}</th>
       <th class="col-2">{{'sportType' | translate}}</th>
       <th class="col-2">{{'mentor' | translate}}</th>
-      <th class="col-1" *ngIf="isEditAllow"></th> <!--remove btn-->
+      <th class="col-1" *ngIf="canEdit"></th> <!--remove btn-->
     </tr>
     </thead>
     <tbody>
@@ -17,7 +17,7 @@
                       class="p-0"
                       [(data)]="selectedBaseGroup"
                       [role]="selectedPublicUserRole"
-                      [baseGroup]="isEditAllow"
+                      [baseGroup]="canEdit"
                       (change)="onChangeGroupPerson($event)"></app-group-person>
     </tbody>
   </table>
@@ -46,12 +46,12 @@
     <thead>
     <tr class="d-flex">
       <th class="col-1">{{'image' | translate}}</th>
-      <th [ngClass]="{'col-2' : isEditAllow, 'col-3' : !isEditAllow}">{{'name' | translate}}</th>
+      <th [ngClass]="{'col-2' : canEdit, 'col-3' : !canEdit}">{{'name' | translate}}</th>
       <th class="col-2">{{'groupType' | translate}}</th>
       <th class="col-2">{{'sportRole' | translate}}</th>
       <th class="col-2">{{'sportType' | translate}}</th>
       <th class="col-2">{{'mentor' | translate}}</th>
-      <th *ngIf="isEditAllow"
+      <th *ngIf="canEdit"
           class="col-1"></th>
     </tr>
     </thead>
@@ -69,7 +69,7 @@
     </ngx-virtual-scroll>
     </tbody>
   </table>
-  <div *ngIf="isEditAllow"
+  <div *ngIf="canEdit"
        class="d-flex flex-row mt-2">
     <div class="d-flex flex-column">
       <div class="d-flex flex-row">
