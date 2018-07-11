@@ -81,7 +81,7 @@ export class RefereeCategoryModalComponent {
       if (this.personRefereeCategoryViewModel.document.id) {
         document = await this._participantRestApiService.updateFile(this.personRefereeCategoryViewModel.document, this._file);
       } else {
-        this.personRefereeCategoryViewModel.document.objectId = this.personRefereeCategoryViewModel.data.id;
+        this.personRefereeCategoryViewModel.document.objectId = personRefereeCategory.id;
         this.personRefereeCategoryViewModel.document.clazz = FileClass.PERSON_REFEREE_CATEGORY;
         document = await this._participantRestApiService.uploadFile(this.personRefereeCategoryViewModel.document, [this._file])[0];
       }

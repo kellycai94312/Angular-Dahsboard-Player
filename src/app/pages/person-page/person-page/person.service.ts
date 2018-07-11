@@ -122,7 +122,13 @@ export class PersonService implements OnDestroy {
    * @deprecated
    */
   shared: {
+    /**
+     * @deprecated
+     */
     person: Person;
+    /**
+     * @deprecated
+     */
     isEditAllow: boolean;
   };
   /**
@@ -141,21 +147,33 @@ export class PersonService implements OnDestroy {
    * @deprecated
    */
   private sportTypeSelect = new Subject<SportType>();
+  /**
+   * @deprecated
+   */
   sportTypeSelectEmitted$ = this.sportTypeSelect.asObservable();
   /**
    * @deprecated
    */
   private userRoleSelect = new Subject<UserRole>();
+  /**
+   * @deprecated
+   */
   userRoleSelectEmitted$ = this.userRoleSelect.asObservable();
   /**
    * @deprecated
    */
   private baseGroupSelect = new Subject<GroupPerson>();
+  /**
+   * @deprecated
+   */
   baseGroupSelectEmitted$ = this.baseGroupSelect.asObservable();
   /**
    * @deprecated
    */
   private baseGroupChange = new Subject<GroupPerson>();
+  /**
+   * @deprecated
+   */
   baseGroupChangeEmitted$ = this.baseGroupChange.asObservable();
 
   /**
