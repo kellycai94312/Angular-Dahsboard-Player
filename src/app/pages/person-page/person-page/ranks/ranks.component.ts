@@ -19,11 +19,11 @@ export class RanksComponent implements OnInit {
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _modalService: NgbModal) {
-    this.isEditAllow = _personService.shared.isEditAllow;
+    this.isEditAllow = this._personService.allowEdit();
   }
 
   async ngOnInit() {
-    this.personRanks = await this._participantRestApiService.getRanks({id: this._personService.shared.person.id});
+    this.personRanks = await this._participantRestApiService.getRanks({id: this._personService.personViewModel.data.id});
   }
 
   public async editRank(index: number) {

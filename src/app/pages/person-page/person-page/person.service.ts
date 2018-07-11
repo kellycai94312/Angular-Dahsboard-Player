@@ -7,7 +7,6 @@ import {Image} from '../../../data/remote/model/file/image/image';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
-import {Person} from '../../../data/remote/model/person';
 import {AppHelper} from '../../../utils/app-helper';
 
 @Injectable()
@@ -42,12 +41,6 @@ export class PersonService implements OnDestroy {
     this.selectedUserRole = null;
     this.selectedSportType = null;
     this.baseGroup = null;
-
-    const person = new Person();
-    person.id = 1;
-    person.firstName = '';
-    person.lastName = '';
-    this.shared = {person: person, isEditAllow: true};
   }
 
   ngOnDestroy(): void {
@@ -121,98 +114,5 @@ export class PersonService implements OnDestroy {
     // TODO: Add expression
     return true;
   }
-
-  //#region Deprecated
-  /**
-   * @deprecated
-   */
-  shared: {
-    /**
-     * @deprecated
-     */
-    person: Person;
-    /**
-     * @deprecated
-     */
-    isEditAllow: boolean;
-  };
-  /**
-   * @deprecated
-   */
-  sportTypeSelectDefault: SportType;
-  /**
-   * @deprecated
-   */
-  userRoleSelectDefault: UserRole;
-  /**
-   * @deprecated
-   */
-  baseGroupSelectDefault: GroupPerson;
-  /**
-   * @deprecated
-   */
-  private sportTypeSelect = new Subject<SportType>();
-  /**
-   * @deprecated
-   */
-  sportTypeSelectEmitted$ = this.sportTypeSelect.asObservable();
-  /**
-   * @deprecated
-   */
-  private userRoleSelect = new Subject<UserRole>();
-  /**
-   * @deprecated
-   */
-  userRoleSelectEmitted$ = this.userRoleSelect.asObservable();
-  /**
-   * @deprecated
-   */
-  private baseGroupSelect = new Subject<GroupPerson>();
-  /**
-   * @deprecated
-   */
-  baseGroupSelectEmitted$ = this.baseGroupSelect.asObservable();
-  /**
-   * @deprecated
-   */
-  private baseGroupChange = new Subject<GroupPerson>();
-  /**
-   * @deprecated
-   */
-  baseGroupChangeEmitted$ = this.baseGroupChange.asObservable();
-
-  /**
-   * @deprecated
-   */
-  emitSportTypeSelect(change: SportType) {
-    this.sportTypeSelectDefault = change;
-    this.sportTypeSelect.next(change);
-  }
-
-  /**
-   * @deprecated
-   */
-  emitUserRoleSelect(change: UserRole) {
-    this.userRoleSelectDefault = change;
-    this.userRoleSelect.next(change);
-  }
-
-  /**
-   * @deprecated
-   */
-  emitBaseGroupSelect(change: GroupPerson) {
-    this.baseGroupSelectDefault = change;
-    this.baseGroupSelect.next(change);
-  }
-
-  /**
-   * @deprecated
-   */
-  emitBaseGroupChange(change: GroupPerson) {
-    this.baseGroupSelectDefault = change;
-    this.baseGroupChange.next(change);
-  }
-
-  //#endregion
 
 }

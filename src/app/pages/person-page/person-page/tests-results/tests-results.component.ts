@@ -39,16 +39,16 @@ export class TestsResultsComponent implements OnInit {
               private _personService: PersonService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper) {
-    this.isEditAllow = _personService.shared.isEditAllow;
+    this.isEditAllow = this._personService.allowEdit();
 
     this.measureTemplateQuery = new MeasureTemplateQuery();
     this.measureTemplateQuery.from = 0;
     this.measureTemplateQuery.count = PropertyConstant.pageSize;
-    this.measureTemplateQuery.personId = this._personService.shared.person.id;
+    this.measureTemplateQuery.personId = this._personService.personViewModel.data.id;
   }
 
   async ngOnInit() {
-    this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.shared.person.id})).list;
+    this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.measureTemplateQuery.name = value;
@@ -62,14 +62,14 @@ export class TestsResultsComponent implements OnInit {
       const groupId = result.group.id;
       const list = result.exerciseValues.list;
       const container = await this._participantRestApiService.getExerciseValue({
-        personId: this._personService.shared.person.id,
+        personId: this._personService.personViewModel.data.id,
         groupId: groupId,
         from: list.length
       });
       this._appHelper.pushItemsInList(list.length, list, container);
     } else {
       const container = await this._participantRestApiService.getExerciseValue({
-        personId: this._personService.shared.person.id,
+        personId: this._personService.personViewModel.data.id,
         from: this.personMeasureValues.length
       });
       this._appHelper.pushItemsInList(this.personMeasureValues.length, this.personMeasureValues, container);
@@ -95,10 +95,10 @@ export class TestsResultsComponent implements OnInit {
     componentInstance.onSave = async selectedItems => {
       try {
         await this._participantRestApiService.updatePersonMeasureTemplate(new ListRequest(selectedItems));
-        this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.shared.person.id})).list;
+        this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
         ref.dismiss();
       } catch (e) {
-        // TODO: Show message
+        await this._appHelper.showErrorMessage('saveError');
       }
     };
     await componentInstance.initialize(personMeasures);
