@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
 import {PersonService} from '../person.service';
-import {Person} from '../../../../data/remote/model/person';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {Address} from '../../../../data/remote/model/address';
-import {ProfileService} from '../../../../shared/profile.service';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
+import {Person} from '../../../../data/remote/model/person';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-personal',
@@ -17,38 +16,31 @@ import {UserRole} from '../../../../data/remote/model/user-role';
 })
 export class PersonalComponent implements OnInit {
 
-  public readonly isEditAllow: boolean;
-  public readonly person: Person;
   public readonly pageSize: number;
   public readonly sexEnumValues: SexEnum[];
 
-  public userRoles: UserRole[];
+  public allowEdit: boolean;
+  public person: Person;
   public baseUserRole: UserRole;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService,
-              private _profileService: ProfileService) {
-    this.isEditAllow = _personService.shared.isEditAllow;
+  constructor(public personService: PersonService,
+              private _participantRestApiService: ParticipantRestApiService,
+              private  _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
-    this.person = _personService.shared.person;
     this.sexEnumValues = Object.keys(SexEnum)
       .filter(e => parseInt(e, 10) >= 0)
       .map(k => SexEnum[k]);
   }
 
   async ngOnInit() {
-    // load person address
-    this._participantRestApiService.getPersonAddress({id: this.person.id})
-      .then(address => this.person.address = address)
-      .catch(() => this.person.address = new Address());
-
-    // TODO:
-    this.userRoles = await this._participantRestApiService.getUserRolesByUser({id: this.person.user.id});
-
+    this.person = this.personService.personViewModel.data;
+    this.allowEdit = this.personService.allowEdit();
     try {
-      this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: this.person.user.id});
+      if (this.person && this.person.id) {
+        this.person.address = await this._participantRestApiService.getPersonAddress({id: this.person.id});
+        this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: this.person.user.id});
+      }
     } catch (e) {
-      this.baseUserRole = null;
     }
   }
 
@@ -61,15 +53,17 @@ export class PersonalComponent implements OnInit {
     this.person.address.city = null;
   }
 
-  async savePersonal() {
-    await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
-    this._profileService.emitFullNameChange(this.person);
-
+  public async onSave() {
     try {
+      const person = await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
+      this.personService.personViewModel.update(person);
+
+      // TODO: this._profileService.emitFullNameChange(this.person);
       if (this.baseUserRole) {
         await this._participantRestApiService.postBaseUserRoleByUser({id: this.baseUserRole.id});
       }
     } catch (e) {
+      await this._appHelper.showErrorMessage('saveError');
     }
   }
 

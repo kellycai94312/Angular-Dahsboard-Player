@@ -8,19 +8,17 @@ export class TrainingPersonViewModel extends BaseViewModel<TrainingPerson> {
 
   constructor(data: TrainingPerson) {
     super(data);
-    this.update(data, true);
   }
 
-  public update(data: TrainingPerson, initialize: boolean = false): void {
-    if (!initialize) {
-      super.update(data, initialize);
-    }
+  public update(data: TrainingPerson): void {
+    super.update(data);
+
     this.personViewModel = new PersonViewModel(data.person);
   }
 
-  initialize() {
+  async initialize() {
     super.initialize();
-    this.personViewModel.initialize();
+    await this.personViewModel.initialize();
   }
 
 }

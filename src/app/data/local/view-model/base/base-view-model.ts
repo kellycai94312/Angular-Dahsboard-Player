@@ -16,7 +16,7 @@ export class BaseViewModel<T> {
     this.update(data);
   }
 
-  public update(data: T, initialize: boolean = false) {
+  public update(data: T) {
     this.data = data;
   }
 

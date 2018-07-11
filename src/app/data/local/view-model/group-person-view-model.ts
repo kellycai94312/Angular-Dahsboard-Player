@@ -8,13 +8,11 @@ export class GroupPersonViewModel extends BaseViewModel<GroupPerson> {
 
   constructor(data: GroupPerson) {
     super(data);
-    this.update(data, true);
   }
 
-  update(data: GroupPerson, initialize: boolean = false): void {
-    if (!initialize) {
-      super.update(data, initialize);
-    }
+  update(data: GroupPerson): void {
+    super.update(data);
+
     this.personViewModel = new PersonViewModel(data.person);
   }
 

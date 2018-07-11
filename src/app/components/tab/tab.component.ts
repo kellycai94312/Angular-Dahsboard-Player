@@ -1,12 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {Tab} from '../../data/local/tab';
+import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
+import {BusyWrapperComponent} from '../busy-wrapper/busy-wrapper.component';
 
 @Component({
   selector: 'app-tab',
   templateUrl: './tab.component.html',
   styleUrls: ['./tab.component.scss']
 })
-export class TabComponent implements OnInit {
+export class TabComponent {
+
+  @ViewChild(BusyWrapperComponent)
+  public busyWrapperComponent: BusyWrapperComponent;
 
   @Input()
   public tabs: Tab[];
@@ -17,10 +22,22 @@ export class TabComponent implements OnInit {
   @Input()
   public visible: Function;
 
-  constructor() {
-  }
+  public busy: boolean;
 
-  ngOnInit() {
+  constructor(private _router: Router) {
+    this._router.events.subscribe(event => {
+      if (!this.busyWrapperComponent) {
+        return;
+      }
+
+      if (event instanceof NavigationStart) {
+        this.busyWrapperComponent.setState(true);
+      } else if (event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError) {
+        this.busyWrapperComponent.setState(false);
+      }
+    });
   }
 
   onClickApply = () => {

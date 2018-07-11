@@ -4,7 +4,7 @@
       <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
       <dx-text-box id="lastName"
                    [(value)]="person.lastName"
-                   [readOnly]="!isEditAllow">
+                   [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
@@ -16,7 +16,7 @@
       <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
       <dx-text-box id="firstName"
                    [(value)]="person.firstName"
-                   [readOnly]="!isEditAllow">
+                   [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
@@ -29,7 +29,7 @@
       <dx-text-box id="middleName"
                    [(value)]="person.patronymic"
                    [showClearButton]="true"
-                   [readOnly]="!isEditAllow">
+                   [readOnly]="!allowEdit">
       </dx-text-box>
     </div>
   </div>
@@ -42,7 +42,7 @@
                    [(value)]="person.birthDate"
                    type="date"
                    class="w-100"
-                   [readOnly]="!isEditAllow">
+                   [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
@@ -55,7 +55,7 @@
       <dx-select-box id="sex"
                      [items]="sexEnumValues"
                      [(value)]="person.sex"
-                     [readOnly]="!isEditAllow">
+                     [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
@@ -65,12 +65,12 @@
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
       <label>{{'baseUserRole' | translate}}</label>
-      <dx-select-box [items]="userRoles"
+      <dx-select-box [items]="personService.userRoles"
                      [(value)]="baseUserRole"
                      displayExpr="name"
                      acceptCustomValue="true"
                      showClearButton="true"
-                     [readOnly]="!isEditAllow">
+                     [readOnly]="!allowEdit">
       </dx-select-box>
     </div>
   </div>
@@ -83,7 +83,7 @@
                       [loadData]="loadCountries"
                       [(model)]="person.address.country"
                       [pageSize]="pageSize"
-                      [disabled]="!isEditAllow"
+                      [disabled]="!allowEdit"
                       (onChange)="onCountryChange($event)"
                       [getKey]="getKey"
                       [getName]="getName"
@@ -97,7 +97,7 @@
                       [loadData]="loadRegions"
                       [(model)]="person.address.region"
                       [pageSize]="pageSize"
-                      [disabled]="!isEditAllow || person.address.country == null"
+                      [disabled]="!allowEdit || !person.address.country"
                       (onChange)="onRegionChange($event)"
                       [getKey]="getKey"
                       [getName]="getName"
@@ -111,7 +111,7 @@
                       [loadData]="loadCities"
                       [(model)]="person.address.city"
                       [pageSize]="pageSize"
-                      [disabled]="!isEditAllow || person.address.region == null"
+                      [disabled]="!allowEdit || !person.address.region"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="Select a city"
@@ -119,8 +119,8 @@
     </app-input-select>
   </div>
 </div>
-<button *ngIf="isEditAllow"
+<button *ngIf="allowEdit"
         type="button"
         class="btn btn-outline-success mt-2"
-        (click)="savePersonal()">{{'persons.person.save' | translate}}
+        (click)="onSave()">{{'persons.person.save' | translate}}
 </button>

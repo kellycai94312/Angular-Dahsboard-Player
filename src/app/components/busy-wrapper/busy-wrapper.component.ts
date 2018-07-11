@@ -1,27 +1,46 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'app-busy-wrapper',
   templateUrl: './busy-wrapper.component.html',
   styleUrls: ['./busy-wrapper.component.scss']
 })
-export class BusyWrapperComponent implements OnInit {
+export class BusyWrapperComponent {
+
+  @Input()
+  public startDebounce: number;
 
   public isBusy: boolean;
 
   private _isLocked: boolean;
+  private _startBusySubscription: ISubscription;
 
-  constructor() {
+  public constructor() {
+    this.startDebounce = 200;
   }
 
-  ngOnInit() {
+  public setState(busy: boolean) {
+    if (busy) {
+      if (!this.isBusy && (!this._startBusySubscription || this._startBusySubscription.closed)) {
+        this._startBusySubscription = Observable.of([]).delay(this.startDebounce)
+          .subscribe(() => {
+            this.isBusy = true;
+          });
+      }
+    } else {
+      if (this._startBusySubscription) {
+        this._startBusySubscription.unsubscribe();
+      }
+      this.isBusy = false;
+    }
   }
 
   public async invoke(event: Event, callback: Function, parameter: any): Promise<void> {
     if (callback && !this._isLocked) {
       this._isLocked = true;
-      const subscription = Observable.of([]).delay(200)
+      const subscription = Observable.of([]).delay(this.startDebounce)
         .subscribe(() => {
           this.isBusy = true;
         });
