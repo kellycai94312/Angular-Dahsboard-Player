@@ -60,6 +60,7 @@ import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
 import {RefereeCategoryModalComponent} from './person-page/category/referee-category-modal/referee-category-modal.component';
+import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
 
 @NgModule({
   imports: [
@@ -125,7 +126,8 @@ import {RefereeCategoryModalComponent} from './person-page/category/referee-cate
     PersonService,
     MyRegionService,
     DatePipe,
-    RoundPipe
+    RoundPipe,
+    CanDeactivateGuard
   ],
   entryComponents: [
     ModalSelectPageComponent,

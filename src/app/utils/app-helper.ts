@@ -1,10 +1,11 @@
-import {PageContainer} from '../data/remote/bean/page-container';
-import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {DatePipe} from '@angular/common';
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
-import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {ToastrService} from 'ngx-toastr';
+import {ISubscription} from 'rxjs-compat/Subscription';
+import {PageContainer} from '../data/remote/bean/page-container';
+import {IdentifiedObject} from '../data/remote/base/identified-object';
+import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 
 @Injectable()
 export class AppHelper {
@@ -108,6 +109,12 @@ export class AppHelper {
 
   public cloneObject<T>(obj: T): T {
     return <T>JSON.parse(JSON.stringify(obj));
+  }
+
+  public unsubscribe(obj: ISubscription) {
+    if (obj) {
+      obj.unsubscribe();
+    }
   }
 
 }

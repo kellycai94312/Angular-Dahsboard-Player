@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measure-template-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -9,18 +9,21 @@ import {PersonService} from '../person.service';
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'app-tests-results-history',
   templateUrl: './tests-results-history.component.html',
   styleUrls: ['./tests-results-history.component.scss']
 })
-export class TestsResultsHistoryComponent implements OnInit {
+export class TestsResultsHistoryComponent implements OnInit, OnDestroy {
   public measureValues: ExerciseExecMeasureValue[];
   public readonly query: MeasureTemplateQuery;
   public exerciseMeasure: ExerciseMeasure;
   public isNumber: boolean;
   public precision: number;
+
+  private readonly _paramsSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,
@@ -29,6 +32,25 @@ export class TestsResultsHistoryComponent implements OnInit {
               private _appHelper: AppHelper) {
     this.measureValues = [];
     this.query = new MeasureTemplateQuery();
+    this.query.personId = this._personService.personViewModel.data.id;
+    this._paramsSubscription = this._route.params.subscribe(params => {
+      this.query.exerciseMeasureId = +params.id;
+    });
+  }
+
+  async ngOnInit() {
+    this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({
+      exerciseMeasureId: this.query.exerciseMeasureId
+    });
+    const measureUnit = this.exerciseMeasure.measure.measureUnit;
+    this.isNumber = measureUnit.unitTypeEnum.toString() === UnitTypeEnum[UnitTypeEnum.NUMBER];
+    if (this.isNumber) {
+      this.precision = measureUnit.precision;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._paramsSubscription);
   }
 
   public setup = async (isNumeric: boolean = false, count: number = PropertyConstant.pageSize) => {
@@ -73,20 +95,5 @@ export class TestsResultsHistoryComponent implements OnInit {
   public getValue = (item: ExerciseExecMeasureValue) => {
     return this.isNumber ? this._roundPipe.transform(parseFloat(item.value), this.precision) : item.value;
   };
-
-  async ngOnInit() {
-    this.query.personId = this._personService.shared.person.id;
-    this._route.params.subscribe(params => {
-      this.query.exerciseMeasureId = +params.id;
-    });
-    this.exerciseMeasure = await this._participantRestApiService.getExerciseMeasureById({
-      exerciseMeasureId: this.query.exerciseMeasureId
-    });
-    const measureUnit = this.exerciseMeasure.measure.measureUnit;
-    this.isNumber = measureUnit.unitTypeEnum.toString() === UnitTypeEnum[UnitTypeEnum.NUMBER];
-    if (this.isNumber) {
-      this.precision = measureUnit.precision;
-    }
-  }
 
 }

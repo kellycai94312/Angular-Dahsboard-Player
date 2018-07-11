@@ -1,52 +1,55 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ISubscription} from 'rxjs-compat/Subscription';
 import {PersonAnthropometry} from '../../../../data/remote/model/person-anthropometry';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {PersonService} from '../person.service';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {SportType} from '../../../../data/remote/model/sport-type';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-anthropometry',
   templateUrl: './anthropometry.component.html',
   styleUrls: ['./anthropometry.component.scss']
 })
-export class AnthropometryComponent implements OnInit {
+export class AnthropometryComponent implements OnInit, OnDestroy {
 
   public anthropometry: PersonAnthropometry[];
-  public isEditAllow: boolean;
+  public readonly allowEdit: boolean;
 
-  private _sportTypeId: number;
+  private readonly _sportTypeSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService) {
-    this.isEditAllow = _personService.shared.isEditAllow;
-    _personService.sportTypeSelectEmitted$.subscribe(sportType => this.load(sportType));
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
+    this.allowEdit = this._personService.allowEdit();
+    this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(sportType => this.load(sportType));
   }
 
   async ngOnInit() {
-    if (this._personService.sportTypeSelectDefault) {
-      this._sportTypeId = this._personService.sportTypeSelectDefault.id;
-      await this.load(this._personService.sportTypeSelectDefault);
+    if (this._personService.selectedSportType) {
+      await this.load(this._personService.selectedSportType);
     }
   }
 
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._sportTypeSubscription);
+  }
+
   public async onSave() {
-    if (this._sportTypeId) {
-      this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {sportTypeId: this._sportTypeId});
+    if (this._personService.selectedSportType) {
+      this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {sportTypeId: this._personService.selectedSportType.id});
     }
   }
 
   private async load(sportType: SportType) {
-    this._personService.sportTypeSelectDefault = sportType;
-    if (!sportType) {
-      this._sportTypeId = null;
-      this.anthropometry = [];
-    } else {
-      this._sportTypeId = sportType.id;
+    if (sportType) {
       this.anthropometry = await this._participantRestApiService.getAnthropometry({
-        id: this._personService.shared.person.id,
-        sportTypeId: this._sportTypeId
+        id: this._personService.personViewModel.data.id,
+        sportTypeId: sportType.id
       });
+    } else {
+      this.anthropometry = [];
     }
   }
 

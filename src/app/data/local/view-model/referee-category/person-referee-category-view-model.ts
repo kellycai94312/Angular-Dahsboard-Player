@@ -22,7 +22,7 @@ export class PersonRefereeCategoryViewModel extends BaseViewModel<PersonRefereeC
 
   public documentUpdate(document: Document) {
     this.document = document;
-    this.documentUrl = this.participantRestApiService.getFileUrl({clazz: this.document.clazz, objectId: this.document.objectId, type: this.document.type});
+    this.documentUrl = this.participantRestApiService.getDocument(this.document.id);
   }
 
 }

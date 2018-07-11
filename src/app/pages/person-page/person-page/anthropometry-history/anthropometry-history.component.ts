@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PersonService} from '../person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -9,19 +9,22 @@ import {AnthropometryQuery} from '../../../../data/remote/rest-api/query/anthrop
 import {PersonAnthropometry} from '../../../../data/remote/model/person-anthropometry';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'app-anthropometry-history',
   templateUrl: './anthropometry-history.component.html',
   styleUrls: ['./anthropometry-history.component.scss']
 })
-export class AnthropometryHistoryComponent implements OnInit {
+export class AnthropometryHistoryComponent implements OnInit, OnDestroy {
 
   public anthropometries: PersonAnthropometry[];
   public readonly query: AnthropometryQuery;
   public measure: Measure;
   public isNumber: boolean;
   public precision: number;
+
+  private readonly _paramsSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,
@@ -30,6 +33,24 @@ export class AnthropometryHistoryComponent implements OnInit {
               private _appHelper: AppHelper) {
     this.anthropometries = [];
     this.query = new AnthropometryQuery();
+    this.query.personId = this._personService.personViewModel.data.id;
+    this._paramsSubscription = this._route.params.subscribe(params => {
+      this.query.measureId = +params.id;
+    });
+  }
+
+  async ngOnInit() {
+    this.measure = await this._participantRestApiService.getMeasureById({
+      id: this.query.measureId
+    });
+    this.isNumber = this.measure.measureUnit.unitTypeEnum.toString() == UnitTypeEnum[UnitTypeEnum.NUMBER];
+    if (this.isNumber) {
+      this.precision = this.measure.measureUnit.precision;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._paramsSubscription);
   }
 
   public setup = async (isNumeric: boolean = false, count: number = PropertyConstant.pageSize) => {
@@ -74,19 +95,5 @@ export class AnthropometryHistoryComponent implements OnInit {
   public getValue = (item: PersonAnthropometry) => {
     return this.isNumber ? this._roundPipe.transform(parseFloat(item.value), this.precision) : item.value;
   };
-
-  async ngOnInit() {
-    this.query.personId = this._personService.shared.person.id;
-    this._route.params.subscribe(params => {
-      this.query.measureId = +params.id;
-    });
-    this.measure = await this._participantRestApiService.getMeasureById({
-      id: this.query.measureId
-    });
-    this.isNumber = this.measure.measureUnit.unitTypeEnum.toString() == UnitTypeEnum[UnitTypeEnum.NUMBER];
-    if (this.isNumber) {
-      this.precision = this.measure.measureUnit.precision;
-    }
-  }
 
 }

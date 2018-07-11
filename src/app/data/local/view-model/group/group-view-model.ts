@@ -5,7 +5,6 @@ export class GroupViewModel extends BaseViewModel<Group> {
 
   constructor(data: Group) {
     super(data);
-    this.update(data, true);
   }
 
   initialize() {
@@ -13,10 +12,8 @@ export class GroupViewModel extends BaseViewModel<Group> {
     this.update(this.data);
   }
 
-  update(data: Group, initialize: boolean = false): void {
-    if (!initialize) {
-      super.update(data, initialize);
-    }
+  update(data: Group): void {
+    super.update(data);
 
     if (this.data) {
       this.url = `/group/${this.data.id}`;

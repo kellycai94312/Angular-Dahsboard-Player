@@ -661,7 +661,15 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getFileUrl(documentQuery: DocumentQuery): string {
-    return `${PropertyConstant.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}&type=${documentQuery.type}`;
+    let url = `${PropertyConstant.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
+    if (documentQuery.type) {
+      url += `&type=${documentQuery.type}`;
+    }
+    return url;
+  }
+
+  getDocument(documentId: number): string {
+    return `${PropertyConstant.restUrl}/file/download/document/${documentId}`;
   }
 
   //#endregion

@@ -1,55 +1,118 @@
-import {Injectable} from '@angular/core';
-import {Person} from '../../../data/remote/model/person';
+import {Injectable, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {UserRole} from '../../../data/remote/model/user-role';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {Image} from '../../../data/remote/model/file/image/image';
+import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
+import {ISubscription} from 'rxjs-compat/Subscription';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Injectable()
-export class PersonService {
+export class PersonService implements OnDestroy {
 
-  shared: {
-    person: Person;
-    isEditAllow: boolean;
-  };
+  public personViewModel: PersonViewModel;
+  public userRoles: UserRole[];
+  public sportTypes: SportType[];
 
-  sportTypeSelectDefault: SportType;
-  userRoleSelectDefault: UserRole;
-  baseGroupSelectDefault: GroupPerson;
+  public selectedUserRole: UserRole;
+  public selectedSportType: SportType;
+  // BaseGroup by SelectedUserRole
+  public baseGroup: GroupPerson;
 
-  private sportTypeSelect = new Subject<SportType>();
-  sportTypeSelectEmitted$ = this.sportTypeSelect.asObservable();
+  public readonly userRoleHandler: Subject<UserRole>;
+  public readonly sportTypeHandler: Subject<SportType>;
+  public readonly baseGroupHandler: Subject<GroupPerson>;
+  public readonly logoHandler: Subject<Image>;
 
-  private userRoleSelect = new Subject<UserRole>();
-  userRoleSelectEmitted$ = this.userRoleSelect.asObservable();
+  private _userRoleSubscription: ISubscription;
 
-  private baseGroupSelect = new Subject<GroupPerson>();
-  baseGroupSelectEmitted$ = this.baseGroupSelect.asObservable();
+  public constructor(private _participantRestApiService: ParticipantRestApiService,
+                     private _appHelper: AppHelper) {
+    this.userRoleHandler = new Subject<UserRole>();
+    this.sportTypeHandler = new Subject<SportType>();
+    this.baseGroupHandler = new Subject<GroupPerson>();
+    this.logoHandler = new Subject<Image>();
 
-  private baseGroupChange = new Subject<GroupPerson>();
-  baseGroupChangeEmitted$ = this.baseGroupChange.asObservable();
+    this.userRoles = [];
+    this.sportTypes = [];
 
-  emitSportTypeSelect(change: SportType) {
-    this.sportTypeSelectDefault = change;
-    this.sportTypeSelect.next(change);
+    this.selectedUserRole = null;
+    this.selectedSportType = null;
+    this.baseGroup = null;
   }
 
-  emitUserRoleSelect(change: UserRole) {
-    this.userRoleSelectDefault = change;
-    this.userRoleSelect.next(change);
+  ngOnDestroy(): void {
+    this.unsubscribe();
   }
 
-  emitBaseGroupSelect(change: GroupPerson) {
-    this.baseGroupSelectDefault = change;
-    this.baseGroupSelect.next(change);
+  public async initialize(personId: number): Promise<PersonViewModel> {
+    try {
+      const person = await this._participantRestApiService.getPerson({id: personId});
+      this.personViewModel = new PersonViewModel(person);
+      await this.personViewModel.initialize();
+      if (person && person.id) {
+        if (person.user && person.user.id) {
+          this.userRoles = await  this._participantRestApiService.getUserRolesByUser({id: person.user.id});
+          if (this.userRoles.length) {
+            this.setUserRole(this.userRoles[0]);
+          }
+        }
+
+        this.sportTypes = await  this._participantRestApiService.getPersonSportTypes({id: person.id});
+        if (this.sportTypes.length) {
+          this.setSportType(this.sportTypes[0]);
+        }
+
+        this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
+          if (value) {
+            try {
+              this.baseGroup = await this._participantRestApiService.getBaseGroup({
+                id: this.personViewModel.data.id,
+                userRoleId: value.id
+              });
+            } catch (e) {
+              this.baseGroup = null;
+            }
+          } else {
+            this.baseGroup = null;
+          }
+          this.baseGroupHandler.next(this.baseGroup);
+        });
+      }
+
+      return this.personViewModel;
+    } catch (e) {
+    }
+    return null;
   }
 
-  emitBaseGroupChange(change: GroupPerson) {
-    this.baseGroupSelectDefault = change;
-    this.baseGroupChange.next(change);
+  public setUserRole(userRole: UserRole) {
+    this.selectedUserRole = userRole;
+    this.userRoleHandler.next(userRole);
   }
 
-  constructor() {
+  public setSportType(sportType: SportType) {
+    this.selectedSportType = sportType;
+    this.sportTypeHandler.next(sportType);
+  }
+
+  public setBaseGroup(baseGroup: GroupPerson) {
+    this.baseGroup = baseGroup;
+    this.baseGroupHandler.next(baseGroup);
+  }
+
+  public subscribe() {
+  }
+
+  public unsubscribe() {
+    this._appHelper.unsubscribe(this._userRoleSubscription);
+  }
+
+  public allowEdit(): boolean {
+    // TODO: Add expression
+    return true;
   }
 
 }
