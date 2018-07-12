@@ -36,9 +36,8 @@
                  [dimension]="'W130xH130'"></app-group>
     </div>
   </div>
-  <app-busy-button *ngIf="allowEditConnection"
-                   [nameKey]="editContactNameKey"
-                   [click]="onEditContactClick"></app-busy-button>
+  <ngx-split-button [items]="splitButtonItems">
+  </ngx-split-button>
   <!-- roles -->
   <div class="d-flex flex-row mt-2">
     <div class="align-self-center">

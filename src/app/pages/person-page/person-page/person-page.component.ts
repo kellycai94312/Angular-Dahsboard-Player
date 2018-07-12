@@ -21,8 +21,9 @@ import {ListRequest} from '../../../data/remote/request/list-request';
 import {UserRole} from '../../../data/remote/model/user-role';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {Person} from '../../../data/remote/model/person';
 import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
+import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
+import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
 
 @Component({
   selector: 'app-person-page',
@@ -39,10 +40,11 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   public readonly tabs: PersonTab[];
   public allowEdit: boolean;
-  public allowEditConnection: boolean;
   public hasConnection: boolean;
-  public editContactNameKey: string;
   public personViewModel: PersonViewModel;
+  public splitButtonItems: SplitButtonItem[];
+
+  private _connectionSplitButtonItem: SplitButtonItem;
 
   private readonly _baseGroupSubscription: ISubscription;
 
@@ -109,7 +111,64 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       this.tabs.push(new PersonTab('requisites', 'requisites', [], false));
     }
 
-    await this.connectionInitialize(this.personService.personViewModel.data);
+    const authPerson = await this._authorizationService.getPerson();
+    this.splitButtonItems = [];
+    const myProfile = this.personService.personViewModel.data.id == authPerson.id;
+    if (!myProfile) {
+      this.splitButtonItems.push({
+        nameKey: 'sendMessage',
+        callback: async () => {
+          try {
+            const dialogue: Dialogue = await this._participantRestApiService.getDialogue({personId: this.personService.personViewModel.data.id});
+            await this._router.navigate(['/conversation', dialogue.id]);
+          } catch (e) {
+          }
+        },
+        default: true,
+        order: 1
+      });
+    }
+
+    if (!myProfile) {
+      try {
+        this._connectionSplitButtonItem = new SplitButtonItem();
+        this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.personService.personViewModel.data.id})).value;
+        this._connectionSplitButtonItem.nameKey = this.hasConnection ? 'removeContact' : 'addContact';
+        this._connectionSplitButtonItem.callback = async () => {
+          try {
+            if (this.hasConnection) {
+              await this._participantRestApiService.removeConnection({id: this.personService.personViewModel.data.id});
+            } else {
+              await this._participantRestApiService.createConnection({id: this.personService.personViewModel.data.id});
+            }
+            this.hasConnection = !this.hasConnection;
+            this._connectionSplitButtonItem.nameKey = this.hasConnection ? 'removeContact' : 'addContact';
+          } catch (e) {
+            await this._appHelper.showErrorMessage('error');
+          }
+
+        };
+        this._connectionSplitButtonItem.default = true;
+        this._connectionSplitButtonItem.order = 1;
+
+        this.splitButtonItems.push(this._connectionSplitButtonItem);
+      } catch (e) {
+      }
+    }
+
+    if (!myProfile && this.allowEdit) {
+      this.splitButtonItems.push({
+        nameKey: 'remove',
+        callback: async () => {
+          try {
+            await this._participantRestApiService.removePerson({personId: this.personService.personViewModel.data.id});
+            await this._router.navigate(['/person']);
+          } catch (e) {
+          }
+        },
+        order: 3
+      });
+    }
   }
 
   public async onLogoChanged(fileList: FileList) {
@@ -256,41 +315,5 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
     await this._router.navigate([], {relativeTo: this._activatedRoute, queryParams: queryParams});
   }
-
-  //#region Person connection
-
-  public onEditContactClick = async (): Promise<void> => {
-    await this.editConnection(this.personService.personViewModel.data);
-  };
-
-  private async connectionInitialize(person: Person) {
-    this.allowEditConnection = person.id != this._authorizationService.session.personId;
-    if (!this.allowEditConnection) {
-      return;
-    }
-
-    try {
-      this.hasConnection = (await this._participantRestApiService.hasConnection({id: person.id})).value;
-      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
-    } catch (e) {
-    }
-  }
-
-  private async editConnection(person: Person): Promise<void> {
-    try {
-      if (this.hasConnection) {
-        await this._participantRestApiService.removeConnection({id: person.id});
-      } else {
-        await this._participantRestApiService.createConnection({id: person.id});
-      }
-
-      this.hasConnection = !this.hasConnection;
-      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
-    } catch (e) {
-      await this._appHelper.showErrorMessage('error');
-    }
-  }
-
-  //#endregion
 
 }

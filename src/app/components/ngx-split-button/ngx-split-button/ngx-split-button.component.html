@@ -1,0 +1,16 @@
+<div *ngIf="defaultItem"
+     class="btn btn-group p-0"
+     ngbDropdown>
+  <button class="btn btn-primary input-height-sm"
+          (click)="onClick(defaultItem)">{{defaultItem.nameKey | translate}}
+  </button>
+  <button class="btn btn-primary input-height-sm dropdown-toggle-split"
+          ngbDropdownToggle></button>
+  <div class="dropdown-menu fixed-left-unset"
+       ngbDropdownMenu>
+    <button *ngFor="let item of items"
+            class="dropdown-item"
+            (click)="onClick(item)">{{item.nameKey | translate}}
+    </button>
+  </div>
+</div>
