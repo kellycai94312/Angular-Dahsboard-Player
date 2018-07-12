@@ -145,7 +145,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/user/{!userRole}/baseRole'
+    path: '/user/{!userId}/baseRole'
   })
   updateUserBaseUserRole: IRestMethodStrict<UserRole, any, { userId: number }, void>;
 
