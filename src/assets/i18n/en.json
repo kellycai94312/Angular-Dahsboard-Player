@@ -302,5 +302,8 @@
   "documentNumber": "Document number",
   "documentType": "Document type",
   "identityNumber": "Identity number",
-  "uploadFile": "Upload file"
+  "uploadFile": "Upload file",
+  "addPerson": "Add person",
+  "personMustHaveAtLeastOneRole": "Person must have at least one role",
+  "personMustHaveAtLeastOneSportType": "Person must have at least one sport type"
 }

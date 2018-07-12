@@ -1,0 +1,107 @@
+<div class="modal-header">
+  <h4 class="modal-title">{{'addPerson' | translate}}</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <dx-text-box mode="text"
+               placeholder="{{'persons.person.personal.firstName' | translate}}"
+               [(value)]="person.firstName"
+               [showClearButton]="true">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-text-box>
+
+  <dx-text-box class="mt-2"
+               mode="text"
+               placeholder="{{'persons.person.personal.lastName' | translate}}"
+               [(value)]="person.lastName"
+               [showClearButton]="true">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-text-box>
+
+  <dx-date-box class="mt-2 w-100"
+               [(value)]="person.birthDate"
+               [min]="dateMin"
+               [max]="dateMax"
+               placeholder="{{'persons.person.personal.birthDate' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-date-box>
+
+  <dx-select-box class="mt-2"
+                 [items]="sexValues"
+                 [(value)]="selectedSex"
+                 displayExpr="name"
+                 placeholder="{{'persons.person.personal.sex' | translate}}">
+
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+
+  <div class="d-flex flex-row mt-2">
+    <div class="align-self-center">
+      <p>{{'persons.person.roles.section' | translate }}</p>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button *ngFor="let userRole of userRoles" class="btn btn-outline-primary input-height-sm mr-1 mb-1">
+        {{userRole.userRoleEnum}}
+      </button>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button class="btn btn-default input-height-sm"
+              (click)="onEditUserRoles()">
+        <i class="fa fa-pencil-square-o"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row mt-2">
+    <div class="align-self-center">
+      <p>{{'persons.person.sportTypes.section' | translate }}</p>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button *ngFor="let sportType of sportTypes" class="btn btn-outline-primary input-height-sm mr-1 mb-1">
+        {{sportType.sportTypeEnum}}
+      </button>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button class="btn btn-default input-height-sm"
+              (click)="onEditSportTypes()">
+        <i class="fa fa-pencil-square-o"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex flex-row mt-2">
+    <div class="align-self-center">
+      <p>{{'persons.person.groups.section' | translate }}</p>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button *ngFor="let group of groups" class="btn btn-outline-primary input-height-sm mr-1 mb-1">
+        {{group.name}}
+      </button>
+    </div>
+    <div class="ml-2 align-self-center">
+      <button class="btn btn-default input-height-sm"
+              (click)="onEditGroups()">
+        <i class="fa fa-pencil-square-o"></i>
+      </button>
+    </div>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <dx-button type="default"
+             class="btn-outline-success"
+             text="{{'modal.save' | translate}}"
+             (onClick)="onSave($event)"></dx-button>
+  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+  </button>
+</div>

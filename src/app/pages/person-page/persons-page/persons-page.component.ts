@@ -17,6 +17,8 @@ import {PersonViewModel} from '../../../data/local/view-model/person-view-model'
 import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PersonModalCreateComponent} from './person-modal-create/person-modal-create.component';
 
 @Component({
   selector: 'app-persons-page',
@@ -39,6 +41,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
+              private _modalService: NgbModal,
               private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
 
@@ -172,6 +175,8 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
       return personViewModel;
     });
   };
+
+  public createPerson = () => this._modalService.open(PersonModalCreateComponent, {size: 'lg'});
 
   private async updateItems() {
     await this.ngxVirtualScrollComponent.reset();

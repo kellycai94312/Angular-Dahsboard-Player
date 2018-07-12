@@ -7,7 +7,8 @@ import {NamedObjectItemComponent} from './named-object-item.component';
     CommonModule
   ],
   declarations: [NamedObjectItemComponent],
-  exports: [NamedObjectItemComponent]
+  exports: [NamedObjectItemComponent],
+  entryComponents: [NamedObjectItemComponent]
 })
 export class NamedObjectItemModule {
 }

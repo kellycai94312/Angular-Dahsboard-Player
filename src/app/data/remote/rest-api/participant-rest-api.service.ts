@@ -76,6 +76,7 @@ import {ImageQuery} from './query/file/image-query';
 import {DocumentQuery} from './query/file/document-query';
 import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
+import {PersonTemplateRequest} from '../request/person-template-request';
 
 @Injectable()
 @RestParams({
@@ -312,6 +313,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/person'
   })
   createPerson: IRestMethod<Person, Person>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/template'
+  })
+  createTemplatePerson: IRestMethod<PersonTemplateRequest, Person>;
 
   @RestAction({
     method: RestRequestMethod.Post,
