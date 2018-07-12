@@ -1,0 +1,22 @@
+<div class="row cols-padding">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group">
+      <label>{{'inn' | translate}}</label>
+      <dx-text-box [(value)]="requisites.inn">
+      </dx-text-box>
+    </div>
+  </div>
+</div>
+
+<div class="row cols-padding">
+  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="form-group">
+      <label>{{'passport' | translate}}</label>
+      <dx-text-box [(value)]="requisites.passport">
+      </dx-text-box>
+    </div>
+  </div>
+</div>
+
+<app-busy-button nameKey="save"
+                 [click]="onSave"></app-busy-button>

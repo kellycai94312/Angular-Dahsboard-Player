@@ -81,7 +81,7 @@ export class GroupPersonComponent implements OnInit {
 
   async onRemove() {
     if (this.baseGroup) {
-      await this._participantRestApiService.updatePersonBaseGroup({}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+      await this._participantRestApiService.updatePersonBaseGroup({id: null}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       this.data = null;
     } else {
       if (this.data) {

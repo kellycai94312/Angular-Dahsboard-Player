@@ -102,8 +102,11 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     this.allowEdit = await this.personService.allowEdit();
 
     const userRoles = await this._authorizationService.getUserRoles();
-    if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR) && this.allowEdit) {
-      this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+    if (this.allowEdit) {
+      if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR)) {
+        this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+      }
+      this.tabs.push(new PersonTab('requisites', 'requisites', [], false));
     }
 
     await this.connectionInitialize(this.personService.personViewModel.data);
