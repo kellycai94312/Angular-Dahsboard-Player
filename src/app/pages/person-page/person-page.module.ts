@@ -127,7 +127,7 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
     AnthropometryHistoryComponent,
     RefereeCategoriesComponent,
     RefereeCategoryModalComponent,
-    MyGroupsComponent
+    MyGroupsComponent,
     PersonModalCreateComponent
   ],
   providers: [
