@@ -19,6 +19,8 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 import {AppHelper} from '../../../utils/app-helper';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PersonModalCreateComponent} from './person-modal-create/person-modal-create.component';
+import {AuthorizationService} from '../../../shared/authorization.service';
+import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 
 @Component({
   selector: 'app-persons-page',
@@ -38,9 +40,11 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   public personQuery: PersonQuery;
   public sexItems: Sex[];
   public userRoles: UserRole[];
+  public canCreatePerson: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
+              private _authorizationService: AuthorizationService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
@@ -49,12 +53,15 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
     this.personQuery.name = '';
     this.personQuery.from = 0;
     this.personQuery.count = this.pageSize;
+    this.personQuery.template = false;
 
     this.sexItems = [];
     this.userRoles = [];
   }
 
   async ngOnInit() {
+    this.canCreatePerson = await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
+
     const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
     for (let i = 0; i < temp.length; i++) {
       const sex = new Sex();
@@ -178,7 +185,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
 
   public createPerson = () => this._modalService.open(PersonModalCreateComponent, {size: 'lg'});
 
-  private async updateItems() {
+  public async updateItems() {
     await this.ngxVirtualScrollComponent.reset();
   }
 

@@ -306,5 +306,6 @@
   "myGroups": "My groups",
   "addPerson": "Add person",
   "personMustHaveAtLeastOneRole": "Person must have at least one role",
-  "personMustHaveAtLeastOneSportType": "Person must have at least one sport type"
+  "personMustHaveAtLeastOneSportType": "Person must have at least one sport type",
+  "personTemplate": "Non-active persons"
 }

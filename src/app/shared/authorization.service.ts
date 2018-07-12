@@ -8,6 +8,7 @@ import {LayoutService} from '../layout/shared/layout.service';
 import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
 import {UserRole} from '../data/remote/model/user-role';
+import {UserRoleEnum} from '../data/remote/model/user-role-enum';
 
 @Injectable()
 export class AuthorizationService {
@@ -85,6 +86,11 @@ export class AuthorizationService {
     } catch (e) {
     }
     return userRoles;
+  }
+
+  public async hasUserRole(userRoleEnum: UserRoleEnum) {
+    const userRoles = await this.getUserRoles();
+    return userRoles.filter(userRole => userRole.userRoleEnum == userRoleEnum).length != 0;
   }
 
   public isAuthenticated(): boolean {

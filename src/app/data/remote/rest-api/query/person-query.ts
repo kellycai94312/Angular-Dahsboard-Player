@@ -7,4 +7,5 @@ export class PersonQuery extends PageQuery {
   public groupId?: number;
   public sportTypeId?: number;
   public cityId?: number;
+  public template?: boolean;
 }
