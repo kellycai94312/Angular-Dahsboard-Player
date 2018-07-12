@@ -14,10 +14,10 @@ export class PersonViewModel extends BaseViewModel<Person> {
     this.url = `/person/${this.data.id}`;
 
     try {
-      this.baseUserRole = await this.participantRestApiService.getBaseUserRoleByUser({id: this.data.user.id});
+      this.baseUserRole = await this.participantRestApiService.getBaseUserRoleByUser({userId: this.data.user.id});
       if (this.baseUserRole) {
-        const baseGroupPerson = await this.participantRestApiService.getBaseGroup({
-          id: this.data.id,
+        const baseGroupPerson = await this.participantRestApiService.getPersonBaseGroup({
+          personId: this.data.id,
           userRoleId: this.baseUserRole.id
         });
 

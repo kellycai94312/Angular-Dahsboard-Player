@@ -24,7 +24,6 @@ import {GroupQuery} from './query/group-query';
 import {GroupPerson} from '../model/group/group-person';
 import {SubGroup} from '../model/group/sub-group';
 import {GroupPersonQuery} from './query/group-person-query';
-import {RoleQuery} from './query/role-query';
 import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
@@ -77,6 +76,8 @@ import {DocumentQuery} from './query/file/document-query';
 import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
 import {PersonTemplateRequest} from '../request/person-template-request';
+import {BaseContact} from '../model/contact/base/base-contact';
+import {Requisites} from '../model/requisites';
 
 @Injectable()
 @RestParams({
@@ -114,25 +115,7 @@ export class ParticipantRestApiService extends Rest {
 
   //#region User
 
-  //#region GET
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/sportType'
-  })
-  getSportTypes: IRestMethod<NamedQuery, PageContainer<SportType>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!id}'
-  })
-  getUser: IRestMethod<{ id: number }, User>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!id}/role'
-  })
-  getUserRolesByUser: IRestMethod<QueryParams, UserRole[]>;
+  //#region UserRole
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -142,9 +125,48 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/user/{!id}/baseRole'
+    path: '/user/{!userId}/role'
   })
-  getBaseUserRoleByUser: IRestMethod<{ id: number }, UserRole>;
+  getUserUserRoles: IRestMethod<{ userId: number }, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/{!userId}/role'
+  })
+  updateUserUserRoles: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { userId: number }, UserRole[]>;
+
+  //#region Base
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!userId}/baseRole'
+  })
+  getBaseUserRoleByUser: IRestMethod<{ userId: number }, UserRole>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/{!userRole}/baseRole'
+  })
+  updateUserBaseUserRole: IRestMethodStrict<UserRole, any, { userId: number }, void>;
+
+  //#endregion
+
+  //#endregion
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/user/{!userId}/enable'
+  })
+  enableTemplatePerson: IRestMethodStrict<EmailRequest, any, { userId: number }, void>;
+
+  //#region GET
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/user/{!id}'
+  })
+  getUser: IRestMethod<{ id: number }, User>;
+
 
   //#endregion
 
@@ -168,23 +190,55 @@ export class ParticipantRestApiService extends Rest {
   })
   resetPassword: IRestMethod<EmailRequest, void>;
 
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/role'
-  })
-  changeRoles: IRestMethod<ListRequest<IdentifiedObject>, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/baseRole'
-  })
-  postBaseUserRoleByUser: IRestMethod<{ id?: number }, UserRole>;
-
   //#endregion
 
   //#endregion
 
   //#region Person
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/canEdit'
+  })
+  canEditPerson: IRestMethod<{ personId: number }, BooleanWrapper>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/{!personId}'
+  })
+  removePerson: IRestMethod<{ personId: number }, Person>;
+
+  //#region Contact
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/contact'
+  })
+  getPersonContacts: IRestMethod<{ personId: number }, BaseContact[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/contact'
+  })
+  updatePersonContacts: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { personId: number }, BaseContact[]>;
+
+  //#endregion
+
+  //#region Personal
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/requisites'
+  })
+  getPersonRequisites: IRestMethod<{ personId: number }, Requisites>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/requisites'
+  })
+  updatePersonRequisites: IRestMethodStrict<Requisites, any, { personId: number }, Requisites>;
+
+  //#endregion
 
   //#region Dialogue
 
@@ -213,11 +267,49 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region Group
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/group'
+  })
+  getGroupPersons: IRestMethod<{ personId: number }, GroupPerson[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/{!personId}/group'
+  })
+  updateGroupPersons: IRestMethodStrict<ListRequest<GroupPerson>, any, { personId: number }, GroupPerson[]>;
+
+  //#endregion
+
+  //#region Person rank
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/rank'
+  })
+  getRanks: IRestMethod<{ personId: number }, PersonRank[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/rank/{!rankId}'
+  })
+  updateRank: IRestMethodStrict<PersonRank, any, { personId: number, rankId: number }, PersonRank>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/{!personId}/rank/{!rankId}'
+  })
+  removeRank: IRestMethod<{ personId: number, rankId: number }, void>;
+
+  //#endregion
+
   //#region GET
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/filter'
+    path: '/person'
   })
   getPersons: IRestMethod<PersonQuery, PageContainer<Person>>;
 
@@ -247,15 +339,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/rank'
+    path: '/person/{!personId}/role/{!userRoleId}/baseGroup',
   })
-  getRanks: IRestMethod<{ id: number }, PersonRank[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!id}/role/{!userRoleId}/baseGroup',
-  })
-  getBaseGroup: IRestMethod<GroupQuery, GroupPerson>;
+  getPersonBaseGroup: IRestMethod<{ personId: number, userRoleId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -322,9 +408,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/sporttype'
+    path: '/person/{!personId}/sportType'
   })
-  changeSportTypes: IRestMethod<ListRequest<IdentifiedObject>, SportType[]>;
+  updatePersonSportTypes: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { personId: number }, SportType[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -334,15 +420,21 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/role/{!userRoleId}/public',
+    path: '/person/{!personId}/role/{!userRoleId}/public',
   })
-  addPublicRole: IRestMethod<RoleQuery, void>;
+  createPublicRole: IRestMethodStrict<Group, any, { personId: number, userRoleId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/{!personId}/role/{!userRoleId}/public',
+  })
+  removePublicRole: IRestMethodStrict<Group, any, { personId: number, userRoleId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/role/{!userRoleId}/baseGroup',
+    path: '/person/{!personId}/role/{!userRoleId}/baseGroup',
   })
-  saveBaseGroup: IRestMethod<RoleQuery, void>;
+  updatePersonBaseGroup: IRestMethod<{ personId: number, userRoleId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -388,21 +480,9 @@ export class ParticipantRestApiService extends Rest {
   })
   updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
 
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/person/rank/{!rankId}'
-  })
-  updateRank: IRestMethodStrict<PersonRank, any, { rankId: number }, PersonRank>;
-
   //#endregion
 
   //#region DELETE
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/person/role/{!userRoleId}/public',
-  })
-  removePublicRole: IRestMethod<RoleQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
@@ -415,12 +495,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/note/{!id}',
   })
   removeNote: IRestMethod<{ id: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/person/rank/{!rankId}'
-  })
-  removeRank: IRestMethod<{ rankId: number }, void>;
 
   //#endregion
 
@@ -1013,6 +1087,12 @@ export class ParticipantRestApiService extends Rest {
 
 
   //#endregion
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType'
+  })
+  getSportTypes: IRestMethod<NamedQuery, PageContainer<SportType>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

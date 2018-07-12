@@ -42,7 +42,7 @@ export class GroupPersonModalComponent implements OnInit {
 
   async ngOnInit() {
     await this.initBaseGroup(this.groupPerson.person, this.groupPerson.userRole);
-    this.userRoles = await this._participantRestApiService.getUserRolesByUser({id: this.groupPerson.person.user.id});
+    this.userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.groupPerson.person.user.id});
     this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
 
     if (this.groupPerson.group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM]) {
@@ -63,8 +63,8 @@ export class GroupPersonModalComponent implements OnInit {
 
   public async initBaseGroup(person: Person, userRole: UserRole) {
     try {
-      this.baseGroupPerson = await this._participantRestApiService.getBaseGroup({
-        id: person.id,
+      this.baseGroupPerson = await this._participantRestApiService.getPersonBaseGroup({
+        personId: person.id,
         userRoleId: userRole.id
       });
     } catch (e) {

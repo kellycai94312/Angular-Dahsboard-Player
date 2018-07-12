@@ -49,7 +49,7 @@ export class ProfileService {
   }
 
   async hasUserRole(userRoleEnum: UserRoleEnum) {
-    const roles = await this._participantRestApiService.getUserRolesByUser({id: this._authorizationService.session.userId});
+    const roles = await this._participantRestApiService.getUserUserRoles({userId: this._authorizationService.session.userId});
     return roles.filter(role => role.userRoleEnum === userRoleEnum).length != 0;
   }
 

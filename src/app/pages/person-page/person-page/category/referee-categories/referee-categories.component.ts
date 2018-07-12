@@ -20,20 +20,21 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
   private readonly _sportTypeSubscription: ISubscription;
 
   public personRefereeCategoryViewModels: PersonRefereeCategoryViewModel[];
-  private readonly _allowEdit: boolean;
+  private _allowEdit: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _authorizationService: AuthorizationService,
               private _personService: PersonService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper) {
-    this._allowEdit = this._personService.allowEdit();
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
       await this.initialize(this._personService.personViewModel.data, value);
     });
   }
 
   async ngOnInit() {
+    this._allowEdit = await this._personService.allowEdit();
+
     await this.initialize();
   }
 

@@ -30,7 +30,7 @@ export class TestsResultsComponent implements OnInit {
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  public readonly isEditAllow: boolean;
+  public isEditAllow: boolean;
   public readonly measureTemplateQuery: MeasureTemplateQuery;
 
   public personMeasureValues: ExerciseExecMeasureValue[];
@@ -39,8 +39,6 @@ export class TestsResultsComponent implements OnInit {
               private _personService: PersonService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper) {
-    this.isEditAllow = this._personService.allowEdit();
-
     this.measureTemplateQuery = new MeasureTemplateQuery();
     this.measureTemplateQuery.from = 0;
     this.measureTemplateQuery.count = PropertyConstant.pageSize;
@@ -48,6 +46,7 @@ export class TestsResultsComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.isEditAllow = await this._personService.allowEdit();
     this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {

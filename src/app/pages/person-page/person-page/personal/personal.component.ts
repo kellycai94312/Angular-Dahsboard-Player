@@ -34,11 +34,11 @@ export class PersonalComponent implements OnInit {
 
   async ngOnInit() {
     this.person = this.personService.personViewModel.data;
-    this.allowEdit = this.personService.allowEdit();
+    this.allowEdit = await this.personService.allowEdit();
     try {
       if (this.person && this.person.id) {
         this.person.address = await this._participantRestApiService.getPersonAddress({id: this.person.id});
-        this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({id: this.person.user.id});
+        this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({userId: this.person.user.id});
       }
     } catch (e) {
     }
@@ -60,7 +60,7 @@ export class PersonalComponent implements OnInit {
 
       // TODO: this._profileService.emitFullNameChange(this.person);
       if (this.baseUserRole) {
-        await this._participantRestApiService.postBaseUserRoleByUser({id: this.baseUserRole.id});
+        await this._participantRestApiService.updateUserBaseUserRole(this.baseUserRole, {}, {userId: this.personService.personViewModel.data.user.id});
       }
     } catch (e) {
       await this._appHelper.showErrorMessage('saveError');

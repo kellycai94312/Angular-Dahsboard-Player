@@ -1,7 +1,8 @@
-import { SexEnum } from '../misc/sex-enum';
-import { Address } from './address';
-import { IdentifiedObject } from '../base/identified-object';
-import { User } from './user';
+import {SexEnum} from '../misc/sex-enum';
+import {Address} from './address';
+import {IdentifiedObject} from '../base/identified-object';
+import {User} from './user';
+import {Requisites} from './requisites';
 
 export class Person extends IdentifiedObject {
   firstName: string;
@@ -13,4 +14,5 @@ export class Person extends IdentifiedObject {
   phoneNumber: string;
   address: Address;
   user: User;
+  requisites: Requisites;
 }
