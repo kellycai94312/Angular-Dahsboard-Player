@@ -434,7 +434,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/person/{!personId}/role/{!userRoleId}/baseGroup',
   })
-  updatePersonBaseGroup: IRestMethod<{ personId: number, userRoleId: number }, void>;
+  updatePersonBaseGroup: IRestMethodStrict<IdRequest, any, { personId: number, userRoleId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Post,
