@@ -63,10 +63,8 @@ export class GroupPersonComponent implements OnInit {
 
   async onGroupChange(e) {
     if (this.baseGroup) {
-      await this._participantRestApiService.updatePersonBaseGroup({
-        personId: e.current == null ? null : e.current.group.id,
-        userRoleId: this.role.id
-      });
+      await this._participantRestApiService.updatePersonBaseGroup({id: e.current == null ? null : e.current.group.id}, {},
+        {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       this.change.emit(this.data);
     } else {
       if (e.prev) {
@@ -83,10 +81,7 @@ export class GroupPersonComponent implements OnInit {
 
   async onRemove() {
     if (this.baseGroup) {
-      await this._participantRestApiService.updatePersonBaseGroup({
-        personId: null,
-        userRoleId: this.role.id
-      });
+      await this._participantRestApiService.updatePersonBaseGroup({}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       this.data = null;
     } else {
       if (this.data) {
