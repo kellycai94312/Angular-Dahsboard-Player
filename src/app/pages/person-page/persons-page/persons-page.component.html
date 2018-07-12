@@ -67,7 +67,6 @@
   </div>
   <div class="col">
     <dx-check-box *ngIf="!isOwner"
-                  class="mt-2"
                   [(value)]="personQuery.template"
                   (valueChange)="updateItems()"
                   text="{{'personTemplate' | translate}}">

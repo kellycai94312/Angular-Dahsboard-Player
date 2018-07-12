@@ -1,3 +1,31 @@
-<p>
-  contact works!
-</p>
+<div class="col-xl-6 col-lg-6 col-md-10 col-sm-12">
+  <div class="d-flex flex-row" *ngFor="let contact of contacts">
+    <div class="form-group w-100">
+      <label for="value">{{contact.discriminator}}
+        <button *ngIf="!enabled && contact.discriminator == 'EMAIL'"
+                class="btn btn-outline-primary input-height-sm mb-1"
+                (click)="enablePerson()">
+          <i class="fa fa-check-circle"></i> {{'activate' | translate}}
+        </button>
+      </label>
+      <dx-text-box id="value"
+                   [(value)]="contact.value"
+                   [readOnly]="!allowEdit"
+                   [showClearButton]="true">
+        <dx-validator>
+          <dxi-validation-rule *ngIf="contact.discriminator == 'EMAIL'" type="email"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+    </div>
+    <div class="align-self-center">
+      <dx-check-box *ngIf="allowEdit"
+                    class="ml-3"
+                    [(value)]="contact.visible"
+                    text="{{'public' | translate}}">
+      </dx-check-box>
+    </div>
+  </div>
+  <dx-button *ngIf="allowEdit" type="default" class="btn-outline-success"
+             text="{{'save' | translate}}"
+             (onClick)="onSave($event)"></dx-button>
+</div>

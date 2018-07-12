@@ -307,5 +307,7 @@
   "addPerson": "Add person",
   "personMustHaveAtLeastOneRole": "Person must have at least one role",
   "personMustHaveAtLeastOneSportType": "Person must have at least one sport type",
-  "personTemplate": "Non-active persons"
+  "personTemplate": "Non-active persons",
+  "activate" : "Activate",
+  "personActivation": "Person activation"
 }

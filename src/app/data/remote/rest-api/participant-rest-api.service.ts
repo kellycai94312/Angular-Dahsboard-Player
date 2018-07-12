@@ -220,7 +220,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Put,
     path: '/person/{!personId}/contact'
   })
-  updatePersonContacts: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { personId: number }, BaseContact[]>;
+  updatePersonContacts: IRestMethodStrict<ListRequest<BaseContact>, any, { personId: number }, BaseContact[]>;
 
   //#endregion
 
