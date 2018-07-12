@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {PersonService} from '../person.service';
@@ -11,7 +11,7 @@ import {UserRole} from '../../../../data/remote/model/user-role';
   templateUrl: './group-person.component.html',
   styleUrls: ['./group-person.component.scss']
 })
-export class GroupPersonComponent {
+export class GroupPersonComponent implements OnInit {
 
   @Input()
   public data: GroupPerson;
@@ -31,8 +31,11 @@ export class GroupPersonComponent {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService) {
-    this.allowEdit = this._personService.allowEdit();
     this.change = new EventEmitter<GroupPerson>();
+  }
+
+  async ngOnInit() {
+    this.allowEdit = await this._personService.allowEdit();
   }
 
   loadData = async (from: number, searchText: string) => {
@@ -60,23 +63,17 @@ export class GroupPersonComponent {
 
   async onGroupChange(e) {
     if (this.baseGroup) {
-      await this._participantRestApiService.saveBaseGroup({
-        id: e.current == null ? null : e.current.group.id,
+      await this._participantRestApiService.updatePersonBaseGroup({
+        personId: e.current == null ? null : e.current.group.id,
         userRoleId: this.role.id
       });
       this.change.emit(this.data);
     } else {
       if (e.prev) {
-        await this._participantRestApiService.removePublicRole({
-          id: e.prev.group.id,
-          userRoleId: this.role.id
-        });
+        await this._participantRestApiService.removePublicRole(e.prev.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       }
       if (e.current) {
-        await this._participantRestApiService.addPublicRole({
-          id: e.current.group.id,
-          userRoleId: this.role.id
-        });
+        await this._participantRestApiService.createPublicRole(e.current.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       }
       if (!e.current) {
         this.change.emit(e.prev);
@@ -86,17 +83,14 @@ export class GroupPersonComponent {
 
   async onRemove() {
     if (this.baseGroup) {
-      await this._participantRestApiService.saveBaseGroup({
-        id: null,
+      await this._participantRestApiService.updatePersonBaseGroup({
+        personId: null,
         userRoleId: this.role.id
       });
       this.data = null;
     } else {
       if (this.data) {
-        await this._participantRestApiService.removePublicRole({
-          id: this.data.group.id,
-          userRoleId: this.role.id
-        });
+        await this._participantRestApiService.removePublicRole(this.data.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
       }
     }
     this.change.emit(this.data);

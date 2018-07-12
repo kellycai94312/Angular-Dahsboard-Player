@@ -23,7 +23,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 export class EventsComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
-  public readonly allowEdit: boolean;
+  public allowEdit: boolean;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -40,8 +40,6 @@ export class EventsComponent implements OnInit, OnDestroy {
               private _personService: PersonService,
               private _appHelper: AppHelper,
               private _modalService: NgbModal) {
-    this.allowEdit = this._personService.allowEdit();
-
     this.pageSize = PropertyConstant.pageSize;
     this.trainingQuery = new TrainingQuery();
     this.trainingQuery.from = 0;
@@ -63,6 +61,8 @@ export class EventsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.allowEdit = await this._personService.allowEdit();
+
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.trainingQuery.name = value;

@@ -12,32 +12,32 @@ import {RankModalComponent} from './rank-modal/rank-modal.component';
 })
 export class RanksComponent implements OnInit {
 
-  public readonly isEditAllow: boolean;
+  public isEditAllow: boolean;
 
   public personRanks: PersonRank[];
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _modalService: NgbModal) {
-    this.isEditAllow = this._personService.allowEdit();
   }
 
   async ngOnInit() {
-    this.personRanks = await this._participantRestApiService.getRanks({id: this._personService.personViewModel.data.id});
+    this.isEditAllow = await this._personService.allowEdit();
+    this.personRanks = await this._participantRestApiService.getRanks({personId: this._personService.personViewModel.data.id});
   }
 
   public async editRank(index: number) {
     const ref = this._modalService.open(RankModalComponent, {size: 'lg'});
     ref.componentInstance.personRank = Object.assign({}, this.personRanks[index]);
     ref.componentInstance.onSave = async (newPersonRank: PersonRank) => {
-      await this._participantRestApiService.updateRank(newPersonRank, {}, {rankId: newPersonRank.rank.id});
+      await this._participantRestApiService.updateRank(newPersonRank, {}, {personId: this._personService.personViewModel.data.id, rankId: newPersonRank.rank.id});
       this.personRanks[index] = newPersonRank;
       ref.dismiss();
     };
   }
 
   public async removeRank(index: number) {
-    await this._participantRestApiService.removeRank({rankId: this.personRanks[index].rank.id});
+    await this._participantRestApiService.removeRank({personId: this._personService.personViewModel.data.id, rankId: this.personRanks[index].rank.id});
     this.clearPersonRank(this.personRanks[index]);
   }
 

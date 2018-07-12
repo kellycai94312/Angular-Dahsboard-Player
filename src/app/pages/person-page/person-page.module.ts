@@ -61,6 +61,7 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
 import {RefereeCategoryModalComponent} from './person-page/category/referee-category-modal/referee-category-modal.component';
 import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
+import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {ButtonsModule} from '../../components/buttons/buttons.module';
 import {PersonModalCreateComponent} from './persons-page/person-modal-create/person-modal-create.component';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -126,6 +127,7 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
     AnthropometryHistoryComponent,
     RefereeCategoriesComponent,
     RefereeCategoryModalComponent,
+    MyGroupsComponent
     PersonModalCreateComponent
   ],
   providers: [

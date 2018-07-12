@@ -7,6 +7,7 @@ import {LocalStorageService} from './local-storage.service';
 import {LayoutService} from '../layout/shared/layout.service';
 import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
+import {UserRole} from '../data/remote/model/user-role';
 
 @Injectable()
 export class AuthorizationService {
@@ -67,11 +68,23 @@ export class AuthorizationService {
     return this.session;
   }
 
-  public async getPerson() {
+  public async getPerson(): Promise<Person> {
     if (!this.person && this.session) {
-      this.person = await this._participantRestApiService.getPerson({id: this.session.personId});
+      try {
+        this.person = await this._participantRestApiService.getPerson({id: this.session.personId});
+      } catch (e) {
+      }
     }
     return this.person;
+  }
+
+  public async getUserRoles(): Promise<UserRole[]> {
+    let userRoles: UserRole[] = [];
+    try {
+      userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.session.userId});
+    } catch (e) {
+    }
+    return userRoles;
   }
 
   public isAuthenticated(): boolean {

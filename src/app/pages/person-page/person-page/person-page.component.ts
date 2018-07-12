@@ -99,7 +99,13 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   public async initialize(personId: number) {
     this.personViewModel = await this.personService.initialize(personId);
-    this.allowEdit = this.personService.allowEdit();
+    this.allowEdit = await this.personService.allowEdit();
+
+    const userRoles = await this._authorizationService.getUserRoles();
+    if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR) && this.allowEdit) {
+      this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+    }
+
     await this.connectionInitialize(this.personService.personViewModel.data);
   }
 
@@ -137,8 +143,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     };
     componentInstance.onSave = async selectedItems => {
       try {
-        // TODO: Use method by user
-        this.personService.userRoles = await this._participantRestApiService.changeRoles(new ListRequest(selectedItems));
+        this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(selectedItems), {}, {userId: this.personService.personViewModel.data.user.id});
         const selectedItem = this.personService.userRoles.length ? this.personService.userRoles[0] : null;
         this.personService.setUserRole(selectedItem);
         await this.userRoleRefresh(selectedItem);
@@ -181,8 +186,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     };
     componentInstance.onSave = async selectedItems => {
       try {
-        // TODO: Use method by person
-        this.personService.sportTypes = await this._participantRestApiService.changeSportTypes(new ListRequest(selectedItems));
+        this.personService.sportTypes = await this._participantRestApiService.updatePersonSportTypes(new ListRequest(selectedItems), {}, {personId: this.personService.personViewModel.data.id});
         const selectedItem = this.personService.sportTypes.length ? this.personService.sportTypes[0] : null;
         this.personService.setSportType(selectedItem);
         await this.sportTypeRefresh(selectedItem);

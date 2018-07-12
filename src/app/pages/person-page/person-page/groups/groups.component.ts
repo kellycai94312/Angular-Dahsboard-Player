@@ -19,7 +19,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 export class GroupsComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;
-  public readonly canEdit: boolean;
+  public canEdit: boolean;
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
@@ -36,7 +36,6 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService) {
-    this.canEdit = this._personService.allowEdit();
     this.pageSize = PropertyConstant.pageSize;
 
     this.groupQuery = new GroupQuery();
@@ -64,6 +63,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.canEdit = await this._personService.allowEdit();
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
     this.selectedBaseGroup = this._personService.baseGroup;
     this.selectedPublicUserRole = this._personService.selectedUserRole;
@@ -126,10 +126,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public async addGroup() {
-    await this._participantRestApiService.addPublicRole({
-      id: this.newGroup.group.id,
-      userRoleId: this.selectedPublicUserRole.id
-    });
+    await this._participantRestApiService.createPublicRole(this.newGroup.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.selectedPublicUserRole.id});
     this.ngxVirtualScrollComponent.items.push(this.newGroup);
     this.newGroup = null;
   }

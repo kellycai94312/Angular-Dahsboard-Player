@@ -1,0 +1,9 @@
+<app-busy-button nameKey="edit"
+                 [click]="onEdit">
+</app-busy-button>
+<div class="list-group-flush mt-2">
+  <div *ngFor="let item of groupPersons"
+       class="list-group-item pb-2 cols-padding px-2">
+    <app-group [data]="item.group"></app-group>
+  </div>
+</div>

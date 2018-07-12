@@ -54,7 +54,7 @@ export class PersonService implements OnDestroy {
       await this.personViewModel.initialize();
       if (person && person.id) {
         if (person.user && person.user.id) {
-          this.userRoles = await  this._participantRestApiService.getUserRolesByUser({id: person.user.id});
+          this.userRoles = await  this._participantRestApiService.getUserUserRoles({userId: person.user.id});
           if (this.userRoles.length) {
             this.setUserRole(this.userRoles[0]);
           }
@@ -68,8 +68,8 @@ export class PersonService implements OnDestroy {
         this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
           if (value) {
             try {
-              this.baseGroup = await this._participantRestApiService.getBaseGroup({
-                id: this.personViewModel.data.id,
+              this.baseGroup = await this._participantRestApiService.getPersonBaseGroup({
+                personId: this.personViewModel.data.id,
                 userRoleId: value.id
               });
             } catch (e) {
@@ -110,9 +110,12 @@ export class PersonService implements OnDestroy {
     this._appHelper.unsubscribe(this._userRoleSubscription);
   }
 
-  public allowEdit(): boolean {
-    // TODO: Add expression
-    return true;
+  public async allowEdit(): Promise<boolean> {
+    try {
+      return (await  this._participantRestApiService.canEditPerson({personId: this.personViewModel.data.id})).value;
+    } catch (e) {
+    }
+    return false;
   }
 
 }

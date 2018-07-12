@@ -15,18 +15,19 @@ import {AppHelper} from '../../../../utils/app-helper';
 export class AnthropometryComponent implements OnInit, OnDestroy {
 
   public anthropometry: PersonAnthropometry[];
-  public readonly allowEdit: boolean;
+  public allowEdit: boolean;
 
   private readonly _sportTypeSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
-    this.allowEdit = this._personService.allowEdit();
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(sportType => this.load(sportType));
   }
 
   async ngOnInit() {
+    this.allowEdit = await this._personService.allowEdit();
+
     if (this._personService.selectedSportType) {
       await this.load(this._personService.selectedSportType);
     }
