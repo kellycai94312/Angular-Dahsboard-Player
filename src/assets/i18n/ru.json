@@ -303,5 +303,8 @@
   "documentNumber": "Номер документа",
   "documentType": "Тип документа",
   "identityNumber": "Номер удостоверения",
-  "uploadFile": "Загрузить файл"
+  "uploadFile": "Загрузить файл",
+  "addPerson": "Добавить пользователя",
+  "personMustHaveAtLeastOneRole": "Пользователь должен иметь хотя бы одну роль",
+  "personMustHaveAtLeastOneSportType": "Пользователь должен иметь хотя бы один вид спорта"
 }

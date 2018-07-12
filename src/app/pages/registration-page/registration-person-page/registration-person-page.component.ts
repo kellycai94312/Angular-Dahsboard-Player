@@ -9,6 +9,7 @@ import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {Person} from '../../../data/remote/model/person';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../shared/authorization.service';
+import {PersonContant} from '../../../data/local/person-contant';
 
 @Component({
   selector: 'app-registration-person-page',
@@ -19,10 +20,10 @@ export class RegistrationPersonPageComponent implements OnInit {
 
   public person: Person;
 
-  public dateMin: Date;
-  public dateMax: Date;
+  public readonly dateMin: Date;
+  public readonly dateMax: Date;
 
-  public sexValues: Array<Sex>;
+  public readonly sexValues: Array<Sex>;
   public selectedSex: Sex;
 
   constructor(private _translate: TranslateService,
@@ -32,12 +33,8 @@ export class RegistrationPersonPageComponent implements OnInit {
               private _router: Router) {
     this.sexValues = [];
     this.person = new Person();
-
-    this.dateMin = new Date();
-    this.dateMin.setFullYear(this.dateMin.getFullYear() - 125);
-
-    this.dateMax = new Date();
-    this.dateMax.setFullYear(this.dateMax.getFullYear() - 3);
+    this.dateMin = PersonContant.getBirthDateMin();
+    this.dateMax = PersonContant.getBirthDateMax();
   }
 
   async ngOnInit() {
