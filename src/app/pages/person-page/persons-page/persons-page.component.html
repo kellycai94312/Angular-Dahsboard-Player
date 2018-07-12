@@ -65,7 +65,15 @@
                       (onChange)="onCityChanged($event.current)">
     </app-input-select>
   </div>
-  <app-btn-add [onClick]="createPerson"></app-btn-add>
+  <div class="col">
+    <dx-check-box *ngIf="!isOwner"
+                  class="mt-2"
+                  [(value)]="personQuery.template"
+                  (valueChange)="updateItems()"
+                  text="{{'personTemplate' | translate}}">
+    </dx-check-box>
+  </div>
+  <app-btn-add *ngIf="canCreatePerson" [onClick]="createPerson"></app-btn-add>
 </div>
 
 <table class="table table-hover mt-2">

@@ -307,5 +307,6 @@
   "myGroups": "Мои группы",
   "addPerson": "Добавить пользователя",
   "personMustHaveAtLeastOneRole": "Пользователь должен иметь хотя бы одну роль",
-  "personMustHaveAtLeastOneSportType": "Пользователь должен иметь хотя бы один вид спорта"
+  "personMustHaveAtLeastOneSportType": "Пользователь должен иметь хотя бы один вид спорта",
+  "personTemplate": "Неактивированные пользователи"
 }
