@@ -65,6 +65,7 @@ import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {ButtonsModule} from '../../components/buttons/buttons.module';
 import {PersonModalCreateComponent} from './persons-page/person-modal-create/person-modal-create.component';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
+import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
 
 @NgModule({
   imports: [
@@ -128,7 +129,8 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
     RefereeCategoriesComponent,
     RefereeCategoryModalComponent,
     MyGroupsComponent,
-    PersonModalCreateComponent
+    PersonModalCreateComponent,
+    ContactEnableModalComponent
   ],
   providers: [
     PersonService,
@@ -143,7 +145,8 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
     NoteModalComponent,
     RankModalComponent,
     RefereeCategoryModalComponent,
-    PersonModalCreateComponent
+    PersonModalCreateComponent,
+    ContactEnableModalComponent
   ]
 })
 export class PersonPageModule {

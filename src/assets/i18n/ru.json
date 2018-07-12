@@ -308,5 +308,7 @@
   "addPerson": "Добавить пользователя",
   "personMustHaveAtLeastOneRole": "Пользователь должен иметь хотя бы одну роль",
   "personMustHaveAtLeastOneSportType": "Пользователь должен иметь хотя бы один вид спорта",
-  "personTemplate": "Неактивированные пользователи"
+  "personTemplate": "Неактивированные пользователи",
+  "activate": "Активировать",
+  "personActivation": "Активация пользователя"
 }
