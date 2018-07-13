@@ -21,8 +21,10 @@ import {ListRequest} from '../../../data/remote/request/list-request';
 import {UserRole} from '../../../data/remote/model/user-role';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {Person} from '../../../data/remote/model/person';
 import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
+import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
+import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
+import {ButtonGroupItem} from '../../../components/ngx-button-group/bean/button-group-item';
 
 @Component({
   selector: 'app-person-page',
@@ -39,10 +41,18 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   public readonly tabs: PersonTab[];
   public allowEdit: boolean;
-  public allowEditConnection: boolean;
   public hasConnection: boolean;
-  public editContactNameKey: string;
   public personViewModel: PersonViewModel;
+  public splitButtonItems: SplitButtonItem[];
+
+  public userRoleButtonGroupItems: ButtonGroupItem[];
+  public selectedUserRoleButtonGroupItem: ButtonGroupItem;
+
+  public sportTypeButtonGroupItems: ButtonGroupItem[];
+  public selectedSportTypeButtonGroupItem: ButtonGroupItem;
+
+  private _connectionSplitButtonItem: SplitButtonItem;
+  private _myProfile: boolean;
 
   private readonly _baseGroupSubscription: ISubscription;
 
@@ -102,11 +112,77 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     this.allowEdit = await this.personService.allowEdit();
 
     const userRoles = await this._authorizationService.getUserRoles();
-    if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR) && this.allowEdit) {
-      this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+    if (this.allowEdit) {
+      if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR)) {
+        this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+      }
+      this.tabs.push(new PersonTab('requisites', 'requisites', [], false));
     }
 
-    await this.connectionInitialize(this.personService.personViewModel.data);
+    const authPerson = await this._authorizationService.getPerson();
+    this._myProfile = this.personService.personViewModel.data.id == authPerson.id;
+
+    //#region SplitButton
+    this.splitButtonItems = [];
+    if (!this._myProfile) {
+      this.splitButtonItems.push({
+        nameKey: 'sendMessage',
+        callback: async () => {
+          try {
+            const dialogue: Dialogue = await this._participantRestApiService.getDialogue({personId: this.personService.personViewModel.data.id});
+            await this._router.navigate(['/conversation', dialogue.id]);
+          } catch (e) {
+          }
+        },
+        default: true,
+        order: 1
+      });
+    }
+
+    if (!this._myProfile) {
+      try {
+        this._connectionSplitButtonItem = new SplitButtonItem();
+        this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.personService.personViewModel.data.id})).value;
+        this._connectionSplitButtonItem.nameKey = this.hasConnection ? 'removeContact' : 'addContact';
+        this._connectionSplitButtonItem.callback = async () => {
+          try {
+            if (this.hasConnection) {
+              await this._participantRestApiService.removeConnection({id: this.personService.personViewModel.data.id});
+            } else {
+              await this._participantRestApiService.createConnection({id: this.personService.personViewModel.data.id});
+            }
+            this.hasConnection = !this.hasConnection;
+            this._connectionSplitButtonItem.nameKey = this.hasConnection ? 'removeContact' : 'addContact';
+          } catch (e) {
+            await this._appHelper.showErrorMessage('error');
+          }
+
+        };
+        this._connectionSplitButtonItem.default = true;
+        this._connectionSplitButtonItem.order = 1;
+
+        this.splitButtonItems.push(this._connectionSplitButtonItem);
+      } catch (e) {
+      }
+    }
+
+    if (!this._myProfile && this.allowEdit) {
+      this.splitButtonItems.push({
+        nameKey: 'remove',
+        callback: async () => {
+          try {
+            await this._participantRestApiService.removePerson({personId: this.personService.personViewModel.data.id});
+            await this._router.navigate(['/person']);
+          } catch (e) {
+          }
+        },
+        order: 3
+      });
+    }
+    //#endregion
+
+    this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
+    this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
   }
 
   public async onLogoChanged(fileList: FileList) {
@@ -144,9 +220,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     componentInstance.onSave = async selectedItems => {
       try {
         this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(selectedItems), {}, {userId: this.personService.personViewModel.data.user.id});
-        const selectedItem = this.personService.userRoles.length ? this.personService.userRoles[0] : null;
-        this.personService.setUserRole(selectedItem);
-        await this.userRoleRefresh(selectedItem);
+        this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
+
+        await this.onSelectedUserRole(this.personService.selectedUserRole);
         ref.dismiss();
       } catch (e) {
         if (e.status === 409) {
@@ -160,17 +236,33 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   }
 
   public async onSelectedUserRole(userRole: UserRole) {
-    this.personService.userRoleHandler.next(userRole);
-
-    if (await this.tabAvailableInUserRole(userRole)) {
-      await this.userRoleRefresh(userRole);
-    }
+    await this.userRoleRefresh(userRole);
   }
 
   public async userRoleRefresh(userRole: UserRole = null) {
     await this.setToggle('userRole', this.personService.userRoles, userRole, selectedItem => {
       this.personService.setUserRole(selectedItem);
+      this.selectedUserRoleButtonGroupItem = this.userRoleButtonGroupItems.find(x => x.originalObject.id == selectedItem.id);
     });
+
+    if (!await this.tabAvailableInUserRole(userRole)) {
+      await this._router.navigate(['./'], {relativeTo: this._activatedRoute});
+    }
+  }
+
+  private getUserRoleButtonGroupItems(userRoles: UserRole[]): ButtonGroupItem[] {
+    const buttonGroupItems = [];
+    for (let i = 0; i < userRoles.length; i++) {
+      const item = userRoles[i];
+      buttonGroupItems.push({
+        name: item.name,
+        originalObject: item,
+        callback: async (originalObject: UserRole) => {
+          await this.onSelectedUserRole(originalObject);
+        }
+      });
+    }
+    return buttonGroupItems;
   }
 
   //#endregion
@@ -187,9 +279,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     componentInstance.onSave = async selectedItems => {
       try {
         this.personService.sportTypes = await this._participantRestApiService.updatePersonSportTypes(new ListRequest(selectedItems), {}, {personId: this.personService.personViewModel.data.id});
-        const selectedItem = this.personService.sportTypes.length ? this.personService.sportTypes[0] : null;
-        this.personService.setSportType(selectedItem);
-        await this.sportTypeRefresh(selectedItem);
+        this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
+
+        await this.onSelectedSportType(this.personService.selectedSportType);
         ref.dismiss();
       } catch (e) {
         await this._appHelper.showErrorMessage('saveError');
@@ -200,15 +292,29 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   }
 
   public async onSelectedSportType(sportType: SportType) {
-    this.personService.sportTypeHandler.next(sportType);
     await this.sportTypeRefresh(sportType);
   }
 
   public async sportTypeRefresh(sportType: SportType = null) {
     await this.setToggle('sportType', this.personService.sportTypes, sportType, selectedItem => {
       this.personService.setSportType(selectedItem);
-      return true;
+      this.selectedSportTypeButtonGroupItem = this.sportTypeButtonGroupItems.find(x => x.originalObject.id == selectedItem.id);
     });
+  }
+
+  private getSportTypeButtonGroupItems(sportTypes: SportType[]): ButtonGroupItem[] {
+    const buttonGroupItems = [];
+    for (let i = 0; i < sportTypes.length; i++) {
+      const item = sportTypes[i];
+      buttonGroupItems.push({
+        name: item.name,
+        originalObject: item,
+        callback: async (originalObject: SportType) => {
+          await this.onSelectedSportType(originalObject);
+        }
+      });
+    }
+    return buttonGroupItems;
   }
 
   //#endregion
@@ -221,11 +327,10 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   private async tabAvailableInUserRole(userRole: UserRole): Promise<boolean> {
     const currentTab = this.tabs.filter(t => this._router.url.includes(t.routerLink))[0];
-    if (!this.personService.selectedUserRole || currentTab && currentTab.restrictedRoles.indexOf(UserRoleEnum[this.personService.selectedUserRole.userRoleEnum]) > -1) {
-      await this._router.navigate(['./'], {relativeTo: this._activatedRoute});
-      return false;
+    if (userRole && currentTab && !currentTab.restrictedRoles.find(x => x === userRole.userRoleEnum)) {
+      return true;
     }
-    return true;
+    return false;
   }
 
   private async setToggle<T extends IdentifiedObject>(queryParamKey: string, items: T[], selectedObject: T, selected: (selectedItem: T) => void) {
@@ -235,59 +340,23 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     if (!items.length && queryParam) {
       delete queryParams[queryParamKey];
     } else {
+      let selectedItem: T = null;
       if (selectedObject) {
-        queryParams[queryParamKey] = selectedObject.id;
+        selectedItem = items.find(x => x.id == selectedObject.id);
       } else {
         if (queryParam) {
-          const selectedItems = items.filter(x => x.id == +queryParam);
-          if (selectedItems && selectedItems.length) {
-            selected(selectedItems[0]);
-            queryParams[queryParamKey] = selectedItems[0].id;
-          } else {
-            selected(items[0]);
-            queryParams[queryParamKey] = items[0].id;
-          }
+          selectedItem = items.find(x => x.id == +queryParam);
         }
       }
+      if (!selectedItem) {
+        selectedItem = items[0];
+      }
+
+      selected(selectedItem);
+      queryParams[queryParamKey] = selectedItem.id;
     }
 
     await this._router.navigate([], {relativeTo: this._activatedRoute, queryParams: queryParams});
   }
-
-  //#region Person connection
-
-  public onEditContactClick = async (): Promise<void> => {
-    await this.editConnection(this.personService.personViewModel.data);
-  };
-
-  private async connectionInitialize(person: Person) {
-    this.allowEditConnection = person.id != this._authorizationService.session.personId;
-    if (!this.allowEditConnection) {
-      return;
-    }
-
-    try {
-      this.hasConnection = (await this._participantRestApiService.hasConnection({id: person.id})).value;
-      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
-    } catch (e) {
-    }
-  }
-
-  private async editConnection(person: Person): Promise<void> {
-    try {
-      if (this.hasConnection) {
-        await this._participantRestApiService.removeConnection({id: person.id});
-      } else {
-        await this._participantRestApiService.createConnection({id: person.id});
-      }
-
-      this.hasConnection = !this.hasConnection;
-      this.editContactNameKey = this.hasConnection ? 'removeContact' : 'addContact';
-    } catch (e) {
-      await this._appHelper.showErrorMessage('error');
-    }
-  }
-
-  //#endregion
 
 }

@@ -307,7 +307,10 @@
   "addPerson": "Add person",
   "personMustHaveAtLeastOneRole": "Person must have at least one role",
   "personMustHaveAtLeastOneSportType": "Person must have at least one sport type",
+  "requisites": "Requisites",
+  "inn": "INN",
+  "passport": "Passport",
   "personTemplate": "Non-active persons",
-  "activate" : "Activate",
+  "activate": "Activate",
   "personActivation": "Person activation"
 }

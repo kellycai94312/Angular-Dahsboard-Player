@@ -18,6 +18,7 @@ import {AnthropometryHistoryComponent} from './person-page/anthropometry-history
 import {TestsResultsHistoryComponent} from './person-page/tests-results-history/tests-results-history.component';
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
+import {RequisitesComponent} from './person-page/requisites/requisites.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
       {path: 'achievements', component: AchievementsComponent},
       {path: 'groups', component: GroupsComponent},
       {path: 'my-group', component: MyGroupsComponent},
+      {path: 'requisites', component: RequisitesComponent},
       {
         path: 'my_region', component: MyRegionComponent, children: [
           {path: '', redirectTo: 'school', pathMatch: 'full'},

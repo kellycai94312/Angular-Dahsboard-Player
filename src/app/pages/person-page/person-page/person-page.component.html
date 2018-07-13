@@ -36,28 +36,18 @@
                  [dimension]="'W130xH130'"></app-group>
     </div>
   </div>
-  <app-busy-button *ngIf="allowEditConnection"
-                   [nameKey]="editContactNameKey"
-                   [click]="onEditContactClick"></app-busy-button>
+  <ngx-split-button [items]="splitButtonItems">
+  </ngx-split-button>
   <!-- roles -->
+
   <div class="d-flex flex-row mt-2">
     <div class="align-self-center">
       <p>{{'persons.person.roles.section' | translate | uppercase}}</p>
     </div>
     <div class="ml-2 align-self-center">
-      <div class="btn-group btn-group-toggle"
-           ngbRadioGroup
-           name="radioBasic"
-           [(ngModel)]="personService.selectedUserRole"
-           (change)="onSelectedUserRole(personService.selectedUserRole)">
-        <label ngbButtonLabel
-               class="btn-primary input-height-sm"
-               *ngFor="let role of personService.userRoles">
-          <input ngbButton
-                 type="radio"
-                 [value]="role">{{role.userRoleEnum}}
-        </label>
-      </div>
+      <ngx-button-group [items]="userRoleButtonGroupItems"
+                        [selectedItem]="selectedUserRoleButtonGroupItem">
+      </ngx-button-group>
     </div>
     <div *ngIf="allowEdit"
          class="ml-2 align-self-center">
@@ -73,20 +63,10 @@
     <div class="align-self-center">
       <p>{{'persons.person.sportTypes.section' | translate | uppercase}}</p>
     </div>
-    <div class="ml-2 align-self-center ">
-      <div class="btn-group btn-group-toggle"
-           ngbRadioGroup
-           name="radioBasic"
-           [(ngModel)]="personService.selectedSportType"
-           (change)="onSelectedSportType(personService.selectedSportType)">
-        <label ngbButtonLabel
-               class="btn-primary input-height-sm"
-               *ngFor="let sportType of personService.sportTypes">
-          <input ngbButton
-                 type="radio"
-                 [value]="sportType">{{sportType.sportTypeEnum}}
-        </label>
-      </div>
+    <div class="ml-2 align-self-center">
+      <ngx-button-group [items]="sportTypeButtonGroupItems"
+                        [selectedItem]="selectedSportTypeButtonGroupItem">
+      </ngx-button-group>
     </div>
     <div *ngIf="allowEdit"
          class="ml-2 align-self-center">

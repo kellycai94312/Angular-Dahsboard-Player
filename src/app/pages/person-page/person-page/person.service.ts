@@ -56,13 +56,13 @@ export class PersonService implements OnDestroy {
         if (person.user && person.user.id) {
           this.userRoles = await  this._participantRestApiService.getUserUserRoles({userId: person.user.id});
           if (this.userRoles.length) {
-            this.setUserRole(this.userRoles[0]);
+            this.selectedUserRole = this.userRoles[0];
           }
         }
 
         this.sportTypes = await  this._participantRestApiService.getPersonSportTypes({id: person.id});
         if (this.sportTypes.length) {
-          this.setSportType(this.sportTypes[0]);
+          this.selectedSportType = this.sportTypes[0];
         }
 
         this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
