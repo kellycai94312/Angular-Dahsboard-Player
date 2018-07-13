@@ -68,6 +68,7 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
 import {RequisitesComponent} from './person-page/requisites/requisites.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
+import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 
 @NgModule({
   imports: [
@@ -105,7 +106,8 @@ import {ContactEnableModalComponent} from './person-page/contact/contact-enable-
     NgxVirtualScrollModule,
     ButtonsModule,
     NamedObjectItemModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    NgxButtonGroupModule
   ],
   declarations: [
     PersonPageComponent,

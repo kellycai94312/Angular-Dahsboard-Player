@@ -65,8 +65,7 @@
                       (onChange)="onCityChanged($event.current)">
     </app-input-select>
   </div>
-  <div *ngIf="canCreatePerson"
-       class="col">
+  <div class="col">
     <dx-check-box [(value)]="personQuery.template"
                   (valueChange)="updateItems()"
                   text="{{'personTemplate' | translate}}">

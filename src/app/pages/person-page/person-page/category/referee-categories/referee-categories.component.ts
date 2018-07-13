@@ -9,6 +9,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RefereeCategoryModalComponent} from '../referee-category-modal/referee-category-modal.component';
 import {PersonRefereeCategoryViewModel} from '../../../../../data/local/view-model/referee-category/person-referee-category-view-model';
 import {AppHelper} from '../../../../../utils/app-helper';
+import {Mutex} from '../../../../../data/local/mutex';
 
 @Component({
   selector: 'app-referee-categories',
@@ -22,11 +23,14 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
   public personRefereeCategoryViewModels: PersonRefereeCategoryViewModel[];
   private _allowEdit: boolean;
 
+  private readonly _mutex: Mutex;
+
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _authorizationService: AuthorizationService,
               private _personService: PersonService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper) {
+    this._mutex = new Mutex();
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
       await this.initialize(this._personService.personViewModel.data, value);
     });
@@ -46,6 +50,8 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
     if (!person || !sportType) {
       return;
     }
+
+    await this._mutex.acquire();
     try {
       const personRefereeCategories = await this._participantRestApiService.getPersonRefereeCategories({personId: person.id, sportTypeId: sportType.id});
       this.personRefereeCategoryViewModels = [];
@@ -56,6 +62,8 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
       }
     } catch (e) {
       await this._appHelper.showErrorMessage('error');
+    } finally {
+      this._mutex.release();
     }
   }
 

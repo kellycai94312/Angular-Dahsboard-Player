@@ -18,25 +18,3 @@ a {
     font-size: 14px;
   }
 }
-
-.btn-group-toggle {
-  z-index: 0;
-  .btn-primary {
-    color: $light-blue;
-    border-color: $light-blue;
-    background-color: $white;
-    box-shadow: none;
-    &:hover {
-      background-color: #eee;
-    }
-    &.active {
-      background-color: $light-blue;
-      color: $white-light;
-      outline: none;
-      &:hover {
-        background-color: $light-blue;
-      }
-    }
-  }
-}
-
