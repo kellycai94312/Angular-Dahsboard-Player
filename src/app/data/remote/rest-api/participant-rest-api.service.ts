@@ -414,9 +414,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/anthropometry/{!sportTypeId}'
+    path: '/person/{!personId}/anthropometry/{!sportTypeId}'
   })
-  updateAnthropometry: IRestMethodStrict<ListRequest<PersonAnthropometry>, any, { sportTypeId: number }, PersonAnthropometry[]>;
+  updateAnthropometry: IRestMethodStrict<ListRequest<PersonAnthropometry>, any, { personId: number, sportTypeId: number }, PersonAnthropometry[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,

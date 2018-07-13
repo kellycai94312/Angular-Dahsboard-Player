@@ -39,7 +39,10 @@ export class AnthropometryComponent implements OnInit, OnDestroy {
 
   public async onSave() {
     if (this._personService.selectedSportType) {
-      this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {sportTypeId: this._personService.selectedSportType.id});
+      this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {
+        personId: this._personService.personViewModel.data.id,
+        sportTypeId: this._personService.selectedSportType.id
+      });
     }
   }
 
