@@ -4,7 +4,6 @@ import {Message} from '@stomp/stompjs';
 import {Observable} from 'rxjs/Observable';
 import {ConversationReadRequest} from '../request/conversation-read-request';
 import * as SockJS from 'sockjs-client';
-import {PropertyConstant} from '../../local/property-constant';
 import {environment} from '../../../../environments/environment';
 import {IdRequest} from '../request/id-request';
 
@@ -20,7 +19,7 @@ export class ParticipantStompService {
   public connect(): void {
     if (!this._stompService.connected()) {
       this.stompConfig = new StompConfig();
-      this.stompConfig.url = new SockJS(PropertyConstant.wsUrl);
+      this.stompConfig.url = new SockJS(environment.wsUrl);
       this.stompConfig.headers = {};
       this.stompConfig.heartbeat_in = 0;
       this.stompConfig.heartbeat_out = 20000;

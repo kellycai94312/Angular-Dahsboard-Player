@@ -53,7 +53,6 @@ import {GameReport} from '../bean/game/game-report';
 import {PersonMeasure} from '../bean/person-measure';
 import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
-import {PropertyConstant} from '../../local/property-constant';
 import {BaseNotification} from '../model/notification/base/base-notification';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
@@ -78,10 +77,11 @@ import {Document} from '../model/file/document/document';
 import {PersonTemplateRequest} from '../request/person-template-request';
 import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
+import {environment} from '../../../../environments/environment';
 
 @Injectable()
 @RestParams({
-  url: PropertyConstant.restUrl,
+  url: environment.restUrl,
   withCredentials: true
 })
 export class ParticipantRestApiService extends Rest {
@@ -729,7 +729,7 @@ export class ParticipantRestApiService extends Rest {
     }
 
     formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-    return this.http.post<T[]>(`${PropertyConstant.restUrl}/file`, formData, {withCredentials: true}).toPromise();
+    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
   }
 
   updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
@@ -738,11 +738,11 @@ export class ParticipantRestApiService extends Rest {
       formData.append('file', file, file.name);
     }
     formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-    return this.http.put<T>(`${PropertyConstant.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
+    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
   }
 
   getFileUrl(documentQuery: DocumentQuery): string {
-    let url = `${PropertyConstant.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
+    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
     if (documentQuery.type) {
       url += `&type=${documentQuery.type}`;
     }
@@ -750,7 +750,7 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getDocument(documentId: number): string {
-    return `${PropertyConstant.restUrl}/file/download/document/${documentId}`;
+    return `${environment.restUrl}/file/download/document/${documentId}`;
   }
 
   //#endregion
