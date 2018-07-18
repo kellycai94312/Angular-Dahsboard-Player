@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {PropertyConstant} from '../data/local/property-constant';
 import {ImageDimension} from '../data/local/image-dimension';
 import {ImageFormat} from '../data/local/image-format';
 import {ImageQuery} from '../data/remote/rest-api/query/file/image-query';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class ImageService {
@@ -25,7 +25,7 @@ export class ImageService {
         width = 130;
         height = 130;
     }
-    return `${PropertyConstant.restUrl}/file/download/image?clazz=${imageQuery.clazz}&objectId=${imageQuery.objectId}&type=${imageQuery.type}&width=${width}&height=${height}`;
+    return `${environment.restUrl}/file/download/image?clazz=${imageQuery.clazz}&objectId=${imageQuery.objectId}&type=${imageQuery.type}&width=${width}&height=${height}`;
   }
 
   public rebuildUrl(imageDimension: ImageDimension, imageQuery: ImageQuery): string {
