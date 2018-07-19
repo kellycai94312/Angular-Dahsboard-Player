@@ -26,7 +26,7 @@ export class ImageService {
         width = 130;
         height = 130;
     }
-    return `${environment.restUrl}/file/download/image?clazz=${FileClass[imageQuery.clazz]}&objectId=${imageQuery.objectId}&type=${imageQuery.type}&width=${width}&height=${height}`;
+    return `${environment.restUrl}/file/download/image?clazz=${imageQuery.clazz}&objectId=${imageQuery.objectId}&type=${imageQuery.type}&width=${width}&height=${height}`;
   }
 
   public rebuildUrl(imageDimension: ImageDimension, imageQuery: ImageQuery): string {
