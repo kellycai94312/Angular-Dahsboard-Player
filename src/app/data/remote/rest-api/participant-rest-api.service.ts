@@ -538,7 +538,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/filter',
+    path: '/group',
   })
   getGroups: IRestMethod<GroupQuery, PageContainer<Group>>;
 

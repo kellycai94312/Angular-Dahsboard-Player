@@ -10,6 +10,7 @@ import {RefereeCategoryModalComponent} from '../referee-category-modal/referee-c
 import {PersonRefereeCategoryViewModel} from '../../../../../data/local/view-model/referee-category/person-referee-category-view-model';
 import {AppHelper} from '../../../../../utils/app-helper';
 import {Mutex} from '../../../../../data/local/mutex';
+import {UserRoleEnum} from '../../../../../data/remote/model/user-role-enum';
 
 @Component({
   selector: 'app-referee-categories',
@@ -37,8 +38,7 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this._allowEdit = await this._personService.allowEdit();
-
+    this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
     await this.initialize();
   }
 

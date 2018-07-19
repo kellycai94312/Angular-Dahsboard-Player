@@ -313,5 +313,6 @@
   "passport": "Паспорт",
   "personTemplate": "Неактивированные пользователи",
   "activate": "Активировать",
-  "personActivation": "Активация пользователя"
+  "personActivation": "Активация пользователя",
+  "visible": "Видимый"
 }

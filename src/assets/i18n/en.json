@@ -312,5 +312,6 @@
   "passport": "Passport",
   "personTemplate": "Non-active persons",
   "activate": "Activate",
-  "personActivation": "Person activation"
+  "personActivation": "Person activation",
+  "visible": "Visible"
 }
