@@ -110,17 +110,15 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public async initialize(personId: number) {
     this.personViewModel = await this.personService.initialize(personId);
     this.allowEdit = await this.personService.allowEdit();
+    const authPerson = await this._authorizationService.getPerson();
+    this._myProfile = this.personService.personViewModel.data.id == authPerson.id;
 
-    const userRoles = await this._authorizationService.getUserRoles();
     if (this.allowEdit) {
-      if (userRoles.find(x => x.userRoleEnum === UserRoleEnum.OPERATOR)) {
+      if (this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR) && !this._myProfile) {
         this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
       }
       this.tabs.push(new PersonTab('requisites', 'requisites', [], false));
     }
-
-    const authPerson = await this._authorizationService.getPerson();
-    this._myProfile = this.personService.personViewModel.data.id == authPerson.id;
 
     //#region SplitButton
     this.splitButtonItems = [];

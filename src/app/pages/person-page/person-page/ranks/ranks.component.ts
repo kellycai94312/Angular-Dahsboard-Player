@@ -4,6 +4,8 @@ import {PersonService} from '../person.service';
 import {PersonRank} from '../../../../data/remote/model/person-rank';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {RankModalComponent} from './rank-modal/rank-modal.component';
+import {AuthorizationService} from '../../../../shared/authorization.service';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 
 @Component({
   selector: 'app-ranks',
@@ -17,12 +19,13 @@ export class RanksComponent implements OnInit {
   public personRanks: PersonRank[];
 
   constructor(private _personService: PersonService,
+              private _authorizationService: AuthorizationService,
               private _participantRestApiService: ParticipantRestApiService,
               private _modalService: NgbModal) {
   }
 
   async ngOnInit() {
-    this.isEditAllow = await this._personService.allowEdit();
+    this.isEditAllow = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
     this.personRanks = await this._participantRestApiService.getRanks({personId: this._personService.personViewModel.data.id});
   }
 

@@ -10,6 +10,7 @@ import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-group-settings',
@@ -27,7 +28,8 @@ export class GroupSettingsComponent implements OnInit {
   public pageSize: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
+              private _groupService: GroupService,
+              private  _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
   }
 
@@ -89,8 +91,12 @@ export class GroupSettingsComponent implements OnInit {
   //#endregion
 
   public async onApply() {
-    this.group = await this._participantRestApiService.putGroup(this.group);
-    this._groupService.updateGroup(this.group);
+    try {
+      this.group = await this._participantRestApiService.putGroup(this.group);
+      this._groupService.updateGroup(this.group);
+    } catch (e) {
+      await this._appHelper.showErrorMessage('saveError');
+    }
   }
 
 }

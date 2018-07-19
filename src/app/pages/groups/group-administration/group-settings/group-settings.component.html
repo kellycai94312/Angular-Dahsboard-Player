@@ -23,6 +23,11 @@
         </dx-validator>
       </dx-select-box>
     </div>
+
+    <dx-check-box class="mt-2"
+                  [(value)]="group.visible"
+                  text="{{'visible' | translate}}">
+    </dx-check-box>
   </div>
 
   <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
