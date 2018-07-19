@@ -15,16 +15,15 @@ import {Image} from '../../../data/remote/model/file/image/image';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {ModalSelectPageComponent} from '../../../components/modal-select-page/modal-select-page.component';
-import {UserRoleItemComponent} from '../../../components/user-role-item/user-role-item.component';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {ListRequest} from '../../../data/remote/request/list-request';
 import {UserRole} from '../../../data/remote/model/user-role';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {SportTypeItemComponent} from '../../../components/sport-type-item/sport-type-item.component';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
 import {ButtonGroupItem} from '../../../components/ngx-button-group/bean/button-group-item';
+import {NamedObjectItemComponent} from '../../../components/named-object-item/named-object-item.component';
 
 @Component({
   selector: 'app-person-page',
@@ -205,9 +204,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
     const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
     componentInstance.headerNameKey = 'edit';
-    componentInstance.component = UserRoleItemComponent;
+    componentInstance.component = NamedObjectItemComponent;
     componentInstance.getItems = async pageQuery => {
-      const items = userRoles.filter(userRole => userRole.userRoleEnum.toString().toLowerCase().indexOf(pageQuery.name) > -1);
+      const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
       const pageContainer = new PageContainer();
       pageContainer.from = 0;
       pageContainer.size = items.length;
@@ -270,7 +269,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
     const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
     componentInstance.headerNameKey = 'edit';
-    componentInstance.component = SportTypeItemComponent;
+    componentInstance.component = NamedObjectItemComponent;
     componentInstance.getItems = async pageQuery => {
       return await this._participantRestApiService.getSportTypes(pageQuery);
     };

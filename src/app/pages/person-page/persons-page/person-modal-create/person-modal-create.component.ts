@@ -8,10 +8,8 @@ import {UserRole} from '../../../../data/remote/model/user-role';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {UserRoleItemComponent} from '../../../../components/user-role-item/user-role-item.component';
 import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {SportTypeItemComponent} from '../../../../components/sport-type-item/sport-type-item.component';
 import {NamedObjectItemComponent} from '../../../../components/named-object-item/named-object-item.component';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -68,9 +66,9 @@ export class PersonModalCreateComponent implements OnInit {
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
     const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
     componentInstance.headerNameKey = 'edit';
-    componentInstance.component = UserRoleItemComponent;
+    componentInstance.component = NamedObjectItemComponent;
     componentInstance.getItems = async pageQuery => {
-      const items = userRoles.filter(userRole => userRole.userRoleEnum.toString().toLowerCase().indexOf(pageQuery.name) > -1);
+      const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
       const pageContainer = new PageContainer();
       pageContainer.from = 0;
       pageContainer.size = items.length;
@@ -89,7 +87,7 @@ export class PersonModalCreateComponent implements OnInit {
     const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
     const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
     componentInstance.headerNameKey = 'edit';
-    componentInstance.component = SportTypeItemComponent;
+    componentInstance.component = NamedObjectItemComponent;
     componentInstance.getItems = async pageQuery => await this._participantRestApiService.getSportTypes(pageQuery);
     componentInstance.onSave = async selectedItems => {
       this.sportTypes = selectedItems;
@@ -123,12 +121,12 @@ export class PersonModalCreateComponent implements OnInit {
   public async onSave(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      if (this.userRoles.length == 0) {
-        this._appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
+      if (this.userRoles.length) {
+        await  this._appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
         return;
       }
-      if (this.sportTypes.length == 0) {
-        this._appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
+      if (this.sportTypes.length) {
+        await this._appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
         return;
       }
       this.person.sex = this.selectedSex.sexEnum;
