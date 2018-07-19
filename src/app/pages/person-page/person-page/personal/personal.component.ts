@@ -8,6 +8,8 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {Person} from '../../../../data/remote/model/person';
 import {AppHelper} from '../../../../utils/app-helper';
+import {Sex} from '../../../../data/local/sex';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-personal',
@@ -17,23 +19,33 @@ import {AppHelper} from '../../../../utils/app-helper';
 export class PersonalComponent implements OnInit {
 
   public readonly pageSize: number;
-  public readonly sexEnumValues: SexEnum[];
+  public readonly sexValues: Sex[];
 
   public allowEdit: boolean;
   public person: Person;
   public baseUserRole: UserRole;
+  public selectedSex: Sex;
 
   constructor(public personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
-              private  _appHelper: AppHelper) {
+              private  _appHelper: AppHelper,
+              private _translateObjectService: TranslateObjectService) {
     this.pageSize = PropertyConstant.pageSize;
-    this.sexEnumValues = Object.keys(SexEnum)
-      .filter(e => parseInt(e, 10) >= 0)
-      .map(k => SexEnum[k]);
+    this.sexValues = [];
+    this.person = this.personService.personViewModel.data;
   }
 
   async ngOnInit() {
-    this.person = this.personService.personViewModel.data;
+    const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
+    for (let i = 0; i < temp.length; i++) {
+      const sex = new Sex();
+      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
+      sex.sexEnum = temp[i];
+      this.sexValues.push(sex);
+    }
+
+    this.selectedSex = this.sexValues.find(x => SexEnum[x.sexEnum].toString() === this.person.sex.toString());
+
     this.allowEdit = await this.personService.allowEdit();
     try {
       if (this.person && this.person.id) {
@@ -55,6 +67,7 @@ export class PersonalComponent implements OnInit {
 
   public async onSave() {
     try {
+      this.person.sex = this.selectedSex.sexEnum;
       const person = await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
       this.personService.personViewModel.update(person);
 

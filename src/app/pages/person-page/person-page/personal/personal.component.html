@@ -53,8 +53,10 @@
     <div class="form-group">
       <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
       <dx-select-box id="sex"
-                     [items]="sexEnumValues"
-                     [(value)]="person.sex"
+                     [items]="sexValues"
+                     [(value)]="selectedSex"
+                     displayExpr="name"
+                     placeholder="{{'persons.person.personal.sex' | translate}}"
                      [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
