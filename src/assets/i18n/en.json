@@ -318,5 +318,10 @@
   "createReport": "Create report",
   "general": "General",
   "block": "Block",
-  "blocks": "Blocks"
+  "blocks": "Blocks",
+  "exportToPdf": "Export to Pdf",
+  "exportToExcel": "Export to Excel",
+  "print": "Print",
+  "reportBlock": "Report block",
+  "exercises": "Exercises"
 }

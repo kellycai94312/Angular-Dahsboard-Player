@@ -4,7 +4,6 @@ import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../utils/app-helper';
-import {ConversationService} from '../../../shared/conversation.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-modal.component';
@@ -34,7 +33,6 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
   private _searchInputSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _conversationService: ConversationService,
               private _modalService: NgbModal,
               private _appHelper: AppHelper,
               private _router: Router) {

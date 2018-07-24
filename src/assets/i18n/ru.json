@@ -319,5 +319,10 @@
   "createReport": "Создание отчета",
   "general": "Общий",
   "block": "Блок",
-  "blocks": "Блоки"
+  "blocks": "Блоки",
+  "exportToPdf": "Экспорт в Pdf",
+  "exportToExcel": "Экспорт в Excel",
+  "print": "Распечатать",
+  "reportBlock": "Блок отчета",
+  "exercises": "Упражнения"
 }

@@ -1,4 +1,16 @@
-<p>
-  event-blocks works!
-</p>
-<router-outlet></router-outlet>
+<ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+
+<div class="mt-2">
+  <ngx-virtual-scroll class="list-group-flush"
+                      [getItems]="getItems"
+                      count="99999"
+                      windowScroll="true">
+    <ng-template let-item>
+      <div class="list-group-item p-0"
+           (dblclick)="onShow(item)">
+        <app-training-report-block [data]="item"></app-training-report-block>
+      </div>
+    </ng-template>
+  </ngx-virtual-scroll>
+  <router-outlet></router-outlet>
+</div>

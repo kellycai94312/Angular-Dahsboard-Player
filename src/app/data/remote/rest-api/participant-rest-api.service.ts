@@ -1130,7 +1130,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/trainingReport/{!trainingReportId}/block'
   })
-  getTrainingBlocks: IRestMethod<PageQuery, PageContainer<BaseTrainingBlock>>;
+  getTrainingBlocks: IRestMethodStrict<any, PageQuery, { trainingReportId: number }, PageContainer<BaseTrainingBlock>>;
 
   @RestAction({
     method: RestRequestMethod.Post,

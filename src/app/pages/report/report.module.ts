@@ -13,12 +13,14 @@ import {NamedObjectModule} from '../../components/named-object/named-object.modu
 import {ReportPageComponent} from './report-page/report-page.component';
 import {EventBlocksComponent} from './report-page/event-blocks/event-blocks.component';
 import {EventReportGeneralComponent} from './report-page/event-report-general/event-report-general.component';
-import {PersonsEventBlockComponent} from './report-page/event-blocks/persons-event-block/persons-event-block.component';
-import {GeneralEventBlockComponent} from './report-page/event-blocks/general-event-block/general-event-block.component';
-import {ExercisesEventBlockComponent} from './report-page/event-blocks/exercises-event-block/exercises-event-block.component';
+import {PersonsEventBlockComponent} from './report-page/event-blocks/event-block/persons-event-block/persons-event-block.component';
+import {GeneralEventBlockComponent} from './report-page/event-blocks/event-block/general-event-block/general-event-block.component';
+import {ExercisesEventBlockComponent} from './report-page/event-blocks/event-block/exercises-event-block/exercises-event-block.component';
 import {TabModule} from '../../components/tab/tab.module';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {EventReportService} from './report-page/service/event-report.service';
+import {TrainingReportBlockComponent} from './component/training-report-block/training-report-block.component';
+import {EventBlockComponent} from './report-page/event-blocks/event-block/event-block.component';
 
 @NgModule({
   imports: [
@@ -40,7 +42,9 @@ import {EventReportService} from './report-page/service/event-report.service';
     EventReportGeneralComponent,
     PersonsEventBlockComponent,
     GeneralEventBlockComponent,
-    ExercisesEventBlockComponent
+    ExercisesEventBlockComponent,
+    TrainingReportBlockComponent,
+    EventBlockComponent
   ],
   providers: [EventReportService],
   entryComponents: [NgxModalComponent, NamedObjectComponent]

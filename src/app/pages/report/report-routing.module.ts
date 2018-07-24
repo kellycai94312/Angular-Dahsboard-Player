@@ -4,9 +4,10 @@ import {ReportsPageComponent} from './reports-page/reports-page.component';
 import {ReportPageComponent} from './report-page/report-page.component';
 import {EventReportGeneralComponent} from './report-page/event-report-general/event-report-general.component';
 import {EventBlocksComponent} from './report-page/event-blocks/event-blocks.component';
-import {GeneralEventBlockComponent} from './report-page/event-blocks/general-event-block/general-event-block.component';
-import {ExercisesEventBlockComponent} from './report-page/event-blocks/exercises-event-block/exercises-event-block.component';
-import {PersonsEventBlockComponent} from './report-page/event-blocks/persons-event-block/persons-event-block.component';
+import {GeneralEventBlockComponent} from './report-page/event-blocks/event-block/general-event-block/general-event-block.component';
+import {ExercisesEventBlockComponent} from './report-page/event-blocks/event-block/exercises-event-block/exercises-event-block.component';
+import {PersonsEventBlockComponent} from './report-page/event-blocks/event-block/persons-event-block/persons-event-block.component';
+import {EventBlockComponent} from './report-page/event-blocks/event-block/event-block.component';
 
 const routes: Routes = [
   {path: '', component: ReportsPageComponent},
@@ -17,7 +18,8 @@ const routes: Routes = [
       {path: 'general', component: EventReportGeneralComponent},
       {path: 'block', component: EventBlocksComponent},
       {
-        path: 'block/:id', children: [
+        path: 'block/:id', component: EventBlockComponent,
+        children: [
           {path: '', redirectTo: 'general'},
           {path: 'general', component: GeneralEventBlockComponent},
           {path: 'exercise', component: ExercisesEventBlockComponent},
