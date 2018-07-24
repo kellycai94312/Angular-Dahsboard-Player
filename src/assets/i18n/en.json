@@ -315,5 +315,8 @@
   "personActivation": "Person activation",
   "visible": "Visible",
   "reports": "Reports",
-  "createReport": "Create report"
+  "createReport": "Create report",
+  "general": "General",
+  "block": "Block",
+  "blocks": "Blocks"
 }

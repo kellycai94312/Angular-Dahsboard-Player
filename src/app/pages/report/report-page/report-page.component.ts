@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {Tab} from '../../../data/local/tab';
+import {ActivatedRoute} from '@angular/router';
+import {EventReportService} from './service/event-report.service';
 
 @Component({
   selector: 'app-report-page',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReportPageComponent implements OnInit {
 
-  constructor() { }
+  public readonly tabs: Tab[];
 
-  ngOnInit() {
+  constructor(private _eventReportService: EventReportService,
+              private _activatedRoute: ActivatedRoute) {
+    this.tabs = [
+      this.createTab('general', 'general'),
+      this.createTab('blocks', 'block')
+    ];
+  }
+
+  async ngOnInit(): Promise<void> {
+    await this._eventReportService.initialize(this._activatedRoute.snapshot.params.id);
+  }
+
+  private createTab(nameKey: string, routerLink: string): Tab {
+    const tab = new Tab();
+    tab.nameKey = nameKey;
+    tab.routerLink = routerLink;
+    return tab;
   }
 
 }

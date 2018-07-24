@@ -316,5 +316,8 @@
   "personActivation": "Активация пользователя",
   "visible": "Видимый",
   "reports": "Отчеты",
-  "createReport": "Создание отчета"
+  "createReport": "Создание отчета",
+  "general": "Общий",
+  "block": "Блок",
+  "blocks": "Блоки"
 }

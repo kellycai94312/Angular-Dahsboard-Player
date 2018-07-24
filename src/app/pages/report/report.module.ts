@@ -16,6 +16,9 @@ import {EventReportGeneralComponent} from './report-page/event-report-general/ev
 import {PersonsEventBlockComponent} from './report-page/event-blocks/persons-event-block/persons-event-block.component';
 import {GeneralEventBlockComponent} from './report-page/event-blocks/general-event-block/general-event-block.component';
 import {ExercisesEventBlockComponent} from './report-page/event-blocks/exercises-event-block/exercises-event-block.component';
+import {TabModule} from '../../components/tab/tab.module';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
+import {EventReportService} from './report-page/service/event-report.service';
 
 @NgModule({
   imports: [
@@ -26,7 +29,9 @@ import {ExercisesEventBlockComponent} from './report-page/event-blocks/exercises
     BusyButtonModule,
     NgxModalModule,
     ModalSelectPageModule,
-    NamedObjectModule
+    NamedObjectModule,
+    TabModule,
+    NgxSplitButtonModule
   ],
   declarations: [
     ReportsPageComponent,
@@ -37,6 +42,7 @@ import {ExercisesEventBlockComponent} from './report-page/event-blocks/exercises
     GeneralEventBlockComponent,
     ExercisesEventBlockComponent
   ],
+  providers: [EventReportService],
   entryComponents: [NgxModalComponent, NamedObjectComponent]
 })
 export class ReportModule {

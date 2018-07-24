@@ -15,8 +15,9 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'general'},
       {path: 'general', component: EventReportGeneralComponent},
+      {path: 'block', component: EventBlocksComponent},
       {
-        path: 'block/:id', component: EventBlocksComponent, children: [
+        path: 'block/:id', children: [
           {path: '', redirectTo: 'general'},
           {path: 'general', component: GeneralEventBlockComponent},
           {path: 'exercise', component: ExercisesEventBlockComponent},

@@ -1,3 +1,8 @@
-<p>
-  event-report-general works!
-</p>
+<div class="row">
+  <div class="col col-sm col-md-6 col-lg-4">
+    <app-named-object [data]="eventReportService.trainingReport"></app-named-object>
+    <div class="mt-2">
+      <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+    </div>
+  </div>
+</div>
