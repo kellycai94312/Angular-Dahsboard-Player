@@ -78,6 +78,8 @@ import {PersonTemplateRequest} from '../request/person-template-request';
 import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
+import {TrainingReport} from '../model/training/report/base/training-report';
+import {BaseTrainingBlock} from '../model/training/report/base/base-training-block';
 
 @Injectable()
 @RestParams({
@@ -1085,6 +1087,68 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+
+  //#endregion
+
+  //#region TrainingReport
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport'
+  })
+  getTrainingReports: IRestMethod<PageQuery, PageContainer<TrainingReport>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}'
+  })
+  getTrainingReport: IRestMethod<{ trainingReportId: number }, TrainingReport>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/trainingReport'
+  })
+  createTrainingReport: IRestMethod<TrainingReport, TrainingReport>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/trainingReport/{!trainingReportId}'
+  })
+  updateTrainingReport: IRestMethodStrict<TrainingReport, any, { trainingReportId: number }, TrainingReport>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/trainingReport/{!trainingReportId}'
+  })
+  removeTrainingReport: IRestMethod<{ trainingReportId: number }, TrainingReport>;
+
+  //#endregion
+
+  //#region TrainingBlock
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}/block'
+  })
+  getTrainingBlocks: IRestMethod<PageQuery, PageContainer<BaseTrainingBlock>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/trainingReport/{!trainingReportId}/block'
+  })
+  createTrainingBlock: IRestMethodStrict<BaseTrainingBlock, any, { trainingReportId: number }, BaseTrainingBlock>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
+  })
+  updateTrainingBlock: IRestMethodStrict<BaseTrainingBlock, any, { trainingReportId: number, trainingBlockId: number }, BaseTrainingBlock>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
+  })
+  removeTrainingBlock: IRestMethod<{ trainingReportId: number, trainingBlockId: number }, BaseTrainingBlock>;
 
   //#endregion
 

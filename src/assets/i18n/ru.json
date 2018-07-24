@@ -314,5 +314,7 @@
   "personTemplate": "Неактивированные пользователи",
   "activate": "Активировать",
   "personActivation": "Активация пользователя",
-  "visible": "Видимый"
+  "visible": "Видимый",
+  "reports": "Отчеты",
+  "createReport": "Создание отчета"
 }

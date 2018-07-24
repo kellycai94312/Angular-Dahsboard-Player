@@ -1,0 +1,14 @@
+<div *ngIf="data">
+  <label>{{'name' | translate}}</label>
+  <dx-text-box #name
+               mode="text"
+               [(value)]="data.name"
+               [showClearButton]="true">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-text-box>
+
+  <label class="mt-2">{{'description' | translate }}</label>
+  <dx-text-area [(value)]="data.description"></dx-text-area>
+</div>

@@ -1,0 +1,21 @@
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgxModalComponent} from './ngx-modal/ngx-modal.component';
+import {TranslateModule} from '@ngx-translate/core';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgxSplitButtonModule} from '../ngx-split-button/ngx-split-button.module';
+import {RefModule} from '../../directives/ref/ref.module';
+
+@NgModule({
+  imports: [
+    CommonModule,
+    TranslateModule.forChild(),
+    NgbModule,
+    NgxSplitButtonModule,
+    RefModule
+  ],
+  declarations: [NgxModalComponent],
+  exports: [NgxModalComponent]
+})
+export class NgxModalModule {
+}

@@ -50,6 +50,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, LayoutService]
   },
   {
+    path: 'report',
+    loadChildren: './pages/report/report.module#ReportModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]
