@@ -75,7 +75,6 @@ export class EventBlocksComponent implements OnInit {
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
-    console.log(this._trainingReportId);
     return await this._participantRestApiService.getTrainingBlocks({}, query, {trainingReportId: this._trainingReportId});
   };
 

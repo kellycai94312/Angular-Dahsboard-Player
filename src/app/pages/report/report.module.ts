@@ -6,9 +6,7 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {TranslateModule} from '@ngx-translate/core';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
-import {NgxModalComponent} from '../../components/ngx-modal/ngx-modal/ngx-modal.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
-import {NamedObjectComponent} from '../../components/named-object/named-object/named-object.component';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {ReportPageComponent} from './report-page/report-page.component';
 import {EventBlocksComponent} from './report-page/event-blocks/event-blocks.component';
@@ -21,6 +19,9 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
 import {EventReportService} from './report-page/service/event-report.service';
 import {TrainingReportBlockComponent} from './component/training-report-block/training-report-block.component';
 import {EventBlockComponent} from './report-page/event-blocks/event-block/event-block.component';
+import {DxDateBoxModule, DxSelectBoxModule} from 'devextreme-angular';
+import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
+import {GroupPageModule} from '../groups/group-page.module';
 
 @NgModule({
   imports: [
@@ -33,7 +34,11 @@ import {EventBlockComponent} from './report-page/event-blocks/event-block/event-
     ModalSelectPageModule,
     NamedObjectModule,
     TabModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    DxDateBoxModule,
+    DxSelectBoxModule,
+    NamedObjectItemModule,
+    GroupPageModule
   ],
   declarations: [
     ReportsPageComponent,
@@ -46,8 +51,7 @@ import {EventBlockComponent} from './report-page/event-blocks/event-block/event-
     TrainingReportBlockComponent,
     EventBlockComponent
   ],
-  providers: [EventReportService],
-  entryComponents: [NgxModalComponent, NamedObjectComponent]
+  providers: [EventReportService]
 })
 export class ReportModule {
 }

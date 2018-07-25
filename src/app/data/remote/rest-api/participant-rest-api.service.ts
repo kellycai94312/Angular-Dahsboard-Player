@@ -80,6 +80,7 @@ import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
 import {TrainingReport} from '../model/training/report/base/training-report';
 import {BaseTrainingBlock} from '../model/training/report/base/base-training-block';
+import {TrainingBlockQuery} from './query/training-block-query';
 
 @Injectable()
 @RestParams({
@@ -1133,6 +1134,12 @@ export class ParticipantRestApiService extends Rest {
   getTrainingBlocks: IRestMethodStrict<any, PageQuery, { trainingReportId: number }, PageContainer<BaseTrainingBlock>>;
 
   @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
+  })
+  getTrainingBlock: IRestMethod<{ trainingReportId: number, trainingBlockId: number }, BaseTrainingBlock>;
+
+  @RestAction({
     method: RestRequestMethod.Post,
     path: '/trainingReport/{!trainingReportId}/block'
   })
@@ -1149,6 +1156,54 @@ export class ParticipantRestApiService extends Rest {
     path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
   })
   removeTrainingBlock: IRestMethod<{ trainingReportId: number, trainingBlockId: number }, BaseTrainingBlock>;
+
+  //#region Group
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group'
+  })
+  getTrainingBlockGroups: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<Group>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group'
+  })
+  updateTrainingBlockGroups: IRestMethodStrict<ListRequest<Group>, any, { trainingReportId: number, trainingBlockId: number }, Group[]>;
+
+  //#endregion
+
+  //#region Exercise measure
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/exerciseMeasure'
+  })
+  getTrainingBlockExerciseMeasures: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<ExerciseMeasure>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/exerciseMeasure'
+  })
+  updateTrainingBlockExerciseMeasures: IRestMethodStrict<ListRequest<ExerciseMeasure>, any, { trainingReportId: number, trainingBlockId: number }, ExerciseMeasure[]>;
+
+  //#endregion
+
+  //#region Person
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/person'
+  })
+  getTrainingBlockPersons: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<Person>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/person'
+  })
+  updateTrainingBlockPersons: IRestMethodStrict<ListRequest<Person>, any, { trainingReportId: number, trainingBlockId: number }, Person[]>;
+
+  //#endregion
 
   //#endregion
 

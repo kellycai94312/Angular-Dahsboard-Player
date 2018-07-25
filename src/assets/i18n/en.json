@@ -323,5 +323,12 @@
   "exportToExcel": "Export to Excel",
   "print": "Print",
   "reportBlock": "Report block",
-  "exercises": "Exercises"
+  "exercises": "Exercises",
+  "interval": "Interval",
+  "eventType": "Event type",
+  "trainingDiscriminator": {
+    "TRAINING": "Training",
+    "TESTING": "Testing",
+    "GAME": "Game"
+  }
 }

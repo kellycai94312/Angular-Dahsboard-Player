@@ -15,7 +15,8 @@ import {RefModule} from '../../directives/ref/ref.module';
     RefModule
   ],
   declarations: [NgxModalComponent],
-  exports: [NgxModalComponent]
+  exports: [NgxModalComponent],
+  entryComponents: [NgxModalComponent]
 })
 export class NgxModalModule {
 }

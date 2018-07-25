@@ -324,5 +324,12 @@
   "exportToExcel": "Экспорт в Excel",
   "print": "Распечатать",
   "reportBlock": "Блок отчета",
-  "exercises": "Упражнения"
+  "exercises": "Упражнения",
+  "interval": "Промежуток",
+  "eventType": "Тип события",
+  "trainingDiscriminator": {
+    "TRAINING": "Тренировка",
+    "TESTING": "Тестирование",
+    "GAME": "Игра"
+  }
 }

@@ -20,8 +20,8 @@ export class ReportPageComponent implements OnInit {
     ];
   }
 
-  async ngOnInit(): Promise<void> {
-    await this._eventReportService.initialize(this._activatedRoute.snapshot.params.id);
+  ngOnInit(): void {
+    this._eventReportService.setTrainingReportId(this._activatedRoute.snapshot.params.id);
   }
 
   private createTab(nameKey: string, routerLink: string): Tab {

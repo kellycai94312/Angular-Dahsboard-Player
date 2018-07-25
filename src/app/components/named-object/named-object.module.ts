@@ -13,7 +13,8 @@ import {NamedObjectComponent} from './named-object/named-object.component';
     DxTextAreaModule
   ],
   declarations: [NamedObjectComponent],
-  exports: [NamedObjectComponent]
+  exports: [NamedObjectComponent],
+  entryComponents: [NamedObjectComponent]
 })
 export class NamedObjectModule {
 }

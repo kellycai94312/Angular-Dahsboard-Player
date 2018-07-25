@@ -40,6 +40,10 @@ export class AppHelper {
   }
 
   public getGmtDate(date: Date): any {
+    if (!date) {
+      return null;
+    }
+
     date = new Date(date);
     const dateWithTimezone = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
     return this._datePipe.transform(dateWithTimezone, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';

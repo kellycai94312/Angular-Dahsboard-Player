@@ -1,20 +1,23 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Router} from '@angular/router';
 import {EventReportService} from '../service/event-report.service';
+import {TrainingReport} from '../../../../data/remote/model/training/report/base/training-report';
 
 @Component({
   selector: 'app-event-report-general',
   templateUrl: './event-report-general.component.html',
   styleUrls: ['./event-report-general.component.scss']
 })
-export class EventReportGeneralComponent {
+export class EventReportGeneralComponent implements OnInit {
+
+  public trainingReport: TrainingReport;
 
   public readonly splitButtonItems: SplitButtonItem[];
 
-  constructor(public eventReportService: EventReportService,
+  constructor(private _eventReportService: EventReportService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _router: Router) {
@@ -24,11 +27,12 @@ export class EventReportGeneralComponent {
         default: true,
         callback: async () => {
           try {
-            this.eventReportService.trainingReport = await this._participantRestApiService.updateTrainingReport(
-              this.eventReportService.trainingReport,
+            this.trainingReport = await this._participantRestApiService.updateTrainingReport(
+              this.trainingReport,
               {},
-              {trainingReportId: this.eventReportService.trainingReport.id}
+              {trainingReportId: this.trainingReport.id}
             );
+            this._eventReportService.setTrainingReport(this.trainingReport);
             await this._appHelper.showSuccessMessage('saved');
           } catch (e) {
             await this._appHelper.showErrorMessage('saveError');
@@ -39,7 +43,7 @@ export class EventReportGeneralComponent {
         nameKey: 'remove',
         callback: async () => {
           try {
-            await this._participantRestApiService.removeTrainingReport({trainingReportId: this.eventReportService.trainingReport.id});
+            await this._participantRestApiService.removeTrainingReport({trainingReportId: this.trainingReport.id});
             await this._router.navigate(['/report']);
           } catch (e) {
             await this._appHelper.showErrorMessage('removeError');
@@ -47,6 +51,10 @@ export class EventReportGeneralComponent {
         }
       }
     ];
+  }
+
+  async ngOnInit() {
+    this.trainingReport = await this._eventReportService.getTrainingReport();
   }
 
 }
