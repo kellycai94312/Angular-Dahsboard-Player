@@ -330,5 +330,6 @@
     "TRAINING": "Training",
     "TESTING": "Testing",
     "GAME": "Game"
-  }
+  },
+  "loadDataError":"Load data error"
 }

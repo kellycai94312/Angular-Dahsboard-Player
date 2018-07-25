@@ -1,5 +1,5 @@
 <div *ngIf="data"
-     [routerLink]="url">
+     [routerLink]="canNavigate?url:null">
   <div class="d-flex flex-row align-items-center">
     <app-image
       [type]="'LOGO'"

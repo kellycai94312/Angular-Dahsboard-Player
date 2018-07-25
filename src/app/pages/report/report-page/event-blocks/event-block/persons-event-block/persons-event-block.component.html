@@ -1,3 +1,34 @@
-<p>
-  persons-event-block works!
-</p>
+<div class="d-flex flex-wrap selected-content">
+  <div *ngFor="let item of persons"
+       (dblclick)="onUnselected(item)"
+       class="pr-2 pb-2 item-width">
+    <app-person [canNavigate]="false"
+                [data]="item"></app-person>
+  </div>
+</div>
+
+<div class="row cols-padding mb-2">
+  <div class="col">
+    <input #searchInput
+           type="text"
+           class="form-control input-height-sm"
+           placeholder="{{'search' | translate}}">
+  </div>
+  <div class="col-auto">
+    <app-busy-button nameKey="save"
+                     [click]="onSave"></app-busy-button>
+  </div>
+</div>
+
+<ngx-virtual-scroll class="d-flex flex-wrap"
+                    [getItems]="getItemsWithoutSelected"
+                    [(query)]="query"
+                    windowScroll="true">
+  <ng-template let-item>
+    <div class="pr-2 pb-2 item-width"
+         (dblclick)="onSelected(item)">
+      <app-person [canNavigate]="false"
+                  [data]="item"></app-person>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

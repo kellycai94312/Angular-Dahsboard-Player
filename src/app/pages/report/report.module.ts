@@ -22,6 +22,7 @@ import {EventBlockComponent} from './report-page/event-blocks/event-block/event-
 import {DxDateBoxModule, DxSelectBoxModule} from 'devextreme-angular';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {GroupPageModule} from '../groups/group-page.module';
+import {PersonModule} from '../../components/person/person.module';
 
 @NgModule({
   imports: [
@@ -38,7 +39,8 @@ import {GroupPageModule} from '../groups/group-page.module';
     DxDateBoxModule,
     DxSelectBoxModule,
     NamedObjectItemModule,
-    GroupPageModule
+    GroupPageModule,
+    PersonModule
   ],
   declarations: [
     ReportsPageComponent,
