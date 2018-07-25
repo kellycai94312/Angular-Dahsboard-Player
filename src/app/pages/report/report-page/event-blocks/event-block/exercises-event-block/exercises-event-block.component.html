@@ -1,3 +1,24 @@
-<p>
-  exercises-event-block works!
-</p>
+<app-busy-button nameKey="edit"
+                 [click]="onEdit"></app-busy-button>
+<div *ngIf="exerciseMeasures&&exerciseMeasures.length"
+     class="row cols-padding">
+  <div class="col col-sm col-md-10 col-lg-8">
+    <table class="table table-bordered table-hover table-sm mt-2">
+      <thead>
+      <tr class="d-flex">
+        <th class="col-5">{{'exercise' | translate}}</th>
+        <th class="col-4">{{'parameter' | translate}}</th>
+        <th class="col-3">{{'units' | translate}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of exerciseMeasures"
+          class="d-flex">
+        <td class="col-5">{{item.baseExercise.name}}</td>
+        <td class="col-4">{{item.measure.measureParameter.name}}</td>
+        <td class="col-3">{{item.measure.measureUnit.name}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

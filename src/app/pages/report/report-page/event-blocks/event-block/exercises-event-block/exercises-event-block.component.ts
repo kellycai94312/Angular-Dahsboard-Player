@@ -1,4 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {EventReportService} from '../../../service/event-report.service';
+import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import {BaseTrainingBlock} from '../../../../../../data/remote/model/training/report/base/base-training-block';
+import {ExerciseMeasure} from '../../../../../../data/remote/model/exercise/exercise-measure';
+import {AppHelper} from '../../../../../../utils/app-helper';
+import {PropertyConstant} from '../../../../../../data/local/property-constant';
+import {ListRequest} from '../../../../../../data/remote/request/list-request';
+import {ExerciseMeasureItemComponent} from '../../../../../../components/exercise-measure-item/exercise-measure-item.component';
+import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
 
 @Component({
   selector: 'app-exercises-event-block',
@@ -7,9 +18,55 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExercisesEventBlockComponent implements OnInit {
 
-  constructor() { }
+  public exerciseMeasures: ExerciseMeasure[];
 
-  ngOnInit() {
+  private _trainingBlock: BaseTrainingBlock;
+  private _trainingBlockFilter: any;
+
+  constructor(private _eventReportService: EventReportService,
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper,
+              private _modalService: NgbModal) {
   }
+
+  async ngOnInit() {
+    this._trainingBlock = await this._eventReportService.getSelectedTrainingBlock();
+    this._trainingBlockFilter = {
+      trainingReportId: this._trainingBlock.trainingReport.id,
+      trainingBlockId: this._trainingBlock.id
+    };
+    try {
+      this.exerciseMeasures = (await this._participantRestApiService.getTrainingBlockExerciseMeasures(
+        {},
+        {count: PropertyConstant.pageSizeMax, unassigned: false},
+        this._trainingBlockFilter
+      )).list;
+    } catch (e) {
+      await this._appHelper.showErrorMessage('loadDataError');
+    }
+  }
+
+  public onEdit = async () => {
+    const trainingBlockQuery = new TrainingBlockQuery();
+    trainingBlockQuery.unassigned = true;
+
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<ExerciseMeasure>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = ExerciseMeasureItemComponent;
+    componentInstance.pageQuery = trainingBlockQuery;
+    componentInstance.getItems = async pageQuery => {
+      return await this._participantRestApiService.getTrainingBlockExerciseMeasures({}, pageQuery, this._trainingBlockFilter);
+    };
+    componentInstance.onSave = async selectedItems => {
+      try {
+        this.exerciseMeasures = await this._participantRestApiService.updateTrainingBlockExerciseMeasures(new ListRequest(selectedItems), {}, this._trainingBlockFilter);
+        ref.dismiss();
+      } catch (e) {
+        await this._appHelper.showErrorMessage('saveError');
+      }
+    };
+    await componentInstance.initialize(this.exerciseMeasures);
+  };
 
 }

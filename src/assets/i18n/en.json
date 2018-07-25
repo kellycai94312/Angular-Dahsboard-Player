@@ -331,5 +331,6 @@
     "TESTING": "Testing",
     "GAME": "Game"
   },
-  "loadDataError":"Load data error"
+  "loadDataError":"Load data error",
+  "exercise":"Exercise"
 }

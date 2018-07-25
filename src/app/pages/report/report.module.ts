@@ -23,6 +23,7 @@ import {DxDateBoxModule, DxSelectBoxModule} from 'devextreme-angular';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {GroupPageModule} from '../groups/group-page.module';
 import {PersonModule} from '../../components/person/person.module';
+import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 
 @NgModule({
   imports: [
@@ -40,7 +41,8 @@ import {PersonModule} from '../../components/person/person.module';
     DxSelectBoxModule,
     NamedObjectItemModule,
     GroupPageModule,
-    PersonModule
+    PersonModule,
+    ExerciseMeasureItemModule
   ],
   declarations: [
     ReportsPageComponent,
