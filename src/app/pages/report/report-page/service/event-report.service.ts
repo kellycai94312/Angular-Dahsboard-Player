@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
-import {TrainingReport} from '../../../../data/remote/model/training/report/base/training-report';
+import {TrainingReport} from '../../../../data/remote/model/training/report/training-report';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {Mutex} from '../../../../data/local/mutex';
-import {BaseTrainingBlock} from '../../../../data/remote/model/training/report/base/base-training-block';
+import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
 
 @Injectable()
 export class EventReportService {
 
   private _trainingReport: TrainingReport;
-  private _selectedTrainingBlock: BaseTrainingBlock;
+  private _selectedTrainingBlock: TrainingBlock;
 
   private readonly _trainingReportMutex: Mutex;
   private readonly _selectedTrainingBlockMutex: Mutex;
@@ -44,7 +44,7 @@ export class EventReportService {
     }
   }
 
-  public setSelectedTrainingBlock(trainingBlock: BaseTrainingBlock) {
+  public setSelectedTrainingBlock(trainingBlock: TrainingBlock) {
     this._selectedTrainingBlockId = trainingBlock.id;
     this._selectedTrainingBlock = trainingBlock;
   }
@@ -54,7 +54,7 @@ export class EventReportService {
     this._selectedTrainingBlock = null;
   }
 
-  public async getSelectedTrainingBlock(): Promise<BaseTrainingBlock> {
+  public async getSelectedTrainingBlock(): Promise<TrainingBlock> {
     await this._selectedTrainingBlockMutex.acquire();
     try {
       if (!this._selectedTrainingBlock || this._selectedTrainingBlockId && this._selectedTrainingBlock.id != this._selectedTrainingBlockId) {

@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {EventReportService} from '../../../service/event-report.service';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {BaseTrainingBlock} from '../../../../../../data/remote/model/training/report/base/base-training-block';
 import {ExerciseMeasure} from '../../../../../../data/remote/model/exercise/exercise-measure';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
@@ -10,6 +9,7 @@ import {ExerciseMeasureItemComponent} from '../../../../../../components/exercis
 import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
+import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 
 @Component({
   selector: 'app-exercises-event-block',
@@ -20,7 +20,7 @@ export class ExercisesEventBlockComponent implements OnInit {
 
   public exerciseMeasures: ExerciseMeasure[];
 
-  private _trainingBlock: BaseTrainingBlock;
+  private _trainingBlock: TrainingBlock;
   private _trainingBlockFilter: any;
 
   constructor(private _eventReportService: EventReportService,

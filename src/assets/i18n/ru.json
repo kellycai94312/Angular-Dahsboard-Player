@@ -189,8 +189,8 @@
   "test": "Тест",
   "parameter": "Параметр",
   "templates": "Шаблоны",
-  "showHistory": "посмотреть историю",
-  "showMore": "показать больше",
+  "showHistory": "Посмотреть историю",
+  "showMore": "Показать больше",
   "from": "C",
   "to": "По",
   "location": "Место проведения",
@@ -332,6 +332,10 @@
     "TESTING": "Тестирование",
     "GAME": "Игра"
   },
-  "loadDataError":"Ошибка загрузки данных",
-  "exercise":"Упражнение"
+  "loadDataError": "Ошибка загрузки данных",
+  "exercise": "Упражнение",
+  "noData": "Нет данных",
+  "chartType": "Тип графика",
+  "barChartType": "Столбец",
+  "lineChartType": "Линия"
 }

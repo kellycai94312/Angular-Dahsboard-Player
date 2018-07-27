@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseTrainingBlock} from '../../../../../../data/remote/model/training/report/base/base-training-block';
 import {EventReportService} from '../../../service/event-report.service';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
@@ -17,6 +16,7 @@ import {ListRequest} from '../../../../../../data/remote/request/list-request';
 import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
 import {NamedObjectItemComponent} from '../../../../../../components/named-object-item/named-object-item.component';
 import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
+import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 
 @Component({
   selector: 'app-general-event-block',
@@ -25,7 +25,7 @@ import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/t
 })
 export class GeneralEventBlockComponent implements OnInit {
 
-  public trainingBlock: BaseTrainingBlock;
+  public trainingBlock: TrainingBlock;
   public selectedEventType: EventType;
   public sportTypes: SportType[];
   public locations: Location[];

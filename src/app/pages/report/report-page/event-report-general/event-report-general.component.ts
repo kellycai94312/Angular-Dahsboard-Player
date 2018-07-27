@@ -4,7 +4,7 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {AppHelper} from '../../../../utils/app-helper';
 import {Router} from '@angular/router';
 import {EventReportService} from '../service/event-report.service';
-import {TrainingReport} from '../../../../data/remote/model/training/report/base/training-report';
+import {TrainingReport} from '../../../../data/remote/model/training/report/training-report';
 
 @Component({
   selector: 'app-event-report-general',

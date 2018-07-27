@@ -8,9 +8,9 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {EventReportService} from '../service/event-report.service';
-import {TableTrainingBlock} from '../../../../data/remote/model/training/report/table-training-block';
 import {TranslateService} from '@ngx-translate/core';
-import {BaseTrainingBlock} from '../../../../data/remote/model/training/report/base/base-training-block';
+import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
+import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
 
 @Component({
   selector: 'app-event-blocks',
@@ -39,7 +39,8 @@ export class EventBlocksComponent implements OnInit {
         default: true,
         callback: async () => {
           try {
-            let trainingBlock = new TableTrainingBlock();
+            let trainingBlock = new TrainingBlock();
+            trainingBlock.trainingBlockType = TrainingBlockType.TABLE;
             trainingBlock.name = await this._translateService.get('reportBlock').toPromise();
             trainingBlock = await this._participantRestApiService.createTrainingBlock(trainingBlock, {}, {trainingReportId: this._trainingReportId});
             await this.onShow(trainingBlock);
@@ -78,9 +79,8 @@ export class EventBlocksComponent implements OnInit {
     return await this._participantRestApiService.getTrainingBlocks({}, query, {trainingReportId: this._trainingReportId});
   };
 
-  public async onShow(baseTrainingBlock: BaseTrainingBlock): Promise<void> {
+  public async onShow(baseTrainingBlock: TrainingBlock): Promise<void> {
     await this._router.navigate([baseTrainingBlock.id], {relativeTo: this._activatedRoute});
-
   }
 
   private async resetItems(): Promise<void> {

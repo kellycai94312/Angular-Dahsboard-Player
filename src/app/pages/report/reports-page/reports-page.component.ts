@@ -9,7 +9,7 @@ import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-modal.component';
 import {NamedObjectComponent} from '../../../components/named-object/named-object/named-object.component';
 import {Router} from '@angular/router';
-import {TrainingReport} from '../../../data/remote/model/training/report/base/training-report';
+import {TrainingReport} from '../../../data/remote/model/training/report/training-report';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';

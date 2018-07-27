@@ -188,8 +188,8 @@
   "test": "Test",
   "parameter": "Parameter",
   "templates": "Templates",
-  "showHistory": "show history",
-  "showMore": "show more",
+  "showHistory": "Show history",
+  "showMore": "Show more",
   "from": "From",
   "to": "To",
   "location": "Location",
@@ -331,6 +331,10 @@
     "TESTING": "Testing",
     "GAME": "Game"
   },
-  "loadDataError":"Load data error",
-  "exercise":"Exercise"
+  "loadDataError": "Load data error",
+  "exercise": "Exercise",
+  "noData": "No data",
+  "chartType": "Chart type",
+  "barChartType": "Bar",
+  "lineChartType": "Line"
 }

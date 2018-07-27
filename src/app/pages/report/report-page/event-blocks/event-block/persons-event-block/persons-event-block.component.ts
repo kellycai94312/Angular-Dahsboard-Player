@@ -4,7 +4,6 @@ import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {Person} from '../../../../../../data/remote/model/person';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {BaseTrainingBlock} from '../../../../../../data/remote/model/training/report/base/base-training-block';
 import {EventReportService} from '../../../service/event-report.service';
 import {ListRequest} from '../../../../../../data/remote/request/list-request';
 import {Direction} from '../../../../../../components/ngx-virtual-scroll/model/direction';
@@ -12,6 +11,7 @@ import {PageQuery} from '../../../../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {ISubscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
+import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 
 @Component({
   selector: 'app-persons-event-block',
@@ -28,7 +28,7 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
 
   public query: TrainingBlockQuery;
   public persons: Person[];
-  public _trainingBlock: BaseTrainingBlock;
+  public _trainingBlock: TrainingBlock;
 
   private _searchInputSubscription: ISubscription;
 
