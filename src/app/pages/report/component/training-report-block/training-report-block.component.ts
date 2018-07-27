@@ -240,12 +240,12 @@ export class TrainingReportBlockComponent implements OnInit {
 
 }
 
-export class GroupData {
+class GroupData {
   public data: ExerciseMeasure;
   public trace: ScatterData;
 }
 
-export class ChartTypeViewModel {
+class ChartTypeViewModel {
   public type: ChartType;
   public name: string;
 }
