@@ -1,0 +1,71 @@
+<div *ngIf="trainingBlock">
+  <div class="row cols-padding">
+    <div class="col col-sm col-md-6 col-lg-4">
+      <app-named-object [data]="trainingBlock"></app-named-object>
+
+      <label class="mt-2">{{'interval' | translate}}</label>
+      <div class="row cols-padding">
+        <div class="col">
+          <dx-date-box class="w-100"
+                       [(value)]="trainingBlock.dateFrom"
+                       type="date"
+                       placeholder="{{'from' | translate}}"
+                       showClearButton="true">
+          </dx-date-box>
+        </div>
+        <div class="col">
+          <dx-date-box class="w-100"
+                       [(value)]="trainingBlock.dateTo"
+                       type="date"
+                       placeholder="{{'to' | translate}}"
+                       showClearButton="true">
+          </dx-date-box>
+        </div>
+      </div>
+
+      <label class="mt-2">{{'eventType' | translate }}</label>
+      <dx-select-box [items]="eventTypes"
+                     [(value)]="selectedEventType"
+                     displayExpr="name"
+                     showClearButton="true">
+      </dx-select-box>
+
+      <label class="mt-2">{{'sportType' | translate }}</label>
+      <dx-select-box [items]="sportTypes"
+                     [(value)]="trainingBlock.sportType"
+                     displayExpr="name"
+                     acceptCustomValue="true"
+                     showClearButton="true">
+      </dx-select-box>
+
+      <label class="mt-2">{{'location' | translate }}</label>
+      <dx-select-box [items]="locations"
+                     [(value)]="trainingBlock.location"
+                     displayExpr="name"
+                     acceptCustomValue="true"
+                     showClearButton="true">
+      </dx-select-box>
+    </div>
+
+    <div class="col-auto">
+      <div class="row cols-padding">
+        <div class="col">
+          <label>{{'groups.section' | translate }}</label>
+        </div>
+        <div class="col-auto">
+          <app-busy-button nameKey="edit"
+                           [click]="onEditGroups"></app-busy-button>
+        </div>
+      </div>
+
+      <div class="list-group-flush mt-2">
+        <app-group *ngFor="let item of groups"
+                   class="list-group-item p-2"
+                   [data]="item"></app-group>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2">
+    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+  </div>
+</div>

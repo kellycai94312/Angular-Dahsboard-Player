@@ -20,8 +20,8 @@ import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.m
   ],
   exports: [ModalSelectPageComponent],
   declarations: [ModalSelectPageComponent],
+  entryComponents: [ModalSelectPageComponent],
   providers: [NgbActiveModal]
 })
 export class ModalSelectPageModule {
-
 }

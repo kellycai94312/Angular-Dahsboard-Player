@@ -3,11 +3,11 @@ import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/
 import {Tab} from '../../../../../../data/local/tab';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TrainingGroup} from '../../../../../../data/remote/model/training-group';
-import {PersonMeasure} from '../../../../../../data/remote/bean/person-measure';
 import {ExerciseExecMeasureValue} from '../../../../../../data/remote/model/training/exercise-exec-measure-value';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {TrainingPerson} from '../../../../../../data/remote/model/training/training-person';
 import {ReportsService} from '../../../../../../shared/reports.service';
+import {TrainingPersonMeasure} from '../../../../../../data/remote/bean/training-person-measure';
 
 @Component({
   selector: 'app-game-step-execution-page',
@@ -25,7 +25,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
   public trainingGroupTabs: Tab[];
 
   public tableColumns: string[];
-  public personMeasures: PersonMeasure<any>[];
+  public personMeasures: TrainingPersonMeasure<any>[];
 
   public gameId: number;
   public trainingPartId: number;

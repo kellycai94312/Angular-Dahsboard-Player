@@ -1,0 +1,21 @@
+@import "../../../../styles/variables";
+
+.content-height {
+  height: 360px;
+  overflow: auto;
+}
+
+.table-non-flex {
+  td, th {
+    font-size: 12px;
+    padding: 0.5rem !important;
+    border-top: 1px solid #dee2e6;
+  }
+
+  thead th {
+    min-width: 130px;
+    font-size: 12px;
+    font-weight: normal;
+    color: $active-color;
+  }
+}

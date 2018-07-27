@@ -1,0 +1,58 @@
+<div *ngIf="data"
+     class="p-2">
+  <div class="d-flex align-items-center">
+    <div class="mr-auto">
+      <h5>
+        {{data.name}}
+      </h5>
+    </div>
+    <div *ngIf="haveData"
+         class="mr-2">
+      <ngx-button-group [items]="buttonGroupItems"
+                        [selectedItem]="selectedItem"></ngx-button-group>
+    </div>
+    <div *ngIf="haveData&&data.trainingBlockType==='CHART'"
+         class="mr-2">
+      <dx-select-box [items]="chartTypeViewModels"
+                     [(value)]="selectedChartTypeViewModel"
+                     (onValueChanged)="onChartTypeChanged(selectedChartTypeViewModel)"
+                     placeholder="{{'chartType' | translate}}"
+                     displayExpr="name">
+      </dx-select-box>
+    </div>
+    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+  </div>
+  <div class="content-height mt-2">
+    <div [hidden]="!haveData">
+      <div [hidden]="data.trainingBlockType!='CHART'">
+        <div #chart></div>
+      </div>
+      <div *ngIf="haveData&&data.trainingBlockType==='TABLE'">
+        <table class="table-non-flex table-hover">
+          <thead>
+          <tr>
+            <th scope="col">{{'person' | translate}}</th>
+            <th *ngFor="let item of personMeasures[0].measureValues.list"
+                scope="col">{{item.exerciseExecMeasure.exerciseMeasure.baseExercise.name}}
+              {{item.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name}}
+              {{item.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.name}}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of personMeasures">
+            <th scope="row">{{item.person.firstName+' '+item.person.lastName}}</th>
+            <td *ngFor="let exerciseMeasureValue of item.measureValues.list"
+                class="text-center">
+              {{exerciseMeasureValue.value}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div *ngIf="!haveData">
+      {{'noData' | translate}}
+    </div>
+  </div>
+</div>
