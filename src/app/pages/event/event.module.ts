@@ -27,6 +27,7 @@ import {EventCalendarMonthModalComponent} from './events-page/events-calendar/ev
 import {CustomDateFormatter} from '../../components/calendar-utils/custom-date-formatter.prodiver';
 import {EventsCalendarService} from './events-page/events-calendar/events-calendar.service';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   imports: [
@@ -50,7 +51,8 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     InputSelectModule,
     GroupPageModule,
     CalendarModule.forRoot(),
-    CalendarUtilsModule
+    CalendarUtilsModule,
+    NgxSplitButtonModule
   ],
   declarations: [
     EventPageComponent,

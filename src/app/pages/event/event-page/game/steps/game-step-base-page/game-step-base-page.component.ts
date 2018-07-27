@@ -18,6 +18,7 @@ import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-que
 import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
 import {NamedObjectItemComponent} from '../../../../../../components/named-object-item/named-object-item.component';
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
+import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
 
 @Component({
   selector: 'app-game-step-base-page',
@@ -32,6 +33,8 @@ export class GameStepBasePageComponent implements OnInit {
   public groups: Group[];
   public locations: Location[];
   public sportTypes: SportType[];
+
+  public readonly splitButtonItems: SplitButtonItem[];
 
   constructor(public appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
@@ -48,6 +51,43 @@ export class GameStepBasePageComponent implements OnInit {
     this.groups = [];
     this.locations = [];
     this.sportTypes = [];
+
+    this.splitButtonItems = [
+      {
+        nameKey: 'save',
+        default: true,
+        callback: async () => {
+          try {
+            if (this.appHelper.isNewObject(this.game)) {
+              this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
+              this.game.manualMode = true;
+              this.game.durationMs = 1000;
+              this.game.template = false;
+              this.game.trainingState = TrainingState[TrainingState.DRAFT];
+              this.game = (await this._participantRestApiService.createBaseTraining(this.game)) as Game;
+              await this._router.navigate(['/event/' + this.game.id + '/game/step/']);
+            } else {
+              this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
+              this.game = (await this._participantRestApiService.updateBaseTraining(this.game, null, {id: this.game.id})) as Game;
+              await this.initialize();
+            }
+            await  this.appHelper.showSuccessMessage('saved');
+          } catch (e) {
+            await this.appHelper.showErrorMessage('saveError');
+          }
+        }
+      },
+      {
+        nameKey: 'stop',
+        callback: async () => {
+          try {
+            this.game = <Game>(await this._participantRestApiService.updateBaseTrainingState({trainingState: TrainingState.STOP}, {}, {id: this.game.id}));
+          } catch (e) {
+            await this.appHelper.showErrorMessage('saveError');
+          }
+        }
+      }
+    ];
   }
 
   async ngOnInit() {
@@ -64,27 +104,6 @@ export class GameStepBasePageComponent implements OnInit {
 
     this.locations = (await this._participantRestApiService.getLocations({count: 999999})).list;
     this.sportTypes = (await this._participantRestApiService.getSportTypes({count: 999999})).list;
-  }
-
-  public async onSave() {
-    try {
-      if (this.appHelper.isNewObject(this.game)) {
-        this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
-        this.game.manualMode = true;
-        this.game.durationMs = 1000;
-        this.game.template = false;
-        this.game.trainingState = TrainingState[TrainingState.DRAFT];
-        this.game = (await this._participantRestApiService.createBaseTraining(this.game)) as Game;
-        await this._router.navigate(['/event/' + this.game.id + '/game/step/']);
-      } else {
-        this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
-        this.game = (await this._participantRestApiService.updateBaseTraining(this.game, null, {id: this.game.id})) as Game;
-        await this.initialize();
-      }
-      await  this.appHelper.showSuccessMessage('saved');
-    } catch (e) {
-      await this.appHelper.showErrorMessage('saveError');
-    }
   }
 
   public async onSetTrainingPartDuration(trainingPart: TrainingPart, value: Date) {

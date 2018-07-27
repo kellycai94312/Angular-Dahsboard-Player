@@ -337,5 +337,6 @@
   "chartType": "Chart type",
   "barChartType": "Bar",
   "lineChartType": "Line",
-  "maximumCount": "Maximum count: {{count}}"
+  "maximumCount": "Maximum count: {{count}}",
+  "stop": "Stop"
 }
