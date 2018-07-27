@@ -337,5 +337,6 @@
   "noData": "Нет данных",
   "chartType": "Тип графика",
   "barChartType": "Столбец",
-  "lineChartType": "Линия"
+  "lineChartType": "Линия",
+  "maximumCount": "Максимальное количество: {{count}}"
 }

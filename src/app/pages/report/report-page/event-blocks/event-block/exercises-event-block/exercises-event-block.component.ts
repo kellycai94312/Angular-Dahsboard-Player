@@ -20,6 +20,8 @@ export class ExercisesEventBlockComponent implements OnInit {
 
   public exerciseMeasures: ExerciseMeasure[];
 
+  private readonly _maxCountExercises: number;
+
   private _trainingBlock: TrainingBlock;
   private _trainingBlockFilter: any;
 
@@ -27,6 +29,7 @@ export class ExercisesEventBlockComponent implements OnInit {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _modalService: NgbModal) {
+    this._maxCountExercises = 2;
   }
 
   async ngOnInit() {
@@ -59,6 +62,10 @@ export class ExercisesEventBlockComponent implements OnInit {
       return await this._participantRestApiService.getTrainingBlockExerciseMeasures({}, pageQuery, this._trainingBlockFilter);
     };
     componentInstance.onSave = async selectedItems => {
+      if (selectedItems && selectedItems.length > this._maxCountExercises) {
+        await this._appHelper.showErrorMessage('maximumCount', {count: this._maxCountExercises});
+        return;
+      }
       try {
         this.exerciseMeasures = await this._participantRestApiService.updateTrainingBlockExerciseMeasures(new ListRequest(selectedItems), {}, this._trainingBlockFilter);
         ref.dismiss();
