@@ -28,11 +28,9 @@
                    acceptCustomValue="true"
                    placeholder="{{'sportType' | translate}}">
     </dx-select-box>
-    <dx-button type="default"
-               class="mt-2 text-uppercase"
-               (onClick)="onSave()"
-               text="{{ 'save' | translate }}">
-    </dx-button>
+    <div class="mt-2">
+      <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+    </div>
   </div>
   <div class="col">
     <label>{{'parts' | translate }}</label>

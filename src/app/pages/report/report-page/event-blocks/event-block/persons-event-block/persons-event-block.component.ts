@@ -30,6 +30,8 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
   public persons: Person[];
   public _trainingBlock: TrainingBlock;
 
+  private readonly _maxCountPersons: number;
+
   private _searchInputSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -38,6 +40,8 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
     this.query = new TrainingBlockQuery();
     this.query.name = '';
     this.query.unassigned = true;
+
+    this._maxCountPersons = 10;
   }
 
   async ngOnInit() {
@@ -91,6 +95,11 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
   };
 
   public onSave = async () => {
+    if (this.persons && this.persons.length > this._maxCountPersons) {
+      await this._appHelper.showErrorMessage('maximumCount', {count: this._maxCountPersons});
+      return;
+    }
+
     try {
       this.persons = await this._participantRestApiService.updateTrainingBlockPersons(
         new ListRequest<Person>(this.persons),

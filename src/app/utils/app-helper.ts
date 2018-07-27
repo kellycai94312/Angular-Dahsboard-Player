@@ -76,8 +76,8 @@ export class AppHelper {
     return first === second;
   }
 
-  public async showErrorMessage(messageKey: string): Promise<void> {
-    const message = await this._translateService.get(messageKey).toPromise();
+  public async showErrorMessage(messageKey: string, parameters?: any): Promise<void> {
+    const message = await this._translateService.get(messageKey, parameters).toPromise();
     this._toastrService.error(message);
   }
 

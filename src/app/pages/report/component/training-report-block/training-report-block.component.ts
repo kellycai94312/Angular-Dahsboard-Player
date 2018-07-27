@@ -39,6 +39,7 @@ export class TrainingReportBlockComponent implements OnInit {
   public readonly chartTypeViewModels: ChartTypeViewModel[];
   private readonly _contentHeight: number;
   private readonly _query: TrainingBlockQuery;
+  private readonly _colorPalette: string[];
 
   constructor(private _router: Router,
               private _activatedRoute: ActivatedRoute,
@@ -82,6 +83,19 @@ export class TrainingReportBlockComponent implements OnInit {
           await this._router.navigate([this.data.id], {relativeTo: this._activatedRoute});
         }
       }
+    ];
+
+    this._colorPalette = [
+      '#00CCFF',
+      '#FF6600',
+      '#0000FF',
+      '#000080',
+      '#99CCFF',
+      '#FF99CC',
+      '#CC99FF',
+      '#FFCC99',
+      '#3366FF',
+      '#FF9900',
     ];
   }
 
@@ -168,9 +182,10 @@ export class TrainingReportBlockComponent implements OnInit {
 
     // TODO: Optimize algorithm
     const chartData: Array<Data> = [];
-    for (let i = 0; i < personMeasures.length; i++) {
+    // Max count person 10 link with color palette array
+    for (let i = 0; i < personMeasures.length && i < this._colorPalette.length; i++) {
       const item = personMeasures[i];
-      const color = this._appHelper.getRandomHex();
+      const color = this._colorPalette[i];
       const groups: Array<GroupData> = [];
       for (let j = 0; j < item.measureValues.list.length; j++) {
         const exerciseMeasureValue = item.measureValues.list[j];
@@ -199,7 +214,7 @@ export class TrainingReportBlockComponent implements OnInit {
         }
 
         if (exerciseMeasureValue.created) {
-          (<Array<Datum>>groupData.trace.x).push(this._appHelper.dateByFormat(exerciseMeasureValue.created, 'yyyy.MM.dd HH:mm:ss'));
+          (<Array<Datum>>groupData.trace.x).push(this._appHelper.dateByFormat(exerciseMeasureValue.created, 'dd/MM/yyyy'));
         }
         if (exerciseMeasureValue.value) {
           (<Array<Datum>>groupData.trace.y).push(exerciseMeasureValue.value);
