@@ -121,11 +121,11 @@ export class PersonModalCreateComponent implements OnInit {
   public async onSave(event: any) {
     const result = event.validationGroup.validate();
     if (result.isValid) {
-      if (this.userRoles.length) {
+      if (!this.userRoles.length) {
         await  this._appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
         return;
       }
-      if (this.sportTypes.length) {
+      if (!this.sportTypes.length) {
         await this._appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
         return;
       }
