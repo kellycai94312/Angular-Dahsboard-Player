@@ -214,7 +214,7 @@ export class TrainingReportBlockComponent implements OnInit {
         }
 
         if (exerciseMeasureValue.created) {
-          (<Array<Datum>>groupData.trace.x).push(this._appHelper.dateByFormat(exerciseMeasureValue.created, 'dd/MM/yyyy'));
+          (<Array<Datum>>groupData.trace.x).push(this._appHelper.dateByFormat(exerciseMeasureValue.created, 'dd/MM/yyyy HH:mm'));
         }
         if (exerciseMeasureValue.value) {
           (<Array<Datum>>groupData.trace.y).push(exerciseMeasureValue.value);
