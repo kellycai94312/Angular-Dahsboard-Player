@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { IRestMethod, Rest, RestAction, RestHandler, RestParams, RestRequestMethod } from 'rest-core';
-import { HttpClient } from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {IRestMethod, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {HttpClient} from '@angular/common/http';
 
 export const Path = 'assets/reports';
 
@@ -21,6 +21,12 @@ export class AssetsService extends Rest {
     path: '/game.mrt',
   })
   getGameReport: IRestMethod<void, any>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person_measure.mrt',
+  })
+  getPersonMeasure: IRestMethod<void, any>;
 
   constructor(restHandler: RestHandler,
               private http: HttpClient) {

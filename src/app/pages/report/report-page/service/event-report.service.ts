@@ -7,6 +7,19 @@ import {TrainingBlock} from '../../../../data/remote/model/training/report/train
 @Injectable()
 export class EventReportService {
 
+  public static colorPalette: string[] = [
+    '#00CCFF',
+    '#FF6600',
+    '#0000FF',
+    '#000080',
+    '#99CCFF',
+    '#FF99CC',
+    '#CC99FF',
+    '#FFCC99',
+    '#3366FF',
+    '#FF9900',
+  ];
+
   private _trainingReport: TrainingReport;
   private _selectedTrainingBlock: TrainingBlock;
 

@@ -39,7 +39,6 @@ export class TrainingReportBlockComponent implements OnInit {
   public readonly chartTypeViewModels: ChartTypeViewModel[];
   private readonly _contentHeight: number;
   private readonly _query: TrainingBlockQuery;
-  private readonly _colorPalette: string[];
 
   constructor(private _router: Router,
               private _activatedRoute: ActivatedRoute,
@@ -83,19 +82,6 @@ export class TrainingReportBlockComponent implements OnInit {
           await this._router.navigate([this.data.id], {relativeTo: this._activatedRoute});
         }
       }
-    ];
-
-    this._colorPalette = [
-      '#00CCFF',
-      '#FF6600',
-      '#0000FF',
-      '#000080',
-      '#99CCFF',
-      '#FF99CC',
-      '#CC99FF',
-      '#FFCC99',
-      '#3366FF',
-      '#FF9900',
     ];
   }
 
@@ -183,9 +169,9 @@ export class TrainingReportBlockComponent implements OnInit {
     // TODO: Optimize algorithm
     const chartData: Array<Data> = [];
     // Max count person 10 link with color palette array
-    for (let i = 0; i < personMeasures.length && i < this._colorPalette.length; i++) {
+    for (let i = 0; i < personMeasures.length && i < EventReportService.colorPalette.length; i++) {
       const item = personMeasures[i];
-      const color = this._colorPalette[i];
+      const color = EventReportService.colorPalette[i];
       const groups: Array<GroupData> = [];
       for (let j = 0; j < item.measureValues.list.length; j++) {
         const exerciseMeasureValue = item.measureValues.list[j];
@@ -222,7 +208,6 @@ export class TrainingReportBlockComponent implements OnInit {
       }
 
       for (let j = 0; j < groups.length; j++) {
-        groups[j].trace.x = (<Array<Datum>>groups[j].trace.x).sort();
         chartData.push(groups[j].trace);
       }
     }
