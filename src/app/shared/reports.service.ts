@@ -186,8 +186,8 @@ export class ReportsService {
         exportSettings = new Stimulsoft.Report.Export.StiPdfExportSettings();
         break;
       case FileFormat.EXCEL:
-        exportService = new Stimulsoft.Report.Export.StiExcelExportService();
-        exportSettings = new Stimulsoft.Report.Export.StiExcelExportSettings();
+        exportService = new Stimulsoft.Report.Export.StiExcel2007ExportService();
+        exportSettings = new Stimulsoft.Report.Export.StiExcel2007ExportSettings();
         break;
     }
     const stream = new Stimulsoft.System.IO.MemoryStream();
@@ -203,6 +203,7 @@ export class ReportsService {
           case FileFormat.EXCEL:
             headerExportedDocument = 'application/excel';
             exportedDocument = report.exportDocument(Stimulsoft.Report.StiExportFormat.Excel2007);
+            fileName = `${fileName}.xlsx`;
             break;
         }
         (<any>Object).saveAs(exportedDocument, fileName, headerExportedDocument);
