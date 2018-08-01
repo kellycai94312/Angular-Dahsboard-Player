@@ -9,6 +9,7 @@ import {PropertyConstant} from '../data/local/property-constant';
 import {ChartType} from '../data/remote/model/training/report/chart-type';
 import {EventReportService} from '../pages/report/report-page/service/event-report.service';
 import {AppHelper} from '../utils/app-helper';
+import {EventBlockSeries} from '../pages/report/report-page/event-blocks/event-blocks.component';
 
 @Injectable()
 export class ReportsService {
@@ -93,8 +94,8 @@ export class ReportsService {
     await this.download(report, gameReport.gameInfo.gameName + ' - ' + gameReport.gameInfo.groupName);
   }
 
-  async printPersonMeasure(trainingReportId: number) {
-    const eventReport = await this.getPersonMeasureData(trainingReportId);
+  async printPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[]) {
+    const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
     const report = new Stimulsoft.Report.StiReport();
     report.loadDocument(await this._assetsService.getPersonMeasure());
     report.dictionary.databases.clear();
@@ -103,8 +104,8 @@ export class ReportsService {
     report.print();
   }
 
-  async downloadPersonMeasure(trainingReportId: number, fileFormat: FileFormat) {
-    const eventReport = await this.getPersonMeasureData(trainingReportId);
+  async downloadPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[], fileFormat: FileFormat) {
+    const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
     const report = new Stimulsoft.Report.StiReport();
     report.loadDocument(await this._assetsService.getPersonMeasure());
     report.dictionary.databases.clear();
@@ -114,7 +115,7 @@ export class ReportsService {
     await this.download(report, `Person measures ${this._appHelper.dateByFormat(new Date(), 'dd_MM_yyyy HH_mm')}`, fileFormat);
   }
 
-  private async getPersonMeasureData(trainingReportId: number): Promise<EventReport> {
+  private async getPersonMeasureData(trainingReportId: number, eventBlockSeries: EventBlockSeries[]): Promise<EventReport> {
     const trainingBlocks = await this._participantRestApiService.getTrainingBlocks({}, {count: PropertyConstant.pageSizeMax}, {trainingReportId: trainingReportId});
     const eventReport = new EventReport();
     eventReport.persons = [];
@@ -132,7 +133,7 @@ export class ReportsService {
           blockType = EventReportBlockType.BAR;
         }
       }
-      eventReport.blocks.push({id: block.id, blockType: blockType, name: block.name});
+
       const blockResults = await this._participantRestApiService.getTrainingBlockResults({},
         {count: PropertyConstant.pageSizeMax},
         {
@@ -140,16 +141,25 @@ export class ReportsService {
           trainingBlockId: block.id
         });
 
+      let hasAnyData = false;
       for (let j = 0; j < blockResults.length; j++) {
         const blockResult = blockResults[j];
+        const personName = `${blockResult.person.lastName} ${blockResult.person.firstName}`;
         const color: any = this._appHelper.hexToRgb(EventReportService.colorPalette[j], 'string');
-
-        eventReport.persons.push({id: blockResult.person.id, name: `${blockResult.person.lastName} ${blockResult.person.firstName}`});
+        eventReport.persons.push({id: blockResult.person.id, name: personName});
 
         for (let k = 0; k < blockResult.measureValues.list.length; k++) {
           const measureValue = blockResult.measureValues.list[k];
+          if (eventBlockSeries && eventBlockSeries.find(x => x.firstLastPersonName === personName &&
+            x.exercise === measureValue.exerciseExecMeasure.exerciseExec.baseExercise.name &&
+            x.parameter === measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name)) {
+            continue;
+          }
+
+          hasAnyData = true;
 
           const chartName = `${measureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name} ${measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name} ${measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.name}`;
+
           eventReport.exerciseMeasures.push(
             {
               id: `${measureValue.exerciseExecMeasure.exerciseMeasure.id}_${blockResult.person.id}`,
@@ -172,6 +182,10 @@ export class ReportsService {
               });
           }
         }
+      }
+
+      if (hasAnyData) {
+        eventReport.blocks.push({id: block.id, blockType: blockType, name: block.name});
       }
     }
     return eventReport;

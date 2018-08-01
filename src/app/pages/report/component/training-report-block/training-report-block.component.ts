@@ -61,7 +61,8 @@ export class TrainingReportBlockComponent implements OnInit {
         callback: async () => {
           this.data.trainingBlockType = TrainingBlockType.TABLE;
           await this.updateTrainingBlock(this.data);
-        }
+        },
+        originalObject: TrainingBlockType.TABLE
       },
       {
         nameKey: 'chart',
@@ -71,7 +72,8 @@ export class TrainingReportBlockComponent implements OnInit {
           this.selectedChartTypeViewModel = this.chartTypeViewModels.find(x => x.type === this.data.chartType);
           await this.updateTrainingBlock(this.data);
           await this.drawChart(this.personMeasures);
-        }
+        },
+        originalObject: TrainingBlockType.CHART
       }
     ];
 
@@ -154,6 +156,13 @@ export class TrainingReportBlockComponent implements OnInit {
     await this.drawChart(this.personMeasures);
   }
 
+  public getDisabledSeriesNames(): string[] {
+    if (this.chartElement.nativeElement.data && this.selectedItem.originalObject === TrainingBlockType.CHART) {
+      return this.chartElement.nativeElement.data.filter(x => x.visible === 'legendonly').map(x => x.name);
+    }
+    return [];
+  }
+
   private async drawChart(personMeasures: PersonMeasure[]) {
     let scatterType: any = 'scatter';
     if (this.data.trainingBlockType === TrainingBlockType.CHART) {
@@ -190,11 +199,7 @@ export class TrainingReportBlockComponent implements OnInit {
           };
           groupData.trace.mode = 'lines+markers';
           groupData.trace.type = scatterType;
-
-          groupData.trace.name = item.person.firstName + ' ' +
-            item.person.lastName + ' ' +
-            exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name + ' ' +
-            exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name;
+          groupData.trace.name = `${item.person.lastName} ${item.person.firstName} / ${exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name} / ${exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name}`;
 
           groups.push(groupData);
         }
