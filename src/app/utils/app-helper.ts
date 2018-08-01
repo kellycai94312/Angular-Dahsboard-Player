@@ -125,4 +125,28 @@ export class AppHelper {
     return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
   }
 
+  public hexToRgb(hex: string, dataType: 'object' | 'string' = 'object'): string | object {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, function (m, r, g, b) {
+      return r + r + g + g + b + b;
+    });
+
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    const rgb = result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+    if (!rgb) {
+      return null;
+    }
+
+    switch (dataType) {
+      case 'object':
+        return rgb;
+      case 'string':
+        return `${rgb.r};${rgb.g};${rgb.b}`;
+    }
+  }
+
 }

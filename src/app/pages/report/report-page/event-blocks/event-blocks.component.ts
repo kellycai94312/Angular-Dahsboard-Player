@@ -11,6 +11,7 @@ import {EventReportService} from '../service/event-report.service';
 import {TranslateService} from '@ngx-translate/core';
 import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
 import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
+import {FileFormat, ReportsService} from '../../../../shared/reports.service';
 
 @Component({
   selector: 'app-event-blocks',
@@ -32,7 +33,8 @@ export class EventBlocksComponent implements OnInit {
               private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _eventReportService: EventReportService,
-              private _translateService: TranslateService) {
+              private _translateService: TranslateService,
+              private _reportsService: ReportsService) {
     this.splitButtonItems = [
       {
         nameKey: 'add',
@@ -52,19 +54,19 @@ export class EventBlocksComponent implements OnInit {
       {
         nameKey: 'exportToPdf',
         callback: async () => {
-          // TODO: Add business logic
+          await this._reportsService.downloadPersonMeasure(this._trainingReportId, FileFormat.PDF);
         }
       },
       {
         nameKey: 'exportToExcel',
         callback: async () => {
-          // TODO: Add business logic
+          await this._reportsService.downloadPersonMeasure(this._trainingReportId, FileFormat.EXCEL);
         }
       },
       {
         nameKey: 'print',
         callback: async () => {
-          // TODO: Add business logic
+          await this._reportsService.printPersonMeasure(this._trainingReportId);
         }
       }
     ];
