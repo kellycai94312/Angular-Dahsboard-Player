@@ -1,7 +1,7 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {GroupPersonState} from '../../../data/local/group-person-state';
 import {SubGroup} from '../../../data/remote/model/group/sub-group';
@@ -40,6 +40,7 @@ export class GroupPageComponent implements OnInit {
               private _modalService: NgbModal,
               private _appHelper: AppHelper,
               private _translateService: TranslateService,
+              private _router: Router,
               public groupService: GroupService) {
     this.groupService.groupSubject.subscribe(group => {
       this.group = group;
@@ -52,20 +53,31 @@ export class GroupPageComponent implements OnInit {
 
   async ngOnInit() {
     const groupId = this._activatedRoute.snapshot.params.id;
-    this.group = await this._participantRestApiService.getGroup({id: groupId});
-    this.groupService.updateGroup(this.group);
+    try {
+      this.group = await this._participantRestApiService.getGroup({id: groupId});
+      this.groupService.updateGroup(this.group);
 
-    if (this.group != null) {
-      await this.baseInit();
+      if (this.group) {
+        await this.baseInit();
+      }
+    } catch (e) {
+      if (e.status == 403) {
+        await this._router.navigate(['/group']);
+      }
     }
   }
 
   async baseInit() {
+    try {
+      this.groupPerson = await this.groupService.getCurrentGroupPerson();
+      this.textStateInGroup = this.groupService.getKeyNamePersonStateInGroup(this.groupService.getGroupPersonState());
 
-    this.groupPerson = await this.groupService.getCurrentGroupPerson();
-    this.textStateInGroup = this.groupService.getKeyNamePersonStateInGroup(this.groupService.getGroupPersonState());
-
-    await this.groupService.updateSubgroups();
+      await this.groupService.updateSubgroups();
+    } catch (e) {
+      if (e.status == 403) {
+        await this._router.navigate(['/group']);
+      }
+    }
   }
 
   private async initTabs() {
@@ -129,8 +141,8 @@ export class GroupPageComponent implements OnInit {
             default: true,
             callback: async () => {
               if (await this.changePersonStateInGroup()) {
-                await this.baseInit();
                 modal.dismiss();
+                await this.baseInit();
               }
             }
           },

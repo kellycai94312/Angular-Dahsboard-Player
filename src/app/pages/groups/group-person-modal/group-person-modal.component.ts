@@ -42,23 +42,22 @@ export class GroupPersonModalComponent implements OnInit {
 
   async ngOnInit() {
     await this.initBaseGroup(this.groupPerson.person, this.groupPerson.userRole);
+
     this.userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.groupPerson.person.user.id});
     this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
 
-    if (this.groupPerson.group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM]) {
-      this.sportRoles = await this._participantRestApiService.getSportRolesBySportType({id: (this.groupPerson.group as GroupTeam).sportType.id});
-    }
-
-    switch (this.groupPerson.group.groupType.groupTypeEnum.toString()) {
-      case GroupTypeEnum[GroupTypeEnum.TEAM]:
-        this.mentorUserRole = this.userRoles.find(x => x.userRoleEnum.toString() === UserRoleEnum[UserRoleEnum.TRAINER]);
+    const allUserRoles = await this._participantRestApiService.getUserRoles();
+    switch (this.groupPerson.group.groupType.groupTypeEnum) {
+      case GroupTypeEnum.TEAM:
+        this.sportRoles = await this._participantRestApiService.getSportRolesBySportType({id: (this.groupPerson.group as GroupTeam).sportType.id});
+        this.mentorUserRole = allUserRoles.find(x => x.userRoleEnum === UserRoleEnum.TRAINER);
         break;
-      case GroupTypeEnum[GroupTypeEnum.AGENCY]:
-        this.mentorUserRole = this.userRoles.find(x => x.userRoleEnum.toString() === UserRoleEnum[UserRoleEnum.SCOUT]);
+      case GroupTypeEnum.AGENCY:
+        this.mentorUserRole = allUserRoles.find(x => x.userRoleEnum === UserRoleEnum.SCOUT);
         break;
     }
 
-    this.isOwner = this.groupPerson.group.owner.id === this.groupPerson.person.user.id;
+    this.isOwner = this.groupPerson.group.owner.id == this.groupPerson.person.user.id;
   }
 
   public async initBaseGroup(person: Person, userRole: UserRole) {
