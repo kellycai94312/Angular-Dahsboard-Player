@@ -7,7 +7,7 @@ import {PersonMeasure} from '../../../../data/remote/bean/person-measure';
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
 import * as Plotly from 'plotly.js';
-import {Data, Datum, ScatterData} from 'plotly.js';
+import {Data, Datum, PlotRestyleEvent, ScatterData} from 'plotly.js';
 import {EventReportService} from '../../report-page/service/event-report.service';
 import {TrainingBlockQuery} from '../../../../data/remote/rest-api/query/training-block-query';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -39,6 +39,7 @@ export class TrainingReportBlockComponent implements OnInit {
   public readonly chartTypeViewModels: ChartTypeViewModel[];
   private readonly _contentHeight: number;
   private readonly _query: TrainingBlockQuery;
+  private _disabledSeriesNames: string[];
 
   constructor(private _router: Router,
               private _activatedRoute: ActivatedRoute,
@@ -47,6 +48,7 @@ export class TrainingReportBlockComponent implements OnInit {
               private _appHelper: AppHelper,
               private _translateService: TranslateService) {
     this._contentHeight = 360;
+    this._disabledSeriesNames = [];
 
     this._query = new TrainingBlockQuery();
     this._query.count = PropertyConstant.pageSize;
@@ -157,10 +159,7 @@ export class TrainingReportBlockComponent implements OnInit {
   }
 
   public getDisabledSeriesNames(): string[] {
-    if (this.chartElement.nativeElement.data && this.selectedItem.originalObject === TrainingBlockType.CHART) {
-      return this.chartElement.nativeElement.data.filter(x => x.visible === 'legendonly').map(x => x.name);
-    }
-    return [];
+    return this._disabledSeriesNames;
   }
 
   private async drawChart(personMeasures: PersonMeasure[]) {
@@ -175,8 +174,9 @@ export class TrainingReportBlockComponent implements OnInit {
       }
     }
 
-    // TODO: Optimize algorithm
     const chartData: Array<Data> = [];
+    const xValues = [];
+    // TODO: Optimize algorithm
     // Max count person 10 link with color palette array
     for (let i = 0; i < personMeasures.length && i < EventReportService.colorPalette.length; i++) {
       const item = personMeasures[i];
@@ -191,6 +191,7 @@ export class TrainingReportBlockComponent implements OnInit {
           groupData.trace = <ScatterData>{};
           groupData.trace.x = [];
           groupData.trace.y = [];
+          groupData.trace.type = 'scatter';
           groupData.trace.marker = {
             color: color,
             line: {
@@ -205,28 +206,47 @@ export class TrainingReportBlockComponent implements OnInit {
         }
 
         if (exerciseMeasureValue.created) {
-          (<Array<Datum>>groupData.trace.x).push(this._appHelper.dateByFormat(exerciseMeasureValue.created, 'dd/MM/yyyy HH:mm'));
+          const xValue = this._appHelper.dateByFormat(exerciseMeasureValue.created, 'dd/MM/yyyy HH:mm');
+          if (!xValues.find(x => x === xValue)) {
+            xValues.push(xValue);
+          }
         }
-        if (exerciseMeasureValue.value) {
-          (<Array<Datum>>groupData.trace.y).push(exerciseMeasureValue.value);
-        }
+
+        (<Array<Datum>>groupData.trace.y).push(exerciseMeasureValue.value);
       }
 
       for (let j = 0; j < groups.length; j++) {
+        groups[j].trace.x = xValues;
         chartData.push(groups[j].trace);
       }
     }
 
     setTimeout(async () => {
-      await Plotly.newPlot(this.chartElement.nativeElement, chartData, {
+      const plotly = await Plotly.newPlot(this.chartElement.nativeElement, chartData.sort((a, b) => {
+        if (a.name > b.name) {
+          return 1;
+        }
+        if (a.name < b.name) {
+          return -1;
+        }
+        return 0;
+      }), {
         height: this._contentHeight,
         margin: {
           l: 30,
           r: 0,
           b: 80,
           t: 0
+        },
+        showlegend: true,
+        legend: {
+          orientation: 'h'
         }
       }, {displayModeBar: false});
+
+      plotly.on('plotly_restyle', (data: PlotRestyleEvent) => {
+        this._disabledSeriesNames = this.chartElement.nativeElement.data.filter(x => x.visible === 'legendonly').map(x => x.name);
+      });
     });
   }
 

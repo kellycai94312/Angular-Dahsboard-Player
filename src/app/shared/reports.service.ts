@@ -146,7 +146,9 @@ export class ReportsService {
         const blockResult = blockResults[j];
         const personName = `${blockResult.person.lastName} ${blockResult.person.firstName}`;
         const color: any = this._appHelper.hexToRgb(EventReportService.colorPalette[j], 'string');
-        eventReport.persons.push({id: blockResult.person.id, name: personName});
+        if (!eventReport.persons.find(x => x.id == blockResult.person.id)) {
+          eventReport.persons.push({id: blockResult.person.id, name: personName});
+        }
 
         for (let k = 0; k < blockResult.measureValues.list.length; k++) {
           const measureValue = blockResult.measureValues.list[k];
@@ -166,7 +168,7 @@ export class ReportsService {
               exerciseExecMeasureId: `${measureValue.exerciseExecMeasure.id}_${blockResult.person.id}`,
               personId: blockResult.person.id,
               tableName: `${chartName} ${this._appHelper.dateByFormat(measureValue.exerciseExecMeasure.created, 'dd/MM/yyyy HH:mm')}`,
-              chartName: `${blockResult.person.firstName} ${blockResult.person.lastName} ${chartName}`,
+              chartName: `${personName} ${chartName}`,
               color: color
             }
           );
