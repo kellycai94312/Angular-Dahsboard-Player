@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
@@ -12,6 +12,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
 import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
 import {FileFormat, ReportsService} from '../../../../shared/reports.service';
+import {TrainingReportBlockComponent} from '../../component/training-report-block/training-report-block.component';
 
 @Component({
   selector: 'app-event-blocks',
@@ -22,6 +23,9 @@ export class EventBlocksComponent implements OnInit {
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+
+  @ViewChildren(TrainingReportBlockComponent)
+  public trainingReportBlockComponents: QueryList<TrainingReportBlockComponent>;
 
   public readonly splitButtonItems: SplitButtonItem[];
 
@@ -54,19 +58,19 @@ export class EventBlocksComponent implements OnInit {
       {
         nameKey: 'exportToPdf',
         callback: async () => {
-          await this._reportsService.downloadPersonMeasure(this._trainingReportId, FileFormat.PDF);
+          await this._reportsService.downloadPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries(), FileFormat.PDF);
         }
       },
       {
         nameKey: 'exportToExcel',
         callback: async () => {
-          await this._reportsService.downloadPersonMeasure(this._trainingReportId, FileFormat.EXCEL);
+          await this._reportsService.downloadPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries(), FileFormat.EXCEL);
         }
       },
       {
         nameKey: 'print',
         callback: async () => {
-          await this._reportsService.printPersonMeasure(this._trainingReportId);
+          await this._reportsService.printPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries());
         }
       }
     ];
@@ -91,4 +95,36 @@ export class EventBlocksComponent implements OnInit {
     });
   }
 
+  private getDisabledEventBlockSeries(): EventBlockSeries[] {
+    const disabledEventBlockSeries: EventBlockSeries[] = [];
+    if (this.trainingReportBlockComponents) {
+      for (const trainingReportBlockComponent of this.trainingReportBlockComponents.toArray()) {
+        const disabledSeriesNames = trainingReportBlockComponent.getDisabledSeriesNames();
+        if (disabledSeriesNames && disabledSeriesNames.length) {
+          for (const disabledSeriesName of disabledSeriesNames) {
+            const data = disabledSeriesName.split(' / ');
+            if (data && data.length > 2) {
+              const item = new EventBlockSeries();
+              item.blockId = trainingReportBlockComponent.data.id;
+              item.firstLastPersonName = data[0];
+              item.exercise = data[1];
+              item.parameter = data[2];
+
+              disabledEventBlockSeries.push(item);
+            }
+          }
+        }
+      }
+    }
+    return disabledEventBlockSeries;
+  }
+
+}
+
+export class EventBlockSeries {
+  public blockId: number;
+  public firstLastPersonName: string;
+  public exercise: string;
+  public parameter: string;
+  public unit: string;
 }
