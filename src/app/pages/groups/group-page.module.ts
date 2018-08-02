@@ -32,6 +32,9 @@ import {GroupEventModalComponent} from './group-events/group-event-modal/group-e
 import {GroupComponent} from './group/group.component';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
+import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {HtmlContentModule} from '../../components/html-content/html-content.module';
 
 @NgModule({
   imports: [
@@ -54,7 +57,10 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     ExerciseMeasureItemModule,
     DxDateBoxModule,
     DxTextAreaModule,
-    ImageModule
+    ImageModule,
+    BusyButtonModule,
+    NgxModalModule,
+    HtmlContentModule
   ],
   exports: [
     GroupComponent

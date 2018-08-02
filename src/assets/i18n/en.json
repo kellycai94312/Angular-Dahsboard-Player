@@ -338,5 +338,7 @@
   "barChartType": "Bar",
   "lineChartType": "Line",
   "maximumCount": "Maximum count: {{count}}",
-  "stop": "Stop"
+  "stop": "Stop",
+  "confirmation": "Confirmation"
+  "areYouSureYouWantToLeaveTheGroup": "Are you sure you want to leave the group?"
 }

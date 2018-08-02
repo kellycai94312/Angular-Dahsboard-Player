@@ -31,13 +31,14 @@
         <p *ngIf="group.address?.city!=null" class="ml-1">{{'city' | translate }} - {{group.address.city.name}}</p>
       </div>
     </div>
+
+    <div class="ml-auto">
+      <app-busy-button [nameKey]="textStateInGroup"
+                       [click]="onGroupPersonState">
+      </app-busy-button>
+    </div>
   </div>
-  <dx-button *ngIf="!groupService.isOwner()"
-             type="default"
-             class="mb-2"
-             (onClick)="onGroupPersonState()"
-             text="{{textStateInGroup | translate}}">
-  </dx-button>
+
   <!-- group body -->
   <app-tab [tabs]="tabs"></app-tab>
 </div>

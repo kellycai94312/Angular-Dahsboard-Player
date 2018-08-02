@@ -11,6 +11,11 @@ import {ImageComponent} from '../../../components/image/image.component';
 import {Image} from '../../../data/remote/model/file/image/image';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-modal.component';
+import {AppHelper} from '../../../utils/app-helper';
+import {HtmlContentComponent} from '../../../components/html-content/html-content/html-content.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-group-page',
@@ -32,6 +37,9 @@ export class GroupPageComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
+              private _modalService: NgbModal,
+              private _appHelper: AppHelper,
+              private _translateService: TranslateService,
               public groupService: GroupService) {
     this.groupService.groupSubject.subscribe(group => {
       this.group = group;
@@ -107,16 +115,52 @@ export class GroupPageComponent implements OnInit {
     }
   }
 
-  public async onGroupPersonState() {
+  public onGroupPersonState = async () => {
+    if (this.groupService.getGroupPersonState() === GroupPersonState.MEMBER) {
+      const modal = this._modalService.open(NgxModalComponent, {size: 'lg'});
+      const componentInstance = modal.componentInstance as NgxModalComponent;
+      componentInstance.titleKey = 'confirmation';
+      await componentInstance.initializeBody(HtmlContentComponent, async component => {
+        component.html = await this._translateService.get('areYouSureYouWantToLeaveTheGroup').toPromise();
+
+        componentInstance.splitButtonItems = [
+          {
+            nameKey: 'approve',
+            default: true,
+            callback: async () => {
+              if (await this.changePersonStateInGroup()) {
+                await this.baseInit();
+                modal.dismiss();
+              }
+            }
+          },
+          {
+            nameKey: 'cancel',
+            callback: async () => {
+              modal.dismiss();
+            }
+          }
+        ];
+      });
+    } else {
+      if (await this.changePersonStateInGroup()) {
+        await this.baseInit();
+      }
+    }
+  };
+
+  private async changePersonStateInGroup(): Promise<boolean> {
     try {
       if (this.groupService.getGroupPersonState() === GroupPersonState.NOT_MEMBER) {
         await this._participantRestApiService.joinGroup({id: this.group.id});
       } else {
         await this._participantRestApiService.leaveGroup({id: this.group.id});
       }
+      return true;
     } catch (e) {
+      await this._appHelper.showErrorMessage('saveError');
     }
-    await this.baseInit();
+    return false;
   }
 
 }
