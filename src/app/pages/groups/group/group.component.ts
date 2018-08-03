@@ -3,6 +3,7 @@ import {GroupViewModel} from '../../../data/local/view-model/group/group-view-mo
 import {Group} from '../../../data/remote/model/group/base/group';
 import {ImageDimension} from '../../../data/local/image-dimension';
 import {ImageComponent} from '../../../components/image/image.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-group',
@@ -17,7 +18,7 @@ export class GroupComponent extends GroupViewModel implements OnInit {
   @Input()
   public dimension: ImageDimension;
 
-  constructor() {
+  constructor(private _router: Router) {
     super(new Group());
     this.dimension = ImageDimension.W80xH80;
   }
@@ -35,4 +36,9 @@ export class GroupComponent extends GroupViewModel implements OnInit {
     }
   }
 
+  public async onNavigate() {
+    // TODO: Need for reload component
+    await this._router.navigate(['/group']);
+    await this._router.navigate(['/group', this.data.id]);
+  }
 }
