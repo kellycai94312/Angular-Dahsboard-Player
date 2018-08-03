@@ -341,5 +341,6 @@
   "maximumCount": "Максимальное количество: {{count}}",
   "stop": "Стоп",
   "confirmation": "Подтверждение",
-  "areYouSureYouWantToLeaveTheGroup": "Вы уверены, что хотите покинуть группу?"
+  "areYouSureYouWantToLeaveTheGroup": "Вы уверены, что хотите покинуть группу?",
+  "eventState": "Состояние события"
 }

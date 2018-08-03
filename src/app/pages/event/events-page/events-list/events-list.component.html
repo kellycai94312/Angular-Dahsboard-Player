@@ -40,9 +40,10 @@
   <tr class="d-flex">
     <th class="col-3">{{'name' | translate}}</th>
     <th class="col-1">{{'trainingType' | translate}}</th>
+    <th class="col-1">{{'eventState' | translate}}</th>
     <th class="col-2">{{'startDateAndTime' | translate}}</th>
     <th class="col-2">{{'location' | translate}}</th>
-    <th class="col-3">{{'groups.section' | translate}}</th>
+    <th class="col-2">{{'groups.section' | translate}}</th>
     <th class="col-1">{{'score' | translate}}</th>
   </tr>
   </thead>
@@ -55,9 +56,10 @@
       <tr class="d-flex" routerLink="/event/{{item.id}}" [class.disabled]="item.discriminator !== 'GAME'">
         <td class="col-sm-3">{{item.name}}</td>
         <td class="col-sm-1">{{item.discriminator}}</td>
+        <td class="col-sm-1">{{item.trainingState}}</td>
         <td class="col-sm-2">{{item.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
         <td class="col-sm-2">{{item.location != null ? item.location.name : ''}}</td>
-        <td class="col-sm-3">{{item.discriminator === 'GAME' ? item.teams : ''}}</td>
+        <td class="col-sm-2">{{item.discriminator === 'GAME' ? item.teams : ''}}</td>
         <td class="col-sm-1">{{item.discriminator === 'GAME' ? item.score : ''}}</td>
       </tr>
     </ng-template>
