@@ -77,11 +77,11 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
     this._activatedRouteSubscription.unsubscribe();
   }
 
-  public onEdit(groupPersonViewModel: GroupPersonViewModel) {
+  public onEdit = async (event: any, parameter: GroupPersonViewModel) => {
     const modalRef = this._modalService.open(GroupPersonModalComponent, {size: 'lg'});
-    modalRef.componentInstance.groupPerson = groupPersonViewModel.data;
+    modalRef.componentInstance.groupPerson = parameter.data;
     modalRef.componentInstance.onChangeGroupPerson = async () => this.updateItems();
-  }
+  };
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
