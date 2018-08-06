@@ -20,7 +20,6 @@ import {SubgroupsComponent} from './group-administration/subgroups/subgroups.com
 import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
 import {MembersComponent} from './group-administration/members/members.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {GroupPersonModalComponent} from './group-person-modal/group-person-modal.component';
 import {RequestsComponent} from './group-administration/requests/requests.component';
 import {PersonModule} from '../../components/person/person.module';
 import {MeasureTemplateComponent} from './group-administration/measure-template/measure-template.component';
@@ -35,6 +34,7 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {HtmlContentModule} from '../../components/html-content/html-content.module';
+import {EditGroupPersonComponent} from './component/edit-group-person/edit-group-person.component';
 
 @NgModule({
   imports: [
@@ -82,17 +82,17 @@ import {HtmlContentModule} from '../../components/html-content/html-content.modu
     SubgroupComponent,
     MembersComponent,
     RequestsComponent,
-    GroupPersonModalComponent,
     MeasureTemplateComponent,
     GroupEventsComponent,
     GroupEventModalComponent,
-    GroupComponent
+    GroupComponent,
+    EditGroupPersonComponent
   ],
   entryComponents: [
     GroupComponent,
-    GroupPersonModalComponent,
     ModalSelectPageComponent,
-    GroupEventModalComponent
+    GroupEventModalComponent,
+    EditGroupPersonComponent
   ]
 })
 export class GroupPageModule {
