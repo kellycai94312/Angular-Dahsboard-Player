@@ -16,6 +16,9 @@ export class BusyButtonComponent {
   public click: Function;
 
   @Input()
+  public disabled: () => boolean;
+
+  @Input()
   public parameter: any;
 
   @Input()
@@ -30,9 +33,6 @@ export class BusyButtonComponent {
   public busy: boolean;
 
   private _clicked: boolean;
-
-  constructor() {
-  }
 
   public async onClick(event: Event): Promise<void> {
     if (this.click && !this._clicked) {

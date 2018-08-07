@@ -11,6 +11,8 @@ import {Person} from '../../../../data/remote/model/person';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -35,7 +37,8 @@ export class EditGroupPersonComponent implements OnInit {
   public isOwner: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _ngxModalService: NgxModalService) {
     this.pageSize = PropertyConstant.pageSize;
 
     this.manualInitialization = false;
@@ -49,6 +52,7 @@ export class EditGroupPersonComponent implements OnInit {
 
   public async initialize(groupPerson: GroupPerson): Promise<boolean> {
     this.groupPerson = groupPerson;
+    this.isOwner = this.groupPerson.group.owner.id == this.groupPerson.person.user.id;
 
     await this.initBaseGroupPerson(groupPerson.person, groupPerson.userRole);
 
@@ -67,8 +71,6 @@ export class EditGroupPersonComponent implements OnInit {
           this.mentorUserRole = allUserRoles.find(x => x.userRoleEnum === UserRoleEnum.SCOUT);
           break;
       }
-
-      this.isOwner = this.groupPerson.group.owner.id == this.groupPerson.person.user.id;
 
       return true;
     } catch (e) {
@@ -163,6 +165,16 @@ export class EditGroupPersonComponent implements OnInit {
     }
     return false;
   }
+
+  public onEditGroupPersonLog = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+
+    await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
+      component.manualInitialization = true;
+      await component.initialize(this.groupPerson);
+    });
+  };
 
   private async initBaseGroupPerson(person: Person, userRole: UserRole) {
     try {

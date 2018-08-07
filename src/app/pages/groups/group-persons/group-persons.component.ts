@@ -6,14 +6,13 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-view-model';
 import {GroupService} from '../group.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ISubscription} from 'rxjs/Subscription';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../utils/app-helper';
-import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-modal.component';
 import {EditGroupPersonComponent} from '../component/edit-group-person/edit-group-person.component';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'app-group-persons',
@@ -35,7 +34,7 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
 
   private readonly _activatedRouteSubscription: ISubscription;
 
-  constructor(private _modalService: NgbModal,
+  constructor(private _ngxModalService: NgxModalService,
               private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
               private _appHelper: AppHelper,
@@ -79,14 +78,14 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
   }
 
   public onEdit = async (event: any, parameter: GroupPersonViewModel) => {
-    const modal = this._modalService.open(NgxModalComponent, {size: 'lg'});
-    const componentInstance = modal.componentInstance as NgxModalComponent;
-    componentInstance.titleKey = 'member';
-    await componentInstance.initializeBody(EditGroupPersonComponent, async component => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'member';
+
+    await modal.componentInstance.initializeBody(EditGroupPersonComponent, async component => {
       component.manualInitialization = true;
       await component.initialize(this._appHelper.cloneObject(parameter.data));
 
-      componentInstance.splitButtonItems = [
+      modal.componentInstance.splitButtonItems = [
         {
           nameKey: 'save',
           default: true,
@@ -101,7 +100,7 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
       ];
 
       if (!component.isOwner) {
-        componentInstance.splitButtonItems.push({
+        modal.componentInstance.splitButtonItems.push({
           nameKey: 'remove',
           callback: async () => {
             const isRemoved = await component.onRemove();

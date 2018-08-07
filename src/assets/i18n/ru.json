@@ -342,5 +342,9 @@
   "stop": "Стоп",
   "confirmation": "Подтверждение",
   "areYouSureYouWantToLeaveTheGroup": "Вы уверены, что хотите покинуть группу?",
-  "eventState": "Состояние события"
+  "eventState": "Состояние события",
+  "stayInterval": "Интервал пребывания",
+  "showPersonLog": "Показать историю пользователя",
+  "joinDate": "Дата вступления",
+  "leaveDate": "Дата выхода"
 }

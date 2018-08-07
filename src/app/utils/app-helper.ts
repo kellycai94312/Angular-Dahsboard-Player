@@ -35,8 +35,12 @@ export class AppHelper {
     items.splice(items.indexOf(item), 1);
   }
 
-  public isNewObject<T extends IdentifiedObject>(obj: T) {
+  public isNewObject<T extends IdentifiedObject>(obj: T): boolean {
     return obj.id === undefined || obj.id == null || obj.id < 1;
+  }
+
+  public isUndefinedOrNull(val: any): boolean {
+    return val === undefined || val == null;
   }
 
   public getGmtDate(date: Date): any {
@@ -86,7 +90,7 @@ export class AppHelper {
     this._toastrService.success(message);
   }
 
-  public delay(ms: number): Promise<void> {
+  public delay(ms: number = 0): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 

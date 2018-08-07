@@ -1,16 +1,18 @@
-<div class="modal-header">
-  <h4 *ngIf="title || titleKey"
-      class="modal-title">{{title ? (title):(titleKey | translate)}}</h4>
-  <button type="button"
-          class="close"
-          aria-label="Close"
-          (click)="onClose()">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
-  <ng-template appRef></ng-template>
-</div>
-<div class="modal-footer">
-  <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+<div class="shadow">
+  <div class="modal-header">
+    <h4 *ngIf="title || titleKey"
+        class="modal-title">{{title ? (title):(titleKey | translate)}}</h4>
+    <button type="button"
+            class="close"
+            aria-label="Close"
+            (click)="onClose()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-template appRef></ng-template>
+  </div>
+  <div class="modal-footer">
+    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+  </div>
 </div>

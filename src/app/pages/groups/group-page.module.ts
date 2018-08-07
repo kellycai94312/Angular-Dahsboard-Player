@@ -35,6 +35,7 @@ import {BusyButtonModule} from '../../components/busy-button/busy-button.module'
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {HtmlContentModule} from '../../components/html-content/html-content.module';
 import {EditGroupPersonComponent} from './component/edit-group-person/edit-group-person.component';
+import {EditGroupPersonLogComponent} from './component/edit-group-person-log/edit-group-person-log.component';
 
 @NgModule({
   imports: [
@@ -86,13 +87,15 @@ import {EditGroupPersonComponent} from './component/edit-group-person/edit-group
     GroupEventsComponent,
     GroupEventModalComponent,
     GroupComponent,
-    EditGroupPersonComponent
+    EditGroupPersonComponent,
+    EditGroupPersonLogComponent
   ],
   entryComponents: [
     GroupComponent,
     ModalSelectPageComponent,
     GroupEventModalComponent,
-    EditGroupPersonComponent
+    EditGroupPersonComponent,
+    EditGroupPersonLogComponent
   ]
 })
 export class GroupPageModule {

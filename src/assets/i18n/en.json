@@ -341,5 +341,9 @@
   "stop": "Stop",
   "confirmation": "Confirmation",
   "areYouSureYouWantToLeaveTheGroup": "Are you sure you want to leave the group?",
-  "eventState": "Event state"
+  "eventState": "Event state",
+  "stayInterval": "Stay interval",
+  "showPersonLog": "Show person log",
+  "joinDate": "Join date",
+  "leaveDate": "Leave date"
 }

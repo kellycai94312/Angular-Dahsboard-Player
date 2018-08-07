@@ -82,6 +82,7 @@ import {TrainingBlockQuery} from './query/training-block-query';
 import {TrainingPersonMeasure} from '../bean/training-person-measure';
 import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
+import {GroupPersonLog} from '../model/group/group-person-log';
 
 @Injectable()
 @RestParams({
@@ -689,6 +690,44 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/subgroup/{!subgroupId}',
   })
   deleteSubgroup: IRestMethodStrict<any, any, { groupId: number, subgroupId: number }, void>;
+
+  //#endregion
+
+  //#region LeadTrainer
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/leadTrainer',
+  })
+  setGroupPersonLeadTrainer: IRestMethod<{ groupId: number, personId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/person/{!personId}/leadTrainer',
+  })
+  unsetGroupPersonLeadTrainer: IRestMethod<{ groupId: number, personId: number }, void>;
+
+  //#endregion
+
+  //#region GroupPersonLog
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}/log',
+  })
+  getGroupPersonLog: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/log',
+  })
+  createGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number }, GroupPersonLog>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!groupId}/person/{!personId}/log/{!groupPersonLogId}',
+  })
+  updateGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number, groupPersonLogId: number }, GroupPersonLog>;
 
   //#endregion
 

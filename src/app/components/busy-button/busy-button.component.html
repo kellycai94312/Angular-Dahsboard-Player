@@ -1,4 +1,5 @@
 <button class="btn btn-primary input-height-sm {{classes}}"
+        [disabled]="disabled ? disabled():false"
         (click)="onClick($event)"
         (keyup.enter)="onKeyUp($event)">
   <i *ngIf="icon"

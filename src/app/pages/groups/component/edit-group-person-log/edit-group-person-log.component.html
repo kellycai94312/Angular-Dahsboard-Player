@@ -1,0 +1,49 @@
+<div *ngIf="currentGroupPersonLog">
+  <label class="mt-2">{{'stayInterval' | translate}}</label>
+  <div class="row cols-padding">
+    <div class="col">
+      <dx-date-box class="w-100"
+                   [(value)]="currentGroupPersonLog.joinDate"
+                   type="date"
+                   placeholder="{{'from' | translate}}"
+                   showClearButton="true"
+                   [displayFormat]="dateFormat">
+      </dx-date-box>
+    </div>
+    <div class="col">
+      <dx-date-box class="w-100"
+                   [(value)]="currentGroupPersonLog.leaveDate"
+                   type="date"
+                   placeholder="{{'to' | translate}}"
+                   showClearButton="true"
+                   [displayFormat]="dateFormat">
+      </dx-date-box>
+    </div>
+    <div class="col-auto">
+      <app-busy-button icon="fa fa-plus"
+                       [click]="onSave"
+                       [disabled]="disabledSaveButton">
+      </app-busy-button>
+    </div>
+  </div>
+</div>
+
+<table class="table table-bordered table-hover table-sm mt-2">
+  <thead>
+  <tr class="d-flex">
+    <th class="col">{{ 'joinDate' | translate }}</th>
+    <th class="col">{{ 'leaveDate' | translate }}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ngx-virtual-scroll [query]="pageQuery"
+                      [getItems]="getItems">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col">{{item.joinDate | date:dateFormat}}</td>
+        <td class="col">{{item.leaveDate | date:dateFormat}}</td>
+      </tr>
+    </ng-template>
+  </ngx-virtual-scroll>
+  </tbody>
+</table>

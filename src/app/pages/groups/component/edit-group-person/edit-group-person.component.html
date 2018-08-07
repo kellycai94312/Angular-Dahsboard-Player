@@ -53,7 +53,10 @@
 </div>
 
 <dx-check-box *ngIf="!isOwner"
-              class="mt-2"
+              class="w-100 my-2"
               [(value)]="groupPerson.admin"
               text="{{ 'administrator' | translate }}">
 </dx-check-box>
+
+<app-busy-button nameKey="showPersonLog"
+                 [click]="onEditGroupPersonLog"></app-busy-button>
