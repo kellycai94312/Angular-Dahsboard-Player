@@ -21,7 +21,6 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/linearicons/dist/web-font/style.css",
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles.scss"
@@ -120,7 +119,6 @@
               "node_modules/stimulsoft-reports-js/stimulsoft.reports.min.js"
             ],
             "styles": [
-              "node_modules/linearicons/dist/web-font/style.css",
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles.scss"
