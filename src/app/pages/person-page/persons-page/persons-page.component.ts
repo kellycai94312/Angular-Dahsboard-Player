@@ -14,13 +14,13 @@ import {City} from '../../../data/remote/model/city';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
-import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PersonModalCreateComponent} from './person-modal-create/person-modal-create.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-persons-page',

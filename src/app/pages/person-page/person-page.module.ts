@@ -28,7 +28,6 @@ import {ContactComponent} from './person-page/contact/contact.component';
 import {TestsResultsComponent} from './person-page/tests-results/tests-results.component';
 import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
-import {ModalModule} from 'ngx-bootstrap';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
@@ -75,7 +74,6 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
     PersonPageRoutingModule,
     TranslateModule.forChild(),
     NgbModule.forRoot(),
-    ModalModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,
     DxDateBoxModule,

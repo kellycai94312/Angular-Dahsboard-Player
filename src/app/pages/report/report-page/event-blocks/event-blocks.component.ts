@@ -1,7 +1,6 @@
 import {Component, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -13,6 +12,7 @@ import {TrainingBlock} from '../../../../data/remote/model/training/report/train
 import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
 import {FileFormat, ReportsService} from '../../../../shared/reports.service';
 import {TrainingReportBlockComponent} from '../../component/training-report-block/training-report-block.component';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-event-blocks',

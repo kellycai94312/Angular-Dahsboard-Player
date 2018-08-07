@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -31,6 +30,7 @@ import {SystemMessageContent} from '../../../data/remote/model/chat/message/syst
 import {SystemMessageContentType} from '../../../data/remote/model/chat/message/system-message-content-type';
 import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 import {MessageToastrService} from '../../../components/message-toastr/message-toastr.service';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-conversation-page',
@@ -91,8 +91,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       this.readMessageFrom(x.message.created);
       x.message.read = true;
 
-      if (x.message.content.discriminator == BaseMessageContentType.SYSTEM_MESSAGE_CONTENT
-        && x.message.sender.person.id != this.person.id) { //exclude update duplication
+      if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT
+        && x.message.sender.person.id != this.person.id) { // Exclude update duplication
         switch ((x.message.content as SystemMessageContent).systemMessageType) {
           case SystemMessageContentType.UPDATE_LOGO:
             this.logo.refresh();
@@ -171,7 +171,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
       this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: this._conversationId})).value;
       switch (this.conversation.discriminator) {
         case BaseConversationType.DIALOGUE:
-          //get recipient
+          // Get recipient
           const participantsContainer = await this._participantRestApiService.getParticipants({conversationId: this._conversationId});
           if (participantsContainer.size > 0) {
             this.recipient = participantsContainer.list[0];
@@ -219,7 +219,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.messageContent.content = this.messageContent.content.trim();
 
     if (this.editedMessage) {
-      //update message
+      // Update message
       try {
         this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {conversationId: this._conversationId, messageContentId: this.messageContent.id});
         this.cancelEditMessage();
@@ -227,7 +227,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         await this._appHelper.showErrorMessage('sendError');
       }
     } else {
-      //create message
+      // Create message
       try {
         const message = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
         this.addSendMessageInList(message);

@@ -5,7 +5,6 @@ import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-modal.component';
 import {NamedObjectComponent} from '../../../components/named-object/named-object/named-object.component';
 import {Router} from '@angular/router';
@@ -14,6 +13,7 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import {PropertyConstant} from '../../../data/local/property-constant';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-reports-page',
