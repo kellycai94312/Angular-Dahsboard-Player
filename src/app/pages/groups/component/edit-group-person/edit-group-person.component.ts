@@ -31,10 +31,11 @@ export class EditGroupPersonComponent implements OnInit {
 
   public baseGroupPerson: GroupPerson;
   public userRoles: UserRole[];
-  public mentorUserRole: UserRole;
   public subgroups: SubGroup[];
   public sportRoles: SportRole[];
   public isOwner: boolean;
+
+  private _mentorUserRoleEnum: UserRoleEnum;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
@@ -61,14 +62,13 @@ export class EditGroupPersonComponent implements OnInit {
       // TODO: Subgroups have to stored in GroupService
       this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
 
-      const allUserRoles = await this._participantRestApiService.getUserRoles();
       switch (this.groupPerson.group.groupType.groupTypeEnum) {
         case GroupTypeEnum.TEAM:
           this.sportRoles = await this._participantRestApiService.getSportRolesBySportType({id: (this.groupPerson.group as GroupTeam).sportType.id});
-          this.mentorUserRole = allUserRoles.find(x => x.userRoleEnum === UserRoleEnum.TRAINER);
+          this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
           break;
         case GroupTypeEnum.AGENCY:
-          this.mentorUserRole = allUserRoles.find(x => x.userRoleEnum === UserRoleEnum.SCOUT);
+          this._mentorUserRoleEnum = UserRoleEnum.SCOUT;
           break;
       }
 
@@ -79,10 +79,9 @@ export class EditGroupPersonComponent implements OnInit {
   }
 
   loadMentors = async (from: number, searchText: string) => {
-    // TODO: Use userRoleEnum instead UserRoleId. Need add on server
     return this._participantRestApiService.getGroupPersonsByGroup({
       id: this.groupPerson.group.id,
-      userRoleId: this.mentorUserRole.id,
+      userRoleEnum: this._mentorUserRoleEnum,
       from: from,
       count: this.pageSize,
       name: searchText
