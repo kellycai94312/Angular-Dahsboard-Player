@@ -7,10 +7,11 @@ import {RegistrationVerificationPageComponent} from './registration-verification
 import {AuthDenyGuard} from '../../guard/auth-deny.guard';
 import {RegistrationPersonPageGuard} from '../../guard/registration-person-page.guard';
 import {RegistrationPersonEnableComponent} from './registration-person-enable/registration-person-enable.component';
+import {EnvironmentGuard} from '../../guard/environment.guard';
 
 const routes: Routes = [
-  {path: '', component: RegistrationPageComponent, canActivate: [AuthDenyGuard]},
-  {path: 'person', component: RegistrationPersonPageComponent, canActivate: [RegistrationPersonPageGuard]},
+  {path: '', component: RegistrationPageComponent, canActivate: [AuthDenyGuard, EnvironmentGuard]},
+  {path: 'person', component: RegistrationPersonPageComponent, canActivate: [RegistrationPersonPageGuard, EnvironmentGuard]},
   {path: 'verification', component: RegistrationVerificationPageComponent},
   {path: 'enable', component: RegistrationPersonEnableComponent}
 ];

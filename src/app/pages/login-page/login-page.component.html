@@ -27,13 +27,13 @@
                        checkPressedEnter="true"
                        nameKey="login.signIn"></app-busy-button>
       <div class="mt-2 text-center">
-        <p>{{'registration.notRegistered'| translate}}
+        <p *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL">
+          {{'registration.notRegistered'| translate}}
           <a routerLink="/registration"
              routerLinkActive="active">{{'registration.signUp' | translate}}</a>
-          <br>
-          <a routerLink="/password/reset"
-             routerLinkActive="active">{{'login.forgotYourPassword' | translate}}</a>
         </p>
+        <a routerLink="/password/reset"
+           routerLinkActive="active">{{'login.forgotYourPassword' | translate}}</a>
       </div>
     </div>
   </div>
