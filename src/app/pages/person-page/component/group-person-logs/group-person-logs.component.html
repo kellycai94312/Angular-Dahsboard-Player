@@ -1,0 +1,43 @@
+<div class="text-light bg-primary p-1 mb-2">{{'personHistory' | translate}}</div>
+<table class="table table-sm mt-2">
+  <thead>
+  <tr class="d-flex">
+    <th class="col-1">{{'image' | translate}}</th>
+    <th class="col-6">{{'name' | translate}}</th>
+    <th class="col-3">{{'mentor' | translate}}</th>
+    <th class="col-1">{{'joinDate' | translate}}</th>
+    <th class="col-1">{{'leaveDate' | translate}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ngx-virtual-scroll [query]="query"
+                      [getItems]="getItems"
+                      windowScroll="true">
+    <ng-template let-item>
+      <tr class="d-flex">
+        <td class="col-1">
+          <app-image *ngIf="group"
+                     [type]="'LOGO'"
+                     [clazz]="'GROUP'"
+                     [id]="group.id"
+                     [dimension]="'W80xH80'"
+                     [format]="'SQUARE'"></app-image>
+        </td>
+        <td class="col-6">
+          <p>{{group.name}}</p>
+        </td>
+        <td class="col-3">
+          <app-person *ngIf="item?.mentor"
+                      [data]="item.mentor"></app-person>
+        </td>
+        <td class="col-1">
+          <p>{{item.joinDate | date:dateFormat}}</p>
+        </td>
+        <td class="col-1">
+          <p>{{item.leaveDate | date:dateFormat}}</p>
+        </td>
+      </tr>
+    </ng-template>
+  </ngx-virtual-scroll>
+  </tbody>
+</table>

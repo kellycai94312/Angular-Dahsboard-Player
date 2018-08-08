@@ -715,7 +715,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/person/{!personId}/log',
   })
-  getGroupPersonLog: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
+  getGroupPersonLogs: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

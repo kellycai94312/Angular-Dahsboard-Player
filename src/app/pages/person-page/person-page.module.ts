@@ -66,6 +66,7 @@ import {RequisitesComponent} from './person-page/requisites/requisites.component
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
+import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
 
 @NgModule({
   imports: [
@@ -130,7 +131,8 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
     MyGroupsComponent,
     PersonModalCreateComponent,
     RequisitesComponent,
-    ContactEnableModalComponent
+    ContactEnableModalComponent,
+    GroupPersonLogsComponent
   ],
   providers: [
     PersonService,

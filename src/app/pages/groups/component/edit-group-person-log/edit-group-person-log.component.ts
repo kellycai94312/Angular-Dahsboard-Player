@@ -48,7 +48,7 @@ export class EditGroupPersonLogComponent implements OnInit {
   }
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
-    const pageContainer = await this._participantRestApiService.getGroupPersonLog({}, pageQuery, {groupId: this.groupPerson.group.id, personId: this.groupPerson.person.id});
+    const pageContainer = await this._participantRestApiService.getGroupPersonLogs({}, pageQuery, {groupId: this.groupPerson.group.id, personId: this.groupPerson.person.id});
     if (this._appHelper.isNewObject(this.currentGroupPersonLog) && pageContainer.list.length) {
       this.currentGroupPersonLog = this._appHelper.cloneObject(pageContainer.list.find(x => this._appHelper.isUndefinedOrNull(x.leaveDate)) || new GroupPersonLog());
     }

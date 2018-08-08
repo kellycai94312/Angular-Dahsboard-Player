@@ -5,6 +5,8 @@ import {PersonService} from '../person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupPersonLog} from '../../../../data/remote/model/group/group-person-log';
+import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
+import {ActivatedRoute, Router} from '@angular/router';
 
 // TODO: Remove this component. See app-group-person-new!
 @Component({
@@ -31,9 +33,12 @@ export class GroupPersonComponent implements OnInit {
 
   public readonly pageSize: number;
   public readonly dateFormat: string;
+  public splitButtonItems: SplitButtonItem[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private _router: Router,
+              private _activatedRoute: ActivatedRoute) {
     this.change = new EventEmitter<GroupPerson>();
 
     this.pageSize = PropertyConstant.pageSize;
@@ -42,6 +47,31 @@ export class GroupPersonComponent implements OnInit {
 
   async ngOnInit() {
     this.allowEdit = await this._personService.allowEdit();
+    this.splitButtonItems = [];
+    if (this.allowEdit) {
+      this.splitButtonItems.push({
+        nameKey: 'remove',
+        default: true,
+        callback: async () => {
+          if (this.baseGroup) {
+            await this._participantRestApiService.updatePersonBaseGroup({id: null}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+            this.data = null;
+          } else {
+            if (this.data) {
+              await this._participantRestApiService.removePublicRole(this.data.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+            }
+          }
+          this.change.emit(this.data);
+          await this.refreshGroupPersonLog();
+        }
+      });
+    }
+    this.splitButtonItems.push({
+      nameKey: 'showHistory',
+      callback: async () => {
+        await this._router.navigate([this.data.group.id, 'history'], {relativeTo: this._activatedRoute});
+      }
+    });
     await this.refreshGroupPersonLog();
   }
 
@@ -84,19 +114,6 @@ export class GroupPersonComponent implements OnInit {
         this.change.emit(e.prev);
       }
     }
-    await this.refreshGroupPersonLog();
-  }
-
-  async onRemove() {
-    if (this.baseGroup) {
-      await this._participantRestApiService.updatePersonBaseGroup({id: null}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
-      this.data = null;
-    } else {
-      if (this.data) {
-        await this._participantRestApiService.removePublicRole(this.data.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
-      }
-    }
-    this.change.emit(this.data);
     await this.refreshGroupPersonLog();
   }
 

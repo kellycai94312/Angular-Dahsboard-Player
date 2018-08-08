@@ -4,11 +4,11 @@
     <thead>
     <tr class="d-flex">
       <th class="col-1">{{'image' | translate}}</th>
-      <th [ngClass]="{'col-4' : canEdit, 'col-5' : !canEdit}">{{'name' | translate}}</th>
+      <th class="col-3">{{'name' | translate}}</th>
       <th class="col-2">{{'sportType' | translate}}</th>
       <th class="col-3">{{'mentor' | translate}}</th>
       <th class="col-1">{{'joinDate' | translate}}</th>
-      <th class="col-1" *ngIf="canEdit"></th> <!--remove btn-->
+      <th class="col-2"></th>
     </tr>
     </thead>
     <tbody>
@@ -45,12 +45,11 @@
     <thead>
     <tr class="d-flex">
       <th class="col-1">{{'image' | translate}}</th>
-      <th [ngClass]="{'col-4' : canEdit, 'col-5' : !canEdit}">{{'name' | translate}}</th>
+      <th class="col-3">{{'name' | translate}}</th>
       <th class="col-2">{{'sportType' | translate}}</th>
       <th class="col-3">{{'mentor' | translate}}</th>
       <th class="col-1">{{'joinDate' | translate}}</th>
-      <th *ngIf="canEdit"
-          class="col-1"></th>
+      <th class="col-2"></th>
     </tr>
     </thead>
     <tbody>
