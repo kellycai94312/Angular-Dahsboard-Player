@@ -4,6 +4,7 @@ import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {PersonService} from '../person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
+import {GroupPersonLog} from '../../../../data/remote/model/group/group-person-log';
 
 // TODO: Remove this component. See app-group-person-new!
 @Component({
@@ -25,17 +26,23 @@ export class GroupPersonComponent implements OnInit {
   @Output()
   public change: EventEmitter<GroupPerson>;
 
+  public groupPersonLog: GroupPersonLog;
   public allowEdit: boolean;
 
-  public pageSize = PropertyConstant.pageSize;
+  public readonly pageSize: number;
+  public readonly dateFormat: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService) {
     this.change = new EventEmitter<GroupPerson>();
+
+    this.pageSize = PropertyConstant.pageSize;
+    this.dateFormat = PropertyConstant.dateFormat;
   }
 
   async ngOnInit() {
     this.allowEdit = await this._personService.allowEdit();
+    await this.refreshGroupPersonLog();
   }
 
   loadData = async (from: number, searchText: string) => {
@@ -77,6 +84,7 @@ export class GroupPersonComponent implements OnInit {
         this.change.emit(e.prev);
       }
     }
+    await this.refreshGroupPersonLog();
   }
 
   async onRemove() {
@@ -89,6 +97,19 @@ export class GroupPersonComponent implements OnInit {
       }
     }
     this.change.emit(this.data);
+    await this.refreshGroupPersonLog();
+  }
+
+  private async refreshGroupPersonLog(): Promise<void> {
+    if (this.data) {
+      try {
+        this.groupPersonLog = await this._participantRestApiService.getLatestGroupPersonLog({personId: this.data.person.id, groupId: this.data.group.id});
+      } catch (e) {
+        this.groupPersonLog = null;
+      }
+    } else {
+      this.groupPersonLog = null;
+    }
   }
 
 }

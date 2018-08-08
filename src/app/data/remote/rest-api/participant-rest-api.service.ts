@@ -718,6 +718,12 @@ export class ParticipantRestApiService extends Rest {
   getGroupPersonLog: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
 
   @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}/log/latest',
+  })
+  getLatestGroupPersonLog: IRestMethod<{ groupId: number, personId: number }, GroupPersonLog>;
+
+  @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/person/{!personId}/log',
   })

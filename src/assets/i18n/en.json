@@ -345,5 +345,7 @@
   "stayInterval": "Stay interval",
   "showPersonLog": "Show person log",
   "joinDate": "Join date",
-  "leaveDate": "Leave date"
+  "leaveDate": "Leave date",
+  "basic": "Basic",
+  "additional": "Additional"
 }
