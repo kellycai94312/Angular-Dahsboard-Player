@@ -13,6 +13,7 @@ import {Direction} from '../../../components/ngx-virtual-scroll/model/direction'
 import {AppHelper} from '../../../utils/app-helper';
 import {EditGroupPersonComponent} from '../component/edit-group-person/edit-group-person.component';
 import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {Params} from '@angular/router/src/shared';
 
 @Component({
   selector: 'app-group-persons',
@@ -32,7 +33,7 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
 
   public groupPersonQuery: GroupPersonQuery;
 
-  private readonly _activatedRouteSubscription: ISubscription;
+  private _activatedRouteSubscription: ISubscription;
 
   constructor(private _ngxModalService: NgxModalService,
               private _participantRestApiService: ParticipantRestApiService,
@@ -40,21 +41,6 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
               private _appHelper: AppHelper,
               public groupService: GroupService) {
     this.groupPersonQuery = new GroupPersonQuery();
-
-    this._activatedRouteSubscription = this._activatedRoute.params.subscribe(async params => {
-      const subGroupId: number = +params.id;
-
-      this.groupPersonQuery.name = '';
-      this.groupPersonQuery.from = 0;
-      this.groupPersonQuery.count = PropertyConstant.pageSize;
-
-      if (subGroupId) {
-        this.groupPersonQuery.subGroupId = subGroupId;
-      } else {
-        delete this.groupPersonQuery.subGroupId;
-      }
-      await this.updateItems();
-    });
   }
 
   async ngOnInit() {
@@ -63,18 +49,29 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
     } else {
       this.groupPersonQuery.id = this._activatedRoute.parent.snapshot.params.id;
     }
+    this.refreshSubGroupQuery(this._activatedRoute.snapshot.params);
+
+    await this.updateItems();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.groupPersonQuery.name = value;
         await this.updateItems();
       });
-    await this.updateItems();
+
+    this._activatedRouteSubscription = this._activatedRoute.params.skip(1).subscribe(async params => {
+      this.groupPersonQuery.name = '';
+      this.groupPersonQuery.from = 0;
+      this.groupPersonQuery.count = PropertyConstant.pageSize;
+      this.refreshSubGroupQuery(params);
+
+      await this.updateItems();
+    });
   }
 
   ngOnDestroy(): void {
-    this.searchDxTextBoxComponent.textChange.unsubscribe();
-    this._activatedRouteSubscription.unsubscribe();
+    this._appHelper.unsubscribe(this.searchDxTextBoxComponent.textChange);
+    this._appHelper.unsubscribe(this._activatedRouteSubscription);
   }
 
   public onEdit = async (event: any, parameter: GroupPersonViewModel) => {
@@ -124,8 +121,19 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
   };
 
   private async updateItems() {
+    // TODO: Without setTimeout or promise delay not working in other components
+    await this._appHelper.delay();
     if (this.ngxVirtualScrollComponent) {
       await this.ngxVirtualScrollComponent.reset();
+    }
+  }
+
+  private refreshSubGroupQuery(params: Params) {
+    const subGroupId: number = +params.id;
+    if (subGroupId) {
+      this.groupPersonQuery.subGroupId = subGroupId;
+    } else {
+      delete this.groupPersonQuery.subGroupId;
     }
   }
 
