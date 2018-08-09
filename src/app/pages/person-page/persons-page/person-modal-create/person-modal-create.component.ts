@@ -132,6 +132,7 @@ export class PersonModalCreateComponent implements OnInit {
       this.person.sex = this.selectedSex.sexEnum;
       const request = new PersonTemplateRequest();
       request.person = this.person;
+      request.person.birthDate = this._appHelper.dateByFormat(request.person.birthDate, PropertyConstant.dateTimeServerFormat);
       request.userRoleIds = this.userRoles.map(userRole => new IdRequest(userRole.id));
       request.sportTypeIds = this.sportTypes.map(sportType => new IdRequest(sportType.id));
       request.groupIds = this.groups.map(group => new IdRequest(group.id));
