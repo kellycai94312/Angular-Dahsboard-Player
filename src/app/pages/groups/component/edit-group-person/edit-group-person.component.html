@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col">
+    <app-person *ngIf="groupPerson?.person"
+                [data]="groupPerson.person"></app-person>
+  </div>
+  <div class="col">
+    <app-group *ngIf="baseGroupPerson"
+               [data]="baseGroupPerson.group"></app-group>
+  </div>
+</div>
+
+<label class="mt-3">{{'subgroup' | translate }}</label>
+<dx-select-box [items]="subgroups"
+               [(value)]="groupPerson.subGroup"
+               displayExpr="name"
+               acceptCustomValue="true"
+               showClearButton="true"
+               placeholder="{{'subgroup' | translate}}">
+</dx-select-box>
+
+<label class="mt-2">{{'userRole' | translate }}</label>
+<dx-select-box [items]="userRoles"
+               [(value)]="groupPerson.userRole"
+               displayExpr="name"
+               acceptCustomValue="true"
+               showClearButton="true"
+               (onSelectionChanged)="onUserRoleChange($event.selectedItem)"
+               placeholder="{{'userRole' | translate}}">
+</dx-select-box>
+
+<div *ngIf="groupPerson.userRole && groupPerson.userRole.userRoleEnum==='ATHLETE'">
+  <label class="mt-2">{{'mentor' | translate}}</label>
+  <app-input-select
+    [loadData]="loadMentors"
+    [(model)]="groupPerson.mentor"
+    [pageSize]="pageSize"
+    [getKey]="getKey"
+    [getName]="getName"
+    ngDefaultControl>
+  </app-input-select>
+
+  <label class="mt-2">{{'sportRole' | translate }}</label>
+  <dx-select-box [items]="sportRoles"
+                 [(value)]="groupPerson.sportRole"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 showClearButton="true"
+                 placeholder="{{'sportRole' | translate}}">
+  </dx-select-box>
+
+  <label class="mt-2">{{'number' | translate }}</label>
+  <dx-text-box [(value)]="groupPerson.number"></dx-text-box>
+</div>
+
+<dx-check-box *ngIf="!isOwner"
+              class="w-100 mt-2"
+              [(value)]="groupPerson.admin"
+              text="{{ 'administrator' | translate }}">
+</dx-check-box>
+
+<div class="mt-2">
+  <app-busy-button nameKey="showPersonLog"
+                   [click]="onEditGroupPersonLog"></app-busy-button>
+</div>

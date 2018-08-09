@@ -17,4 +17,5 @@ export class GroupPerson extends IdentifiedObject {
   public approved: boolean;
   public admin: boolean;
   public number: number;
+  public leadTrainer: boolean;
 }

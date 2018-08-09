@@ -20,7 +20,6 @@ import {SubgroupsComponent} from './group-administration/subgroups/subgroups.com
 import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
 import {MembersComponent} from './group-administration/members/members.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {GroupPersonModalComponent} from './group-person-modal/group-person-modal.component';
 import {RequestsComponent} from './group-administration/requests/requests.component';
 import {PersonModule} from '../../components/person/person.module';
 import {MeasureTemplateComponent} from './group-administration/measure-template/measure-template.component';
@@ -32,6 +31,11 @@ import {GroupEventModalComponent} from './group-events/group-event-modal/group-e
 import {GroupComponent} from './group/group.component';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
+import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {HtmlContentModule} from '../../components/html-content/html-content.module';
+import {EditGroupPersonComponent} from './component/edit-group-person/edit-group-person.component';
+import {EditGroupPersonLogComponent} from './component/edit-group-person-log/edit-group-person-log.component';
 
 @NgModule({
   imports: [
@@ -54,7 +58,10 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     ExerciseMeasureItemModule,
     DxDateBoxModule,
     DxTextAreaModule,
-    ImageModule
+    ImageModule,
+    BusyButtonModule,
+    NgxModalModule,
+    HtmlContentModule
   ],
   exports: [
     GroupComponent
@@ -76,17 +83,19 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     SubgroupComponent,
     MembersComponent,
     RequestsComponent,
-    GroupPersonModalComponent,
     MeasureTemplateComponent,
     GroupEventsComponent,
     GroupEventModalComponent,
-    GroupComponent
+    GroupComponent,
+    EditGroupPersonComponent,
+    EditGroupPersonLogComponent
   ],
   entryComponents: [
     GroupComponent,
-    GroupPersonModalComponent,
     ModalSelectPageComponent,
-    GroupEventModalComponent
+    GroupEventModalComponent,
+    EditGroupPersonComponent,
+    EditGroupPersonLogComponent
   ]
 })
 export class GroupPageModule {

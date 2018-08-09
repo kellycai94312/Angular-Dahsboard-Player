@@ -21,7 +21,6 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/linearicons/dist/web-font/style.css",
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles.scss"
@@ -82,6 +81,23 @@
                   "with": "src/environments/environment.by.ts"
                 }
               ]
+            },
+            "school": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.school.ts"
+                }
+              ]
             }
           }
         },
@@ -99,6 +115,9 @@
             },
             "by": {
               "browserTarget": "sport-monitoring-web:build:by"
+            },
+            "school": {
+              "browserTarget": "sport-monitoring-web:build:school"
             }
           }
         },
@@ -120,7 +139,6 @@
               "node_modules/stimulsoft-reports-js/stimulsoft.reports.min.js"
             ],
             "styles": [
-              "node_modules/linearicons/dist/web-font/style.css",
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
               "src/styles.scss"

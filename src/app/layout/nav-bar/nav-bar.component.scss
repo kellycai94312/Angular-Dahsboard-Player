@@ -40,7 +40,7 @@ $user-panel-width: 250px;
       }
     }
 
-    > .lnr {
+    > .fa {
       color: $white;
       font-size: .6em;
       font-weight: 900;
@@ -51,7 +51,7 @@ $user-panel-width: 250px;
 
 
     &:hover {
-      > p, > .lnr {
+      > p, > .fa {
         color: $white-light;
       }
       background-color: darken($navbar-background-dark, 2%);

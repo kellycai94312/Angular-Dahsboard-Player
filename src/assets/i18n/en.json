@@ -338,5 +338,15 @@
   "barChartType": "Bar",
   "lineChartType": "Line",
   "maximumCount": "Maximum count: {{count}}",
-  "stop": "Stop"
+  "stop": "Stop",
+  "confirmation": "Confirmation",
+  "areYouSureYouWantToLeaveTheGroup": "Are you sure you want to leave the group?",
+  "eventState": "Event state",
+  "stayInterval": "Stay interval",
+  "showPersonLog": "Show person log",
+  "joinDate": "Join date",
+  "leaveDate": "Leave date",
+  "basic": "Basic",
+  "additional": "Additional",
+  "personHistory": "Person history"
 }

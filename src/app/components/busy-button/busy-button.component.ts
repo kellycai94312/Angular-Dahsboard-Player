@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
 @Component({
@@ -6,7 +6,7 @@ import {Observable} from 'rxjs/Observable';
   templateUrl: './busy-button.component.html',
   styleUrls: ['./busy-button.component.scss']
 })
-export class BusyButtonComponent implements OnInit {
+export class BusyButtonComponent {
 
   // TODO: Use host binding
   @Input()
@@ -14,6 +14,9 @@ export class BusyButtonComponent implements OnInit {
 
   @Input()
   public click: Function;
+
+  @Input()
+  public disabled: () => boolean;
 
   @Input()
   public parameter: any;
@@ -24,15 +27,12 @@ export class BusyButtonComponent implements OnInit {
   @Input()
   public nameKey: string;
 
+  @Input()
+  public icon: 'fa fa-edit' | 'fa fa-plus';
+
   public busy: boolean;
 
   private _clicked: boolean;
-
-  constructor() {
-  }
-
-  ngOnInit() {
-  }
 
   public async onClick(event: Event): Promise<void> {
     if (this.click && !this._clicked) {

@@ -7,7 +7,7 @@
                [dimension]="'W80xH80'"
                [format]="'SQUARE'"></app-image>
   </td>
-  <td [ngClass]="{'col-2' : allowEdit, 'col-3' : !allowEdit}">
+  <td class="col-3">
     <a *ngIf="!allowEdit && data"
        routerLink="/group/{{data.group.id}}">
       <p>{{data?.group.name}}</p>
@@ -25,23 +25,17 @@
     </div>
   </td>
   <td class="col-2">
-    <p>{{data?.group.groupType.name}}</p>
+    <p>{{data?.sportRole?.sportType.name}}</p>
   </td>
-  <td class="col-2">
-    <p *ngIf="data?.sportRole">{{data.sportRole.name}}</p>
+  <td class="col-3">
+    <app-person *ngIf="groupPersonLog?.mentor"
+                [data]="groupPersonLog.mentor"></app-person>
   </td>
-  <td class="col-2">
-    <p *ngIf="data?.sportRole">{{data.sportRole.sportType.sportTypeEnum}}</p>
+  <td class="col-1">
+    <p>{{groupPersonLog?.joinDate | date:dateFormat}}</p>
   </td>
-  <td class="col-2">
-    <app-person *ngIf="data?.mentor?.person"
-                [data]="data.mentor.person"></app-person>
-  </td>
-  <td *ngIf="allowEdit && data"
-      class="col-1">
-    <button class="btn btn-outline-danger"
-            (click)="onRemove()">
-      <i class="fa fa-times"></i>
-    </button>
+  <td [hidden]="!data"
+      class="col-2">
+    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
   </td>
 </tr>

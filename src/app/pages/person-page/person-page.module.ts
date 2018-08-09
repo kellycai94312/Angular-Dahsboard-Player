@@ -28,7 +28,6 @@ import {ContactComponent} from './person-page/contact/contact.component';
 import {TestsResultsComponent} from './person-page/tests-results/tests-results.component';
 import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
-import {ModalModule} from 'ngx-bootstrap';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
 import {GroupPageModule} from '../groups/group-page.module';
@@ -67,6 +66,7 @@ import {RequisitesComponent} from './person-page/requisites/requisites.component
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
+import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
 
 @NgModule({
   imports: [
@@ -75,7 +75,6 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
     PersonPageRoutingModule,
     TranslateModule.forChild(),
     NgbModule.forRoot(),
-    ModalModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,
     DxDateBoxModule,
@@ -132,7 +131,8 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
     MyGroupsComponent,
     PersonModalCreateComponent,
     RequisitesComponent,
-    ContactEnableModalComponent
+    ContactEnableModalComponent,
+    GroupPersonLogsComponent
   ],
   providers: [
     PersonService,

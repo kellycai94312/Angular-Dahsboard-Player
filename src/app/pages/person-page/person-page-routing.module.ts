@@ -19,6 +19,7 @@ import {TestsResultsHistoryComponent} from './person-page/tests-results-history/
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {RequisitesComponent} from './person-page/requisites/requisites.component';
+import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
 
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
       {path: 'tests_results/:id', component: TestsResultsHistoryComponent},
       {path: 'achievements', component: AchievementsComponent},
       {path: 'groups', component: GroupsComponent},
+      {path: 'groups/:id/history', component: GroupPersonLogsComponent},
       {path: 'my-group', component: MyGroupsComponent},
       {path: 'requisites', component: RequisitesComponent},
       {

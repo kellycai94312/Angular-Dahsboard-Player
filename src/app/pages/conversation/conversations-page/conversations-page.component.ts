@@ -3,18 +3,18 @@ import {ISubscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {PropertyConstant} from '../../../data/local/property-constant';
-import {Direction} from 'ngx-bootstrap/carousel/carousel.component';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {ConversationService} from '../../../shared/conversation.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 import {AppHelper} from '../../../utils/app-helper';
 import {ConversationWrapper} from '../conversation-wrapper';
 import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-conversations-page',
@@ -129,24 +129,12 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._searchInputSubscription) {
-      this._searchInputSubscription.unsubscribe();
-    }
-    if (this._messageCreateSubscription) {
-      this._messageCreateSubscription.unsubscribe();
-    }
-    if (this._messageUpdateSubscription) {
-      this._messageUpdateSubscription.unsubscribe();
-    }
-    if (this._messageReadSubscription) {
-      this._messageReadSubscription.unsubscribe();
-    }
-    if (this._messageDeleteSubscription) {
-      this._messageDeleteSubscription.unsubscribe();
-    }
-    if (this._typingSubscription) {
-      this._typingSubscription.unsubscribe();
-    }
+    this._appHelper.unsubscribe(this._searchInputSubscription);
+    this._appHelper.unsubscribe(this._messageCreateSubscription);
+    this._appHelper.unsubscribe(this._messageUpdateSubscription);
+    this._appHelper.unsubscribe(this._messageReadSubscription);
+    this._appHelper.unsubscribe(this._messageDeleteSubscription);
+    this._appHelper.unsubscribe(this._typingSubscription);
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {

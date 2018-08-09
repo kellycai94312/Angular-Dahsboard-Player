@@ -32,18 +32,18 @@
                       [data]="item.data.person"></app-person>
         </td>
         <td class="col-1">
-          <h5>{{item.data.person?.birthDate | date:'yyyy'}}</h5>
+          <h6>{{item.data.person?.birthDate | date:'yyyy'}}</h6>
         </td>
         <td class="col-2">
           <app-group *ngIf="item.personViewModel?.baseGroupViewModel?.data"
                      [data]="item.personViewModel.baseGroupViewModel.data"></app-group>
         </td>
         <td class="col-1">
-          <h5>{{item.data?.userRole?.name}}</h5>
+          <h6>{{item.data?.userRole?.name}}</h6>
         </td>
         <td *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"
             class="col-1">
-          <h5>{{item.data?.sportRole?.name}}</h5>
+          <h6>{{item.data?.sportRole?.name}}</h6>
         </td>
         <td class="{{groupService.isEditAllow()? 'col-3':'col-4'}}">
           <app-person *ngIf="item.data?.mentor"
@@ -51,11 +51,10 @@
         </td>
         <td *ngIf="groupService.isEditAllow()"
             class="col-1">
-          <dx-button type="default"
-                     class="w-100"
-                     (onClick)="onEdit(item)"
-                     text="{{ 'edit' | translate }}">
-          </dx-button>
+          <app-busy-button icon="fa fa-edit"
+                           [click]="onEdit"
+                           [parameter]="item">
+          </app-busy-button>
         </td>
       </tr>
     </ng-template>

@@ -100,15 +100,15 @@
                      [format]="'CIRCLE'"></app-image>
         </td>
         <td class="col-4">
-          <h5>{{item.data?.firstName}}<br>
+          <h6>{{item.data?.firstName}}<br>
             {{item.data?.lastName}}<br>
-            {{item.data?.patronymic}}</h5>
+            {{item.data?.patronymic}}</h6>
         </td>
         <td class="col-2">
-          <h5>{{item.data?.birthDate | date:'yyyy'}}</h5>
+          <h6>{{item.data?.birthDate | date:'yyyy'}}</h6>
         </td>
         <td class="col-2">
-          <h5>{{item.baseUserRole?.name}}</h5>
+          <h6>{{item.baseUserRole?.name}}</h6>
         </td>
         <td class="col-3">
           <app-group *ngIf="item.baseGroupViewModel"
