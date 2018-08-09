@@ -1,8 +1,8 @@
 const gulp = require('gulp'),
-      replace = require('gulp-replace'),
-      uglify = require('gulp-uglify'),
-      notify = require('gulp-notify'),
-      rename = require('gulp-rename');
+  replace = require('gulp-replace'),
+  uglify = require('gulp-uglify'),
+  notify = require('gulp-notify'),
+  rename = require('gulp-rename');
 
 gulp.task('crack-and-minify-stimulsoft', function () {
   return gulp.src('node_modules/stimulsoft-reports-js/stimulsoft.reports.js')
@@ -16,6 +16,7 @@ gulp.task('crack-and-minify-stimulsoft', function () {
     .pipe(gulp.dest(function (file) {
       return file.base;
     }))
+    .pipe(gulp.dest('src/assets/js/'))
     .pipe(notify({
       message: 'Scripts task complete!',
       onLast: true

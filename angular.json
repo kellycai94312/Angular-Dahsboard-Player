@@ -26,8 +26,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/plotly.js/dist/plotly.min.js",
-              "node_modules/stimulsoft-reports-js/stimulsoft.reports.min.js"
+              "node_modules/plotly.js/dist/plotly.min.js"
             ]
           },
           "configurations": {
@@ -135,8 +134,7 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
-              "node_modules/plotly.js/dist/plotly.min.js",
-              "node_modules/stimulsoft-reports-js/stimulsoft.reports.min.js"
+              "node_modules/plotly.js/dist/plotly.min.js"
             ],
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",

@@ -94,6 +94,11 @@ export class AppHelper {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
+  public round(val: number, precision: number): number {
+    const round = Math.pow(10, precision);
+    return Math.round(val * round) / round;
+  }
+
   public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>,
                                                        instanceBuilder: (obj: TInput) => Promise<TOutput> | TOutput,
                                                        filter?: (original: TInput) => boolean): Promise<PageContainer<TOutput>> {

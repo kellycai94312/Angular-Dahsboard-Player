@@ -21,6 +21,8 @@ export class ReportsService {
   }
 
   async downloadPersonalReport(testingId: number, trainingPersonId: number) {
+    await this.initializeLibraries();
+
     const reportJson = await this._assetsService.getPersonalReport();
     let testingPersonalReport;
     try {
@@ -47,8 +49,8 @@ export class ReportsService {
 
     const estimatedParameters = testingPersonalReport.estimatedParameterResults;
     for (const item of estimatedParameters) {
-      item.value = this.round(item.value);
-      item.perspectiveValue = this.round(item.perspectiveValue);
+      item.value = this._appHelper.round(item.value, 2);
+      item.perspectiveValue = this._appHelper.round(item.perspectiveValue, 2);
     }
     const estimatedParametersDataSet = new Stimulsoft.System.Data.DataSet('estimated_parameters');
     estimatedParametersDataSet.readJson(estimatedParameters);
@@ -56,7 +58,7 @@ export class ReportsService {
 
     const testResults = testingPersonalReport.testResults;
     for (const item of testResults) {
-      item.value = this.round(item.value);
+      item.value = this._appHelper.round(item.value, 2);
     }
     const halfLength = testResults.length / 2;
     const testResultsDataSet = new Stimulsoft.System.Data.DataSet('test_results_1');
@@ -77,6 +79,8 @@ export class ReportsService {
   }
 
   async downloadGameReport(gameId: number, trainingGroupId: number) {
+    await this.initializeLibraries();
+
     const reportJson = await this._assetsService.getGameReport();
     const gameReport = await this._participantRestApiService.getGameReport({
       gameId: gameId,
@@ -95,6 +99,8 @@ export class ReportsService {
   }
 
   async printPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[]) {
+    await this.initializeLibraries();
+
     const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
     const report = new Stimulsoft.Report.StiReport();
     report.loadDocument(await this._assetsService.getPersonMeasure());
@@ -105,6 +111,8 @@ export class ReportsService {
   }
 
   async downloadPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[], fileFormat: FileFormat) {
+    await this.initializeLibraries();
+
     const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
     const report = new Stimulsoft.Report.StiReport();
     report.loadDocument(await this._assetsService.getPersonMeasure());
@@ -227,8 +235,9 @@ export class ReportsService {
     }, false);
   }
 
-  private round(value: number) {
-    return Math.round(value * 100) / 100;
+  // You must use this method where you use report libraries
+  private async initializeLibraries(): Promise<boolean> {
+    return await this._assetsService.setScriptInDocumentIfNotExist('/assets/js/stimulsoft.reports.min.js');
   }
 
 }
@@ -278,4 +287,3 @@ class MeasureValueEventReport {
   public value: string;
   public created: string;
 }
-
