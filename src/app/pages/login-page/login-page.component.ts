@@ -6,6 +6,9 @@ import {Session} from '../../data/remote/model/session';
 import {ProfileService} from '../../shared/profile.service';
 import {AuthorizationService} from '../../shared/authorization.service';
 import {AppHelper} from '../../utils/app-helper';
+import {environment} from '../../../environments/environment';
+import {IEnvironment} from '../../../environments/ienvironment';
+import {EnvironmentType} from '../../../environments/environment-type';
 
 @Component({
   selector: 'app-login-page',
@@ -14,7 +17,10 @@ import {AppHelper} from '../../utils/app-helper';
 })
 export class LoginPageComponent {
 
+  // Store a reference to the enum
+  public environmentType = EnvironmentType;
   public auth: Auth;
+  public environment: IEnvironment;
 
   constructor(public translate: TranslateService,
               private _authorizationService: AuthorizationService,
@@ -22,6 +28,7 @@ export class LoginPageComponent {
               private _appHelper: AppHelper,
               private router: Router) {
     this.auth = new Auth();
+    this.environment = environment;
   }
 
   public signIn = async (event: any) => {
