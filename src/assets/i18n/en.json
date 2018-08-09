@@ -51,9 +51,7 @@
       },
       "groups": {
         "section": "Groups",
-        "placeholder": "Select a group",
-        "baseGroup": "Base",
-        "additionalGroups": "Additional"
+        "placeholder": "Select a group"
       },
       "myRegion": {
         "section": "My region",

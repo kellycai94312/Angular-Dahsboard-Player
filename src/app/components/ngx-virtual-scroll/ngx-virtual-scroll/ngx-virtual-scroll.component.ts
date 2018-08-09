@@ -4,6 +4,7 @@ import {PageContainer} from '../../../data/remote/bean/page-container';
 import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
+import {Mutex} from '../../../data/local/mutex';
 
 @Component({
   selector: 'ngx-virtual-scroll',
@@ -53,7 +54,11 @@ export class NgxVirtualScrollComponent {
   private _front?: number;
   private _total: number;
 
+  private readonly _mutex: Mutex;
+
   constructor() {
+    this._mutex = new Mutex();
+
     this.class = '';
     this.count = PropertyConstant.pageSize;
     this.query = new PageQuery();
@@ -165,12 +170,14 @@ export class NgxVirtualScrollComponent {
   }
 
   public async reset(): Promise<void> {
+    await this._mutex.acquire();
     this.initialize();
 
     await this.onScrollDown();
     if (this.autoScroll) {
       this.scrollDown();
     }
+    this._mutex.release();
   }
 
   private initialize() {

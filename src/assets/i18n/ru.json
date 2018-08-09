@@ -52,9 +52,7 @@
       },
       "groups": {
         "section": "Группы",
-        "placeholder": "Выбрать группу",
-        "baseGroup": "Основная",
-        "additionalGroups": "Дополнительные"
+        "placeholder": "Выбрать группу"
       },
       "myRegion": {
         "section": "Мой регион",
