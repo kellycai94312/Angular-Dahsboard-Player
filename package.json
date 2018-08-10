@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall":"gulp --gulpfile gulpfile.js crack-and-minify-stimulsoft"
+    "postinstall": "gulp --gulpfile gulpfile.js"
   },
   "private": true,
   "dependencies": {
