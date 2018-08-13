@@ -39,11 +39,10 @@ export class AssetsService extends Rest {
     }
     try {
       const node = document.createElement('script') as HTMLScriptElement;
-      node.src = url;
       node.type = 'text/javascript';
+      node.src = url;
       node.async = async;
-      node.charset = 'utf-8';
-      document.getElementsByTagName('head')[0].appendChild(node);
+      document.getElementsByTagName('body')[0].appendChild(node);
       return true;
     } catch (e) {
     }
