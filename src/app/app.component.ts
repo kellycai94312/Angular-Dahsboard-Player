@@ -13,6 +13,7 @@ import {MessageToastrService} from './components/message-toastr/message-toastr.s
 import {Router} from '@angular/router';
 import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
 import {Message} from './data/remote/model/chat/message/message';
+import {AssetsService} from './data/remote/rest-api/assets.service';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
               private _messageToastrService: MessageToastrService,
-              private _router: Router) {
+              private _router: Router,
+              private _assetsService: AssetsService) {
     this.subscribe();
 
     this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
@@ -109,8 +111,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this._participantStompService.disconnect();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initLangs();
+    await this._assetsService.setScriptInDocumentIfNotExist('/assets/js/plotly.min.js', true);
   }
 
   ngOnDestroy(): void {

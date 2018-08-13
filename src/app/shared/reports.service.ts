@@ -107,7 +107,8 @@ export class ReportsService {
     report.dictionary.databases.clear();
     report.regData('data', 'data', eventReport);
     report.render();
-    report.print();
+
+    await this.print(report);
   }
 
   async downloadPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[], fileFormat: FileFormat) {
@@ -214,30 +215,50 @@ export class ReportsService {
         exportSettings = new Stimulsoft.Report.Export.StiExcel2007ExportSettings();
         break;
     }
+
     const stream = new Stimulsoft.System.IO.MemoryStream();
-    report.renderAsync(function () {
-      exportService.exportToAsync(function () {
-        let exportedDocument = null;
-        let headerExportedDocument: string = null;
-        switch (fileFormat) {
-          case FileFormat.PDF:
-            headerExportedDocument = 'application/pdf';
-            exportedDocument = report.exportDocument(Stimulsoft.Report.StiExportFormat.Pdf);
-            break;
-          case FileFormat.EXCEL:
-            headerExportedDocument = 'application/excel';
-            exportedDocument = report.exportDocument(Stimulsoft.Report.StiExportFormat.Excel2007);
-            fileName = `${fileName}.xlsx`;
-            break;
-        }
-        (<any>Object).saveAs(exportedDocument, fileName, headerExportedDocument);
-      }, report, stream, exportSettings);
-    }, false);
+    exportService.exportTo(report, stream, exportSettings);
+    let exportedDocument = null;
+    let headerExportedDocument: string = null;
+    switch (fileFormat) {
+      case FileFormat.PDF:
+        headerExportedDocument = 'application/pdf';
+        fileName = `${fileName}.pdf`;
+        exportedDocument = report.exportDocument(Stimulsoft.Report.StiExportFormat.Pdf);
+        break;
+      case FileFormat.EXCEL:
+        headerExportedDocument = 'application/excel';
+        exportedDocument = report.exportDocument(Stimulsoft.Report.StiExportFormat.Excel2007);
+        fileName = `${fileName}.xlsx`;
+        break;
+    }
+    (<any>Object).saveAs(stream.toArray(), fileName, headerExportedDocument);
+
+    this.removeTempDataStimulsoft();
   }
 
   // You must use this method where you use report libraries
   private async initializeLibraries(): Promise<boolean> {
     return await this._assetsService.setScriptInDocumentIfNotExist('/assets/js/stimulsoft.reports.min.js');
+  }
+
+  private removeTempDataStimulsoft() {
+    const tempDataStimulsoft = document.querySelectorAll('body > svg:not([id])');
+    if (!tempDataStimulsoft) {
+      return;
+    }
+
+    for (let i = 0; i < tempDataStimulsoft.length; i++) {
+      tempDataStimulsoft.item(i).remove();
+    }
+  }
+
+  private async print(report: any): Promise<void> {
+    report.print();
+
+    // TODO: This delay needs to initialize temp data. The not good solution, but events not working.
+    await this._appHelper.delay(1500);
+    this.removeTempDataStimulsoft();
   }
 
 }

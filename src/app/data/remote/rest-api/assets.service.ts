@@ -33,17 +33,16 @@ export class AssetsService extends Rest {
     super(restHandler);
   }
 
-  public async setScriptInDocumentIfNotExist(url: string): Promise<boolean> {
+  public async setScriptInDocumentIfNotExist(url: string, async: boolean = false): Promise<boolean> {
     if (document.querySelector(`script[src="${url}"]`)) {
       return true;
     }
     try {
       const node = document.createElement('script') as HTMLScriptElement;
-      node.src = url;
       node.type = 'text/javascript';
-      node.async = false;
-      node.charset = 'utf-8';
-      document.getElementsByTagName('head')[0].appendChild(node);
+      node.src = url;
+      node.async = async;
+      document.getElementsByTagName('body')[0].appendChild(node);
       return true;
     } catch (e) {
     }

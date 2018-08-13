@@ -347,5 +347,6 @@
   "leaveDate": "Дата выхода",
   "basic": "Основная",
   "additional": "Дополнительная",
-  "personHistory": "История пользователя"
+  "personHistory": "История пользователя",
+  "connections": "Связи"
 }

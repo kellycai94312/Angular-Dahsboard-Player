@@ -36,6 +36,7 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {HtmlContentModule} from '../../components/html-content/html-content.module';
 import {EditGroupPersonComponent} from './component/edit-group-person/edit-group-person.component';
 import {EditGroupPersonLogComponent} from './component/edit-group-person-log/edit-group-person-log.component';
+import {GroupConnectionsComponent} from './group-administration/group-connections/group-connections.component';
 
 @NgModule({
   imports: [
@@ -88,7 +89,8 @@ import {EditGroupPersonLogComponent} from './component/edit-group-person-log/edi
     GroupEventModalComponent,
     GroupComponent,
     EditGroupPersonComponent,
-    EditGroupPersonLogComponent
+    EditGroupPersonLogComponent,
+    GroupConnectionsComponent
   ],
   entryComponents: [
     GroupComponent,

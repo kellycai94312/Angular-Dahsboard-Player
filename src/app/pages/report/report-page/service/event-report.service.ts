@@ -8,16 +8,16 @@ import {TrainingBlock} from '../../../../data/remote/model/training/report/train
 export class EventReportService {
 
   public static colorPalette: string[] = [
-    '#00CCFF',
-    '#FF6600',
-    '#0000FF',
-    '#000080',
-    '#99CCFF',
-    '#FF99CC',
-    '#CC99FF',
-    '#FFCC99',
-    '#3366FF',
-    '#FF9900',
+    '#e2433f',
+    '#263ded',
+    '#2ea02e',
+    '#fdf74b',
+    '#9f42b5',
+    '#43a7f2',
+    '#85da05',
+    '#c97e3d',
+    '#fe235d',
+    '#ff8901',
   ];
 
   private _trainingReport: TrainingReport;
