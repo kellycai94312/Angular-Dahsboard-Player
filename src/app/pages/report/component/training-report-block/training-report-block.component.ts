@@ -198,9 +198,15 @@ export class TrainingReportBlockComponent implements OnInit {
               color: color
             }
           };
-          groupData.trace.mode = 'lines+markers';
+          groupData.trace.mode = 'text+lines+markers';
           groupData.trace.type = scatterType;
+          groupData.trace.hoverinfo = 'name';
           groupData.trace.name = `${item.person.lastName} ${item.person.firstName} / ${exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name} / ${exerciseMeasureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name}`;
+          if (scatterType === 'bar') {
+            (<any>groupData.trace).textposition = 'auto';
+          } else {
+            (<any>groupData.trace).textposition = 'top center';
+          }
 
           groups.push(groupData);
         }
@@ -217,6 +223,7 @@ export class TrainingReportBlockComponent implements OnInit {
 
       for (let j = 0; j < groups.length; j++) {
         groups[j].trace.x = xValues;
+        (<any>groups[j].trace).text = groups[j].trace.y;
         chartData.push(groups[j].trace);
       }
     }
