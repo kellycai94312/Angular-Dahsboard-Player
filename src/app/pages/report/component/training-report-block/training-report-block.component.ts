@@ -174,13 +174,12 @@ export class TrainingReportBlockComponent implements OnInit {
       }
     }
 
-    const chartData: Array<Data> = [];
+    let chartData: Array<Data> = [];
     const xValues = [];
     // TODO: Optimize algorithm
     // Max count person 10 link with color palette array
     for (let i = 0; i < personMeasures.length && i < EventReportService.colorPalette.length; i++) {
       const item = personMeasures[i];
-      const color = EventReportService.colorPalette[i];
       const groups: Array<GroupData> = [];
       for (let j = 0; j < item.measureValues.list.length; j++) {
         const exerciseMeasureValue = item.measureValues.list[j];
@@ -192,12 +191,6 @@ export class TrainingReportBlockComponent implements OnInit {
           groupData.trace.x = [];
           groupData.trace.y = [];
           groupData.trace.type = 'scatter';
-          groupData.trace.marker = {
-            color: color,
-            line: {
-              color: color
-            }
-          };
           groupData.trace.mode = 'text+lines+markers';
           groupData.trace.type = scatterType;
           groupData.trace.hoverinfo = 'name';
@@ -228,16 +221,28 @@ export class TrainingReportBlockComponent implements OnInit {
       }
     }
 
+    chartData = chartData.sort((a, b) => {
+      if (a.name > b.name) {
+        return 1;
+      }
+      if (a.name < b.name) {
+        return -1;
+      }
+      return 0;
+    });
+
+    for (let i = 0; i < chartData.length && i < EventReportService.colorPalette.length; i++) {
+      const color = EventReportService.colorPalette[i];
+      chartData[i].marker = {
+        color: color,
+        line: {
+          color: color
+        }
+      };
+    }
+
     setTimeout(async () => {
-      const plotly = await Plotly.newPlot(this.chartElement.nativeElement, chartData.sort((a, b) => {
-        if (a.name > b.name) {
-          return 1;
-        }
-        if (a.name < b.name) {
-          return -1;
-        }
-        return 0;
-      }), {
+      const plotly = await Plotly.newPlot(this.chartElement.nativeElement, chartData, {
         height: this._contentHeight,
         margin: {
           l: 30,

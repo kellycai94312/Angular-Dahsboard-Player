@@ -42,7 +42,21 @@ export class AssetsService extends Rest {
       node.type = 'text/javascript';
       node.src = url;
       node.async = async;
-      document.getElementsByTagName('body')[0].appendChild(node);
+      document.body.appendChild(node);
+
+      if (!async) {
+        let loadResolve: any = null;
+        const loaded = new Promise((resolve, reject) => {
+          loadResolve = resolve;
+        });
+        const loadListener = val => {
+          loadResolve();
+        };
+        const loadEventName = 'load';
+        node.addEventListener(loadEventName, loadListener);
+        await loaded;
+        node.removeEventListener(loadEventName, loadListener);
+      }
       return true;
     } catch (e) {
     }

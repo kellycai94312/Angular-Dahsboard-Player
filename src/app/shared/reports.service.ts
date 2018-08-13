@@ -154,7 +154,6 @@ export class ReportsService {
       for (let j = 0; j < blockResults.length; j++) {
         const blockResult = blockResults[j];
         const personName = `${blockResult.person.lastName} ${blockResult.person.firstName}`;
-        const color: any = this._appHelper.hexToRgb(EventReportService.colorPalette[j], 'string');
         if (!eventReport.persons.find(x => x.id == blockResult.person.id)) {
           eventReport.persons.push({id: blockResult.person.id, name: personName});
         }
@@ -169,7 +168,7 @@ export class ReportsService {
 
           hasAnyData = true;
 
-          const chartName = `${measureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name} ${measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name} ${measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureUnit.name}`;
+          const chartName = `${measureValue.exerciseExecMeasure.exerciseMeasure.baseExercise.name} ${measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name}`;
 
           eventReport.exerciseMeasures.push(
             {
@@ -178,7 +177,8 @@ export class ReportsService {
               personId: blockResult.person.id,
               tableName: `${chartName} ${this._appHelper.dateByFormat(measureValue.exerciseExecMeasure.created, 'dd/MM/yyyy HH:mm')}`,
               chartName: `${personName} ${chartName}`,
-              color: color
+              color: null,
+              blockId: block.id
             }
           );
 
@@ -199,6 +199,35 @@ export class ReportsService {
         eventReport.blocks.push({id: block.id, blockType: blockType, name: block.name});
       }
     }
+
+    const sortByChartName = (a, b) => {
+      if (a.chartName > b.chartName) {
+        return 1;
+      }
+      if (a.chartName < b.chartName) {
+        return -1;
+      }
+      return 0;
+    };
+
+    for (const block of eventReport.blocks) {
+      let colorIndex = 0;
+      let color: any = this._appHelper.hexToRgb(EventReportService.colorPalette[colorIndex++], 'string');
+      const exerciseMeasures = eventReport.exerciseMeasures.filter(x => x.blockId == block.id).sort(sortByChartName);
+      if (!exerciseMeasures.length) {
+        continue;
+      }
+      let previousChartName = exerciseMeasures[0].chartName;
+
+      for (const exerciseMeasure of exerciseMeasures) {
+        if (previousChartName !== exerciseMeasure.chartName) {
+          color = this._appHelper.hexToRgb(EventReportService.colorPalette[colorIndex++], 'string');
+          previousChartName = exerciseMeasure.chartName;
+        }
+        exerciseMeasure.color = color;
+      }
+    }
+
     return eventReport;
   }
 
@@ -299,6 +328,7 @@ class ExerciseMeasureEventReport {
   public tableName: string;
   public chartName: string;
   public color: string;
+  public blockId: number;
 }
 
 class MeasureValueEventReport {
