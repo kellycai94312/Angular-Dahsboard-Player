@@ -83,6 +83,7 @@ import {TrainingPersonMeasure} from '../bean/training-person-measure';
 import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
+import {GroupConnection} from '../model/group/group-connection';
 
 @Injectable()
 @RestParams({
@@ -734,6 +735,58 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}/log/{!groupPersonLogId}',
   })
   updateGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number, groupPersonLogId: number }, GroupPersonLog>;
+
+  //#endregion
+
+  //#region GroupConnection
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/connection',
+  })
+  getGroupConnections: IRestMethod<{ groupId: number }, PageContainer<GroupConnection>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/connection/graph',
+  })
+  getGraphGroupConnections: IRestMethodStrict<void, { depth?: number }, { groupId: number }, GroupConnection[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection',
+  })
+  createGroupConnection: IRestMethodStrict<GroupConnection, any, { groupId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}',
+  })
+  removeGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
+  })
+  approveGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
+  })
+  disapproveGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
+  })
+  visibleGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
+  })
+  invisibleGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
 
   //#endregion
 
