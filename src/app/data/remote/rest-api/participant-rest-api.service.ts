@@ -84,6 +84,7 @@ import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
 import {GroupConnection} from '../model/group/group-connection';
+import {PersonStageSportType} from '../model/stage/person-stage-sport-type';
 
 @Injectable()
 @RestParams({
@@ -501,6 +502,22 @@ export class ParticipantRestApiService extends Rest {
     path: '/note/{!id}',
   })
   removeNote: IRestMethod<{ id: number }, void>;
+
+  //#endregion
+
+  //#region PersonStageSportType
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/stage/{!sportTypeId}'
+  })
+  getPersonStageSportTypes: IRestMethod<{ personId: number, sportTypeId: number }, PersonStageSportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/stage/{!sportTypeId}'
+  })
+  updatePersonStageSportType: IRestMethodStrict<PersonStageSportType, any, { personId: number, sportTypeId: number }, PersonStageSportType>;
 
   //#endregion
 
