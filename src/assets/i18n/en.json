@@ -347,5 +347,13 @@
   "basic": "Basic",
   "additional": "Additional",
   "personHistory": "Person history",
-  "connections": "Connections"
+  "connections": "Connections",
+  "topLevel": "Top level",
+  "sameLevel": "Same level",
+  "bottomLevel": "Bottom level",
+  "visibility": "Visibility",
+  "approved": "Approved",
+  "none": "None",
+  "removed": "Removed",
+  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "You should save this state for next steps or be canceling changes"
 }

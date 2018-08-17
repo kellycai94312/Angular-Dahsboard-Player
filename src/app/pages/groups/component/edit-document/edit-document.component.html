@@ -1,0 +1,35 @@
+<label>{{'documentType' | translate}}</label>
+<dx-select-box class="w-100"
+               [items]="documentTypes"
+               [(value)]="data.type">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>
+
+<label class="mt-2">{{'date' | translate}}</label>
+<dx-date-box class="w-100"
+             [(value)]="data.date"
+             [displayFormat]="propertyConstant.dateFormat"
+             type="date">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-date-box>
+
+<label class="mt-2">{{'documentNumber' | translate}}</label>
+<dx-text-box class="w-100"
+             [(value)]="data.number"
+             type="date">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-text-box>
+
+<div class="d-flex flex-row align-items-center mt-2">
+  <label class="btn btn-primary btn-file">
+    {{'uploadFile' | translate}}<input type="file"
+                                       (change)="onFileChange($event)">
+  </label>
+  <p class="ml-2">{{selectedFileName}}</p>
+</div>

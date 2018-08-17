@@ -744,7 +744,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/connection',
   })
-  getGroupConnections: IRestMethod<{ groupId: number }, PageContainer<GroupConnection>>;
+  getGroupConnections: IRestMethodStrict<any, GroupQuery, { groupId: number }, PageContainer<GroupConnection>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -780,13 +780,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
   })
-  visibleGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+  visibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
   })
-  invisibleGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+  invisibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
 
   //#endregion
 
@@ -817,6 +817,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/file/document',
   })
   getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/file/{!fileId}',
+  })
+  removeFile: IRestMethod<{ fileId: number }, BaseFile>;
 
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
@@ -852,6 +858,10 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getDocument(documentId: number): string {
+    if (!documentId) {
+      return null;
+    }
+
     return `${environment.restUrl}/file/download/document/${documentId}`;
   }
 

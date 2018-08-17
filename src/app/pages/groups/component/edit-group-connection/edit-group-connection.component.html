@@ -1,0 +1,64 @@
+<label>{{'group' | translate }}</label>
+<app-input-select [loadData]="loadGroups"
+                  [(model)]="!isSource ? data.source : data.target"
+                  [pageSize]="propertyConstant.pageSize"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  placeholder="{{'none' | translate}}"
+                  [disabled]="data.id"
+                  ngDefaultControl>
+</app-input-select>
+
+<div [hidden]="!data.id">
+  <table class="table table-bordered table-hover mt-2">
+    <thead>
+    <tr class="d-flex">
+      <th class="col">{{'documentType'| translate}}</th>
+      <th class="col">{{'documentNumber'| translate}}</th>
+      <th class="col">{{'date'| translate}}</th>
+      <th class="col">{{'document'| translate}}</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <ngx-virtual-scroll [query]="query"
+                        [getItems]="getItems">
+      <ng-template let-item>
+        <tr class="d-flex"
+            (dblclick)="onEdit($event,item)">
+          <td class="col">
+            {{item.type}}
+          </td>
+          <td class="col">
+            {{item.number}}
+          </td>
+          <td class="col">
+            {{item.date | date:propertyConstant.dateFormat}}
+          </td>
+          <td class="col">
+            <a [href]="getDocumentUrl(item)">{{item.resource?.name}}</a>
+          </td>
+        </tr>
+      </ng-template>
+
+    </ngx-virtual-scroll>
+    </tbody>
+  </table>
+  <div class="mt-2">
+    <app-busy-button nameKey="add"
+                     [click]="onAdd"
+                     [parameter]=""></app-busy-button>
+  </div>
+
+  <dx-check-box *ngIf="isSource" class="mt-2"
+                [(value)]="data.visibleBySource"
+                text="{{'public' | translate}}">
+  </dx-check-box>
+  <dx-check-box *ngIf="!isSource" class="mt-2"
+                [(value)]="data.visibleByTarget"
+                text="{{'public' | translate}}">
+  </dx-check-box>
+</div>
+
+<p *ngIf="!data.id"
+   class="mt-2">{{'youShouldSaveThisStateForNextStepsOrBeCancelingChanges' | translate}}</p>
