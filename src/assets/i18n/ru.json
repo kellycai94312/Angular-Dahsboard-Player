@@ -348,5 +348,24 @@
   "basic": "Основная",
   "additional": "Дополнительная",
   "personHistory": "История пользователя",
-  "connections": "Связи"
+  "connections": "Связи",
+  "topLevel": "Верхний уровень",
+  "sameLevel": "Одинаковый уровень",
+  "bottomLevel": "Нижний уровень",
+  "visibility": "Видимость",
+  "approved": "Подтверждено",
+  "none": "Ничто",
+  "removed": "Удалено",
+  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "Вы должны сохранить это состояние для следующих шагов или отменить изменения",
+  "documentTypeEnum": {
+    "CONTRACT": "Контракт",
+    "ORDER": "Приказ",
+    "DISPOSITION": "Распоряжение",
+    "OTHER": "Другой"
+  },
+  "stages": "Этапы",
+  "duration": "Длительность",
+  "medicalExaminations": "Медицинские обследования",
+  "passDate": "Дата прохождения",
+  "recommendations": "Рекомендации"
 }

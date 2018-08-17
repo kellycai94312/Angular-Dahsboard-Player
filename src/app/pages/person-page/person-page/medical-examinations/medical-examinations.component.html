@@ -1,0 +1,38 @@
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr class="d-flex">
+    <th class="col">{{'passDate'| translate}}</th>
+    <th class="col">{{'approved'| translate}}</th>
+    <th class="col">{{'recommendations'| translate}}</th>
+    <th class="col">{{'document'| translate}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <ngx-virtual-scroll [getItems]="getItems"
+                      [windowScroll]="true">
+    <ng-template let-item>
+      <tr class="d-flex"
+          (dblclick)="onEdit($event,item)">
+        <td class="col">
+          {{ item.data?.passDate | date: propertyConstant.dateFormat}}
+        </td>
+        <td class="col">
+          {{item.data?.approved}}
+        </td>
+        <td class="col">
+          {{item.data.recommendations}}
+        </td>
+        <td class="col">
+          <a *ngIf="item.document"
+             [href]="getDocumentUrl(item.document)">{{item.document?.resource?.name}}</a>
+        </td>
+      </tr>
+    </ng-template>
+  </ngx-virtual-scroll>
+  </tbody>
+</table>
+
+<div *ngIf="allowEdit" class="mt-2">
+  <app-busy-button nameKey="add"
+                   [click]="onAdd"></app-busy-button>
+</div>

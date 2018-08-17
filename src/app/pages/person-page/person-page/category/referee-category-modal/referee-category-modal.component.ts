@@ -9,6 +9,8 @@ import {AppHelper} from '../../../../../utils/app-helper';
 import {DocumentType} from '../../../../../data/remote/model/file/document/document-type';
 import {Document} from '../../../../../data/remote/model/file/document/document';
 import {PersonRefereeCategoryViewModel} from '../../../../../data/local/view-model/referee-category/person-referee-category-view-model';
+import {NameWrapper} from '../../../../../data/local/name-wrapper';
+import {TranslateObjectService} from '../../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-referee-category-modal',
@@ -27,21 +29,26 @@ export class RefereeCategoryModalComponent {
   public sportType: SportType;
 
   public selectedFileName: string;
-  public readonly documentTypes: DocumentType[];
+  public documentTypes: NameWrapper<DocumentType>[];
+  public selectedDocumentType: NameWrapper<DocumentType>;
 
   private _file: File;
 
   constructor(public modal: NgbActiveModal,
               private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
-    this.documentTypes = Object.keys(DocumentType).filter(e => parseInt(e, 10) >= 0).map(x => DocumentType[x]);
+              private _appHelper: AppHelper,
+              private _translateObjectService: TranslateObjectService) {
   }
 
-  public initialize(personRefereeCategoryViewModel: PersonRefereeCategoryViewModel, person: Person, sportType: SportType) {
+  public async initialize(personRefereeCategoryViewModel: PersonRefereeCategoryViewModel, person: Person, sportType: SportType) {
     this.personRefereeCategoryViewModel = personRefereeCategoryViewModel;
     if (this.personRefereeCategoryViewModel.document.resource !== undefined) {
       this.selectedFileName = this.personRefereeCategoryViewModel.document.resource.name;
     }
+
+    this.documentTypes = await this._translateObjectService.getTranslatedEnumCollection<DocumentType>(DocumentType, 'DocumentTypeEnum');
+    this.selectedDocumentType = this.documentTypes.find(x => x.data === this.personRefereeCategoryViewModel.document.type);
+
     this.person = person;
     this.sportType = sportType;
   }
@@ -68,6 +75,8 @@ export class RefereeCategoryModalComponent {
 
   public async onSave() {
     try {
+      this.personRefereeCategoryViewModel.document.type = this.selectedDocumentType.data;
+
       if (this.personRefereeCategoryViewModel.data.assignDate) {
         this.personRefereeCategoryViewModel.data.assignDate = this._appHelper.getGmtDate(this.personRefereeCategoryViewModel.data.assignDate);
       }

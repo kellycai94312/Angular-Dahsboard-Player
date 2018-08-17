@@ -1,0 +1,31 @@
+<div *ngIf="data">
+  <label>{{'passDate' | translate}}</label>
+  <dx-date-box class="w-100"
+               [(value)]="data.passDate"
+               [displayFormat]="propertyConstant.dateFormat"
+               type="date">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-date-box>
+
+  <dx-check-box class="mt-2 w-100"
+                [(value)]="data.approved"
+                text="{{'approved' | translate}}">
+  </dx-check-box>
+
+  <label class="mt-2">{{'recommendations' | translate}}</label>
+  <dx-text-area class="w-100"
+                [(value)]="data.recommendations"
+                [maxLength]="4096"
+                [height]="250"></dx-text-area>
+
+  <div *ngIf="data.id"
+       class="mt-2">
+    <app-busy-button nameKey="document"
+                     [click]="editDocument"></app-busy-button>
+  </div>
+
+  <p *ngIf="!data.id"
+     class="mt-2">{{'youShouldSaveThisStateForNextStepsOrBeCancelingChanges' | translate}}</p>
+</div>

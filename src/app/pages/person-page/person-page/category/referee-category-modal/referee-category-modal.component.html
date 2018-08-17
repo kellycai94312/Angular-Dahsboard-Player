@@ -42,7 +42,8 @@
   <label class="mt-2">{{'documentType' | translate}}</label>
   <dx-select-box class="w-100"
                  [items]="documentTypes"
-                 [(value)]="personRefereeCategoryViewModel.document.type">
+                 [(value)]="selectedDocumentType"
+                 displayExpr="name">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dx-validator>

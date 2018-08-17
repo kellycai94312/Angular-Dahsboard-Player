@@ -1,6 +1,7 @@
 import {PageQuery} from '../page-query';
 import {GroupTypeEnum} from '../../model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../model/user-role-enum';
+import {GroupConnectionType} from '../../model/group/group-connection-type';
 
 export class GroupQuery extends PageQuery {
   public id?: number;
@@ -19,4 +20,9 @@ export class GroupQuery extends PageQuery {
   public regionId?: number;
   public cityId?: number;
   public admin?: boolean;
+
+  //#region GroupConnection
+  public groupConnectionType?: GroupConnectionType;
+  public unassigned?: boolean;
+  //#endregion
 }

@@ -1,19 +1,20 @@
-import {Component, OnInit} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {Component} from '@angular/core';
 import {GroupService} from '../../group.service';
+import {GroupConnectionType} from '../../../../data/remote/model/group/group-connection-type';
 
 @Component({
   selector: 'app-group-connections',
   templateUrl: './group-connections.component.html',
   styleUrls: ['./group-connections.component.scss']
 })
-export class GroupConnectionsComponent implements OnInit {
+export class GroupConnectionsComponent {
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
-  }
+  public readonly groupConnectionType = GroupConnectionType;
+  public readonly object = Object;
+  public readonly groupId: number;
 
-  ngOnInit() {
+  constructor(private _groupService: GroupService) {
+    this.groupId = _groupService.getGroup().id;
   }
 
 }

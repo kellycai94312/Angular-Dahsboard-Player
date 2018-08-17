@@ -20,6 +20,8 @@ import {RefereeCategoriesComponent} from './person-page/category/referee-categor
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {RequisitesComponent} from './person-page/requisites/requisites.component';
 import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
+import {PersonStagesComponent} from './person-page/person-stages/person-stages.component';
+import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
 
 
 const routes: Routes = [
@@ -50,6 +52,8 @@ const routes: Routes = [
         ]
       },
       {path: 'category', component: RefereeCategoriesComponent},
+      {path: 'stage', component: PersonStagesComponent},
+      {path: 'medical-examination', component: MedicalExaminationsComponent},
     ]
   },
 

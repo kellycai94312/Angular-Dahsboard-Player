@@ -158,4 +158,46 @@ export class AppHelper {
     }
   }
 
+  //#region Try actions
+
+  public async tryLoad(load: () => Promise<void>, notify: boolean = true): Promise<boolean> {
+    return this.tryAction(null, 'loadDataError', load, notify);
+  }
+
+  public async trySave(save: () => Promise<void>, notify: boolean = true): Promise<boolean> {
+    return this.tryAction('saved', 'saveError', save, notify);
+  }
+
+  public async tryRemove(remove: () => Promise<void>, notify: boolean = true): Promise<boolean> {
+    return this.tryAction('removed', 'removeError', remove, notify);
+  }
+
+  public async tryAction(successMessageKey: string,
+                         errorMessageKey: string,
+                         action: () => Promise<void>,
+                         notify: boolean = true): Promise<boolean> {
+    let isSuccess = true;
+    try {
+      await action();
+    } catch (e) {
+      isSuccess = false;
+    }
+
+    if (notify) {
+      if (isSuccess) {
+        if (successMessageKey) {
+          await this.showSuccessMessage(successMessageKey);
+        }
+      } else {
+        if (errorMessageKey) {
+          await this.showErrorMessage(errorMessageKey);
+        }
+      }
+    }
+
+    return isSuccess;
+  }
+
+  //#endregion
+
 }

@@ -10,6 +10,7 @@ import {
   DxDataGridModule,
   DxDateBoxModule,
   DxFormModule,
+  DxNumberBoxModule,
   DxPopupModule,
   DxSelectBoxModule,
   DxTemplateModule,
@@ -67,6 +68,10 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
 import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
+import {PersonStagesComponent} from './person-page/person-stages/person-stages.component';
+import {EditPersonStageComponent} from './component/edit-person-stage/edit-person-stage.component';
+import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
+import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
 
 @NgModule({
   imports: [
@@ -102,7 +107,8 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
     ButtonsModule,
     NamedObjectItemModule,
     NgxSplitButtonModule,
-    NgxButtonGroupModule
+    NgxButtonGroupModule,
+    DxNumberBoxModule
   ],
   declarations: [
     PersonPageComponent,
@@ -132,7 +138,11 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
     PersonModalCreateComponent,
     RequisitesComponent,
     ContactEnableModalComponent,
-    GroupPersonLogsComponent
+    GroupPersonLogsComponent,
+    PersonStagesComponent,
+    EditPersonStageComponent,
+    MedicalExaminationsComponent,
+    EditMedicalExaminationComponent
   ],
   providers: [
     PersonService,
@@ -148,7 +158,9 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
     RankModalComponent,
     RefereeCategoryModalComponent,
     PersonModalCreateComponent,
-    ContactEnableModalComponent
+    ContactEnableModalComponent,
+    EditPersonStageComponent,
+    EditMedicalExaminationComponent
   ]
 })
 export class PersonPageModule {

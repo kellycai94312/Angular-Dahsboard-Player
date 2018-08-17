@@ -1,3 +1,5 @@
-<p>
-  group-connections works!
-</p>
+<div *ngFor="let item of object.keys(groupConnectionType)"
+     class="mb-4">
+  <app-table-group-connection [groupId]="groupId"
+                              [type]="item"></app-table-group-connection>
+</div>

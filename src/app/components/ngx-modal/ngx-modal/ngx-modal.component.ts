@@ -2,6 +2,7 @@ import {Component, ComponentFactoryResolver, Input, Type, ViewChild} from '@angu
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
 import {RefDirective} from '../../../directives/ref/ref.directive';
+import {INgxContent} from '../bean/ingx-content';
 
 @Component({
   selector: 'ngx-modal',
@@ -36,6 +37,7 @@ export class NgxModalComponent {
     viewContainerRef.clear();
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
+    (<any>componentRef.instance as INgxContent).modal = this.modal;
     await initialize(componentRef.instance);
     componentRef.changeDetectorRef.detectChanges();
 

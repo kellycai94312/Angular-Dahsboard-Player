@@ -3,5 +3,6 @@ export enum EnvironmentType {
   LOCAL = 'LOCAL',
   TEST = 'TEST',
   BELARUS = 'BELARUS',
-  SCHOOL = 'SCHOOL'
+  SCHOOL = 'SCHOOL',
+  SAINT_PETERSBURG = 'SAINT_PETERSBURG'
 }

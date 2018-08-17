@@ -1,0 +1,31 @@
+<table class="table table-bordered table-hover">
+  <thead>
+  <tr class="d-flex">
+    <th class="col">{{'name'| translate}}</th>
+    <th class="col">{{'duration'| translate}}</th>
+    <th class="col">{{'joinDate'| translate}}</th>
+    <th class="col">{{'number'| translate}}</th>
+    <th class="col">{{'document'| translate}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr class="d-flex"
+      *ngFor="let item of personStageSportTypes"
+      (dblclick)="onEdit($event,item)">
+    <td class="col">
+      {{ item.data.stage.name}}
+    </td>
+    <td class="col">
+      {{item.data?.duration}}
+    </td>
+    <td class="col">
+      {{item.data?.assignDate | date: propertyConstant.dateFormat}}
+    <td class="col">
+      {{item.document?.number}}
+    </td>
+    <td class="col">
+      <a *ngIf="item.document"
+         [href]="getDocumentUrl(item.document)">{{item.document?.resource?.name}}</a></td>
+  </tr>
+  </tbody>
+</table>

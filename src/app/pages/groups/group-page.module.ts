@@ -37,6 +37,10 @@ import {HtmlContentModule} from '../../components/html-content/html-content.modu
 import {EditGroupPersonComponent} from './component/edit-group-person/edit-group-person.component';
 import {EditGroupPersonLogComponent} from './component/edit-group-person-log/edit-group-person-log.component';
 import {GroupConnectionsComponent} from './group-administration/group-connections/group-connections.component';
+import {TableGroupConnectionComponent} from './component/table-group-connection/table-group-connection.component';
+import {EditGroupConnectionComponent} from './component/edit-group-connection/edit-group-connection.component';
+import {EditDocumentComponent} from './component/edit-document/edit-document.component';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   imports: [
@@ -62,7 +66,8 @@ import {GroupConnectionsComponent} from './group-administration/group-connection
     ImageModule,
     BusyButtonModule,
     NgxModalModule,
-    HtmlContentModule
+    HtmlContentModule,
+    NgxSplitButtonModule
   ],
   exports: [
     GroupComponent
@@ -90,14 +95,19 @@ import {GroupConnectionsComponent} from './group-administration/group-connection
     GroupComponent,
     EditGroupPersonComponent,
     EditGroupPersonLogComponent,
-    GroupConnectionsComponent
+    GroupConnectionsComponent,
+    TableGroupConnectionComponent,
+    EditGroupConnectionComponent,
+    EditDocumentComponent
   ],
   entryComponents: [
     GroupComponent,
     ModalSelectPageComponent,
     GroupEventModalComponent,
     EditGroupPersonComponent,
-    EditGroupPersonLogComponent
+    EditGroupPersonLogComponent,
+    EditGroupConnectionComponent,
+    EditDocumentComponent
   ]
 })
 export class GroupPageModule {

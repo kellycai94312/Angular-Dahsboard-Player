@@ -83,6 +83,9 @@ import {TrainingPersonMeasure} from '../bean/training-person-measure';
 import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
+import {GroupConnection} from '../model/group/group-connection';
+import {PersonStageSportType} from '../model/stage/person-stage-sport-type';
+import {MedicalExamination} from '../model/person/medical-examination';
 
 @Injectable()
 @RestParams({
@@ -503,6 +506,50 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region PersonStageSportType
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/stage/{!sportTypeId}'
+  })
+  getPersonStageSportTypes: IRestMethod<{ personId: number, sportTypeId: number }, PersonStageSportType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/stage/{!sportTypeId}'
+  })
+  updatePersonStageSportType: IRestMethodStrict<PersonStageSportType, any, { personId: number, sportTypeId: number }, PersonStageSportType>;
+
+  //#endregion
+
+  //#region Medical examination
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/medicalExamination'
+  })
+  getMedicalExaminations: IRestMethodStrict<any, PageQuery, { personId: number }, PageContainer<MedicalExamination>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/{!personId}/medicalExamination'
+  })
+  createMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number }, MedicalExamination>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
+  })
+  updateMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number, medicalExaminationId: number }, MedicalExamination>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
+  })
+  removeMedicalExamination: IRestMethod<{ personId: number, medicalExaminationId: number }, MedicalExamination>;
+
+  //#endregion
+
   //#endregion
 
   //#region Country
@@ -737,33 +784,91 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region GroupConnection
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/connection',
+  })
+  getGroupConnections: IRestMethodStrict<any, GroupQuery, { groupId: number }, PageContainer<GroupConnection>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/connection/graph',
+  })
+  getGraphGroupConnections: IRestMethodStrict<void, { depth?: number }, { groupId: number }, GroupConnection[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection',
+  })
+  createGroupConnection: IRestMethodStrict<GroupConnection, any, { groupId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}',
+  })
+  removeGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
+  })
+  approveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
+  })
+  disapproveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
+  })
+  visibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
+  })
+  invisibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
+
+  //#endregion
+
   //#endregion
 
   //#region File
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/image',
+    path: '/file/download/image'
   })
   downloadImage: IRestMethod<ImageQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/document',
+    path: '/file/download/document'
   })
   downloadDocument: IRestMethod<DocumentQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/image',
+    path: '/file/image'
   })
   getImages: IRestMethod<ImageQuery, PageContainer<Image>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/document',
+    path: '/file/document'
   })
   getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/file/{!fileId}'
+  })
+  removeFile: IRestMethod<{ fileId: number }, BaseFile>;
 
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
@@ -799,6 +904,10 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getDocument(documentId: number): string {
+    if (!documentId) {
+      return null;
+    }
+
     return `${environment.restUrl}/file/download/document/${documentId}`;
   }
 

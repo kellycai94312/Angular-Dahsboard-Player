@@ -27,7 +27,8 @@
                        checkPressedEnter="true"
                        nameKey="login.signIn"></app-busy-button>
       <div class="mt-2 text-center">
-        <p *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL">
+        <p
+          *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL&& environment.type!== environmentType.SAINT_PETERSBURG">
           {{'registration.notRegistered'| translate}}
           <a routerLink="/registration"
              routerLinkActive="active">{{'registration.signUp' | translate}}</a>

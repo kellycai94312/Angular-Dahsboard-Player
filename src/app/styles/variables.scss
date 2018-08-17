@@ -22,6 +22,7 @@ $font-size: 14px;
 
 $odd-item-color: #eee;
 $max-width-content: 400px;
+$max-height-content: 400px;
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');
