@@ -1,3 +1,29 @@
-<p>
-  edit-person-stage works!
-</p>
+<label>{{'name' | translate}}</label>
+<dx-text-box [(value)]="data.stage.name"
+             [disabled]="true">
+</dx-text-box>
+
+<label class="mt-2">{{'duration' | translate}}</label>
+<dx-number-box [(value)]="data.duration"
+               [min]="data.stage.minDuration"
+               [max]="data.stage.maxDuration">
+</dx-number-box>
+
+<label class="mt-2">{{'joinDate' | translate}}</label>
+<dx-date-box class="w-100"
+             [(value)]="data.assignDate"
+             [displayFormat]="propertyConstant.dateFormat"
+             type="date">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-date-box>
+
+<div *ngIf="data.id"
+     class="mt-2">
+  <app-busy-button nameKey="document"
+                   [click]="editDocument"></app-busy-button>
+</div>
+
+<p *ngIf="!data.id"
+   class="mt-2">{{'youShouldSaveThisStateForNextStepsOrBeCancelingChanges' | translate}}</p>

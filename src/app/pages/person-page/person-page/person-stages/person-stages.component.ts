@@ -6,6 +6,10 @@ import {PersonService} from '../person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PersonStageSportTypeViewModel} from '../../../../data/local/view-model/stage/person-stage-sport-type-view-model';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditPersonStageComponent} from '../../component/edit-person-stage/edit-person-stage.component';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {AuthorizationService} from '../../../../shared/authorization.service';
 
 @Component({
   selector: 'app-person-stages',
@@ -18,16 +22,21 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
 
   public personStageSportTypes: PersonStageSportTypeViewModel[];
   private _sportTypeSubscription: ISubscription;
+  private _allowEdit: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _personService: PersonService) {
+              private _personService: PersonService,
+              private  _ngxModalService: NgxModalService,
+              private _authorizationService: AuthorizationService) {
   }
 
   async ngOnInit() {
     await this.initialize();
 
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
+      this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
+
       await this.initialize();
     });
   }
@@ -56,7 +65,35 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   }
 
   public onEdit = async (e: any, parameter: PersonStageSportTypeViewModel) => {
+    if (!this._personService.personViewModel.data || !this._personService.selectedSportType) {
+      return;
+    }
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
 
+    await modal.componentInstance.initializeBody(EditPersonStageComponent, async component => {
+      component.manualInitialization = true;
+      component.personId = this._personService.personViewModel.data.id;
+      component.sportTypeId = this._personService.selectedSportType.id;
+
+      await component.initialize(this._appHelper.cloneObject(parameter.data));
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'save',
+          default: true,
+          callback: async () => {
+            if (await this._ngxModalService.save(modal, component, !this._appHelper.isNewObject(component.data))) {
+              await this.initialize();
+            }
+          },
+        }
+      ];
+    });
+    modal.result.then(async x => {
+      await this.initialize();
+    }, async reason => {
+    });
   };
 
   public getDocumentUrl(item: Document) {

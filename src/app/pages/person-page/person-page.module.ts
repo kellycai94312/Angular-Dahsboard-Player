@@ -10,6 +10,7 @@ import {
   DxDataGridModule,
   DxDateBoxModule,
   DxFormModule,
+  DxNumberBoxModule,
   DxPopupModule,
   DxSelectBoxModule,
   DxTemplateModule,
@@ -104,7 +105,8 @@ import {EditPersonStageComponent} from './component/edit-person-stage/edit-perso
     ButtonsModule,
     NamedObjectItemModule,
     NgxSplitButtonModule,
-    NgxButtonGroupModule
+    NgxButtonGroupModule,
+    DxNumberBoxModule
   ],
   declarations: [
     PersonPageComponent,
