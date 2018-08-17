@@ -361,5 +361,7 @@
     "ORDER": "Order",
     "DISPOSITION": "Disposition",
     "OTHER": "Other"
-  }
+  },
+  "stages":"Stages",
+  "duration":"Duration"
 }

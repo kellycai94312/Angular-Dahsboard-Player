@@ -67,6 +67,8 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
 import {ContactEnableModalComponent} from './person-page/contact/contact-enable-modal/contact-enable-modal.component';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
+import {PersonStagesComponent} from './person-page/person-stages/person-stages.component';
+import {EditPersonStageComponent} from './component/edit-person-stage/edit-person-stage.component';
 
 @NgModule({
   imports: [
@@ -132,7 +134,9 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
     PersonModalCreateComponent,
     RequisitesComponent,
     ContactEnableModalComponent,
-    GroupPersonLogsComponent
+    GroupPersonLogsComponent,
+    PersonStagesComponent,
+    EditPersonStageComponent
   ],
   providers: [
     PersonService,
@@ -148,7 +152,8 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
     RankModalComponent,
     RefereeCategoryModalComponent,
     PersonModalCreateComponent,
-    ContactEnableModalComponent
+    ContactEnableModalComponent,
+    EditPersonStageComponent
   ]
 })
 export class PersonPageModule {
