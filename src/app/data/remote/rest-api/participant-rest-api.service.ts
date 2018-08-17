@@ -796,31 +796,31 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/image',
+    path: '/file/download/image'
   })
   downloadImage: IRestMethod<ImageQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/document',
+    path: '/file/download/document'
   })
   downloadDocument: IRestMethod<DocumentQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/image',
+    path: '/file/image'
   })
   getImages: IRestMethod<ImageQuery, PageContainer<Image>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/document',
+    path: '/file/document'
   })
   getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/file/{!fileId}',
+    path: '/file/{!fileId}'
   })
   removeFile: IRestMethod<{ fileId: number }, BaseFile>;
 

@@ -28,7 +28,8 @@
         {{item?.document?.number}}
       </ng-template>
     </td>
-    <td class="col-2">{{item?.document?.type}}</td>
+    <td class="col-2"><span *ngIf="item?.document?.type">{{'documentTypeEnum.'+item?.document?.type | translate}}</span>
+    </td>
     <td class="col-2">{{item?.data?.certificationNumber}}</td>
   </tr>
   </tbody>

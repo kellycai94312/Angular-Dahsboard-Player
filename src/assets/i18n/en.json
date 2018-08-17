@@ -355,5 +355,11 @@
   "approved": "Approved",
   "none": "None",
   "removed": "Removed",
-  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "You should save this state for next steps or be canceling changes"
+  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "You should save this state for next steps or be canceling changes",
+  "documentTypeEnum": {
+    "CONTRACT": "Contract",
+    "ORDER": "Order",
+    "DISPOSITION": "Disposition",
+    "OTHER": "Other"
+  }
 }

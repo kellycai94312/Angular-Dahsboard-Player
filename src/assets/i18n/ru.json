@@ -356,5 +356,11 @@
   "approved": "Подтверждено",
   "none": "Ничто",
   "removed": "Удалено",
-  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "Вы должны сохранить это состояние для следующих шагов или отменить изменения"
+  "youShouldSaveThisStateForNextStepsOrBeCancelingChanges": "Вы должны сохранить это состояние для следующих шагов или отменить изменения",
+  "documentTypeEnum": {
+    "CONTRACT": "Контракт",
+    "ORDER": "Приказ",
+    "DISPOSITION": "Распоряжение",
+    "OTHER": "Другой"
+  }
 }

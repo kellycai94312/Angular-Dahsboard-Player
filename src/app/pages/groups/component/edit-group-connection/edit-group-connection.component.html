@@ -37,7 +37,7 @@
         <tr class="d-flex"
             (dblclick)="onEdit($event,item)">
           <td class="col">
-            {{item.type}}
+            <span *ngIf="item?.type">{{'documentTypeEnum.'+item?.type | translate}}</span>
           </td>
           <td class="col">
             {{item.number}}
