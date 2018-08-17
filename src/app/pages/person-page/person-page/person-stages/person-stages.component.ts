@@ -33,10 +33,9 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.initialize();
+    this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
 
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
-      this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
-
       await this.initialize();
     });
   }
@@ -65,7 +64,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   }
 
   public onEdit = async (e: any, parameter: PersonStageSportTypeViewModel) => {
-    if (!this._personService.personViewModel.data || !this._personService.selectedSportType) {
+    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this._allowEdit) {
       return;
     }
     const modal = this._ngxModalService.open();

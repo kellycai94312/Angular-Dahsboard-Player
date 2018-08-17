@@ -364,5 +364,8 @@
     "OTHER": "Другой"
   },
   "stages": "Этапы",
-  "duration": "Длительность"
+  "duration": "Длительность",
+  "medicalExaminations": "Медицинские обследования",
+  "passDate": "Дата прохождения",
+  "recommendations": "Рекомендации"
 }

@@ -70,6 +70,8 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
 import {GroupPersonLogsComponent} from './component/group-person-logs/group-person-logs.component';
 import {PersonStagesComponent} from './person-page/person-stages/person-stages.component';
 import {EditPersonStageComponent} from './component/edit-person-stage/edit-person-stage.component';
+import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
+import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
 
 @NgModule({
   imports: [
@@ -138,7 +140,9 @@ import {EditPersonStageComponent} from './component/edit-person-stage/edit-perso
     ContactEnableModalComponent,
     GroupPersonLogsComponent,
     PersonStagesComponent,
-    EditPersonStageComponent
+    EditPersonStageComponent,
+    MedicalExaminationsComponent,
+    EditMedicalExaminationComponent
   ],
   providers: [
     PersonService,
@@ -155,7 +159,8 @@ import {EditPersonStageComponent} from './component/edit-person-stage/edit-perso
     RefereeCategoryModalComponent,
     PersonModalCreateComponent,
     ContactEnableModalComponent,
-    EditPersonStageComponent
+    EditPersonStageComponent,
+    EditMedicalExaminationComponent
   ]
 })
 export class PersonPageModule {

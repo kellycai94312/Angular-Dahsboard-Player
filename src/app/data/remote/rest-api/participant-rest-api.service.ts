@@ -85,6 +85,7 @@ import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
 import {GroupConnection} from '../model/group/group-connection';
 import {PersonStageSportType} from '../model/stage/person-stage-sport-type';
+import {MedicalExamination} from '../model/person/medical-examination';
 
 @Injectable()
 @RestParams({
@@ -518,6 +519,34 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}/stage/{!sportTypeId}'
   })
   updatePersonStageSportType: IRestMethodStrict<PersonStageSportType, any, { personId: number, sportTypeId: number }, PersonStageSportType>;
+
+  //#endregion
+
+  //#region Medical examination
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/medicalExamination'
+  })
+  getMedicalExaminations: IRestMethodStrict<any, PageQuery, { personId: number }, PageContainer<MedicalExamination>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/{!personId}/medicalExamination'
+  })
+  createMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number }, MedicalExamination>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
+  })
+  updateMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number, medicalExaminationId: number }, MedicalExamination>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
+  })
+  removeMedicalExamination: IRestMethod<{ personId: number, medicalExaminationId: number }, MedicalExamination>;
 
   //#endregion
 
