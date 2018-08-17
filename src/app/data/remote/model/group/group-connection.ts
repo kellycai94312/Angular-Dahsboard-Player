@@ -6,7 +6,7 @@ export class GroupConnection extends IdentifiedObject {
   public source: Group;
   public target: Group;
   public type: GroupConnectionType;
-  public approve: boolean;
+  public approved: boolean;
   public visibleBySource: boolean;
   public visibleByTarget: boolean;
 }

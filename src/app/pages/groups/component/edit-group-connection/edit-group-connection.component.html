@@ -1,13 +1,23 @@
 <label>{{'group' | translate }}</label>
-<app-input-select [loadData]="loadGroups"
-                  [(model)]="!isSource ? data.source : data.target"
-                  [pageSize]="propertyConstant.pageSize"
-                  [getKey]="getKey"
-                  [getName]="getName"
-                  placeholder="{{'none' | translate}}"
-                  [disabled]="data.id"
-                  ngDefaultControl>
-</app-input-select>
+<div class="d-flex">
+  <div class="w-100">
+    <app-input-select [loadData]="loadGroups"
+                      [(model)]="!isSource ? data.source : data.target"
+                      [pageSize]="propertyConstant.pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'none' | translate}}"
+                      [disabled]="data.id"
+                      ngDefaultControl>
+    </app-input-select>
+  </div>
+  <div *ngIf="!data.approved&&data.id&&!isSource"
+       class="ml-auto">
+    <div class="ml-2">
+      <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+    </div>
+  </div>
+</div>
 
 <div [hidden]="!data.id">
   <table class="table table-bordered table-hover mt-2">

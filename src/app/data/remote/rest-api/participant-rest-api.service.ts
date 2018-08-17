@@ -768,13 +768,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
   })
-  approveGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+  approveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
   })
-  disapproveGroupConnection: IRestMethodStrict<void, any, { groupId: number, groupConnectionId: number }, void>;
+  disapproveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Post,

@@ -40,6 +40,7 @@ import {GroupConnectionsComponent} from './group-administration/group-connection
 import {TableGroupConnectionComponent} from './component/table-group-connection/table-group-connection.component';
 import {EditGroupConnectionComponent} from './component/edit-group-connection/edit-group-connection.component';
 import {EditDocumentComponent} from './component/edit-document/edit-document.component';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   imports: [
@@ -65,7 +66,8 @@ import {EditDocumentComponent} from './component/edit-document/edit-document.com
     ImageModule,
     BusyButtonModule,
     NgxModalModule,
-    HtmlContentModule
+    HtmlContentModule,
+    NgxSplitButtonModule
   ],
   exports: [
     GroupComponent

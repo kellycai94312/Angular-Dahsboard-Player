@@ -13,23 +13,29 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
+import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
+import {INgxContent} from '../../../../components/ngx-modal/bean/ingx-content';
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-edit-group-connection',
   templateUrl: './edit-group-connection.component.html',
   styleUrls: ['./edit-group-connection.component.scss']
 })
-export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnection> {
+export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnection> implements INgxContent {
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  public modal: NgbActiveModal;
+
   public readonly propertyConstant = PropertyConstant;
+  public readonly splitButtonItems: SplitButtonItem[];
 
   public isSource: boolean;
   public query: DocumentQuery;
 
-  public readonly _currentGroup: Group;
+  private readonly _currentGroup: Group;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _groupService: GroupService,
@@ -40,6 +46,8 @@ export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnect
     this.isSource = true;
     this.query = new DocumentQuery();
     this.query.clazz = FileClass.GROUP_CONNECTION;
+
+    this.splitButtonItems = [];
   }
 
   async initialize(obj: GroupConnection): Promise<boolean> {
@@ -50,6 +58,33 @@ export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnect
       if (obj.source.id != this._currentGroup.id) {
         this.isSource = false;
       }
+    }
+
+    if (!obj.approved && !this.isSource) {
+      const urlParams = {
+        groupId: this._currentGroup.id,
+        groupConnectionId: this.data.id
+      };
+      this.splitButtonItems.push({
+        nameKey: 'approve',
+        default: true,
+        callback: async () => {
+          await this.appHelper.trySave(async () => {
+            await this.participantRestApiService.approveGroupConnection(urlParams);
+            this.data.approved = true;
+          });
+        }
+      });
+      this.splitButtonItems.push({
+        nameKey: 'refuse',
+        callback: async () => {
+          await this.appHelper.trySave(async () => {
+            await this.participantRestApiService.disapproveGroupConnection(urlParams);
+            this.data.approved = false;
+            this.modal.close();
+          });
+        }
+      });
     }
 
     return await this.appHelper.tryLoad(async () => {
