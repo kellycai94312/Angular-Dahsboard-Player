@@ -11,7 +11,7 @@
                       ngDefaultControl>
     </app-input-select>
   </div>
-  <div *ngIf="!data.approved&&data.id&&!isSource"
+  <div *ngIf="!data.approved && data.id && !isSource"
        class="ml-auto">
     <div class="ml-2">
       <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
@@ -56,15 +56,16 @@
   </table>
   <div class="mt-2">
     <app-busy-button nameKey="add"
-                     [click]="onAdd"
-                     [parameter]=""></app-busy-button>
+                     [click]="onAdd"></app-busy-button>
   </div>
 
-  <dx-check-box *ngIf="isSource" class="mt-2"
+  <dx-check-box *ngIf="isSource"
+                class="mt-2"
                 [(value)]="data.visibleBySource"
                 text="{{'public' | translate}}">
   </dx-check-box>
-  <dx-check-box *ngIf="!isSource" class="mt-2"
+  <dx-check-box *ngIf="!isSource"
+                class="mt-2"
                 [(value)]="data.visibleByTarget"
                 text="{{'public' | translate}}">
   </dx-check-box>

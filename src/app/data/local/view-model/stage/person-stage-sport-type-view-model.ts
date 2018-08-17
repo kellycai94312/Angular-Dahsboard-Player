@@ -10,14 +10,11 @@ export class PersonStageSportTypeViewModel extends BaseViewModel<PersonStageSpor
   async initialize() {
     super.initialize();
 
-    try {
-      if (this.data && this.data.id) {
-        const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON_STAGE_SPORT_TYPE, objectId: this.data.id, count: 1});
-        if (documents.list.length) {
-          this.document = documents.list[0];
-        }
+    if (this.data && this.data.id) {
+      const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON_STAGE_SPORT_TYPE, objectId: this.data.id, count: 1});
+      if (documents.list.length) {
+        this.document = documents.list[0];
       }
-    } catch (e) {
     }
   }
 

@@ -10,14 +10,11 @@ export class MedicalExaminationViewModel extends BaseViewModel<MedicalExaminatio
   async initialize() {
     super.initialize();
 
-    try {
-      if (this.data && this.data.id) {
-        const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.MEDICAL_EXAMINATION, objectId: this.data.id, count: 1});
-        if (documents.list.length) {
-          this.document = documents.list[0];
-        }
+    if (this.data && this.data.id) {
+      const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.MEDICAL_EXAMINATION, objectId: this.data.id, count: 1});
+      if (documents.list.length) {
+        this.document = documents.list[0];
       }
-    } catch (e) {
     }
   }
 

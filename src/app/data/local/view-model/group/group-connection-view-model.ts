@@ -17,10 +17,7 @@ export class GroupConnectionViewModel extends BaseViewModel<GroupConnection> {
   async initialize() {
     super.initialize();
 
-    try {
-      this.documents = (await this.participantRestApiService.getDocuments({clazz: FileClass.GROUP_CONNECTION, objectId: this.data.id, count: PropertyConstant.pageSizeMax})).list;
-    } catch (e) {
-    }
+    this.documents = (await this.participantRestApiService.getDocuments({clazz: FileClass.GROUP_CONNECTION, objectId: this.data.id, count: PropertyConstant.pageSizeMax})).list;
   }
 
 }
