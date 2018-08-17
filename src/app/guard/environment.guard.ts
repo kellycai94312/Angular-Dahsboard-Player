@@ -13,11 +13,11 @@ import {RegistrationPersonPageComponent} from '../pages/registration-page/regist
 export class EnvironmentGuard implements CanActivate {
 
   private readonly _environmentDeactivationComponents: EnvironmentDeactivationComponent[];
-  
+
   constructor(private _router: Router) {
     this._environmentDeactivationComponents = [
       {
-        environmentTypes: [EnvironmentType.BELARUS, EnvironmentType.SCHOOL],
+        environmentTypes: [EnvironmentType.BELARUS, EnvironmentType.SCHOOL, EnvironmentType.SAINT_PETERSBURG],
         deactivationComponents: [RegistrationPageComponent, RegistrationPersonPageComponent]
       }
     ];

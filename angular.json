@@ -62,7 +62,7 @@
                 }
               ]
             },
-            "by": {
+            "belarus": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -75,7 +75,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.by.ts"
+                  "with": "src/environments/environment.belarus.ts"
                 }
               ]
             },
@@ -95,6 +95,23 @@
                   "with": "src/environments/environment.school.ts"
                 }
               ]
+            },
+            "saint-petersburg": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.saint-petersburg.ts"
+                }
+              ]
             }
           }
         },
@@ -110,11 +127,14 @@
             "test": {
               "browserTarget": "sport-monitoring-web:build:test"
             },
-            "by": {
-              "browserTarget": "sport-monitoring-web:build:by"
+            "belarus": {
+              "browserTarget": "sport-monitoring-web:build:belarus"
             },
             "school": {
               "browserTarget": "sport-monitoring-web:build:school"
+            },
+            "saint-petersburg": {
+              "browserTarget": "sport-monitoring-web:build:saint-petersburg"
             }
           }
         },
