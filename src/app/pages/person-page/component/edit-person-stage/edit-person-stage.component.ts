@@ -8,6 +8,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {PersonService} from '../../person-page/person.service';
 
 @Component({
   selector: 'app-edit-person-stage',
@@ -27,7 +28,8 @@ export class EditPersonStageComponent extends BaseEditComponent<PersonStageSport
   private _document: Document;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+              private _ngxModalService: NgxModalService,
+              private _personService: PersonService) {
     super(participantRestApiService, appHelper);
     this._document = new Document();
     this._document.clazz = FileClass.PERSON_STAGE_SPORT_TYPE;
@@ -52,6 +54,7 @@ export class EditPersonStageComponent extends BaseEditComponent<PersonStageSport
       this.data.assignDate = this.appHelper.dateByFormat(this.data.assignDate, PropertyConstant.dateTimeServerFormat);
       this.data = await this.participantRestApiService.updatePersonStageSportType(this.data, {}, {personId: this.personId, sportTypeId: this.sportTypeId});
       this._document.objectId = this.data.id;
+      await this._personService.refreshCurrentPersonStage();
     });
   }
 

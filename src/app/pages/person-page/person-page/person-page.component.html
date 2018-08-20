@@ -26,7 +26,8 @@
           <h4>{{personViewModel.data?.lastName | uppercase}}</h4>
           <h4>{{personViewModel.data?.patronymic | uppercase}}</h4>
           <br>
-          <p>{{'persons.person.rating' | translate | uppercase}}: 100</p>
+          <p *ngIf="personService.selectedPersonStageSportType">{{'stage' | translate}}:
+            {{personService.selectedPersonStageSportType.stage.name}}</p>
         </div>
       </div>
     </div>
