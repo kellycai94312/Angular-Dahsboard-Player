@@ -363,6 +363,7 @@
     "OTHER": "Other"
   },
   "stages": "Stages",
+  "stage": "Stage",
   "duration": "Duration",
   "medicalExaminations": "Medical examinations",
   "passDate": "Pass date",

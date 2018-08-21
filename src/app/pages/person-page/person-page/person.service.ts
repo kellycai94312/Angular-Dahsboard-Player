@@ -8,6 +8,7 @@ import {PersonViewModel} from '../../../data/local/view-model/person-view-model'
 import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
+import {PersonStageSportType} from '../../../data/remote/model/stage/person-stage-sport-type';
 
 @Injectable()
 export class PersonService implements OnDestroy {
@@ -18,20 +19,24 @@ export class PersonService implements OnDestroy {
 
   public selectedUserRole: UserRole;
   public selectedSportType: SportType;
+  public selectedPersonStageSportType: PersonStageSportType;
   // BaseGroup by SelectedUserRole
   public baseGroup: GroupPerson;
 
   public readonly userRoleHandler: Subject<UserRole>;
   public readonly sportTypeHandler: Subject<SportType>;
+  public readonly personStageSportTypeHandler: Subject<PersonStageSportType>;
   public readonly baseGroupHandler: Subject<GroupPerson>;
   public readonly logoHandler: Subject<Image>;
 
   private _userRoleSubscription: ISubscription;
+  private readonly _personStageSportTypeSubscription: ISubscription;
 
   public constructor(private _participantRestApiService: ParticipantRestApiService,
                      private _appHelper: AppHelper) {
     this.userRoleHandler = new Subject<UserRole>();
     this.sportTypeHandler = new Subject<SportType>();
+    this.personStageSportTypeHandler = new Subject<PersonStageSportType>();
     this.baseGroupHandler = new Subject<GroupPerson>();
     this.logoHandler = new Subject<Image>();
 
@@ -41,6 +46,10 @@ export class PersonService implements OnDestroy {
     this.selectedUserRole = null;
     this.selectedSportType = null;
     this.baseGroup = null;
+
+    this._personStageSportTypeSubscription = this.sportTypeHandler.subscribe(async value => {
+      await this.refreshCurrentPersonStage();
+    });
   }
 
   ngOnDestroy(): void {
@@ -63,6 +72,7 @@ export class PersonService implements OnDestroy {
         this.sportTypes = await  this._participantRestApiService.getPersonSportTypes({id: person.id});
         if (this.sportTypes.length) {
           this.selectedSportType = this.sportTypes[0];
+          await this.refreshCurrentPersonStage();
         }
 
         this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
@@ -98,6 +108,21 @@ export class PersonService implements OnDestroy {
     this.sportTypeHandler.next(sportType);
   }
 
+  public async refreshCurrentPersonStage(): Promise<PersonStageSportType> {
+    let currentItem = null;
+    try {
+      const items = await this._participantRestApiService.getPersonStageSportTypes({
+        personId: this.personViewModel.data.id,
+        sportTypeId: this.selectedSportType.id
+      });
+      currentItem = items.reverse().find(x => !this._appHelper.isUndefinedOrNull(x.assignDate));
+    } catch (e) {
+    }
+    this.selectedPersonStageSportType = currentItem;
+    this.personStageSportTypeHandler.next(currentItem);
+    return currentItem;
+  }
+
   public setBaseGroup(baseGroup: GroupPerson) {
     this.baseGroup = baseGroup;
     this.baseGroupHandler.next(baseGroup);
@@ -108,6 +133,7 @@ export class PersonService implements OnDestroy {
 
   public unsubscribe() {
     this._appHelper.unsubscribe(this._userRoleSubscription);
+    this._appHelper.unsubscribe(this._personStageSportTypeSubscription);
   }
 
   public async allowEdit(): Promise<boolean> {
