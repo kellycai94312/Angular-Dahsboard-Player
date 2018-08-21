@@ -1,3 +1,6 @@
-<p>
-  dictionaries works!
-</p>
+<div class="list-group-flush">
+  <div *ngFor="let item of dictionaries">
+    <h5 class="list-group-item py-2 cols-padding px-2"
+        routerLink="{{item.data}}">{{item.name | translate}}</h5>
+  </div>
+</div>

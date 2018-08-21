@@ -369,5 +369,6 @@
   "medicalExaminations": "Медицинские обследования",
   "passDate": "Дата прохождения",
   "recommendations": "Рекомендации",
-  "dictionaries": "Словари"
+  "dictionaries": "Словари",
+  "controlTransferStandards": "Контрольно-переводные нормативы"
 }

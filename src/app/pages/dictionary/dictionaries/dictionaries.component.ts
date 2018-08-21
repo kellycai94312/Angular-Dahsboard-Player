@@ -1,16 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-dictionaries',
   templateUrl: './dictionaries.component.html',
   styleUrls: ['./dictionaries.component.scss']
 })
-export class DictionariesComponent implements OnInit {
+export class DictionariesComponent {
+
+  public dictionaries: NameWrapper<string>[];
 
   constructor() {
-  }
-
-  ngOnInit() {
+    this.dictionaries = [
+      {name: 'controlTransferStandards', data: 'stage-standard'}
+    ];
   }
 
 }
