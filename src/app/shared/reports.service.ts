@@ -43,9 +43,14 @@ export class ReportsService {
     report.dictionary.databases.clear();
 
     const trainingInfo = testingPersonalReport.trainingInfo;
-    const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
+    const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('teamByPersonal');
     trainingInfoDataSet.readJson(trainingInfo);
     report.regData('training_info', 'training_info', trainingInfoDataSet);
+
+    const scores = testingPersonalReport.scores;
+    const scoresDataSet = new Stimulsoft.System.Data.DataSet('scores');
+    scoresDataSet.readJson(scores);
+    report.regData('scores', 'scores', scoresDataSet);
 
     const estimatedParameters = testingPersonalReport.estimatedParameterResults;
     for (const item of estimatedParameters) {
@@ -76,6 +81,43 @@ export class ReportsService {
     report.render();
 
     await this.download(report, trainingInfo.name + ' - ' + trainingInfo.fullName);
+  }
+
+  async downloadTeamByPersonalReport(testingId: number) {
+    await this.initializeLibraries();
+
+    const reportJson = await this._assetsService.getTeamByPersonalReport();
+    let testingTeamByPersonalReport;
+    try {
+      testingTeamByPersonalReport = await this._participantRestApiService.getTeamByPersonalReport({testingId: testingId});
+    } catch (e) {
+      if (e.status === 404) {
+        const errorMessage = await this._translate.get('reportError').toPromise();
+        notify(errorMessage, 'warning', 3000);
+      }
+      return;
+    }
+
+    const report = new Stimulsoft.Report.StiReport();
+    report.loadDocument(reportJson);
+    report.dictionary.databases.clear();
+
+    const teamByPersonalReport = testingTeamByPersonalReport;
+    const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('teamByPersonal');
+    trainingInfoDataSet.readJson(teamByPersonalReport);
+    report.regData('teamByPersonal', 'teamByPersonal', testingTeamByPersonalReport);
+
+    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
+    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo',
+      false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
+    report.dictionary.resources.add(logoResource);
+
+    report.render();
+
+    for (const item of teamByPersonalReport) {
+      const trainingInfo = item.trainingInfo;
+    }
+    await this.download(report, trainingInfo.name + ' - ' + trainingInfo.date);
   }
 
   async downloadGameReport(gameId: number, trainingGroupId: number) {
@@ -161,8 +203,8 @@ export class ReportsService {
         for (let k = 0; k < blockResult.measureValues.list.length; k++) {
           const measureValue = blockResult.measureValues.list[k];
           if (eventBlockSeries && eventBlockSeries.find(x => x.firstLastPersonName === personName &&
-            x.exercise === measureValue.exerciseExecMeasure.exerciseExec.baseExercise.name &&
-            x.parameter === measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name)) {
+              x.exercise === measureValue.exerciseExecMeasure.exerciseExec.baseExercise.name &&
+              x.parameter === measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name)) {
             continue;
           }
 
