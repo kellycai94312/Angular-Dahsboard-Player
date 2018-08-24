@@ -125,7 +125,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     if (item.baseTraining.discriminator === TrainingDiscriminator.GAME) {
       await this._reportsService.downloadGameReport(item.baseTraining.id, item.trainingGroup.id);
     } else {
-      await this._reportsService.downloadPersonalReport(item.baseTraining.id, item.id);
+      await this._reportsService.downloadTeamReport(item.baseTraining.id);
     }
   }
 

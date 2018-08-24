@@ -120,6 +120,44 @@ export class ReportsService {
     await this.download(report, trainingInfo.name + ' - ' + trainingInfo.date);
   }
 
+  async downloadTeamReport(testingId: number) {
+    await this.initializeLibraries();
+
+    const reportJson = await this._assetsService.getTeamReport();
+    let testingTeamReport;
+    try {
+      testingTeamReport = await this._participantRestApiService.getTeamReport({testingId: testingId});
+    } catch (e) {
+      if (e.status === 404) {
+        const errorMessage = await this._translate.get('reportError').toPromise();
+        notify(errorMessage, 'warning', 3000);
+      }
+      return;
+    }
+
+    const report = new Stimulsoft.Report.StiReport();
+    report.loadDocument(reportJson);
+    report.dictionary.databases.clear();
+
+    const sportRoleResults = testingTeamReport.sportRoleResults;
+    const sportRoleResultsDataSet = new Stimulsoft.System.Data.DataSet('team_report');
+    sportRoleResultsDataSet.readJson(sportRoleResults);
+    report.regData('team_report', 'team_report', testingTeamReport);
+
+    const trainingInfo = testingTeamReport.traininginfo;
+    const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
+    trainingInfoDataSet.readJson(trainingInfo);
+    report.regData('training_info', 'training_info', trainingInfo);
+
+    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
+    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo',
+      false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
+    report.dictionary.resources.add(logoResource);
+
+    report.render();
+    await this.download(report, 123); // TODO Change name when training_info will be added to response
+  }
+
   async downloadGameReport(gameId: number, trainingGroupId: number) {
     await this.initializeLibraries();
 

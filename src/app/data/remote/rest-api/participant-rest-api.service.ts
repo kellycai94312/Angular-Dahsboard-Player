@@ -1042,6 +1042,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getTeamByPersonalReport: IRestMethod<{ testingId: number }, TestingPersonalReport[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/team'
+  })
+  getTeamReport: IRestMethod<{ testingId: number }, TestingPersonalReport[]>;
+
   //#endregion
 
   //#region Game
