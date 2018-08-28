@@ -1,0 +1,47 @@
+<label>{{'sportType' | translate}}</label>
+<app-input-select [loadData]="loadSportTypes"
+                  [(model)]="selectedSportType"
+                  [pageSize]="propertyConstant.pageSize"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  (onChange)="onSportTypeChanged($event.current)"
+                  ngDefaultControl>
+</app-input-select>
+
+<label class="mt-2">{{'stage' | translate}}</label>
+<dx-select-box [items]="stages"
+               displayExpr="name"
+               [(value)]="selectedStage"
+               acceptCustomValue="true"
+               placeholder="{{'stage' | translate}}"
+               (onValueChanged)="onStageChanged($event.value)">
+</dx-select-box>
+
+<ngx-grid class="mt-2"
+          [query]="query"
+          [fetchItems]="fetchItems"
+          [canEdit]="canEdit"
+          [windowScroll]="true">
+  <ngx-column nameKey="estimatedParameter"
+              [templateRef]="estimatedParameterTemplate"></ngx-column>
+  <ngx-column nameKey="man"
+              [templateRef]="manTemplate"></ngx-column>
+  <ngx-column nameKey="woman"
+              [templateRef]="womanTemplate"></ngx-column>
+
+  <ng-template #estimatedParameterTemplate let-item>
+    <p>{{item.estimatedParameter.name}}</p>
+  </ng-template>
+
+  <ng-template #manTemplate let-item>
+    <p>{{item.exerciseMeasure.baseExercise.name}} / {{item.exerciseMeasure.measure.measureParameter.name}}
+      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{item.maleOperator}} {{item.maleStandardValue}})</p>
+  </ng-template>
+
+  <ng-template #womanTemplate let-item>
+    <p>{{item.exerciseMeasure.baseExercise.name}} / {{item.exerciseMeasure.measure.measureParameter.name}}
+      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{item.femaleOperator}} {{item.femaleStandardValue}})
+    </p>
+  </ng-template>
+</ngx-grid>
+

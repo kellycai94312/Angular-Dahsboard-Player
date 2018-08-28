@@ -86,6 +86,9 @@ import {GroupPersonLog} from '../model/group/group-person-log';
 import {GroupConnection} from '../model/group/group-connection';
 import {PersonStageSportType} from '../model/stage/person-stage-sport-type';
 import {MedicalExamination} from '../model/person/medical-examination';
+import {StageQuery} from './query/stage-query';
+import {StageStandard} from '../model/stage/stage-standard';
+import {Stage} from '../model/stage/stage';
 
 @Injectable()
 @RestParams({
@@ -1369,6 +1372,46 @@ export class ParticipantRestApiService extends Rest {
   getTrainingBlockResults: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PersonMeasure[]>;
 
   //#endregion
+
+  //#endregion
+
+  //#region Stage
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stage'
+  })
+  getStages: IRestMethod<void, Stage[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stage/{!stageId}/standard'
+  })
+  getStageStandards: IRestMethodStrict<any, StageQuery, { stageId: number }, PageContainer<StageStandard>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stage/{!stageId}/standard/exerciseMeasure/unassigned'
+  })
+  getUnassignedExerciseMeasuresByStage: IRestMethodStrict<any, StageQuery, { stageId: number }, PageContainer<ExerciseMeasure>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/stage/{!stageId}/standard'
+  })
+  createStageStandard: IRestMethod<StageStandard, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/stage/{!stageId}/standard/{!stageStandardId}'
+  })
+  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number }, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/stage/{!stageId}/standard/{!stageStandardId}'
+  })
+  removeStageStandard: IRestMethod<{ stageId: number, stageStandardId: number }, StageStandard>;
 
   //#endregion
 

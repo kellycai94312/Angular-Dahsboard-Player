@@ -55,6 +55,11 @@ const routes: Routes = [
     canActivate: [AuthGuard, LayoutService]
   },
   {
+    path: 'dictionary',
+    loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]
