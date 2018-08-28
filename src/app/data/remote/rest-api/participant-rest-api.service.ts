@@ -89,6 +89,7 @@ import {MedicalExamination} from '../model/person/medical-examination';
 import {StageQuery} from './query/stage-query';
 import {StageStandard} from '../model/stage/stage-standard';
 import {Stage} from '../model/stage/stage';
+import {StringWrapper} from '../bean/wrapper/string-wrapper';
 
 @Injectable()
 @RestParams({
@@ -1402,7 +1403,7 @@ export class ParticipantRestApiService extends Rest {
   createStageStandard: IRestMethod<StageStandard, StageStandard>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
+    method: RestRequestMethod.Put,
     path: '/stage/{!stageId}/standard/{!stageStandardId}'
   })
   updateStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number }, StageStandard>;
@@ -1412,6 +1413,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/stage/{!stageId}/standard/{!stageStandardId}'
   })
   removeStageStandard: IRestMethod<{ stageId: number, stageStandardId: number }, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/stage/{!stageId}/shortName'
+  })
+  updateStageShortName: IRestMethodStrict<StringWrapper, any, { stageId: number }, Stage>;
 
   //#endregion
 

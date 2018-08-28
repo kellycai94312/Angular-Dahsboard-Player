@@ -8,6 +8,7 @@ import {InputSelectModule} from '../../components/input-select/input-select.modu
 import {DxSelectBoxModule} from 'devextreme-angular';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,7 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
     BusyButtonModule,
     NgxGridModule
   ],
-  declarations: [DictionariesComponent, StageStandardDictionaryComponent]
+  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent]
 })
 export class DictionaryModule {
 }

@@ -12,7 +12,8 @@ export class DictionariesComponent {
 
   constructor() {
     this.dictionaries = [
-      {name: 'controlTransferStandards', data: 'stage-standard'}
+      {name: 'controlTransferStandards', data: 'stage-standard'},
+      {name: 'stageOfSportsTraining', data: 'stage'}
     ];
   }
 
