@@ -370,5 +370,8 @@
   "passDate": "Дата прохождения",
   "recommendations": "Рекомендации",
   "dictionaries": "Словари",
-  "controlTransferStandards": "Контрольно-переводные нормативы"
+  "controlTransferStandards": "Контрольно-переводные нормативы",
+  "estimatedParameter": "Оценочный параметр",
+  "man": "Мужчина",
+  "woman": "Женщина"
 }

@@ -1,0 +1,29 @@
+<table class="table table-bordered table-hover {{class}}">
+  <thead>
+  <tr class="d-flex">
+    <th *ngFor="let item of ngxColumnComponents.toArray()"
+        class="{{item.style}}">{{item.name ? (item.name) : (item.nameKey | translate)}}
+    </th>
+  </tr>
+  </thead>
+  <tbody>
+  <ngx-virtual-scroll [getItems]="onFetchItems"
+                      [query]="query"
+                      [windowScroll]="windowScroll">
+    <ng-template let-item>
+      <tr class="d-flex"
+          (dblclick)="onEdit($event,item)">
+        <td *ngFor="let column of ngxColumnComponents.toArray()"
+            class="{{column.style}}">
+          <ng-content *ngTemplateOutlet="column.templateRef; context: {$implicit: item}"></ng-content>
+        </td>
+      </tr>
+    </ng-template>
+  </ngx-virtual-scroll>
+  </tbody>
+</table>
+
+<app-busy-button *ngIf="canEdit"
+                 classes="mt-2"
+                 nameKey="add"
+                 [click]="onAdd"></app-busy-button>

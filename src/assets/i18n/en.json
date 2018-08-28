@@ -369,5 +369,8 @@
   "passDate": "Pass date",
   "recommendations": "Recommendations",
   "dictionaries": "Dictionaries",
-  "controlTransferStandards": "Control transfer standards"
+  "controlTransferStandards": "Control transfer standards",
+  "estimatedParameter": "Estimated parameter",
+  "man": "Man",
+  "woman": "Woman"
 }
