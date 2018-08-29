@@ -12,6 +12,7 @@ import {Stage} from '../../../../data/remote/model/stage/stage';
 import {Router} from '@angular/router';
 import {environment} from '../../../../../environments/environment';
 import {EnvironmentType} from '../../../../../environments/environment-type';
+import {TeamType} from '../../../../data/remote/model/group/team/team-type';
 
 @Component({
   selector: 'app-edit-group',
@@ -27,6 +28,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
   public sportTypes: SportType[];
   public stages: Stage[];
   public stageTypes: StageType[];
+  public teamTypes: TeamType[];
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _router: Router) {
@@ -44,8 +46,8 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
 
       this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
       this.stages = await this.participantRestApiService.getStages();
-      // TODO: Set get stage types
-      this.stageTypes = null;
+      this.teamTypes = await this.participantRestApiService.getTeamTypes();
+      this.stageTypes = await this.participantRestApiService.getStageTypes();
     });
   }
 

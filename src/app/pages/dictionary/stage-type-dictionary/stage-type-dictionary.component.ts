@@ -27,8 +27,7 @@ export class StageTypeDictionaryComponent extends BaseDictionaryComponent {
   }
 
   public fetchItems = async (pageQuery: PageQuery) => {
-    // TODO: Set get stage types
-    return null;
+    return this.appHelper.arrayToPageContainer(await this.participantRestApiService.getStageTypes());
   };
 
   public getName = (item: StageType) => {

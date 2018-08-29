@@ -2,32 +2,7 @@
      class="row">
   <div class="col-12 col-md-6 col-lg-4">
     <h5>{{'basicInformation' | translate }}</h5>
-    <label>{{'name' | translate }}</label>
-    <dx-text-box [(value)]="group.name">
-      <dx-validator>
-        <dxi-validation-rule type="required"></dxi-validation-rule>
-      </dx-validator>
-    </dx-text-box>
-
-    <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
-      <label class="mt-2">{{'teamType' | translate }}</label>
-      <dx-select-box [items]="teamTypes"
-                     [(value)]="group.teamType"
-                     displayExpr="name"
-                     acceptCustomValue="true"
-                     placeholder="{{'teamType' | translate}}">
-        <dx-validator>
-          <dxi-validation-rule type="required"
-                               message="{{'requiredField' | translate}}">
-          </dxi-validation-rule>
-        </dx-validator>
-      </dx-select-box>
-    </div>
-
-    <dx-check-box class="mt-2"
-                  [(value)]="group.visible"
-                  text="{{'public' | translate}}">
-    </dx-check-box>
+    <app-edit-group [(data)]="group"></app-edit-group>
   </div>
 
   <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
@@ -109,8 +84,6 @@
   </div>
 </div>
 
-<dx-button type="default"
-           class="mt-2"
-           (onClick)="onApply()"
-           text="{{'save' | translate}}">
-</dx-button>
+<app-busy-button classes="mt-2"
+                 nameKey="save"
+                 [click]="onSave"></app-busy-button>

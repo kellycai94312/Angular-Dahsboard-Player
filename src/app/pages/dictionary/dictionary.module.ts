@@ -28,7 +28,7 @@ import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-typ
     DxValidatorModule
   ],
   declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent],
-  entryComponents: [EditStageComponent]
+  entryComponents: [EditStageComponent, EditStageTypeComponent]
 })
 export class DictionaryModule {
 }

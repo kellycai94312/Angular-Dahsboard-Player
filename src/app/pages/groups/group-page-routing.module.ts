@@ -5,7 +5,6 @@ import {GroupsPageComponent} from './groups-page/groups-page.component';
 import {GroupPageComponent} from './group-page/group-page.component';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';

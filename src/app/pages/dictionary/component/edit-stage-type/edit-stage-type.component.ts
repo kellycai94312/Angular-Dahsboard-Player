@@ -21,8 +21,7 @@ export class EditStageTypeComponent extends BaseEditComponent<StageType> {
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      // TODO: Set save short name
-      this.data = null;
+      this.data = await this.participantRestApiService.updateStageTypeShortName({name: this.data.shortName}, {}, {stageTypeId: this.data.id});
     });
   }
 
