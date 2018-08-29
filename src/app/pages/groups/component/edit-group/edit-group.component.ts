@@ -10,6 +10,8 @@ import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type
 import {StageType} from '../../../../data/remote/model/stage/stage-type';
 import {Stage} from '../../../../data/remote/model/stage/stage';
 import {Router} from '@angular/router';
+import {environment} from '../../../../../environments/environment';
+import {EnvironmentType} from '../../../../../environments/environment-type';
 
 @Component({
   selector: 'app-edit-group',
@@ -36,6 +38,10 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
 
     return await this.appHelper.tryLoad(async () => {
       this.groupTypes = await this.participantRestApiService.getGroupTypes();
+      if (environment.type === EnvironmentType.SCHOOL || environment.type === EnvironmentType.SAINT_PETERSBURG) {
+        this.groupTypes = [this.groupTypes.find(x => x.groupTypeEnum === GroupTypeEnum.TEAM)];
+      }
+
       this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
       this.stages = await this.participantRestApiService.getStages();
       // TODO: Set get stage types

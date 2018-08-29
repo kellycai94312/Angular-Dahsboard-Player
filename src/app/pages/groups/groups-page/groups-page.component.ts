@@ -41,7 +41,7 @@ export class GroupsPageComponent implements OnInit {
 
   public addGroup = async () => {
     const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
+    modal.componentInstance.titleKey = 'add';
 
     await modal.componentInstance.initializeBody(EditGroupComponent, async component => {
       await component.initialize(new Group());
