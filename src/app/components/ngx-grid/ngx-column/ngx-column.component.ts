@@ -17,6 +17,9 @@ export class NgxColumnComponent {
   public templateRef: TemplateRef<any>;
 
   @Input()
+  public displayValue: (obj: any) => string;
+
+  @Input()
   public style: string;
 
   constructor() {

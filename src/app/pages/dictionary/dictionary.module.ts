@@ -5,9 +5,14 @@ import {DictionaryRoutingModule} from './dictionary-routing.module';
 import {StageStandardDictionaryComponent} from './stage-standard-dictionary/stage-standard-dictionary.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {DxSelectBoxModule} from 'devextreme-angular';
+import {DxSelectBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
+import {EditStageComponent} from './component/edit-stage/edit-stage.component';
+import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
+import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
 
 @NgModule({
   imports: [
@@ -17,9 +22,13 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
     InputSelectModule,
     DxSelectBoxModule,
     BusyButtonModule,
-    NgxGridModule
+    NgxGridModule,
+    NgxModalModule,
+    DxTextBoxModule,
+    DxValidatorModule
   ],
-  declarations: [DictionariesComponent, StageStandardDictionaryComponent]
+  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent],
+  entryComponents: [EditStageComponent]
 })
 export class DictionaryModule {
 }

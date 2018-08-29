@@ -120,6 +120,15 @@ export class AppHelper {
     return pageContainer;
   }
 
+  public arrayToPageContainer<T>(items: T[]): PageContainer<T> {
+    const pageContainer = new PageContainer<T>();
+    pageContainer.list = items;
+    pageContainer.from = 0;
+    pageContainer.size = items.length;
+    pageContainer.total = items.length;
+    return pageContainer;
+  }
+
   public cloneObject<T>(obj: T): T {
     return <T>JSON.parse(JSON.stringify(obj));
   }
