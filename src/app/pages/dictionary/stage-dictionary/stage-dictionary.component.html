@@ -1,0 +1,10 @@
+<ngx-grid [fetchItems]="fetchItems"
+          [windowScroll]="true"
+          [canEdit]="canEdit"
+          [enabledAdd]="false"
+          [edit]="onEdit">
+  <ngx-column nameKey="name"
+              [displayValue]="getName"></ngx-column>
+  <ngx-column nameKey="shortName"
+              [displayValue]="getShortName"></ngx-column>
+</ngx-grid>

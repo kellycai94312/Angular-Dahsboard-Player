@@ -15,7 +15,12 @@
           (dblclick)="onEdit($event,item)">
         <td *ngFor="let column of ngxColumnComponents.toArray()"
             class="{{column.style}}">
-          <ng-content *ngTemplateOutlet="column.templateRef; context: {$implicit: item}"></ng-content>
+          <div *ngIf="column.templateRef; then linkTemplate else defaultTemplate"></div>
+          <ng-template #linkTemplate
+                       *ngTemplateOutlet="column.templateRef; context: {$implicit: item}"></ng-template>
+          <ng-template #defaultTemplate>
+            {{column.displayValue ? column.displayValue(item) : null}}
+          </ng-template>
         </td>
       </tr>
     </ng-template>
@@ -23,7 +28,7 @@
   </tbody>
 </table>
 
-<app-busy-button *ngIf="canEdit"
+<app-busy-button *ngIf="canEdit&&enabledAdd"
                  classes="mt-2"
                  nameKey="add"
                  [click]="onAdd"></app-busy-button>

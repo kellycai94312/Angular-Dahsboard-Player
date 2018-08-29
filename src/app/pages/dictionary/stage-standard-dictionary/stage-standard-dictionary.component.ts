@@ -9,14 +9,14 @@ import {NamedObject} from '../../../data/remote/base/named-object';
 import {StageQuery} from '../../../data/remote/rest-api/query/stage-query';
 import {NgxGridComponent} from '../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
-import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
+import {BaseDictionaryComponent} from '../base/base-dictionary-component';
 
 @Component({
   selector: 'app-stage-standard-dictionary',
   templateUrl: './stage-standard-dictionary.component.html',
   styleUrls: ['./stage-standard-dictionary.component.scss']
 })
-export class StageStandardDictionaryComponent implements OnInit {
+export class StageStandardDictionaryComponent extends BaseDictionaryComponent implements OnInit {
 
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;
@@ -29,21 +29,21 @@ export class StageStandardDictionaryComponent implements OnInit {
   public query: StageQuery;
   public canEdit: boolean;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper,
-              private _authorizationService: AuthorizationService) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper, authorizationService: AuthorizationService) {
+    super(participantRestApiService, appHelper, authorizationService);
+
     this.query = new StageQuery();
   }
 
-  async ngOnInit() {
-    this.canEdit = await this._authorizationService.hasUserRole(UserRoleEnum.ADMIN);
-    this.stages = await this._participantRestApiService.getStages();
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+    this.stages = await this.participantRestApiService.getStages();
   }
 
   //#region SportTypes
 
   loadSportTypes = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getSportTypes({from: from, count: PropertyConstant.pageSize, name: searchText});
+    return this.participantRestApiService.getSportTypes({from: from, count: PropertyConstant.pageSize, name: searchText});
   };
 
   getKey(obj: IdentifiedObject) {
@@ -63,8 +63,6 @@ export class StageStandardDictionaryComponent implements OnInit {
   }
 
   public async onStageChanged(val: any) {
-    console.log(val);
-
     await this.resetItems();
   }
 
@@ -72,11 +70,11 @@ export class StageStandardDictionaryComponent implements OnInit {
     if (!this.selectedStage || !this.query.sportTypeId) {
       return null;
     }
-    return await this._participantRestApiService.getStageStandards({}, pageQuery, {stageId: this.selectedStage.id});
+    return await this.participantRestApiService.getStageStandards({}, pageQuery, {stageId: this.selectedStage.id});
   };
 
   private async resetItems(): Promise<void> {
-    await this._appHelper.delay();
+    await this.appHelper.delay();
     await this.ngxGridComponent.reset();
   }
 

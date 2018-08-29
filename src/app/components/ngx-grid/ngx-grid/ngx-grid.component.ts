@@ -1,5 +1,4 @@
 import {Component, ContentChildren, Input, OnInit, QueryList, ViewChild} from '@angular/core';
-import {AppHelper} from '../../../utils/app-helper';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -26,6 +25,9 @@ export class NgxGridComponent implements OnInit {
   public canEdit: boolean;
 
   @Input()
+  public enabledAdd: boolean;
+
+  @Input()
   public add: () => Promise<boolean>;
 
   @Input()
@@ -40,9 +42,10 @@ export class NgxGridComponent implements OnInit {
   @Input()
   public fetchItems: (query: PageQuery) => Promise<PageContainer<any>>;
 
-  constructor(private _appHelper: AppHelper) {
+  constructor() {
     this.query = new PageQuery();
     this.query.from = 0;
+    this.enabledAdd = true;
   }
 
   async ngOnInit() {
@@ -50,25 +53,15 @@ export class NgxGridComponent implements OnInit {
   }
 
   public onAdd = async () => {
-    if (!this.canEdit) {
-      return;
+    if (this.canEdit && this.add) {
+      await this.add();
     }
-    await this._appHelper.trySave(async () => {
-      if (this.add) {
-        await this.add();
-      }
-    });
   };
 
   public onEdit = async (e: any, parameter: any) => {
-    if (!this.canEdit) {
-      return;
+    if (this.canEdit && this.edit) {
+      await this.edit(parameter);
     }
-    await this._appHelper.trySave(async () => {
-      if (this.edit) {
-        await this.edit(parameter);
-      }
-    });
   };
 
   public onFetchItems = async (direction: Direction, pageQuery: PageQuery): Promise<PageContainer<any>> => {
