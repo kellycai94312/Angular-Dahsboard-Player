@@ -375,5 +375,6 @@
   "man": "Мужчина",
   "woman": "Женщина",
   "stageOfSportsTraining": "Этап спортивной подготовки",
-  "shortName": "Сокращенное имя"
+  "shortName": "Сокращенное имя",
+  "stageType": "Тип этапа"
 }

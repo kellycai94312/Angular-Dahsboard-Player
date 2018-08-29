@@ -11,6 +11,8 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
 import {EditStageComponent} from './component/edit-stage/edit-stage.component';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
+import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
 
 @NgModule({
   imports: [
@@ -25,7 +27,7 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
     DxTextBoxModule,
     DxValidatorModule
   ],
-  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent],
+  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent],
   entryComponents: [EditStageComponent]
 })
 export class DictionaryModule {

@@ -374,5 +374,6 @@
   "man": "Man",
   "woman": "Woman",
   "stageOfSportsTraining": "Stage of sports training",
-  "shortName": "Short name"
+  "shortName": "Short name",
+  "stageType": "Stage type"
 }
