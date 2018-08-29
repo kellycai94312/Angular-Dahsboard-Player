@@ -61,7 +61,6 @@ import {RefereeCategoryModalComponent} from './person-page/category/referee-cate
 import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {ButtonsModule} from '../../components/buttons/buttons.module';
-import {PersonModalCreateComponent} from './persons-page/person-modal-create/person-modal-create.component';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {RequisitesComponent} from './person-page/requisites/requisites.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
@@ -72,6 +71,7 @@ import {PersonStagesComponent} from './person-page/person-stages/person-stages.c
 import {EditPersonStageComponent} from './component/edit-person-stage/edit-person-stage.component';
 import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
 import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
+import {EditPersonComponent} from './component/edit-person/edit-person.component';
 
 @NgModule({
   imports: [
@@ -135,14 +135,14 @@ import {EditMedicalExaminationComponent} from './component/edit-medical-examinat
     RefereeCategoriesComponent,
     RefereeCategoryModalComponent,
     MyGroupsComponent,
-    PersonModalCreateComponent,
     RequisitesComponent,
     ContactEnableModalComponent,
     GroupPersonLogsComponent,
     PersonStagesComponent,
     EditPersonStageComponent,
     MedicalExaminationsComponent,
-    EditMedicalExaminationComponent
+    EditMedicalExaminationComponent,
+    EditPersonComponent
   ],
   providers: [
     PersonService,
@@ -157,10 +157,10 @@ import {EditMedicalExaminationComponent} from './component/edit-medical-examinat
     NoteModalComponent,
     RankModalComponent,
     RefereeCategoryModalComponent,
-    PersonModalCreateComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
-    EditMedicalExaminationComponent
+    EditMedicalExaminationComponent,
+    EditPersonComponent
   ]
 })
 export class PersonPageModule {

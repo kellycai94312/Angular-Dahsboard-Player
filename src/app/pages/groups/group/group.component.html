@@ -7,7 +7,7 @@
                [dimension]="dimension"
                [format]="'SQUARE'"></app-image>
     <div class="d-flex flex-column ml-2">
-      <h6>{{data.name}}</h6>
+      <h6>{{data.name}} {{data?.stage?.shortName}}{{data.stageYear}}{{data?.stageType?.shortName}}</h6>
       <p>{{data.groupType.name}}</p>
     </div>
   </div>

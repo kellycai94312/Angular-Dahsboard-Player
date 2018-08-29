@@ -374,7 +374,8 @@
   "estimatedParameter": "Оценочный параметр",
   "man": "Мужчина",
   "woman": "Женщина",
-  "stageOfSportsTraining": "Этап спортивной подготовки",
+  "sportsTrainingStage": "Этап спортивной подготовки",
   "shortName": "Сокращенное имя",
-  "stageType": "Тип этапа"
+  "stageType": "Тип этапа",
+  "yearPreparation": "Год подготовки"
 }

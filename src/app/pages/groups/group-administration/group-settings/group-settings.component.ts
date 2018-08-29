@@ -1,6 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {TeamType} from '../../../../data/remote/model/group/team/team-type';
 import {League} from '../../../../data/remote/model/group/team/league';
 import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
@@ -10,7 +9,7 @@ import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
-import {AppHelper} from '../../../../utils/app-helper';
+import {EditGroupComponent} from '../../component/edit-group/edit-group.component';
 
 @Component({
   selector: 'app-group-settings',
@@ -19,17 +18,17 @@ import {AppHelper} from '../../../../utils/app-helper';
 })
 export class GroupSettingsComponent implements OnInit {
 
-  public group: Group;
+  @ViewChild(EditGroupComponent)
+  public editGroupComponent: EditGroupComponent;
 
-  public teamTypes: TeamType[];
+  public group: Group;
   public leagues: League[];
   public ageGroups: AgeGroup[];
 
   public pageSize: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService,
-              private  _appHelper: AppHelper) {
+              private _groupService: GroupService) {
     this.pageSize = PropertyConstant.pageSize;
   }
 
@@ -39,7 +38,6 @@ export class GroupSettingsComponent implements OnInit {
     if (this.group.groupType.groupTypeEnum === GroupTypeEnum.TEAM) {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({id: (this.group as GroupTeam).sportType.id});
       this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
-      this.teamTypes = await this._participantRestApiService.getTeamTypes();
     }
   }
 
@@ -90,13 +88,10 @@ export class GroupSettingsComponent implements OnInit {
 
   //#endregion
 
-  public async onApply() {
-    try {
-      this.group = await this._participantRestApiService.putGroup(this.group);
+  public onSave = async () => {
+    if (await this.editGroupComponent.onSave()) {
       this._groupService.updateGroup(this.group);
-    } catch (e) {
-      await this._appHelper.showErrorMessage('saveError');
     }
-  }
+  };
 
 }

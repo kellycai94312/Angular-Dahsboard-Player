@@ -26,6 +26,9 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
   public component: Type<any>;
 
   @Input()
+  public maxNumber: number;
+
+  @Input()
   public getItems: (pageQuery: PageQuery) => Promise<PageContainer<T>>;
 
   @Input()
@@ -60,6 +63,9 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
   }
 
   public async onSelected(item: T) {
+    if (this.selectedItems.length >= this.maxNumber) {
+      return;
+    }
     this._appHelper.removeItem(this.itemsNgxVirtualScrollComponent.items, item);
     this.selectedItems.push(item);
 

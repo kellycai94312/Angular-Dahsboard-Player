@@ -1,0 +1,153 @@
+import {Component, OnInit} from '@angular/core';
+import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
+import {Person} from '../../../../data/remote/model/person';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {Sex} from '../../../../data/local/sex';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {Group} from '../../../../data/remote/model/group/base/group';
+import {PersonContant} from '../../../../data/local/person-contant';
+import {SexEnum} from '../../../../data/remote/misc/sex-enum';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {Router} from '@angular/router';
+import {PageContainer} from '../../../../data/remote/bean/page-container';
+import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
+import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
+import {NamedObjectItemComponent} from '../../../../components/named-object-item/named-object-item.component';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {PersonTemplateRequest} from '../../../../data/remote/request/person-template-request';
+import {IdRequest} from '../../../../data/remote/request/id-request';
+
+@Component({
+  selector: 'app-edit-person',
+  templateUrl: './edit-person.component.html',
+  styleUrls: ['./edit-person.component.scss']
+})
+export class EditPersonComponent extends BaseEditComponent<Person> implements OnInit {
+
+  public readonly dateMin: Date;
+  public readonly dateMax: Date;
+  public readonly sexValues: Sex[];
+
+  public selectedSex: Sex;
+  public userRoles: UserRole[];
+  public sportTypes: SportType[];
+  public groups: Group[];
+
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+              private _translateObjectService: TranslateObjectService,
+              private _router: Router,
+              private _modalService: NgbModal) {
+    super(participantRestApiService, appHelper);
+    this.sexValues = [];
+    this.dateMin = PersonContant.getBirthDateMin();
+    this.dateMax = PersonContant.getBirthDateMax();
+    this.userRoles = [];
+    this.sportTypes = [];
+    this.groups = [];
+  }
+
+  async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+    await this.appHelper.tryLoad(async () => {
+      const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
+      for (let i = 0; i < temp.length; i++) {
+        const sex = new Sex();
+        sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
+        sex.sexEnum = temp[i];
+        this.sexValues.push(sex);
+      }
+    });
+  }
+
+  async onRemove(): Promise<boolean> {
+    return undefined;
+  }
+
+  async onSave(): Promise<boolean> {
+    return await this.appHelper.trySave(async () => {
+      if (!this.userRoles.length) {
+        await  this.appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
+        return;
+      }
+      if (!this.sportTypes.length) {
+        await this.appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
+        return;
+      }
+      this.data.sex = this.selectedSex.sexEnum;
+      const request = new PersonTemplateRequest();
+      request.person = this.data;
+      request.person.birthDate = this.appHelper.dateByFormat(request.person.birthDate, PropertyConstant.dateTimeServerFormat);
+      request.userRoleIds = this.userRoles.map(userRole => new IdRequest(userRole.id));
+      request.sportTypeIds = this.sportTypes.map(sportType => new IdRequest(sportType.id));
+      request.groupIds = this.groups.map(group => new IdRequest(group.id));
+      this.data = await this.participantRestApiService.createTemplatePerson(request);
+    });
+  }
+
+  public async navigateToPage(): Promise<void> {
+    await this._router.navigate(['/person', this.data.id]);
+  }
+
+  public async onEditUserRoles() {
+    const userRoles = await this.participantRestApiService.getUserRoles();
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = NamedObjectItemComponent;
+    componentInstance.getItems = async pageQuery => {
+      const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
+      const pageContainer = new PageContainer();
+      pageContainer.from = 0;
+      pageContainer.size = items.length;
+      pageContainer.total = items.length;
+      pageContainer.list = items;
+      return pageContainer;
+    };
+    componentInstance.onSave = async selectedItems => {
+      this.userRoles = selectedItems;
+      ref.dismiss();
+    };
+    await componentInstance.initialize(this.userRoles);
+  }
+
+  public async onEditSportTypes() {
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = NamedObjectItemComponent;
+    componentInstance.getItems = async pageQuery => await this.participantRestApiService.getSportTypes(pageQuery);
+    componentInstance.onSave = async selectedItems => {
+      this.sportTypes = selectedItems;
+      ref.dismiss();
+    };
+    await componentInstance.initialize(this.sportTypes);
+  }
+
+  public async onEditGroups() {
+    const groupQuery = new GroupQuery();
+    groupQuery.from = 0;
+    groupQuery.count = PropertyConstant.pageSize;
+    groupQuery.all = false;
+    groupQuery.admin = true;
+
+    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    componentInstance.headerNameKey = 'edit';
+    componentInstance.component = NamedObjectItemComponent;
+    componentInstance.maxNumber = 1;
+    componentInstance.pageQuery = groupQuery;
+    componentInstance.getItems = async pageQuery => {
+      return await this.participantRestApiService.getGroups(pageQuery);
+    };
+    componentInstance.onSave = async selectedItems => {
+      this.groups = selectedItems;
+      ref.dismiss();
+    };
+    await componentInstance.initialize(this.groups);
+  }
+
+}

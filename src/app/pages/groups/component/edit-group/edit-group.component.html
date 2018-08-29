@@ -1,0 +1,78 @@
+<label>{{'name' | translate}}</label>
+<dx-text-box class="w-100"
+             [(value)]="data.name"
+             type="text">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-text-box>
+
+<label class="mt-2">{{'groupType' | translate}}</label>
+<dx-select-box [items]="groupTypes"
+               [(value)]="data.groupType"
+               displayExpr="name"
+               acceptCustomValue="true"
+               [disabled]="data.id"
+               placeholder="{{'groupType' | translate}}">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>
+
+<dx-check-box class="mt-2"
+              [(value)]="data.visible"
+              text="{{'public' | translate}}">
+</dx-check-box>
+
+<div *ngIf="data.groupType?.groupTypeEnum === groupTypeEnum.TEAM">
+  <label class="mt-2">{{'sportType' | translate}}</label>
+  <dx-select-box [items]="sportTypes"
+                 [(value)]="data.sportType"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 [disabled]="data.id"
+                 placeholder="{{'sportType' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+
+  <label class="mt-2">{{'teamType' | translate }}</label>
+  <dx-select-box [items]="teamTypes"
+                 [(value)]="data.teamType"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 placeholder="{{'teamType' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+
+  <label class="mt-2">{{'stage' | translate}}</label>
+  <dx-select-box [items]="stages"
+                 [(value)]="data.stage"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 placeholder="{{'stage' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+
+  <label class="mt-2">{{'yearPreparation' | translate}}</label>
+  <dx-number-box [(value)]="data.stageYear"
+                 [min]="1"
+                 [max]="99">
+  </dx-number-box>
+
+  <label class="mt-2">{{'stageType' | translate}}</label>
+  <dx-select-box [items]="stageTypes"
+                 [(value)]="data.stageType"
+                 displayExpr="name"
+                 acceptCustomValue="true"
+                 placeholder="{{'stageType' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+</div>

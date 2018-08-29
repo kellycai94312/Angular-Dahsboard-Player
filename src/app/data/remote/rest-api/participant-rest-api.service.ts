@@ -90,6 +90,7 @@ import {StageQuery} from './query/stage-query';
 import {StageStandard} from '../model/stage/stage-standard';
 import {Stage} from '../model/stage/stage';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
+import {StageType} from '../model/stage/stage-type';
 
 @Injectable()
 @RestParams({
@@ -1419,6 +1420,22 @@ export class ParticipantRestApiService extends Rest {
     path: '/stage/{!stageId}/shortName'
   })
   updateStageShortName: IRestMethodStrict<StringWrapper, any, { stageId: number }, Stage>;
+
+  //#endregion
+
+  //#region StageType
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stageType'
+  })
+  getStageTypes: IRestMethod<void, StageType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/stageType/{!stageTypeId}/shortName'
+  })
+  updateStageTypeShortName: IRestMethodStrict<StringWrapper, any, { stageTypeId: number }, StageType>;
 
   //#endregion
 

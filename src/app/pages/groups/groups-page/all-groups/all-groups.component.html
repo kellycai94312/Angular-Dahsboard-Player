@@ -75,6 +75,32 @@
                       (onChange)="onCityChanged($event.current)">
     </app-input-select>
   </div>
+  <div class="col">
+    <dx-select-box [items]="stages"
+                   displayExpr="name"
+                   (onValueChanged)="onStageChanged($event.value)"
+                   placeholder="{{'stage' | translate}}"
+                   showClearButton="true">
+    </dx-select-box>
+  </div>
+
+  <div class="col">
+    <dx-number-box [min]="1"
+                   [max]="99"
+                   placeholder="{{'yearPreparation' | translate}}"
+                   (onValueChanged)="onStageYearChanged($event.value)">
+    </dx-number-box>
+  </div>
+
+  <div class="col">
+    <dx-select-box [items]="stageTypes"
+                   displayExpr="name"
+                   (onValueChanged)="onStageTypeChanged($event.value)"
+                   placeholder="{{'stageType' | translate}}"
+                   showClearButton="true">
+    </dx-select-box>
+  </div>
+
 </div>
 
 <table class="table table-hover mt-2">
@@ -108,7 +134,8 @@
                      [format]="'SQUARE'"></app-image>
         </td>
         <td class="col-sm-3">
-          <h6>{{item.data.name}}</h6>
+          <h6>{{item.data.name}}
+            {{item.data?.stage?.shortName}}{{item.data.stageYear}}{{item.data?.stageType?.shortName}}</h6>
         </td>
         <td class="col-sm-1">
           <h6>{{item.data.groupType.name}}</h6>
