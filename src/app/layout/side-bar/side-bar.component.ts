@@ -3,6 +3,8 @@ import {MenuItem} from '../../data/local/menu-item';
 import {ConversationService} from '../../shared/conversation.service';
 import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {AuthorizationService} from '../../shared/authorization.service';
+import {UserRoleEnum} from '../../data/remote/model/user-role-enum';
 
 @Component({
   selector: 'app-side-bar',
@@ -20,7 +22,8 @@ export class SideBarComponent implements OnInit, OnDestroy {
   public readonly conversationMenuItem: MenuItem;
 
   constructor(private _conversationService: ConversationService,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _authorizationService: AuthorizationService) {
     this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
       this.conversationMenuItem.count = x.value;
     });
@@ -32,7 +35,10 @@ export class SideBarComponent implements OnInit, OnDestroy {
     this.menuItems.push(this.createMenuItem('fa fa-bell', 'notifications', 'notification'));
     this.menuItems.push(this.createMenuItem('fa fa-address-book', 'contacts', 'connection'));
     this.menuItems.push(this.createMenuItem('fa fa-file', 'reports', 'report'));
-    this.menuItems.push(this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary'));
+
+    if (this._authorizationService.hasUserRole(UserRoleEnum.ADMIN)) {
+      this.menuItems.push(this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary'));
+    }
 
     this.conversationMenuItem = this.createMenuItem('fa fa-comments', 'messages.section', 'conversation');
     this.menuItems.push(this.conversationMenuItem);
