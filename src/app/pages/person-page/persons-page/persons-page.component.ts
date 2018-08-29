@@ -16,11 +16,12 @@ import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {PersonModalCreateComponent} from './person-modal-create/person-modal-create.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {EditPersonComponent} from '../component/edit-person/edit-person.component';
+import {Person} from '../../../data/remote/model/person';
 
 @Component({
   selector: 'app-persons-page',
@@ -45,7 +46,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
               private _authorizationService: AuthorizationService,
-              private _modalService: NgbModal,
+              private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
 
@@ -183,7 +184,23 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
     });
   };
 
-  public createPerson = () => this._modalService.open(PersonModalCreateComponent, {size: 'lg'});
+  public addPerson = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'add';
+    await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
+      await component.initialize(new Person());
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'save',
+          callback: async () => {
+            if (await this._ngxModalService.save(modal, component)) {
+              await component.navigateToPage();
+            }
+          }
+        }
+      ];
+    });
+  };
 
   public async updateItems() {
     await this.ngxVirtualScrollComponent.reset();
