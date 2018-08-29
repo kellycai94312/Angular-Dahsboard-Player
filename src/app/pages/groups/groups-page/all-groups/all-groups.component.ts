@@ -18,6 +18,8 @@ import {GroupViewModel} from '../../../../data/local/view-model/group/group-view
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../../utils/app-helper';
+import {Stage} from '../../../../data/remote/model/stage/stage';
+import {StageType} from '../../../../data/remote/model/stage/stage-type';
 
 @Component({
   selector: 'app-all-groups',
@@ -39,6 +41,8 @@ export class AllGroupsComponent implements OnInit {
   public groupTypes: GroupType[];
   public ageGroups: AgeGroup[];
   public leagues: League[];
+  public stages: Stage[];
+  public stageTypes: StageType[];
 
   public selectedCountry: Country;
   public selectedRegion: Region;
@@ -58,6 +62,8 @@ export class AllGroupsComponent implements OnInit {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
     this.leagues = await this._participantRestApiService.getLeagues();
+    this.stages = await this._participantRestApiService.getStages();
+    this.stageTypes = await this._participantRestApiService.getStageTypes();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
@@ -219,6 +225,33 @@ export class AllGroupsComponent implements OnInit {
       this.groupQuery.sportTypeId = value.id;
     } else {
       delete this.groupQuery.sportTypeId;
+    }
+    await this.updateItems();
+  }
+
+  public async onStageChanged(value: Stage) {
+    if (value != null) {
+      this.groupQuery.stageEnum = value.stageEnum;
+    } else {
+      delete this.groupQuery.stageEnum;
+    }
+    await this.updateItems();
+  }
+
+  public async onStageYearChanged(value: number) {
+    if (value != null) {
+      this.groupQuery.stageYear = value;
+    } else {
+      delete this.groupQuery.stageYear;
+    }
+    await this.updateItems();
+  }
+
+  public async onStageTypeChanged(value: StageType) {
+    if (value != null) {
+      this.groupQuery.stageTypeEnum = value.stageTypeEnum;
+    } else {
+      delete this.groupQuery.stageTypeEnum;
     }
     await this.updateItems();
   }

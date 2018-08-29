@@ -30,6 +30,7 @@
                  [(value)]="data.sportType"
                  displayExpr="name"
                  acceptCustomValue="true"
+                 [disabled]="data.id"
                  placeholder="{{'sportType' | translate}}">
     <dx-validator>
       <dxi-validation-rule type="required"></dxi-validation-rule>

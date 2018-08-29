@@ -2,6 +2,8 @@ import {PageQuery} from '../page-query';
 import {GroupTypeEnum} from '../../model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../model/user-role-enum';
 import {GroupConnectionType} from '../../model/group/group-connection-type';
+import {StageEnum} from '../../model/stage/stage-enum';
+import {StageTypeEnum} from '../../model/stage/stage-type-enum';
 
 export class GroupQuery extends PageQuery {
   public id?: number;
@@ -20,6 +22,9 @@ export class GroupQuery extends PageQuery {
   public regionId?: number;
   public cityId?: number;
   public admin?: boolean;
+  public stageEnum?: StageEnum;
+  public stageTypeEnum?: StageTypeEnum;
+  public stageYear?: number;
 
   //#region GroupConnection
   public groupConnectionType?: GroupConnectionType;
