@@ -8,8 +8,18 @@ import {GroupPageRoutingModule} from './group-page-routing.module';
 import {LayoutService} from '../../layout/shared/layout.service';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
-import {NewGroupPageComponent} from './new-group-page/new-group-page.component';
+import {
+  DxButtonModule,
+  DxCheckBoxModule,
+  DxDataGridModule,
+  DxDateBoxModule,
+  DxNumberBoxModule,
+  DxSelectBoxModule,
+  DxTemplateModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxValidatorModule
+} from 'devextreme-angular';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
@@ -41,6 +51,7 @@ import {TableGroupConnectionComponent} from './component/table-group-connection/
 import {EditGroupConnectionComponent} from './component/edit-group-connection/edit-group-connection.component';
 import {EditDocumentComponent} from './component/edit-document/edit-document.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
+import {EditGroupComponent} from './component/edit-group/edit-group.component';
 
 @NgModule({
   imports: [
@@ -67,7 +78,8 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
     BusyButtonModule,
     NgxModalModule,
     HtmlContentModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    DxNumberBoxModule
   ],
   exports: [
     GroupComponent
@@ -81,7 +93,6 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
     GroupPageComponent,
     AllGroupsComponent,
     MyGroupsComponent,
-    NewGroupPageComponent,
     GroupPersonsComponent,
     GroupAdministrationComponent,
     GroupSettingsComponent,
@@ -98,7 +109,8 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
     GroupConnectionsComponent,
     TableGroupConnectionComponent,
     EditGroupConnectionComponent,
-    EditDocumentComponent
+    EditDocumentComponent,
+    EditGroupComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -107,7 +119,8 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
     EditGroupPersonComponent,
     EditGroupPersonLogComponent,
     EditGroupConnectionComponent,
-    EditDocumentComponent
+    EditDocumentComponent,
+    EditGroupComponent
   ]
 })
 export class GroupPageModule {

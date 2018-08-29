@@ -4,6 +4,8 @@ import {SportType} from '../../sport-type';
 import {TeamType} from './team-type';
 import {League} from './league';
 import {AgeGroup} from '../../age-group';
+import {Stage} from '../../stage/stage';
+import {StageType} from '../../stage/stage-type';
 
 export class GroupTeam extends Group {
 
@@ -11,9 +13,13 @@ export class GroupTeam extends Group {
   public league: League;
   public teamType: TeamType;
   public ageGroup: AgeGroup;
+  public stage: Stage;
+  public stageYear: number;
+  public stageType: StageType;
 
   constructor() {
     super();
-    this.discriminator = GroupTypeEnum[GroupTypeEnum.TEAM];
+    this.discriminator = GroupTypeEnum.TEAM;
   }
+
 }

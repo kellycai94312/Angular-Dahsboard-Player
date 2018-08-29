@@ -1,9 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
-import {ActivatedRoute, Router} from '@angular/router';
-import {TabComponent} from '../../../components/tab/tab.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
+import {TabComponent} from '../../../components/tab/tab.component';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {EditGroupComponent} from '../component/edit-group/edit-group.component';
+import {Group} from '../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-groups-page',
@@ -14,30 +16,45 @@ export class GroupsPageComponent implements OnInit {
 
   @ViewChild(TabComponent)
   public tabComponent: TabComponent;
+
   public readonly tabs: Tab[];
 
-  constructor(private _route: ActivatedRoute,
-              private _router: Router,
-              private _authorizationService: AuthorizationService) {
-    this.tabs = [];
-    const allTab = new Tab();
-    allTab.nameKey = 'groups.all';
-    allTab.routerLink = 'all';
-    this.tabs.push(allTab);
-
-    const myTab = new Tab();
-    myTab.nameKey = 'groups.my';
-    myTab.routerLink = 'my';
-    this.tabs.push(myTab);
+  constructor(private _authorizationService: AuthorizationService,
+              private _ngxModalService: NgxModalService) {
+    this.tabs = [
+      {
+        nameKey: 'groups.all',
+        routerLink: 'all'
+      },
+      {
+        nameKey: 'groups.my',
+        routerLink: 'my'
+      }
+    ];
   }
 
   async ngOnInit() {
-    this.tabComponent.tabs = this.tabs;
     if (await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR)) {
-      this.tabComponent.newElement = this.openNewGroupPage;
+      this.tabComponent.newElement = this.addGroup;
     }
   }
 
-  public openNewGroupPage = async () => this._router.navigate(['new'], {relativeTo: this._route});
+  public addGroup = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+
+    await modal.componentInstance.initializeBody(EditGroupComponent, async component => {
+      await component.initialize(new Group());
+
+      modal.componentInstance.splitButtonItems = [{
+        nameKey: 'save',
+        callback: async () => {
+          if (await this._ngxModalService.save(modal, component)) {
+            await component.navigateToPage();
+          }
+        }
+      }];
+    });
+  };
 
 }

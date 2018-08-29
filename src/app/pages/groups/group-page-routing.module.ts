@@ -26,9 +26,6 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'new', component: NewGroupPageComponent,
-  },
-  {
     path: ':id', component: GroupPageComponent,
     children: [
       {path: '', redirectTo: 'subgroup/0', pathMatch: 'full'},

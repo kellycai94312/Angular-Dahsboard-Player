@@ -373,7 +373,8 @@
   "estimatedParameter": "Estimated parameter",
   "man": "Man",
   "woman": "Woman",
-  "stageOfSportsTraining": "Stage of sports training",
+  "sportsTrainingStage": "Sports training stage",
   "shortName": "Short name",
-  "stageType": "Stage type"
+  "stageType": "Stage type",
+  "yearPreparation": "Year preparation"
 }
