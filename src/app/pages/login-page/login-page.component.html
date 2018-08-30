@@ -5,8 +5,7 @@
   <div class="mb-auto">
     <div class="m-2 form"
          (keyup.enter)="busyButton.onKeyUp($event)">
-      <img src="/assets/img/athlete-readiness-logo.png"
-           [width]="230">
+      <img src="/assets/img/athlete-readiness-logo.png">
       <dx-text-box placeholder="{{'login.enterEmailOrPhoneNumber' | translate}}"
                    [(value)]="auth.email"
                    [showClearButton]="true">

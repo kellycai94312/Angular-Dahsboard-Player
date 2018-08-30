@@ -4,8 +4,7 @@
   </div>
   <div class="mb-auto max-width-content">
     <div class="form" *ngIf="!isRegistrationComplete;else content">
-      <img src="/assets/img/athlete-readiness-logo.png"
-           [width]="230">
+      <img src="/assets/img/athlete-readiness-logo.png">
       <dx-text-box mode="email"
                    placeholder="{{'registration.enterEmail' | translate}}"
                    [(value)]="user.email"
@@ -42,8 +41,8 @@
 
       <div class="mt-2 text-center">
         <p>{{'login.alreadyRegistered'| translate}}
-          <a routerLink="/login"
-             routerLinkActive="active">{{'login.signIn' | translate}}</a>
+          <u><a routerLink="/login"
+                routerLinkActive="active">{{'login.signIn' | translate}}</a></u>
         </p>
       </div>
     </div>
@@ -53,7 +52,7 @@
         <p>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate }} <br>
           {{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
           {{'registration.followTheInstructionsInIt' | translate }}</p>
-        <a routerLink="/login">{{'login.signIn' | translate}}</a>
+        <u><a routerLink="/login">{{'login.signIn' | translate}}</a></u>
       </div>
     </ng-template>
   </div>
