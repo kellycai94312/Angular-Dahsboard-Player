@@ -4,7 +4,7 @@
   </div>
   <div class="mb-auto max-width-content">
     <div class="form" *ngIf="!isRegistrationComplete;else content">
-      <img src="/assets/img/athlete-readiness-logo.png" alt="">
+      <img src="/assets/img/athlete-readiness-logo.png">
       <dx-text-box mode="email"
                    placeholder="{{'registration.enterEmail' | translate}}"
                    [(value)]="user.email"
@@ -35,14 +35,14 @@
         </dx-validator>
       </dx-text-box>
 
-      <dx-button class="mt-2 w-100"
-                 text="{{'registration.signUp' | translate | uppercase}}"
-                 (onClick)="onApply($event)"></dx-button>
+      <app-busy-button classes="mt-2 w-100"
+                       nameKey="registration.signUp"
+                       [click]="onSave"></app-busy-button>
 
       <div class="mt-2 text-center">
         <p>{{'login.alreadyRegistered'| translate}}
-          <a routerLink="/login"
-             routerLinkActive="active">{{'login.signIn' | translate}}</a>
+          <u><a routerLink="/login"
+                routerLinkActive="active">{{'login.signIn' | translate}}</a></u>
         </p>
       </div>
     </div>
@@ -52,8 +52,7 @@
         <p>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate }} <br>
           {{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
           {{'registration.followTheInstructionsInIt' | translate }}</p>
-        <a routerLink="/login"
-           routerLinkActive="active">{{'login.signIn' | translate}}</a>
+        <u><a routerLink="/login">{{'login.signIn' | translate}}</a></u>
       </div>
     </ng-template>
   </div>

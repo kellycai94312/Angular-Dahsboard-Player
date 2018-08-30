@@ -4,6 +4,14 @@
   img {
     margin: 0 auto 20px auto;
     display: block;
+    width: 230px;
+  }
+
+  a {
+    color: #bbb;
+    &:hover {
+      color: #ddd;
+    }
   }
 
 }

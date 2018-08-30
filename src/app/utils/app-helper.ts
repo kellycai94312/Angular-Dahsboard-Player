@@ -134,7 +134,7 @@ export class AppHelper {
   }
 
   public unsubscribe(obj: ISubscription) {
-    if (obj != undefined && obj) {
+    if (!this.isUndefinedOrNull(obj)) {
       obj.unsubscribe();
     }
   }
