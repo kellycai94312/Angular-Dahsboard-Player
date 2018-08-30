@@ -17,7 +17,8 @@ export class AuthorizationService {
   public readonly handleLogOut: Subject<boolean>;
 
   public session: Session;
-  private person: Person;
+
+  private _person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _layoutService: LayoutService,
@@ -44,7 +45,7 @@ export class AuthorizationService {
 
   public async logOut(withNavigate: boolean = true): Promise<void> {
     this.session = null;
-    this.person = null;
+    this._person = null;
     this.handleLogOut.next(true);
     try {
       await this._participantRestApiService.logout();
@@ -70,13 +71,13 @@ export class AuthorizationService {
   }
 
   public async getPerson(): Promise<Person> {
-    if (!this.person && this.session) {
+    if (!this._person && this.session) {
       try {
-        this.person = await this._participantRestApiService.getPerson({id: this.session.personId});
+        this._person = await this._participantRestApiService.getPerson({id: this.session.personId});
       } catch (e) {
       }
     }
-    return this.person;
+    return this._person;
   }
 
   public async getUserRoles(): Promise<UserRole[]> {

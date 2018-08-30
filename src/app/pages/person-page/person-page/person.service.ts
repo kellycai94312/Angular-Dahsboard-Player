@@ -138,7 +138,9 @@ export class PersonService implements OnDestroy {
 
   public async allowEdit(): Promise<boolean> {
     try {
-      return (await  this._participantRestApiService.canEditPerson({personId: this.personViewModel.data.id})).value;
+      const createdByAnotherPerson = this.personViewModel.data.user.id != this.personViewModel.data.owner.id;
+      const canEdit = (await  this._participantRestApiService.canEditPerson({personId: this.personViewModel.data.id})).value;
+      return !createdByAnotherPerson && canEdit;
     } catch (e) {
     }
     return false;
