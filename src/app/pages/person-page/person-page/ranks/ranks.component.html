@@ -1,36 +1,36 @@
-<table class="table table-bordered table-hover table-sm mt-2">
-  <thead>
-  <tr class="d-flex">
-    <th class="col-2">{{ 'rank' | translate }}</th>
-    <th [ngClass]="{'col-3' : isEditAllow, 'col-4' : !isEditAllow}">{{ 'assignee' | translate }}</th>
-    <th class="col-1">{{ 'date' | translate }}</th>
-    <th class="col-3">{{ 'orderNumber' | translate }}</th>
-    <th class="col-2">{{ 'certificateNumber' | translate }}</th>
-    <th *ngIf="isEditAllow"
-        class="col-1"></th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let personRank of personRanks; let index = index"
-      class="d-flex">
-    <td class="col-2">{{personRank.rank.name}}</td>
-    <td [ngClass]="{'col-3' : isEditAllow, 'col-4' : !isEditAllow}">{{personRank.assignee}}</td>
-    <td class="col-1">{{personRank.date | date: 'dd.MM.yyyy'}}</td>
-    <td class="col-3">{{personRank.orderNumber}}</td>
-    <td class="col-2">{{personRank.certificateNumber}}</td>
-    <td *ngIf="isEditAllow"
-        class="col-1">
-      <div class="text-center">
-        <button class="btn btn-outline-primary"
-                (click)="editRank(index)">
-          <i class="fa fa-edit"></i>
-        </button>
-        <button class="btn btn-outline-warning"
-                (click)="removeRank(index)">
-          <i class="fa fa-eraser"></i>
-        </button>
-      </div>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<ngx-grid [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [enabledAdd]="false"
+          [canEdit]="canEdit">
+  <ngx-column nameKey="rank"
+              style="col-2"
+              [templateRef]="rankTemplate"></ngx-column>
+  <ngx-column nameKey="assignee"
+              style="col-4"
+              [templateRef]="assigneeTemplate"></ngx-column>
+  <ngx-column nameKey="date"
+              style="col-2"
+              [templateRef]="dateTemplate"></ngx-column>
+  <ngx-column nameKey="orderNumber"
+              style="col-2"
+              [templateRef]="orderNumberTemplate"></ngx-column>
+  <ngx-column nameKey="certificateNumber"
+              style="col-2"
+              [templateRef]="certificateNumberTemplate"></ngx-column>
+
+  <ng-template #rankTemplate let-item>
+    {{item.rank.name}}
+  </ng-template>
+  <ng-template #assigneeTemplate let-item>
+    {{item.assignee}}
+  </ng-template>
+  <ng-template #dateTemplate let-item>
+    {{item.date | date:propertyConstant.dateFormat}}
+  </ng-template>
+  <ng-template #orderNumberTemplate let-item>
+    {{item.orderNumber}}
+  </ng-template>
+  <ng-template #certificateNumberTemplate let-item>
+    {{item.certificateNumber}}
+  </ng-template>
+</ngx-grid>

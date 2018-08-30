@@ -102,3 +102,18 @@
     </button>
   </div>
 </div>
+
+<p *ngIf="!data.id;else elseTemplate"
+   class="mt-2">{{'youShouldSaveThisStateForNextStepsOrBeCancelingChanges' | translate}}</p>
+
+<ng-template #elseTemplate>
+  <div class="mt-2">
+    <app-busy-button *ngIf="groups.length"
+                     classes="mr-2"
+                     nameKey="editGroupPerson"
+                     [click]="onEditGroupPerson"></app-busy-button>
+    <app-busy-button *ngIf="hasUserRoleAthlete"
+                     nameKey="editRank"
+                     [click]="onEditRank"></app-busy-button>
+  </div>
+</ng-template>

@@ -376,5 +376,7 @@
   "sportsTrainingStage": "Sports training stage",
   "shortName": "Short name",
   "stageType": "Stage type",
-  "yearPreparation": "Year preparation"
+  "yearPreparation": "Year preparation",
+  "editGroupPerson": "Edit group person",
+  "editRank": "Edit rank"
 }

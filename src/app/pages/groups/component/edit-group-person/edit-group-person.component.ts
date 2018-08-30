@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
@@ -12,6 +12,7 @@ import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
+import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 
 @Component({
@@ -19,13 +20,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
   templateUrl: './edit-group-person.component.html',
   styleUrls: ['./edit-group-person.component.scss']
 })
-export class EditGroupPersonComponent implements OnInit {
-
-  @Input()
-  public manualInitialization: boolean;
-
-  @Input()
-  public groupPerson: GroupPerson;
+export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   public readonly pageSize: number;
 
@@ -37,50 +32,37 @@ export class EditGroupPersonComponent implements OnInit {
 
   private _mentorUserRoleEnum: UserRoleEnum;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper,
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _ngxModalService: NgxModalService) {
+    super(participantRestApiService, appHelper);
     this.pageSize = PropertyConstant.pageSize;
-
-    this.manualInitialization = false;
   }
 
-  async ngOnInit() {
-    if (!this.manualInitialization) {
-      await this.initialize(this.groupPerson);
-    }
-  }
+  async initialize(obj: GroupPerson): Promise<boolean> {
+    await super.initialize(obj);
+    this.isOwner = this.data.group.owner.id == this.data.person.user.id;
 
-  public async initialize(groupPerson: GroupPerson): Promise<boolean> {
-    this.groupPerson = groupPerson;
-    this.isOwner = this.groupPerson.group.owner.id == this.groupPerson.person.user.id;
-
-    await this.initBaseGroupPerson(groupPerson.person, groupPerson.userRole);
-
-    try {
-      this.userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.groupPerson.person.user.id});
+    return await this.appHelper.tryLoad(async () => {
+      await this.initBaseGroupPerson(obj.person, obj.userRole);
+      this.userRoles = await this.participantRestApiService.getUserUserRoles({userId: this.data.person.user.id});
       // TODO: Subgroups have to stored in GroupService
-      this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this.groupPerson.group.id});
+      this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
 
-      switch (this.groupPerson.group.groupType.groupTypeEnum) {
+      switch (this.data.group.groupType.groupTypeEnum) {
         case GroupTypeEnum.TEAM:
-          this.sportRoles = await this._participantRestApiService.getSportRolesBySportType({id: (this.groupPerson.group as GroupTeam).sportType.id});
+          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as GroupTeam).sportType.id});
           this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
           break;
         case GroupTypeEnum.AGENCY:
           this._mentorUserRoleEnum = UserRoleEnum.SCOUT;
           break;
       }
-
-      return true;
-    } catch (e) {
-    }
-    return false;
+    });
   }
 
   loadMentors = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getGroupPersonsByGroup({
-      id: this.groupPerson.group.id,
+    return this.participantRestApiService.getGroupPersonsByGroup({
+      id: this.data.group.id,
       userRoleEnum: this._mentorUserRoleEnum,
       from: from,
       count: this.pageSize,
@@ -101,68 +83,60 @@ export class EditGroupPersonComponent implements OnInit {
   }
 
   public async onUserRoleChange(userRole: UserRole) {
-    await this.initBaseGroupPerson(this.groupPerson.person, userRole);
+    await this.initBaseGroupPerson(this.data.person, userRole);
   }
 
   public async onSave(): Promise<boolean> {
-    try {
-      const subGroupId = this.groupPerson.subGroup === undefined ? null : this.groupPerson.subGroup.id;
-      await  this._participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
-        groupId: this.groupPerson.group.id,
-        personId: this.groupPerson.person.id
+    return await this.appHelper.trySave(async () => {
+      const subGroupId = this.data.subGroup === undefined ? null : this.data.subGroup.id;
+      await  this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
+        groupId: this.data.group.id,
+        personId: this.data.person.id
       });
 
-      const userRoleId = this.groupPerson.userRole === undefined || this.groupPerson.userRole === null ? null : this.groupPerson.userRole.id;
-      await  this._participantRestApiService.postPersonUserRole({id: userRoleId}, {}, {
-        groupId: this.groupPerson.group.id,
-        personId: this.groupPerson.person.id
+      const userRoleId = this.data.userRole === undefined || this.data.userRole === null ? null : this.data.userRole.id;
+      await  this.participantRestApiService.postPersonUserRole({id: userRoleId}, {}, {
+        groupId: this.data.group.id,
+        personId: this.data.person.id
       });
 
-      const sportRoleId = this.groupPerson.sportRole === undefined || this.groupPerson.sportRole === null ? null : this.groupPerson.sportRole.id;
-      await  this._participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
-        groupId: this.groupPerson.group.id,
-        personId: this.groupPerson.person.id
+      const sportRoleId = this.data.sportRole === undefined || this.data.sportRole === null ? null : this.data.sportRole.id;
+      await  this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
+        groupId: this.data.group.id,
+        personId: this.data.person.id
       });
 
-      await  this._participantRestApiService.postPersonNumber({number: this.groupPerson.number}, {}, {
-        groupId: this.groupPerson.group.id,
-        personId: this.groupPerson.person.id
+      await  this.participantRestApiService.postPersonNumber({number: this.data.number}, {}, {
+        groupId: this.data.group.id,
+        personId: this.data.person.id
       });
 
       try {
-        const mentorId = this.groupPerson.mentor === undefined || this.groupPerson.mentor === null ? null : this.groupPerson.mentor.person.id;
-        await  this._participantRestApiService.postPersonMentor({id: mentorId}, {}, {
-          groupId: this.groupPerson.group.id,
-          personId: this.groupPerson.person.id
+        const mentorId = this.data.mentor === undefined || this.data.mentor === null ? null : this.data.mentor.person.id;
+        await  this.participantRestApiService.postPersonMentor({id: mentorId}, {}, {
+          groupId: this.data.group.id,
+          personId: this.data.person.id
         });
       } catch (e) {
       }
 
       try {
-        await  this._participantRestApiService.postPersonAdmin({admin: this.groupPerson.admin}, {}, {
-          groupId: this.groupPerson.group.id,
-          personId: this.groupPerson.person.id
+        await  this.participantRestApiService.postPersonAdmin({admin: this.data.admin}, {}, {
+          groupId: this.data.group.id,
+          personId: this.data.person.id
         });
       } catch (e) {
       }
-      return true;
-    } catch (e) {
-      await this._appHelper.showErrorMessage('saveError');
-    }
-    return false;
+    });
   }
 
   public async onRemove(): Promise<boolean> {
-    try {
-      await this._participantRestApiService.deleteApprovePersonInGroup({
-        id: this.groupPerson.group.id,
-        personId: this.groupPerson.person.id
+    return await this.appHelper.tryRemove(async () => {
+      await this.participantRestApiService.deleteApprovePersonInGroup({
+        id: this.data.group.id,
+        personId: this.data.person.id
       });
-      return true;
-    } catch (e) {
-      await this._appHelper.showErrorMessage('removeError');
-    }
-    return false;
+    });
   }
 
   public onEditGroupPersonLog = async () => {
@@ -171,13 +145,13 @@ export class EditGroupPersonComponent implements OnInit {
 
     await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
       component.manualInitialization = true;
-      await component.initialize(this.groupPerson);
+      await component.initialize(this.data);
     });
   };
 
   private async initBaseGroupPerson(person: Person, userRole: UserRole) {
     try {
-      this.baseGroupPerson = await this._participantRestApiService.getPersonBaseGroup({
+      this.baseGroupPerson = await this.participantRestApiService.getPersonBaseGroup({
         personId: person.id,
         userRoleId: userRole.id
       });

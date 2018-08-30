@@ -47,7 +47,6 @@ import {MyRegionService} from './person-page/my-region/my-region.service';
 import {NoteModalComponent} from './person-page/my-region/note-modal/note-modal.component';
 import {AchievementsComponent} from './person-page/achievements/achievements.component';
 import {RanksComponent} from './person-page/ranks/ranks.component';
-import {RankModalComponent} from './person-page/ranks/rank-modal/rank-modal.component';
 import {MeasureInputModule} from '../../components/measure-input/measure-input.module';
 import {AnthropometryHistoryComponent} from './person-page/anthropometry-history/anthropometry-history.component';
 import {TestsResultsHistoryComponent} from './person-page/tests-results-history/tests-results-history.component';
@@ -72,6 +71,8 @@ import {EditPersonStageComponent} from './component/edit-person-stage/edit-perso
 import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
 import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
 import {EditPersonComponent} from './component/edit-person/edit-person.component';
+import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 
 @NgModule({
   imports: [
@@ -108,7 +109,8 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     NamedObjectItemModule,
     NgxSplitButtonModule,
     NgxButtonGroupModule,
-    DxNumberBoxModule
+    DxNumberBoxModule,
+    NgxGridModule
   ],
   declarations: [
     PersonPageComponent,
@@ -129,7 +131,6 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     AgentNoteComponent,
     NoteModalComponent,
     RanksComponent,
-    RankModalComponent,
     TestsResultsHistoryComponent,
     AnthropometryHistoryComponent,
     RefereeCategoriesComponent,
@@ -142,7 +143,8 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     EditPersonStageComponent,
     MedicalExaminationsComponent,
     EditMedicalExaminationComponent,
-    EditPersonComponent
+    EditPersonComponent,
+    EditRankComponent
   ],
   providers: [
     PersonService,
@@ -155,12 +157,13 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     ModalSelectPageComponent,
     EventModalComponent,
     NoteModalComponent,
-    RankModalComponent,
     RefereeCategoryModalComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
     EditMedicalExaminationComponent,
-    EditPersonComponent
+    EditPersonComponent,
+    EditRankComponent,
+    RanksComponent
   ]
 })
 export class PersonPageModule {

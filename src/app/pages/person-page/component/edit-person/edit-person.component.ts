@@ -19,6 +19,10 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {PersonTemplateRequest} from '../../../../data/remote/request/person-template-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditGroupPersonComponent} from '../../../groups/component/edit-group-person/edit-group-person.component';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {RanksComponent} from '../../person-page/ranks/ranks.component';
 
 @Component({
   selector: 'app-edit-person',
@@ -36,10 +40,13 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public sportTypes: SportType[];
   public groups: Group[];
 
+  public hasUserRoleAthlete: boolean;
+
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService,
               private _router: Router,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
     this.sexValues = [];
     this.dateMin = PersonContant.getBirthDateMin();
@@ -51,7 +58,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   async ngOnInit(): Promise<void> {
     await super.ngOnInit();
-
     await this.appHelper.tryLoad(async () => {
       const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
       for (let i = 0; i < temp.length; i++) {
@@ -68,15 +74,16 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   }
 
   async onSave(): Promise<boolean> {
+    if (!this.userRoles.length) {
+      await  this.appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
+      return false;
+    }
+    if (!this.sportTypes.length) {
+      await this.appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
+      return false;
+    }
+
     return await this.appHelper.trySave(async () => {
-      if (!this.userRoles.length) {
-        await  this.appHelper.showErrorMessage('personMustHaveAtLeastOneRole');
-        return;
-      }
-      if (!this.sportTypes.length) {
-        await this.appHelper.showErrorMessage('personMustHaveAtLeastOneSportType');
-        return;
-      }
       this.data.sex = this.selectedSex.sexEnum;
       const request = new PersonTemplateRequest();
       request.person = this.data;
@@ -89,7 +96,9 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   }
 
   public async navigateToPage(): Promise<void> {
-    await this._router.navigate(['/person', this.data.id]);
+    if (this.data && this.data.id) {
+      await this._router.navigate(['/person', this.data.id]);
+    }
   }
 
   public async onEditUserRoles() {
@@ -107,8 +116,9 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       pageContainer.list = items;
       return pageContainer;
     };
-    componentInstance.onSave = async selectedItems => {
+    componentInstance.onSave = async (selectedItems: UserRole[]) => {
       this.userRoles = selectedItems;
+      this.hasUserRoleAthlete = selectedItems.find(x => x.userRoleEnum === UserRoleEnum.ATHLETE) != null;
       ref.dismiss();
     };
     await componentInstance.initialize(this.userRoles);
@@ -149,5 +159,33 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     };
     await componentInstance.initialize(this.groups);
   }
+
+  public onEditGroupPerson = async () => {
+    if (!this.groups || !this.groups.length) {
+      return;
+    }
+    // TODO: Get GroupPerson by groupId and personId
+    const groupPerson = null;
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EditGroupPersonComponent, async component => {
+      await component.initialize(groupPerson);
+
+      modal.componentInstance.splitButtonItems = [{
+        nameKey: 'save',
+        callback: async () => {
+          await this._ngxModalService.save(modal, component);
+        }
+      }];
+    });
+  };
+
+  public onEditRank = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(RanksComponent, async component => {
+      component.personId = this.data.id;
+    });
+  };
 
 }
