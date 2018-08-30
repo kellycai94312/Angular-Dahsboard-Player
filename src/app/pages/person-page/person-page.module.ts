@@ -72,6 +72,8 @@ import {EditPersonStageComponent} from './component/edit-person-stage/edit-perso
 import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
 import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
 import {EditPersonComponent} from './component/edit-person/edit-person.component';
+import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 
 @NgModule({
   imports: [
@@ -108,7 +110,8 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     NamedObjectItemModule,
     NgxSplitButtonModule,
     NgxButtonGroupModule,
-    DxNumberBoxModule
+    DxNumberBoxModule,
+    NgxGridModule
   ],
   declarations: [
     PersonPageComponent,
@@ -142,7 +145,8 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     EditPersonStageComponent,
     MedicalExaminationsComponent,
     EditMedicalExaminationComponent,
-    EditPersonComponent
+    EditPersonComponent,
+    EditRankComponent
   ],
   providers: [
     PersonService,
@@ -160,7 +164,9 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
     ContactEnableModalComponent,
     EditPersonStageComponent,
     EditMedicalExaminationComponent,
-    EditPersonComponent
+    EditPersonComponent,
+    EditRankComponent,
+    RanksComponent
   ]
 })
 export class PersonPageModule {

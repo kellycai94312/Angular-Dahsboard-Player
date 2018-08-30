@@ -1,11 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PersonService} from '../person.service';
 import {PersonRank} from '../../../../data/remote/model/person-rank';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {RankModalComponent} from './rank-modal/rank-modal.component';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditRankComponent} from '../../component/edit-rank/edit-rank.component';
 
 @Component({
   selector: 'app-ranks',
@@ -14,41 +17,62 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 })
 export class RanksComponent implements OnInit {
 
-  public isEditAllow: boolean;
+  @Input()
+  public personId: number;
 
-  public personRanks: PersonRank[];
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
+  public readonly propertyConstant = PropertyConstant;
+  public canEdit: boolean;
 
   constructor(private _personService: PersonService,
               private _authorizationService: AuthorizationService,
               private _participantRestApiService: ParticipantRestApiService,
-              private _modalService: NgbModal) {
+              private _appHelper: AppHelper,
+              private _ngxModalService: NgxModalService) {
+    this.personId = this.personId || this._personService.personViewModel.data.id;
   }
 
   async ngOnInit() {
-    this.isEditAllow = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
-    this.personRanks = await this._participantRestApiService.getRanks({personId: this._personService.personViewModel.data.id});
+    this.canEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
   }
 
-  public async editRank(index: number) {
-    const ref = this._modalService.open(RankModalComponent, {size: 'lg'});
-    ref.componentInstance.personRank = Object.assign({}, this.personRanks[index]);
-    ref.componentInstance.onSave = async (newPersonRank: PersonRank) => {
-      await this._participantRestApiService.updateRank(newPersonRank, {}, {personId: this._personService.personViewModel.data.id, rankId: newPersonRank.rank.id});
-      this.personRanks[index] = newPersonRank;
-      ref.dismiss();
-    };
-  }
+  public fetchItems = async () => {
+    return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getRanks({personId: this.personId}));
+  };
 
-  public async removeRank(index: number) {
-    await this._participantRestApiService.removeRank({personId: this._personService.personViewModel.data.id, rankId: this.personRanks[index].rank.id});
-    this.clearPersonRank(this.personRanks[index]);
-  }
+  public onEdit = async (obj: PersonRank) => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EditRankComponent, async component => {
+      component.rankId = obj.rank.id;
+      component.personId = this.personId;
+      await component.initialize(this._appHelper.cloneObject(obj));
+      modal.componentInstance.splitButtonItems = [
+        {
+          default: true,
+          nameKey: 'save',
+          callback: async () => {
+            if (await this._ngxModalService.save(modal, component)) {
+              await this.resetItems();
+            }
+          }
+        },
+        {
+          nameKey: 'remove',
+          callback: async () => {
+            if (await this._ngxModalService.remove(modal, component)) {
+              await this.resetItems();
+            }
+          }
+        }
+      ];
+    });
+  };
 
-  private clearPersonRank(personRank: PersonRank) {
-    personRank.assignee = null;
-    personRank.date = null;
-    personRank.orderNumber = null;
-    personRank.certificateNumber = null;
+  private async resetItems(): Promise<void> {
+    await this.ngxGridComponent.reset();
   }
 
 }

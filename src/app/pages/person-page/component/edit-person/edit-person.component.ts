@@ -22,6 +22,7 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditGroupPersonComponent} from '../../../groups/component/edit-group-person/edit-group-person.component';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {RanksComponent} from '../../person-page/ranks/ranks.component';
 
 @Component({
   selector: 'app-edit-person',
@@ -180,7 +181,11 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   };
 
   public onEditRank = async () => {
-
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(RanksComponent, async component => {
+      component.personId = this.data.id;
+    });
   };
 
 }
