@@ -1,31 +1,37 @@
-<table class="table table-bordered table-hover">
-  <thead>
-  <tr class="d-flex">
-    <th class="col">{{'name'| translate}}</th>
-    <th class="col">{{'duration'| translate}}</th>
-    <th class="col">{{'joinDate'| translate}}</th>
-    <th class="col">{{'number'| translate}}</th>
-    <th class="col">{{'document'| translate}}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr class="d-flex"
-      *ngFor="let item of personStageSportTypes"
-      (dblclick)="onEdit($event,item)">
-    <td class="col">
-      {{ item.data.stage.name}}
-    </td>
-    <td class="col">
-      {{item.data?.duration}}
-    </td>
-    <td class="col">
-      {{item.data?.assignDate | date: propertyConstant.dateFormat}}
-    <td class="col">
-      {{item.document?.number}}
-    </td>
-    <td class="col">
-      <a *ngIf="item.document"
-         [href]="getDocumentUrl(item.document)">{{item.document?.resource?.name}}</a></td>
-  </tr>
-  </tbody>
-</table>
+<ngx-grid [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [canEdit]="canEdit"
+          [enabledAdd]="false">
+  <ngx-column nameKey="name"
+              [templateRef]="nameTemplate"></ngx-column>
+  <ngx-column nameKey="duration"
+              [templateRef]="durationTemplate"></ngx-column>
+  <ngx-column nameKey="joinDate"
+              [templateRef]="joinDateTemplate"></ngx-column>
+  <ngx-column nameKey="leaveDate"
+              [templateRef]="leaveDateTemplate"></ngx-column>
+  <ngx-column nameKey="number"
+              [templateRef]="numberTemplate"></ngx-column>
+  <ngx-column nameKey="document"
+              [templateRef]="documentTemplate"></ngx-column>
+
+  <ng-template #nameTemplate let-item>
+    {{item.data.groupPerson?.group?.stage.name}}
+  </ng-template>
+  <ng-template #durationTemplate let-item>
+    {{item.data?.duration}}
+  </ng-template>
+  <ng-template #joinDateTemplate let-item>
+    {{item.data?.joinDate}}
+  </ng-template>
+  <ng-template #leaveDateTemplate let-item>
+    {{item.data?.leaveDate}}
+  </ng-template>
+  <ng-template #numberTemplate let-item>
+    {{item.document?.number}}
+  </ng-template>
+  <ng-template #documentTemplate let-item>
+    <a *ngIf="item.document"
+       [href]="getDocumentUrl(item.document)">{{item.document?.resource?.name}}</a>
+  </ng-template>
+</ngx-grid>

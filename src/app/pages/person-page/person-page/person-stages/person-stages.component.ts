@@ -1,15 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PersonService} from '../person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
-import {PersonStageSportTypeViewModel} from '../../../../data/local/view-model/stage/person-stage-sport-type-view-model';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditPersonStageComponent} from '../../component/edit-person-stage/edit-person-stage.component';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AuthorizationService} from '../../../../shared/authorization.service';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {PublicUserRoleViewModel} from '../../../../data/local/view-model/person/public-user-role-view-model';
 
 @Component({
   selector: 'app-person-stages',
@@ -20,9 +21,12 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstant = PropertyConstant;
 
-  public personStageSportTypes: PersonStageSportTypeViewModel[];
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
+  public canEdit: boolean;
+
   private _sportTypeSubscription: ISubscription;
-  private _allowEdit: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
@@ -33,7 +37,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     await this.initialize();
-    this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
+    this.canEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
 
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
       await this.initialize();
@@ -46,25 +50,12 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
 
   public async initialize() {
     await this._appHelper.tryLoad(async () => {
-      if (this._personService.personViewModel.data && this._personService.selectedSportType) {
-        const items = await this._participantRestApiService.getPersonStageSportTypes({
-          personId: this._personService.personViewModel.data.id,
-          sportTypeId: this._personService.selectedSportType.id
-        });
-
-        this.personStageSportTypes = await Promise.all(items.map(async value => {
-          const viewModel = new PersonStageSportTypeViewModel(value);
-          await viewModel.initialize();
-          return viewModel;
-        }));
-      } else {
-        this.personStageSportTypes = [];
-      }
+      await this.resetItems();
     });
   }
 
-  public onEdit = async (e: any, parameter: PersonStageSportTypeViewModel) => {
-    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this._allowEdit) {
+  public onEdit = async (parameter: PublicUserRoleViewModel) => {
+    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this.canEdit) {
       return;
     }
     const modal = this._ngxModalService.open();
@@ -95,8 +86,25 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
     });
   };
 
+  public fetchItems = async () => {
+    const items = await this._participantRestApiService.getPublicUserRoles({}, {
+      sportTypeId: this._personService.selectedSportType.id,
+      userRoleId: this._personService.selectedUserRole.id
+    }, {personId: this._personService.personViewModel.data.id});
+
+    return this._appHelper.arrayToPageContainer(await Promise.all(items.map(async value => {
+      const viewModel = new PublicUserRoleViewModel(value);
+      await viewModel.initialize();
+      return viewModel;
+    })));
+  };
+
   public getDocumentUrl(item: Document) {
     return this._participantRestApiService.getDocument(item.id);
+  }
+
+  private async resetItems(): Promise<void> {
+    await this.ngxGridComponent.reset();
   }
 
 }

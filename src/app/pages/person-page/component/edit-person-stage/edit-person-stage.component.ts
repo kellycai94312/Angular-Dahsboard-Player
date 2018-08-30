@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {PersonStageSportType} from '../../../../data/remote/model/stage/person-stage-sport-type';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -9,13 +8,15 @@ import {EditDocumentComponent} from '../../../groups/component/edit-document/edi
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PersonService} from '../../person-page/person.service';
+import {PublicUserRole} from '../../../../data/remote/model/group/public-user-role';
 
 @Component({
   selector: 'app-edit-person-stage',
   templateUrl: './edit-person-stage.component.html',
   styleUrls: ['./edit-person-stage.component.scss']
 })
-export class EditPersonStageComponent extends BaseEditComponent<PersonStageSportType> {
+// TODO: Use PublicUserRole without any type
+export class EditPersonStageComponent extends BaseEditComponent<any> {
 
   public readonly propertyConstant = PropertyConstant;
 
@@ -32,16 +33,16 @@ export class EditPersonStageComponent extends BaseEditComponent<PersonStageSport
               private _personService: PersonService) {
     super(participantRestApiService, appHelper);
     this._document = new Document();
-    this._document.clazz = FileClass.PERSON_STAGE_SPORT_TYPE;
+    this._document.clazz = FileClass.PUBLIC_USER_ROLE;
   }
 
-  public async initialize(obj: PersonStageSportType): Promise<boolean> {
+  public async initialize(obj: PublicUserRole): Promise<boolean> {
     await super.initialize(obj);
     this._document.objectId = this.data.id;
 
     return this.appHelper.tryLoad(async () => {
       if (this.data && this.data.id) {
-        const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON_STAGE_SPORT_TYPE, objectId: this.data.id, count: 1});
+        const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.PUBLIC_USER_ROLE, objectId: this.data.id, count: 1});
         if (documents.list.length) {
           this._document = documents.list[0];
         }
@@ -51,8 +52,9 @@ export class EditPersonStageComponent extends BaseEditComponent<PersonStageSport
 
   public async onSave(): Promise<boolean> {
     return this.appHelper.trySave(async () => {
-      this.data.assignDate = this.appHelper.dateByFormat(this.data.assignDate, PropertyConstant.dateTimeServerFormat);
-      this.data = await this.participantRestApiService.updatePersonStageSportType(this.data, {}, {personId: this.personId, sportTypeId: this.sportTypeId});
+      this.data.joinDate = this.appHelper.dateByFormat(this.data.joinDate, PropertyConstant.dateTimeServerFormat);
+      this.data.leaveDate = this.appHelper.dateByFormat(this.data.leaveDate, PropertyConstant.dateTimeServerFormat);
+      this.data = await this.participantRestApiService.updatePublicUserRole(this.data, {}, {personId: this.personId, publicUserRoleId: this.data.id});
       this._document.objectId = this.data.id;
       await this._personService.refreshCurrentPersonStage();
     });
