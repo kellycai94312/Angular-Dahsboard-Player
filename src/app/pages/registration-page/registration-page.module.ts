@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {DxButtonModule, DxDateBoxModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule,} from 'devextreme-angular';
-
 import {RegistrationPageComponent} from './registration-page.component';
 import {RegistrationPersonPageComponent} from './registration-person-page/registration-person-page.component';
 import {RegistrationPageRoutingModule} from './registration-page-routing.module';
@@ -11,6 +10,7 @@ import {RegistrationVerificationPageComponent} from './registration-verification
 import {BusyIndicatorModule} from '../../components/busy-indicator/busy-indicator.module';
 import {RegistrationPersonEnableComponent} from './registration-person-enable/registration-person-enable.component';
 import {PasswordSetModule} from '../../components/password-set/password-set.module';
+import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 
 @NgModule({
   imports: [
@@ -24,7 +24,8 @@ import {PasswordSetModule} from '../../components/password-set/password-set.modu
     LocaleModule,
     BusyIndicatorModule,
     PasswordSetModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    BusyButtonModule
   ],
   declarations: [
     RegistrationPageComponent,
