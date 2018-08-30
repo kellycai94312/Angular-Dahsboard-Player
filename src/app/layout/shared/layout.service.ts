@@ -7,15 +7,14 @@ import 'rxjs/add/observable/of';
 @Injectable()
 export class LayoutService implements CanActivate {
 
-  public hidden: Subject<boolean>;
+  public readonly hidden: Subject<boolean>;
+  public readonly dark: Subject<boolean>;
+
   private hiddenRoutes: string[] = ['login', 'registration', 'password', 'not-found'];
 
   constructor() {
-    this.hidden = <Subject<boolean>>new Subject();
-  }
-
-  get displayLayout(): Observable<boolean> {
-    return this.hidden.asObservable();
+    this.hidden = new Subject<boolean>();
+    this.dark = new Subject<boolean>();
   }
 
   toggleLayout(urlPath: string) {
