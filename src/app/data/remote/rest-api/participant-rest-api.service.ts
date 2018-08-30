@@ -91,6 +91,7 @@ import {StageStandard} from '../model/stage/stage-standard';
 import {Stage} from '../model/stage/stage';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {StageType} from '../model/stage/stage-type';
+import {AthleteState} from '../model/person/athlete-state';
 
 @Injectable()
 @RestParams({
@@ -654,6 +655,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/currentGroupPerson',
   })
   getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}',
+  })
+  getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -1436,6 +1443,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/stageType/{!stageTypeId}/shortName'
   })
   updateStageTypeShortName: IRestMethodStrict<StringWrapper, any, { stageTypeId: number }, StageType>;
+
+  //#endregion
+
+  //#region AthleteState
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/athleteState'
+  })
+  getAthleteStates: IRestMethod<void, AthleteState[]>;
 
   //#endregion
 
