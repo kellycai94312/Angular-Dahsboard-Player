@@ -377,5 +377,7 @@
   "sportsTrainingStage": "Этап спортивной подготовки",
   "shortName": "Сокращенное имя",
   "stageType": "Тип этапа",
-  "yearPreparation": "Год подготовки"
+  "yearPreparation": "Год подготовки",
+  "editGroupPerson": "Редактировать пользователя группы",
+  "editRank": "Редактировать ранг"
 }

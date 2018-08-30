@@ -82,7 +82,8 @@ import {EditGroupComponent} from './component/edit-group/edit-group.component';
     DxNumberBoxModule
   ],
   exports: [
-    GroupComponent
+    GroupComponent,
+    EditGroupPersonComponent
   ],
   providers: [
     LayoutService,

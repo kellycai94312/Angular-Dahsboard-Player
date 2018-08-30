@@ -193,7 +193,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
         {
           nameKey: 'save',
           callback: async () => {
-            if (await this._ngxModalService.save(modal, component)) {
+            if (await this._ngxModalService.save(modal, component, !this._appHelper.isNewObject(component.data))) {
               await component.navigateToPage();
             }
           }
