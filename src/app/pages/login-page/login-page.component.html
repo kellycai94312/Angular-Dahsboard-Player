@@ -5,7 +5,8 @@
   <div class="mb-auto">
     <div class="m-2 form"
          (keyup.enter)="busyButton.onKeyUp($event)">
-      <img src="/assets/img/athlete-readiness-logo.png" alt="">
+      <img src="/assets/img/athlete-readiness-logo.png"
+           [width]="230">
       <dx-text-box placeholder="{{'login.enterEmailOrPhoneNumber' | translate}}"
                    [(value)]="auth.email"
                    [showClearButton]="true">
@@ -27,14 +28,11 @@
                        checkPressedEnter="true"
                        nameKey="login.signIn"></app-busy-button>
       <div class="mt-2 text-center">
-        <p
-          *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL&& environment.type!== environmentType.SAINT_PETERSBURG">
-          {{'registration.notRegistered'| translate}}
-          <a routerLink="/registration"
-             routerLinkActive="active">{{'registration.signUp' | translate}}</a>
-        </p>
-        <a routerLink="/password/reset"
-           routerLinkActive="active">{{'login.forgotYourPassword' | translate}}</a>
+        <u
+          *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL && environment.type!== environmentType.SAINT_PETERSBURG"><a
+          routerLink="/registration"
+          class="mr-5">{{'registration.signUp' | translate}}</a></u>
+        <u><a routerLink="/password/reset">{{'login.forgotYourPassword' | translate}}</a></u>
       </div>
     </div>
   </div>

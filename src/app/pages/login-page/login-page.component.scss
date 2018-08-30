@@ -1,1 +1,8 @@
 @import "../form-center";
+
+a {
+  color: #bbb;
+  &:hover {
+    color: #ddd;
+  }
+}

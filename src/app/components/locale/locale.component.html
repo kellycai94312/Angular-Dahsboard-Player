@@ -1,9 +1,11 @@
-<p>{{'chooseLanguage'| translate}}
-  <select (change)="onItemChange($event.target.value)">
-    <option *ngFor="let lang of translate.getLangs()"
-            [value]="lang"
-            [selected]="lang === translate.currentLang">
-      {{ lang }}
-    </option>
-  </select>
-</p>
+<p class="text-white">{{'chooseLanguage'| translate}}</p>
+<div class="d-flex flex-row justify-content-center">
+  <div *ngFor="let item of translate.getLangs(); let i = index"
+       class="d-flex flex-row justify-content-center">
+    <p class="text-uppercase text-white"><span *ngIf="i!=0 && i!=translate.getLangs().length"
+                                               class="mx-2">/</span>
+      <a [ngClass]="{'text-danger':item === translate.currentLang}"
+         (click)="onItemChange(item)">{{item}}</a>
+    </p>
+  </div>
+</div>
