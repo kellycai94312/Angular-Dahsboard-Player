@@ -47,7 +47,6 @@ import {MyRegionService} from './person-page/my-region/my-region.service';
 import {NoteModalComponent} from './person-page/my-region/note-modal/note-modal.component';
 import {AchievementsComponent} from './person-page/achievements/achievements.component';
 import {RanksComponent} from './person-page/ranks/ranks.component';
-import {RankModalComponent} from './person-page/ranks/rank-modal/rank-modal.component';
 import {MeasureInputModule} from '../../components/measure-input/measure-input.module';
 import {AnthropometryHistoryComponent} from './person-page/anthropometry-history/anthropometry-history.component';
 import {TestsResultsHistoryComponent} from './person-page/tests-results-history/tests-results-history.component';
@@ -132,7 +131,6 @@ import {EditRankComponent} from './component/edit-rank/edit-rank.component';
     AgentNoteComponent,
     NoteModalComponent,
     RanksComponent,
-    RankModalComponent,
     TestsResultsHistoryComponent,
     AnthropometryHistoryComponent,
     RefereeCategoriesComponent,
@@ -159,7 +157,6 @@ import {EditRankComponent} from './component/edit-rank/edit-rank.component';
     ModalSelectPageComponent,
     EventModalComponent,
     NoteModalComponent,
-    RankModalComponent,
     RefereeCategoryModalComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
