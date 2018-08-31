@@ -22,10 +22,10 @@
     {{item.data?.duration}}
   </ng-template>
   <ng-template #joinDateTemplate let-item>
-    {{item.data?.joinDate}}
+    {{item.data?.joinDate | date:propertyConstant.dateFormat}}
   </ng-template>
   <ng-template #leaveDateTemplate let-item>
-    {{item.data?.leaveDate}}
+    {{item.data?.leaveDate| date:propertyConstant.dateFormat}}
   </ng-template>
   <ng-template #numberTemplate let-item>
     {{item.document?.number}}
