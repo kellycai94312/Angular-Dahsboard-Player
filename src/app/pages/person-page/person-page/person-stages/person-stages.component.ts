@@ -55,7 +55,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   }
 
   public onEdit = async (parameter: PublicUserRoleViewModel) => {
-    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this.canEdit) {
+    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this.canEdit || !parameter.data.id) {
       return;
     }
     const modal = this._ngxModalService.open();
