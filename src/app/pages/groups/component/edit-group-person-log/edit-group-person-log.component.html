@@ -7,7 +7,7 @@
                    type="date"
                    placeholder="{{'from' | translate}}"
                    showClearButton="true"
-                   [displayFormat]="dateFormat">
+                   [displayFormat]="propertyConstant.dateFormat">
       </dx-date-box>
     </div>
     <div class="col">
@@ -16,34 +16,34 @@
                    type="date"
                    placeholder="{{'to' | translate}}"
                    showClearButton="true"
-                   [displayFormat]="dateFormat">
+                   [displayFormat]="propertyConstant.dateFormat">
       </dx-date-box>
     </div>
     <div class="col-auto">
       <app-busy-button icon="fa fa-plus"
-                       [click]="onSave"
+                       [click]="onAdd"
                        [disabled]="disabledSaveButton">
       </app-busy-button>
     </div>
   </div>
 </div>
 
-<table class="table table-bordered table-hover table-sm mt-2">
-  <thead>
-  <tr class="d-flex">
-    <th class="col">{{ 'joinDate' | translate }}</th>
-    <th class="col">{{ 'leaveDate' | translate }}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <ngx-virtual-scroll [query]="pageQuery"
-                      [getItems]="getItems">
-    <ng-template let-item>
-      <tr class="d-flex">
-        <td class="col">{{item.joinDate | date:dateFormat}}</td>
-        <td class="col">{{item.leaveDate | date:dateFormat}}</td>
-      </tr>
-    </ng-template>
-  </ngx-virtual-scroll>
-  </tbody>
-</table>
+<ngx-grid class="mt-2"
+          [fetchItems]="fetchItems">
+  <ngx-column nameKey="joinDate"
+              [templateRef]="joinDateTemplate"></ngx-column>
+  <ngx-column nameKey="leaveDate"
+              [templateRef]="leaveDateTemplate"></ngx-column>
+  <ngx-column nameKey="document"
+              [templateRef]="documentTemplate"></ngx-column>
+
+  <ng-template #joinDateTemplate let-item>
+    {{item.joinDate | date:propertyConstant.dateFormat}}
+  </ng-template>
+  <ng-template #leaveDateTemplate let-item>
+    {{item.leaveDate | date:propertyConstant.dateFormat}}
+  </ng-template>
+  <ng-template #documentTemplate let-item>
+
+  </ng-template>
+</ngx-grid>

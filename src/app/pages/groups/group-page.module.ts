@@ -52,6 +52,7 @@ import {EditGroupConnectionComponent} from './component/edit-group-connection/ed
 import {EditDocumentComponent} from './component/edit-document/edit-document.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {EditGroupComponent} from './component/edit-group/edit-group.component';
+import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 
 @NgModule({
   imports: [
@@ -79,7 +80,8 @@ import {EditGroupComponent} from './component/edit-group/edit-group.component';
     NgxModalModule,
     HtmlContentModule,
     NgxSplitButtonModule,
-    DxNumberBoxModule
+    DxNumberBoxModule,
+    NgxGridModule
   ],
   exports: [
     GroupComponent,
