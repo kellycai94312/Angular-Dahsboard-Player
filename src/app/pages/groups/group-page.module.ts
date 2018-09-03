@@ -53,6 +53,8 @@ import {EditDocumentComponent} from './component/edit-document/edit-document.com
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {EditGroupComponent} from './component/edit-group/edit-group.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {FileModule} from '../../components/file/file.module';
+import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/edit-group-person-logs.component';
 
 @NgModule({
   imports: [
@@ -81,7 +83,8 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
     HtmlContentModule,
     NgxSplitButtonModule,
     DxNumberBoxModule,
-    NgxGridModule
+    NgxGridModule,
+    FileModule
   ],
   exports: [
     GroupComponent,
@@ -113,17 +116,19 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
     TableGroupConnectionComponent,
     EditGroupConnectionComponent,
     EditDocumentComponent,
-    EditGroupComponent
+    EditGroupComponent,
+    EditGroupPersonLogsComponent
   ],
   entryComponents: [
     GroupComponent,
     ModalSelectPageComponent,
     GroupEventModalComponent,
     EditGroupPersonComponent,
-    EditGroupPersonLogComponent,
     EditGroupConnectionComponent,
     EditDocumentComponent,
-    EditGroupComponent
+    EditGroupComponent,
+    EditGroupPersonLogComponent,
+    EditGroupPersonLogsComponent
   ]
 })
 export class GroupPageModule {

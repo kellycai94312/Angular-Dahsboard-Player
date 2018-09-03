@@ -1,49 +1,41 @@
-<div *ngIf="currentGroupPersonLog">
-  <label class="mt-2">{{'stayInterval' | translate}}</label>
-  <div class="row cols-padding">
-    <div class="col">
-      <dx-date-box class="w-100"
-                   [(value)]="currentGroupPersonLog.joinDate"
-                   type="date"
-                   placeholder="{{'from' | translate}}"
-                   showClearButton="true"
-                   [displayFormat]="propertyConstant.dateFormat">
-      </dx-date-box>
-    </div>
-    <div class="col">
-      <dx-date-box class="w-100"
-                   [(value)]="currentGroupPersonLog.leaveDate"
-                   type="date"
-                   placeholder="{{'to' | translate}}"
-                   showClearButton="true"
-                   [displayFormat]="propertyConstant.dateFormat">
-      </dx-date-box>
-    </div>
-    <div class="col-auto">
-      <app-busy-button icon="fa fa-plus"
-                       [click]="onAdd"
-                       [disabled]="disabledSaveButton">
-      </app-busy-button>
-    </div>
+<label class="mt-2">{{'stayInterval' | translate}}</label>
+<div class="row cols-padding">
+  <div class="col">
+    <dx-date-box class="w-100"
+                 [(value)]="data.joinDate"
+                 type="date"
+                 placeholder="{{'from' | translate}}"
+                 showClearButton="true"
+                 [displayFormat]="propertyConstant.dateFormat">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 [(value)]="data.leaveDate"
+                 type="date"
+                 placeholder="{{'to' | translate}}"
+                 showClearButton="true"
+                 [displayFormat]="propertyConstant.dateFormat">
+    </dx-date-box>
   </div>
 </div>
 
-<ngx-grid class="mt-2"
-          [fetchItems]="fetchItems">
-  <ngx-column nameKey="joinDate"
-              [templateRef]="joinDateTemplate"></ngx-column>
-  <ngx-column nameKey="leaveDate"
-              [templateRef]="leaveDateTemplate"></ngx-column>
-  <ngx-column nameKey="document"
-              [templateRef]="documentTemplate"></ngx-column>
+<label class="mt-2">{{'comment' | translate}}</label>
+<dx-text-area class="w-100"
+              [(value)]="data.comment"
+              [maxLength]="4096"
+              [height]="150"></dx-text-area>
 
-  <ng-template #joinDateTemplate let-item>
-    {{item.joinDate | date:propertyConstant.dateFormat}}
-  </ng-template>
-  <ng-template #leaveDateTemplate let-item>
-    {{item.leaveDate | date:propertyConstant.dateFormat}}
-  </ng-template>
-  <ng-template #documentTemplate let-item>
+<div [hidden]="!data.id">
+  <app-files class="mt-2"
+             [fileClass]="fileClass.GROUP_PERSON_LOG"
+             [objectId]="data.id"
+             [type]="viewType.TABLE"
+             [add]="onAdd"
+             [edit]="onEdit"
+             [canEdit]="canEdit"
+             [enabledAdd]="true"></app-files>
+</div>
 
-  </ng-template>
-</ngx-grid>
+<p *ngIf="!data.id"
+   class="mt-2">{{'youShouldSaveThisStateForNextStepsOrBeCancelingChanges' | translate}}</p>

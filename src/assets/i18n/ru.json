@@ -381,5 +381,6 @@
   "editGroupPerson": "Редактировать пользователя группы",
   "editRank": "Редактировать ранг",
   "athleteState": "Состояние спортсмена",
-  "weAreInSocialNetworksJoinNow": "Мы в соцсетях. Присоединяйтесь!"
+  "weAreInSocialNetworksJoinNow": "Мы в соцсетях. Присоединяйтесь!",
+  "comment": "Комментарий"
 }

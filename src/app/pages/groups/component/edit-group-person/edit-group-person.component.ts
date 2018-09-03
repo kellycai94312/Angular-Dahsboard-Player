@@ -11,9 +11,9 @@ import {Person} from '../../../../data/remote/model/person';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -142,10 +142,16 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   public onEditGroupPersonLog = async () => {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
-
-    await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
+    await modal.componentInstance.initializeBody(EditGroupPersonLogsComponent, async component => {
       component.manualInitialization = true;
       await component.initialize(this.data);
+
+      modal.componentInstance.splitButtonItems = [{
+        nameKey: 'add',
+        callback: async () => {
+          await component.onAdd();
+        }
+      }];
     });
   };
 

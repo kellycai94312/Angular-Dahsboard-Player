@@ -1,54 +1,63 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {GroupPersonLog} from '../../../../data/remote/model/group/group-person-log';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {AppHelper} from '../../../../utils/app-helper';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {ViewType} from '../../../../data/local/view-type';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {Document} from '../../../../data/remote/model/file/document/document';
+import {EditDocumentComponent} from '../edit-document/edit-document.component';
+import {FilesComponent} from '../../../../components/file/files/files.component';
 
 @Component({
   selector: 'app-edit-group-person-log',
   templateUrl: './edit-group-person-log.component.html',
   styleUrls: ['./edit-group-person-log.component.scss']
 })
-export class EditGroupPersonLogComponent extends BaseEditComponent<GroupPerson> {
+export class EditGroupPersonLogComponent extends BaseEditComponent<GroupPersonLog> {
 
   public readonly propertyConstant = PropertyConstant;
+  public readonly fileClass = FileClass;
+  public readonly viewType = ViewType;
 
-  @ViewChild(NgxGridComponent)
-  public ngxGridComponent: NgxGridComponent;
+  @ViewChild(FilesComponent)
+  public filesComponent: FilesComponent;
+
+  @Input()
+  public groupId: number;
+
+  @Input()
+  public personId: number;
 
   public pageQuery: PageQuery;
-  public currentGroupPersonLog: GroupPersonLog;
+  public canEdit: boolean;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+              private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
-    this.currentGroupPersonLog = new GroupPersonLog();
+    // TODO: Use validations
+    this.canEdit = true;
   }
 
-  async initialize(obj: GroupPerson): Promise<boolean> {
+  async initialize(obj: GroupPersonLog): Promise<boolean> {
+    await super.initialize(obj);
     return await this.appHelper.tryLoad(async () => {
-      await super.initialize(obj);
-      await this.updateItems();
+      await this.resetItems();
     });
   }
 
-  public fetchItems: Function = async (pageQuery: PageQuery) => {
-    const pageContainer = await this.participantRestApiService.getGroupPersonLogs({}, pageQuery, {groupId: this.data.group.id, personId: this.data.person.id});
-    if (this.appHelper.isNewObject(this.currentGroupPersonLog) && pageContainer.list.length) {
-      this.currentGroupPersonLog = this.appHelper.cloneObject(pageContainer.list.find(x => this.appHelper.isUndefinedOrNull(x.leaveDate)) || new GroupPersonLog());
-    }
-    return pageContainer;
-  };
-
-  public disabledSaveButton = (): boolean => {
-    return this.appHelper.isUndefinedOrNull(this.currentGroupPersonLog.joinDate);
-  };
-
   public onAdd = async () => {
-    await this.onSave();
+    const document = new Document();
+    document.objectId = this.data.id;
+    document.clazz = <any>FileClass[FileClass.GROUP_PERSON_LOG];
+    await this.showModal(document);
+  };
+
+  public onEdit = async (obj: Document) => {
+    await this.showModal(obj);
   };
 
   async onRemove(): Promise<boolean> {
@@ -56,38 +65,60 @@ export class EditGroupPersonLogComponent extends BaseEditComponent<GroupPerson> 
   }
 
   async onSave(): Promise<boolean> {
-    return await this.appHelper.trySave(async () => {
-      let groupPersonLog: GroupPersonLog = this.appHelper.cloneObject(this.currentGroupPersonLog);
-      groupPersonLog.joinDate = this.appHelper.getGmtDate(groupPersonLog.joinDate);
-      groupPersonLog.leaveDate = this.appHelper.getGmtDate(groupPersonLog.leaveDate);
+    return this.appHelper.trySave(async () => {
+      this.data.joinDate = this.appHelper.getGmtDate(this.data.joinDate);
+      this.data.leaveDate = this.appHelper.getGmtDate(this.data.leaveDate);
 
-      if (this.appHelper.isNewObject(groupPersonLog)) {
-        groupPersonLog = await this.participantRestApiService.createGroupPersonLog(groupPersonLog, {}, {
-          groupId: this.data.group.id,
-          personId: this.data.person.id
+      if (this.appHelper.isNewObject(this.data)) {
+        this.data = await this.participantRestApiService.createGroupPersonLog(this.data, {}, {
+          groupId: this.groupId,
+          personId: this.personId
         });
       } else {
-        groupPersonLog = await this.participantRestApiService.updateGroupPersonLog(groupPersonLog, {}, {
-          groupId: this.data.group.id,
-          personId: this.data.person.id,
-          groupPersonLogId: groupPersonLog.id
+        this.data = await this.participantRestApiService.updateGroupPersonLog(this.data, {}, {
+          groupId: this.groupId,
+          personId: this.personId,
+          groupPersonLogId: this.data.id
         });
       }
-
-      if (groupPersonLog.leaveDate && groupPersonLog.joinDate) {
-        this.currentGroupPersonLog = new GroupPersonLog();
-      } else {
-        this.currentGroupPersonLog = groupPersonLog;
-      }
-
-      await this.updateItems();
     });
   }
 
-  private async updateItems() {
+  private async resetItems() {
     // TODO: Without setTimeout or promise delay not working in other components
     await this.appHelper.delay();
-    await this.ngxGridComponent.reset();
+    await this.filesComponent.reset();
+  }
+
+  private async showModal(obj: Document) {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+
+    await  modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
+      await component.initialize(this.appHelper.cloneObject(obj));
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'save',
+          default: true,
+          callback: async () => {
+            await this._ngxModalService.save(modal, component);
+          },
+        },
+        {
+          nameKey: 'remove',
+          callback: async () => {
+            await this._ngxModalService.remove(modal, component);
+          },
+        }
+      ];
+    });
+
+    // TODO: Use optimized algorithm for update objects
+    modal.result.then(async x => {
+      await this.resetItems();
+    }, async reason => {
+      await this.resetItems();
+    });
   }
 
 }
