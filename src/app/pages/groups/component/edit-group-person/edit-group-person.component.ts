@@ -146,6 +146,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
             nameKey: 'remove',
             callback: async () => {
               await this.appHelper.tryRemove(async () => {
+                await this.participantRestApiService.updateGroupPersonLog(component.data, {}, {groupId: this.data.group.id, personId: this.data.person.id, groupPersonLogId: component.data.id});
                 await this.participantRestApiService.deleteApprovePersonInGroup({
                   id: this.data.group.id,
                   personId: this.data.person.id
