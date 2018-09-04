@@ -126,7 +126,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public async addGroup() {
-    await this._participantRestApiService.createPublicRole(this.newGroup.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.selectedPublicUserRole.id});
+    await this._participantRestApiService.createPublicRole(this.newGroup.group, {userRoleId: this.selectedPublicUserRole.id}, {personId: this._personService.personViewModel.data.id});
     this.ngxVirtualScrollComponent.items.push(this.newGroup);
     this.newGroup = null;
   }

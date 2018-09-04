@@ -84,13 +84,14 @@ import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
 import {GroupConnection} from '../model/group/group-connection';
-import {PersonStageSportType} from '../model/stage/person-stage-sport-type';
 import {MedicalExamination} from '../model/person/medical-examination';
 import {StageQuery} from './query/stage-query';
 import {StageStandard} from '../model/stage/stage-standard';
 import {Stage} from '../model/stage/stage';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {StageType} from '../model/stage/stage-type';
+import {AthleteState} from '../model/person/athlete-state';
+import {PublicUserRole} from '../model/group/public-user-role';
 
 @Injectable()
 @RestParams({
@@ -433,15 +434,27 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/{!personId}/role/{!userRoleId}/public',
+    path: '/person/{!personId}/publicUserRole',
   })
-  createPublicRole: IRestMethodStrict<Group, any, { personId: number, userRoleId: number }, void>;
+  createPublicRole: IRestMethodStrict<Group, { userRoleId: number }, { personId: number }, void>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/person/{!personId}/role/{!userRoleId}/public',
+    path: '/person/{!personId}/publicUserRole',
   })
-  removePublicRole: IRestMethodStrict<Group, any, { personId: number, userRoleId: number }, void>;
+  removePublicRole: IRestMethodStrict<Group, { userRoleId: number }, { personId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/publicUserRole',
+  })
+  getPublicUserRoles: IRestMethodStrict<any, { userRoleId: number, sportTypeId: number }, { personId: number }, PublicUserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/person/{!personId}/publicUserRole/{!publicUserRoleId}',
+  })
+  updatePublicUserRole: IRestMethodStrict<PublicUserRole, any, { personId: number, publicUserRoleId: number }, PublicUserRole>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -508,22 +521,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/note/{!id}',
   })
   removeNote: IRestMethod<{ id: number }, void>;
-
-  //#endregion
-
-  //#region PersonStageSportType
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/stage/{!sportTypeId}'
-  })
-  getPersonStageSportTypes: IRestMethod<{ personId: number, sportTypeId: number }, PersonStageSportType[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/person/{!personId}/stage/{!sportTypeId}'
-  })
-  updatePersonStageSportType: IRestMethodStrict<PersonStageSportType, any, { personId: number, sportTypeId: number }, PersonStageSportType>;
 
   //#endregion
 
@@ -654,6 +651,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/currentGroupPerson',
   })
   getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}',
+  })
+  getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -1436,6 +1439,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/stageType/{!stageTypeId}/shortName'
   })
   updateStageTypeShortName: IRestMethodStrict<StringWrapper, any, { stageTypeId: number }, StageType>;
+
+  //#endregion
+
+  //#region AthleteState
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/athleteState'
+  })
+  getAthleteStates: IRestMethod<void, AthleteState[]>;
 
   //#endregion
 

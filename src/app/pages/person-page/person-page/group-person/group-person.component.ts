@@ -58,7 +58,7 @@ export class GroupPersonComponent implements OnInit {
             this.data = null;
           } else {
             if (this.data) {
-              await this._participantRestApiService.removePublicRole(this.data.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+              await this._participantRestApiService.removePublicRole(this.data.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
             }
           }
           this.change.emit(this.data);
@@ -105,10 +105,10 @@ export class GroupPersonComponent implements OnInit {
       this.change.emit(this.data);
     } else {
       if (e.prev) {
-        await this._participantRestApiService.removePublicRole(e.prev.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+        await this._participantRestApiService.removePublicRole(e.prev.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
       }
       if (e.current) {
-        await this._participantRestApiService.createPublicRole(e.current.group, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+        await this._participantRestApiService.createPublicRole(e.current.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
       }
       if (!e.current) {
         this.change.emit(e.prev);

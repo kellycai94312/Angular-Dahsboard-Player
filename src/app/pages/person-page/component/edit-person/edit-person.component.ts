@@ -164,8 +164,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     if (!this.groups || !this.groups.length) {
       return;
     }
-    // TODO: Get GroupPerson by groupId and personId
-    const groupPerson = null;
+
+    const groupPerson = await this.participantRestApiService.getGroupPerson({groupId: this.groups[0].id, personId: this.data.id});
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditGroupPersonComponent, async component => {

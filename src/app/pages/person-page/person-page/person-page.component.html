@@ -26,8 +26,8 @@
           <h4>{{personViewModel.data?.lastName | uppercase}}</h4>
           <h4>{{personViewModel.data?.patronymic | uppercase}}</h4>
           <br>
-          <p *ngIf="personService.selectedPersonStageSportType">{{'stage' | translate}}:
-            {{personService.selectedPersonStageSportType.stage.name}}</p>
+          <p *ngIf="personService.selectedPublicUserRole">{{'stage' | translate}}:
+            {{personService.selectedPublicUserRole?.groupPerson?.group?.stage.name}}</p>
         </div>
       </div>
     </div>

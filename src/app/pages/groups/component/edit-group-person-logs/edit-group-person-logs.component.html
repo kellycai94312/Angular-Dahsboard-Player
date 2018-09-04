@@ -1,0 +1,28 @@
+<ngx-grid [fetchItems]="fetchItems"
+          [canEdit]="canEdit"
+          [edit]="onEdit"
+          [enabledAdd]="false">
+  <ngx-column nameKey="joinDate"
+              [templateRef]="joinDateTemplate"></ngx-column>
+  <ngx-column nameKey="leaveDate"
+              [templateRef]="leaveDateTemplate"></ngx-column>
+  <ngx-column nameKey="comment"
+              [templateRef]="commentTemplate"></ngx-column>
+  <ngx-column nameKey="document"
+              [templateRef]="documentTemplate"></ngx-column>
+
+  <ng-template #joinDateTemplate let-item>
+    {{item.joinDate | date:propertyConstant.dateFormat}}
+  </ng-template>
+  <ng-template #leaveDateTemplate let-item>
+    {{item.leaveDate | date:propertyConstant.dateFormat}}
+  </ng-template>
+  <ng-template #commentTemplate let-item>
+    {{item.comment}}
+  </ng-template>
+  <ng-template #documentTemplate let-item>
+    <app-files [type]="viewType.LIST"
+               [objectId]="item.id"
+               [fileClass]="fileClass.GROUP_PERSON_LOG"></app-files>
+  </ng-template>
+</ngx-grid>

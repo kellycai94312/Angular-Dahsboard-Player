@@ -11,9 +11,10 @@ import {Person} from '../../../../data/remote/model/person';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
+import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -132,20 +133,45 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   public async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
-      await this.participantRestApiService.deleteApprovePersonInGroup({
-        id: this.data.group.id,
-        personId: this.data.person.id
+      const modal = this._ngxModalService.open();
+      modal.componentInstance.titleKey = 'edit';
+
+      await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
+        component.manualInitialization = true;
+        const groupPersonLog = await this.participantRestApiService.getLatestGroupPersonLog({groupId: this.data.group.id, personId: this.data.person.id});
+        await component.initialize(groupPersonLog);
+
+        modal.componentInstance.splitButtonItems = [
+          {
+            nameKey: 'remove',
+            callback: async () => {
+              await this.appHelper.tryRemove(async () => {
+                await this.participantRestApiService.updateGroupPersonLog(component.data, {}, {groupId: this.data.group.id, personId: this.data.person.id, groupPersonLogId: component.data.id});
+                await this.participantRestApiService.deleteApprovePersonInGroup({
+                  id: this.data.group.id,
+                  personId: this.data.person.id
+                });
+                modal.dismiss();
+              });
+            }
+          }];
       });
-    });
+    }, false);
   }
 
   public onEditGroupPersonLog = async () => {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
-
-    await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
+    await modal.componentInstance.initializeBody(EditGroupPersonLogsComponent, async component => {
       component.manualInitialization = true;
       await component.initialize(this.data);
+
+      modal.componentInstance.splitButtonItems = [{
+        nameKey: 'add',
+        callback: async () => {
+          await component.onAdd();
+        }
+      }];
     });
   };
 

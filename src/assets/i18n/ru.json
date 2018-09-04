@@ -379,5 +379,8 @@
   "stageType": "Тип этапа",
   "yearPreparation": "Год подготовки",
   "editGroupPerson": "Редактировать пользователя группы",
-  "editRank": "Редактировать ранг"
+  "editRank": "Редактировать ранг",
+  "athleteState": "Состояние спортсмена",
+  "weAreInSocialNetworksJoinNow": "Мы в соцсетях. Присоединяйтесь!",
+  "comment": "Комментарий"
 }

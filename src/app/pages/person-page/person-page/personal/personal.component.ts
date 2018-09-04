@@ -10,6 +10,8 @@ import {Person} from '../../../../data/remote/model/person';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Sex} from '../../../../data/local/sex';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {AthleteState} from '../../../../data/remote/model/person/athlete-state';
 
 @Component({
   selector: 'app-personal',
@@ -18,6 +20,7 @@ import {TranslateObjectService} from '../../../../shared/translate-object.servic
 })
 export class PersonalComponent implements OnInit {
 
+  public readonly userRoleEnum = UserRoleEnum;
   public readonly pageSize: number;
   public readonly sexValues: Sex[];
 
@@ -25,10 +28,11 @@ export class PersonalComponent implements OnInit {
   public person: Person;
   public baseUserRole: UserRole;
   public selectedSex: Sex;
+  public athleteStates: AthleteState[];
 
   constructor(public personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
-              private  _appHelper: AppHelper,
+              private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService) {
     this.pageSize = PropertyConstant.pageSize;
     this.sexValues = [];
@@ -45,7 +49,7 @@ export class PersonalComponent implements OnInit {
     }
 
     this.selectedSex = this.sexValues.find(x => SexEnum[x.sexEnum].toString() === this.person.sex.toString());
-
+    this.athleteStates = await this._participantRestApiService.getAthleteStates();
     this.allowEdit = await this.personService.allowEdit();
     try {
       if (this.person && this.person.id) {

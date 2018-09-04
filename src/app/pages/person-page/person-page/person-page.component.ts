@@ -352,7 +352,11 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       }
 
       selected(selectedItem);
-      queryParams[queryParamKey] = selectedItem.id;
+      if (selectedItem) {
+        queryParams[queryParamKey] = selectedItem.id;
+      } else {
+        delete queryParams[queryParamKey];
+      }
     }
 
     await this._router.navigate([], {relativeTo: this._activatedRoute, queryParams: queryParams});

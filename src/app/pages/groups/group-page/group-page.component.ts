@@ -162,17 +162,13 @@ export class GroupPageComponent implements OnInit {
   };
 
   private async changePersonStateInGroup(): Promise<boolean> {
-    try {
+    return this._appHelper.trySave(async () => {
       if (this.groupService.getGroupPersonState() === GroupPersonState.NOT_MEMBER) {
         await this._participantRestApiService.joinGroup({id: this.group.id});
       } else {
         await this._participantRestApiService.leaveGroup({id: this.group.id});
       }
-      return true;
-    } catch (e) {
-      await this._appHelper.showErrorMessage('saveError');
-    }
-    return false;
+    });
   }
 
 }
