@@ -28,7 +28,7 @@ export class SportTypeDictionaryComponent extends BaseDictionaryComponent {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(StagePersonsComponent, async component => {
-      component.sportTypeId = obj.id;
+      component.sportType = obj;
     });
   };
 

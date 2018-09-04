@@ -6,6 +6,9 @@ import {NgxColumnComponent} from '../../../../components/ngx-grid/ngx-column/ngx
 import {StageType} from '../../../../data/remote/model/stage/stage-type';
 import {Stage} from '../../../../data/remote/model/stage/stage';
 import {StagePerson} from '../../../../data/remote/bean/stage-person';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {StagePersonRanksComponent} from '../stage-person-ranks/stage-person-ranks.component';
 
 @Component({
   selector: 'app-stage-persons',
@@ -15,12 +18,13 @@ import {StagePerson} from '../../../../data/remote/bean/stage-person';
 export class StagePersonsComponent implements OnInit {
 
   @Input()
-  public sportTypeId: number;
+  public sportType: SportType;
 
   public stageTypes: StageType[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _ngxModalService: NgxModalService) {
   }
 
   async ngOnInit(): Promise<void> {
@@ -28,11 +32,18 @@ export class StagePersonsComponent implements OnInit {
   }
 
   public fetchItems = async (query: PageQuery) => {
-    const items = await this._participantRestApiService.getStagePersons({sportTypeId: this.sportTypeId});
+    const items = await this._participantRestApiService.getStagePersons({sportTypeId: this.sportType.id});
     return this._appHelper.arrayToPageContainer(this.groupStagePerson(items));
   };
 
   public onColumnClick = async (column: NgxColumnComponent) => {
+    const modal = this._ngxModalService.open();
+    const data: StageType = column.data;
+    modal.componentInstance.title = `${this.sportType.name} - ${data.name}`;
+    await modal.componentInstance.initializeBody(StagePersonRanksComponent, async component => {
+      component.sportType = this.sportType;
+      component.stageType = data;
+    });
   };
 
   public getItemByColumn(item: GroupStagePerson, column: NgxColumnComponent): StageTypePerson {
