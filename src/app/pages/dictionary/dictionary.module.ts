@@ -13,6 +13,7 @@ import {EditStageComponent} from './component/edit-stage/edit-stage.component';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
 import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
+import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-typ
     DxTextBoxModule,
     DxValidatorModule
   ],
-  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent],
+  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent, SportTypeDictionaryComponent],
   entryComponents: [EditStageComponent, EditStageTypeComponent]
 })
 export class DictionaryModule {
