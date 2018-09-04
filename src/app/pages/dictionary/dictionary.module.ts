@@ -13,6 +13,10 @@ import {EditStageComponent} from './component/edit-stage/edit-stage.component';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
 import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
+import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
+import {StagePersonsComponent} from './component/stage-persons/stage-persons.component';
+import {StagePersonRanksComponent} from './component/stage-person-ranks/stage-person-ranks.component';
+import {PersonModule} from '../../components/person/person.module';
 
 @NgModule({
   imports: [
@@ -25,10 +29,26 @@ import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-typ
     NgxGridModule,
     NgxModalModule,
     DxTextBoxModule,
-    DxValidatorModule
+    DxValidatorModule,
+    PersonModule
   ],
-  declarations: [DictionariesComponent, StageStandardDictionaryComponent, StageDictionaryComponent, EditStageComponent, StageTypeDictionaryComponent, EditStageTypeComponent],
-  entryComponents: [EditStageComponent, EditStageTypeComponent]
+  declarations: [
+    DictionariesComponent,
+    StageStandardDictionaryComponent,
+    StageDictionaryComponent,
+    EditStageComponent,
+    StageTypeDictionaryComponent,
+    EditStageTypeComponent,
+    SportTypeDictionaryComponent,
+    StagePersonsComponent,
+    StagePersonRanksComponent
+  ],
+  entryComponents: [
+    EditStageComponent,
+    EditStageTypeComponent,
+    StagePersonsComponent,
+    StagePersonRanksComponent
+  ]
 })
 export class DictionaryModule {
 }

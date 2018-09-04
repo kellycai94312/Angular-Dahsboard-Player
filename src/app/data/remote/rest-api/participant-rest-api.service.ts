@@ -92,6 +92,8 @@ import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {StageType} from '../model/stage/stage-type';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
+import {StagePerson} from '../bean/stage-person';
+import {StagePersonRank} from '../bean/stage-person-rank';
 
 @Injectable()
 @RestParams({
@@ -1452,6 +1454,8 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region SportType
+
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/sportType'
@@ -1466,15 +1470,29 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/league',
-  })
-  getLeagues: IRestMethod<void, League[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/sportType/{!id}/sportRole',
   })
   getSportRolesBySportType: IRestMethod<QueryParams, SportRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/{!sportTypeId}/stagePerson',
+  })
+  getStagePersons: IRestMethod<{ sportTypeId: number }, StagePerson[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/{!sportTypeId}/stagePersonRank',
+  })
+  getStagePersonRanks: IRestMethodStrict<any, { stageTypeId: number }, { sportTypeId: number }, StagePersonRank[]>;
+
+  //#endregion
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/league',
+  })
+  getLeagues: IRestMethod<void, League[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,

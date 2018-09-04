@@ -2,6 +2,7 @@
   <thead>
   <tr class="d-flex">
     <th *ngFor="let item of ngxColumnComponents.toArray()"
+        (click)="onColumnClick(item)"
         class="{{item.style}}">{{item.name ? (item.name) : (item.nameKey | translate)}}
     </th>
   </tr>
@@ -17,7 +18,7 @@
             class="{{column.style}}">
           <div *ngIf="column.templateRef; then linkTemplate else defaultTemplate"></div>
           <ng-template #linkTemplate
-                       *ngTemplateOutlet="column.templateRef; context: {$implicit: item}"></ng-template>
+                       *ngTemplateOutlet="column.templateRef; context: {$implicit: item, column:column}"></ng-template>
           <ng-template #defaultTemplate>
             {{column.displayValue ? column.displayValue(item) : null}}
           </ng-template>
