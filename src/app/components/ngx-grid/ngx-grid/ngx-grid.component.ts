@@ -75,4 +75,10 @@ export class NgxGridComponent implements OnInit {
     await this.ngxVirtualScrollComponent.reset();
   }
 
+  public async onColumnClick(column: NgxColumnComponent): Promise<void> {
+    if (column.click) {
+      await column.click(column);
+    }
+  }
+
 }

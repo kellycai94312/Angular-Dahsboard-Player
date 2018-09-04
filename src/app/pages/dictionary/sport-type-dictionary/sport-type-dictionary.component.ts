@@ -4,6 +4,9 @@ import {BaseDictionaryComponent} from '../base/base-dictionary-component';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {AppHelper} from '../../../utils/app-helper';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {StagePersonsComponent} from '../component/stage-persons/stage-persons.component';
+import {SportType} from '../../../data/remote/model/sport-type';
 
 @Component({
   selector: 'app-sport-type-dictionary',
@@ -12,7 +15,8 @@ import {AppHelper} from '../../../utils/app-helper';
 })
 export class SportTypeDictionaryComponent extends BaseDictionaryComponent {
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper, authorizationService: AuthorizationService) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper, authorizationService: AuthorizationService,
+              private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper, authorizationService);
   }
 
@@ -20,8 +24,12 @@ export class SportTypeDictionaryComponent extends BaseDictionaryComponent {
     return await this.participantRestApiService.getSportTypes(query);
   };
 
-  public onEdit = async () => {
-
+  public onEdit = async (obj: SportType) => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(StagePersonsComponent, async component => {
+      component.sportTypeId = obj.id;
+    });
   };
 
 }

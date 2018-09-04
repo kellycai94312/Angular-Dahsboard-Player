@@ -22,6 +22,12 @@ export class NgxColumnComponent {
   @Input()
   public style: string;
 
+  @Input()
+  public data: any;
+
+  @Input()
+  public click: (column: NgxColumnComponent) => Promise<void>;
+
   constructor() {
     this.style = 'col';
   }
