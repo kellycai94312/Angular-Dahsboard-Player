@@ -83,6 +83,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER], true));
     this.tabs.push(new PersonTab('stages', 'stage', []));
     this.tabs.push(new PersonTab('medicalExaminations', 'medical-examination', []));
+    this.tabs.push(new PersonTab('controlTransferStandards', 'stage-standard', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], true));
     //#endregion
 
     this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {

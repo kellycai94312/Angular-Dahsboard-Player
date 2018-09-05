@@ -391,5 +391,6 @@
     "NOT_LESS_THAN": "Not less than",
     "INTERVAL": "Interval"
   },
-  "operator": "Operator"
+  "operator": "Operator",
+  "result": "Result"
 }

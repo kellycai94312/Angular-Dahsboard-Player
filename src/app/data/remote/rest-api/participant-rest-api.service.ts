@@ -95,6 +95,7 @@ import {PublicUserRole} from '../model/group/public-user-role';
 import {StagePerson} from '../bean/stage-person';
 import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
+import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 
 @Injectable()
 @RestParams({
@@ -554,6 +555,16 @@ export class ParticipantRestApiService extends Rest {
   removeMedicalExamination: IRestMethod<{ personId: number, medicalExaminationId: number }, MedicalExamination>;
 
   //#endregion
+
+  //#region StageStandard
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/{!personId}/stage/{!stageId}/sportType/{!sportTypeId}'
+  })
+  getStageStandardMeasureValues: IRestMethodStrict<any, PageQuery, { personId: number, stageId: number, sportTypeId: number }, PageContainer<StageStandardMeasureValue>>;
+
+  ///#endregion
 
   //#endregion
 
