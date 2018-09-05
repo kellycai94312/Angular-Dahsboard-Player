@@ -1,0 +1,24 @@
+<div class="d-flex">
+  <div class="w-100 mr-2"><label>{{'operator' | translate}}</label>
+    <dx-select-box [items]="operators"
+                   displayExpr="name"
+                   [(value)]="selectedOperator"
+                   acceptCustomValue="true"
+                   placeholder="{{'operator' | translate}}"
+                   (onValueChanged)="onOperatorChanged()">
+    </dx-select-box>
+  </div>
+  <div class="w-100">
+    <label></label>
+    <dx-number-box [(value)]="minValue"
+                   (onValueChanged)="onValueChanged()">
+    </dx-number-box>
+  </div>
+  <div *ngIf="selectedOperator?.data === operatorClass.INTERVAL"
+       class="w-100 ml-2">
+    <label></label>
+    <dx-number-box [(value)]="maxValue"
+                   (onValueChanged)="onValueChanged()">
+    </dx-number-box>
+  </div>
+</div>

@@ -382,5 +382,15 @@
   "editRank": "Редактировать ранг",
   "athleteState": "Состояние спортсмена",
   "weAreInSocialNetworksJoinNow": "Мы в соцсетях. Присоединяйтесь!",
-  "comment": "Комментарий"
+  "comment": "Комментарий",
+  "operatorEnum": {
+    "MORE_THAN": "Больше чем",
+    "LESS_THAN": "Меньше чем",
+    "EQUALS": "Равно",
+    "NOT_EQUALS": "Не равно",
+    "NOT_MORE_THAN": "Не больше чем",
+    "NOT_LESS_THAN": "Не меньше чем",
+    "INTERVAL": "Интервал"
+  },
+  "operator": "Оператор"
 }

@@ -1,0 +1,38 @@
+<label>{{'sportType' | translate}}</label>
+<app-input-select [loadData]="loadSportTypes"
+                  [(model)]="data.sportType"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  ngDefaultControl>
+</app-input-select>
+
+<label class="mt-2">{{'stage' | translate}}</label>
+<dx-select-box [items]="stages"
+               displayExpr="name"
+               [(value)]="data.stage"
+               acceptCustomValue="true"
+               placeholder="{{'stage' | translate}}">
+</dx-select-box>
+
+<label class="mt-2">{{'estimatedParameter' | translate}}</label>
+<app-input-select [loadData]="loadEstimatedParameters"
+                  [(model)]="data.estimatedParameter"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  ngDefaultControl>
+</app-input-select>
+
+<label class="mt-2">{{'parameter' | translate}}</label>
+<app-input-select [loadData]="loadExerciseMeasure"
+                  [(model)]="data.exerciseMeasure"
+                  [getKey]="getKey"
+                  [getName]="getExerciseMeasureName"
+                  ngDefaultControl>
+</app-input-select>
+
+<label class="mt-2">{{'man' | translate}}</label>
+<app-operator-value [(operator)]="data.maleOperator"
+                    [(value)]="data.maleStandardValue"></app-operator-value>
+<label class="mt-2">{{'woman' | translate}}</label>
+<app-operator-value [(operator)]="data.femaleOperator"
+                    [(value)]="data.femaleStandardValue"></app-operator-value>

@@ -94,6 +94,7 @@ import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
 import {StagePerson} from '../bean/stage-person';
 import {StagePersonRank} from '../bean/stage-person-rank';
+import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
 
 @Injectable()
 @RestParams({
@@ -1406,13 +1407,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/stage/{!stageId}/standard'
   })
-  createStageStandard: IRestMethod<StageStandard, StageStandard>;
+  createStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number }, StageStandard>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/stage/{!stageId}/standard/{!stageStandardId}'
   })
-  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number }, StageStandard>;
+  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number, stageStandardId: number }, StageStandard>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
@@ -1488,6 +1489,16 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region EstimatedParameter
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/estimatedParameter',
+  })
+  getEstimatedParameters: IRestMethod<PageQuery, PageContainer<EstimatedParameter>>;
+
+  //#endregion
+
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/league',
@@ -1504,7 +1515,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/exerciseMeasure',
   })
-  getExerciseMeasure: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseMeasure>>;
+  getExerciseMeasures: IRestMethod<MeasureTemplateQuery, PageContainer<ExerciseMeasure>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

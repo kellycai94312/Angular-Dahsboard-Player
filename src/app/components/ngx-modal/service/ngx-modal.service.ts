@@ -4,6 +4,7 @@ import {NgbModalOptions} from '@ng-bootstrap/ng-bootstrap/modal/modal';
 import {NgxModalComponent} from '../ngx-modal/ngx-modal.component';
 import {NgxModalRef} from '../bean/ngx-modal-ref';
 import {IBaseEditComponent} from '../../../data/local/component/base/ibase-edit-component';
+import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
 
 @Injectable()
 export class NgxModalService {
@@ -29,6 +30,21 @@ export class NgxModalService {
       ngxModalRef.dismiss();
     }
     return isRemoved;
+  }
+
+  public saveSplitItemButton(callback: () => Promise<void>): SplitButtonItem {
+    return {
+      default: true,
+      nameKey: 'save',
+      callback: callback
+    };
+  }
+
+  public removeSplitItemButton(callback: () => Promise<void>): SplitButtonItem {
+    return {
+      nameKey: 'remove',
+      callback: callback
+    };
   }
 
 }
