@@ -381,5 +381,16 @@
   "editRank": "Edit rank",
   "athleteState": "Athlete state",
   "weAreInSocialNetworksJoinNow": "We are in social networks. Join now!",
-  "comment": "Comment"
+  "comment": "Comment",
+  "operatorEnum": {
+    "MORE_THAN": "More than",
+    "LESS_THAN": "Less than",
+    "EQUALS": "Equals",
+    "NOT_EQUALS": "Not equals",
+    "NOT_MORE_THAN": "Not more than",
+    "NOT_LESS_THAN": "Not less than",
+    "INTERVAL": "Interval"
+  },
+  "operator": "Operator",
+  "result": "Result"
 }

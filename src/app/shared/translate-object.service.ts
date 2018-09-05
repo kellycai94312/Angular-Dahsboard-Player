@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {NameWrapper} from '../data/local/name-wrapper';
-import {DocumentType} from '../data/remote/model/file/document/document-type';
 
 @Injectable()
 export class TranslateObjectService {
@@ -19,7 +18,12 @@ export class TranslateObjectService {
 
   // TODO: Have to set auto-generate enumKey
   public async getTranslatedEnumCollection<T>(enumType: any, enumKey: string): Promise<NameWrapper<T>[]> {
-    const enumItems = Object.keys(enumType).filter(e => parseInt(e, 10) >= 0).map(x => DocumentType[x]);
+    // Get by number
+    let enumItems = Object.keys(enumType).filter(e => parseInt(e, 10) >= 0).map(x => enumType[x]);
+    if (!enumItems || !enumItems.length) {
+      // Get by name
+      enumItems = Object.keys(enumType).map(x => enumType[x]);
+    }
     const items: NameWrapper<T>[] = [];
     for (let i = 0; i < enumItems.length; i++) {
       const item = enumItems[i];

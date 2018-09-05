@@ -10,6 +10,9 @@ import {StageQuery} from '../../../data/remote/rest-api/query/stage-query';
 import {NgxGridComponent} from '../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {BaseDictionaryComponent} from '../base/base-dictionary-component';
+import {StageStandard} from '../../../data/remote/model/stage/stage-standard';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {EditStageStandardComponent} from '../component/edit-stage-standard/edit-stage-standard.component';
 
 @Component({
   selector: 'app-stage-standard-dictionary',
@@ -29,7 +32,8 @@ export class StageStandardDictionaryComponent extends BaseDictionaryComponent im
   public query: StageQuery;
   public canEdit: boolean;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper, authorizationService: AuthorizationService) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper, authorizationService: AuthorizationService,
+              private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper, authorizationService);
 
     this.query = new StageQuery();
@@ -72,6 +76,36 @@ export class StageStandardDictionaryComponent extends BaseDictionaryComponent im
     }
     return await this.participantRestApiService.getStageStandards({}, pageQuery, {stageId: this.selectedStage.id});
   };
+
+  public onAdd = async () => {
+    await this.showModal(new StageStandard());
+  };
+
+  public onEdit = async (obj: StageStandard) => {
+    await this.showModal(obj);
+  };
+
+  private async showModal(obj: StageStandard): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EditStageStandardComponent, async component => {
+      component.manualInitialization = true;
+      await component.initialize(this.appHelper.cloneObject(obj));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await this._ngxModalService.save(modal, component)) {
+            await this.resetItems();
+          }
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          if (await this._ngxModalService.remove(modal, component)) {
+            await this.resetItems();
+          }
+        })
+      ];
+    });
+  }
 
   private async resetItems(): Promise<void> {
     await this.appHelper.delay();

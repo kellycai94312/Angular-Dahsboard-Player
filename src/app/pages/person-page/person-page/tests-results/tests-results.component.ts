@@ -89,7 +89,7 @@ export class TestsResultsComponent implements OnInit {
     componentInstance.component = ExerciseMeasureItemComponent;
     componentInstance.pageQuery = measureQuery;
     componentInstance.getItems = async pageQuery => {
-      return await this._participantRestApiService.getExerciseMeasure(pageQuery);
+      return await this._participantRestApiService.getExerciseMeasures(pageQuery);
     };
     componentInstance.onSave = async selectedItems => {
       try {

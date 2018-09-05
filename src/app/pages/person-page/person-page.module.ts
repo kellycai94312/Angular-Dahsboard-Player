@@ -73,6 +73,7 @@ import {EditMedicalExaminationComponent} from './component/edit-medical-examinat
 import {EditPersonComponent} from './component/edit-person/edit-person.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {EditRankComponent} from './component/edit-rank/edit-rank.component';
+import {PersonStageStandardsComponent} from './person-page/person-stage-standards/person-stage-standards.component';
 
 @NgModule({
   imports: [
@@ -144,7 +145,8 @@ import {EditRankComponent} from './component/edit-rank/edit-rank.component';
     MedicalExaminationsComponent,
     EditMedicalExaminationComponent,
     EditPersonComponent,
-    EditRankComponent
+    EditRankComponent,
+    PersonStageStandardsComponent
   ],
   providers: [
     PersonService,

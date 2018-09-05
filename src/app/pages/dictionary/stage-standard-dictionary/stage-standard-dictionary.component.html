@@ -21,7 +21,9 @@
           [query]="query"
           [fetchItems]="fetchItems"
           [canEdit]="canEdit"
-          [windowScroll]="true">
+          [windowScroll]="true"
+          [add]="onAdd"
+          [edit]="onEdit">
   <ngx-column nameKey="estimatedParameter"
               [templateRef]="estimatedParameterTemplate"></ngx-column>
   <ngx-column nameKey="man"
@@ -35,12 +37,14 @@
 
   <ng-template #manTemplate let-item>
     <p>{{item.exerciseMeasure.baseExercise.name}} / {{item.exerciseMeasure.measure.measureParameter.name}}
-      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{item.maleOperator}} {{item.maleStandardValue}})</p>
+      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{'operatorEnum.' + item.maleOperator | translate}}
+      {{item.maleStandardValue}})</p>
   </ng-template>
 
   <ng-template #womanTemplate let-item>
     <p>{{item.exerciseMeasure.baseExercise.name}} / {{item.exerciseMeasure.measure.measureParameter.name}}
-      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{item.femaleOperator}} {{item.femaleStandardValue}})
+      [{{item.exerciseMeasure.measure.measureUnit.shortName}}]<br>({{'operatorEnum.' + item.femaleOperator | translate}}
+      {{item.femaleStandardValue}})
     </p>
   </ng-template>
 </ngx-grid>

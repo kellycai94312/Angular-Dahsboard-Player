@@ -17,6 +17,8 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {StagePersonsComponent} from './component/stage-persons/stage-persons.component';
 import {StagePersonRanksComponent} from './component/stage-person-ranks/stage-person-ranks.component';
 import {PersonModule} from '../../components/person/person.module';
+import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
+import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
 
 @NgModule({
   imports: [
@@ -30,7 +32,8 @@ import {PersonModule} from '../../components/person/person.module';
     NgxModalModule,
     DxTextBoxModule,
     DxValidatorModule,
-    PersonModule
+    PersonModule,
+    OperatorValueModule
   ],
   declarations: [
     DictionariesComponent,
@@ -41,13 +44,15 @@ import {PersonModule} from '../../components/person/person.module';
     EditStageTypeComponent,
     SportTypeDictionaryComponent,
     StagePersonsComponent,
-    StagePersonRanksComponent
+    StagePersonRanksComponent,
+    EditStageStandardComponent
   ],
   entryComponents: [
     EditStageComponent,
     EditStageTypeComponent,
     StagePersonsComponent,
-    StagePersonRanksComponent
+    StagePersonRanksComponent,
+    EditStageStandardComponent
   ]
 })
 export class DictionaryModule {
