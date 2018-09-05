@@ -1,4 +1,7 @@
-<ngx-grid [fetchItems]="fetchItems">
+<ngx-grid [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [canEdit]="true"
+          [enabledAdd]="false">
   <ngx-column nameKey="name"
               [templateRef]="nameTemplate"></ngx-column>
   <ngx-column nameKey="description"

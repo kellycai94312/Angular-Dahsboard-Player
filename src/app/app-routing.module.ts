@@ -65,6 +65,11 @@ const routes: Routes = [
     canActivate: [AuthDenyGuard]
   },
   {
+    path: 'statistics',
+    loadChildren: './pages/statistics/statistics.module#StatisticsModule',
+    canActivate: [AuthGuard, LayoutService]
+  },
+  {
     path: 'not-found',
     loadChildren: './pages/not-found-page/not-found-page.module#NotFoundPageModule'
   },

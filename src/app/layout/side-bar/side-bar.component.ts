@@ -35,6 +35,7 @@ export class SideBarComponent implements OnInit, OnDestroy {
     this.menuItems.push(this.createMenuItem('fa fa-bell', 'notifications', 'notification'));
     this.menuItems.push(this.createMenuItem('fa fa-address-book', 'contacts', 'connection'));
     this.menuItems.push(this.createMenuItem('fa fa-file', 'reports', 'report'));
+    this.menuItems.push(this.createMenuItem('fa fa-book', 'statistics', 'statistics'));
 
     if (this._authorizationService.hasUserRole(UserRoleEnum.ADMIN)) {
       this.menuItems.push(this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary'));

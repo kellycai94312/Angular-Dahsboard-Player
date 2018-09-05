@@ -392,5 +392,6 @@
     "INTERVAL": "Interval"
   },
   "operator": "Operator",
-  "result": "Result"
+  "result": "Result",
+  "statistics": "Statistics"
 }
