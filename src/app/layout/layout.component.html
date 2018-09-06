@@ -3,6 +3,7 @@
      [ngClass]="{'hidden' : hidden, 'background':dark}">
   <app-side-bar *ngIf="!hidden"></app-side-bar>
   <div class="content">
+    <ngx-breadcrumb *ngIf="!hidden"></ngx-breadcrumb>
     <router-outlet></router-outlet>
   </div>
 </div>

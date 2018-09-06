@@ -5,13 +5,36 @@ import {StageStandardDictionaryComponent} from './stage-standard-dictionary/stag
 import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
 import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
+import {BreadcrumbItem} from '../../components/ngx-breadcrumb/bean/breadcrumb-item';
 
 const routes: Routes = [
-  {path: '', component: DictionariesComponent},
-  {path: 'stage-standard', component: StageStandardDictionaryComponent},
-  {path: 'stage', component: StageDictionaryComponent},
-  {path: 'stage-type', component: StageTypeDictionaryComponent},
-  {path: 'sport-type', component: SportTypeDictionaryComponent}
+  {
+    path: '', component: DictionariesComponent,
+  },
+  {
+    path: 'stage-standard', component: StageStandardDictionaryComponent,
+    data: {
+      breadcrumb: {nameKey: 'controlTransferStandards'} as BreadcrumbItem
+    }
+  },
+  {
+    path: 'stage', component: StageDictionaryComponent,
+    data: {
+      breadcrumb: {nameKey: 'sportsTrainingStage'} as BreadcrumbItem
+    }
+  },
+  {
+    path: 'stage-type', component: StageTypeDictionaryComponent,
+    data: {
+      breadcrumb: {nameKey: 'stageType'} as BreadcrumbItem
+    }
+  },
+  {
+    path: 'sport-type', component: SportTypeDictionaryComponent,
+    data: {
+      breadcrumb: {nameKey: 'sportType'} as BreadcrumbItem
+    }
+  }
 ];
 
 @NgModule({
