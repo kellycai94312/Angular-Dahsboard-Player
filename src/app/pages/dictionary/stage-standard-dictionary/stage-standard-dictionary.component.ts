@@ -61,20 +61,30 @@ export class StageStandardDictionaryComponent extends BaseDictionaryComponent im
   //#endregion
 
   public async onSportTypeChanged(val: any) {
-    this.query.sportTypeId = val.id;
+    if (val) {
+      this.query.sportTypeId = val.id;
+    } else {
+      delete this.query.sportTypeId;
+    }
 
     await this.resetItems();
   }
 
   public async onStageChanged(val: any) {
+    if (val) {
+      this.query.stageId = val.id;
+    } else {
+      delete this.query.stageId;
+    }
+
     await this.resetItems();
   }
 
   public fetchItems = async (pageQuery: StageQuery) => {
-    if (!this.selectedStage || !this.query.sportTypeId) {
+    if (!this.query.stageId || !this.query.sportTypeId) {
       return null;
     }
-    return await this.participantRestApiService.getStageStandards({}, pageQuery, {stageId: this.selectedStage.id});
+    return await this.participantRestApiService.getStageStandards(pageQuery);
   };
 
   public onAdd = async () => {

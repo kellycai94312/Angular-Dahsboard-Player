@@ -4,13 +4,13 @@
           [enabledAdd]="false">
   <ngx-column nameKey="name"
               [templateRef]="nameTemplate"></ngx-column>
-  <ngx-column nameKey="description"
-              [templateRef]="descriptionTemplate"></ngx-column>
+  <ngx-column nameKey="personCount"
+              [templateRef]="personCountTemplate"></ngx-column>
 
   <ng-template #nameTemplate let-item>
-    {{item.name}}
+    {{item.sportType.name}}
   </ng-template>
-  <ng-template #descriptionTemplate let-item>
-    {{item.description}}
+  <ng-template #personCountTemplate let-item>
+    {{item.personCount}}
   </ng-template>
 </ngx-grid>

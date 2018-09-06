@@ -393,5 +393,6 @@
   },
   "operator": "Operator",
   "result": "Result",
-  "statistics": "Statistics"
+  "statistics": "Statistics",
+  "personCount": "Person count"
 }
