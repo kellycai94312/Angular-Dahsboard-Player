@@ -2,6 +2,6 @@
     class="breadcrumb">
   <li *ngFor="let item of breadcrumbItems$ | async"
       class="breadcrumb-item">
-    <a [routerLink]="item.url">{{item.nameKey | translate}}</a>
+    <a [routerLink]="item.url">{{item.name ? (item.name) : (item.nameKey | translate)}}</a>
   </li>
 </ol>

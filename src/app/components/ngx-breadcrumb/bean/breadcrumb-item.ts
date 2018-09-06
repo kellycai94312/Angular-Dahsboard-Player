@@ -1,4 +1,8 @@
+import {Params} from '@angular/router';
+
 export class BreadcrumbItem {
-  public nameKey: string;
+  public name?: string;
+  public nameKey?: string;
   public url: string;
+  public params: Params;
 }

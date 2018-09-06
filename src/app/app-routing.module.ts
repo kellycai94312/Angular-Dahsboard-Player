@@ -71,7 +71,10 @@ const routes: Routes = [
   {
     path: 'statistics',
     loadChildren: './pages/statistics/statistics.module#StatisticsModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard, LayoutService],
+    data: {
+      breadcrumb: {nameKey: 'statistics'} as BreadcrumbItem
+    }
   },
   {
     path: 'not-found',

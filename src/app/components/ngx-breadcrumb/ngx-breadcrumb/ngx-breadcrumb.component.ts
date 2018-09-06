@@ -29,14 +29,20 @@ export class NgxBreadcrumbComponent {
                               breadcrumbItems: BreadcrumbItem[] = []): BreadcrumbItem[] {
     let nextUrl = '';
     if (activatedRoute.routeConfig) {
-      let nameKey = '';
+      let breadcrumbItem: BreadcrumbItem = null;
       if (activatedRoute.routeConfig.data && !this._appHelper.isUndefinedOrNull(activatedRoute.routeConfig.data.breadcrumb)) {
-        nameKey = (activatedRoute.routeConfig.data.breadcrumb as BreadcrumbItem).nameKey;
+        breadcrumbItem = activatedRoute.routeConfig.data.breadcrumb as BreadcrumbItem;
       }
       const path = activatedRoute.routeConfig.path;
-      if (nameKey && path) {
+      if (breadcrumbItem && path) {
         nextUrl = `${url}${path}/`;
-        breadcrumbItems.push({nameKey: nameKey, url: nextUrl});
+        const paramId = activatedRoute.snapshot.params.id;
+        if (paramId) {
+          nextUrl = nextUrl.replace(':id', paramId);
+        }
+        breadcrumbItem.url = nextUrl;
+        breadcrumbItem.params = activatedRoute.snapshot.params;
+        breadcrumbItems.push(breadcrumbItem);
       }
     }
 
