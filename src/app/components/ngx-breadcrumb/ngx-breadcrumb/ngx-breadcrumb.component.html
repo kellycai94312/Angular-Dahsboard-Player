@@ -1,6 +1,6 @@
 <ol [hidden]="!enabled"
     class="breadcrumb">
-  <li *ngFor="let item of breadcrumbItems$ | async"
+  <li *ngFor="let item of breadcrumbItems"
       class="breadcrumb-item">
     <a [routerLink]="item.url">{{item.name ? (item.name) : (item.nameKey | translate)}}</a>
   </li>

@@ -1,32 +1,41 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import 'rxjs/add/operator/distinctUntilChanged';
-import {Observable} from 'rxjs';
 import {BreadcrumbItem} from '../bean/breadcrumb-item';
 import {AppHelper} from '../../../utils/app-helper';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'ngx-breadcrumb',
   templateUrl: './ngx-breadcrumb.component.html',
   styleUrls: ['./ngx-breadcrumb.component.scss']
 })
-export class NgxBreadcrumbComponent {
+export class NgxBreadcrumbComponent implements OnDestroy {
 
   public enabled: boolean;
-  public breadcrumbItems$: Observable<BreadcrumbItem[]>;
+  public breadcrumbItems: BreadcrumbItem[];
+
+  private readonly _routerEventsSubscription: ISubscription;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _appHelper: AppHelper) {
-    this.breadcrumbItems$ = this._router.events
+    this.update();
+    this._routerEventsSubscription = this._router.events
       .filter(event => event instanceof NavigationEnd)
       .distinctUntilChanged()
-      .map(event => this.buildBreadcrumbItems(this._activatedRoute.root));
+      .subscribe(event => {
+        this.update();
+      });
   }
 
-  public buildBreadcrumbItems(activatedRoute: ActivatedRoute,
-                              url: string = '',
-                              breadcrumbItems: BreadcrumbItem[] = []): BreadcrumbItem[] {
+  private update() {
+    this.breadcrumbItems = this.buildBreadcrumbItems(this._activatedRoute.root);
+  }
+
+  private buildBreadcrumbItems(activatedRoute: ActivatedRoute,
+                               url: string = '',
+                               breadcrumbItems: BreadcrumbItem[] = []): BreadcrumbItem[] {
     let nextUrl = '';
     if (activatedRoute.routeConfig) {
       let breadcrumbItem: BreadcrumbItem = null;
@@ -52,6 +61,10 @@ export class NgxBreadcrumbComponent {
 
     this.enabled = breadcrumbItems.length > 0;
     return breadcrumbItems;
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._routerEventsSubscription);
   }
 
 }
