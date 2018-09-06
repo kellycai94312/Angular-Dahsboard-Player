@@ -9,6 +9,10 @@
 .table {
   margin: 0;
 
+  th, td {
+    justify-content: center;
+  }
+
   tbody tr:nth-of-type(odd) {
     background-color: $odd-item-color;
   }
