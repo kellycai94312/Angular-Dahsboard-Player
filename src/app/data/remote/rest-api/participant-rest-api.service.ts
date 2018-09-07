@@ -96,6 +96,7 @@ import {StagePerson} from '../bean/stage-person';
 import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
 import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
+import {SportTypePerson} from '../bean/sport-type-person';
 
 @Injectable()
 @RestParams({
@@ -1403,36 +1404,6 @@ export class ParticipantRestApiService extends Rest {
   getStages: IRestMethod<void, Stage[]>;
 
   @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stage/{!stageId}/standard'
-  })
-  getStageStandards: IRestMethodStrict<any, StageQuery, { stageId: number }, PageContainer<StageStandard>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stage/{!stageId}/standard/exerciseMeasure/unassigned'
-  })
-  getUnassignedExerciseMeasuresByStage: IRestMethodStrict<any, StageQuery, { stageId: number }, PageContainer<ExerciseMeasure>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/stage/{!stageId}/standard'
-  })
-  createStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/stage/{!stageId}/standard/{!stageStandardId}'
-  })
-  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageId: number, stageStandardId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/stage/{!stageId}/standard/{!stageStandardId}'
-  })
-  removeStageStandard: IRestMethod<{ stageId: number, stageStandardId: number }, StageStandard>;
-
-  @RestAction({
     method: RestRequestMethod.Put,
     path: '/stage/{!stageId}/shortName'
   })
@@ -1447,6 +1418,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/stageType'
   })
   getStageTypes: IRestMethod<void, StageType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stageType/{!stageTypeId}'
+  })
+  getStageType: IRestMethod<{ stageTypeId: number }, StageType>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -1476,6 +1453,12 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
+    path: '/sportType/{!sportTypeId}'
+  })
+  getSportType: IRestMethod<{ sportTypeId: number }, SportType>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
     path: '/sportType/{!id}/league',
   })
   getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
@@ -1498,6 +1481,12 @@ export class ParticipantRestApiService extends Rest {
   })
   getStagePersonRanks: IRestMethodStrict<any, { stageTypeId: number }, { sportTypeId: number }, StagePersonRank[]>;
 
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/sportType/person',
+  })
+  getSportTypePersons: IRestMethod<void, SportTypePerson[]>;
+
   //#endregion
 
   //#region EstimatedParameter
@@ -1507,6 +1496,41 @@ export class ParticipantRestApiService extends Rest {
     path: '/estimatedParameter',
   })
   getEstimatedParameters: IRestMethod<PageQuery, PageContainer<EstimatedParameter>>;
+
+  //#endregion
+
+  //#region StageStandard
+
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stageStandard'
+  })
+  getStageStandards: IRestMethod<StageQuery, PageContainer<StageStandard>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/stageStandard'
+  })
+  createStageStandard: IRestMethod<StageStandard, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/stageStandard/{!stageStandardId}'
+  })
+  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageStandardId: number }, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/stageStandard/{!stageStandardId}'
+  })
+  removeStageStandard: IRestMethod<{ stageStandardId: number }, StageStandard>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/stageStandard/exerciseMeasure/unassigned'
+  })
+  getUnassignedExerciseMeasuresByStage: IRestMethod<StageQuery, PageContainer<ExerciseMeasure>>;
 
   //#endregion
 

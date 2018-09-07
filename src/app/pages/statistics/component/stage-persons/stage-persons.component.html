@@ -4,7 +4,7 @@
   <ngx-column nameKey="name"
               [templateRef]="nameTemplate"></ngx-column>
   <ngx-column *ngFor="let item of stageTypes"
-              [name]="item.shortName"
+              [name]="item.name"
               [data]="item"
               [templateRef]="stageTypeTemplate"
               [click]="onColumnClick"></ngx-column>

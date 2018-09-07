@@ -31,16 +31,16 @@ export class EditStageStandardComponent extends BaseEditComponent<StageStandard>
 
   async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
-      this.data = await this.participantRestApiService.removeStageStandard({stageId: this.data.stage.id, stageStandardId: this.data.id});
+      this.data = await this.participantRestApiService.removeStageStandard({stageStandardId: this.data.id});
     });
   }
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       if (this.appHelper.isNewObject(this.data)) {
-        this.data = await this.participantRestApiService.createStageStandard(this.data, {}, {stageId: this.data.stage.id});
+        this.data = await this.participantRestApiService.createStageStandard(this.data);
       } else {
-        this.data = await this.participantRestApiService.updateStageStandard(this.data, {}, {stageId: this.data.stage.id, stageStandardId: this.data.id});
+        this.data = await this.participantRestApiService.updateStageStandard(this.data, {}, {stageStandardId: this.data.id});
       }
     });
   }

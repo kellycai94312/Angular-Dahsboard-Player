@@ -14,8 +14,6 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
 import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
 import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
-import {StagePersonsComponent} from './component/stage-persons/stage-persons.component';
-import {StagePersonRanksComponent} from './component/stage-person-ranks/stage-person-ranks.component';
 import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
@@ -43,15 +41,11 @@ import {OperatorValueModule} from '../../components/operator-value/operator-valu
     StageTypeDictionaryComponent,
     EditStageTypeComponent,
     SportTypeDictionaryComponent,
-    StagePersonsComponent,
-    StagePersonRanksComponent,
     EditStageStandardComponent
   ],
   entryComponents: [
     EditStageComponent,
     EditStageTypeComponent,
-    StagePersonsComponent,
-    StagePersonRanksComponent,
     EditStageStandardComponent
   ]
 })

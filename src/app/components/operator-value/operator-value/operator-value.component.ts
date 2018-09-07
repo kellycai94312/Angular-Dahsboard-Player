@@ -11,15 +11,31 @@ import {AppHelper} from '../../../utils/app-helper';
 })
 export class OperatorValueComponent implements OnInit {
 
-  public readonly operatorClass = Operator;
+  @Input()
+  get operator(): Operator {
+    return this._operator;
+  }
+
+  set operator(value: Operator) {
+    this._operator = value;
+    this.operatorChange.emit(value);
+  }
 
   @Input()
-  public value: string;
+  get value(): string {
+    return this._value;
+  }
+
+  set value(value: string) {
+    this._value = value;
+    this.valueChange.emit(value);
+  }
+
+  public readonly operatorClass = Operator;
+
   @Output()
   public readonly valueChange: EventEmitter<string>;
 
-  @Input()
-  public operator: Operator;
   @Output()
   public readonly operatorChange: EventEmitter<Operator>;
 
@@ -27,6 +43,9 @@ export class OperatorValueComponent implements OnInit {
   public minValue: number;
   public maxValue: number;
   public operators: NameWrapper<Operator>[];
+
+  private _value: string;
+  private _operator: Operator;
 
   constructor(private _translateObjectService: TranslateObjectService,
               private _appHelper: AppHelper) {
@@ -38,15 +57,14 @@ export class OperatorValueComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.operators = await this._translateObjectService.getTranslatedEnumCollection<Operator>(Operator, 'OperatorEnum');
-    if (this.operator) {
-      this.selectedOperator = this.operators.find(x => x.data === this.operator);
+    if (this._operator) {
+      this.selectedOperator = this.operators.find(x => x.data === this._operator);
     } else {
       this.selectedOperator = this.operators[0];
       this.operator = this.selectedOperator.data;
-      this.operatorChange.emit(this.operator);
     }
 
-    const result = this.parseValue(this.selectedOperator.data, this.value);
+    const result = this.parseValue(this.selectedOperator.data, this._value);
     if (result) {
       this.minValue = result.val1;
       this.maxValue = result.val2;
@@ -55,7 +73,6 @@ export class OperatorValueComponent implements OnInit {
 
   public onOperatorChanged() {
     this.operator = this.selectedOperator.data;
-    this.operatorChange.emit(this.operator);
 
     this.onValueChanged();
   }
@@ -73,7 +90,6 @@ export class OperatorValueComponent implements OnInit {
         this.value = null;
       }
     }
-    this.valueChange.emit(this.value);
   }
 
   private parseValue(operator: Operator, val: string): { val1: number, val2?: number } {

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -8,7 +8,10 @@ import {Stage} from '../../../../data/remote/model/stage/stage';
 import {StagePerson} from '../../../../data/remote/bean/stage-person';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {SportType} from '../../../../data/remote/model/sport-type';
-import {StagePersonRanksComponent} from '../stage-person-ranks/stage-person-ranks.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {BreadcrumbItem} from '../../../../components/ngx-breadcrumb/bean/breadcrumb-item';
 
 @Component({
   selector: 'app-stage-persons',
@@ -17,33 +20,45 @@ import {StagePersonRanksComponent} from '../stage-person-ranks/stage-person-rank
 })
 export class StagePersonsComponent implements OnInit {
 
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
   @Input()
   public sportType: SportType;
 
   public stageTypes: StageType[];
+  private readonly _breadcrumbItem: BreadcrumbItem;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+              private _ngxModalService: NgxModalService,
+              private _activatedRoute: ActivatedRoute,
+              private _router: Router) {
+    this._breadcrumbItem = this._activatedRoute.routeConfig.data.breadcrumb as BreadcrumbItem;
   }
 
   async ngOnInit(): Promise<void> {
     this.stageTypes = await this._participantRestApiService.getStageTypes();
+    if (!this.sportType) {
+      const sportTypeId = await this._activatedRoute.snapshot.params.id;
+      // TODO: You should use another method to get sport type by id from server
+      this.sportType = (await this._participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list.find(x => x.id == sportTypeId);
+      this._breadcrumbItem.name = this.sportType.name;
+      await this.resetItems();
+    }
   }
 
   public fetchItems = async (query: PageQuery) => {
+    if (!this.sportType) {
+      return;
+    }
     const items = await this._participantRestApiService.getStagePersons({sportTypeId: this.sportType.id});
     return this._appHelper.arrayToPageContainer(this.groupStagePerson(items));
   };
 
   public onColumnClick = async (column: NgxColumnComponent) => {
-    const modal = this._ngxModalService.open();
     const data: StageType = column.data;
-    modal.componentInstance.title = `${this.sportType.name} - ${data.name}`;
-    await modal.componentInstance.initializeBody(StagePersonRanksComponent, async component => {
-      component.sportType = this.sportType;
-      component.stageType = data;
-    });
+    await this._router.navigate([data.id, 'person'], {relativeTo: this._activatedRoute});
   };
 
   public getItemByColumn(item: GroupStagePerson, column: NgxColumnComponent): StageTypePerson {
@@ -74,6 +89,10 @@ export class StagePersonsComponent implements OnInit {
     return groupStagePersons;
   }
 
+  private async resetItems() {
+    await this._appHelper.delay();
+    await this.ngxGridComponent.reset();
+  }
 }
 
 class GroupStagePerson {
