@@ -14,7 +14,7 @@ import {NgxColumnComponent} from './ngx-column/ngx-column.component';
     TranslateModule.forChild()
   ],
   declarations: [NgxGridComponent, NgxColumnComponent],
-  exports: [NgxGridComponent, NgxColumnComponent]
+  exports: [NgxGridComponent, NgxColumnComponent, NgxVirtualScrollModule, BusyButtonModule]
 })
 export class NgxGridModule {
 }

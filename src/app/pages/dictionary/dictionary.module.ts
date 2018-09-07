@@ -17,6 +17,9 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
+import {OrganizationsDictionaryComponent} from './organizations-dictionary/organizations-dictionary.component';
+import {OrganizationDictionaryComponent} from './organization-dictionary/organization-dictionary.component';
+import {EditOrganizationComponent} from './component/edit-organization/edit-organization.component';
 
 @NgModule({
   imports: [
@@ -41,12 +44,16 @@ import {OperatorValueModule} from '../../components/operator-value/operator-valu
     StageTypeDictionaryComponent,
     EditStageTypeComponent,
     SportTypeDictionaryComponent,
-    EditStageStandardComponent
+    EditStageStandardComponent,
+    OrganizationsDictionaryComponent,
+    OrganizationDictionaryComponent,
+    EditOrganizationComponent
   ],
   entryComponents: [
     EditStageComponent,
     EditStageTypeComponent,
-    EditStageStandardComponent
+    EditStageStandardComponent,
+    EditOrganizationComponent
   ]
 })
 export class DictionaryModule {

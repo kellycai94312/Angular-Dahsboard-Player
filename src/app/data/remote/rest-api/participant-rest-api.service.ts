@@ -97,6 +97,7 @@ import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
 import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
+import {Organization} from '../model/organization';
 import {TeamReport} from '../bean/report/team-report';
 
 @Injectable()
@@ -1514,7 +1515,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#region StageStandard
 
-
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/stageStandard'
@@ -1544,6 +1544,64 @@ export class ParticipantRestApiService extends Rest {
     path: '/stageStandard/exerciseMeasure/unassigned'
   })
   getUnassignedExerciseMeasuresByStage: IRestMethod<StageQuery, PageContainer<ExerciseMeasure>>;
+
+  //#endregion
+
+  //#region Organization
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organization'
+  })
+  getOrganizations: IRestMethod<void, Organization[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organization/{!organizationId}'
+  })
+  getOrganization: IRestMethod<{ organizationId: number }, Organization>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/organization'
+  })
+  createOrganization: IRestMethod<Organization, Organization>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/organization/{!organizationId}'
+  })
+  updateOrganization: IRestMethodStrict<Organization, any, { organizationId: number }, Organization>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/organization/{!organizationId}'
+  })
+  removeOrganization: IRestMethod<{ organizationId: number }, Organization>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organization/{!organizationId}/person'
+  })
+  getOrganizationPersons: IRestMethodStrict<void, PersonQuery, { organizationId: number }, PageContainer<Person>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/organization/{!organizationId}/person'
+  })
+  updateOrganizationPersons: IRestMethodStrict<ListRequest<Person>, any, { organizationId: number }, Person[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organization/{!organizationId}/group'
+  })
+  getOrganizationGroups: IRestMethodStrict<void, GroupQuery, { organizationId: number }, PageContainer<Group>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/organization/{!organizationId}/group'
+  })
+  updateOrganizationGroups: IRestMethodStrict<ListRequest<Group>, any, { organizationId: number }, Group[]>;
 
   //#endregion
 

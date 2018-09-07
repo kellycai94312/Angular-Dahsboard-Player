@@ -395,6 +395,8 @@
   "result": "Result",
   "statistics": "Statistics",
   "personCount": "Person count",
+  "organizations": "Organizations",
+  "parent": "Parent",
   "showRadarCharts": "Show radar charts",
   "showReactorScore": "Show reactor score",
   "showChartSimpleLegend": "Show chart simple legend",
