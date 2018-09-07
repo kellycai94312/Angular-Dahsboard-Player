@@ -1583,7 +1583,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/organization/{!organizationId}/person'
   })
-  getOrganizationPersons: IRestMethodStrict<void, PersonQuery, { organizationId: number }, PageContainer<Person>>;
+  getOrganizationPersons: IRestMethodStrict<any, PersonQuery, { organizationId: number }, PageContainer<Person>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1595,7 +1595,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/organization/{!organizationId}/group'
   })
-  getOrganizationGroups: IRestMethodStrict<void, GroupQuery, { organizationId: number }, PageContainer<Group>>;
+  getOrganizationGroups: IRestMethodStrict<any, GroupQuery, { organizationId: number }, PageContainer<Group>>;
 
   @RestAction({
     method: RestRequestMethod.Post,

@@ -20,6 +20,11 @@ import {OperatorValueModule} from '../../components/operator-value/operator-valu
 import {OrganizationsDictionaryComponent} from './organizations-dictionary/organizations-dictionary.component';
 import {OrganizationDictionaryComponent} from './organization-dictionary/organization-dictionary.component';
 import {EditOrganizationComponent} from './component/edit-organization/edit-organization.component';
+import {GroupPageModule} from '../groups/group-page.module';
+import {NamedObjectModule} from '../../components/named-object/named-object.module';
+import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
+import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
+import {PersonComponent} from '../../components/person/person.component';
 
 @NgModule({
   imports: [
@@ -34,7 +39,11 @@ import {EditOrganizationComponent} from './component/edit-organization/edit-orga
     DxTextBoxModule,
     DxValidatorModule,
     PersonModule,
-    OperatorValueModule
+    OperatorValueModule,
+    GroupPageModule,
+    NamedObjectModule,
+    NamedObjectItemModule,
+    ModalSelectPageModule
   ],
   declarations: [
     DictionariesComponent,
@@ -53,7 +62,8 @@ import {EditOrganizationComponent} from './component/edit-organization/edit-orga
     EditStageComponent,
     EditStageTypeComponent,
     EditStageStandardComponent,
-    EditOrganizationComponent
+    EditOrganizationComponent,
+    PersonComponent
   ]
 })
 export class DictionaryModule {

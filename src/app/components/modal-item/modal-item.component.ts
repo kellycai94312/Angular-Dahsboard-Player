@@ -1,5 +1,5 @@
-import { AfterViewInit, Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild } from '@angular/core';
-import { AdDirective } from './ad.directive';
+import {AfterViewInit, Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
+import {AdDirective} from './ad.directive';
 
 @Component({
   selector: 'app-modal-item',
@@ -26,6 +26,8 @@ export class ModalItemComponent implements OnInit, AfterViewInit {
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
     componentRef.instance.data = this.data;
+    // TODO: This fix needed to forbid navigation
+    componentRef.instance.canNavigate = false;
     componentRef.changeDetectorRef.detectChanges();
   }
 
