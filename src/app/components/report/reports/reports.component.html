@@ -1,0 +1,15 @@
+<div class="list-group-flush">
+  <div *ngFor="let item of items"
+       class="list-group-item p-2 d-flex">
+    <div (click)="onGetReport(item)"
+         class="w-100 mr-auto">
+      {{item.nameKey | translate: item.param}}
+    </div>
+    <div>
+      <app-busy-button *ngIf="item.settings"
+                       icon="fa fa-edit"
+                       [click]="onEdit"
+                       [parameter]="item"></app-busy-button>
+    </div>
+  </div>
+</div>

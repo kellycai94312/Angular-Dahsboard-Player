@@ -28,7 +28,7 @@ export class BusyButtonComponent {
   public nameKey: string;
 
   @Input()
-  public icon: 'fa fa-edit' | 'fa fa-plus';
+  public icon: 'fa fa-edit' | 'fa fa-plus' | 'fa fa-book';
 
   public busy: boolean;
 

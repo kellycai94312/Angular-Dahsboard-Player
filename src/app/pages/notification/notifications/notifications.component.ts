@@ -58,7 +58,7 @@ export class NotificationsComponent implements OnInit, OnDestroy {
       }
     }
     const dateWrapper = new DateWrapper();
-    dateWrapper.date = this._appHelper.dateByFormat(this.readBefore, PropertyConstant.dateTimeFormat);
+    dateWrapper.date = this._appHelper.dateByFormat(this.readBefore, PropertyConstant.dateTimeServerFormat);
     await this._participantRestApiService.createReadNotifications(dateWrapper);
     return pageContainer;
   };

@@ -223,7 +223,7 @@
   "addError": "Add error",
   "removeError": "Remove error",
   "gameMustHaveTwoTeams": "Game must have two teams",
-  "trainingType": "Training type",
+  "eventType": "Event type",
   "score": "Score",
   "access": "Access",
   "showPrevious": "Show previous",
@@ -394,5 +394,14 @@
   "operator": "Operator",
   "result": "Result",
   "statistics": "Statistics",
-  "personCount": "Person count"
+  "personCount": "Person count",
+  "showRadarCharts": "Show radar charts",
+  "showReactorScore": "Show reactor score",
+  "showChartSimpleLegend": "Show chart simple legend",
+  "showChartFullLegend": "Show chart full legend",
+  "showPerspective": "Show perspective",
+  "showReal": "Show real",
+  "showTeamByPersonal": "Show team by personal",
+  "teamReport": "Team report",
+  "personalReportParam": "Personal report {{data}}"
 }

@@ -3,17 +3,16 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
 import {PersonService} from '../person.service';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EventModalComponent} from './event-modal/event-modal.component';
 import {ReportsService} from '../../../../shared/reports.service';
-import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {ISubscription} from 'rxjs/Subscription';
 import {AppHelper} from '../../../../utils/app-helper';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {ReportsComponent} from '../../../../components/report/reports/reports.component';
+import {EventModalComponent} from './event-modal/event-modal.component';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-events',
@@ -22,14 +21,15 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 })
 export class EventsComponent implements OnInit, OnDestroy {
 
+  public propertyConstant = PropertyConstant;
   public readonly pageSize: number;
-  public allowEdit: boolean;
+  public canEdit: boolean;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(NgxVirtualScrollComponent)
-  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
 
   public trainingQuery: TrainingQuery;
 
@@ -39,7 +39,8 @@ export class EventsComponent implements OnInit, OnDestroy {
               private _reportsService: ReportsService,
               private _personService: PersonService,
               private _appHelper: AppHelper,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _ngxModalService: NgxModalService) {
     this.pageSize = PropertyConstant.pageSize;
     this.trainingQuery = new TrainingQuery();
     this.trainingQuery.from = 0;
@@ -56,19 +57,19 @@ export class EventsComponent implements OnInit, OnDestroy {
       } else {
         delete this.trainingQuery.userRoleEnum;
       }
-      await this.updateItems();
+      await this.resetItems();
     });
   }
 
   async ngOnInit() {
-    this.allowEdit = await this._personService.allowEdit();
+    this.canEdit = await this._personService.allowEdit();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
         this.trainingQuery.name = value;
-        await this.updateItems();
+        await this.resetItems();
       });
-    await this.updateItems();
+    await this.resetItems();
   }
 
   ngOnDestroy(): void {
@@ -84,7 +85,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     } else {
       delete this.trainingQuery.dateFrom;
     }
-    await this.updateItems();
+    await this.resetItems();
   }
 
   public async onDateToChange(event: any) {
@@ -93,7 +94,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     } else {
       delete this.trainingQuery.dateTo;
     }
-    await this.updateItems();
+    await this.resetItems();
   }
 
   public async onLocationChange(e: any) {
@@ -102,12 +103,12 @@ export class EventsComponent implements OnInit, OnDestroy {
     } else {
       delete this.trainingQuery.locationId;
     }
-    await this.updateItems();
+    await this.resetItems();
   }
 
   //#endregion
 
-  public async editPublic(item: TrainingPerson) {
+  public onEdit = async (item: TrainingPerson) => {
     const ref = this._modalService.open(EventModalComponent, {size: 'lg'});
     ref.componentInstance.trainingPerson = Object.assign({}, item);
     ref.componentInstance.onSave = async (visible: boolean) => {
@@ -119,22 +120,28 @@ export class EventsComponent implements OnInit, OnDestroy {
       item.visible = visible;
       ref.dismiss();
     };
-  }
-
-  public async downloadReport(item: TrainingPerson) {
-    if (item.baseTraining.discriminator === TrainingDiscriminator.GAME) {
-      await this._reportsService.downloadGameReport(item.baseTraining.id, item.trainingGroup.id);
-    } else {
-      await this._reportsService.downloadPersonalReport(item.baseTraining.id, item.id);
-    }
-  }
-
-  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
-    return await this._participantRestApiService.getPersonTrainings(pageQuery);
   };
 
-  private async updateItems() {
-    await this.ngxVirtualScrollComponent.reset();
+  public onGetReport = async (e: any, parameter: TrainingPerson) => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'report';
+    await modal.componentInstance.initializeBody(ReportsComponent, async component => {
+      component.eventId = parameter.baseTraining.id;
+      component.eventPersonId = parameter.id;
+      if (parameter.trainingGroup) {
+        component.eventGroupId = parameter.trainingGroup.id;
+      }
+      component.initialize(this._reportsService.eventTypeToReportType(parameter.baseTraining.discriminator));
+    });
+  };
+
+  public fetchItems: Function = async (query: TrainingQuery) => {
+    return await this._participantRestApiService.getPersonTrainings(query);
+  };
+
+  private async resetItems() {
+    await this._appHelper.delay();
+    await this.ngxGridComponent.reset();
   }
 
 }

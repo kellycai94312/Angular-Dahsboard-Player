@@ -97,6 +97,7 @@ import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
 import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
+import {TeamReport} from '../bean/report/team-report';
 
 @Injectable()
 @RestParams({
@@ -1035,6 +1036,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/testing/{!testingId}/report/personal/{!trainingPersonId}'
   })
   getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/personal'
+  })
+  getTestingPersonalReports: IRestMethod<{ testingId: number }, TestingPersonalReport[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/report/team'
+  })
+  getTeamReport: IRestMethod<{ testingId: number }, TeamReport>;
 
   //#endregion
 
