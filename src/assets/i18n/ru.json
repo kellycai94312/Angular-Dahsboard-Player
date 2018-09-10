@@ -224,7 +224,7 @@
   "addError": "Ошибка добавления",
   "removeError": "Ошибка удаления",
   "gameMustHaveTwoTeams": "В игре должно быть две команды",
-  "trainingType": "Вид события",
+  "eventType": "Вид события",
   "score": "Счет",
   "access": "Доступ",
   "showPrevious": "Показать предыдущий",
@@ -395,5 +395,14 @@
   "operator": "Оператор",
   "result": "Результат",
   "statistics": "Статистика",
-  "personCount": "Количество пользователей"
+  "personCount": "Количество пользователей",
+  "showRadarCharts": "Отобразить ",
+  "showReactorScore": "Отобразить reactor score",
+  "showChartSimpleLegend": "Отобразить диаграмму с упрощенной легендой",
+  "showChartFullLegend": "Отобразить диаграмму с полной легендой",
+  "showPerspective": "Отобразить перспективные данные",
+  "showReal": "Отобразить реальные данные",
+  "showTeamByPersonal": "Отобразить командный на основе персонального",
+  "teamReport": "Командный отчет",
+  "personalReportParam": "Персональный отчет {{data}}"
 }

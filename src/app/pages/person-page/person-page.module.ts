@@ -74,6 +74,7 @@ import {EditPersonComponent} from './component/edit-person/edit-person.component
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 import {PersonStageStandardsComponent} from './person-page/person-stage-standards/person-stage-standards.component';
+import {ReportModule} from '../../components/report/report.module';
 
 @NgModule({
   imports: [
@@ -111,7 +112,8 @@ import {PersonStageStandardsComponent} from './person-page/person-stage-standard
     NgxSplitButtonModule,
     NgxButtonGroupModule,
     DxNumberBoxModule,
-    NgxGridModule
+    NgxGridModule,
+    ReportModule
   ],
   declarations: [
     PersonPageComponent,

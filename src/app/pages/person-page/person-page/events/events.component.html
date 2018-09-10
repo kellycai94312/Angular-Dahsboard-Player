@@ -26,47 +26,48 @@
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
 </div>
-<table class="table table-bordered table-hover table-sm mt-2">
-  <thead>
-  <tr class="d-flex">
-    <th class="col-4">{{ 'name' | translate }}</th>
-    <th class="col-1">{{ 'trainingType' | translate }}</th>
-    <th class="col-2">{{ 'startDateAndTime' | translate }}</th>
-    <th class="col-2">{{ 'location' | translate }}</th>
-    <th class="col-1">{{ 'public' | translate }}</th>
-    <th class="col-2"></th>
-  </tr>
-  </thead>
-  <tbody>
-  <ngx-virtual-scroll [query]="trainingQuery"
-                      [getItems]="getItems"
-                      windowScroll="true">
-    <ng-template let-item>
-      <tr class="d-flex">
-        <td class="col-4">{{item?.baseTraining.name}}</td>
-        <td class="col-1">{{item?.baseTraining.discriminator}}</td>
-        <td class="col-2">{{item?.baseTraining.startTime | date:'dd.MM.yyyy HH:mm'}}</td>
-        <td class="col-2">{{item?.baseTraining.location?.name}}</td>
-        <td class="col-1">
-          <dx-check-box [(value)]="item.visible"
-                        [disabled]="true">
-          </dx-check-box>
-        </td>
-        <td class="col-2">
-          <div class="text-center">
-            <button *ngIf="allowEdit"
-                    class="btn btn-outline-primary"
-                    (click)="editPublic(item)">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-outline-success"
-                    (click)="downloadReport(item)">
-              <i class="fa fa-download"></i> {{'report' | translate}}
-            </button>
-          </div>
-        </td>
-      </tr>
+
+<ngx-grid class="mt-2"
+          [fetchItems]="fetchItems"
+          [query]="trainingQuery"
+          [edit]="onEdit"
+          [canEdit]="canEdit"
+          [enabledAdd]="false"
+          [windowScroll]="true">
+  <ngx-column nameKey="name"
+              [style]="'col-6'"
+              [templateRef]="nameTemplate">
+    <ng-template #nameTemplate let-item>
+      {{item.baseTraining.name}}
     </ng-template>
-  </ngx-virtual-scroll>
-  </tbody>
-</table>
+  </ngx-column>
+  <ngx-column nameKey="eventType"
+              [style]="'col-1'"
+              [templateRef]="eventTypeTemplate">
+    <ng-template #eventTypeTemplate let-item>
+      {{'trainingDiscriminator.' + item.baseTraining.discriminator | translate}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="startDateAndTime"
+              [style]="'col-2'"
+              [templateRef]="startDateAndTimeTemplate">
+    <ng-template #startDateAndTimeTemplate let-item>
+      {{item.baseTraining.startTime | date: propertyConstant.dateTimeFormat}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="location"
+              [style]="'col-2'"
+              [templateRef]="locationTemplate">
+    <ng-template #locationTemplate let-item>
+      {{item.baseTraining.location?.name}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column [style]="'col-1'"
+              [templateRef]="reportTemplate">
+    <ng-template #reportTemplate let-item>
+      <app-busy-button [icon]="'fa fa-book'"
+                       [click]="onGetReport"
+                       [parameter]="item"></app-busy-button>
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

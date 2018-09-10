@@ -11,6 +11,9 @@ import {AppHelper} from '../utils/app-helper';
 import {EventBlockSeries} from '../pages/report/report-page/event-blocks/event-blocks.component';
 import {TestingPersonalReport} from '../data/remote/bean/testing-personal-report';
 import {TeamReport} from '../data/remote/bean/report/team-report';
+import {TrainingDiscriminator} from '../data/remote/model/training/base/training-discriminator';
+import {ReportType} from '../components/report/bean/report-type';
+import {PersonalReportSettings} from '../data/remote/bean/report/personal-report-settings';
 
 @Injectable()
 export class ReportsService {
@@ -21,7 +24,9 @@ export class ReportsService {
               private _appHelper: AppHelper) {
   }
 
-  async downloadPersonalReport(testingId: number, trainingPersonId: number) {
+  //#region Testing
+
+  public async downloadTestingPersonalReport(testingId: number, trainingPersonId: number, personalReportSettings: PersonalReportSettings) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getPersonalReport();
@@ -76,7 +81,7 @@ export class ReportsService {
     await this.download(report, `${testingPersonalReport.trainingInfo.name} - ${testingPersonalReport.trainingInfo.fullName}`);
   }
 
-  async downloadTeamByPersonalReport(testingId: number) {
+  public async downloadTestingTeamPersonalReport(testingId: number) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getTeamByPersonalReport();
@@ -104,7 +109,7 @@ export class ReportsService {
     await this.download(report, `report`);
   }
 
-  async downloadTeamReport(testingId: number) {
+  public async downloadTestingTeamReport(testingId: number) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getTeamReport();
@@ -136,7 +141,11 @@ export class ReportsService {
     await this.download(report, 'report');
   }
 
-  async downloadGameReport(gameId: number, trainingGroupId: number) {
+  //#endregion
+
+  //#region Game
+
+  public async downloadGameReport(gameId: number, trainingGroupId: number) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getGameReport();
@@ -156,7 +165,9 @@ export class ReportsService {
     await this.download(report, `${gameReport.gameInfo.gameName} - ${gameReport.gameInfo.groupName}`);
   }
 
-  async printPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[]) {
+  //#endregion
+
+  public async printPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[]) {
     await this.initializeLibraries();
 
     const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
@@ -169,7 +180,7 @@ export class ReportsService {
     await this.print(report);
   }
 
-  async downloadPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[], fileFormat: FileFormat) {
+  public async downloadPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[], fileFormat: FileFormat) {
     await this.initializeLibraries();
 
     const eventReport = await this.getPersonMeasureData(trainingReportId, eventBlockSeries);
@@ -180,6 +191,16 @@ export class ReportsService {
     report.render();
 
     await this.download(report, `Person measures ${this._appHelper.dateByFormat(new Date(), 'dd_MM_yyyy HH_mm')}`, fileFormat);
+  }
+
+  public eventTypeToReportType(type: TrainingDiscriminator): ReportType {
+    switch (type) {
+      case TrainingDiscriminator.GAME:
+        return ReportType.GAME;
+      case TrainingDiscriminator.TESTING:
+        return ReportType.TESTING;
+    }
+    return null;
   }
 
   private async getPersonMeasureData(trainingReportId: number, eventBlockSeries: EventBlockSeries[]): Promise<EventReport> {
