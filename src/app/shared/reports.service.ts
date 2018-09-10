@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {AssetsService} from '../data/remote/rest-api/assets.service';
-import notify from 'devextreme/ui/notify';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {TranslateService} from '@ngx-translate/core';
 import {MeasureParameterEnum} from '../data/remote/misc/measure-parameter-enum';
@@ -10,6 +9,8 @@ import {ChartType} from '../data/remote/model/training/report/chart-type';
 import {EventReportService} from '../pages/report/report-page/service/event-report.service';
 import {AppHelper} from '../utils/app-helper';
 import {EventBlockSeries} from '../pages/report/report-page/event-blocks/event-blocks.component';
+import {TestingPersonalReport} from '../data/remote/bean/testing-personal-report';
+import {TeamReport} from '../data/remote/bean/report/team-report';
 
 @Injectable()
 export class ReportsService {
@@ -24,7 +25,7 @@ export class ReportsService {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getPersonalReport();
-    let testingPersonalReport;
+    let testingPersonalReport: TestingPersonalReport;
     try {
       testingPersonalReport = await this._participantRestApiService.getPersonalReport({
         testingId: testingId,
@@ -32,8 +33,7 @@ export class ReportsService {
       });
     } catch (e) {
       if (e.status === 404) {
-        const errorMessage = await this._translate.get('reportError').toPromise();
-        notify(errorMessage, 'warning', 3000);
+        await this._appHelper.showErrorMessage('reportError');
       }
       return;
     }
@@ -42,29 +42,27 @@ export class ReportsService {
     report.loadDocument(reportJson);
     report.dictionary.databases.clear();
 
-    const trainingInfo = testingPersonalReport.trainingInfo;
     const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('teamByPersonal');
-    trainingInfoDataSet.readJson(trainingInfo);
+    trainingInfoDataSet.readJson(testingPersonalReport.trainingInfo);
     report.regData('training_info', 'training_info', trainingInfoDataSet);
 
-    const scores = testingPersonalReport.scores;
     const scoresDataSet = new Stimulsoft.System.Data.DataSet('scores');
-    scoresDataSet.readJson(scores);
+    scoresDataSet.readJson(testingPersonalReport.scores);
     report.regData('scores', 'scores', scoresDataSet);
 
-    const estimatedParameters = testingPersonalReport.estimatedParameterResults;
-    for (const item of estimatedParameters) {
+    for (const item of testingPersonalReport.estimatedParameterResults) {
       item.value = this._appHelper.round(item.value, 2);
       item.perspectiveValue = this._appHelper.round(item.perspectiveValue, 2);
     }
     const estimatedParametersDataSet = new Stimulsoft.System.Data.DataSet('estimated_parameters');
-    estimatedParametersDataSet.readJson(estimatedParameters);
+    estimatedParametersDataSet.readJson(testingPersonalReport.estimatedParameterResults);
     report.regData('estimated_parameters', 'estimated_parameters', estimatedParametersDataSet);
 
     const testResults = testingPersonalReport.testResults;
     for (const item of testResults) {
       item.value = this._appHelper.round(item.value, 2);
     }
+
     const halfLength = testResults.length / 2;
     const testResultsDataSet = new Stimulsoft.System.Data.DataSet('test_results_1');
     testResultsDataSet.readJson(testResults.slice(0, halfLength));
@@ -72,28 +70,22 @@ export class ReportsService {
     const testResultsDataSet_2 = new Stimulsoft.System.Data.DataSet('test_results_2');
     testResultsDataSet_2.readJson(testResults.slice(halfLength));
     report.regData('test_results_2', 'test_results_2', testResultsDataSet_2);
-
-    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
-    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo',
-      false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
-    report.dictionary.resources.add(logoResource);
-
+    this.addLogoResource(report);
     report.render();
 
-    await this.download(report, trainingInfo.name + ' - ' + trainingInfo.fullName);
+    await this.download(report, `${testingPersonalReport.trainingInfo.name} - ${testingPersonalReport.trainingInfo.fullName}`);
   }
 
   async downloadTeamByPersonalReport(testingId: number) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getTeamByPersonalReport();
-    let testingTeamByPersonalReport;
+    let testingPersonalReports: TestingPersonalReport[];
     try {
-      testingTeamByPersonalReport = await this._participantRestApiService.getTeamByPersonalReport({testingId: testingId});
+      testingPersonalReports = await this._participantRestApiService.getTestingPersonalReports({testingId: testingId});
     } catch (e) {
       if (e.status === 404) {
-        const errorMessage = await this._translate.get('reportError').toPromise();
-        notify(errorMessage, 'warning', 3000);
+        await this._appHelper.showErrorMessage('reportError');
       }
       return;
     }
@@ -102,35 +94,26 @@ export class ReportsService {
     report.loadDocument(reportJson);
     report.dictionary.databases.clear();
 
-    const teamByPersonalReport = testingTeamByPersonalReport;
     const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('teamByPersonal');
-    trainingInfoDataSet.readJson(teamByPersonalReport);
-    report.regData('teamByPersonal', 'teamByPersonal', testingTeamByPersonalReport);
+    trainingInfoDataSet.readJson(testingPersonalReports);
+    report.regData('teamByPersonal', 'teamByPersonal', trainingInfoDataSet);
 
-    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
-    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo',
-      false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
-    report.dictionary.resources.add(logoResource);
-
+    this.addLogoResource(report);
     report.render();
 
-    for (const item of teamByPersonalReport) {
-      const trainingInfo = item.trainingInfo;
-    }
-    await this.download(report, trainingInfo.name + ' - ' + trainingInfo.date);
+    await this.download(report, `report`);
   }
 
   async downloadTeamReport(testingId: number) {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getTeamReport();
-    let testingTeamReport;
+    let testingTeamReport: TeamReport;
     try {
       testingTeamReport = await this._participantRestApiService.getTeamReport({testingId: testingId});
     } catch (e) {
       if (e.status === 404) {
-        const errorMessage = await this._translate.get('reportError').toPromise();
-        notify(errorMessage, 'warning', 3000);
+        await this._appHelper.showErrorMessage('reportError');
       }
       return;
     }
@@ -139,23 +122,18 @@ export class ReportsService {
     report.loadDocument(reportJson);
     report.dictionary.databases.clear();
 
-    const sportRoleResults = testingTeamReport.sportRoleResults;
     const sportRoleResultsDataSet = new Stimulsoft.System.Data.DataSet('team_report');
-    sportRoleResultsDataSet.readJson(sportRoleResults);
-    report.regData('team_report', 'team_report', testingTeamReport);
+    sportRoleResultsDataSet.readJson(testingTeamReport.sportRoleResults);
+    report.regData('team_report', 'team_report', sportRoleResultsDataSet);
 
-    const trainingInfo = testingTeamReport.traininginfo;
-    const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
-    trainingInfoDataSet.readJson(trainingInfo);
-    report.regData('training_info', 'training_info', trainingInfo);
-
-    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
-    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo',
-      false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
-    report.dictionary.resources.add(logoResource);
-
+    // TODO: Add information about this report
+    // const trainingInfo = testingTeamReport.traininginfo;
+    // const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
+    // trainingInfoDataSet.readJson(trainingInfo);
+    // report.regData('training_info', 'training_info', trainingInfoDataSet);
+    this.addLogoResource(report);
     report.render();
-    await this.download(report, 123); // TODO Change name when training_info will be added to response
+    await this.download(report, 'report');
   }
 
   async downloadGameReport(gameId: number, trainingGroupId: number) {
@@ -175,7 +153,7 @@ export class ReportsService {
     report.regData('game', 'game', gameReport);
     report.render();
 
-    await this.download(report, gameReport.gameInfo.gameName + ' - ' + gameReport.gameInfo.groupName);
+    await this.download(report, `${gameReport.gameInfo.gameName} - ${gameReport.gameInfo.groupName}`);
   }
 
   async printPersonMeasure(trainingReportId: number, eventBlockSeries: EventBlockSeries[]) {
@@ -241,8 +219,8 @@ export class ReportsService {
         for (let k = 0; k < blockResult.measureValues.list.length; k++) {
           const measureValue = blockResult.measureValues.list[k];
           if (eventBlockSeries && eventBlockSeries.find(x => x.firstLastPersonName === personName &&
-              x.exercise === measureValue.exerciseExecMeasure.exerciseExec.baseExercise.name &&
-              x.parameter === measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name)) {
+            x.exercise === measureValue.exerciseExecMeasure.exerciseExec.baseExercise.name &&
+            x.parameter === measureValue.exerciseExecMeasure.exerciseMeasure.measure.measureParameter.name)) {
             continue;
           }
 
@@ -309,6 +287,13 @@ export class ReportsService {
     }
 
     return eventReport;
+  }
+
+  private addLogoResource(report: any): any {
+    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
+    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo', false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
+    report.dictionary.resources.add(logoResource);
+    return logoResource;
   }
 
   private async download(report: any, fileName: string, fileFormat: FileFormat = FileFormat.PDF) {
