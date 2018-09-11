@@ -34,6 +34,15 @@ export class ReportsComponent {
     this.personalReportSettings = new PersonalReportSettings();
   }
 
+  private async  addSettings() {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
+      component.data = this.personalReportSettings;
+    });
+    return true;
+  }
+
   public initialize(type: ReportType) {
     this.items = [];
     switch (type) {
@@ -46,7 +55,7 @@ export class ReportsComponent {
                 await this._reportsService.downloadGameReport(this.eventId, this.eventGroupId);
               });
             }
-          });
+            });
         }
         break;
       case  ReportType.TESTING:
@@ -58,13 +67,7 @@ export class ReportsComponent {
                 await this._reportsService.downloadTestingTeamPersonalReport(this.eventId, this.personalReportSettings);
               });
             },
-            settings: async () => {
-              const modal = this._ngxModalService.open();
-              modal.componentInstance.titleKey = 'edit';
-              await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
-                component.data = this.personalReportSettings;
-              });
-              return true;
+            settings: async () => {this.addSettings();
             }
           });
           this.items.push({
@@ -74,31 +77,19 @@ export class ReportsComponent {
                 await this._reportsService.downloadTestingTeamReport(this.eventId, this.personalReportSettings);
               });
             },
-            settings: async () => {
-              const modal = this._ngxModalService.open();
-              modal.componentInstance.titleKey = 'edit';
-              await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
-                component.data = this.personalReportSettings;
-              });
-              return true;
+            settings: async () => {this.addSettings();
             }
           });
 
           if (this.eventPersonId) {
             this.items.push({
-              nameKey: 'personalReportParam',
+              nameKey: 'personalReport',
               action: async () => {
                 return await this._appHelper.tryLoad(async () => {
                   await this._reportsService.downloadTestingPersonalReport(this.eventId, this.eventPersonId, this.personalReportSettings);
                 });
               },
-              settings: async () => {
-                const modal = this._ngxModalService.open();
-                modal.componentInstance.titleKey = 'edit';
-                await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
-                  component.data = this.personalReportSettings;
-                });
-                return true;
+              settings: async () => {this.addSettings();
               }
             });
           }

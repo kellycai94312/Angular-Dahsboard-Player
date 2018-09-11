@@ -77,9 +77,7 @@ export class ReportsService {
     report.regData('test_results_2', 'test_results_2', testResultsDataSet_2);
 
     this.addSettings(report, personalReportSettings);
-    const logoContent = Stimulsoft.System.IO.Http.getFile('assets/img/reactor-combine-logo.png', true);
-    const logoResource = new Stimulsoft.Report.Dictionary.StiResource('logo', 'logo', false, Stimulsoft.Report.Dictionary.StiResourceType.Image, logoContent);
-    report.dictionary.resources.add(logoResource);
+    this.addLogoResource(report);
     report.render();
 
     await this.download(report, `${testingPersonalReport.trainingInfo.name} - ${testingPersonalReport.trainingInfo.fullName}`);
@@ -139,12 +137,6 @@ export class ReportsService {
     const sportRoleResultsDataSet = new Stimulsoft.System.Data.DataSet('team_report');
     sportRoleResultsDataSet.readJson(testingTeamReport);
     report.regData('team_report', 'team_report', sportRoleResultsDataSet);
-
-    // TODO: Add information about this report
-    // const trainingInfo = testingTeamReport.traininginfo;
-    // const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
-    // trainingInfoDataSet.readJson(trainingInfo);
-    // report.regData('training_info', 'training_info', trainingInfoDataSet);
 
     this.addSettings(report, personalReportSettings);
     this.addLogoResource(report);
