@@ -5,9 +5,8 @@
          class="w-100 mr-auto">
       {{item.nameKey | translate: item.param}}
     </div>
-    <div>
-      <app-busy-button *ngIf="item.settings"
-                       icon="fa fa-edit"
+    <div *ngIf="item.settings">
+      <app-busy-button icon="fa fa-edit"
                        [click]="onEdit"
                        [parameter]="item"></app-busy-button>
     </div>
