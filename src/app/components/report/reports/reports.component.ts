@@ -34,7 +34,7 @@ export class ReportsComponent {
     this.personalReportSettings = new PersonalReportSettings();
   }
 
-  private async  addSettings() {
+  private async addSettings(): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
@@ -67,7 +67,7 @@ export class ReportsComponent {
                 await this._reportsService.downloadTestingTeamPersonalReport(this.eventId, this.personalReportSettings);
               });
             },
-            settings: async () => {this.addSettings();
+            settings: async () => {await this.addSettings();
             }
           });
           this.items.push({
@@ -77,7 +77,7 @@ export class ReportsComponent {
                 await this._reportsService.downloadTestingTeamReport(this.eventId, this.personalReportSettings);
               });
             },
-            settings: async () => {this.addSettings();
+            settings: async () => {await this.addSettings();
             }
           });
 
@@ -89,7 +89,7 @@ export class ReportsComponent {
                   await this._reportsService.downloadTestingPersonalReport(this.eventId, this.eventPersonId, this.personalReportSettings);
                 });
               },
-              settings: async () => {this.addSettings();
+              settings: async () => {await this.addSettings();
               }
             });
           }
