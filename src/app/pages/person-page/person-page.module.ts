@@ -56,7 +56,6 @@ import {BusyButtonModule} from '../../components/busy-button/busy-button.module'
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
-import {RefereeCategoryModalComponent} from './person-page/category/referee-category-modal/referee-category-modal.component';
 import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
 import {ButtonsModule} from '../../components/buttons/buttons.module';
@@ -75,6 +74,7 @@ import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 import {PersonStageStandardsComponent} from './person-page/person-stage-standards/person-stage-standards.component';
 import {ReportModule} from '../../components/report/report.module';
+import {EditRefereeCategoryComponent} from './component/edit-referee-category/edit-referee-category.component';
 
 @NgModule({
   imports: [
@@ -137,7 +137,6 @@ import {ReportModule} from '../../components/report/report.module';
     TestsResultsHistoryComponent,
     AnthropometryHistoryComponent,
     RefereeCategoriesComponent,
-    RefereeCategoryModalComponent,
     MyGroupsComponent,
     RequisitesComponent,
     ContactEnableModalComponent,
@@ -148,7 +147,8 @@ import {ReportModule} from '../../components/report/report.module';
     EditMedicalExaminationComponent,
     EditPersonComponent,
     EditRankComponent,
-    PersonStageStandardsComponent
+    PersonStageStandardsComponent,
+    EditRefereeCategoryComponent
   ],
   providers: [
     PersonService,
@@ -161,13 +161,13 @@ import {ReportModule} from '../../components/report/report.module';
     ModalSelectPageComponent,
     EventModalComponent,
     NoteModalComponent,
-    RefereeCategoryModalComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
     EditMedicalExaminationComponent,
     EditPersonComponent,
     EditRankComponent,
-    RanksComponent
+    RanksComponent,
+    EditRefereeCategoryComponent
   ]
 })
 export class PersonPageModule {

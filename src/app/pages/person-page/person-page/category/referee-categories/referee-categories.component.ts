@@ -1,16 +1,16 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../../../shared/authorization.service';
-import {Person} from '../../../../../data/remote/model/person';
 import {PersonService} from '../../person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
-import {SportType} from '../../../../../data/remote/model/sport-type';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {RefereeCategoryModalComponent} from '../referee-category-modal/referee-category-modal.component';
 import {PersonRefereeCategoryViewModel} from '../../../../../data/local/view-model/referee-category/person-referee-category-view-model';
 import {AppHelper} from '../../../../../utils/app-helper';
-import {Mutex} from '../../../../../data/local/mutex';
 import {UserRoleEnum} from '../../../../../data/remote/model/user-role-enum';
+import {PageQuery} from '../../../../../data/remote/rest-api/page-query';
+import {PropertyConstant} from '../../../../../data/local/property-constant';
+import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditRefereeCategoryComponent} from '../../../component/edit-referee-category/edit-referee-category.component';
 
 @Component({
   selector: 'app-referee-categories',
@@ -19,66 +19,69 @@ import {UserRoleEnum} from '../../../../../data/remote/model/user-role-enum';
 })
 export class RefereeCategoriesComponent implements OnInit, OnDestroy {
 
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
+  public propertyConstant = PropertyConstant;
+  public canEdit: boolean;
+
   private readonly _sportTypeSubscription: ISubscription;
-
-  public personRefereeCategoryViewModels: PersonRefereeCategoryViewModel[];
-  private _allowEdit: boolean;
-
-  private readonly _mutex: Mutex;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _authorizationService: AuthorizationService,
               private _personService: PersonService,
-              private _modalService: NgbModal,
+              private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper) {
-    this._mutex = new Mutex();
     this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
-      await this.initialize(this._personService.personViewModel.data, value);
+      await this.resetItems();
     });
   }
 
   async ngOnInit() {
-    this._allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
-    await this.initialize();
+    this.canEdit = await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
   }
 
   ngOnDestroy(): void {
     this._appHelper.unsubscribe(this._sportTypeSubscription);
   }
 
-  public async initialize(person: Person = this._personService.personViewModel.data, sportType: SportType = this._personService.selectedSportType) {
-    if (!person || !sportType) {
-      return;
-    }
-
-    await this._mutex.acquire();
-    try {
-      const personRefereeCategories = await this._participantRestApiService.getPersonRefereeCategories({personId: person.id, sportTypeId: sportType.id});
-      this.personRefereeCategoryViewModels = [];
-      for (let i = 0; i < personRefereeCategories.length; i++) {
-        const personRefereeCategoryViewModel = new PersonRefereeCategoryViewModel(personRefereeCategories[i]);
-        await  personRefereeCategoryViewModel.initialize();
-        this.personRefereeCategoryViewModels.push(personRefereeCategoryViewModel);
-      }
-    } catch (e) {
-      await this._appHelper.showErrorMessage('error');
-    } finally {
-      this._mutex.release();
-    }
-  }
-
-  public onEdit(personRefereeCategoryViewModel: PersonRefereeCategoryViewModel) {
-    if (!this._allowEdit) {
-      return;
-    }
-    const ref = this._modalService.open(RefereeCategoryModalComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as RefereeCategoryModalComponent;
-    componentInstance.initialize(Object.assign({}, personRefereeCategoryViewModel), this._personService.personViewModel.data, this._personService.selectedSportType);
-
-    ref.result.then(async x => {
-    }, async reason => {
-      await this.initialize();
+  public onEdit = async (personRefereeCategoryViewModel: PersonRefereeCategoryViewModel) => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EditRefereeCategoryComponent, async component => {
+      component.manualInitialization = true;
+      component.person = this._personService.personViewModel.data;
+      component.sportType = this._personService.selectedSportType;
+      await component.initialize(this._appHelper.cloneObject(personRefereeCategoryViewModel.data));
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await this._ngxModalService.save(modal, component, !this._appHelper.isNewObject(component.data))) {
+            personRefereeCategoryViewModel.update(component.data);
+          }
+        })];
     });
+    modal.result.then(async x => {
+    }, async reason => {
+      await this.resetItems();
+    });
+  };
+
+  public fetchItems = async (query: PageQuery) => {
+    if (!this._personService.personViewModel.data || !this._personService.selectedSportType) {
+      return;
+    }
+    const items = await this._participantRestApiService.getPersonRefereeCategories({personId: this._personService.personViewModel.data.id, sportTypeId: this._personService.selectedSportType.id});
+    const pageContainer = this._appHelper.arrayToPageContainer(items);
+    return this._appHelper.pageContainerConverter(pageContainer, async obj => {
+      const personRefereeCategoryViewModel = new PersonRefereeCategoryViewModel(obj);
+      await  personRefereeCategoryViewModel.initialize();
+      return personRefereeCategoryViewModel;
+    });
+  };
+
+  public async resetItems() {
+    await this._appHelper.delay();
+    await this.ngxGridComponent.reset();
   }
 
 }

@@ -53,7 +53,7 @@ export class EditDocumentComponent extends BaseEditComponent<Document> {
       this.data.type = this.selectedDocumentType.data;
 
       if (this.appHelper.isNewObject(this.data)) {
-        this.data = await this.participantRestApiService.uploadFile(this.data, [this._file])[0];
+        this.data = (await this.participantRestApiService.uploadFile(this.data, [this._file]))[0];
       } else {
         this.data = await this.participantRestApiService.updateFile(this.data, this._file);
       }

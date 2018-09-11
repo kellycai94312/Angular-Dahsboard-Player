@@ -80,9 +80,13 @@ export class AppHelper {
     return first === second;
   }
 
-  public async showErrorMessage(messageKey: string, parameters?: any): Promise<void> {
-    const message = await this._translateService.get(messageKey, parameters).toPromise();
-    this._toastrService.error(message);
+  public async showErrorMessage(messageKey: string, parameters?: any, message?: string): Promise<void> {
+    const titleMessage = await this._translateService.get(messageKey, parameters).toPromise();
+    let content = `${titleMessage}`;
+    if (!this.isUndefinedOrNull(message)) {
+      content += `. ${message}`;
+    }
+    this._toastrService.error(content);
   }
 
   public async showSuccessMessage(messageKey: string): Promise<void> {
@@ -186,9 +190,11 @@ export class AppHelper {
                          action: () => Promise<void>,
                          notify: boolean = true): Promise<boolean> {
     let isSuccess = true;
+    let errorMessage: string = null;
     try {
       await action();
     } catch (e) {
+      errorMessage = e.message;
       isSuccess = false;
     }
 
@@ -199,7 +205,7 @@ export class AppHelper {
         }
       } else {
         if (errorMessageKey) {
-          await this.showErrorMessage(errorMessageKey);
+          await this.showErrorMessage(errorMessageKey, null, errorMessage);
         }
       }
     }
