@@ -11,8 +11,4 @@ export class PersonalReportSettingsComponent {
   @Input()
   public data: PersonalReportSettings;
 
-  constructor() {
-    this.data = new PersonalReportSettings();
-  }
-
 }

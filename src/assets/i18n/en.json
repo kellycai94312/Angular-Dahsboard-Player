@@ -405,5 +405,6 @@
   "showReal": "Show real",
   "showTeamByPersonal": "Show team by personal",
   "teamReport": "Team report",
-  "personalReportParam": "Personal report {{data}}"
+  "teamByPersonalReport": "Team by personal report",
+  "personalReportParam": "Personal report"
 }

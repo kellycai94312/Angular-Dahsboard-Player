@@ -52,27 +52,41 @@ export class ReportsComponent {
       case  ReportType.TESTING:
         if (this.eventId) {
           this.items.push({
-            nameKey: 'personalReportParam',
-            param: {data: 1},
+            nameKey: 'teamByPersonalReport',
             action: async () => {
               return await this._appHelper.tryLoad(async () => {
-                await this._reportsService.downloadTestingTeamPersonalReport(this.eventId);
+                await this._reportsService.downloadTestingTeamPersonalReport(this.eventId, this.personalReportSettings);
               });
+            },
+            settings: async () => {
+              const modal = this._ngxModalService.open();
+              modal.componentInstance.titleKey = 'edit';
+              await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
+                component.data = this.personalReportSettings;
+              });
+              return true;
             }
           });
           this.items.push({
             nameKey: 'teamReport',
             action: async () => {
               return await this._appHelper.tryLoad(async () => {
-                await this._reportsService.downloadTestingTeamReport(this.eventId);
+                await this._reportsService.downloadTestingTeamReport(this.eventId, this.personalReportSettings);
               });
+            },
+            settings: async () => {
+              const modal = this._ngxModalService.open();
+              modal.componentInstance.titleKey = 'edit';
+              await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
+                component.data = this.personalReportSettings;
+              });
+              return true;
             }
           });
 
           if (this.eventPersonId) {
             this.items.push({
               nameKey: 'personalReportParam',
-              param: {data: 2},
               action: async () => {
                 return await this._appHelper.tryLoad(async () => {
                   await this._reportsService.downloadTestingPersonalReport(this.eventId, this.eventPersonId, this.personalReportSettings);
