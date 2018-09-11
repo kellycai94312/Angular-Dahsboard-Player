@@ -17,6 +17,14 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
+import {OrganizationsDictionaryComponent} from './organizations-dictionary/organizations-dictionary.component';
+import {OrganizationDictionaryComponent} from './organization-dictionary/organization-dictionary.component';
+import {EditOrganizationComponent} from './component/edit-organization/edit-organization.component';
+import {GroupPageModule} from '../groups/group-page.module';
+import {NamedObjectModule} from '../../components/named-object/named-object.module';
+import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
+import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
+import {PersonComponent} from '../../components/person/person.component';
 
 @NgModule({
   imports: [
@@ -31,7 +39,11 @@ import {OperatorValueModule} from '../../components/operator-value/operator-valu
     DxTextBoxModule,
     DxValidatorModule,
     PersonModule,
-    OperatorValueModule
+    OperatorValueModule,
+    GroupPageModule,
+    NamedObjectModule,
+    NamedObjectItemModule,
+    ModalSelectPageModule
   ],
   declarations: [
     DictionariesComponent,
@@ -41,12 +53,17 @@ import {OperatorValueModule} from '../../components/operator-value/operator-valu
     StageTypeDictionaryComponent,
     EditStageTypeComponent,
     SportTypeDictionaryComponent,
-    EditStageStandardComponent
+    EditStageStandardComponent,
+    OrganizationsDictionaryComponent,
+    OrganizationDictionaryComponent,
+    EditOrganizationComponent
   ],
   entryComponents: [
     EditStageComponent,
     EditStageTypeComponent,
-    EditStageStandardComponent
+    EditStageStandardComponent,
+    EditOrganizationComponent,
+    PersonComponent
   ]
 })
 export class DictionaryModule {

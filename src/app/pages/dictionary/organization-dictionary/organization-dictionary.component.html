@@ -1,0 +1,31 @@
+<h5>{{'persons.section' | translate}}</h5>
+<div class="max-height-content mt-2">
+  <ngx-virtual-scroll #personList
+                      class="d-flex flex-wrap"
+                      [getItems]="fetchPersonItems">
+    <ng-template let-item>
+      <div class="item-width ml-2 mb-2">
+        <app-person [data]="item"></app-person>
+      </div>
+    </ng-template>
+  </ngx-virtual-scroll>
+</div>
+<app-busy-button classes="mt-2"
+                 nameKey="edit"
+                 [click]="onEditPersons"></app-busy-button>
+
+<h5 class="mt-2">{{'groups.section' | translate}}</h5>
+<div class="max-height-content mt-2">
+  <ngx-virtual-scroll #groupList
+                      class="d-flex flex-wrap"
+                      [getItems]="fetchGroupItems">
+    <ng-template let-item>
+      <div class="item-width ml-2 mb-2">
+        <app-group [data]="item"></app-group>
+      </div>
+    </ng-template>
+  </ngx-virtual-scroll>
+</div>
+<app-busy-button classes="mt-2"
+                 nameKey="edit"
+                 [click]="onEditGroups"></app-busy-button>

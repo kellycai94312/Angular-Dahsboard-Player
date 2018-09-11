@@ -8,4 +8,7 @@ export class PersonQuery extends PageQuery {
   public sportTypeId?: number;
   public cityId?: number;
   public template?: boolean;
+  //#region Organization
+  public unassigned?: boolean;
+  //#endregion
 }

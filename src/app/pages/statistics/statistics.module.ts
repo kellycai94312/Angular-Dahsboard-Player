@@ -9,6 +9,7 @@ import {StagePersonRanksComponent} from './component/stage-person-ranks/stage-pe
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {PersonModule} from '../../components/person/person.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {ImageModule} from '../../components/image/image.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
     StatisticsRoutingModule,
     NgxGridModule,
     PersonModule,
-    NgxModalModule
+    NgxModalModule,
+    ImageModule
   ],
   declarations: [StatisticsPageComponent, SportTypeStatisticsPageComponent, StagePersonsComponent, StagePersonRanksComponent],
   entryComponents: [StagePersonsComponent, StagePersonRanksComponent]

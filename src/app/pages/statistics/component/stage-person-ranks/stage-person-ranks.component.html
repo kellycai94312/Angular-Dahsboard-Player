@@ -1,6 +1,9 @@
 <ngx-grid [fetchItems]="fetchItems">
+  <ngx-column nameKey="image"
+              style="col-2"
+              [templateRef]="imageTemplate"></ngx-column>
   <ngx-column nameKey="person"
-              style="col-7"
+              style="col-5"
               [templateRef]="personTemplate"></ngx-column>
   <ngx-column nameKey="birthDate"
               style="col-2"
@@ -12,8 +15,16 @@
               style="col-2"
               [templateRef]="rankTemplate"></ngx-column>
 
+  <ng-template #imageTemplate let-item>
+    <app-image
+      [type]="'LOGO'"
+      [clazz]="'PERSON'"
+      [id]="item.person.id"
+      [dimension]="'W80xH80'"
+      [format]="'CIRCLE'"></app-image>
+  </ng-template>
   <ng-template #personTemplate let-item>
-    <app-person [data]="item.person"></app-person>
+    <h6>{{item.person.lastName}} {{item.person.firstName}} {{item.person?.patronymic}}</h6>
   </ng-template>
   <ng-template #birthDateTemplate let-item>
     {{item.person.birthDate | date:propertyConstant.dateFormat}} ({{getAge(item.person.birthDate)}})

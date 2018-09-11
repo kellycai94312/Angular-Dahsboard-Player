@@ -15,7 +15,8 @@ export class DictionariesComponent {
       {name: 'controlTransferStandards', data: 'stage-standard'},
       {name: 'sportsTrainingStage', data: 'stage'},
       {name: 'stageType', data: 'stage-type'},
-      {name: 'sportType', data: 'sport-type'}
+      {name: 'sportType', data: 'sport-type'},
+      {name: 'organizations', data: 'organization'}
     ];
   }
 
