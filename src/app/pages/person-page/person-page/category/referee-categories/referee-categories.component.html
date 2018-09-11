@@ -1,36 +1,54 @@
-<table class="table table-bordered table-hover table-sm mt-2">
-  <thead>
-  <tr class="d-flex">
-    <th class="col-2">{{ 'name' | translate }}</th>
-    <th class="col-3">{{ 'assignedBy' | translate }}</th>
-    <th class="col-1">{{ 'date' | translate }}</th>
-    <th class="col-2">{{ 'documentNumber' | translate }}</th>
-    <th class="col-2">{{ 'documentType' | translate }}</th>
-    <th class="col-2">{{ 'identityNumber' | translate }}</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let item of personRefereeCategoryViewModels"
-      (dblclick)="onEdit(item)"
-      class="d-flex">
-    <td class="col-2">{{item?.data.refereeCategory.name}}</td>
-    <td class="col-3">
-      <div *ngIf="item.data.personAssignedBy">
-        {{item.data.personAssignedBy.firstName+' '+item.data.personAssignedBy.lastName}}
-      </div>
-    </td>
-    <td class="col-1">{{item?.data.assignDate | date:'dd.MM.yyyy'}}</td>
-    <td class="col-2">
-      <div *ngIf="item?.document?.resource; else elseTemplate">
-        <a [href]="item.documentUrl">{{item?.document?.number}}</a>
+<ngx-grid [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [canEdit]="canEdit"
+          [enabledAdd]="false"
+          [windowScroll]="'true'">
+  <ngx-column nameKey="name"
+              [style]="'col-3'"
+              [templateRef]="nameTemplate">
+    <ng-template #nameTemplate let-item>{{item.data.refereeCategory.name}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="assignedBy"
+              [style]="'col-2'"
+              [templateRef]="assignedByTemplate">
+    <ng-template #assignedByTemplate let-item>
+      <span *ngIf="item.data.personAssignedBy">
+        {{item.data.personAssignedBy.firstName + ' ' + item.data.personAssignedBy.lastName}}
+      </span>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="date"
+              [style]="'col-1'"
+              [templateRef]="dateTemplate">
+    <ng-template #dateTemplate let-item>
+      {{item.data?.assignDate | date: propertyConstant.dateFormat}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="documentNumber"
+              [style]="'col-2'"
+              [templateRef]="documentNumberTemplate">
+    <ng-template #documentNumberTemplate let-item>
+      <div *ngIf="item.document?.resource; else elseTemplate">
+        <a [href]="item.documentUrl">{{item.document?.number}}</a>
       </div>
       <ng-template #elseTemplate>
-        {{item?.document?.number}}
+        {{item.document?.number}}
       </ng-template>
-    </td>
-    <td class="col-2"><span *ngIf="item?.document?.type">{{'documentTypeEnum.'+item?.document?.type | translate}}</span>
-    </td>
-    <td class="col-2">{{item?.data?.certificationNumber}}</td>
-  </tr>
-  </tbody>
-</table>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="documentType"
+              [style]="'col-2'"
+              [templateRef]="documentTypeTemplate">
+    <ng-template #documentTypeTemplate let-item>
+      <span *ngIf="item.document?.type">{{'documentTypeEnum.' + item.document?.type | translate}}</span>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="identityNumber"
+              [style]="'col-2'"
+              [templateRef]="identityNumberTemplate">
+    <ng-template #identityNumberTemplate let-item>
+      {{item.data?.certificationNumber}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>
