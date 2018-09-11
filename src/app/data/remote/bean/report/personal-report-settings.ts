@@ -1,4 +1,5 @@
 export class PersonalReportSettings {
+
   public showRadarCharts: boolean;
   public showReactorScore: boolean;
   public showChartSimpleLegend: boolean;
@@ -6,4 +7,15 @@ export class PersonalReportSettings {
   public showPerspective: boolean;
   public showReal: boolean;
   public showTeamByPersonal: boolean;
+
+  constructor() {
+    this.showRadarCharts = false;
+    this.showReactorScore = false;
+    this.showChartSimpleLegend = false;
+    this.showChartFullLegend = false;
+    this.showPerspective = false;
+    this.showReal = false;
+    this.showTeamByPersonal = false;
+  }
+
 }

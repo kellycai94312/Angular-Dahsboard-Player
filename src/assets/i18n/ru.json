@@ -406,5 +406,6 @@
   "showReal": "Отобразить реальные данные",
   "showTeamByPersonal": "Отобразить командный на основе персонального",
   "teamReport": "Командный отчет",
-  "personalReportParam": "Персональный отчет {{data}}"
+  "teamByPersonalReport": "Командный отчет по персональным",
+  "personalReport": "Персональный отчет"
 }
