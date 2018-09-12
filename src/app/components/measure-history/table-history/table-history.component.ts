@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'app-table-history',
@@ -7,6 +8,8 @@ import { PageQuery } from '../../../data/remote/rest-api/page-query';
   styleUrls: ['./table-history.component.scss']
 })
 export class TableHistoryComponent implements OnInit {
+
+  public readonly propertyConstant = PropertyConstant;
 
   @Input()
   measureValues: any[];

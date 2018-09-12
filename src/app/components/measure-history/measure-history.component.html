@@ -1,15 +1,21 @@
 <div class="row cols-padding">
   <div class="col">
-    <dx-date-box class="w-100"
+    <dx-date-box #fromDate
+                 class="w-100"
                  type="date"
+                 [displayFormat]="propertyConstant.dateFormat"
                  placeholder="{{'from' | translate}}"
+                 [max]="toDate.value"
                  [showClearButton]="true"
                  (onValueChanged)="onDateFromChange($event)">
     </dx-date-box>
   </div>
   <div class="col">
-    <dx-date-box class="w-100"
+    <dx-date-box #toDate
+                 class="w-100"
                  type="date"
+                 [min]="fromDate.value"
+                 [displayFormat]="propertyConstant.dateFormat"
                  placeholder="{{'to' | translate}}"
                  [showClearButton]="true"
                  (onValueChanged)="onDateToChange($event)">
