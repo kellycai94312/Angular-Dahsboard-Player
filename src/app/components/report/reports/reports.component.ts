@@ -99,8 +99,8 @@ export class ReportsComponent {
     await parameter.settings();
   };
 
-  public async onGetReport(obj: ReportAction): Promise<void> {
-    await obj.action();
-  }
+  public onDownload = async (e: any, parameter: ReportAction) => {
+    await parameter.action();
+  };
 
 }
