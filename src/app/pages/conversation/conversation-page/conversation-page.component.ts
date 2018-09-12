@@ -199,7 +199,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
     let lastUnreadMessage: Date;
     pageContainer.list = pageContainer.list.map(x => {
-      if (x.receiver == null || x.receiver.person.id == this.person.id && !x.read) {
+      if (!x.receiver || x.receiver.person.id == this.person.id && !x.read) {
         x.read = true;
         lastUnreadMessage = x.content.created;
       }
