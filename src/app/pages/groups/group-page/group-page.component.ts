@@ -106,6 +106,11 @@ export class GroupPageComponent implements OnInit {
       eventsTab.routerLink = 'events';
       this.tabs.push(eventsTab);
     }
+
+    const connectionsGraphTab = new Tab();
+    connectionsGraphTab.nameKey = 'connectionsGraph';
+    connectionsGraphTab.routerLink = 'connections-graph';
+    this.tabs.push(connectionsGraphTab);
   }
 
   private getSubGroupRouterLink(subGroupId: number): string {
