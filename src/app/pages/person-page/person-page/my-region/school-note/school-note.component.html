@@ -30,7 +30,8 @@
           [query]="myRegionService.noteQuery"
           [edit]="myRegionService.onEdit"
           [canEdit]="myRegionService.canEdit"
-          [enabledAdd]="false">
+          [enabledAdd]="false"
+          [windowScroll]="true">
   <ngx-column nameKey="name"
               [style]="'col-6'"
               [templateRef]="nameTemplate">
