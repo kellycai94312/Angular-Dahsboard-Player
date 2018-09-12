@@ -15,27 +15,18 @@
                      [(value)]="group.league"
                      displayExpr="name"
                      acceptCustomValue="true"
+                     [showClearButton]="true"
                      placeholder="{{'league' | translate}}">
-        <dx-validator>
-          <dxi-validation-rule type="required"
-                               message="{{'requiredField' | translate}}">
-          </dxi-validation-rule>
-        </dx-validator>
       </dx-select-box>
 
       <label class="mt-2">{{'ageGroup' | translate }}</label>
       <dx-select-box [items]="ageGroups"
                      [(value)]="group.ageGroup"
                      displayExpr="name"
+                     [showClearButton]="true"
                      acceptCustomValue="true"
                      placeholder="{{'ageGroup' | translate}}">
-        <dx-validator>
-          <dxi-validation-rule type="required"
-                               message="{{'requiredField' | translate}}">
-          </dxi-validation-rule>
-        </dx-validator>
       </dx-select-box>
-
     </div>
 
     <label for="country"
