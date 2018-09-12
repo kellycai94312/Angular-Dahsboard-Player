@@ -6,7 +6,7 @@ export class BaseTrainingQuery extends PageQuery {
   public template?: boolean;
   public state?: TrainingState;
   public discriminator?: TrainingDiscriminator;
-  public measureParameter?: string;
+  public measureParameterEnum?: string;
   public locationId?: number;
   public dateFrom?: Date;
   public dateTo?: Date;

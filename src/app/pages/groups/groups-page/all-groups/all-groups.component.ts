@@ -44,6 +44,7 @@ export class AllGroupsComponent implements OnInit {
   public stages: Stage[];
   public stageTypes: StageType[];
 
+  public selectedSportType: SportType;
   public selectedCountry: Country;
   public selectedRegion: Region;
   public selectedCity: City;
@@ -61,7 +62,6 @@ export class AllGroupsComponent implements OnInit {
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
-    this.leagues = await this._participantRestApiService.getLeagues();
     this.stages = await this._participantRestApiService.getStages();
     this.stageTypes = await this._participantRestApiService.getStageTypes();
 
@@ -221,6 +221,14 @@ export class AllGroupsComponent implements OnInit {
   }
 
   public async onSportTypeChanged(value: SportType) {
+    this.selectedSportType = value;
+    if (this.selectedSportType) {
+      this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: this.selectedSportType.id});
+    } else {
+      delete this.groupQuery.leagueId;
+      this.leagues = [];
+    }
+
     if (value != null) {
       this.groupQuery.sportTypeId = value.id;
     } else {

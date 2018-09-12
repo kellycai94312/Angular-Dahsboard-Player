@@ -1473,9 +1473,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/sportType/{!id}/league',
+    path: '/sportType/{!sportTypeId}/league',
   })
-  getLeaguesBySportType: IRestMethod<QueryParams, League[]>;
+  getLeaguesBySportType: IRestMethod<{ sportTypeId: number }, League[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
