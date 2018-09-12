@@ -24,10 +24,10 @@ export class GroupConnectionsGraphComponent implements OnInit {
 
   public nodes: Node[];
   public links: Link[];
-  public orientation: string;
-  public colorScheme: any;
-  public curve: any;
-  public updateSubject: Subject<any>;
+  public readonly orientation: string;
+  public readonly colorScheme: any;
+  public readonly curve: any;
+  public readonly updateSubject: Subject<any>;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
@@ -81,7 +81,7 @@ export class GroupConnectionsGraphComponent implements OnInit {
   }
 
   private async getGroupConnectionLabel(groupConnection: GroupConnection) {
-    switch (GroupConnectionType[groupConnection.type]) {
+    switch (groupConnection.type) {
       case GroupConnectionType.TOP:
         return await this._translateService.get('topLevelShort').toPromise();
       case GroupConnectionType.SAME:
@@ -92,7 +92,7 @@ export class GroupConnectionsGraphComponent implements OnInit {
   }
 
   private getGroupConnectionColor(groupConnection: GroupConnection) {
-    switch (GroupConnectionType[groupConnection.type]) {
+    switch (groupConnection.type) {
       case GroupConnectionType.TOP:
         return '#3D9970';
       case GroupConnectionType.SAME:
