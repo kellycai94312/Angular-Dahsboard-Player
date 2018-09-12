@@ -289,7 +289,7 @@
   "deleteSelectedMessages": "Delete selected messages",
   "deleteForReceiver": "Delete messages for receiver",
   "areYouSure": "Are you sure?",
-  "deleteMessages": "Delete messages",
+  "clearMessagesHistory": "Clear messages history",
   "editMessage": "Edit message",
   "newMessage": "New message",
   "chatMustContainOneParticipant": "Chat must contain at least one participant",
