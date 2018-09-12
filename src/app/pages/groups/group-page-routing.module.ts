@@ -14,6 +14,7 @@ import {RequestsComponent} from './group-administration/requests/requests.compon
 import {MeasureTemplateComponent} from './group-administration/measure-template/measure-template.component';
 import {GroupEventsComponent} from './group-events/group-events.component';
 import {GroupConnectionsComponent} from './group-administration/group-connections/group-connections.component';
+import {GroupConnectionsGraphComponent} from './group-connections-graph/group-connections-graph.component';
 
 const routes: Routes = [
   {
@@ -41,7 +42,8 @@ const routes: Routes = [
           {path: 'connection', component: GroupConnectionsComponent}
         ]
       },
-      {path: 'events', component: GroupEventsComponent}
+      {path: 'events', component: GroupEventsComponent},
+      {path: 'connections-graph', component: GroupConnectionsGraphComponent}
     ]
   }
 ];

@@ -55,6 +55,9 @@ import {EditGroupComponent} from './component/edit-group/edit-group.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {FileModule} from '../../components/file/file.module';
 import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/edit-group-person-logs.component';
+import {GroupConnectionsGraphComponent} from './group-connections-graph/group-connections-graph.component';
+import {NgxGraphModule} from '@swimlane/ngx-graph';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
   imports: [
@@ -84,7 +87,9 @@ import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/e
     NgxSplitButtonModule,
     DxNumberBoxModule,
     NgxGridModule,
-    FileModule
+    FileModule,
+    NgxGraphModule,
+    NgxChartsModule
   ],
   exports: [
     GroupComponent,
@@ -117,7 +122,8 @@ import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/e
     EditGroupConnectionComponent,
     EditDocumentComponent,
     EditGroupComponent,
-    EditGroupPersonLogsComponent
+    EditGroupPersonLogsComponent,
+    GroupConnectionsGraphComponent
   ],
   entryComponents: [
     GroupComponent,

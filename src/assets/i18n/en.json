@@ -351,6 +351,9 @@
   "topLevel": "Top level",
   "sameLevel": "Same level",
   "bottomLevel": "Bottom level",
+  "topLevelShort": "Top",
+  "sameLevelShort": "Same",
+  "bottomLevelShort": "Bottom",
   "visibility": "Visibility",
   "approved": "Approved",
   "none": "None",
@@ -406,5 +409,13 @@
   "showTeamByPersonal": "Show team by personal",
   "teamReport": "Team report",
   "teamByPersonalReport": "Team by personal report",
-  "personalReport": "Personal report"
+  "personalReport": "Personal report",
+  "connectionsGraph": "Connections graph",
+  "nesting": "Nesting",
+  "nestingEnum": {
+    "LEVEL1": "Nesting level 1",
+    "LEVEL2": "Nesting level 2",
+    "LEVEL3": "Nesting level 3",
+    "ENDLESS": "Endless nesting"
+  }
 }

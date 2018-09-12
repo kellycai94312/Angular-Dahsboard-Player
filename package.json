@@ -29,6 +29,7 @@
     "@ngx-translate/core": "^10.0.2",
     "@ngx-translate/http-loader": "^3.0.1",
     "@stomp/ng2-stompjs": "^4.0.1",
+    "@swimlane/ngx-graph": "^5.1.0",
     "@types/plotly.js": "^1.38.5",
     "angular-calendar": "^0.25.2",
     "bootstrap": "^4.1.3",

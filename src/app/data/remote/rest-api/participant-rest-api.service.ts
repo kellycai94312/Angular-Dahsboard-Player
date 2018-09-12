@@ -821,7 +821,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/connection/graph',
   })
-  getGraphGroupConnections: IRestMethodStrict<void, { depth?: number }, { groupId: number }, GroupConnection[]>;
+  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number }, { groupId: number }, GroupConnection[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
