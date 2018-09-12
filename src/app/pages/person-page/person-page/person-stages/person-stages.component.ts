@@ -31,7 +31,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _personService: PersonService,
-              private  _ngxModalService: NgxModalService,
+              private _ngxModalService: NgxModalService,
               private _authorizationService: AuthorizationService) {
   }
 
@@ -39,7 +39,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
     await this.initialize();
     this.canEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
 
-    this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
+    this._sportTypeSubscription = this._personService.sportTypeSubject.subscribe(async value => {
       await this.initialize();
     });
   }
@@ -55,7 +55,8 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   }
 
   public onEdit = async (parameter: PublicUserRoleViewModel) => {
-    if (!this._personService.personViewModel.data || !this._personService.selectedSportType || !this.canEdit || !parameter.data.id) {
+    const sportType = this._personService.sportTypeSubject.getValue();
+    if (!this._personService.personViewModel.data || !sportType || !this.canEdit || !parameter.data.id) {
       return;
     }
     const modal = this._ngxModalService.open();
@@ -64,7 +65,7 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
     await modal.componentInstance.initializeBody(EditPersonStageComponent, async component => {
       component.manualInitialization = true;
       component.personId = this._personService.personViewModel.data.id;
-      component.sportTypeId = this._personService.selectedSportType.id;
+      component.sportTypeId = sportType.id;
 
       await component.initialize(this._appHelper.cloneObject(parameter.data));
 
@@ -87,8 +88,12 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
   };
 
   public fetchItems = async () => {
+    const sportType = this._personService.sportTypeSubject.getValue();
+    if (!sportType) {
+      return null;
+    }
     const items = await this._participantRestApiService.getPublicUserRoles({}, {
-      sportTypeId: this._personService.selectedSportType.id,
+      sportTypeId: sportType.id,
       userRoleId: this._personService.selectedUserRole.id
     }, {personId: this._personService.personViewModel.data.id});
 

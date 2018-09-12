@@ -32,7 +32,7 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
               private _personService: PersonService,
               private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper) {
-    this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
+    this._sportTypeSubscription = this._personService.sportTypeSubject.subscribe(async value => {
       await this.resetItems();
     });
   }
@@ -51,7 +51,7 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
     await modal.componentInstance.initializeBody(EditRefereeCategoryComponent, async component => {
       component.manualInitialization = true;
       component.person = this._personService.personViewModel.data;
-      component.sportType = this._personService.selectedSportType;
+      component.sportType = this._personService.sportTypeSubject.getValue();
       await component.initialize(this._appHelper.cloneObject(personRefereeCategoryViewModel.data));
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
@@ -67,10 +67,11 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
   };
 
   public fetchItems = async (query: PageQuery) => {
-    if (!this._personService.personViewModel.data || !this._personService.selectedSportType) {
+    const sportType = this._personService.sportTypeSubject.getValue();
+    if (!this._personService.personViewModel.data || !sportType) {
       return;
     }
-    const items = await this._participantRestApiService.getPersonRefereeCategories({personId: this._personService.personViewModel.data.id, sportTypeId: this._personService.selectedSportType.id});
+    const items = await this._participantRestApiService.getPersonRefereeCategories({personId: this._personService.personViewModel.data.id, sportTypeId: sportType.id});
     const pageContainer = this._appHelper.arrayToPageContainer(items);
     return this._appHelper.pageContainerConverter(pageContainer, async obj => {
       const personRefereeCategoryViewModel = new PersonRefereeCategoryViewModel(obj);

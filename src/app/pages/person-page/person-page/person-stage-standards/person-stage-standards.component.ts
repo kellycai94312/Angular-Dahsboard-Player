@@ -35,7 +35,7 @@ export class PersonStageStandardsComponent implements OnInit, OnDestroy {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
     this.person = this._personService.personViewModel.data;
-    this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(async value => {
+    this._sportTypeSubscription = this._personService.sportTypeSubject.subscribe(async value => {
       this._sportType = value;
       await this.resetItems();
     });

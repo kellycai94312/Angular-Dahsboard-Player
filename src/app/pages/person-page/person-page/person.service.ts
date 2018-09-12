@@ -15,6 +15,7 @@ import {BehaviorSubject} from 'rxjs';
 export class PersonService implements OnDestroy {
 
   public readonly personViewModelSubject: BehaviorSubject<PersonViewModel>;
+  public readonly sportTypeSubject: BehaviorSubject<SportType>;
 
   /*
   @deprecated Use person
@@ -24,24 +25,22 @@ export class PersonService implements OnDestroy {
   public sportTypes: SportType[];
 
   public selectedUserRole: UserRole;
-  public selectedSportType: SportType;
   public selectedPublicUserRole: PublicUserRole;
   // BaseGroup by SelectedUserRole
   public baseGroup: GroupPerson;
 
   public readonly userRoleHandler: Subject<UserRole>;
-  public readonly sportTypeHandler: Subject<SportType>;
   public readonly personStageSportTypeHandler: Subject<PublicUserRole>;
   public readonly baseGroupHandler: Subject<GroupPerson>;
   public readonly logoHandler: Subject<Image>;
 
   private _userRoleSubscription: ISubscription;
-  private readonly _personStageSportTypeSubscription: ISubscription;
+  private readonly _sportTypeSubscription: ISubscription;
 
   public constructor(private _participantRestApiService: ParticipantRestApiService,
                      private _appHelper: AppHelper) {
     this.userRoleHandler = new Subject<UserRole>();
-    this.sportTypeHandler = new Subject<SportType>();
+    this.sportTypeSubject = new BehaviorSubject<SportType>(null);
     this.personStageSportTypeHandler = new Subject<PublicUserRole>();
     this.baseGroupHandler = new Subject<GroupPerson>();
     this.logoHandler = new Subject<Image>();
@@ -50,10 +49,9 @@ export class PersonService implements OnDestroy {
     this.sportTypes = [];
 
     this.selectedUserRole = null;
-    this.selectedSportType = null;
     this.baseGroup = null;
 
-    this._personStageSportTypeSubscription = this.sportTypeHandler.subscribe(async value => {
+    this._sportTypeSubscription = this.sportTypeSubject.subscribe(async value => {
       await this.refreshCurrentPersonStage();
     });
   }
@@ -78,8 +76,7 @@ export class PersonService implements OnDestroy {
 
         this.sportTypes = await  this._participantRestApiService.getPersonSportTypes({id: person.id});
         if (this.sportTypes.length) {
-          this.selectedSportType = this.sportTypes[0];
-          await this.refreshCurrentPersonStage();
+          this.sportTypeSubject.next(this.sportTypes[0]);
         }
 
         this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
@@ -110,22 +107,21 @@ export class PersonService implements OnDestroy {
     this.userRoleHandler.next(userRole);
   }
 
-  public setSportType(sportType: SportType) {
-    this.selectedSportType = sportType;
-    this.sportTypeHandler.next(sportType);
-  }
-
   public async refreshCurrentPersonStage(): Promise<PublicUserRole> {
     let currentItem = null;
-    try {
-      const items = await this._participantRestApiService.getPublicUserRoles({}, {
-        sportTypeId: this.selectedSportType.id,
-        userRoleId: this.selectedUserRole.id
-      }, {personId: this.personViewModel.data.id});
+    const sportType = this.sportTypeSubject.getValue();
+    if (sportType) {
+      try {
+        const items = await this._participantRestApiService.getPublicUserRoles({}, {
+          sportTypeId: sportType.id,
+          userRoleId: this.selectedUserRole.id
+        }, {personId: this.personViewModel.data.id});
 
-      currentItem = items.reverse().find(x => !this._appHelper.isUndefinedOrNull(x.joinDate));
-    } catch (e) {
+        currentItem = items.reverse().find(x => !this._appHelper.isUndefinedOrNull(x.joinDate));
+      } catch (e) {
+      }
     }
+
     this.selectedPublicUserRole = currentItem;
     this.personStageSportTypeHandler.next(currentItem);
     return currentItem;
@@ -141,7 +137,7 @@ export class PersonService implements OnDestroy {
 
   public unsubscribe() {
     this._appHelper.unsubscribe(this._userRoleSubscription);
-    this._appHelper.unsubscribe(this._personStageSportTypeSubscription);
+    this._appHelper.unsubscribe(this._sportTypeSubscription);
   }
 
   public async allowEdit(): Promise<boolean> {

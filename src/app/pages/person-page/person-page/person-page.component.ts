@@ -281,7 +281,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
         this.personService.sportTypes = await this._participantRestApiService.updatePersonSportTypes(new ListRequest(selectedItems), {}, {personId: this.personService.personViewModel.data.id});
         this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
 
-        await this.onSelectedSportType(this.personService.selectedSportType);
+        await this.onSelectedSportType(this.personService.sportTypeSubject.getValue());
         ref.dismiss();
       } catch (e) {
         await this._appHelper.showErrorMessage('saveError');
@@ -297,7 +297,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   public async sportTypeRefresh(sportType: SportType = null) {
     await this.setToggle('sportType', this.personService.sportTypes, sportType, selectedItem => {
-      this.personService.setSportType(selectedItem);
+      this.personService.sportTypeSubject.next(selectedItem);
       this.selectedSportTypeButtonGroupItem = this.sportTypeButtonGroupItems.find(x => x.originalObject.id == selectedItem.id);
     });
   }
