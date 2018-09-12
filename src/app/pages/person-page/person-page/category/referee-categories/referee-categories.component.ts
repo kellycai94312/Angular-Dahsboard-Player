@@ -22,7 +22,7 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;
 
-  public propertyConstant = PropertyConstant;
+  public readonly propertyConstant = PropertyConstant;
   public canEdit: boolean;
 
   private readonly _sportTypeSubscription: ISubscription;
