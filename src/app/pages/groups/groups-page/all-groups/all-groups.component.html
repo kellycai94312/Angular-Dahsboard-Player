@@ -17,6 +17,7 @@
   <div class="col">
     <app-input-select [loadData]="loadSportTypes"
                       [pageSize]="pageSize"
+                      [(model)]="selectedSportType"
                       [getKey]="getSportTypeKey"
                       [getName]="getSportTypeName"
                       placeholder="{{'sportType' | translate}}"
@@ -37,6 +38,7 @@
                    displayExpr="name"
                    (onValueChanged)="onLeagueChanged($event.value)"
                    placeholder="{{'league' | translate}}"
+                   [disabled]="!selectedSportType"
                    showClearButton="true">
     </dx-select-box>
   </div>
@@ -57,7 +59,7 @@
                       [getKey]="getRegionKey"
                       [getName]="getRegionName"
                       [(model)]="selectedRegion"
-                      [disabled]="selectedCountry==null"
+                      [disabled]="!selectedCountry"
                       placeholder="{{'region' | translate}}"
                       ngDefaultControl
                       (onChange)="onRegionChanged($event.current)">
@@ -69,7 +71,7 @@
                       [getKey]="getCityKey"
                       [getName]="getCityName"
                       [(model)]="selectedCity"
-                      [disabled]="selectedRegion==null"
+                      [disabled]="!selectedRegion"
                       placeholder="{{'city' | translate}}"
                       ngDefaultControl
                       (onChange)="onCityChanged($event.current)">

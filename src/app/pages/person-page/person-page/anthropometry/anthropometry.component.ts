@@ -15,38 +15,25 @@ import {AppHelper} from '../../../../utils/app-helper';
 export class AnthropometryComponent implements OnInit, OnDestroy {
 
   public anthropometry: PersonAnthropometry[];
-  public allowEdit: boolean;
+  public canEdit: boolean;
 
   private readonly _sportTypeSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
-    this._sportTypeSubscription = this._personService.sportTypeHandler.subscribe(sportType => this.load(sportType));
+    this._sportTypeSubscription = this._personService.sportTypeSubject.subscribe(async sportType => await this.initialize(sportType));
   }
 
   async ngOnInit() {
-    this.allowEdit = await this._personService.allowEdit();
-
-    if (this._personService.selectedSportType) {
-      await this.load(this._personService.selectedSportType);
-    }
+    this.canEdit = await this._personService.allowEdit();
   }
 
   ngOnDestroy(): void {
     this._appHelper.unsubscribe(this._sportTypeSubscription);
   }
 
-  public async onSave() {
-    if (this._personService.selectedSportType) {
-      this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {
-        personId: this._personService.personViewModel.data.id,
-        sportTypeId: this._personService.selectedSportType.id
-      });
-    }
-  }
-
-  private async load(sportType: SportType) {
+  public async initialize(sportType: SportType): Promise<void> {
     if (sportType) {
       this.anthropometry = await this._participantRestApiService.getAnthropometry({
         id: this._personService.personViewModel.data.id,
@@ -56,5 +43,17 @@ export class AnthropometryComponent implements OnInit, OnDestroy {
       this.anthropometry = [];
     }
   }
+
+  public onSave = async () => {
+    await this._appHelper.trySave(async () => {
+      const sportType = this._personService.sportTypeSubject.getValue();
+      if (sportType) {
+        this.anthropometry = await this._participantRestApiService.updateAnthropometry(new ListRequest(this.anthropometry), {}, {
+          personId: this._personService.personViewModel.data.id,
+          sportTypeId: sportType.id
+        });
+      }
+    });
+  };
 
 }

@@ -42,6 +42,7 @@
                    [(value)]="person.birthDate"
                    type="date"
                    class="w-100"
+                   [displayFormat]="propertyConstant.dateFormat"
                    [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -51,12 +52,12 @@
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="sex">{{'persons.person.personal.sex' | translate}}</label>
+      <label for="sex">{{'sex' | translate}}</label>
       <dx-select-box id="sex"
-                     [items]="sexValues"
-                     [(value)]="selectedSex"
+                     [items]="sexEnumNameWrappers"
+                     [(value)]="selectedSexEnum"
                      displayExpr="name"
-                     placeholder="{{'persons.person.personal.sex' | translate}}"
+                     placeholder="{{'sex' | translate}}"
                      [readOnly]="!allowEdit">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -136,8 +137,7 @@
     </app-input-select>
   </div>
 </div>
-<button *ngIf="allowEdit"
-        type="button"
-        class="btn btn-outline-success mt-2"
-        (click)="onSave()">{{'persons.person.save' | translate}}
-</button>
+<app-busy-button *ngIf="allowEdit"
+                 classes="mt-2"
+                 nameKey="save"
+                 [click]="onSave"></app-busy-button>

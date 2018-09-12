@@ -1,0 +1,21 @@
+<label>{{(data.noteType === noteType.SCHOOL ? 'name' : 'fullName') | translate }}</label>
+<dx-text-box [(value)]="data.name"></dx-text-box>
+
+<label class="mt-2">{{'phone' | translate }}</label>
+<dx-text-box [(value)]="data.phone"></dx-text-box>
+
+<label class="mt-2">{{'email' | translate }}</label>
+<dx-text-box [(value)]="data.email"></dx-text-box>
+
+<div *ngIf="data.noteType === noteType.AGENT">
+  <label class="mt-2">{{'organization' | translate }}</label>
+  <dx-text-box [(value)]="data.organization"></dx-text-box>
+</div>
+
+<div *ngIf="data.noteType === noteType.TRAINER">
+  <label class="mt-2">{{'club' | translate }}</label>
+  <dx-text-box [(value)]="data.club"></dx-text-box>
+
+  <label class="mt-2">{{'persons.person.myRegion.trainer.age' | translate }}</label>
+  <dx-text-box [(value)]="data.age"></dx-text-box>
+</div>

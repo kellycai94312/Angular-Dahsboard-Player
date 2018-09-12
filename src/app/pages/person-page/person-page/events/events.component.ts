@@ -21,7 +21,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 })
 export class EventsComponent implements OnInit, OnDestroy {
 
-  public propertyConstant = PropertyConstant;
+  public readonly propertyConstant = PropertyConstant;
   public readonly pageSize: number;
   public canEdit: boolean;
 

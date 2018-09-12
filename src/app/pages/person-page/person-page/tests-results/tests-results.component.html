@@ -33,17 +33,10 @@
   {{'showMore' | translate}}
 </button>
 
-<!--group-->
-<dx-text-box #searchDxTextBoxComponent
-             class="mt-2"
-             placeholder="{{'search' | translate}}"
-             mode="search"
-             showClearButton="true">
-</dx-text-box>
-
-<ngx-virtual-scroll [getItems]="getItems"
+<ngx-virtual-scroll class="mt-2"
+                    [getItems]="getItems"
                     [query]="measureTemplateQuery"
-                    windowScroll="true">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div class="mb-2">
       <div class="d-flex flex-row">
@@ -80,4 +73,3 @@
     </div>
   </ng-template>
 </ngx-virtual-scroll>
-

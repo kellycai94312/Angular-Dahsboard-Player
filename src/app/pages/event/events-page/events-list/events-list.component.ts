@@ -34,7 +34,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
               private _profileService: ProfileService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
-    this.baseTrainingQuery.measureParameter = MeasureParameterEnum[MeasureParameterEnum.GOALS];
+    this.baseTrainingQuery.measureParameterEnum = MeasureParameterEnum[MeasureParameterEnum.GOALS];
   }
 
   async ngOnInit() {

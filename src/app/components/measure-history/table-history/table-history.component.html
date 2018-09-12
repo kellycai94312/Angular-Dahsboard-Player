@@ -10,7 +10,7 @@
          ngxScroll
          (scrollDown)="onNextPage($event)">
   <tr class="d-flex">
-    <td class="col">{{getDate(item) | date:'yyyy.MM.dd HH:mm'}}</td>
+    <td class="col">{{getDate(item) | date: propertyConstant.dateTimeFormat}}</td>
     <td class="col">{{getUnits(item)}}</td>
     <td class="col">{{getValue(item)}}</td>
   </tr>

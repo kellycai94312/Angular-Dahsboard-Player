@@ -1,12 +1,13 @@
-import { Note } from './base/note';
-import { NoteType } from './base/note-type';
+import {Note} from './base/note';
+import {NoteType} from './base/note-type';
 
 export class AgentNote extends Note {
-  organization: string;
+
+  public organization: string;
 
   constructor() {
     super();
-    this.discriminator = NoteType[NoteType.AGENT];
+    this.discriminator = NoteType.AGENT;
   }
 
 }

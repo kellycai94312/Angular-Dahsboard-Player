@@ -4,12 +4,11 @@
     <div class="form-group mb-2">
       <label>{{item.measure.measureParameter.name}}</label>
       <app-measure-input [anthropometry]="item"
-                         [disabled]="!allowEdit"></app-measure-input>
+                         [disabled]="!canEdit"></app-measure-input>
     </div>
   </div>
 </div>
-<button *ngIf="allowEdit"
-        type="button"
-        class="btn btn-success"
-        (click)="onSave()">{{'persons.person.save' | translate}}
-</button>
+<app-busy-button *ngIf="canEdit"
+                 classes="mt-2"
+                 nameKey="save"
+                 [click]="onSave"></app-busy-button>

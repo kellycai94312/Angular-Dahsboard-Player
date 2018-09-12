@@ -1,13 +1,15 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { MeasureHistoryService } from './measure-history.service';
+import {Component, Input} from '@angular/core';
+import {MeasureHistoryService} from './measure-history.service';
+import {PropertyConstant} from '../../data/local/property-constant';
 
 @Component({
   selector: 'app-measure-history',
   templateUrl: './measure-history.component.html',
   styleUrls: ['./measure-history.component.scss']
 })
-export class MeasureHistoryComponent implements OnInit {
+export class MeasureHistoryComponent {
+
+  public propertyConstant = PropertyConstant;
 
   @Input()
   measureValues: any[];
@@ -40,9 +42,6 @@ export class MeasureHistoryComponent implements OnInit {
   isNumber: boolean;
 
   constructor(private _measureHistoryService: MeasureHistoryService) {
-  }
-
-  async ngOnInit() {
   }
 
   async onDateFromChange(event: any) {

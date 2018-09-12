@@ -3,8 +3,8 @@ import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../../../data/local/property-constant';
 import {NoteType} from '../../../../../data/remote/model/note/base/note-type';
 import {MyRegionService} from '../my-region.service';
-import {NgxVirtualScrollComponent} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {ISubscription} from 'rxjs-compat/Subscription';
+import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 
 @Component({
   selector: 'app-school-note',
@@ -13,8 +13,8 @@ import {ISubscription} from 'rxjs-compat/Subscription';
 })
 export class SchoolNoteComponent implements OnInit, OnDestroy {
 
-  @ViewChild(NgxVirtualScrollComponent)
-  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
 
   @ViewChild('name')
   public name: DxTextBoxComponent;
@@ -35,7 +35,7 @@ export class SchoolNoteComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.myRegionService.reset = async () => {
       setTimeout(async () => {
-        await this.ngxVirtualScrollComponent.reset();
+        await this.ngxGridComponent.reset();
       });
     };
 

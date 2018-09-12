@@ -5,7 +5,6 @@ import {ExerciseResult} from '../../../../data/remote/bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../../../../data/remote/model/training/exercise-exec-measure-value';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {DxTextBoxComponent} from 'devextreme-angular';
 import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measure-template-query';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -27,9 +26,6 @@ export class TestsResultsComponent implements OnInit {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  @ViewChild('searchDxTextBoxComponent')
-  public searchDxTextBoxComponent: DxTextBoxComponent;
-
   public isEditAllow: boolean;
   public readonly measureTemplateQuery: MeasureTemplateQuery;
 
@@ -48,11 +44,6 @@ export class TestsResultsComponent implements OnInit {
   async ngOnInit() {
     this.isEditAllow = await this._personService.allowEdit();
     this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
-      .subscribe(async value => {
-        this.measureTemplateQuery.name = value;
-        await this.updateItems();
-      });
     await this.updateItems();
   }
 

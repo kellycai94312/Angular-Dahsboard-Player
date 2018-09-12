@@ -8,10 +8,10 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {Person} from '../../../../data/remote/model/person';
 import {AppHelper} from '../../../../utils/app-helper';
-import {Sex} from '../../../../data/local/sex';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AthleteState} from '../../../../data/remote/model/person/athlete-state';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-personal',
@@ -20,14 +20,15 @@ import {AthleteState} from '../../../../data/remote/model/person/athlete-state';
 })
 export class PersonalComponent implements OnInit {
 
+  public readonly propertyConstant = PropertyConstant;
   public readonly userRoleEnum = UserRoleEnum;
   public readonly pageSize: number;
-  public readonly sexValues: Sex[];
 
   public allowEdit: boolean;
   public person: Person;
   public baseUserRole: UserRole;
-  public selectedSex: Sex;
+  public sexEnumNameWrappers: NameWrapper<SexEnum>[];
+  public selectedSexEnum: NameWrapper<SexEnum>;
   public athleteStates: AthleteState[];
 
   constructor(public personService: PersonService,
@@ -35,22 +36,15 @@ export class PersonalComponent implements OnInit {
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService) {
     this.pageSize = PropertyConstant.pageSize;
-    this.sexValues = [];
     this.person = this.personService.personViewModel.data;
   }
 
   async ngOnInit() {
-    const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    for (let i = 0; i < temp.length; i++) {
-      const sex = new Sex();
-      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
-      sex.sexEnum = temp[i];
-      this.sexValues.push(sex);
-    }
-
-    this.selectedSex = this.sexValues.find(x => SexEnum[x.sexEnum].toString() === this.person.sex.toString());
-    this.athleteStates = await this._participantRestApiService.getAthleteStates();
     this.allowEdit = await this.personService.allowEdit();
+
+    this.sexEnumNameWrappers = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
+    this.selectedSexEnum = this.sexEnumNameWrappers.find(x => x.data === this.person.sex);
+    this.athleteStates = await this._participantRestApiService.getAthleteStates();
     try {
       if (this.person && this.person.id) {
         this.person.address = await this._participantRestApiService.getPersonAddress({id: this.person.id});
@@ -69,9 +63,9 @@ export class PersonalComponent implements OnInit {
     this.person.address.city = null;
   }
 
-  public async onSave() {
-    try {
-      this.person.sex = this.selectedSex.sexEnum;
+  public onSave = async () => {
+    await this._appHelper.trySave(async () => {
+      this.person.sex = this.selectedSexEnum.data;
       const person = await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
       this.personService.personViewModel.update(person);
 
@@ -79,10 +73,8 @@ export class PersonalComponent implements OnInit {
       if (this.baseUserRole) {
         await this._participantRestApiService.updateUserBaseUserRole(this.baseUserRole, {}, {userId: this.personService.personViewModel.data.user.id});
       }
-    } catch (e) {
-      await this._appHelper.showErrorMessage('saveError');
-    }
-  }
+    });
+  };
 
   loadCountries = async (from: number, searchText: string) => {
     return this._participantRestApiService.getCountries({

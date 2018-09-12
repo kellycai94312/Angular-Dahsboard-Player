@@ -6,6 +6,7 @@ import {ISubscription} from 'rxjs-compat/Subscription';
 import {PageContainer} from '../data/remote/bean/page-container';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
+import {ClientError} from '../data/local/error/client-error';
 
 @Injectable()
 export class AppHelper {
@@ -194,8 +195,13 @@ export class AppHelper {
     try {
       await action();
     } catch (e) {
-      errorMessage = e.message;
       isSuccess = false;
+
+      if (e instanceof ClientError) {
+        errorMessage = await this._translateService.get(e.messageKey).toPromise();
+      } else {
+        errorMessage = e.message;
+      }
     }
 
     if (notify) {
