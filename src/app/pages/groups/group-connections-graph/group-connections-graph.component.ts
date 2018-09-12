@@ -6,11 +6,11 @@ import {GroupConnection} from '../../../data/remote/model/group/group-connection
 import {Group} from '../../../data/remote/model/group/base/group';
 import {GroupConnectionType} from '../../../data/remote/model/group/group-connection-type';
 import {TranslateService} from '@ngx-translate/core';
-import {NestingEnum} from './nesting-enum';
+import {NestingEnum} from '../../../data/local/nesting-enum';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {Nesting} from './nesting';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {Subject} from 'rxjs';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-group-connections-graph',
@@ -19,8 +19,8 @@ import {Subject} from 'rxjs';
 })
 export class GroupConnectionsGraphComponent implements OnInit {
 
-  public nesting: Nesting;
-  public nestingValues: Nesting[];
+  public nesting: NameWrapper<NestingEnum>;
+  public nestingValues: NameWrapper<NestingEnum>[];
 
   public nodes: Node[];
   public links: Link[];
@@ -44,19 +44,12 @@ export class GroupConnectionsGraphComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.nestingValues = [];
-    const nestingTypes = Object.keys(NestingEnum).filter(x => !isNaN(Number(NestingEnum[x]))).map(x => NestingEnum[x]);
-    for (let i = 0; i < nestingTypes.length; i++) {
-      const nesting = new Nesting();
-      nesting.nestingEnum = nestingTypes[i];
-      nesting.name = await this._translateObjectService.getTranslateName('nestingEnum', NestingEnum[nestingTypes[i]].toString());
-      this.nestingValues.push(nesting);
-    }
+    this.nestingValues = await this._translateObjectService.getTranslatedEnumCollection<NestingEnum>(NestingEnum, 'NestingEnum');
     this.nesting = this.nestingValues[0];
   }
 
-  public async onNestingChanged(nesting: Nesting) {
-    switch (nesting.nestingEnum) {
+  public async onNestingChanged(nameWrapper: NameWrapper<NestingEnum>) {
+    switch (nameWrapper.data) {
       case NestingEnum.LEVEL1:
         await this.initializeGroupConnections(1);
         break;
