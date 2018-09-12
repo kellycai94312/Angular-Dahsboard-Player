@@ -199,7 +199,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
     let lastUnreadMessage: Date;
     pageContainer.list = pageContainer.list.map(x => {
-      if (x.receiver.person.id == this.person.id && !x.read) {
+      if (!x.receiver || x.receiver.person.id == this.person.id && !x.read) {
         x.read = true;
         lastUnreadMessage = x.content.created;
       }
@@ -305,7 +305,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     };
   }
 
-  public async deleteMessages() {
+  public async clearMessagesHistory() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
     const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
     componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();

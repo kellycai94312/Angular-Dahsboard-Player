@@ -43,7 +43,7 @@
           <button class="dropdown-item" (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' :
             'enableNotifications') | translate}}
           </button>
-          <button class="dropdown-item" (click)="deleteMessages()">{{'deleteMessages' | translate}}</button>
+          <button class="dropdown-item" (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}</button>
           <button class="dropdown-item" (click)="createChat()" *ngIf="conversation.discriminator == 'DIALOGUE'">
             {{'createChat' | translate}}
           </button>
