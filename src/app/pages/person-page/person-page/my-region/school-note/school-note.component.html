@@ -24,36 +24,32 @@
     </dx-text-box>
   </div>
 </div>
-<table class="table table-bordered table-hover table-sm mt-2">
-  <thead>
-  <tr class="d-flex">
-    <th class="col-5">{{ 'name' | translate }}</th>
-    <th class="col-3">{{ 'phone' | translate }}</th>
-    <th class="col-3">{{ 'email' | translate }}</th>
-    <th class="col-1"></th>
-  </tr>
-  </thead>
-  <tbody>
-  <ngx-virtual-scroll [getItems]="myRegionService.getItems"
-                      [(query)]="myRegionService.noteQuery"
-                      windowScroll="true">
-    <ng-template let-item>
-      <tr class="d-flex">
-        <td class="col-5">{{item?.name}}</td>
-        <td class="col-3">{{item?.phone}}</td>
-        <td class="col-3">{{item?.email}}</td>
-        <td class="col-1">
-          <div class="text-center">
-            <button class="btn btn-outline-primary" (click)="myRegionService.edit(item)">
-              <i class="fa fa-edit"></i>
-            </button>
-            <button class="btn btn-outline-danger" (click)="myRegionService.remove(item)">
-              <i class="fa fa-remove"></i>
-            </button>
-          </div>
-        </td>
-      </tr>
+
+<ngx-grid class="mt-2"
+          [fetchItems]="myRegionService.getItems"
+          [query]="myRegionService.noteQuery"
+          [edit]="myRegionService.onEdit"
+          [canEdit]="myRegionService.canEdit"
+          [enabledAdd]="false">
+  <ngx-column nameKey="name"
+              [style]="'col-6'"
+              [templateRef]="nameTemplate">
+    <ng-template #nameTemplate let-item>
+      {{item.name}}
     </ng-template>
-  </ngx-virtual-scroll>
-  </tbody>
-</table>
+  </ngx-column>
+  <ngx-column nameKey="phone"
+              [style]="'col-3'"
+              [templateRef]="phoneTemplate">
+    <ng-template #phoneTemplate let-item>
+      {{item.phone}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="email"
+              [style]="'col-3'"
+              [templateRef]="emailTemplate">
+    <ng-template #emailTemplate let-item>
+      {{item.email}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

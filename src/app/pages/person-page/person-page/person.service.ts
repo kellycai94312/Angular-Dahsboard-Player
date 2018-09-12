@@ -9,10 +9,16 @@ import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
 import {PublicUserRole} from '../../../data/remote/model/group/public-user-role';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class PersonService implements OnDestroy {
 
+  public readonly personViewModelSubject: BehaviorSubject<PersonViewModel>;
+
+  /*
+  @deprecated Use person
+   */
   public personViewModel: PersonViewModel;
   public userRoles: UserRole[];
   public sportTypes: SportType[];
@@ -39,7 +45,7 @@ export class PersonService implements OnDestroy {
     this.personStageSportTypeHandler = new Subject<PublicUserRole>();
     this.baseGroupHandler = new Subject<GroupPerson>();
     this.logoHandler = new Subject<Image>();
-
+    this.personViewModelSubject = new BehaviorSubject<PersonViewModel>(null);
     this.userRoles = [];
     this.sportTypes = [];
 
@@ -61,6 +67,7 @@ export class PersonService implements OnDestroy {
       const person = await this._participantRestApiService.getPerson({id: personId});
       this.personViewModel = new PersonViewModel(person);
       await this.personViewModel.initialize();
+      this.personViewModelSubject.next(this.personViewModel);
       if (person && person.id) {
         if (person.user && person.user.id) {
           this.userRoles = await  this._participantRestApiService.getUserUserRoles({userId: person.user.id});

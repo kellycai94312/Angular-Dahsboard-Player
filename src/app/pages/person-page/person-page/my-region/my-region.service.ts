@@ -1,5 +1,4 @@
-import {Injectable} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {Injectable, OnDestroy} from '@angular/core';
 
 import {Note} from '../../../../data/remote/model/note/base/note';
 import {NoteQuery} from '../../../../data/remote/rest-api/query/note-query';
@@ -7,51 +6,69 @@ import {NoteType} from '../../../../data/remote/model/note/base/note-type';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {NoteModalComponent} from './note-modal/note-modal.component';
-import {ModalEvent} from '../../../../data/local/modal-event';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditNoteComponent} from '../../component/edit-note/edit-note.component';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PersonService} from '../person.service';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Injectable()
-export class MyRegionService {
+export class MyRegionService implements OnDestroy {
 
   public noteQuery: NoteQuery;
 
   public reset: () => Promise<void>;
+  public canEdit: boolean;
+  private readonly _personViewModelSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _modalService: NgbModal) {
+              private _ngxModalService: NgxModalService,
+              private _appHelper: AppHelper,
+              private _personService: PersonService) {
     this.noteQuery = new NoteQuery();
     this.noteQuery.noteType = NoteType.AGENT;
     this.noteQuery.from = 0;
     this.noteQuery.count = PropertyConstant.pageSize;
+    this._personViewModelSubscription = _personService.personViewModelSubject.subscribe(async value => {
+      this.canEdit = await this._personService.allowEdit();
+    });
   }
 
-  public add = async () => {
-    const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});
-    ref.componentInstance.modalEvent = ModalEvent.ADD;
-    ref.componentInstance.noteType = this.noteQuery.noteType;
-    ref.componentInstance.onSave = async (item: Note) => {
-      await this._participantRestApiService.addNote(item);
-      await this.updateItems();
-      ref.dismiss();
-    };
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._personViewModelSubscription);
+  }
+
+  public onAdd = async () => {
+    const note = new Note();
+    note.discriminator = this.noteQuery.noteType;
+    note.noteType = this.noteQuery.noteType;
+    await this.showModal(note);
   };
 
-  public async edit(item: Note) {
-    const ref = this._modalService.open(NoteModalComponent, {size: 'lg'});
-    ref.componentInstance.modalEvent = ModalEvent[ModalEvent.EDIT];
-    ref.componentInstance.note = Object.assign({}, item);
-    ref.componentInstance.noteType = this.noteQuery.noteType;
-    ref.componentInstance.onSave = async (newItem: Note) => {
-      await this._participantRestApiService.updateNote(newItem, null, {id: item.id});
-      await this.updateItems();
-      ref.dismiss();
-    };
-  }
+  public onEdit = async (obj: Note) => {
+    await this.showModal(obj);
+  };
 
-  public async remove(item: Note) {
-    await this._participantRestApiService.removeNote({id: item.id});
-    await this.updateItems();
+  public async showModal(note: Note): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EditNoteComponent, async component => {
+      component.manualInitialization = true;
+      await component.initialize(this._appHelper.cloneObject(note));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+        })];
+    });
+
+    modal.result.then(async x => {
+    }, async reason => {
+      await this.initialize(this.noteQuery.noteType);
+    });
   }
 
   public async initialize(noteType: NoteType) {
@@ -60,7 +77,7 @@ export class MyRegionService {
     await this.updateItems();
   }
 
-  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
+  public getItems: Function = async (pageQuery: PageQuery) => {
     return await this._participantRestApiService.getNotes(pageQuery);
   };
 

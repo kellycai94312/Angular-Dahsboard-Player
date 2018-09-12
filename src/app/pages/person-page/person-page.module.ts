@@ -44,7 +44,6 @@ import {SchoolNoteComponent} from './person-page/my-region/school-note/school-no
 import {TrainerNoteComponent} from './person-page/my-region/trainer-note/trainer-note.component';
 import {AgentNoteComponent} from './person-page/my-region/agent-note/agent-note.component';
 import {MyRegionService} from './person-page/my-region/my-region.service';
-import {NoteModalComponent} from './person-page/my-region/note-modal/note-modal.component';
 import {AchievementsComponent} from './person-page/achievements/achievements.component';
 import {RanksComponent} from './person-page/ranks/ranks.component';
 import {MeasureInputModule} from '../../components/measure-input/measure-input.module';
@@ -75,6 +74,7 @@ import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 import {PersonStageStandardsComponent} from './person-page/person-stage-standards/person-stage-standards.component';
 import {ReportModule} from '../../components/report/report.module';
 import {EditRefereeCategoryComponent} from './component/edit-referee-category/edit-referee-category.component';
+import {EditNoteComponent} from './component/edit-note/edit-note.component';
 
 @NgModule({
   imports: [
@@ -132,7 +132,6 @@ import {EditRefereeCategoryComponent} from './component/edit-referee-category/ed
     SchoolNoteComponent,
     TrainerNoteComponent,
     AgentNoteComponent,
-    NoteModalComponent,
     RanksComponent,
     TestsResultsHistoryComponent,
     AnthropometryHistoryComponent,
@@ -148,7 +147,8 @@ import {EditRefereeCategoryComponent} from './component/edit-referee-category/ed
     EditPersonComponent,
     EditRankComponent,
     PersonStageStandardsComponent,
-    EditRefereeCategoryComponent
+    EditRefereeCategoryComponent,
+    EditNoteComponent
   ],
   providers: [
     PersonService,
@@ -160,14 +160,14 @@ import {EditRefereeCategoryComponent} from './component/edit-referee-category/ed
   entryComponents: [
     ModalSelectPageComponent,
     EventModalComponent,
-    NoteModalComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
     EditMedicalExaminationComponent,
     EditPersonComponent,
     EditRankComponent,
     RanksComponent,
-    EditRefereeCategoryComponent
+    EditRefereeCategoryComponent,
+    EditNoteComponent
   ]
 })
 export class PersonPageModule {

@@ -94,7 +94,6 @@ export class EditRefereeCategoryComponent extends BaseEditComponent<PersonRefere
 
       modal.result.then(async x => {
       }, async reason => {
-        console.log(component);
         this._document = this.appHelper.cloneObject(component.data);
       });
     });

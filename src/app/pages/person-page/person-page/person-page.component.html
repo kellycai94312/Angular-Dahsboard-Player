@@ -12,6 +12,7 @@
            class="logo-xl-circle-change">
         <div class="logo-content">
           <input type="file"
+                 title=" "
                  (change)="onLogoChanged($event.target.files)"
                  accept="image/*">
           <p>{{'uploadAvatar' | translate | uppercase}}</p>
