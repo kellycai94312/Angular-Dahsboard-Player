@@ -18,14 +18,12 @@
       "rating": "Рейтинг",
       "edit": "редактировать",
       "cancel": "Отмена",
-      "save": "Сохранить",
       "personal": {
         "section": "Основные данные",
         "firstName": "Имя",
         "lastName": "Фамилия",
         "middleName": "Отчество",
         "birthDate": "Дата рождения",
-        "sex": "Пол",
         "country": "Страна",
         "region": "Регион",
         "city": "Город"

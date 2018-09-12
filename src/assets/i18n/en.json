@@ -17,14 +17,12 @@
       "rating": "Rating",
       "edit": "edit",
       "cancel": "Cancel",
-      "save": "Save",
       "personal": {
         "section": "Personal information",
         "firstName": "First name",
         "lastName": "Last name",
         "middleName": "Middle name",
         "birthDate": "Birth date",
-        "sex": "Sex",
         "country": "Country",
         "region": "Region",
         "city": "City"
