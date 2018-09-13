@@ -1,0 +1,11 @@
+<div class="content-dimension {{class}}"
+     [routerLink]="data.id">
+  <div class="text-center">
+    <app-image [type]="'LOGO'"
+               [clazz]="'EXERCISE'"
+               [id]="data.id"
+               [dimension]="'W130xH130'"
+               [format]="'SQUARE'"></app-image>
+  </div>
+  <h6 class="text-truncate mt-2">{{data.name}}</h6>
+</div>
