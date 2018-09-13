@@ -1,4 +1,5 @@
 export enum ExerciseType {
-  EXERCISE,
-  TEST
+  EXERCISE = 'EXERCISE',
+  TEST = 'TEST',
+  GAME_EXERCISE = 'GAME_EXERCISE'
 }

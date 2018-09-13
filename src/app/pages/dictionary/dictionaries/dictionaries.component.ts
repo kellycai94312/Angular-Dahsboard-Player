@@ -16,7 +16,9 @@ export class DictionariesComponent {
       {name: 'sportsTrainingStage', data: 'stage'},
       {name: 'stageType', data: 'stage-type'},
       {name: 'sportType', data: 'sport-type'},
-      {name: 'organizations', data: 'organization'}
+      {name: 'organizations', data: 'organization'},
+      {name: 'exercises', data: 'exercise'},
+      {name: 'tests', data: 'test'}
     ];
   }
 
