@@ -417,5 +417,6 @@
     "ENDLESS": "Endless nesting"
   },
   "tests": "Tests",
-  "tags": "Tags"
+  "tags": "Tags",
+  "selection": "Selection"
 }

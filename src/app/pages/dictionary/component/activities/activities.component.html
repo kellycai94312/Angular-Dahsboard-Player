@@ -5,6 +5,14 @@
   <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
 </div>
 
+<div *ngIf="tags && tags.length"
+     class="d-flex flex-wrap mt-2">
+  <div *ngFor="let item of tags"
+       class="">
+    <div class="p-2 mr-2 mb-2 bg-secondary text-white">{{item.name}}</div>
+  </div>
+</div>
+
 <ngx-virtual-scroll class="d-flex flex-wrap mt-2"
                     [query]="query"
                     [getItems]="fetchItems"

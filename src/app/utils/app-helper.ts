@@ -77,7 +77,7 @@ export class AppHelper {
     return items;
   }
 
-  private defaultCompare<T>(first: T, second: T): boolean {
+  public defaultCompare<T>(first: T, second: T): boolean {
     return first === second;
   }
 
@@ -135,6 +135,9 @@ export class AppHelper {
   }
 
   public cloneObject<T>(obj: T): T {
+    if (this.isUndefinedOrNull(obj)) {
+      return obj;
+    }
     return <T>JSON.parse(JSON.stringify(obj));
   }
 

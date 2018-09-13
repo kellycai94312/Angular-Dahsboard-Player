@@ -3,6 +3,9 @@ import {CommonModule} from '@angular/common';
 import {ModalItemComponent} from './modal-item.component';
 import {AdDirective} from './ad.directive';
 
+/*
+@deprecated Use NgxSelectionComponent
+ */
 @NgModule({
   imports: [
     CommonModule

@@ -1,5 +1,8 @@
-import { Directive, ViewContainerRef } from '@angular/core';
+import {Directive, ViewContainerRef} from '@angular/core';
 
+/*
+@deprecated Use NgxSelectionComponent
+ */
 @Directive({
   selector: '[appAd]'
 })

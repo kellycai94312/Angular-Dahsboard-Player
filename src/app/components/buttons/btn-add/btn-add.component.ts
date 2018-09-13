@@ -1,5 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
+/*
+@deprecated Use BusyButton
+ */
 @Component({
   selector: 'app-btn-add',
   templateUrl: './btn-add.component.html',
@@ -10,7 +13,8 @@ export class BtnAddComponent implements OnInit {
   @Input()
   public onClick: Function;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

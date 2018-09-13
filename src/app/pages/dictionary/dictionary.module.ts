@@ -34,6 +34,7 @@ import {ImageModule} from '../../components/image/image.module';
 import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
 import {EditActivityComponent} from './component/edit-activity/edit-activity.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
+import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 
 @NgModule({
   imports: [
@@ -55,7 +56,8 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
     ModalSelectPageModule,
     ImageModule,
     NgxTextBoxModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    NgxSelectionModule
   ],
   declarations: [
     DictionariesComponent,

@@ -11,6 +11,12 @@ import {EditActivityComponent} from '../edit-activity/edit-activity.component';
 import {BaseExercise} from '../../../../data/remote/model/exercise/base/base-exercise';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
+import {NgxSelectionComponent} from '../../../../components/ngx-selection/ngx-selection/ngx-selection.component';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {PageContainer} from '../../../../data/remote/bean/page-container';
+import {Tag} from '../../../../data/remote/model/tag';
+import {NamedObject} from '../../../../data/remote/base/named-object';
+import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
 
 @Component({
   selector: 'app-activities',
@@ -29,6 +35,7 @@ export class ActivitiesComponent implements OnInit {
 
   public readonly splitButtonItems: SplitButtonItem[];
   public query: ActivityQuery;
+  public tags: Tag[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
@@ -61,7 +68,33 @@ export class ActivitiesComponent implements OnInit {
       {
         nameKey: 'tags',
         callback: async () => {
-          // TODO: Add select tags
+          const modal = this._ngxModalService.open();
+          modal.componentInstance.titleKey = 'selection';
+          await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+            const fetchItems = async (query: PageQuery): Promise<PageContainer<Tag>> => {
+              return await this._participantRestApiService.getTags(query);
+            };
+            const initializeComponent = async (componentItem: PreviewNamedObjectComponent<NamedObject>, data: any) => {
+              componentItem.data = data;
+            };
+
+            await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(this.tags));
+
+            modal.componentInstance.splitButtonItems = [
+              {
+                nameKey: 'apply',
+                callback: async () => {
+                  this.query.tags = '';
+                  this.tags = component.selectedItems;
+                  for (const item of this.tags) {
+                    this.query.tags += `${item.id}_`;
+                  }
+                  modal.dismiss();
+                  await this.resetItems();
+                }
+              }
+            ];
+          });
         }
       }
     ];

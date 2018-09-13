@@ -1,6 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
+/*
+@deprecated Use NgxModalComponent
+ */
 @Component({
   selector: 'app-modal-confirm-danger',
   templateUrl: './modal-confirm-danger.component.html',

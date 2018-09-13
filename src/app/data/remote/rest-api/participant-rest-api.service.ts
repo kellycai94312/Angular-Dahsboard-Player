@@ -1684,6 +1684,34 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region Tag
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/tag'
+  })
+  getTags: IRestMethod<PageQuery, PageContainer<Tag>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/tag'
+  })
+  createTag: IRestMethod<Tag, Tag>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/tag/{!tagId}'
+  })
+  updateTag: IRestMethodStrict<Tag, any, { tagId: number }, Tag>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/tag/{!tagId}'
+  })
+  removeTag: IRestMethod<{ tagId: number }, Tag>;
+
+  //#endregion
+
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/league',
