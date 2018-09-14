@@ -1,9 +1,9 @@
-<div class="row cols-padding">
+<ngx-text-box class="w-100"
+              [debounceTime]="propertyConstant.searchDebounceTime"
+              (valueChanged)="onSearchTextChanged($event)"></ngx-text-box>
+<div class="content row cols-padding mt-2">
   <div class="col">
-    <ngx-text-box class="w-100"
-                  [debounceTime]="propertyConstant.searchDebounceTime"
-                  (valueChanged)="onSearchTextChanged($event)"></ngx-text-box>
-    <ngx-virtual-scroll class="mt-2 list-group-flush"
+    <ngx-virtual-scroll class="list-group-flush overflow-content"
                         [getItems]="getItems"
                         [query]="query">
       <ng-template let-item>
@@ -16,7 +16,7 @@
       </ng-template>
     </ngx-virtual-scroll>
   </div>
-  <div class="col list-group-flush">
+  <div class="col list-group-flush overflow-content">
     <div *ngFor="let item of selectedItems"
          class="list-group-item p-2"
          (dblclick)="onUnselected(item)">
