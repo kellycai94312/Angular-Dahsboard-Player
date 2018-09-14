@@ -38,7 +38,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
 
   public readonly splitButtonItems: SplitButtonItem[];
 
-  private readonly _groupScoresSubscription: ISubscription;
+  private _groupScoresSubscription: ISubscription;
 
   constructor(public appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
