@@ -21,6 +21,9 @@ export class ReportsComponent {
   public eventPersonId: number;
 
   @Input()
+  public personId: number;
+
+  @Input()
   public eventGroupId: number;
 
   @Input()
@@ -53,6 +56,18 @@ export class ReportsComponent {
             action: async () => {
               return await this._appHelper.tryLoad(async () => {
                 await this._reportsService.downloadGameReport(this.eventId, this.eventGroupId);
+              });
+            }
+          });
+        }
+        break;
+        case ReportType.TRAINING:
+        if (this.eventId && this.personId) {
+          this.items.push({
+            nameKey: 'trainingPersonalReport',
+            action: async () => {
+              return await this._appHelper.tryLoad(async () => {
+                await this._reportsService.downloadTrainingPersonalReport(this.eventId, this.personId, this.personalReportSettings);
               });
             }
           });

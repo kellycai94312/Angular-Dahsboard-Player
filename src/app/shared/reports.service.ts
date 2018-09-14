@@ -14,6 +14,8 @@ import {TeamReport} from '../data/remote/bean/report/team-report';
 import {TrainingDiscriminator} from '../data/remote/model/training/base/training-discriminator';
 import {ReportType} from '../components/report/bean/report-type';
 import {PersonalReportSettings} from '../data/remote/bean/report/personal-report-settings';
+import {TrainingPersonalReport} from '../data/remote/bean/training-personal-report';
+import {TrainingPersonExercise} from '../data/remote/bean/training-person-exercise';
 
 @Injectable()
 export class ReportsService {
@@ -29,10 +31,10 @@ export class ReportsService {
   public async downloadTestingPersonalReport(testingId: number, trainingPersonId: number, personalReportSettings: PersonalReportSettings) {
     await this.initializeLibraries();
 
-    const reportJson = await this._assetsService.getPersonalReport();
+    const reportJson = await this._assetsService.getTestingPersonalReport();
     let testingPersonalReport: TestingPersonalReport;
     try {
-      testingPersonalReport = await this._participantRestApiService.getPersonalReport({
+      testingPersonalReport = await this._participantRestApiService.getTestingPersonalReport({
         testingId: testingId,
         trainingPersonId: trainingPersonId
       });
@@ -146,6 +148,49 @@ export class ReportsService {
 
   //#endregion
 
+  //#region Training
+
+  public async downloadTrainingPersonalReport(trainingId: number, trainingPersonId: number, personalReportSettings: PersonalReportSettings) {
+    await this.initializeLibraries();
+
+    const reportJson = await this._assetsService.getTrainingPersonalReport();
+    let trainingPersonExercises: TrainingPersonExercise[];
+
+    try {
+      trainingPersonExercises = await this._participantRestApiService.getReportTrainingPersonExercises({
+        trainingId: trainingId,
+        trainingPersonId: trainingPersonId
+      });
+      console.log(trainingId);
+      console.log(trainingPersonId);
+    } catch (e) {
+      if (e.status === 404) {
+        await this._appHelper.showErrorMessage('reportError');
+      }
+      return;
+    }
+    const report = new Stimulsoft.Report.StiReport();
+    report.loadDocument(reportJson);
+    report.dictionary.databases.clear();
+
+    const trainingPersonExerciseDataSet = new Stimulsoft.System.Data.DataSet('personal_training');
+    trainingPersonExerciseDataSet.readJson(trainingPersonExercises);
+    report.regData('personal_training', 'personal_training', trainingPersonExerciseDataSet);
+
+    // const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
+    // trainingInfoDataSet.readJson(trainingPersonExercises.trainingInfo);
+    // report.regData('training_info', 'training_info', trainingInfoDataSet);
+
+    this.addSettings(report, personalReportSettings);
+    this.addLogoResource(report);
+    report.render();
+
+    //await this.download(report, `${trainingPersonExercises.trainingInfo.name} - ${trainingPersonExercises.trainingInfo.fullName}`);
+    await this.download(report, `Personal training report`);
+  }
+
+  //#endregion
+
   //#region Game
 
   public async downloadGameReport(gameId: number, trainingGroupId: number) {
@@ -202,6 +247,8 @@ export class ReportsService {
         return ReportType.GAME;
       case TrainingDiscriminator.TESTING:
         return ReportType.TESTING;
+      case TrainingDiscriminator.TRAINING:
+        return ReportType.TRAINING;
     }
     return null;
   }

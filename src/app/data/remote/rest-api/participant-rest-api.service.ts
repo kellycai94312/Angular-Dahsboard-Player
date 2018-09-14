@@ -99,6 +99,8 @@ import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {Organization} from '../model/organization';
 import {TeamReport} from '../bean/report/team-report';
+import {TrainingPersonalReport} from '../bean/training-personal-report';
+import {TrainingPersonExercise} from '../bean/training-person-exercise';
 import {GroupScore} from '../model/training/game/group-score';
 
 @Injectable()
@@ -1031,13 +1033,23 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region Training
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/training/{!trainingId}/report/personal/{!trainingPersonId}/exercise'
+  })
+  getReportTrainingPersonExercises: IRestMethod<{ trainingId: number, trainingPersonId: number }, TrainingPersonExercise[]>;
+
+  //#endregion
+
   //#region Testing
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/testing/{!testingId}/report/personal/{!trainingPersonId}'
   })
-  getPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
+  getTestingPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
 
   @RestAction({
     method: RestRequestMethod.Get,
