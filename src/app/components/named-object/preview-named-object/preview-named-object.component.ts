@@ -7,5 +7,5 @@ import {NamedObject} from '../../../data/remote/base/named-object';
   templateUrl: './preview-named-object.component.html',
   styleUrls: ['./preview-named-object.component.scss']
 })
-export class PreviewNamedObjectComponent<T extends NamedObject> extends BaseComponent<T> {
+export class PreviewNamedObjectComponent<T extends NamedObject | any> extends BaseComponent<T> {
 }

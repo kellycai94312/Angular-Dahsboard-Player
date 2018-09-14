@@ -1,46 +1,61 @@
 import {Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
 import {RefDirective} from '../../../directives/ref/ref.directive';
+import {INgxComponentFactory} from '../model/ingx-component-factory';
 
 @Component({
   selector: 'ngx-component-factory',
   templateUrl: './ngx-component-factory.component.html',
   styleUrls: ['./ngx-component-factory.component.scss']
 })
-export class NgxComponentFactoryComponent<T extends any> implements OnInit {
+export class NgxComponentFactoryComponent<TComponent extends any, TModel extends any> implements INgxComponentFactory<TComponent, TModel>, OnInit {
 
   @ViewChild(RefDirective)
   public refDirective: RefDirective;
 
   @Input()
-  public data: any;
+  public manualInitialization: boolean;
 
   @Input()
-  public component: Type<T>;
+  public class: string;
 
   @Input()
-  public initializeComponent: (component: T, data: any) => Promise<void>;
+  public data: TModel;
+
+  @Input()
+  public componentType: Type<TComponent>;
+
+  @Input()
+  public initializeComponent: (component: TComponent, data: TModel) => Promise<void>;
+
+  @Input()
+  public component: TComponent;
 
   constructor(private _componentFactoryResolver: ComponentFactoryResolver) {
+    this.class = '';
+    this.manualInitialization = true;
   }
 
   async ngOnInit(): Promise<void> {
-    await this.initialize(this.component, this.data, this.initializeComponent);
+    if (!this.manualInitialization) {
+      await this.initialize(this.componentType, this.data, this.initializeComponent);
+    }
   }
 
-  private async initialize(component: Type<T>, data: any, initialize?: (component: T, data: any) => Promise<void>): Promise<T> {
-    this.component = component;
+  public async initialize(componentType: Type<TComponent>, data: TModel, initialize?: (component: TComponent, data: TModel) => Promise<void>): Promise<TComponent> {
+    this.componentType = componentType;
     this.data = data;
 
-    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(component);
+    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(componentType);
     const viewContainerRef = this.refDirective.viewContainerRef;
     viewContainerRef.clear();
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
+    componentRef.changeDetectorRef.detectChanges();
     if (initialize) {
       await initialize(componentRef.instance, data);
     }
-    componentRef.changeDetectorRef.detectChanges();
 
+    this.component = componentRef.instance;
     return componentRef.instance;
   }
 

@@ -9,8 +9,9 @@
       <ng-template let-item>
         <div class="list-group-item p-2"
              (dblclick)="onSelected(item)">
-          <ngx-component-factory [data]="item"
-                                 [component]="component"
+          <ngx-component-factory [manualInitialization]="false"
+                                 [data]="item"
+                                 [componentType]="componentType"
                                  [initializeComponent]="initializeComponent"></ngx-component-factory>
         </div>
       </ng-template>
@@ -20,8 +21,9 @@
     <div *ngFor="let item of selectedItems"
          class="list-group-item p-2"
          (dblclick)="onUnselected(item)">
-      <ngx-component-factory [data]="item"
-                             [component]="component"
+      <ngx-component-factory [manualInitialization]="false"
+                             [data]="item"
+                             [componentType]="componentType"
                              [initializeComponent]="initializeComponent"></ngx-component-factory>
     </div>
   </div>

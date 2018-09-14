@@ -22,7 +22,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public selectedItems: TModel[];
 
   @Input()
-  public component: Type<TComponent>;
+  public componentType: Type<TComponent>;
 
   @Input()
   public initializeComponent: (component: TComponent, data: TModel) => Promise<void>;
@@ -43,11 +43,11 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
     };
   }
 
-  public async initialize(component: Type<TComponent>,
+  public async initialize(componentType: Type<TComponent>,
                           initializeComponent: (component: TComponent, data: TModel) => Promise<void>,
                           fetchItems: (query: TQuery) => Promise<PageContainer<TModel>>,
                           selectedItems: TModel[]): Promise<void> {
-    this.component = component;
+    this.componentType = componentType;
     this.initializeComponent = initializeComponent;
     this.fetchItems = fetchItems;
     this.selectedItems = selectedItems || [];

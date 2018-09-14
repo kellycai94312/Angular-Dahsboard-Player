@@ -15,8 +15,8 @@ import {NgxSelectionComponent} from '../../../../components/ngx-selection/ngx-se
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {Tag} from '../../../../data/remote/model/tag';
-import {NamedObject} from '../../../../data/remote/base/named-object';
 import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
+import {NgxEditableItemComponent} from '../../../../components/ngx-editable-item/ngx-editable-item/ngx-editable-item.component';
 
 @Component({
   selector: 'app-activities',
@@ -74,11 +74,20 @@ export class ActivitiesComponent implements OnInit {
             const fetchItems = async (query: PageQuery): Promise<PageContainer<Tag>> => {
               return await this._participantRestApiService.getTags(query);
             };
-            const initializeComponent = async (componentItem: PreviewNamedObjectComponent<NamedObject>, data: any) => {
+
+            const initializeComponent = async (componentItem: PreviewNamedObjectComponent<Tag>, data: any) => {
               componentItem.data = data;
             };
 
-            await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(this.tags));
+            const initializeEditComponent = async (componentItem: NgxEditableItemComponent<PreviewNamedObjectComponent<Tag>, Tag>, data: any) => {
+              componentItem.edit = async (editComponent: PreviewNamedObjectComponent<Tag>): Promise<boolean> => {
+                // TODO: Add edit tag
+                return true;
+              };
+              await componentItem.initialize(PreviewNamedObjectComponent, data, initializeComponent);
+            };
+
+            await component.initialize(NgxEditableItemComponent, initializeEditComponent, fetchItems, this._appHelper.cloneObject(this.tags));
 
             modal.componentInstance.splitButtonItems = [
               {
