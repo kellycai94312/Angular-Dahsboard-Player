@@ -1,26 +1,36 @@
 <div *ngIf="trainingPartTabs && trainingGroupTabs && trainingPartTabs.length && trainingGroupTabs.length">
-  <ul class="nav nav-tabs mt-2">
-    <li *ngFor="let item of trainingPartTabs"
-        class="nav-item">
-      <a class="nav-link text-uppercase"
-         [routerLink]="item.routerLink"
-         [queryParams]="item.queryParams"
-         routerLinkActive="active">
-        {{item.name ? (item.name) : (item.nameKey | translate)}}
-      </a>
-    </li>
-  </ul>
-  <ul class="nav nav-tabs mt-2">
-    <li *ngFor="let item of trainingGroupTabs"
-        class="nav-item">
-      <a class="nav-link text-uppercase"
-         [routerLink]="item.routerLink"
-         [queryParams]="item.queryParams"
-         routerLinkActive="active">
-        {{item.name}}
-      </a>
-    </li>
-  </ul>
+  <div class="d-flex mt-2">
+    <div class="align-self-center font-weight-bold mr-3">
+      {{'parts' | translate}}:
+    </div>
+    <ul class="nav nav-tabs">
+      <li *ngFor="let item of trainingPartTabs"
+          class="nav-item">
+        <a class="nav-link text-uppercase"
+           [routerLink]="item.routerLink"
+           [queryParams]="item.queryParams"
+           routerLinkActive="active">
+          {{item.name ? (item.name) : (item.nameKey | translate)}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="d-flex mt-2">
+    <div class="align-self-center font-weight-bold mr-3">
+      {{'groups.section' | translate}}:
+    </div>
+    <ul class="nav nav-tabs">
+      <li *ngFor="let item of trainingGroupTabs"
+          class="nav-item">
+        <a class="nav-link text-uppercase"
+           [routerLink]="item.routerLink"
+           [queryParams]="item.queryParams"
+           routerLinkActive="active">
+          {{item.name}}
+        </a>
+      </li>
+    </ul>
+  </div>
 
   <div *ngIf="personMeasures && this.tableColumns && personMeasures.length">
     <table class="table mt-2" [class.table-bordered]="totalTrainingPartId==trainingPartId">

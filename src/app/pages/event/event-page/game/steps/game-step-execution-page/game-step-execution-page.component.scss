@@ -2,6 +2,11 @@ td, th {
   display: table-cell;
   vertical-align: middle !important;
   text-align: center;
+
+  input {
+    text-align: center;
+  }
+
 }
 
 ul {
