@@ -13,7 +13,7 @@ export class GameStepsManagerPageComponent implements OnInit {
   constructor() {
     this.tabs = [];
     this.tabs.push(this.createTab('information', '1'));
-    this.tabs.push(this.createTab('persons.section', '2'));
+    this.tabs.push(this.createTab('participants', '2'));
     this.tabs.push(this.createTab('execution', '3'));
   }
 

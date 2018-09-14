@@ -99,6 +99,7 @@ import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {Organization} from '../model/organization';
 import {TeamReport} from '../bean/report/team-report';
+import {GroupScore} from '../model/training/game/group-score';
 
 @Injectable()
 @RestParams({
@@ -950,7 +951,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/baseTraining/{!id}'
   })
-  getBaseTraining: IRestMethod<{ id: number }, BaseTraining>;
+  getBaseTraining: IRestMethod<{ id: number, measureParameterEnum?: string }, BaseTraining>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1071,6 +1072,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/game/{!gameId}/group/{!trainingGroupId}/personMeasure',
   })
   getTotalPersonMeasures: IRestMethod<{ gameId: number, trainingGroupId: number }, TrainingPersonMeasure<PersonMeasureValue>[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/game/{!gameId}/score',
+  })
+  getGameGroupScores: IRestMethod<{ gameId: number, measureParameterEnum: string }, GroupScore[]>;
 
   //#endregion
 

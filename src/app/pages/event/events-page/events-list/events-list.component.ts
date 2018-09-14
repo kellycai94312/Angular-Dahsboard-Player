@@ -11,6 +11,8 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {ProfileService} from '../../../../shared/profile.service';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
+import {Game} from '../../../../data/remote/model/training/game/game';
 
 @Component({
   selector: 'app-events-list',
@@ -34,7 +36,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
               private _profileService: ProfileService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
-    this.baseTrainingQuery.measureParameterEnum = MeasureParameterEnum[MeasureParameterEnum.GOALS];
+    this.baseTrainingQuery.measureParameterEnum = MeasureParameterEnum.GOALS;
   }
 
   async ngOnInit() {
@@ -84,11 +86,24 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
-    return await this._participantRestApiService.getBaseTrainings(pageQuery);
+    const items = await this._participantRestApiService.getBaseTrainings(pageQuery);
+    for (const event of items.list) {
+      if (event.discriminator == TrainingDiscriminator.GAME) {
+        this.setGameGroupScores(event as Game);
+      }
+    }
+    return items;
   };
 
   private async updateItems() {
     await this.ngxVirtualScrollComponent.reset();
+  }
+
+  private setGameGroupScores(event: Game) {
+    if (event.groupScores) {
+      event.teams = event.groupScores.map(groupScore => groupScore.group.name).join(' - ');
+      event.score = event.groupScores.map(groupScore => groupScore.score).join(' : ');
+    }
   }
 
 }
