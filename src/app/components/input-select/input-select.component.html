@@ -1,6 +1,13 @@
 <div class="wrapper" tabindex="-1">
   <div class="search">
-    <span class="fa fa-caret-down"></span>
+    <div class="btn-wrapper">
+      <div class="times-wrapper" *ngIf="model != null" (click)="clearModel()">
+        <span class="fa fa-times-circle"></span>
+      </div>
+      <div class="caret-wrapper" (click)="showList()" [ngClass]="{'focused' : active }">
+        <span class="fa fa-caret-down"></span>
+      </div>
+    </div>
     <input #searchBar
            id="searchBar"
            class="form-control"
@@ -11,7 +18,6 @@
            [ngClass]="{'empty' : !active && model == null}">
   </div>
   <app-scroll class="menu" [fetchMore]="fetchMore" *ngIf="active">
-    <li class="input-font default" [ngClass]="{'active' : model && model === empty}" (click)="select(empty)">{{placeholder}}</li>
     <li class="input-font"
         *ngFor="let item of data"
         (click)="select(item)"
