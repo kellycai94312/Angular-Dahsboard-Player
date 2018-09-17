@@ -1,15 +1,17 @@
-import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnInit, Output, Renderer2} from '@angular/core';
+import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2} from '@angular/core';
 import {PageContainer} from '../../data/remote/bean/page-container';
 import {ScrollService} from './scroll/scroll.service';
 import {Subject} from 'rxjs/Rx';
 import {PropertyConstant} from '../../data/local/property-constant';
+import {ISubscription} from 'rxjs/Subscription';
+import {AppHelper} from '../../utils/app-helper';
 
 @Component({
   selector: 'app-input-select',
   templateUrl: './input-select.component.html',
   styleUrls: ['./input-select.component.scss']
 })
-export class InputSelectComponent implements OnChanges, OnInit {
+export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
 
   @Input() loadData: Function;
   @Input() model: any;
@@ -29,14 +31,16 @@ export class InputSelectComponent implements OnChanges, OnInit {
   private pageNumber;
   private empty: Object = {};
   private searchChanged: Subject<any>;
+  private readonly _searchChangedSubscription: ISubscription;
 
-  constructor(private eRef: ElementRef,
-              private renderer: Renderer2,
-              private scrollService: ScrollService) {
+  constructor(private _eRef: ElementRef,
+              private _renderer: Renderer2,
+              private _appHelper: AppHelper,
+              private _scrollService: ScrollService) {
     this.modelChange = new EventEmitter<any>();
     this.onChange = new EventEmitter<any>();
     this.searchChanged = new Subject<any>();
-    this.searchChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this._searchChangedSubscription = this.searchChanged.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(() => {
         this.clearData();
         this.load();
@@ -51,6 +55,10 @@ export class InputSelectComponent implements OnChanges, OnInit {
       this.placeholder = 'Select an option';
     }
     this.clearData();
+  }
+
+  ngOnDestroy() {
+    this._appHelper.unsubscribe(this._searchChangedSubscription);
   }
 
   ngOnChanges() {
@@ -74,7 +82,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
   /** hide dropdown list */
   @HostListener('document:click', ['$event'])
   hideList(event) {
-    if (!this.eRef.nativeElement.contains(event.target)) {
+    if (!this._eRef.nativeElement.contains(event.target)) {
       this.resetSearch();
     }
   }
@@ -108,7 +116,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
       const src = e.srcElement;
       const wrapper = src.parentElement.parentElement;
       const scrollMenu = wrapper.children[1];
-      const childSize: number = this.scrollService.getChildLength(scrollMenu);
+      const childSize: number = this._scrollService.getChildLength(scrollMenu);
       if (e.keyCode === 38) {
         if (index >= 0) {
           this.model = index === 0 ? this.empty : this.data[index - 1];
@@ -128,7 +136,7 @@ export class InputSelectComponent implements OnChanges, OnInit {
       }
     } else if (e.keyCode === 13) {
       this.select(this.model);
-      const searchBar = this.renderer.selectRootElement('#searchBar');
+      const searchBar = this._renderer.selectRootElement('#searchBar');
       searchBar.parentElement.parentElement.focus();
     } else {
       this.searchChanged.next(e);
