@@ -19,6 +19,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
+  public add: () => Promise<void>;
+
+  @Input()
   public selectedItems: TModel[];
 
   @Input()
@@ -80,5 +83,11 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
     this._appHelper.removeItem(this.selectedItems, item);
     this.ngxVirtualScrollComponent.items.push(item);
   }
+
+  public onAdd = async () => {
+    if (this.add) {
+      await this.add();
+    }
+  };
 
 }

@@ -1,2 +1,12 @@
 <label>{{'name' | translate}}</label>
 <ngx-text-box [(value)]="data.name"></ngx-text-box>
+
+<div *ngIf="canEditDictionaryType">
+  <label class="mt-2">{{'dictionaryType' | translate}}</label>
+  <dx-select-box [items]="dictionaryTypes"
+                 displayExpr="name"
+                 [(value)]="selectedDictionaryType"
+                 acceptCustomValue="true"
+                 placeholder="{{'dictionaryType' | translate}}">
+  </dx-select-box>
+</div>

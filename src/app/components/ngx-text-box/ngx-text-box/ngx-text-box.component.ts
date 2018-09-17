@@ -18,6 +18,9 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   }
 
   set value(value: string) {
+    if (value === undefined) {
+      value = null;
+    }
     this._value = value;
     this.valueChange.emit(value);
   }

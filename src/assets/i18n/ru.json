@@ -419,5 +419,10 @@
   },
   "tests": "Тесты",
   "tags": "Теги",
-  "selection": "Выбор"
+  "selection": "Выбор",
+  "dictionaryTypeEnum": {
+    "SYSTEM": "Системный",
+    "USER": "Пользовательский"
+  },
+  "dictionaryType": "Тип словаря"
 }

@@ -1,6 +1,12 @@
-<ngx-text-box class="w-100"
-              [debounceTime]="propertyConstant.searchDebounceTime"
-              (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+<div class="d-flex">
+  <ngx-text-box class="w-100"
+                [debounceTime]="propertyConstant.searchDebounceTime"
+                (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+  <app-busy-button *ngIf="add"
+                   class="ml-2"
+                   nameKey="add"
+                   [click]="onAdd"></app-busy-button>
+</div>
 <div class="content row cols-padding mt-2">
   <div class="col">
     <ngx-virtual-scroll class="list-group-flush overflow-content"

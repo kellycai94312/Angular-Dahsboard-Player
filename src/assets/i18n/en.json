@@ -418,5 +418,10 @@
   },
   "tests": "Tests",
   "tags": "Tags",
-  "selection": "Selection"
+  "selection": "Selection",
+  "dictionaryTypeEnum": {
+    "SYSTEM": "System",
+    "USER": "User"
+  },
+  "dictionaryType": "Dictionary type"
 }

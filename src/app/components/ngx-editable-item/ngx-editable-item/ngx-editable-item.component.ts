@@ -12,7 +12,7 @@ export class NgxEditableItemComponent<TComponent extends any, TModel extends any
   public ngxComponentFactoryComponent: NgxComponentFactoryComponent<TComponent, TModel>;
 
   @Input()
-  public edit: (component: TComponent) => Promise<boolean>;
+  public edit: (component: TComponent) => Promise<void>;
 
   @Input()
   public canEdit: boolean;
