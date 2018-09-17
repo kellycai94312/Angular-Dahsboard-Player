@@ -6,7 +6,7 @@ export class BaseComponent<T> {
   public data: T;
 
   public update(data: T): void {
-    this.data = data;
+    this.data = Object.assign(this.data, data);
   }
 
 }

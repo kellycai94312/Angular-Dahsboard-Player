@@ -36,6 +36,7 @@ import {EditActivityComponent} from './component/edit-activity/edit-activity.com
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 import {NgxEditableItemModule} from '../../components/ngx-editable-item/ngx-editable-item.module';
+import {EditTagComponent} from './component/edit-tag/edit-tag.component';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import {NgxEditableItemModule} from '../../components/ngx-editable-item/ngx-edit
     ActivitiesComponent,
     ActivityComponent,
     ActivityItemComponent,
-    EditActivityComponent
+    EditActivityComponent,
+    EditTagComponent
   ],
   entryComponents: [
     EditStageComponent,
@@ -86,7 +88,8 @@ import {NgxEditableItemModule} from '../../components/ngx-editable-item/ngx-edit
     EditStageStandardComponent,
     EditOrganizationComponent,
     PersonComponent,
-    EditActivityComponent
+    EditActivityComponent,
+    EditTagComponent
   ]
 })
 export class DictionaryModule {

@@ -1,6 +1,6 @@
 <div class="d-flex align-items-center">
   <ngx-component-factory class="mr-auto"></ngx-component-factory>
-  <app-busy-button *ngIf="edit"
+  <app-busy-button *ngIf="edit && canEdit"
                    classes="ml-2"
                    icon="fa fa-edit"
                    [click]="onEdit"></app-busy-button>

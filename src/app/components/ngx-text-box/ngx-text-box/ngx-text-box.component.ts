@@ -19,11 +19,11 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
 
   set value(value: string) {
     this._value = value;
-    this.valueChanged.emit(value);
+    this.valueChange.emit(value);
   }
 
   @Output()
-  public readonly valueChanged: EventEmitter<string>;
+  public readonly valueChange: EventEmitter<string>;
 
   @Input()
   public debounceTime: number;
@@ -33,8 +33,9 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   private _inputKeyupSubscription: ISubscription;
 
   constructor(private _appHelper: AppHelper) {
-    this.valueChanged = new EventEmitter<string>();
+    this.valueChange = new EventEmitter<string>();
     this.keyUp = new Subject<KeyboardEvent>();
+    this.value = null;
   }
 
   ngOnInit() {

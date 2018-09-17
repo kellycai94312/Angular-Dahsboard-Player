@@ -1,6 +1,6 @@
 <ngx-text-box class="w-100"
               [debounceTime]="propertyConstant.searchDebounceTime"
-              (valueChanged)="onSearchTextChanged($event)"></ngx-text-box>
+              (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
 <div class="content row cols-padding mt-2">
   <div class="col">
     <ngx-virtual-scroll class="list-group-flush overflow-content"

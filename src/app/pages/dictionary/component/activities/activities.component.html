@@ -1,7 +1,7 @@
 <div class="d-flex">
   <ngx-text-box class="w-100 mr-2"
                 [debounceTime]="propertyConstant.searchDebounceTime"
-                (valueChanged)="onSearchTextChanged($event)"></ngx-text-box>
+                (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
   <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
 </div>
 

@@ -17,6 +17,9 @@ import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {Tag} from '../../../../data/remote/model/tag';
 import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
 import {NgxEditableItemComponent} from '../../../../components/ngx-editable-item/ngx-editable-item/ngx-editable-item.component';
+import {EditTagComponent} from '../edit-tag/edit-tag.component';
+import {AuthorizationService} from '../../../../shared/authorization.service';
+import {PermissionService} from '../../../../shared/permission.service';
 
 @Component({
   selector: 'app-activities',
@@ -41,7 +44,9 @@ export class ActivitiesComponent implements OnInit {
               private _appHelper: AppHelper,
               private _ngxModalService: NgxModalService,
               private _router: Router,
-              private _activatedRoute: ActivatedRoute) {
+              private _activatedRoute: ActivatedRoute,
+              private _authorizationService: AuthorizationService,
+              private _permissionService: PermissionService) {
     this.query = new ActivityQuery();
     this.splitButtonItems = [
       {
@@ -81,8 +86,37 @@ export class ActivitiesComponent implements OnInit {
 
             const initializeEditComponent = async (componentItem: NgxEditableItemComponent<PreviewNamedObjectComponent<Tag>, Tag>, data: any) => {
               componentItem.edit = async (editComponent: PreviewNamedObjectComponent<Tag>): Promise<boolean> => {
-                // TODO: Add edit tag
+                const editModal = this._ngxModalService.open();
+                editModal.componentInstance.titleKey = 'edit';
+                await editModal.componentInstance.initializeBody(EditTagComponent, async component1 => {
+                  component1.manualInitialization = true;
+                  await component1.initialize(this._appHelper.cloneObject(editComponent.data));
+
+                  editModal.componentInstance.splitButtonItems = [
+                    this._ngxModalService.saveSplitItemButton(async () => {
+                      if (await this._ngxModalService.save(editModal, component1)) {
+                        editComponent.update(component1.data);
+                      }
+                    }),
+                    this._ngxModalService.removeSplitItemButton(async () => {
+                      if (await this._ngxModalService.remove(editModal, component1)) {
+                        let itemForRemove = component.selectedItems.find(x => x.id == component1.data.id);
+                        if (itemForRemove) {
+                          this._appHelper.removeItem(component.selectedItems, itemForRemove);
+                        } else {
+                          itemForRemove = component.ngxVirtualScrollComponent.items.find(x => x.id == component1.data.id);
+                          if (itemForRemove) {
+                            this._appHelper.removeItem(component.ngxVirtualScrollComponent.items, itemForRemove);
+                          }
+                        }
+                      }
+                    })
+                  ];
+                });
                 return true;
+              };
+              componentItem.afterInitialize = async (component1) => {
+                componentItem.canEdit = await this._permissionService.canEditTag(componentItem.ngxComponentFactoryComponent.component.data, await this._authorizationService.getPerson());
               };
               await componentItem.initialize(PreviewNamedObjectComponent, data, initializeComponent);
             };
