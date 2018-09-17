@@ -57,6 +57,10 @@ export class InputSelectComponent implements OnChanges, OnInit {
     setTimeout(() => this.value = this.model ? this.getName(this.model) : this.placeholder, 100);
   }
 
+  clearModel() {
+    this.select(this.empty);
+  }
+
   /** show dropdown list */
   showList() {
     this.active = true;
