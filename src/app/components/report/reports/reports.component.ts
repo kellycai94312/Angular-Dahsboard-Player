@@ -58,6 +58,18 @@ export class ReportsComponent {
           });
         }
         break;
+        case ReportType.TRAINING:
+        if (this.eventId && this.eventPersonId) {
+          this.items.push({
+            nameKey: 'trainingPersonalReport',
+            action: async () => {
+              return await this._appHelper.tryLoad(async () => {
+                await this._reportsService.downloadTrainingPersonalReport(this.eventId, this.eventPersonId, this.personalReportSettings);
+              });
+            }
+          });
+        }
+        break;
       case  ReportType.TESTING:
         if (this.eventId) {
           this.items.push({

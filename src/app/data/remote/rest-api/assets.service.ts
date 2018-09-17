@@ -15,7 +15,13 @@ export class AssetsService extends Rest {
     method: RestRequestMethod.Get,
     path: `${reportsPath}/personal_testing.mrt`
   })
-  getPersonalReport: IRestMethod<void, any>;
+  getTestingPersonalReport: IRestMethod<void, any>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: `${reportsPath}/personal_training.mrt`
+  })
+  getTrainingPersonalReport: IRestMethod<void, any>;
 
   @RestAction({
     method: RestRequestMethod.Get,
