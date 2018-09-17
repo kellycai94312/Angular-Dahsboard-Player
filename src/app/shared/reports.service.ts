@@ -161,8 +161,6 @@ export class ReportsService {
         trainingId: trainingId,
         trainingPersonId: trainingPersonId
       });
-      console.log(trainingId);
-      console.log(trainingPersonId);
     } catch (e) {
       if (e.status === 404) {
         await this._appHelper.showErrorMessage('reportError');
