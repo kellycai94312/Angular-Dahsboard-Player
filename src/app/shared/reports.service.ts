@@ -154,10 +154,10 @@ export class ReportsService {
     await this.initializeLibraries();
 
     const reportJson = await this._assetsService.getTrainingPersonalReport();
-    let trainingPersonExercises: TrainingPersonExercise[];
+    let trainingPersonalReport: TrainingPersonalReport;
 
     try {
-      trainingPersonExercises = await this._participantRestApiService.getReportTrainingPersonExercises({
+      trainingPersonalReport = await this._participantRestApiService.getTrainingPersonalReport({
         trainingId: trainingId,
         trainingPersonId: trainingPersonId
       });
@@ -174,19 +174,14 @@ export class ReportsService {
     report.dictionary.databases.clear();
 
     const trainingPersonExerciseDataSet = new Stimulsoft.System.Data.DataSet('personal_training');
-    trainingPersonExerciseDataSet.readJson(trainingPersonExercises);
+    trainingPersonExerciseDataSet.readJson(trainingPersonalReport);
     report.regData('personal_training', 'personal_training', trainingPersonExerciseDataSet);
-
-    // const trainingInfoDataSet = new Stimulsoft.System.Data.DataSet('training_info');
-    // trainingInfoDataSet.readJson(trainingPersonExercises.trainingInfo);
-    // report.regData('training_info', 'training_info', trainingInfoDataSet);
 
     this.addSettings(report, personalReportSettings);
     this.addLogoResource(report);
     report.render();
 
-    //await this.download(report, `${trainingPersonExercises.trainingInfo.name} - ${trainingPersonExercises.trainingInfo.fullName}`);
-    await this.download(report, `Personal training report`);
+    await this.download(report, `${trainingPersonalReport.training.name} - ${trainingPersonalReport.person.lastName} ${trainingPersonalReport.person.firstName}`);
   }
 
   //#endregion

@@ -1,10 +1,9 @@
-import {TestResult} from './test-result';
-import {EstimatedParameterResult} from './estimated-parameter-result';
-import {TrainingInfo} from './training-info';
-import {Scores} from './report/scores';
-import {TrainingPersonExercise} from "./training-person-exercise";
+import {TrainingPersonExercise} from './training-person-exercise';
+import {Person} from '../model/person';
+import {BaseTraining} from '../model/training/base/base-training';
 
 export class TrainingPersonalReport {
-  trainingInfo: TrainingInfo;
+  training: BaseTraining;
+  person: Person;
   trainingPersonExercise: TrainingPersonExercise[];
 }

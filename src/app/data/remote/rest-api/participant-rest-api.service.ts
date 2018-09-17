@@ -1037,9 +1037,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/training/{!trainingId}/report/personal/{!trainingPersonId}/exercise'
+    path: '/training/{!trainingId}/person/{!trainingPersonId}/exercise'
   })
-  getReportTrainingPersonExercises: IRestMethod<{ trainingId: number, trainingPersonId: number }, TrainingPersonExercise[]>;
+  getTrainingPersonalReport: IRestMethod<{ trainingId: number, trainingPersonId: number }, TrainingPersonalReport>;
 
   //#endregion
 

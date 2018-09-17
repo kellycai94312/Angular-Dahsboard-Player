@@ -128,7 +128,6 @@ export class EventsComponent implements OnInit, OnDestroy {
     await modal.componentInstance.initializeBody(ReportsComponent, async component => {
       component.eventId = parameter.baseTraining.id;
       component.eventPersonId = parameter.id;
-      component.personId = parameter.person.id;
       if (parameter.trainingGroup) {
         component.eventGroupId = parameter.trainingGroup.id;
       }
