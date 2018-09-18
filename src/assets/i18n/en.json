@@ -415,5 +415,16 @@
     "LEVEL2": "Nesting level 2",
     "LEVEL3": "Nesting level 3",
     "ENDLESS": "Endless nesting"
-  }
+  },
+  "tests": "Tests",
+  "tags": "Tags",
+  "selection": "Selection",
+  "dictionaryTypeEnum": {
+    "SYSTEM": "System",
+    "USER": "User"
+  },
+  "dictionaryType": "Dictionary type",
+  "changeImage": "Change image",
+  "loadParameters": "Load parameters",
+  "videoUrl": "Video url"
 }

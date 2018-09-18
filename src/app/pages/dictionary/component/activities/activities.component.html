@@ -1,0 +1,21 @@
+<div class="d-flex">
+  <ngx-text-box class="w-100 mr-2"
+                [debounceTime]="propertyConstant.searchDebounceTime"
+                (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+  <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+</div>
+
+<div *ngIf="tags && tags.length"
+     class="tags-content mt-2">
+  <div *ngFor="let item of tags">{{item.name}}</div>
+</div>
+
+<ngx-virtual-scroll class="d-flex flex-wrap mt-2"
+                    [query]="query"
+                    [getItems]="fetchItems"
+                    [windowScroll]="true">
+  <ng-template let-item>
+    <app-activity-item class="mr-2 mb-2"
+                       [data]="item"></app-activity-item>
+  </ng-template>
+</ngx-virtual-scroll>

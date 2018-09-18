@@ -25,6 +25,21 @@ import {NamedObjectModule} from '../../components/named-object/named-object.modu
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {PersonComponent} from '../../components/person/person.component';
+import {ExercisesDictionaryComponent} from './exercises-dictionary/exercises-dictionary.component';
+import {TestsDictionaryComponent} from './tests-dictionary/tests-dictionary.component';
+import {ActivitiesComponent} from './component/activities/activities.component';
+import {ActivityComponent} from './component/activity/activity.component';
+import {ActivityItemComponent} from './component/activity-item/activity-item.component';
+import {ImageModule} from '../../components/image/image.module';
+import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
+import {EditActivityComponent} from './component/edit-activity/edit-activity.component';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
+import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
+import {NgxEditableItemModule} from '../../components/ngx-editable-item/ngx-editable-item.module';
+import {EditTagComponent} from './component/edit-tag/edit-tag.component';
+import {DictionaryTypeModule} from '../../components/dictionary-type/dictionary-type.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 
 @NgModule({
   imports: [
@@ -43,7 +58,15 @@ import {PersonComponent} from '../../components/person/person.component';
     GroupPageModule,
     NamedObjectModule,
     NamedObjectItemModule,
-    ModalSelectPageModule
+    ModalSelectPageModule,
+    ImageModule,
+    NgxTextBoxModule,
+    NgxSplitButtonModule,
+    NgxSelectionModule,
+    NgxEditableItemModule,
+    DictionaryTypeModule,
+    NgxImageModule,
+    SafeHtmlModule
   ],
   declarations: [
     DictionariesComponent,
@@ -56,14 +79,23 @@ import {PersonComponent} from '../../components/person/person.component';
     EditStageStandardComponent,
     OrganizationsDictionaryComponent,
     OrganizationDictionaryComponent,
-    EditOrganizationComponent
+    EditOrganizationComponent,
+    ExercisesDictionaryComponent,
+    TestsDictionaryComponent,
+    ActivitiesComponent,
+    ActivityComponent,
+    ActivityItemComponent,
+    EditActivityComponent,
+    EditTagComponent
   ],
   entryComponents: [
     EditStageComponent,
     EditStageTypeComponent,
     EditStageStandardComponent,
     EditOrganizationComponent,
-    PersonComponent
+    PersonComponent,
+    EditActivityComponent,
+    EditTagComponent
   ]
 })
 export class DictionaryModule {

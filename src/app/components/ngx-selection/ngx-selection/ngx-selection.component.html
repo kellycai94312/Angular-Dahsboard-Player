@@ -1,0 +1,36 @@
+<div class="d-flex">
+  <ngx-text-box class="w-100"
+                [debounceTime]="propertyConstant.searchDebounceTime"
+                (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+  <app-busy-button *ngIf="add"
+                   class="ml-2"
+                   nameKey="add"
+                   [click]="onAdd"></app-busy-button>
+</div>
+<div class="content row cols-padding mt-2">
+  <div class="col">
+    <ngx-virtual-scroll class="list-group-flush overflow-content"
+                        [getItems]="getItems"
+                        [query]="query">
+      <ng-template let-item>
+        <div class="list-group-item p-2"
+             (dblclick)="onSelected(item)">
+          <ngx-component-factory [manualInitialization]="false"
+                                 [data]="item"
+                                 [componentType]="componentType"
+                                 [initializeComponent]="initializeComponent"></ngx-component-factory>
+        </div>
+      </ng-template>
+    </ngx-virtual-scroll>
+  </div>
+  <div class="col list-group-flush overflow-content">
+    <div *ngFor="let item of selectedItems"
+         class="list-group-item p-2"
+         (dblclick)="onUnselected(item)">
+      <ngx-component-factory [manualInitialization]="false"
+                             [data]="item"
+                             [componentType]="componentType"
+                             [initializeComponent]="initializeComponent"></ngx-component-factory>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div *ngIf="activity"
+     class="row cols-padding">
+  <div class="col-2">
+    <ngx-image [objectId]="activity.id"
+               [fileClass]="fileClass"
+               [type]="imageType.LOGO"
+               [canEdit]="canEdit"></ngx-image>
+    <app-busy-button *ngIf="canEdit"
+                     classes="mt-2"
+                     nameKey="save"
+                     [click]="onSave"></app-busy-button>
+  </div>
+  <div class="col">
+    <app-named-object [data]="activity"></app-named-object>
+    <app-dictionary-type class="mt-2"
+                         [(dictionaryType)]="activity.dictionaryType"></app-dictionary-type>
+    <label class="mt-2">{{'videoUrl' | translate}}</label>
+    <ngx-text-box [debounceTime]="propertyConstant.searchDebounceTime"
+                  [(value)]="activity.videoUrl"
+                  (valueChange)="onVideoUrlChanged($event)"></ngx-text-box>
+    <iframe *ngIf="youTubeUrl"
+            [src]="youTubeUrl | safeUrl"
+            [height]="350"
+            class="mt-2 w-100"
+            frameborder="0"
+            scrolling="no"
+            allow="autoplay; encrypted-media"
+            allowfullscreen></iframe>
+  </div>
+  <div class="col d-flex flex-column">
+    <app-busy-button nameKey="tags"
+                     [click]="onEditTags"></app-busy-button>
+    <div *ngIf="tags && tags.length"
+         class="tags-content mt-2">
+      <div *ngFor="let item of tags">
+        {{item.name}}
+      </div>
+    </div>
+
+    <app-busy-button classes="mt-2"
+                     nameKey="loadParameters"
+                     [click]="onEditLoadParameters"></app-busy-button>
+    <div *ngIf="measures && measures.length"
+         class="tags-content mt-2">
+      <div *ngFor="let item of measures">{{item.measureParameter.name}} ({{item.measureUnit.shortName}})</div>
+    </div>
+  </div>
+</div>

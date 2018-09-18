@@ -99,8 +99,10 @@ import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {Organization} from '../model/organization';
 import {TeamReport} from '../bean/report/team-report';
+import {ActivityQuery} from './query/activity-query';
+import {BaseExercise} from '../model/exercise/base/base-exercise';
+import {Tag} from '../model/tag';
 import {TrainingPersonalReport} from '../bean/training-personal-report';
-import {TrainingPersonExercise} from '../bean/training-person-exercise';
 import {GroupScore} from '../model/training/game/group-score';
 
 @Injectable()
@@ -1624,6 +1626,92 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region Activity
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseExercise'
+  })
+  getActivities: IRestMethod<ActivityQuery, PageContainer<BaseExercise>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseExercise/{!activityId}'
+  })
+  getActivity: IRestMethod<{ activityId: number }, BaseExercise>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseExercise'
+  })
+  createActivity: IRestMethod<BaseExercise, BaseExercise>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseExercise/{!activityId}'
+  })
+  updateActivity: IRestMethodStrict<BaseExercise, any, { activityId: number }, BaseExercise>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseExercise/{!activityId}'
+  })
+  removeActivity: IRestMethod<{ activityId: number }, BaseExercise>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseExercise/{!activityId}/measure'
+  })
+  getActivityMeasures: IRestMethod<{ activityId: number }, Measure[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseExercise/{!activityId}/measure'
+  })
+  updateActivityMeasures: IRestMethodStrict<ListRequest<IdRequest>, any, { activityId: number }, Measure[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseExercise/{!activityId}/tag'
+  })
+  getActivityTags: IRestMethod<{ activityId: number }, Tag[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseExercise/{!activityId}/tag'
+  })
+  updateActivityTags: IRestMethodStrict<ListRequest<StringWrapper>, any, { activityId: number }, Tag[]>;
+
+  //#endregion
+
+  //#region Tag
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/tag'
+  })
+  getTags: IRestMethod<PageQuery, PageContainer<Tag>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/tag'
+  })
+  createTag: IRestMethod<Tag, Tag>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/tag/{!tagId}'
+  })
+  updateTag: IRestMethodStrict<Tag, any, { tagId: number }, Tag>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/tag/{!tagId}'
+  })
+  removeTag: IRestMethod<{ tagId: number }, Tag>;
+
+  //#endregion
+
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/league',
@@ -1653,6 +1741,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/measure/{!id}',
   })
   getMeasureById: IRestMethod<{ id: number }, Measure>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/measure',
+  })
+  getMeasures: IRestMethod<PageQuery, PageContainer<Measure>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

@@ -9,15 +9,18 @@ import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
 import {UserRole} from '../data/remote/model/user-role';
 import {UserRoleEnum} from '../data/remote/model/user-role-enum';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class AuthorizationService {
 
   public readonly handleLogIn: Subject<Session>;
   public readonly handleLogOut: Subject<boolean>;
+  public readonly personSubject: BehaviorSubject<Person>;
 
   public session: Session;
 
+  // @deprecated Use personSubject
   private _person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -26,6 +29,7 @@ export class AuthorizationService {
               private _injector: Injector) {
     this.handleLogIn = new Subject<Session>();
     this.handleLogOut = new Subject<boolean>();
+    this.personSubject = new BehaviorSubject<Person>(null);
   }
 
   public async initialize() {
@@ -37,6 +41,8 @@ export class AuthorizationService {
       this.session = await this._participantRestApiService.login(auth);
       if (this.session) {
         this.handleLogIn.next(this.session);
+        const person = await this._participantRestApiService.getPerson({id: this.session.personId});
+        this.personSubject.next(person);
       }
     } catch (e) {
     }
@@ -46,6 +52,7 @@ export class AuthorizationService {
   public async logOut(withNavigate: boolean = true): Promise<void> {
     this.session = null;
     this._person = null;
+    this.personSubject.next(null);
     this.handleLogOut.next(true);
     try {
       await this._participantRestApiService.logout();
@@ -70,6 +77,7 @@ export class AuthorizationService {
     return this.session;
   }
 
+  // @deprecated Use personSubject
   public async getPerson(): Promise<Person> {
     if (!this._person && this.session) {
       try {

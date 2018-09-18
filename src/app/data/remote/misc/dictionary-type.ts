@@ -1,4 +1,4 @@
 export enum DictionaryType {
-  SYSTEM,
-  USER
+  SYSTEM = 'SYSTEM',
+  USER = 'USER'
 }

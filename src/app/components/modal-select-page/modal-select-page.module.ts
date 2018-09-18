@@ -8,6 +8,9 @@ import {ModalSelectPageComponent} from './modal-select-page.component';
 import {ModalItemModule} from '../modal-item/modal-item.module';
 import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
 
+/*
+@deprecated Use NgxSelectionComponent
+ */
 @NgModule({
   imports: [
     CommonModule,

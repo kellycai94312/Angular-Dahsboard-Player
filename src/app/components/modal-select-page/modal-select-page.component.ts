@@ -9,6 +9,9 @@ import {PageContainer} from '../../data/remote/bean/page-container';
 import {NgxVirtualScrollComponent} from '../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../utils/app-helper';
 
+/*
+@deprecated Use NgxSelectionComponent
+ */
 @Component({
   selector: 'app-modal-select-page',
   templateUrl: './modal-select-page.component.html',

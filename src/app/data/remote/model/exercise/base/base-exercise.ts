@@ -1,12 +1,9 @@
-import { DictionaryType } from '../../../misc/dictionary-type';
-import { ExerciseType } from './exercise-type';
-import { NamedObject } from '../../../base/named-object';
-import { Tag } from '../../tag';
+import {DictionaryType} from '../../../misc/dictionary-type';
+import {ExerciseType} from './exercise-type';
+import {NamedObject} from '../../../base/named-object';
 
 export class BaseExercise extends NamedObject {
-  discriminator: string;
+  discriminator: ExerciseType;
   dictionaryType: DictionaryType;
-  exerciseType: ExerciseType;
   videoUrl: string;
-  tags: Tag[];
 }

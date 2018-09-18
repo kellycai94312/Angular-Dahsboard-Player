@@ -1,6 +1,9 @@
 import {AfterViewInit, Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
 import {AdDirective} from './ad.directive';
 
+/*
+@deprecated Use NgxSelectionComponent
+ */
 @Component({
   selector: 'app-modal-item',
   templateUrl: './modal-item.component.html',
