@@ -12,6 +12,7 @@ import {StringWrapper} from '../../../../data/remote/bean/wrapper/string-wrapper
 import {Measure} from '../../../../data/remote/model/measure';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {PermissionService} from '../../../../shared/permission.service';
 
 @Component({
   selector: 'app-activity',
@@ -28,12 +29,15 @@ export class ActivityComponent implements OnInit {
   public measures: Measure[];
   public youTubeUrl: string;
 
+  public canEdit: boolean;
+
   private readonly _breadcrumbItem: BreadcrumbItem;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+              private _ngxModalService: NgxModalService,
+              private _permissionService: PermissionService) {
     this._breadcrumbItem = this._activatedRoute.routeConfig.data.breadcrumb as BreadcrumbItem;
   }
 
@@ -44,6 +48,8 @@ export class ActivityComponent implements OnInit {
     this.fileClass = this._appHelper.exerciseTypeToFileClass(this.activity.discriminator);
     this.tags = await this._participantRestApiService.getActivityTags({activityId: activityId});
     this.measures = await this._participantRestApiService.getActivityMeasures({activityId: activityId});
+
+    this.canEdit = await this._permissionService.canEditActivity(this.activity);
   }
 
   public onEditTags = async () => {

@@ -1,10 +1,12 @@
 <div *ngIf="activity"
      class="row cols-padding">
   <div class="col-2">
-    <ngx-image class="mr-2" [objectId]="activity.id"
+    <ngx-image [objectId]="activity.id"
                [fileClass]="fileClass"
-               [type]="imageType.LOGO"></ngx-image>
-    <app-busy-button classes="mt-2"
+               [type]="imageType.LOGO"
+               [canEdit]="canEdit"></ngx-image>
+    <app-busy-button *ngIf="canEdit"
+                     classes="mt-2"
                      nameKey="save"
                      [click]="onSave"></app-busy-button>
   </div>

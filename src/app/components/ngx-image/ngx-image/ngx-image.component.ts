@@ -4,6 +4,8 @@ import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {environment} from '../../../../environments/environment';
 import {AppHelper} from '../../../utils/app-helper';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {Image} from '../../../data/remote/model/file/image/image';
 
 @Component({
   selector: 'ngx-image',
@@ -43,6 +45,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   private _initialized: boolean;
 
   constructor(private _appHelper: AppHelper,
+              private _participantRestApiService: ParticipantRestApiService,
               private _elementRef: ElementRef) {
     this.imageChange = new EventEmitter<any>();
     this.class = '';
@@ -56,8 +59,23 @@ export class NgxImageComponent implements OnInit, OnChanges {
     this.refresh();
   }
 
-  public onImageChange(e: any) {
-    this.imageChange.emit(e);
+  ngOnChanges(changes: SimpleChanges): void {
+    if (this._initialized) {
+      this.refresh();
+    }
+  }
+
+  public async onImageChange(fileList: FileList) {
+    if (fileList.length > 0) {
+      const file: File = fileList[0];
+      const image: Image = new Image();
+      image.clazz = this.fileClass;
+      image.objectId = this.objectId;
+      image.type = this.type;
+      const files = await this._participantRestApiService.uploadFile(image, [file]);
+      this.imageChange.emit(files[0]);
+      this.refresh();
+    }
   }
 
   public refresh() {
@@ -76,12 +94,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
     url += `&date=${Date.now()}`;
     this.url = url;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this._initialized) {
-      this.refresh();
-    }
   }
 
 }

@@ -1,15 +1,17 @@
-<div class="img-fluid {{class}}"
-     [style.width.px]="width"
-     [style.height.px]="height"
-     [style.background-size]="'cover'"
-     [style.background-image]="'url('+ url +')'"></div>
+<div class="d-flex flex-column">
+  <div class="img-fluid {{class}}"
+       [style.width.px]="width"
+       [style.height.px]="height"
+       [style.background-size]="'cover'"
+       [style.background-image]="'url('+ url +')'"></div>
 
-<!-- TODO: Add change image-->
-<!--<div class="btn btn-primary input-height-sm h-auto w-auto">-->
-  <!--<input type="file"-->
-         <!--title=" "-->
-         <!--(change)="onImageChange($event.target.files)"-->
-         <!--accept="image/*">-->
-  <!--<p>{{'changeImage' | translate | uppercase}}</p>-->
-<!--</div>-->
-
+  <div *ngIf="canEdit">
+    <label for="file-upload"
+           class="btn btn-primary input-height-sm w-auto mt-2">{{'changeImage' | translate}}</label>
+    <input id="file-upload"
+           type="file"
+           title=" "
+           (change)="onImageChange($event.target.files)"
+           accept="image/*">
+  </div>
+</div>
