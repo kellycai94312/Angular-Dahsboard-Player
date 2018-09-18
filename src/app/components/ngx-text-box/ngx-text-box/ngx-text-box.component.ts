@@ -10,6 +10,9 @@ import {AppHelper} from '../../../utils/app-helper';
 })
 export class NgxTextBoxComponent implements OnInit, OnDestroy {
 
+  @Input()
+  public class: string;
+
   private _value: string;
 
   @Input()
@@ -39,6 +42,7 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
     this.valueChange = new EventEmitter<string>();
     this.keyUp = new Subject<KeyboardEvent>();
     this.value = null;
+    this.class = '';
   }
 
   ngOnInit() {

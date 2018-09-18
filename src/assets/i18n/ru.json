@@ -424,5 +424,8 @@
     "SYSTEM": "Системный",
     "USER": "Пользовательский"
   },
-  "dictionaryType": "Тип словаря"
+  "dictionaryType": "Тип словаря",
+  "changeImage": "Изменить изображение",
+  "loadParameters": "Нагрузочные параметры",
+  "videoUrl": "Видео url"
 }

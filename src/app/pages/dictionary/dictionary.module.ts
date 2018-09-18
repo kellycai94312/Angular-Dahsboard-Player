@@ -38,6 +38,8 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
 import {NgxEditableItemModule} from '../../components/ngx-editable-item/ngx-editable-item.module';
 import {EditTagComponent} from './component/edit-tag/edit-tag.component';
 import {DictionaryTypeModule} from '../../components/dictionary-type/dictionary-type.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 
 @NgModule({
   imports: [
@@ -62,7 +64,9 @@ import {DictionaryTypeModule} from '../../components/dictionary-type/dictionary-
     NgxSplitButtonModule,
     NgxSelectionModule,
     NgxEditableItemModule,
-    DictionaryTypeModule
+    DictionaryTypeModule,
+    NgxImageModule,
+    SafeHtmlModule
   ],
   declarations: [
     DictionariesComponent,

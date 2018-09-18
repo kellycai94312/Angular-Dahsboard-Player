@@ -423,5 +423,8 @@
     "SYSTEM": "System",
     "USER": "User"
   },
-  "dictionaryType": "Dictionary type"
+  "dictionaryType": "Dictionary type",
+  "changeImage": "Change image",
+  "loadParameters": "Load parameters",
+  "videoUrl": "Video url"
 }

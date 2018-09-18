@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../data/local/component/base/base-component';
 import {NamedObject} from '../../../data/remote/base/named-object';
 
@@ -8,4 +8,8 @@ import {NamedObject} from '../../../data/remote/base/named-object';
   styleUrls: ['./preview-named-object.component.scss']
 })
 export class PreviewNamedObjectComponent<T extends NamedObject | any> extends BaseComponent<T> {
+
+  @Input()
+  public name: string;
+
 }

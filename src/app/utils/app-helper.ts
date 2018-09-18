@@ -7,6 +7,8 @@ import {PageContainer} from '../data/remote/bean/page-container';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {ClientError} from '../data/local/error/client-error';
+import {FileClass} from '../data/remote/model/file/base/file-class';
+import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
 
 @Injectable()
 export class AppHelper {
@@ -173,6 +175,22 @@ export class AppHelper {
       case 'string':
         return `${rgb.r};${rgb.g};${rgb.b}`;
     }
+  }
+
+  public exerciseTypeToFileClass(val: ExerciseType): FileClass {
+    switch (val) {
+      case ExerciseType.TEST:
+        return FileClass.TEST;
+      case ExerciseType.EXERCISE:
+        return FileClass.EXERCISE;
+    }
+    return null;
+  }
+
+  public getYouTubeIdFromUrl(url: string): string | boolean {
+    const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[7].length == 11) ? match[7] : false;
   }
 
   //#region Try actions

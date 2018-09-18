@@ -1671,7 +1671,7 @@ export class ParticipantRestApiService extends Rest {
   updateActivityMeasures: IRestMethodStrict<ListRequest<IdRequest>, any, { activityId: number }, Measure[]>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
+    method: RestRequestMethod.Get,
     path: '/baseExercise/{!activityId}/tag'
   })
   getActivityTags: IRestMethod<{ activityId: number }, Tag[]>;
@@ -1741,6 +1741,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/measure/{!id}',
   })
   getMeasureById: IRestMethod<{ id: number }, Measure>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/measure',
+  })
+  getMeasures: IRestMethod<PageQuery, PageContainer<Measure>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
