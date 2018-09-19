@@ -2,32 +2,33 @@
      id="carouselExampleIndicators"
      (keyup.arrowleft)="onPrevious()"
      (keyup.arrowright)="onNext()"
-     class="carousel slide {{class}}"
+     class="carousel slide carousel-content {{class}}"
      data-ride="carousel">
   <ol class="carousel-indicators">
     <li *ngFor="let item of images; index as i;"
         data-target="#carouselExampleIndicators"
-        (click)="setCurrentImageIndex(i)"
-        [ngClass]="{'active' : currentImageIndex == i}"></li>
+        (click)="setCurrentImageIndex(item)"
+        [ngClass]="{'active' : currentImage === item}"></li>
   </ol>
-  <div class="carousel-inner">
+  <div *ngIf="currentImage"
+       class="carousel-inner">
     <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
-      <img (dblclick)="onShowImage(images[currentImageIndex].data)"
-           [src]="images[currentImageIndex].name">
+      <img (dblclick)="onShowImage(currentImage.data)"
+           [src]="currentImage.name">
       <div class="carousel-caption d-none d-md-block">
         <app-busy-button *ngIf="canEdit"
                          icon="fa fa-plus"
                          [click]="onAddImage"></app-busy-button>
-        <app-busy-button *ngIf="canEdit && images[currentImageIndex].data.type !== imageType[imageType.LOGO]"
+        <app-busy-button *ngIf="canEdit && currentImage.data.type !== imageType[imageType.LOGO]"
                          icon="fa fa-image"
                          classes="ml-2"
                          [click]="onEditLogoImage"
-                         [parameter]="images[currentImageIndex].data"></app-busy-button>
+                         [parameter]="currentImage.data"></app-busy-button>
         <app-busy-button *ngIf="canEdit"
                          icon="fa fa-trash"
                          classes="ml-2"
                          [click]="onRemoveImage"
-                         [parameter]="images[currentImageIndex]"></app-busy-button>
+                         [parameter]="currentImage"></app-busy-button>
       </div>
     </div>
   </div>
@@ -50,7 +51,7 @@
 </div>
 
 <div *ngIf="!images || !images.length"
-     class="bg-light">
+     [ngClass]="{'bg-light' : !images || !images.length}">
   <app-busy-button *ngIf="canAdd"
                    nameKey="addImage"
                    [click]="onAddImage"></app-busy-button>

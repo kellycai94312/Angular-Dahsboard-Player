@@ -36,7 +36,7 @@ export class NgxCarouselComponent implements OnInit {
 
   public images: NameWrapper<Image>[];
 
-  public currentImageIndex: number;
+  public currentImage: NameWrapper<Image>;
   public canEdit: boolean;
 
   private _fileDialogParameter: Image;
@@ -71,42 +71,46 @@ export class NgxCarouselComponent implements OnInit {
       logoImage = logoImages[0];
       this.images.push(logoImage);
     }
-    if (this.images.length && !this.currentImageIndex) {
+    if (this.images.length && !this.currentImage) {
       if (logoImage) {
-        this.currentImageIndex = this.images.indexOf(logoImage);
+        this.currentImage = logoImage;
       } else {
-        this.currentImageIndex = 0;
+        this.currentImage = this.images[0];
       }
       await this.refreshCanEdit();
     }
   }
 
   public async onPrevious() {
-    if (this.currentImageIndex - 1 >= 0) {
-      this.currentImageIndex--;
+    let index = this.images.indexOf(this.currentImage);
+    if (index - 1 >= 0) {
+      index--;
     } else {
-      this.currentImageIndex = this.images.length - 1;
+      index = this.images.length - 1;
     }
+    this.currentImage = this.images[index];
     await this.refreshCanEdit();
   }
 
   public async onNext() {
-    if (this.currentImageIndex + 1 < this.images.length) {
-      this.currentImageIndex++;
+    let index = this.images.indexOf(this.currentImage);
+    if (index + 1 < this.images.length) {
+      index++;
     } else {
-      this.currentImageIndex = 0;
+      index = 0;
     }
+    this.currentImage = this.images[index];
     await this.refreshCanEdit();
   }
 
-  public async setCurrentImageIndex(index: number) {
-    this.currentImageIndex = index;
+  public async setCurrentImageIndex(item: NameWrapper<Image>) {
+    this.currentImage = item;
     await this.refreshCanEdit();
   }
 
   public async refreshCanEdit() {
     if (this.images.length) {
-      this.canEdit = await this._permissionService.canEditFile(this.images[this.currentImageIndex].data);
+      this.canEdit = await this._permissionService.canEditFile(this.currentImage.data);
     } else {
       this.canEdit = false;
     }
@@ -124,6 +128,7 @@ export class NgxCarouselComponent implements OnInit {
   public onEditLogoImage = async (e: any, item: Image) => {
     item.type = ImageType.LOGO;
     await this._participantRestApiService.updateFile(item, null);
+    this.currentImage = null;
     await this.initialize();
   };
 
@@ -150,7 +155,7 @@ export class NgxCarouselComponent implements OnInit {
   }
 
   public async onShowImage(image: Image) {
-    await this._ngxModalService.showFullImage(image.objectId, image.type, image.clazz);
+    await this._ngxModalService.showFullImage(image);
   }
 
   private openFileDialog(data: Image): void {

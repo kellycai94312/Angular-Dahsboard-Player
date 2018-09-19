@@ -6,6 +6,7 @@ import {Tag} from '../data/remote/model/tag';
 import {BaseExercise} from '../data/remote/model/exercise/base/base-exercise';
 import {AuthorizationService} from './authorization.service';
 import {BaseFile} from '../data/remote/model/file/base/base-file';
+import {IdentifiedObject} from '../data/remote/base/identified-object';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class PermissionService {
   }
 
   public async canEditTag(data: Tag, person: Person): Promise<boolean> {
-    if (data.owner && data.owner.id == person.user.id) {
+    if (this.areYouCreator(data, person)) {
       return true;
     }
 
@@ -30,7 +31,7 @@ export class PermissionService {
 
   public async canEditActivity<T extends BaseExercise>(data: T, person?: Person): Promise<boolean> {
     person = await this.getDefaultPerson(person);
-    if (data.owner && data.owner.id == person.user.id) {
+    if (this.areYouCreator(data, person)) {
       return true;
     }
 
@@ -43,7 +44,7 @@ export class PermissionService {
 
   public async canEditFile<T extends BaseFile>(data: T, person?: Person): Promise<boolean> {
     person = await this.getDefaultPerson(person);
-    if (data.owner && data.owner.id == person.user.id) {
+    if (this.areYouCreator(data, person)) {
       return true;
     }
 
@@ -69,6 +70,13 @@ export class PermissionService {
       }
     }
     return result;
+  }
+
+  public areYouCreator<T extends IdentifiedObject>(data: T, person: Person) {
+    if (data.owner && data.owner.id == person.user.id) {
+      return true;
+    }
+    return false;
   }
 
   private async getDefaultPerson(person: Person): Promise<Person> {
