@@ -12,7 +12,8 @@
   </ol>
   <div class="carousel-inner">
     <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
-      <img [src]="images[currentImageIndex].name">
+      <img (dblclick)="onShowImage(images[currentImageIndex].data)"
+           [src]="images[currentImageIndex].name">
       <div class="carousel-caption d-none d-md-block">
         <app-busy-button *ngIf="canEdit"
                          icon="fa fa-plus"

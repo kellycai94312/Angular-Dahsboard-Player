@@ -6,6 +6,7 @@ import {environment} from '../../../../environments/environment';
 import {AppHelper} from '../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {Image} from '../../../data/remote/model/file/image/image';
+import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'ngx-image',
@@ -46,7 +47,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
-              private _elementRef: ElementRef) {
+              private _elementRef: ElementRef,
+              private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<any>();
     this.class = '';
   }
@@ -94,6 +96,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
     url += `&date=${Date.now()}`;
     this.url = url;
+  }
+
+  public async onShowImage() {
+    await this._ngxModalService.showFullImage(this.objectId, this.type, this.fileClass);
   }
 
 }

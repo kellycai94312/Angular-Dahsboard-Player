@@ -8,6 +8,7 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 import {environment} from '../../../../environments/environment';
 import {PermissionService} from '../../../shared/permission.service';
 import {AppHelper} from '../../../utils/app-helper';
+import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'ngx-carousel',
@@ -42,7 +43,8 @@ export class NgxCarouselComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _ngxModalService: NgxModalService) {
     this.class = '';
   }
 
@@ -145,6 +147,10 @@ export class NgxCarouselComponent implements OnInit {
         await this.onNext();
       }
     }
+  }
+
+  public async onShowImage(image: Image) {
+    await this._ngxModalService.showFullImage(image.objectId, image.type, image.clazz);
   }
 
   private openFileDialog(data: Image): void {
