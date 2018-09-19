@@ -427,5 +427,6 @@
   "dictionaryType": "Тип словаря",
   "changeImage": "Изменить изображение",
   "loadParameters": "Нагрузочные параметры",
-  "videoUrl": "Видео url"
+  "videoUrl": "Видео url",
+  "addImage": "Добавить изображение"
 }

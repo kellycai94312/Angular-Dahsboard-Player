@@ -5,6 +5,7 @@ import {ParticipantRestApiService} from '../data/remote/rest-api/participant-res
 import {Tag} from '../data/remote/model/tag';
 import {BaseExercise} from '../data/remote/model/exercise/base/base-exercise';
 import {AuthorizationService} from './authorization.service';
+import {BaseFile} from '../data/remote/model/file/base/base-file';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +29,19 @@ export class PermissionService {
   }
 
   public async canEditActivity<T extends BaseExercise>(data: T, person?: Person): Promise<boolean> {
+    person = await this.getDefaultPerson(person);
+    if (data.owner && data.owner.id == person.user.id) {
+      return true;
+    }
+
+    if (await this.hasAnyRole(person, [UserRoleEnum.ADMIN])) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public async canEditFile<T extends BaseFile>(data: T, person?: Person): Promise<boolean> {
     person = await this.getDefaultPerson(person);
     if (data.owner && data.owner.id == person.user.id) {
       return true;

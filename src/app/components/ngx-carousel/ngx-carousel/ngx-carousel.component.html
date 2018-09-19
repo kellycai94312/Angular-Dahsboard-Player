@@ -1,0 +1,62 @@
+<div *ngIf="images && images.length"
+     id="carouselExampleIndicators"
+     (keyup.arrowleft)="onPrevious()"
+     (keyup.arrowright)="onNext()"
+     class="carousel slide {{class}}"
+     data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li *ngFor="let item of images; index as i;"
+        data-target="#carouselExampleIndicators"
+        (click)="setCurrentImageIndex(i)"
+        [ngClass]="{'active' : currentImageIndex == i}"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
+      <img [src]="images[currentImageIndex].name">
+      <div class="carousel-caption d-none d-md-block">
+        <app-busy-button *ngIf="canEdit"
+                         icon="fa fa-plus"
+                         [click]="onAddImage"></app-busy-button>
+        <app-busy-button *ngIf="canEdit && images[currentImageIndex].data.type !== imageType[imageType.LOGO]"
+                         icon="fa fa-image"
+                         classes="ml-2"
+                         [click]="onEditLogoImage"
+                         [parameter]="images[currentImageIndex].data"></app-busy-button>
+        <app-busy-button *ngIf="canEdit"
+                         icon="fa fa-trash"
+                         classes="ml-2"
+                         [click]="onRemoveImage"
+                         [parameter]="images[currentImageIndex]"></app-busy-button>
+      </div>
+    </div>
+  </div>
+  <a class="carousel-control-prev"
+     (click)="onPrevious()"
+     role="button"
+     data-slide="prev">
+    <span class="carousel-control-prev-icon"
+          aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next"
+     (click)="onNext()"
+     role="button"
+     data-slide="next">
+    <span class="carousel-control-next-icon"
+          aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<div *ngIf="!images || !images.length"
+     class="bg-light">
+  <app-busy-button *ngIf="canAdd"
+                   nameKey="addImage"
+                   [click]="onAddImage"></app-busy-button>
+</div>
+
+<input #fileInput
+       type="file"
+       title=" "
+       (change)="onImageChange($event.target.files)"
+       accept="image/*"/>
