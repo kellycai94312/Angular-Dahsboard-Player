@@ -18,6 +18,11 @@ import {PermissionService} from '../../../shared/permission.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Measure} from '../../../data/remote/model/measure';
+import {HtmlContentComponent} from '../../html-content/html-content/html-content.component';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {environment} from '../../../../environments/environment';
+import {Image} from '../../../data/remote/model/file/image/image';
 
 @Injectable()
 export class NgxModalService {
@@ -171,6 +176,21 @@ export class NgxModalService {
           }
         }
       ];
+    });
+  }
+
+  public async showFullImage(objectId: number, imageType: ImageType, fileClass: FileClass);
+  public async showFullImage(image: Image);
+  public async showFullImage(objectIdOrImage: number | Image, imageType?: ImageType, fileClass?: FileClass) {
+    const modal = this.open({size: 'lg', backdrop: true, centered: true});
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      let url = `${environment.restUrl}/file/download/image`;
+      if (typeof objectIdOrImage !== 'number') {
+        url += `/${objectIdOrImage.id}?date=${Date.now() * Math.random()}`;
+      } else {
+        url += `?clazz=${fileClass}&objectId=${objectIdOrImage}&type=${imageType}&date=${Date.now() * Math.random()}`;
+      }
+      component.html = `<div class="text-center overflow-content"><img src="${url}"/></div>`;
     });
   }
 

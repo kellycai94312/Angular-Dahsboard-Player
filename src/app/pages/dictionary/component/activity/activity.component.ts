@@ -28,7 +28,6 @@ export class ActivityComponent implements OnInit {
   public tags: Tag[];
   public measures: Measure[];
   public youTubeUrl: string;
-
   public canEdit: boolean;
 
   private readonly _breadcrumbItem: BreadcrumbItem;
@@ -48,7 +47,6 @@ export class ActivityComponent implements OnInit {
     this.fileClass = this._appHelper.exerciseTypeToFileClass(this.activity.discriminator);
     this.tags = await this._participantRestApiService.getActivityTags({activityId: activityId});
     this.measures = await this._participantRestApiService.getActivityMeasures({activityId: activityId});
-
     this.canEdit = await this._permissionService.canEditActivity(this.activity);
   }
 
@@ -93,5 +91,4 @@ export class ActivityComponent implements OnInit {
     }
     this.youTubeUrl = youTubeUrl;
   }
-
 }

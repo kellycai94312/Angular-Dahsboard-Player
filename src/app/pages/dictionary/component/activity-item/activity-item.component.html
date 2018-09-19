@@ -1,7 +1,7 @@
-<div class="activity-content {{class}}"
-     [routerLink]="data.id">
+<div class="activity-content {{class}}">
   <ngx-image [objectId]="data.id"
              [type]="imageType.LOGO"
              [fileClass]="fileClass"></ngx-image>
-  <h6 class="text-truncate mt-2">{{data.name}}</h6>
+  <h6 [routerLink]="data.id"
+      class="text-truncate mt-2">{{data.name}}</h6>
 </div>

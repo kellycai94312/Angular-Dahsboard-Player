@@ -1,17 +1,23 @@
 <div *ngIf="activity"
      class="row cols-padding">
-  <div class="col-2">
-    <ngx-image [objectId]="activity.id"
-               [fileClass]="fileClass"
-               [type]="imageType.LOGO"
-               [canEdit]="canEdit"></ngx-image>
-    <app-busy-button *ngIf="canEdit"
-                     classes="mt-2"
-                     nameKey="save"
-                     [click]="onSave"></app-busy-button>
-  </div>
-  <div class="col">
-    <app-named-object [data]="activity"></app-named-object>
+  <div class="col-8">
+    <label>{{'name' | translate}}</label>
+    <dx-text-box mode="text"
+                 [(value)]="activity.name"
+                 [showClearButton]="true">
+    </dx-text-box>
+    <app-busy-button classes="mt-2"
+                     nameKey="tags"
+                     [click]="onEditTags"></app-busy-button>
+    <div *ngIf="tags && tags.length"
+         class="tags-content mt-2">
+      <div *ngFor="let item of tags">
+        {{item.name}}
+      </div>
+    </div>
+    <label class="mt-2 w-100">{{'description' | translate }}</label>
+    <dx-text-area [(value)]="activity.description"></dx-text-area>
+
     <app-dictionary-type class="mt-2"
                          [(dictionaryType)]="activity.dictionaryType"></app-dictionary-type>
     <label class="mt-2">{{'videoUrl' | translate}}</label>
@@ -26,16 +32,16 @@
             scrolling="no"
             allow="autoplay; encrypted-media"
             allowfullscreen></iframe>
+    <app-busy-button *ngIf="canEdit"
+                     classes="mt-2"
+                     nameKey="save"
+                     [click]="onSave"></app-busy-button>
   </div>
-  <div class="col d-flex flex-column">
-    <app-busy-button nameKey="tags"
-                     [click]="onEditTags"></app-busy-button>
-    <div *ngIf="tags && tags.length"
-         class="tags-content mt-2">
-      <div *ngFor="let item of tags">
-        {{item.name}}
-      </div>
-    </div>
+
+  <div class="col-4 d-flex flex-column">
+    <ngx-carousel [canAdd]="canEdit"
+                  [objectId]="activity.id"
+                  [fileClass]="fileClass"></ngx-carousel>
 
     <app-busy-button classes="mt-2"
                      nameKey="loadParameters"

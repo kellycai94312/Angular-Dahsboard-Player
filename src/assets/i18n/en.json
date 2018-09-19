@@ -426,5 +426,6 @@
   "dictionaryType": "Dictionary type",
   "changeImage": "Change image",
   "loadParameters": "Load parameters",
-  "videoUrl": "Video url"
+  "videoUrl": "Video url",
+  "addImage": "Add image"
 }
