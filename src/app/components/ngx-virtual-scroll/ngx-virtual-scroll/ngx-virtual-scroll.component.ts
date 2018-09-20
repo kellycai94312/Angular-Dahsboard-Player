@@ -5,6 +5,7 @@ import {NgxScrollDirective} from '../ngx-scroll/ngx-scroll.directive';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {Mutex} from '../../../data/local/mutex';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'ngx-virtual-scroll',
@@ -56,7 +57,7 @@ export class NgxVirtualScrollComponent {
 
   private readonly _mutex: Mutex;
 
-  constructor() {
+  constructor(private _appHelper: AppHelper) {
     this._mutex = new Mutex();
 
     this.class = '';
@@ -69,7 +70,7 @@ export class NgxVirtualScrollComponent {
     this.initialize();
   }
 
-  public addItem(item: any, scroll: boolean = false) {
+  public async addItem(item: any, scroll: boolean = false) {
     if (!this._front) {
       this._front = 0;
       this._total = 0;
@@ -78,7 +79,7 @@ export class NgxVirtualScrollComponent {
 
     this.items.push(item);
     if (scroll) {
-      this.scrollDown();
+      await this.scrollDown();
     }
   }
 
@@ -157,10 +158,9 @@ export class NgxVirtualScrollComponent {
     }
   }
 
-  public scrollDown() {
-    setTimeout(() => {
-      this.ngxScrollDirective.scrollToDown();
-    });
+  public async scrollDown() {
+    await this._appHelper.delay();
+    this.ngxScrollDirective.scrollToDown();
   }
 
   //#endregion
@@ -173,9 +173,13 @@ export class NgxVirtualScrollComponent {
     await this._mutex.acquire();
     this.initialize();
 
-    await this.onScrollDown();
+    // This need to activate scroll
+    do {
+      await this.onScrollDown();
+    } while (this.canScrollDown() && this.ngxScrollDirective.getHeight() <= this.ngxScrollDirective.getViewPortHeight());
+
     if (this.autoScroll) {
-      this.scrollDown();
+      await this.scrollDown();
     }
     this._mutex.release();
   }

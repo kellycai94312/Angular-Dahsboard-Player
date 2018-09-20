@@ -107,8 +107,65 @@ export class NgxScrollDirective implements OnInit, OnDestroy {
       }
       window.scrollTo(scrollToOptions);
     } else {
-      this._elementRef.nativeElement.scrollTop = position;
+      this._elementRef.nativeElement.scrollTo(position);
     }
+  }
+
+  public getHeight(): number {
+    if (this.windowScroll) {
+      return document.documentElement.scrollHeight;
+    }
+    return this._elementRef.nativeElement.scrollHeight;
+  }
+
+  public getScrollYPosition(): number {
+    if (this.windowScroll) {
+      return document.documentElement.scrollTop;
+    }
+    return this._elementRef.nativeElement.scrollTop;
+  }
+
+  public getViewPortHeight(): number {
+    if (this.windowScroll) {
+      return document.documentElement.clientHeight;
+    }
+    return this._elementRef.nativeElement.clientHeight;
+  }
+
+  public getDistanceToBottom() {
+    return Math.round(this.getHeight() - this.getViewPortHeight() - this.getScrollYPosition());
+  }
+
+  private onScroll(): void {
+    this._attached = this.autoScroll && this.attachedYOffset >= this.getDistanceToBottom();
+    const height = this.getHeight();
+
+    switch (this.getScrollDirection()) {
+      case Direction.UP: {
+        const yPositionInPercent = 100.0 * this.getScrollYPosition() / height;
+        if (yPositionInPercent < this.scrollUpDistance && this._rearScrollHeight != height) {
+          // console.log('UP');
+          this._rearScrollHeight = height;
+          this.scrollUp.emit();
+        }
+      }
+        break;
+      case Direction.DOWN: {
+        const distanceToTop = this.getScrollYPosition() + this.getViewPortHeight();
+        const yPositionInPercent = 100.0 * distanceToTop / height;
+        if (this._frontPosition < distanceToTop && this.scrollDownDistance < yPositionInPercent) {
+          // console.log('DOWN');
+          this._frontPosition = height;
+          this.scrollDown.emit();
+        }
+      }
+        break;
+    }
+
+    // console.log('getHeight: ' + this.getHeight());
+    // console.log('getScrollYPosition: ' + this.getScrollYPosition());
+    // console.log('getViewPortHeight: ' + this.getViewPortHeight());
+    // console.log('getDistanceToBottom: ' + this.getDistanceToBottom());
   }
 
   private getScrollDirection(): Direction {
@@ -121,61 +178,6 @@ export class NgxScrollDirective implements OnInit, OnDestroy {
     }
     this._lastScrollTop = scrollTop;
     return direction;
-  }
-
-  private getHeight(): number {
-    if (this.windowScroll) {
-      return document.documentElement.scrollHeight;
-    }
-    return this._elementRef.nativeElement.scrollHeight;
-  }
-
-  private getScrollYPosition(): number {
-    if (this.windowScroll) {
-      return document.documentElement.scrollTop;
-    }
-    return Math.round(this._elementRef.nativeElement.scrollTop);
-  }
-
-  private getViewPortHeight(): number {
-    if (this.windowScroll) {
-      return document.documentElement.clientHeight;
-    }
-    return this._elementRef.nativeElement.clientHeight;
-  }
-
-  private getDistanceToBottom() {
-    return Math.round(this.getHeight() - this.getViewPortHeight() - this.getScrollYPosition());
-  }
-
-  private onScroll(): void {
-    this._attached = this.autoScroll && this.attachedYOffset >= this.getDistanceToBottom();
-
-    switch (this.getScrollDirection()) {
-      case Direction.UP: {
-        const yPositionInPercent = 100.0 * this.getScrollYPosition() / (this.getHeight());
-        if (yPositionInPercent < this.scrollUpDistance && this._rearScrollHeight != this.getHeight()) {
-          // console.log('UP');
-          this._rearScrollHeight = this.getHeight();
-          this.scrollUp.emit();
-        }
-      }
-        break;
-      case Direction.DOWN: {
-        const yPositionInPercent = 100.0 * (this.getScrollYPosition() + this.getViewPortHeight()) / (this.getHeight());
-        if (this._frontPosition < this.getScrollYPosition() && this.scrollDownDistance < yPositionInPercent) {
-          // console.log('DOWN');
-          this._frontPosition = this.getHeight();
-          this.scrollDown.emit();
-        }
-      }
-        break;
-    }
-
-    // console.log('getHeight: ' + this.getHeight());
-    // console.log('getScrollYPosition: ' + this.getScrollYPosition());
-    // console.log('getViewPortHeight: ' + this.getViewPortHeight());
-    // console.log('getDistanceToBottom: ' + this.getDistanceToBottom());
   }
 
 }

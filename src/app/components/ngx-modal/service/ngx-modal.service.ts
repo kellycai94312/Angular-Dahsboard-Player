@@ -190,7 +190,7 @@ export class NgxModalService {
       } else {
         url += `?clazz=${fileClass}&objectId=${objectIdOrImage}&type=${imageType}&date=${Date.now() * Math.random()}`;
       }
-      component.html = `<div class="text-center overflow-content"><img src="${url}"/></div>`;
+      component.html = `<div class="text-center"><img class="img-fluid" src="${url}"/></div>`;
     });
   }
 
