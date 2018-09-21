@@ -1,7 +1,7 @@
 import {Type} from '@angular/core';
 
 export interface INgxComponentFactory<TComponent extends any, TModel extends any> {
-  data: any;
+  data: TModel;
   componentType: Type<TComponent>;
   initializeComponent: (component: TComponent, data: TModel) => Promise<void>;
   component: TComponent;

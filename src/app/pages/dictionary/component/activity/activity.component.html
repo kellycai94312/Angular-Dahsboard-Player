@@ -16,7 +16,8 @@
       </div>
     </div>
     <label class="mt-2 w-100">{{'description' | translate }}</label>
-    <dx-text-area [(value)]="activity.description"></dx-text-area>
+    <dx-text-area [(value)]="activity.description"
+                  [height]="250"></dx-text-area>
 
     <app-dictionary-type class="mt-2"
                          [(dictionaryType)]="activity.dictionaryType"></app-dictionary-type>
@@ -24,14 +25,6 @@
     <ngx-text-box [debounceTime]="propertyConstant.searchDebounceTime"
                   [(value)]="activity.videoUrl"
                   (valueChange)="onVideoUrlChanged($event)"></ngx-text-box>
-    <iframe *ngIf="youTubeUrl"
-            [src]="youTubeUrl | safeUrl"
-            [height]="350"
-            class="mt-2 w-100"
-            frameborder="0"
-            scrolling="no"
-            allow="autoplay; encrypted-media"
-            allowfullscreen></iframe>
     <app-busy-button *ngIf="canEdit"
                      classes="mt-2"
                      nameKey="save"
@@ -42,7 +35,14 @@
     <ngx-carousel [canAdd]="canEdit"
                   [objectId]="activity.id"
                   [fileClass]="fileClass"></ngx-carousel>
-
+    <iframe *ngIf="youTubeUrl"
+            [src]="youTubeUrl | safeUrl"
+            [height]="350"
+            class="mt-2 w-100"
+            frameborder="0"
+            scrolling="no"
+            allow="autoplay; encrypted-media"
+            allowfullscreen></iframe>
     <app-busy-button classes="mt-2"
                      nameKey="loadParameters"
                      [click]="onEditLoadParameters"></app-busy-button>
