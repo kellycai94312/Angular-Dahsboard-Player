@@ -10,9 +10,10 @@ import {EventReportService} from '../service/event-report.service';
 import {TranslateService} from '@ngx-translate/core';
 import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
 import {TrainingBlockType} from '../../../../data/remote/model/training/report/training-block-type';
-import {FileFormat, ReportsService} from '../../../../shared/reports.service';
+import {ReportsService} from '../../../../shared/reports.service';
 import {TrainingReportBlockComponent} from '../../component/training-report-block/training-report-block.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {ReportExtension} from '../../../../data/remote/bean/report-extension';
 
 @Component({
   selector: 'app-event-blocks',
@@ -58,19 +59,13 @@ export class EventBlocksComponent implements OnInit {
       {
         nameKey: 'exportToPdf',
         callback: async () => {
-          await this._reportsService.downloadPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries(), FileFormat.PDF);
+          await this._reportsService.downloadTrainingReport(this._trainingReportId, this.getDisabledEventBlockSeries(), ReportExtension.PDF);
         }
       },
       {
         nameKey: 'exportToExcel',
         callback: async () => {
-          await this._reportsService.downloadPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries(), FileFormat.EXCEL);
-        }
-      },
-      {
-        nameKey: 'print',
-        callback: async () => {
-          await this._reportsService.printPersonMeasure(this._trainingReportId, this.getDisabledEventBlockSeries());
+          await this._reportsService.downloadTrainingReport(this._trainingReportId, this.getDisabledEventBlockSeries(), ReportExtension.XLS);
         }
       }
     ];

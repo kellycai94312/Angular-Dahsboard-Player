@@ -427,5 +427,16 @@
   "changeImage": "Change image",
   "loadParameters": "Load parameters",
   "videoUrl": "Video url",
-  "addImage": "Add image"
+  "addImage": "Add image",
+  "reportExtensionEnum": {
+    "PDF": "PDF",
+    "DOCX": "DOCX",
+    "XLS": "XLS",
+    "HTML": "HTML",
+    "RTF": "RTF"
+  },
+  "extension": "Extension",
+  "realData": "Real data",
+  "personalEventReport": "Personal event report",
+  "gameReport": "Game report"
 }

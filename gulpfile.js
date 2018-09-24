@@ -8,33 +8,13 @@ const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
 const imagemin = require('gulp-imagemin');
 
-const stimulsoftTaskName = 'stimulsoft';
 const plotlyTaskName = 'plotly';
 const htmlMinifyTaskName = 'html-minify';
 const cssMinifyTaskName = 'css-minify';
 const jsonMinifyTaskName = 'json-minify';
 const imageMinifyTaskName = 'image-minify';
 
-gulp.task('default', [stimulsoftTaskName, plotlyTaskName]);
-
-gulp.task(stimulsoftTaskName, function () {
-  return gulp.src('node_modules/stimulsoft-reports-js/stimulsoft.reports.js')
-    .pipe(replace('!t.Base.Licenses.StiLicenseKeyValidator.isValidOnJS()', 't.Base.Licenses.StiLicenseKeyValidator.isValidOnJS()'))
-    .pipe(uglify()
-      .on('error', function (e) {
-        console.log(e);
-      })
-    )
-    .pipe(rename({suffix: '.min'}))
-    .pipe(gulp.dest(function (file) {
-      return file.base;
-    }))
-    .pipe(gulp.dest('src/assets/js/'))
-    .pipe(notify({
-      message: 'Scripts task complete!',
-      onLast: true
-    }));
-});
+gulp.task('default', [plotlyTaskName]);
 
 gulp.task(plotlyTaskName, function () {
   return gulp.src('node_modules/plotly.js/dist/plotly.min.js')

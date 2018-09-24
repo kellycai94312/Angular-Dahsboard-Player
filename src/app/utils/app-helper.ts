@@ -9,6 +9,7 @@ import {ParticipantRestApiService} from '../data/remote/rest-api/participant-res
 import {ClientError} from '../data/local/error/client-error';
 import {FileClass} from '../data/remote/model/file/base/file-class';
 import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
+import {environment} from '../../environments/environment';
 
 @Injectable()
 export class AppHelper {
@@ -193,6 +194,37 @@ export class AppHelper {
     return (match && match[7].length == 11) ? match[7] : false;
   }
 
+  public getUrl(query: string, objParams?: any): string {
+    return `${environment.restUrl}${query}${this.getParams(objParams)}`;
+  }
+
+  public getParams(obj: any): string {
+    const params = this.getPropertiesWithValues(obj);
+    if (!params || !params.length) {
+      return '';
+    }
+    let stringParams = '?';
+    for (let i = 0; i < params.length; i++) {
+      const item = params[i];
+      stringParams += `${item.name}=${item.value}`;
+      if (i + 1 < params.length) {
+        stringParams += '&';
+      }
+    }
+    return stringParams;
+  }
+
+  public getPropertiesWithValues(obj: any): ClassProperty[] {
+    const vals: ClassProperty[] = [];
+    if (obj) {
+      for (const key of Object.keys(obj)) {
+        vals.push({name: key, value: obj[key]});
+      }
+    }
+
+    return vals;
+  }
+
   //#region Try actions
 
   public async tryLoad(load: () => Promise<void>, notify: boolean = true): Promise<boolean> {
@@ -242,4 +274,9 @@ export class AppHelper {
 
   //#endregion
 
+}
+
+class ClassProperty {
+  name: string;
+  value: any;
 }

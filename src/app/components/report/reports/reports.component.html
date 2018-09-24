@@ -4,7 +4,7 @@
     <div class="w-100">
       {{item.nameKey | translate: item.param}}
     </div>
-    <div *ngIf="item.settings">
+    <div *ngIf="item.editSettings">
       <app-busy-button icon="fa fa-edit"
                        [click]="onEdit"
                        [parameter]="item"></app-busy-button>
