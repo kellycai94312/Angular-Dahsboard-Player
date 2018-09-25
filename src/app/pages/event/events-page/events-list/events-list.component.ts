@@ -9,10 +9,13 @@ import {Router} from '@angular/router';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {ProfileService} from '../../../../shared/profile.service';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {Game} from '../../../../data/remote/model/training/game/game';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {PersonReportsComponent} from '../../../../components/report/person-reports/person-reports.component';
+import {TrainingState} from '../../../../data/remote/misc/training-state';
 
 @Component({
   selector: 'app-events-list',
@@ -21,11 +24,15 @@ import {Game} from '../../../../data/remote/model/training/game/game';
 })
 export class EventsListComponent implements OnInit, OnDestroy {
 
+  public readonly propertyConstant = PropertyConstant;
+  public readonly trainingDiscriminator = TrainingDiscriminator;
+  public readonly trainingState = TrainingState;
+
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
 
-  @ViewChild(NgxVirtualScrollComponent)
-  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
 
   public baseTrainingQuery: BaseTrainingQuery;
   public canCreateEvent: boolean;
@@ -33,7 +40,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _profileService: ProfileService) {
+              private _profileService: ProfileService,
+              private _ngxModalService: NgxModalService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
     this.baseTrainingQuery.measureParameterEnum = MeasureParameterEnum.GOALS;
@@ -47,7 +55,6 @@ export class EventsListComponent implements OnInit, OnDestroy {
         this.baseTrainingQuery.name = event.value;
         await this.updateItems();
       });
-    await this.updateItems();
   }
 
   ngOnDestroy(): void {
@@ -85,18 +92,26 @@ export class EventsListComponent implements OnInit, OnDestroy {
     await this.updateItems();
   }
 
-  public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
+  public fetchItems = async (pageQuery: PageQuery) => {
     const items = await this._participantRestApiService.getBaseTrainings(pageQuery);
     for (const event of items.list) {
-      if (event.discriminator == TrainingDiscriminator.GAME) {
+      if (event.discriminator === TrainingDiscriminator.GAME) {
         this.setGameGroupScores(event as Game);
       }
     }
     return items;
   };
 
+  public showReport = async (e: any, parameter: BaseTraining) => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'reports';
+    await modal.componentInstance.initializeBody(PersonReportsComponent, async component => {
+      await component.initialize(parameter);
+    });
+  };
+
   private async updateItems() {
-    await this.ngxVirtualScrollComponent.reset();
+    await this.ngxGridComponent.reset();
   }
 
   private setGameGroupScores(event: Game) {

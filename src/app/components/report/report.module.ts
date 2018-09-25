@@ -6,6 +6,7 @@ import {PersonalReportSettingsComponent} from './personal-report-settings/person
 import {DxCheckBoxModule, DxSelectBoxModule} from 'devextreme-angular';
 import {NgxModalModule} from '../ngx-modal/ngx-modal.module';
 import {BusyButtonModule} from '../busy-button/busy-button.module';
+import {PersonReportsComponent} from './person-reports/person-reports.component';
 
 @NgModule({
   imports: [
@@ -16,9 +17,9 @@ import {BusyButtonModule} from '../busy-button/busy-button.module';
     BusyButtonModule,
     DxSelectBoxModule
   ],
-  declarations: [ReportsComponent, PersonalReportSettingsComponent],
-  exports: [ReportsComponent],
-  entryComponents: [ReportsComponent, PersonalReportSettingsComponent]
+  declarations: [ReportsComponent, PersonalReportSettingsComponent, PersonReportsComponent],
+  exports: [ReportsComponent, PersonReportsComponent],
+  entryComponents: [ReportsComponent, PersonalReportSettingsComponent, PersonReportsComponent]
 })
 export class ReportModule {
 }

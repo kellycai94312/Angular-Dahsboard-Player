@@ -17,6 +17,9 @@ import {TestingReportQuery} from '../../../data/remote/rest-api/query/report/tes
 export class ReportsComponent {
 
   @Input()
+  public class: string;
+
+  @Input()
   public eventId: number;
 
   @Input()
@@ -30,6 +33,8 @@ export class ReportsComponent {
   constructor(private _reportsService: ReportsService,
               private _appHelper: AppHelper,
               private _ngxModalService: NgxModalService) {
+    this.class = '';
+    this.items = [];
   }
 
   public initialize(type: ReportType) {
