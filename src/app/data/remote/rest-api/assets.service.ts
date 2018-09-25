@@ -1,51 +1,13 @@
 import {Injectable} from '@angular/core';
-import {IRestMethod, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {Rest, RestHandler, RestParams} from 'rest-core';
 
 export const assetsPath = 'assets';
-export const reportsPath = '/reports';
-export const jsPath = '/js';
 
 @Injectable()
 @RestParams({
   url: assetsPath
 })
 export class AssetsService extends Rest {
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/personal_testing.mrt`
-  })
-  getTestingPersonalReport: IRestMethod<void, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/personal_training.mrt`
-  })
-  getTrainingPersonalReport: IRestMethod<void, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/team_by_personal_testing.mrt`
-  })
-  getTeamByPersonalReport: IRestMethod<void, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/team_testing.mrt`
-  })
-  getTeamReport: IRestMethod<void, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/game.mrt`
-  })
-  getGameReport: IRestMethod<void, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: `${reportsPath}/person_measure.mrt`
-  })
-  getPersonMeasure: IRestMethod<void, any>;
 
   constructor(restHandler: RestHandler) {
     super(restHandler);

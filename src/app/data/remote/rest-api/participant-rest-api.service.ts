@@ -40,7 +40,6 @@ import {TrainingGroup} from '../model/training-group';
 import {TrainingAccess} from '../misc/training-access';
 import {NoteQuery} from './query/note-query';
 import {Note} from '../model/note/base/note';
-import {TestingPersonalReport} from '../bean/testing-personal-report';
 import {NamedQuery} from './named-query';
 import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
@@ -49,7 +48,6 @@ import {BaseTrainingQuery} from './query/base-training-query';
 import {BaseTraining} from '../model/training/base/base-training';
 import {TrainingPart} from '../model/training/training-part';
 import {TrainingPersonQuery} from './query/training-person-query';
-import {GameReport} from '../bean/game/game-report';
 import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
 import {BaseNotification} from '../model/notification/base/base-notification';
@@ -98,11 +96,9 @@ import {EstimatedParameter} from '../model/training/testing/estimated-parameter'
 import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {Organization} from '../model/organization';
-import {TeamReport} from '../bean/report/team-report';
 import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {Tag} from '../model/tag';
-import {TrainingPersonalReport} from '../bean/training-personal-report';
 import {GroupScore} from '../model/training/game/group-score';
 
 @Injectable()
@@ -1035,45 +1031,7 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Training
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/training/{!trainingId}/person/{!trainingPersonId}/exercise'
-  })
-  getTrainingPersonalReport: IRestMethod<{ trainingId: number, trainingPersonId: number }, TrainingPersonalReport>;
-
-  //#endregion
-
-  //#region Testing
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/testing/{!testingId}/report/personal/{!trainingPersonId}'
-  })
-  getTestingPersonalReport: IRestMethod<{ testingId: number, trainingPersonId: number }, TestingPersonalReport>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/testing/{!testingId}/report/personal'
-  })
-  getTestingPersonalReports: IRestMethod<{ testingId: number }, TestingPersonalReport[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/testing/{!testingId}/report/team'
-  })
-  getTeamReport: IRestMethod<{ testingId: number }, TeamReport>;
-
-  //#endregion
-
   //#region Game
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/game/{!gameId}/group/{!trainingGroupId}/report?measureParameter={!measureParameter}',
-  })
-  getGameReport: IRestMethod<{ gameId: number, trainingGroupId: number, measureParameter: string }, GameReport>;
 
   @RestAction({
     method: RestRequestMethod.Get,

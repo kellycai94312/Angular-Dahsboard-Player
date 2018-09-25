@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {NgbModalOptions} from '@ng-bootstrap/ng-bootstrap/modal/modal';
+import {NgbModal, NgbModalOptions} from '@ng-bootstrap/ng-bootstrap';
 import {NgxModalComponent} from '../ngx-modal/ngx-modal.component';
 import {NgxModalRef} from '../bean/ngx-modal-ref';
 import {IBaseEditComponent} from '../../../data/local/component/base/ibase-edit-component';

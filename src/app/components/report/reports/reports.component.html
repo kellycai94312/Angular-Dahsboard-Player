@@ -1,10 +1,10 @@
-<div class="list-group-flush">
+<div class="list-group-flush {{class}}">
   <div *ngFor="let item of items"
        class="list-group-item p-2 d-flex">
     <div class="w-100">
       {{item.nameKey | translate: item.param}}
     </div>
-    <div *ngIf="item.settings">
+    <div *ngIf="item.editSettings">
       <app-busy-button icon="fa fa-edit"
                        [click]="onEdit"
                        [parameter]="item"></app-busy-button>
