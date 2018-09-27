@@ -8,6 +8,8 @@ import {ReportItem} from '../bean/report-item';
 import {MeasureParameterEnum} from '../../../data/remote/misc/measure-parameter-enum';
 import {EventReportQuery} from '../../../data/remote/rest-api/query/report/event-report-query';
 import {TestingReportQuery} from '../../../data/remote/rest-api/query/report/testing-report-query';
+import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
+import {TrainingPerson} from '../../../data/remote/model/training/training-person';
 
 @Component({
   selector: 'app-reports',
@@ -20,13 +22,7 @@ export class ReportsComponent {
   public class: string;
 
   @Input()
-  public eventId: number;
-
-  @Input()
-  public eventPersonId: number;
-
-  @Input()
-  public eventGroupId: number;
+  public eventPerson: TrainingPerson;
 
   public items: ReportItem[];
 
@@ -37,46 +33,54 @@ export class ReportsComponent {
     this.items = [];
   }
 
-  public initialize(type: ReportType) {
+  public initialize(eventPerson: TrainingPerson) {
+    this.eventPerson = eventPerson;
     this.items = [];
-    switch (type) {
-      case ReportType.GAME:
-        if (this.eventId && this.eventGroupId) {
+
+    const eventId = eventPerson.baseTraining.id;
+    let eventGroupId: number;
+    if (eventPerson.trainingGroup) {
+      eventGroupId = eventPerson.trainingGroup.id;
+    }
+
+    switch (eventPerson.baseTraining.discriminator) {
+      case TrainingDiscriminator.GAME:
+        if (eventId && eventGroupId) {
           this.items.push({
             type: ReportType.GAME,
             nameKey: 'gameReport',
             getReport: async () => {
               return await this._appHelper.tryLoad(async () => {
-                await this._reportsService.downloadGameReport(this.eventId, this.eventGroupId, {measureParameter: MeasureParameterEnum.GOALS.toString()});
+                await this._reportsService.downloadGameReport(eventId, eventGroupId, {measureParameter: MeasureParameterEnum.GOALS.toString()});
               });
             },
             editSettings: this.editSettings
           });
         }
         break;
-      case ReportType.TRAINING:
-        this.addReportItemForTrainingOrTesting(ReportType.TRAINING);
+      case TrainingDiscriminator.TRAINING:
+        this.addReportItemForTrainingOrTesting(eventPerson);
         break;
-      case  ReportType.TESTING:
-        this.addReportItemForTrainingOrTesting(ReportType.TESTING);
+      case  TrainingDiscriminator.TESTING:
+        this.addReportItemForTrainingOrTesting(eventPerson);
 
-        if (this.eventId) {
+        if (eventId) {
           this.items.push({
-            type: ReportType.TESTING,
+            type: ReportType.GROUP_BY_PERSONAL,
             nameKey: 'teamByPersonalReport',
             getReport: async (settings: TestingReportQuery) => {
               return await this._appHelper.tryLoad(async () => {
-                await this._reportsService.downloadTestingGroupPersonReport(this.eventId, settings);
+                await this._reportsService.downloadTestingGroupPersonReport(eventId, settings);
               });
             },
             editSettings: this.editSettings
           });
           this.items.push({
-            type: ReportType.TESTING,
+            type: ReportType.GROUP,
             nameKey: 'teamReport',
             getReport: async (settings: TestingReportQuery) => {
               return await this._appHelper.tryLoad(async () => {
-                await this._reportsService.downloadTestingGroupReport(this.eventId, settings);
+                await this._reportsService.downloadTestingGroupReport(eventId, settings);
               });
             },
             editSettings: this.editSettings
@@ -90,6 +94,7 @@ export class ReportsComponent {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(PersonalReportSettingsComponent, async component => {
+      component.event = this.eventPerson.baseTraining;
       component.type = reportItem.type;
       component.data = reportItem.settings;
 
@@ -103,14 +108,14 @@ export class ReportsComponent {
     });
   };
 
-  private addReportItemForTrainingOrTesting(type: ReportType) {
-    if (this.eventId && this.eventPersonId) {
+  private addReportItemForTrainingOrTesting(eventPerson: TrainingPerson) {
+    if (eventPerson.baseTraining.id && eventPerson.id) {
       this.items.push({
-        type: type,
+        type: ReportType.PERSONAL,
         nameKey: 'personalEventReport',
         getReport: async (settings: EventReportQuery) => {
           return await this._appHelper.tryLoad(async () => {
-            await this._reportsService.downloadEventPersonReport(this.eventId, this.eventPersonId, settings);
+            await this._reportsService.downloadEventPersonReport(eventPerson.baseTraining.id, eventPerson.id, settings);
           });
         },
         editSettings: this.editSettings
@@ -119,7 +124,7 @@ export class ReportsComponent {
   }
 
   public onEdit = async (e: any, parameter: ReportItem) => {
-    parameter.settings = parameter.settings || {};
+    parameter.settings = parameter.settings || new TestingReportQuery();
     await parameter.editSettings(parameter);
   };
 

@@ -4,6 +4,8 @@ import {ReportType} from '../bean/report-type';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 import {ReportExtension} from '../../../data/remote/bean/report-extension';
+import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
+import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
 
 @Component({
   selector: 'app-personal-report-settings',
@@ -13,6 +15,10 @@ import {ReportExtension} from '../../../data/remote/bean/report-extension';
 export class PersonalReportSettingsComponent implements OnInit {
 
   public readonly reportType = ReportType;
+  public readonly trainingDiscriminator = TrainingDiscriminator;
+
+  @Input()
+  public event: BaseTraining;
 
   @Input()
   public type: ReportType;

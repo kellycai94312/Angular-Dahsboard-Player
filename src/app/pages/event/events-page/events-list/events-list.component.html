@@ -39,7 +39,10 @@
 <ngx-grid class="mt-2"
           [fetchItems]="fetchItems"
           [query]="baseTrainingQuery"
-          [windowScroll]="true">
+          [windowScroll]="true"
+          [edit]="onShowEvent"
+          [canEdit]="true"
+          [enabledAdd]="false">
   <ngx-column nameKey="name"
               [style]="'col-3'"
               [templateRef]="nameTemplate">

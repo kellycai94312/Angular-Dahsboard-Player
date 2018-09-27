@@ -5,7 +5,6 @@ import {TrainingPerson} from '../../../data/remote/model/training/training-perso
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 import {ReportsComponent} from '../reports/reports.component';
-import {ReportsService} from '../../../shared/reports.service';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 
 @Component({
@@ -24,8 +23,7 @@ export class PersonReportsComponent {
   public eventPersons: NameWrapper<TrainingPerson>[];
   public selectedEventPerson: NameWrapper<TrainingPerson>;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _reportsService: ReportsService) {
+  constructor(private _participantRestApiService: ParticipantRestApiService) {
   }
 
   public async initialize(event: BaseTraining): Promise<void> {
@@ -47,12 +45,7 @@ export class PersonReportsComponent {
   }
 
   public onEventPersonChanged(nameWrapper: NameWrapper<TrainingPerson>) {
-    this.reportsComponent.eventId = nameWrapper.data.baseTraining.id;
-    this.reportsComponent.eventPersonId = nameWrapper.data.id;
-    if (nameWrapper.data.trainingGroup) {
-      this.reportsComponent.eventGroupId = nameWrapper.data.trainingGroup.id;
-    }
-    this.reportsComponent.initialize(this._reportsService.eventTypeToReportType(nameWrapper.data.baseTraining.discriminator));
+    this.reportsComponent.initialize(nameWrapper.data);
   }
 
 }

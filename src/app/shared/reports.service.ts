@@ -5,8 +5,6 @@ import {GameReportQuery} from '../data/remote/rest-api/query/report/game-report-
 import {TrainingReportQuery} from '../data/remote/rest-api/query/report/training-report-query';
 import {EventBlockSeries} from '../pages/report/report-page/event-blocks/event-blocks.component';
 import {ReportExtension} from '../data/remote/bean/report-extension';
-import {ReportType} from '../components/report/bean/report-type';
-import {TrainingDiscriminator} from '../data/remote/model/training/base/training-discriminator';
 import {AppHelper} from '../utils/app-helper';
 
 @Injectable()
@@ -41,18 +39,6 @@ export class ReportsService {
     trainingReportQuery.extension = reportExtension;
 
     this.openReportWindow(`/trainingReport/${trainingReportId}/report`, trainingReportQuery);
-  }
-
-  public eventTypeToReportType(type: TrainingDiscriminator): ReportType {
-    switch (type) {
-      case TrainingDiscriminator.GAME:
-        return ReportType.GAME;
-      case TrainingDiscriminator.TESTING:
-        return ReportType.TESTING;
-      case TrainingDiscriminator.TRAINING:
-        return ReportType.TRAINING;
-    }
-    return null;
   }
 
   private openReportWindow(query: string, objParams?: any): void {

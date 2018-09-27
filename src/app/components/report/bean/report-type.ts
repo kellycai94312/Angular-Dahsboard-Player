@@ -1,5 +1,6 @@
 export enum ReportType {
   GAME = 'GAME',
-  TESTING = 'TESTING',
-  TRAINING = 'TRAINING'
+  GROUP_BY_PERSONAL = 'GROUP_BY_PERSONAL',
+  GROUP = 'GROUP',
+  PERSONAL = 'PERSONAL'
 }
