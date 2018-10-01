@@ -438,5 +438,7 @@
   "extension": "Extension",
   "realData": "Real data",
   "personalEventReport": "Personal event report",
-  "gameReport": "Game report"
+  "gameReport": "Game report",
+  "eventPlan": "Event plan",
+  "eventPlans": "Event plans"
 }

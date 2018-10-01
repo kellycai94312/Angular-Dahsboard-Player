@@ -439,5 +439,7 @@
   "extension": "Расширение",
   "realData": "Реальные данные",
   "personalEventReport": "Персональный отчет по событию",
-  "gameReport": "Отчет по игре"
+  "gameReport": "Отчет по игре",
+  "eventPlan": "План мероприятий",
+  "eventPlans": "Планы мероприятий"
 }
