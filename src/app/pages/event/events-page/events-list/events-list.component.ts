@@ -110,6 +110,12 @@ export class EventsListComponent implements OnInit, OnDestroy {
     });
   };
 
+  public onShowEvent = async (item: BaseTraining) => {
+    if (item.discriminator === TrainingDiscriminator.GAME) {
+      await this._router.navigate([`/event/${item.id}`]);
+    }
+  };
+
   private async updateItems() {
     await this.ngxGridComponent.reset();
   }

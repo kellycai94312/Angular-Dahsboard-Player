@@ -1,5 +1,6 @@
-<div *ngIf="type === reportType.TESTING || type === reportType.TRAINING">
-  <dx-check-box *ngIf="type === reportType.TESTING"
+<div
+  *ngIf="event.discriminator === trainingDiscriminator.TESTING || event.discriminator === trainingDiscriminator.TRAINING">
+  <dx-check-box *ngIf="event.discriminator === trainingDiscriminator.TESTING && type === reportType.GROUP"
                 class="mb-2 w-100"
                 [(value)]="data.realData"
                 text="{{ 'realData' | translate }}">
@@ -24,10 +25,10 @@
                 [(value)]="data.showPerspective"
                 text="{{ 'showPerspective' | translate }}">
   </dx-check-box>
-  <dx-check-box class="mt-2 w-100"
-                [(value)]="data.showReal"
-                text="{{ 'showReal' | translate }}">
-  </dx-check-box>
+  <!-- TODO: Add in report. <dx-check-box class="mt-2 w-100"-->
+                <!--[(value)]="data.showReal"-->
+                <!--text="{{ 'showReal' | translate }}">-->
+  <!--</dx-check-box>-->
   <dx-check-box class="mt-2 w-100"
                 [(value)]="data.showTeamByPersonal"
                 text="{{ 'showTeamByPersonal' | translate }}">

@@ -126,12 +126,7 @@ export class EventsComponent implements OnInit, OnDestroy {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'report';
     await modal.componentInstance.initializeBody(ReportsComponent, async component => {
-      component.eventId = parameter.baseTraining.id;
-      component.eventPersonId = parameter.id;
-      if (parameter.trainingGroup) {
-        component.eventGroupId = parameter.trainingGroup.id;
-      }
-      component.initialize(this._reportsService.eventTypeToReportType(parameter.baseTraining.discriminator));
+      component.initialize(parameter);
     });
   };
 
