@@ -78,7 +78,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     this.tabs.push(new PersonTab('persons.person.testsResults.section', 'tests_results',
       [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
     this.tabs.push(new PersonTab('events', 'events', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR], true));
-    this.tabs.push(new PersonTab('persons.person.groups.section', 'groups', [], true));
+    this.tabs.push(new PersonTab('groups', 'groups', [], true));
     this.tabs.push(new PersonTab('categories', 'category',
       [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER], true));
     this.tabs.push(new PersonTab('stages', 'stage', []));

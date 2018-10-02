@@ -8,7 +8,6 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="onLoadGroups"
-                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'sportType' | translate}}"
@@ -17,7 +16,6 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="onLoadSportTypes"
-                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'sportType' | translate}}"
@@ -27,7 +25,6 @@
   <div class="col">
     <app-input-select [(model)]="selectedSportRole"
                       [loadData]="onLoadSportRoles"
-                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'sportRole' | translate}}"
@@ -37,7 +34,6 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="onLoadAgeGroups"
-                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'ageGroup' | translate}}"
@@ -46,7 +42,6 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="onLoadAuthors"
-                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getPersonName"
                       placeholder="{{'author' | translate}}"

@@ -47,10 +47,6 @@
           "titleEnd": " with parameter "
         }
       },
-      "groups": {
-        "section": "Groups",
-        "placeholder": "Select a group"
-      },
       "myRegion": {
         "section": "My region",
         "school": {
@@ -117,11 +113,6 @@
   "apply": "Apply",
   "errors": {
     "errorWhileSaving": "Error while saving"
-  },
-  "groups": {
-    "section": "Groups",
-    "all": "All",
-    "my": "My"
   },
   "scheduler": {
     "section": "Scheduler"
@@ -450,5 +441,11 @@
   "days": "Days",
   "weeks": "Weeks",
   "months": "Months",
-  "years": "Years"
+  "years": "Years",
+  "estimatedParameters": "Estimated parameters",
+  "groups": "Groups",
+  "all": "All",
+  "my": "My",
+  "sportRoles": "Sport roles",
+  "template": "Template"
 }

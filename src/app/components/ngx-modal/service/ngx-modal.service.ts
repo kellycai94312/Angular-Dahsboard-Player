@@ -22,6 +22,12 @@ import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {environment} from '../../../../environments/environment';
 import {Image} from '../../../data/remote/model/file/image/image';
+import {EstimatedParameter} from '../../../data/remote/model/training/testing/estimated-parameter';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {SportRole} from '../../../data/remote/model/sport-role';
+import {QueryParams} from '../../../data/remote/rest-api/query-params';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 
 @Injectable()
 export class NgxModalService {
@@ -151,7 +157,7 @@ export class NgxModalService {
     });
   }
 
-  public async showMeasures(measure: Measure[], apply: (selectedItems: Measure[]) => Promise<void>) {
+  public async showMeasures(measures: Measure[], apply: (selectedItems: Measure[]) => Promise<void>) {
     const modal = this.open();
     modal.componentInstance.titleKey = 'selection';
     await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
@@ -164,8 +170,75 @@ export class NgxModalService {
         componentItem.name = `${data.measureParameter.name} (${data.measureUnit.shortName})`;
       };
 
-      await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(measure));
+      await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(measures));
 
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            await apply(component.selectedItems);
+            modal.dismiss();
+          }
+        }
+      ];
+    });
+  }
+
+  public async showSelectionEstimatedParametersModal<T extends EstimatedParameter>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async query => {
+        return await this._participantRestApiService.getEstimatedParameters(query);
+      },
+      data => {
+        return data.name;
+      },
+      selectedItems, apply);
+  }
+
+  public async showSelectionGroupsModal<T extends Group>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async (query: GroupQuery) => {
+        return await this._participantRestApiService.getGroups(query);
+      },
+      data => {
+        return data.name;
+      },
+      selectedItems, apply);
+  }
+
+  public async showSelectionSportTypesModal<T extends SportType>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async query => {
+        return await this._participantRestApiService.getSportTypes(query);
+      },
+      data => {
+        return data.name;
+      },
+      selectedItems, apply);
+  }
+
+  public async showSelectionSportRolesModal<T extends SportRole>(sportTypeId: number, selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async (query: QueryParams) => {
+        query.id = sportTypeId;
+        const items = await this._participantRestApiService.getSportRolesBySportType(query);
+        return this._appHelper.arrayToPageContainer(items);
+      },
+      data => {
+        return `${data.name} (${data.shortName})`;
+      },
+      selectedItems, apply);
+  }
+
+  public async showSelectionNameObjectsModal<T>(fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<T>>,
+                                                displayName: (data: T) => string,
+                                                selectedItems: T[],
+                                                apply: (selectedItems: EstimatedParameter[]) => Promise<void>) {
+    const modal = this.open();
+    modal.componentInstance.titleKey = 'selection';
+    await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+      const initializeComponent = async (componentItem: PreviewNamedObjectComponent<T>, data: T) => {
+        componentItem.data = data;
+        componentItem.name = displayName(data);
+      };
+
+      await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));
       modal.componentInstance.splitButtonItems = [
         {
           nameKey: 'apply',

@@ -23,11 +23,11 @@ export class GroupsPageComponent implements OnInit {
               private _ngxModalService: NgxModalService) {
     this.tabs = [
       {
-        nameKey: 'groups.all',
+        nameKey: 'all',
         routerLink: 'all'
       },
       {
-        nameKey: 'groups.my',
+        nameKey: 'my',
         routerLink: 'my'
       }
     ];

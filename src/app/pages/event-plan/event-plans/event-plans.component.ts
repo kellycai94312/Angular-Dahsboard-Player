@@ -18,6 +18,7 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 import {EventPlanStateEnum} from '../../../data/remote/model/training/plan/event-plan-state-enum';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {IconEnum} from '../../../components/ngx-button/model/icon-enum';
+import {EditEventPlanComponent} from '../edit-event-plan/edit-event-plan.component';
 
 @Component({
   selector: 'app-event-plans',
@@ -169,7 +170,19 @@ export class EventPlansComponent implements OnInit {
   };
 
   public onAddEventPlan = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'add';
 
+    await modal.componentInstance.initializeBody(EditEventPlanComponent, async component => {
+      component.manualInitialization = true;
+      await component.initialize(new EventPlan());
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        })
+      ];
+    });
   };
 
   public onShowEventPlan = async (item: EventPlan) => {

@@ -21,6 +21,8 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
   @Input() getName: Function;
   @Input() placeholder: string;
   @Input() disabled: boolean;
+  @Input()
+  public showClearButton: boolean;
 
   @Output() modelChange;
   @Output() onChange;
@@ -40,6 +42,7 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
     this.modelChange = new EventEmitter<any>();
     this.onChange = new EventEmitter<any>();
     this.searchChanged = new Subject<any>();
+    this.showClearButton = true;
     this._searchChangedSubscription = this.searchChanged.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(() => {
         this.clearData();

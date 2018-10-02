@@ -1,7 +1,9 @@
 <div class="wrapper" tabindex="-1">
   <div class="search">
     <div class="btn-wrapper">
-      <div class="times-wrapper" *ngIf="model != null" (click)="clearModel()">
+      <div *ngIf="showClearButton && model"
+           class="times-wrapper"
+           (click)="clearModel()">
         <span class="fa fa-times-circle"></span>
       </div>
       <div class="caret-wrapper" (click)="showList()" [ngClass]="{'focused' : active }">

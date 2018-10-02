@@ -48,10 +48,6 @@
           "titleEnd": " параметру "
         }
       },
-      "groups": {
-        "section": "Группы",
-        "placeholder": "Выбрать группу"
-      },
       "myRegion": {
         "section": "Мой регион",
         "school": {
@@ -118,11 +114,6 @@
   "apply": "Применить",
   "errors": {
     "errorWhileSaving": "Ошибка при сохранении"
-  },
-  "groups": {
-    "section": "Группы",
-    "all": "Все",
-    "my": "Мои"
   },
   "scheduler": {
     "section": "Планировщик"
@@ -451,5 +442,11 @@
   "days": "Дни",
   "weeks": "Недели",
   "months": "Месяцы",
-  "years": "Года"
+  "years": "Года",
+  "estimatedParameters": "Оценочные параметры",
+  "groups": "Группы",
+  "all": "Все",
+  "my": "Мои",
+  "sportRoles": "Спортивные роли",
+  "template": "Шаблон"
 }
