@@ -1,0 +1,80 @@
+<label>{{'name' | translate}}</label>
+<ngx-text-box [(value)]="data.name"></ngx-text-box>
+
+<label class="mt-2">{{'description' | translate}}</label>
+<dx-text-area height="150"
+              [(value)]="data.description"></dx-text-area>
+
+<label class="mt-2">{{'duration' | translate}}</label>
+<div class="row cols-padding">
+  <div class="col">
+    <dx-number-box [(value)]="data.daysAmount"
+                   [min]="0"
+                   placeholder="{{'days' | translate}}"></dx-number-box>
+  </div>
+  <div class="col">
+    <dx-number-box [(value)]="data.weeksAmount"
+                   [min]="0"
+                   placeholder="{{'weeks' | translate}}"></dx-number-box>
+  </div>
+  <div class="col">
+    <dx-number-box [(value)]="data.monthsAmount"
+                   [min]="0"
+                   placeholder="{{'months' | translate}}"></dx-number-box>
+  </div>
+  <div class="col">
+    <dx-number-box [(value)]="data.yearsAmount"
+                   [min]="0"
+                   placeholder="{{'years' | translate}}"></dx-number-box>
+  </div>
+</div>
+
+<ngx-button class="mt-2"
+            nameKey="estimatedParameters"
+            [click]="onSelectEstimatedParameters"></ngx-button>
+<div class="tags-content mt-2">
+  <div *ngFor="let item of estimatedParameters">
+    {{item.name}}
+  </div>
+</div>
+
+<ngx-button class="mt-2"
+            nameKey="groups"
+            [click]="onSelectGroups"></ngx-button>
+<div class="tags-content mt-2">
+  <div *ngFor="let item of groups">
+    {{item.name}}
+  </div>
+</div>
+
+<label class="mt-2">{{'ageGroup' | translate}}</label>
+<app-input-select [loadData]="onLoadAgeGroups"
+                  [(model)]="data.ageGroup"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  [showClearButton]="false"
+                  placeholder="{{'ageGroup' | translate}}">
+</app-input-select>
+
+<label class="mt-2">{{'sportType' | translate}}</label>
+<app-input-select [loadData]="onLoadSportTypes"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  [(model)]="data.sportType"
+                  placeholder="{{'sportType' | translate}}"
+                  (modelChange)="onSportTypeChange($event)">
+</app-input-select>
+
+<ngx-button class="mt-2"
+            nameKey="sportRoles"
+            [click]="onSelectSportRoles"
+            [disabled]="disabledSportRoles"></ngx-button>
+<div class="tags-content mt-2">
+  <div *ngFor="let item of sportRoles">
+    {{item.name + " (" + item.shortName + ")"}}
+  </div>
+</div>
+
+<dx-check-box class="mt-2"
+              [(value)]="data.template"
+              text="{{'template' | translate}}"></dx-check-box>

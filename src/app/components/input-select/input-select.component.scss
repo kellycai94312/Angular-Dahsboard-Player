@@ -24,7 +24,7 @@ $background-color-hover: #e6e6e6;
       }
     }
     .btn-wrapper {
-      $btn-width: 34px;
+      $btn-width: 30px;
 
       position: absolute;
       height: auto;
@@ -40,7 +40,7 @@ $background-color-hover: #e6e6e6;
         right: $btn-width;
 
         text-align: center;
-        line-height: $btn-width + 2px;
+        line-height: $btn-width;
 
         cursor: pointer;
 

@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
 
+// @deprecated Use ngx-button
 @Component({
   selector: 'app-busy-button',
   templateUrl: './busy-button.component.html',

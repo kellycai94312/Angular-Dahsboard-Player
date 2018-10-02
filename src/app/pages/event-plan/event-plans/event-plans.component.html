@@ -1,0 +1,92 @@
+<div class="row cols-padding">
+  <div class="col">
+    <ngx-text-box class="w-100"
+                  [(value)]="query.name"
+                  placeholderKey="search"
+                  [debounceTime]="propertyConstantClass.searchDebounceTime"
+                  (valueChange)="onSearchValueChange($event)"></ngx-text-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="onLoadGroups"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'sportType' | translate}}"
+                      (onChange)="onGroupChange($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="onLoadSportTypes"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'sportType' | translate}}"
+                      (onChange)="onSportTypeChange($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [(model)]="selectedSportRole"
+                      [loadData]="onLoadSportRoles"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'sportRole' | translate}}"
+                      (onChange)="onSportRoleChange($event.current)"
+                      [disabled]="!query?.sportTypeId">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="onLoadAgeGroups"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'ageGroup' | translate}}"
+                      (onChange)="onAgeGroupChange($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="onLoadAuthors"
+                      [getKey]="getKey"
+                      [getName]="getPersonName"
+                      placeholder="{{'author' | translate}}"
+                      (onChange)="onAuthorChange($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <dx-select-box class="input-height-sm"
+                   [items]="eventPlanStates"
+                   displayExpr="name"
+                   [acceptCustomValue]="true"
+                   placeholder="{{'state' | translate}}"
+                   (valueChange)="onEventPlaneStateChange($event)"
+                   [showClearButton]="true">
+    </dx-select-box>
+  </div>
+  <div class="col-auto">
+    <ngx-button [icon]="iconEnum.ADD"
+                [click]="onAddEventPlan"></ngx-button>
+  </div>
+</div>
+
+<ngx-grid class="mt-2"
+          [fetchItems]="fetchItems"
+          [query]="query"
+          [windowScroll]="true"
+          [dblClickByItem]="onShowEventPlan">
+  <ngx-column nameKey="name">
+    <ng-template let-item>
+      {{item.name}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="duration">
+    <ng-template let-item>
+      <span ngIf="item.daysAmount">{{item.daysAmount + " " + ('days' | translate)}}</span>
+      <span ngIf="item.weeksAmount">{{item.weeksAmount + " " + ('weeks' | translate)}}</span>
+      <span ngIf="item.monthsAmount">{{item.monthsAmount + " " + ('months' | translate)}}</span>
+      <span ngIf="item.yearsAmount">{{item.yearsAmount + " " + ('years' | translate)}}</span>
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="author">
+    <ng-template let-item>
+      {{item.person.lastName + " " + item.person.firstName}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

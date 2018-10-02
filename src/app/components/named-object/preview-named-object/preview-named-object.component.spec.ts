@@ -1,10 +1,11 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {PreviewNamedObjectComponent} from './preview-named-object.component';
+import {NamedObject} from '../../../data/remote/base/named-object';
 
 describe('PreviewNamedObjectComponent', () => {
-  let component: PreviewNamedObjectComponent;
-  let fixture: ComponentFixture<PreviewNamedObjectComponent>;
+  let component: PreviewNamedObjectComponent<NamedObject>;
+  let fixture: ComponentFixture<PreviewNamedObjectComponent<NamedObject>>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

@@ -3,8 +3,8 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {NgxComponentFactoryComponent} from './ngx-component-factory.component';
 
 describe('NgxComponentFactoryComponent', () => {
-  let component: NgxComponentFactoryComponent<any>;
-  let fixture: ComponentFixture<NgxComponentFactoryComponent<any>>;
+  let component: NgxComponentFactoryComponent<any, any>;
+  let fixture: ComponentFixture<NgxComponentFactoryComponent<any, any>>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({

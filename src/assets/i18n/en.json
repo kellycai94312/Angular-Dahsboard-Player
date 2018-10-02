@@ -47,10 +47,6 @@
           "titleEnd": " with parameter "
         }
       },
-      "groups": {
-        "section": "Groups",
-        "placeholder": "Select a group"
-      },
       "myRegion": {
         "section": "My region",
         "school": {
@@ -117,11 +113,6 @@
   "apply": "Apply",
   "errors": {
     "errorWhileSaving": "Error while saving"
-  },
-  "groups": {
-    "section": "Groups",
-    "all": "All",
-    "my": "My"
   },
   "scheduler": {
     "section": "Scheduler"
@@ -438,5 +429,23 @@
   "extension": "Extension",
   "realData": "Real data",
   "personalEventReport": "Personal event report",
-  "gameReport": "Game report"
+  "gameReport": "Game report",
+  "eventPlan": "Event plan",
+  "eventPlans": "Event plans",
+  "author": "Author",
+  "state": "State",
+  "eventPlanStateEnum": {
+    "DRAFT": "Draft",
+    "PLAN": "Plan"
+  },
+  "days": "Days",
+  "weeks": "Weeks",
+  "months": "Months",
+  "years": "Years",
+  "estimatedParameters": "Estimated parameters",
+  "groups": "Groups",
+  "all": "All",
+  "my": "My",
+  "sportRoles": "Sport roles",
+  "template": "Template"
 }

@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {BusyButtonComponent} from './busy-button.component';
 import {TranslateModule} from '@ngx-translate/core';
 
+// @deprecated Use ngx-button
 @NgModule({
   imports: [
     CommonModule,

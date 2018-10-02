@@ -1,0 +1,13 @@
+<button class="btn btn-primary input-height-sm {{classes}}"
+        [disabled]="disabled ? disabled() : false"
+        (click)="onClick($event)"
+        (keyup.enter)="onKeyUp($event)">
+  <i *ngIf="icon && !busyDisplay"
+     [class]="icon"></i>
+  <span *ngIf="!busyDisplay; else elseTemplate">
+    {{nameKey | translate}}</span>
+  <ng-template #elseTemplate>
+    <span class="is-busy"></span>
+    {{'pleaseWait' | translate}}
+  </ng-template>
+</button>

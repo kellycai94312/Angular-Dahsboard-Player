@@ -4,8 +4,8 @@ import {NgxSelectionComponent} from './ngx-selection.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 
 describe('NgxSelectionComponent', () => {
-  let component: NgxSelectionComponent<any, PageQuery>;
-  let fixture: ComponentFixture<NgxSelectionComponent<any, PageQuery>>;
+  let component: NgxSelectionComponent<any, PageQuery, any>;
+  let fixture: ComponentFixture<NgxSelectionComponent<any, PageQuery, any>>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
