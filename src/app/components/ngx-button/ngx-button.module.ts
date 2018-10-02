@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NgxTextBoxComponent} from './ngx-text-box/ngx-text-box.component';
+import {NgxButtonComponent} from './ngx-button/ngx-button.component';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
@@ -8,9 +8,8 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     TranslateModule.forChild()
   ],
-  declarations: [NgxTextBoxComponent],
-  exports: [NgxTextBoxComponent],
-  entryComponents: [NgxTextBoxComponent]
+  declarations: [NgxButtonComponent],
+  exports: [NgxButtonComponent]
 })
-export class NgxTextBoxModule {
+export class NgxButtonModule {
 }

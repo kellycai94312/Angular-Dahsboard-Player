@@ -441,5 +441,15 @@
   "personalEventReport": "Персональный отчет по событию",
   "gameReport": "Отчет по игре",
   "eventPlan": "План мероприятий",
-  "eventPlans": "Планы мероприятий"
+  "eventPlans": "Планы мероприятий",
+  "author": "Автор",
+  "state": "Состояние",
+  "eventPlanStateEnum": {
+    "DRAFT": "Черновик",
+    "PLAN": "План"
+  },
+  "days": "Дни",
+  "weeks": "Недели",
+  "months": "Месяцы",
+  "years": "Года"
 }

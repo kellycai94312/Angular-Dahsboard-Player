@@ -70,12 +70,15 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   /** show dropdown list */
-  showList() {
+  async showList() {
+    if (this.disabled) {
+      return;
+    }
     this.active = true;
     if (!this.model || this.model === this.empty) {
       this.value = ''; // clear value when not selected
     }
-    this.load();
+    await this.load();
     this.pageNumber += 1;
   }
 

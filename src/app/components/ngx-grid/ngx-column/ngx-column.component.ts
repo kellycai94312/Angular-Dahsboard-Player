@@ -1,11 +1,14 @@
-import {Component, Input, TemplateRef} from '@angular/core';
+import {Component, ContentChild, Input, OnInit, TemplateRef} from '@angular/core';
 
 @Component({
   selector: 'ngx-column',
   templateUrl: './ngx-column.component.html',
   styleUrls: ['./ngx-column.component.scss']
 })
-export class NgxColumnComponent {
+export class NgxColumnComponent implements OnInit {
+
+  @ContentChild(TemplateRef)
+  public contentChild: TemplateRef<any>;
 
   @Input()
   public name: string;
@@ -30,6 +33,12 @@ export class NgxColumnComponent {
 
   constructor() {
     this.style = 'col';
+  }
+
+  ngOnInit(): void {
+    if (!this.templateRef && this.contentChild) {
+      this.templateRef = this.contentChild;
+    }
   }
 
 }

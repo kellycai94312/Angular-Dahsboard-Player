@@ -440,5 +440,15 @@
   "personalEventReport": "Personal event report",
   "gameReport": "Game report",
   "eventPlan": "Event plan",
-  "eventPlans": "Event plans"
+  "eventPlans": "Event plans",
+  "author": "Author",
+  "state": "State",
+  "eventPlanStateEnum": {
+    "DRAFT": "Draft",
+    "PLAN": "Plan"
+  },
+  "days": "Days",
+  "weeks": "Weeks",
+  "months": "Months",
+  "years": "Years"
 }

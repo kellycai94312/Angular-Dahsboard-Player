@@ -30,8 +30,14 @@ export class NgxGridComponent implements OnInit {
   @Input()
   public add: () => Promise<boolean>;
 
+  /*
+   * @deprecated Use dblClickByItem
+   */
   @Input()
   public edit: (obj: any) => Promise<boolean>;
+
+  @Input()
+  public dblClickByItem: (obj: any) => Promise<boolean>;
 
   @Input()
   public query: PageQuery;
@@ -58,9 +64,13 @@ export class NgxGridComponent implements OnInit {
     }
   };
 
-  public onEdit = async (e: any, parameter: any) => {
-    if (this.canEdit && this.edit) {
-      await this.edit(parameter);
+  public onEdit = async (e: any, item: any) => {
+    if (this.canEdit) {
+      if (this.edit) {
+        await this.edit(item);
+      } else if (this.dblClickByItem) {
+        await this.dblClickByItem(item);
+      }
     }
   };
 
