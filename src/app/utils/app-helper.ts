@@ -10,6 +10,8 @@ import {ClientError} from '../data/local/error/client-error';
 import {FileClass} from '../data/remote/model/file/base/file-class';
 import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
 import {environment} from '../../environments/environment';
+import {ListRequest} from '../data/remote/request/list-request';
+import {IdRequest} from '../data/remote/request/id-request';
 
 @Injectable()
 export class AppHelper {
@@ -223,6 +225,15 @@ export class AppHelper {
     }
 
     return vals;
+  }
+
+  public getIdListRequest<T extends IdentifiedObject>(items: T[]): ListRequest<IdRequest> {
+    const listRequest = new ListRequest([]);
+    if (!items) {
+      return listRequest;
+    }
+    listRequest.list = items.map(x => new IdRequest(x.id));
+    return listRequest;
   }
 
   //#region Try actions

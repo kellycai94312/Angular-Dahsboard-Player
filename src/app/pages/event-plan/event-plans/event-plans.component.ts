@@ -166,7 +166,7 @@ export class EventPlansComponent implements OnInit {
   //#endregion
 
   public fetchItems = async (query: EventPlanQuery): Promise<PageContainer<EventPlan>> => {
-    return {from: 0, size: 20, total: 0, list: []}; // TODO: Add method for get items
+    return await this._participantRestApiService.getEventPlans(query);
   };
 
   public onAddEventPlan = async () => {
@@ -179,7 +179,9 @@ export class EventPlansComponent implements OnInit {
 
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
+          if (await this._ngxModalService.save(modal, component)) {
+            await component.navigateToEventPlanPage();
+          }
         })
       ];
     });

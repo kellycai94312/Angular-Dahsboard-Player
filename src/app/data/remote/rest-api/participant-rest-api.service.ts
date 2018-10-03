@@ -100,6 +100,9 @@ import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {Tag} from '../model/tag';
 import {GroupScore} from '../model/training/game/group-score';
+import {EventPlanQuery} from './query/event/plan/event-plan-query';
+import {EventPlan} from '../model/training/plan/event-plan';
+import {EventPlanPerson} from '../model/training/plan/event-plan-person';
 
 @Injectable()
 @RestParams({
@@ -939,7 +942,7 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region BaseTraining
+  //#region Event
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -1078,6 +1081,101 @@ export class ParticipantRestApiService extends Rest {
     path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
   })
   removeTrainingPerson: IRestMethod<{ baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
+
+  //#endregion
+
+  //#region Event plan
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan'
+  })
+  getEventPlans: IRestMethod<EventPlanQuery, PageContainer<EventPlan>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}'
+  })
+  getEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan'
+  })
+  createEventPlan: IRestMethod<EventPlan, EventPlan>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPlan/{!eventPlanId}'
+  })
+  updateEventPlan: IRestMethodStrict<EventPlan, any, { eventPlanId: number }, EventPlan>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPlan/{!eventPlanId}'
+  })
+  removeEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
+
+  //#region Event plan person
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/person'
+  })
+  getEventPlanPersons: IRestMethodStrict<any, PersonQuery, { eventPlanId: number }, PageContainer<EventPlanPerson>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/person'
+  })
+  createEventPlanPerson: IRestMethodStrict<EventPlanPerson, any, { eventPlanId: number }, EventPlanPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPlan/{!eventPlanId}/person/{!eventPlanPersonId}'
+  })
+  updateEventPlanPerson: IRestMethodStrict<EventPlanPerson, any, { eventPlanId: number, eventPlanPersonId: number }, EventPlanPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPlan/{!eventPlanId}/person/{!eventPlanPersonId}'
+  })
+  removeEventPlanPerson: IRestMethod<{ eventPlanId: number, eventPlanPersonId: number }, EventPlanPerson>;
+
+  //#endregion
+
+
+  //#region Event plan group
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/group'
+  })
+  getEventPlanGroups: IRestMethodStrict<any, GroupQuery, { eventPlanId: number }, PageContainer<Group>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/group'
+  })
+  updateEventPlanGroups: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, Group[]>;
+
+  //#endregion
+
+  //#region Event plan sport role
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/sportRole'
+  })
+  getEventPlanSportRoles: IRestMethodStrict<any, { unassigned?: number }, { eventPlanId: number }, SportRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/sportRole'
+  })
+  updateEventPlanSportRoles: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, SportRole[]>;
+
+  //#endregion
 
   //#endregion
 
