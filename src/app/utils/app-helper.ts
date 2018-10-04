@@ -100,6 +100,11 @@ export class AppHelper {
     this._toastrService.success(message);
   }
 
+  /*
+  * Magic
+  * 1. Fixed: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'some value'. Current value: 'another value'.
+  * 2. Fixed: Call another methods in the component.
+  */
   public delay(ms: number = 0): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }

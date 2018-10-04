@@ -1,5 +1,5 @@
 <div *ngIf="defaultItem"
-     class="btn btn-group p-0 border-0"
+     class="btn btn-group p-0 border-0 h-auto {{classes}}"
      ngbDropdown>
   <button class="btn btn-primary input-height-sm"
           (click)="onClick(defaultItem)">{{defaultItem.nameKey | translate}}
@@ -8,7 +8,7 @@
           ngbDropdownToggle></button>
   <div class="dropdown-menu fixed-left-unset"
        ngbDropdownMenu>
-    <button *ngFor="let item of items"
+    <button *ngFor="let item of additionalItems"
             class="dropdown-item"
             (click)="onClick(item)">{{item.nameKey | translate}}
     </button>

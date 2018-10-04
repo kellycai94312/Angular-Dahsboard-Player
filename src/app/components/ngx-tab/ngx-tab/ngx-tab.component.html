@@ -1,0 +1,22 @@
+<div *ngIf="tabs && tabs.length"
+     [class]="classes">
+  <ul class="nav nav-tabs">
+    <li *ngFor="let tab of tabs"
+        class="nav-item">
+      <a *ngIf="tab && onCheckingVisible(tab)"
+         class="nav-link text-uppercase"
+         routerLink="{{tab.routerLink}}"
+         routerLinkActive="active"
+         [queryParams]="tab.queryParams">
+        {{tab.name ? (tab.name) : (tab.nameKey | translate)}}
+      </a>
+    </li>
+    <li *ngIf="selectedTab && selectedTab.splitButtonsItems && selectedTab.splitButtonsItems.length"
+        class="new-element">
+      <ngx-split-button [items]="selectedTab.splitButtonsItems"></ngx-split-button>
+    </li>
+  </ul>
+  <div class="mt-2">
+    <router-outlet></router-outlet>
+  </div>
+</div>

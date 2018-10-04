@@ -134,8 +134,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
           } catch (e) {
           }
         },
-        default: true,
-        order: 1
+        default: true
       });
     }
 
@@ -159,8 +158,6 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
         };
         this._connectionSplitButtonItem.default = true;
-        this._connectionSplitButtonItem.order = 1;
-
         this.splitButtonItems.push(this._connectionSplitButtonItem);
       } catch (e) {
       }
@@ -175,8 +172,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
             await this._router.navigate(['/person']);
           } catch (e) {
           }
-        },
-        order: 3
+        }
       });
     }
     //#endregion

@@ -1,8 +1,8 @@
 @import "variables";
 
 .nav-tabs {
-  @extend .pt-2;
   line-height: 1;
+
   a.nav-link {
     padding: 8px 12px;
     border-width: thin;

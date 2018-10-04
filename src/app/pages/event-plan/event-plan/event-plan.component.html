@@ -1,3 +1,5 @@
-<p>
-  event-plan works!
-</p>
+<h1>{{eventPlan?.name}}</h1>
+<h6>{{eventPlan?.template ? ('template' | translate) + ": " + eventPlan.template : ''}}</h6>
+<ngx-tab class="mt-2"
+         [tabs]="tabs"
+         (tabChange)="onTabChange($event)"></ngx-tab>

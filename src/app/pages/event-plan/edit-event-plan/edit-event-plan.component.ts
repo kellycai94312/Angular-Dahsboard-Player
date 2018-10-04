@@ -35,7 +35,7 @@ export class EditEventPlanComponent extends BaseEditComponent<EventPlan> {
       if (this.appHelper.isNewObject(this.data)) {
         this.data = await this.participantRestApiService.createEventPlan(this.data);
 
-        // TODO: Add save estimated parameters
+        await this.participantRestApiService.updateEventPlanEstimatedParameters(this.appHelper.getIdListRequest(this.estimatedParameters), {}, {eventPlanId: this.data.id});
         await this.participantRestApiService.updateEventPlanGroups(this.appHelper.getIdListRequest(this.groups), {}, {eventPlanId: this.data.id});
         await this.participantRestApiService.updateEventPlanSportRoles(this.appHelper.getIdListRequest(this.sportRoles), {}, {eventPlanId: this.data.id});
       } else {

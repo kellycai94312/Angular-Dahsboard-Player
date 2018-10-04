@@ -447,5 +447,9 @@
   "all": "All",
   "my": "My",
   "sportRoles": "Sport roles",
-  "template": "Template"
+  "template": "Template",
+  "saveAsTemplate": "Save as template",
+  "applyTemplate": "Apply template",
+  "startDate": "Start date",
+  "finishDate": "Finish date"
 }

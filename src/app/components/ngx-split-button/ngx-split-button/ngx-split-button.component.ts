@@ -8,6 +8,9 @@ import {SplitButtonItem} from '../bean/split-button-item';
 })
 export class NgxSplitButtonComponent {
 
+  @Input('class')
+  public classes: string;
+
   public busy: boolean;
 
   get items(): SplitButtonItem[] {
@@ -26,9 +29,11 @@ export class NgxSplitButtonComponent {
       }
       this.defaultItem = this._items[index];
 
-      this._items.splice(this._items.indexOf(this.defaultItem), 1);
+      this.additionalItems = <SplitButtonItem[]>JSON.parse(JSON.stringify(this._items));
+      this.additionalItems.splice(this.additionalItems.indexOf(this.defaultItem), 1);
     } else {
       this.defaultItem = null;
+      this.additionalItems = [];
     }
   }
 
@@ -36,8 +41,10 @@ export class NgxSplitButtonComponent {
 
   private _items: SplitButtonItem[];
 
+  public additionalItems: SplitButtonItem[];
+
   constructor() {
-    this._items = [];
+    this.classes = '';
   }
 
   public async onClick(item: SplitButtonItem) {

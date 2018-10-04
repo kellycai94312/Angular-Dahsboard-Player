@@ -1177,6 +1177,22 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region Event plan estimated parameters
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/estimatedParameter'
+  })
+  getEventPlanEstimatedParameters: IRestMethodStrict<any, { unassigned?: number, count: number }, { eventPlanId: number }, PageContainer<EstimatedParameter>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/estimatedParameter'
+  })
+  updateEventPlanEstimatedParameters: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, EstimatedParameter[]>;
+
+  //#endregion
+
   //#endregion
 
   //#endregion

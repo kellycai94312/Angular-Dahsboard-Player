@@ -448,5 +448,9 @@
   "all": "Все",
   "my": "Мои",
   "sportRoles": "Спортивные роли",
-  "template": "Шаблон"
+  "template": "Шаблон",
+  "saveAsTemplate": "Сохранить как шаблон",
+  "applyTemplate": "Применить шаблон",
+  "startDate": "Дата начала",
+  "finishDate": "Дата окончания"
 }

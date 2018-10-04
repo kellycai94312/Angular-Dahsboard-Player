@@ -19,6 +19,7 @@ import {EventPlanStateEnum} from '../../../data/remote/model/training/plan/event
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {IconEnum} from '../../../components/ngx-button/model/icon-enum';
 import {EditEventPlanComponent} from '../edit-event-plan/edit-event-plan.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-event-plans',
@@ -41,7 +42,8 @@ export class EventPlansComponent implements OnInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _router: Router) {
     this.query = new EventPlanQuery();
     this.query.name = '';
   }
@@ -188,7 +190,7 @@ export class EventPlansComponent implements OnInit {
   };
 
   public onShowEventPlan = async (item: EventPlan) => {
-
+    await this._router.navigate(['/event-plan', item.id]);
   };
 
   public async onSearchValueChange(val: string) {
