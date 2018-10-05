@@ -12,6 +12,9 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class NgxTabComponent implements OnInit, OnDestroy {
 
+  @Input('class')
+  public classes: string;
+
   @Input()
   public tabs: Tab[];
 

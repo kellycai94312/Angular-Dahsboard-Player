@@ -16,6 +16,7 @@ import {SportRole} from '../../../../../data/remote/model/sport-role';
 import {Group} from '../../../../../data/remote/model/group/base/group';
 import {EstimatedParameter} from '../../../../../data/remote/model/training/testing/estimated-parameter';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-general-step-event-plan',
@@ -40,7 +41,8 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService,
-              private _ngxModalService: NgxModalService) {
+              private _ngxModalService: NgxModalService,
+              private _router: Router) {
     this._eventPlanSubscription = this._eventPlanService.eventPlanSubject.subscribe(async value => {
       await this.initialize(value);
     });
@@ -98,6 +100,7 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
           callback: async () => {
             await this._appHelper.tryRemove(async () => {
               Object.assign(this.eventPlan, await this._participantRestApiService.removeEventPlan({eventPlanId: this.eventPlan.id}));
+              await this._router.navigate(['/event-plan']);
             });
           }
         }
@@ -106,8 +109,6 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
       this.selectedEventPlanState = null;
     }
 
-    // TODO: Without this delay tab will throw Error
-    await this._appHelper.delay();
     this._eventPlanService.selectedTab.splitButtonsItems = splitButtonsItems;
   }
 
