@@ -232,6 +232,33 @@ export class AppHelper {
     return vals;
   }
 
+  // TODO: Optimize this algorithm
+  public updateObject<T extends object>(target: T, source: T): T {
+    const targetObjectKeys = Object.keys(target);
+    for (let i = 0; i < targetObjectKeys.length; i++) {
+      delete target[targetObjectKeys[i]];
+    }
+
+    const sourceObjectKeys = Object.keys(source);
+    for (let i = 0; i < sourceObjectKeys.length; i++) {
+      const objectKey = sourceObjectKeys[i];
+      target[objectKey] = source[objectKey];
+    }
+    return target;
+  }
+
+  public updateArray<T extends object>(target: T[], source: T[]): T[] {
+    if (!target) {
+      target = [];
+    } else if (target.length) {
+      target.splice(0, target.length);
+    }
+    for (let i = 0; i < source.length; i++) {
+      target.push(source[i]);
+    }
+    return target;
+  }
+
   public getIdListRequest<T extends IdentifiedObject>(items: T[]): ListRequest<IdRequest> {
     const listRequest = new ListRequest([]);
     if (!items) {

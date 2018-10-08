@@ -43,6 +43,7 @@ import localeRu from '@angular/common/locales/ru';
 import {ImageModule} from './components/image/image.module';
 import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
 import {NgxBreadcrumbModule} from './components/ngx-breadcrumb/ngx-breadcrumb.module';
+import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 
 registerLocaleData(localeRu);
 
@@ -105,6 +106,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AuthorizationService,
     NotificationService,
     ConversationService,
+    CanDeactivateGuard,
     {
       provide: APP_INITIALIZER,
       useFactory: (as: AuthorizationService) => function () {

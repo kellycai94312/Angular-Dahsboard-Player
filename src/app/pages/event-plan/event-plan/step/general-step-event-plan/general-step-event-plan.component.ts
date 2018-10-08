@@ -17,13 +17,15 @@ import {Group} from '../../../../../data/remote/model/group/base/group';
 import {EstimatedParameter} from '../../../../../data/remote/model/training/testing/estimated-parameter';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {Router} from '@angular/router';
+import {ICanDeactivate} from '../../../../../data/local/component/ican-deactivate';
+import {ChangeWatcher} from '../../../../../data/local/util/change-watcher';
 
 @Component({
   selector: 'app-general-step-event-plan',
   templateUrl: './general-step-event-plan.component.html',
   styleUrls: ['./general-step-event-plan.component.scss']
 })
-export class GeneralStepEventPlanComponent implements OnDestroy {
+export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate {
 
   public readonly propertyConstantClass = PropertyConstant;
 
@@ -36,6 +38,11 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
   public sportRoles: SportRole[];
 
   private readonly _eventPlanSubscription: ISubscription;
+  private readonly _changeWatcher: ChangeWatcher;
+  private readonly _eventPlanName: string;
+  private readonly _estimatedParametersName: string;
+  private readonly _groupsName: string;
+  private readonly _sportRolesName: string;
 
   constructor(private _eventPlanService: EventPlanService,
               private _participantRestApiService: ParticipantRestApiService,
@@ -43,6 +50,11 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
               private _translateObjectService: TranslateObjectService,
               private _ngxModalService: NgxModalService,
               private _router: Router) {
+    this._changeWatcher = new ChangeWatcher(this._appHelper);
+    this._eventPlanName = 'eventPlan';
+    this._estimatedParametersName = 'estimatedParameters';
+    this._groupsName = 'groups';
+    this._sportRolesName = 'sportRoles';
     this._eventPlanSubscription = this._eventPlanService.eventPlanSubject.subscribe(async value => {
       await this.initialize(value);
     });
@@ -52,8 +64,20 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
     this._appHelper.unsubscribe(this._eventPlanSubscription);
   }
 
+  async canDeactivate(): Promise<boolean> {
+    if (this._changeWatcher.hasChanges()) {
+      if (await this._ngxModalService.showUnsavedDialogModal()) {
+        this._changeWatcher.reset();
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public async initialize(eventPlan: EventPlan) {
     this.eventPlan = eventPlan;
+    this._changeWatcher.addOrUpdate(this._eventPlanName, this.eventPlan);
 
     if (!this.eventPlanStates) {
       this.eventPlanStates = await this._translateObjectService.getTranslatedEnumCollection<EventPlanStateEnum>(EventPlanStateEnum, 'EventPlanStateEnum');
@@ -67,21 +91,33 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
       this.groups = (await this._participantRestApiService.getEventPlanGroups({}, {count: PropertyConstant.pageSizeMax}, {eventPlanId: this.eventPlan.id})).list;
       this.sportRoles = await this._participantRestApiService.getEventPlanSportRoles({}, {}, {eventPlanId: this.eventPlan.id});
 
+      this._changeWatcher.addOrUpdate(this._estimatedParametersName, this.estimatedParameters);
+      this._changeWatcher.addOrUpdate(this._groupsName, this.groups);
+      this._changeWatcher.addOrUpdate(this._sportRolesName, this.sportRoles);
+
       splitButtonsItems = [
         {
           nameKey: 'save',
           default: true,
           callback: async () => {
             await this._appHelper.trySave(async () => {
-              this.eventPlan.eventPlanStateEnum = this.selectedEventPlanState.data;
               this.eventPlan.startTime = this._appHelper.dateByFormat(this.eventPlan.startTime, PropertyConstant.dateTimeServerFormat);
               this.eventPlan.finishTime = this._appHelper.dateByFormat(this.eventPlan.finishTime, PropertyConstant.dateTimeServerFormat);
 
-              Object.assign(this.eventPlan, await this._participantRestApiService.updateEventPlan(this.eventPlan, {}, {eventPlanId: this.eventPlan.id}));
+              if (this._changeWatcher.hasChangesObject(this._eventPlanName)) {
+                this._appHelper.updateObject(this.eventPlan, await this._participantRestApiService.updateEventPlan(this.eventPlan, {}, {eventPlanId: this.eventPlan.id}));
+              }
+              if (this._changeWatcher.hasChangesObject(this._estimatedParametersName)) {
+                await this._participantRestApiService.updateEventPlanEstimatedParameters(this._appHelper.getIdListRequest(this.estimatedParameters), {}, {eventPlanId: this.eventPlan.id});
+              }
+              if (this._changeWatcher.hasChangesObject(this._groupsName)) {
+                await this._participantRestApiService.updateEventPlanGroups(this._appHelper.getIdListRequest(this.groups), {}, {eventPlanId: this.eventPlan.id});
+              }
+              if (this._changeWatcher.hasChangesObject(this._sportRolesName)) {
+                await this._participantRestApiService.updateEventPlanSportRoles(this._appHelper.getIdListRequest(this.sportRoles), {}, {eventPlanId: this.eventPlan.id});
+              }
 
-              await this._participantRestApiService.updateEventPlanEstimatedParameters(this._appHelper.getIdListRequest(this.estimatedParameters), {}, {eventPlanId: this.eventPlan.id});
-              await this._participantRestApiService.updateEventPlanGroups(this._appHelper.getIdListRequest(this.groups), {}, {eventPlanId: this.eventPlan.id});
-              await this._participantRestApiService.updateEventPlanSportRoles(this._appHelper.getIdListRequest(this.sportRoles), {}, {eventPlanId: this.eventPlan.id});
+              this._changeWatcher.refresh();
             });
           }
         },
@@ -99,7 +135,7 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
           nameKey: 'remove',
           callback: async () => {
             await this._appHelper.tryRemove(async () => {
-              Object.assign(this.eventPlan, await this._participantRestApiService.removeEventPlan({eventPlanId: this.eventPlan.id}));
+              this._appHelper.updateObject(this.eventPlan, await this._participantRestApiService.removeEventPlan({eventPlanId: this.eventPlan.id}));
               await this._router.navigate(['/event-plan']);
             });
           }
@@ -114,13 +150,13 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
 
   public onSelectEstimatedParameters = async () => {
     await this._ngxModalService.showSelectionEstimatedParametersModal(this.estimatedParameters, async selectedItems => {
-      this.estimatedParameters = selectedItems;
+      this._appHelper.updateArray(this.estimatedParameters, selectedItems);
     });
   };
 
   public onSelectGroups = async () => {
     await this._ngxModalService.showSelectionGroupsModal(this.groups, async selectedItems => {
-      this.groups = selectedItems;
+      this._appHelper.updateArray(this.groups, selectedItems);
     });
   };
 
@@ -148,13 +184,17 @@ export class GeneralStepEventPlanComponent implements OnDestroy {
     });
   };
 
+  public onStateChange(val: NameWrapper<EventPlanStateEnum>) {
+    this.eventPlan.eventPlanStateEnum = val.data;
+  }
+
   public onSportTypeChange(val: SportType) {
-    this.sportRoles = [];
+    this._appHelper.updateArray(this.sportRoles, []);
   }
 
   public onSelectSportRoles = async () => {
     await this._ngxModalService.showSelectionSportRolesModal(this.eventPlan.sportType.id, this.sportRoles, async selectedItems => {
-      this.sportRoles = selectedItems;
+      this._appHelper.updateArray(this.sportRoles, selectedItems);
     });
   };
 

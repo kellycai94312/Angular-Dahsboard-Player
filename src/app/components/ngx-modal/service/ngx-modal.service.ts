@@ -28,6 +28,7 @@ import {SportRole} from '../../../data/remote/model/sport-role';
 import {QueryParams} from '../../../data/remote/rest-api/query-params';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class NgxModalService {
@@ -36,7 +37,8 @@ export class NgxModalService {
               private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
               private _appHelper: AppHelper,
-              private _authorizationService: AuthorizationService) {
+              private _authorizationService: AuthorizationService,
+              private _translateService: TranslateService) {
   }
 
   public open(options: NgbModalOptions = {size: 'lg', backdrop: 'static', centered: true}): NgxModalRef {
@@ -264,6 +266,39 @@ export class NgxModalService {
       }
       component.html = `<div class="text-center"><img class="img-fluid" src="${url}"/></div>`;
     });
+  }
+
+  public async showUnsavedDialogModal(): Promise<boolean> {
+    let loadResolve: (boolean) => void;
+    const result = new Promise<boolean>((resolve, reject) => {
+      loadResolve = resolve;
+    });
+    const modal = this.open();
+    modal.result.then(async x => {
+      loadResolve(x || false);
+    }, async reason => {
+      loadResolve(false);
+    });
+    modal.componentInstance.titleKey = 'attention';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.html = await this._translateService.get('unsavedChangesOnThisPageQuestion').toPromise();
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'discard',
+          callback: async () => {
+            modal.close(true);
+          }
+        },
+        {
+          nameKey: 'cancel',
+          callback: async () => {
+            modal.close(false);
+          }
+        }
+      ];
+    });
+    return await result;
   }
 
 }

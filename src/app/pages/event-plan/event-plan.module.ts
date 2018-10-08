@@ -16,6 +16,7 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
 import {GeneralStepEventPlanComponent} from './event-plan/step/general-step-event-plan/general-step-event-plan.component';
 import {PersonsStepEventPlanComponent} from './event-plan/step/persons-step-event-plan/persons-step-event-plan.component';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {HtmlContentModule} from '../../components/html-content/html-content.module';
 
 @NgModule({
   imports: [
@@ -35,7 +36,8 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     NgxSelectionModule,
     DxCheckBoxModule,
     NgxTabModule,
-    DxDateBoxModule
+    DxDateBoxModule,
+    HtmlContentModule
   ],
   declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent, GeneralStepEventPlanComponent, PersonsStepEventPlanComponent],
   entryComponents: [EditEventPlanComponent]

@@ -13,7 +13,8 @@
                        [(value)]="selectedEventPlanState"
                        displayExpr="name"
                        [acceptCustomValue]="true"
-                       placeholder="{{'state' | translate}}">
+                       placeholder="{{'state' | translate}}"
+                       (onValueChanged)="onStateChange($event.value)">
         </dx-select-box>
       </div>
     </div>
