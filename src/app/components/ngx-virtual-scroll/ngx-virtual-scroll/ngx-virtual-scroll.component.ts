@@ -120,9 +120,9 @@ export class NgxVirtualScrollComponent {
     }
   }
 
-  public async onScrollDown() {
+  public async onScrollDown(): Promise<boolean> {
     if (!this.canScrollDown()) {
-      return;
+      return false;
     }
 
     this.downBusy = true;
@@ -135,7 +135,7 @@ export class NgxVirtualScrollComponent {
     try {
       const pageContainer: PageContainer<any> = await this.getItems(Direction.DOWN, this.query);
       if (!pageContainer) {
-        return;
+        return false;
       }
 
       this._total = pageContainer.total;
@@ -153,9 +153,12 @@ export class NgxVirtualScrollComponent {
       }
 
       this.afterUpdateItems.emit();
+    } catch (e) {
+      return false;
     } finally {
       this.downBusy = false;
     }
+    return true;
   }
 
   public async scrollDown() {
@@ -175,7 +178,9 @@ export class NgxVirtualScrollComponent {
 
     // This need to activate scroll
     do {
-      await this.onScrollDown();
+      if (!(await this.onScrollDown())) {
+        break;
+      }
     } while (this.canScrollDown() && this.ngxScrollDirective.getHeight() <= this.ngxScrollDirective.getViewPortHeight());
 
     if (this.autoScroll) {

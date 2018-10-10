@@ -1,5 +1,6 @@
 <div class="d-flex flex-column">
-  <div class="img-fluid {{class}}"
+  <div class="img-fluid {{class}} "
+       [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
        (dblclick)="onShowImage()"
        [style.width.px]="width"
        [style.height.px]="height"

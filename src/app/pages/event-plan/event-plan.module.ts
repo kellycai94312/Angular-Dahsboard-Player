@@ -17,6 +17,9 @@ import {GeneralStepEventPlanComponent} from './event-plan/step/general-step-even
 import {PersonsStepEventPlanComponent} from './event-plan/step/persons-step-event-plan/persons-step-event-plan.component';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {HtmlContentModule} from '../../components/html-content/html-content.module';
+import {PersonsEventPlanComponent} from './persons-event-plan/persons-event-plan.component';
+import {EventPlanPersonItemComponent} from './event-plan-person-item/event-plan-person-item.component';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   imports: [
@@ -37,9 +40,10 @@ import {HtmlContentModule} from '../../components/html-content/html-content.modu
     DxCheckBoxModule,
     NgxTabModule,
     DxDateBoxModule,
-    HtmlContentModule
+    HtmlContentModule,
+    NgxImageModule
   ],
-  declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent, GeneralStepEventPlanComponent, PersonsStepEventPlanComponent],
+  declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent, GeneralStepEventPlanComponent, PersonsStepEventPlanComponent, PersonsEventPlanComponent, EventPlanPersonItemComponent],
   entryComponents: [EditEventPlanComponent]
 })
 export class EventPlanModule {

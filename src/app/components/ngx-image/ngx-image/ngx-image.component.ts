@@ -15,7 +15,7 @@ import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 })
 export class NgxImageComponent implements OnInit, OnChanges {
 
-  public readonly imageFormat = ImageFormat;
+  public readonly imageFormatClass = ImageFormat;
 
   @Input()
   public objectId: number;
@@ -31,6 +31,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   @Input()
   public canEdit: boolean;
+
+  @Input()
+  public allowFullScreen: boolean;
 
   @Input()
   public format: ImageFormat;
@@ -51,6 +54,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<any>();
     this.class = '';
+    this.allowFullScreen = true;
   }
 
   async ngOnInit() {
@@ -99,7 +103,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
   }
 
   public async onShowImage() {
-    await this._ngxModalService.showFullImage(this.objectId, this.type, this.fileClass);
+    if (this.allowFullScreen) {
+      await this._ngxModalService.showFullImage(this.objectId, this.type, this.fileClass);
+    }
   }
 
 }

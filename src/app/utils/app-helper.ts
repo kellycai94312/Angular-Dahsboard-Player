@@ -114,6 +114,16 @@ export class AppHelper {
     return Math.round(val * round) / round;
   }
 
+  // TODO: Set iterator from IdentifiedObject by properties
+  public setToNewObject<T extends IdentifiedObject>(obj: T): T {
+    delete obj.id;
+    delete obj.created;
+    delete obj.deleted;
+    delete obj.version;
+    delete obj.owner;
+    return obj;
+  }
+
   public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>,
                                                        instanceBuilder: (obj: TInput) => Promise<TOutput> | TOutput,
                                                        filter?: (original: TInput) => boolean): Promise<PageContainer<TOutput>> {
@@ -266,6 +276,13 @@ export class AppHelper {
     }
     listRequest.list = items.map(x => new IdRequest(x.id));
     return listRequest;
+  }
+
+  public async awaitIfNotExist(exist: () => Promise<boolean>, timeOut: number = 1000) {
+    const endDate = (new Date(Date.now() + timeOut)).getTime();
+    while (endDate > Date.now() && !(await exist())) {
+      await this.delay(100);
+    }
   }
 
   //#region Try actions
