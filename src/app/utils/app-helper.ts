@@ -10,6 +10,8 @@ import {ClientError} from '../data/local/error/client-error';
 import {FileClass} from '../data/remote/model/file/base/file-class';
 import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
 import {environment} from '../../environments/environment';
+import {ListRequest} from '../data/remote/request/list-request';
+import {IdRequest} from '../data/remote/request/id-request';
 
 @Injectable()
 export class AppHelper {
@@ -98,6 +100,11 @@ export class AppHelper {
     this._toastrService.success(message);
   }
 
+  /*
+  * Magic
+  * 1. Fixed: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'some value'. Current value: 'another value'.
+  * 2. Fixed: Call another methods in the component.
+  */
   public delay(ms: number = 0): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -105,6 +112,16 @@ export class AppHelper {
   public round(val: number, precision: number): number {
     const round = Math.pow(10, precision);
     return Math.round(val * round) / round;
+  }
+
+  // TODO: Set iterator from IdentifiedObject by properties
+  public setToNewObject<T extends IdentifiedObject>(obj: T): T {
+    delete obj.id;
+    delete obj.created;
+    delete obj.deleted;
+    delete obj.version;
+    delete obj.owner;
+    return obj;
   }
 
   public async pageContainerConverter<TInput, TOutput>(original: PageContainer<TInput>,
@@ -223,6 +240,49 @@ export class AppHelper {
     }
 
     return vals;
+  }
+
+  // TODO: Optimize this algorithm
+  public updateObject<T extends object>(target: T, source: T): T {
+    const targetObjectKeys = Object.keys(target);
+    for (let i = 0; i < targetObjectKeys.length; i++) {
+      delete target[targetObjectKeys[i]];
+    }
+
+    const sourceObjectKeys = Object.keys(source);
+    for (let i = 0; i < sourceObjectKeys.length; i++) {
+      const objectKey = sourceObjectKeys[i];
+      target[objectKey] = source[objectKey];
+    }
+    return target;
+  }
+
+  public updateArray<T extends object>(target: T[], source: T[]): T[] {
+    if (!target) {
+      target = [];
+    } else if (target.length) {
+      target.splice(0, target.length);
+    }
+    for (let i = 0; i < source.length; i++) {
+      target.push(source[i]);
+    }
+    return target;
+  }
+
+  public getIdListRequest<T extends IdentifiedObject>(items: T[]): ListRequest<IdRequest> {
+    const listRequest = new ListRequest([]);
+    if (!items) {
+      return listRequest;
+    }
+    listRequest.list = items.map(x => new IdRequest(x.id));
+    return listRequest;
+  }
+
+  public async awaitIfNotExist(exist: () => Promise<boolean>, timeOut: number = 1000) {
+    const endDate = (new Date(Date.now() + timeOut)).getTime();
+    while (endDate > Date.now() && !(await exist())) {
+      await this.delay(100);
+    }
   }
 
   //#region Try actions

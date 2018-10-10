@@ -13,6 +13,13 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {EditEventPlanComponent} from './edit-event-plan/edit-event-plan.component';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
+import {GeneralStepEventPlanComponent} from './event-plan/step/general-step-event-plan/general-step-event-plan.component';
+import {PersonsStepEventPlanComponent} from './event-plan/step/persons-step-event-plan/persons-step-event-plan.component';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {HtmlContentModule} from '../../components/html-content/html-content.module';
+import {PersonsEventPlanComponent} from './persons-event-plan/persons-event-plan.component';
+import {EventPlanPersonItemComponent} from './event-plan-person-item/event-plan-person-item.component';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   imports: [
@@ -30,9 +37,13 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
     DxDateBoxModule,
     NamedObjectModule,
     NgxSelectionModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
+    NgxTabModule,
+    DxDateBoxModule,
+    HtmlContentModule,
+    NgxImageModule
   ],
-  declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent],
+  declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent, GeneralStepEventPlanComponent, PersonsStepEventPlanComponent, PersonsEventPlanComponent, EventPlanPersonItemComponent],
   entryComponents: [EditEventPlanComponent]
 })
 export class EventPlanModule {

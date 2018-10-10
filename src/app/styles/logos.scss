@@ -49,18 +49,26 @@ $logo-change-content-background-hover: rgba(0, 0, 0, .8);
   background-position: center center;
 }
 
+.img-circle {
+  @extend .circle;
+  border: $logo-border-width solid $light-blue;
+}
+
+// @depecated Use img-circle
 .logo-xl-circle {
   @extend .logo-xl;
   @extend .circle;
   border: $logo-border-width solid $light-blue;
 }
 
+// @depecated Use img-circle
 .logo-lg-circle {
   @extend .logo-lg;
   @extend .circle;
   border: $logo-border-width solid $light-blue;
 }
 
+// @depecated Use img-circle
 .logo-sm-circle {
   @extend .logo-sm;
   @extend .circle;

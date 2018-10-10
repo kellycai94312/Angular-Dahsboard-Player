@@ -19,6 +19,7 @@ import {EventPlanStateEnum} from '../../../data/remote/model/training/plan/event
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {IconEnum} from '../../../components/ngx-button/model/icon-enum';
 import {EditEventPlanComponent} from '../edit-event-plan/edit-event-plan.component';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-event-plans',
@@ -41,7 +42,8 @@ export class EventPlansComponent implements OnInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _router: Router) {
     this.query = new EventPlanQuery();
     this.query.name = '';
   }
@@ -166,7 +168,7 @@ export class EventPlansComponent implements OnInit {
   //#endregion
 
   public fetchItems = async (query: EventPlanQuery): Promise<PageContainer<EventPlan>> => {
-    return {from: 0, size: 20, total: 0, list: []}; // TODO: Add method for get items
+    return await this._participantRestApiService.getEventPlans(query);
   };
 
   public onAddEventPlan = async () => {
@@ -179,14 +181,16 @@ export class EventPlansComponent implements OnInit {
 
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
+          if (await this._ngxModalService.save(modal, component)) {
+            await component.navigateToEventPlanPage();
+          }
         })
       ];
     });
   };
 
   public onShowEventPlan = async (item: EventPlan) => {
-
+    await this._router.navigate(['/event-plan', item.id]);
   };
 
   public async onSearchValueChange(val: string) {

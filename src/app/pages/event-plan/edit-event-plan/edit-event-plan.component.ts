@@ -11,6 +11,7 @@ import {NamedObject} from '../../../data/remote/base/named-object';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {SportRole} from '../../../data/remote/model/sport-role';
 import {SportType} from '../../../data/remote/model/sport-type';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-edit-event-plan',
@@ -24,23 +25,31 @@ export class EditEventPlanComponent extends BaseEditComponent<EventPlan> {
   public sportRoles: SportRole[];
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+              private _ngxModalService: NgxModalService,
+              private _router: Router) {
     super(participantRestApiService, appHelper);
   }
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      // TODO: Add save
       if (this.appHelper.isNewObject(this.data)) {
+        this.data = await this.participantRestApiService.createEventPlan(this.data);
 
+        await this.participantRestApiService.updateEventPlanEstimatedParameters(this.appHelper.getIdListRequest(this.estimatedParameters), {}, {eventPlanId: this.data.id});
+        await this.participantRestApiService.updateEventPlanGroups(this.appHelper.getIdListRequest(this.groups), {}, {eventPlanId: this.data.id});
+        await this.participantRestApiService.updateEventPlanSportRoles(this.appHelper.getIdListRequest(this.sportRoles), {}, {eventPlanId: this.data.id});
       } else {
-
+        this.data = await this.participantRestApiService.updateEventPlan(this.data, {}, {eventPlanId: this.data.id});
       }
     });
   }
 
   async onRemove(): Promise<boolean> {
     return undefined;
+  }
+
+  public async navigateToEventPlanPage() {
+    await this._router.navigate(['/event-plan', this.data.id]);
   }
 
   public onSelectEstimatedParameters = async () => {

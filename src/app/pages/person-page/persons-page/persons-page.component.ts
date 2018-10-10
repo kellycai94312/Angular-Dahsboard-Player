@@ -106,10 +106,10 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   }
 
   public async onUserRoleChanged(value: UserRole) {
-    if (value != null) {
-      this.personQuery.userRoleId = value.id;
+    if (value) {
+      this.personQuery.userRoleEnum = value.userRoleEnum;
     } else {
-      delete this.personQuery.userRoleId;
+      delete this.personQuery.userRoleEnum;
     }
     await this.updateItems();
   }

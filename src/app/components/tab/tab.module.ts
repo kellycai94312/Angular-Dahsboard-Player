@@ -6,6 +6,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {ButtonsModule} from '../buttons/buttons.module';
 import {BusyWrapperModule} from '../busy-wrapper/busy-wrapper.module';
 
+// @deprecated Use ngx-tab
 @NgModule({
   imports: [
     CommonModule,

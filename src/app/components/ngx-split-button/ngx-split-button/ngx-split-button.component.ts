@@ -8,6 +8,9 @@ import {SplitButtonItem} from '../bean/split-button-item';
 })
 export class NgxSplitButtonComponent {
 
+  @Input('class')
+  public classes: string;
+
   public busy: boolean;
 
   get items(): SplitButtonItem[] {
@@ -17,16 +20,12 @@ export class NgxSplitButtonComponent {
   @Input()
   set items(value: SplitButtonItem[]) {
     this._items = value;
-
-    // TODO: Add sort by order
     if (this._items && this._items.length) {
       let index = this._items.findIndex(x => x.default);
       if (index < 0) {
         index = 0;
       }
       this.defaultItem = this._items[index];
-
-      this._items.splice(this._items.indexOf(this.defaultItem), 1);
     } else {
       this.defaultItem = null;
     }
@@ -37,7 +36,7 @@ export class NgxSplitButtonComponent {
   private _items: SplitButtonItem[];
 
   constructor() {
-    this._items = [];
+    this.classes = '';
   }
 
   public async onClick(item: SplitButtonItem) {

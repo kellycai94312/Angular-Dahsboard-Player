@@ -68,6 +68,8 @@
           [fetchItems]="fetchItems"
           [query]="query"
           [windowScroll]="true"
+          [canEdit]="true"
+          [enabledAdd]="false"
           [dblClickByItem]="onShowEventPlan">
   <ngx-column nameKey="name">
     <ng-template let-item>
@@ -77,10 +79,10 @@
 
   <ngx-column nameKey="duration">
     <ng-template let-item>
-      <span ngIf="item.daysAmount">{{item.daysAmount + " " + ('days' | translate)}}</span>
-      <span ngIf="item.weeksAmount">{{item.weeksAmount + " " + ('weeks' | translate)}}</span>
-      <span ngIf="item.monthsAmount">{{item.monthsAmount + " " + ('months' | translate)}}</span>
-      <span ngIf="item.yearsAmount">{{item.yearsAmount + " " + ('years' | translate)}}</span>
+      {{item.daysAmount ? item.daysAmount + " " + ('days' | translate) + " " : ''}}
+      {{item.weeksAmount ? item.weeksAmount + " " + ('weeks' | translate) + " ": ''}}
+      {{item.monthsAmount ? item.monthsAmount + " " + ('months' | translate) + " ": ''}}
+      {{item.yearsAmount ? item.yearsAmount + " " + ('years' | translate) + " ": ''}}
     </ng-template>
   </ngx-column>
 

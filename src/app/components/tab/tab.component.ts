@@ -5,6 +5,7 @@ import {BusyWrapperComponent} from '../busy-wrapper/busy-wrapper.component';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../utils/app-helper';
 
+// @deprecated Use ngx-tab
 @Component({
   selector: 'app-tab',
   templateUrl: './tab.component.html',
