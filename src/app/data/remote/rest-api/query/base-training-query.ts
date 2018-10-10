@@ -11,4 +11,5 @@ export class BaseTrainingQuery extends PageQuery {
   public dateFrom?: Date;
   public dateTo?: Date;
   public sort?: string;
+  public eventPlanId?: number;
 }

@@ -12,6 +12,7 @@ import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
 import {environment} from '../../environments/environment';
 import {ListRequest} from '../data/remote/request/list-request';
 import {IdRequest} from '../data/remote/request/id-request';
+import {Period} from '../data/local/period';
 
 @Injectable()
 export class AppHelper {
@@ -46,7 +47,7 @@ export class AppHelper {
   }
 
   public isUndefinedOrNull(val: any): boolean {
-    return val === undefined || val == null;
+    return val === undefined || val == null || val === '';
   }
 
   public getGmtDate(date: Date): any {
@@ -283,6 +284,25 @@ export class AppHelper {
     while (endDate > Date.now() && !(await exist())) {
       await this.delay(100);
     }
+  }
+
+  public getDateByPeriodOffset(from: Date, period: Period, offset: number): Date {
+    let countDaysInPeriod = 1;
+    switch (period) {
+      case Period.WEEK:
+        countDaysInPeriod = 7;
+        break;
+      case Period.MONTH:
+        countDaysInPeriod = 30;
+        break;
+      case Period.YEAR:
+        countDaysInPeriod = 360;
+        break;
+    }
+    if (typeof from === 'string') {
+      from = new Date(Date.parse(from));
+    }
+    return new Date(from.getTime() + offset * countDaysInPeriod * 24 * 60 * 60 * 1000);
   }
 
   //#region Try actions

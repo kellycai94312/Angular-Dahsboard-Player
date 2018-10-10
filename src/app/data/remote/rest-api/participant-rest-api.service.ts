@@ -103,6 +103,10 @@ import {GroupScore} from '../model/training/game/group-score';
 import {EventPlanQuery} from './query/event/plan/event-plan-query';
 import {EventPlan} from '../model/training/plan/event-plan';
 import {EventPlanPerson} from '../model/training/plan/event-plan-person';
+import {EventPlanLoadTypeEnum} from '../model/training/plan/event-plan-load-type-enum';
+import {Period} from '../../local/period';
+import {EventPlanLoadPeriod} from '../bean/event-plan-load-period';
+import {EventPlanLoad} from '../model/training/plan/event-plan-load';
 
 @Injectable()
 @RestParams({
@@ -1116,6 +1120,12 @@ export class ParticipantRestApiService extends Rest {
   })
   removeEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/template'
+  })
+  createEventPlanTemplate: IRestMethod<IdRequest, EventPlan>;
+
   //#region Event plan person
 
   @RestAction({
@@ -1192,6 +1202,33 @@ export class ParticipantRestApiService extends Rest {
   updateEventPlanEstimatedParameters: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, EstimatedParameter[]>;
 
   //#endregion
+
+
+  //#region Event plan load
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/load'
+  })
+  getEventPlanLoads: IRestMethod<{ eventPlanId: number, eventPlanLoadTypeEnum: EventPlanLoadTypeEnum, eventPlanPeriodEnum: Period, from?: number, count?: number }, PageContainer<EventPlanLoadPeriod>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/load'
+  })
+  createEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number }, EventPlanLoad>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
+  })
+  updateEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
+  })
+  removeEventPlanLoad: IRestMethod<{ eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
 
   //#endregion
 

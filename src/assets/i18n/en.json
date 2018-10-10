@@ -454,5 +454,17 @@
   "finishDate": "Finish date",
   "attention": "Attention",
   "discard": "Discard",
-  "unsavedChangesOnThisPageQuestion": "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?"
+  "unsavedChangesOnThisPageQuestion": "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?",
+  "periodEnum": {
+    "DAY": "Day",
+    "WEEK": "Week",
+    "MONTH": "Month",
+    "YEAR": "Year"
+  },
+  "period": "Period",
+  "eventPlanLoadTypeEnum": {
+    "HOURS": "Hours",
+    "INTENSITY": "Intensity"
+  },
+  "loadType": "Load type"
 }

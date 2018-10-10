@@ -12,4 +12,5 @@ export class BaseTraining extends NamedObject {
   manualMode: boolean;
   durationMs: number;
   location: Location;
+  daysOffset: number;
 }
