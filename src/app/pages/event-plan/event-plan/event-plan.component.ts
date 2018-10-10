@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
 import {EventPlan} from '../../../data/remote/model/training/plan/event-plan';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'app-event-plan',
@@ -14,10 +15,12 @@ import {EventPlan} from '../../../data/remote/model/training/plan/event-plan';
 })
 export class EventPlanComponent implements OnInit, OnDestroy {
 
-  public readonly tabs: Tab[];
-  private readonly _eventPlanSubscription: ISubscription;
+  public readonly propertyConstantClass = PropertyConstant;
 
+  public readonly tabs: Tab[];
   public eventPlan: EventPlan;
+
+  private readonly _eventPlanSubscription: ISubscription;
   private _activatedRouteParamsSubscription: ISubscription;
 
   constructor(private _eventPlanService: EventPlanService,
