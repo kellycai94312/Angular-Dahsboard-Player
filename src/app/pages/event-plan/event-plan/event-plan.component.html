@@ -1,4 +1,5 @@
-<div class="d-flex flex-row align-items-center">
+<div *ngIf="eventPlan"
+     class="d-flex flex-row align-items-center">
   <div class="mr-auto">
     <h1 class="m-0 text-light-blue">{{eventPlan?.name}}</h1>
     <h6 class="m-0 color-black">{{eventPlan?.template ? ('template' | translate) + ": " + eventPlan.template : ''}}</h6>

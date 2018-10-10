@@ -10,7 +10,7 @@ export class ChangeWatcher {
 
   public addOrUpdate(key: string, item: any) {
     const foundItem = this._items.find(x => x.key === key);
-    const lastData = this.stringifyObject(item);
+    const lastData = JSON.stringify(item);
     if (foundItem) {
       foundItem.lastData = lastData;
       foundItem.data = item;
@@ -24,12 +24,12 @@ export class ChangeWatcher {
     if (!item) {
       return false;
     }
-    return item.lastData !== this.stringifyObject(item.data);
+    return item.lastData !== JSON.stringify(item.data);
   }
 
   public hasChanges(): boolean {
     for (const item of this._items) {
-      if (item.lastData !== this.stringifyObject(item.data)) {
+      if (item.lastData !== JSON.stringify(item.data)) {
         return true;
       }
     }
@@ -38,7 +38,7 @@ export class ChangeWatcher {
 
   public refresh() {
     for (const item of this._items) {
-      item.lastData = this.stringifyObject(item.data);
+      item.lastData = JSON.stringify(item.data);
     }
   }
 
@@ -46,10 +46,6 @@ export class ChangeWatcher {
     for (const item of this._items) {
       this._appHelper.updateObject(item.data, JSON.parse(item.lastData));
     }
-  }
-
-  private stringifyObject(obj: any): string {
-    return JSON.stringify(obj);
   }
 
 }
