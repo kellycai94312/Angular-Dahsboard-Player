@@ -2,6 +2,7 @@ import {TrainingState} from '../../../misc/training-state';
 import {NamedObject} from '../../../base/named-object';
 import {TrainingDiscriminator} from './training-discriminator';
 import {Location} from '../../location';
+import {EventPlan} from '../plan/event-plan';
 
 export class BaseTraining extends NamedObject {
   discriminator: TrainingDiscriminator;
@@ -13,4 +14,5 @@ export class BaseTraining extends NamedObject {
   durationMs: number;
   location: Location;
   daysOffset: number;
+  eventPlan?: EventPlan;
 }

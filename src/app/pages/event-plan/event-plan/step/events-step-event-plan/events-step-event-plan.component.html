@@ -3,5 +3,6 @@
 <div [ngSwitch]="componentType"
      class="mt-2">
   <app-event-plan-loads *ngSwitchCase="componentTypeClass.TABLE"></app-event-plan-loads>
-  <app-event-plan-calendar *ngSwitchCase="componentTypeClass.CALENDAR"></app-event-plan-calendar>
+  <app-events-calendar *ngSwitchCase="componentTypeClass.CALENDAR"
+                       [eventPlan]="eventPlan"></app-events-calendar>
 </div>

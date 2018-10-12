@@ -475,5 +475,6 @@
   },
   "newEvent": "Новое событие",
   "creatingTemplate": "Создать шаблон",
-  "templateCreated": "Шаблон создан"
+  "templateCreated": "Шаблон создан",
+  "dateOutsidePlan": "Дата вне плана"
 }

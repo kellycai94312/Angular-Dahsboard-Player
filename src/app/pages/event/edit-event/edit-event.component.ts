@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BaseEditComponent} from '../../../data/local/component/base/base-edit-component';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
@@ -18,6 +18,9 @@ import {Training} from '../../../data/remote/model/training/training/training';
   styleUrls: ['./edit-event.component.scss']
 })
 export class EditEventComponent<T extends BaseTraining> extends BaseEditComponent<T> {
+
+  @Input()
+  public date: Date;
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly trainingDiscriminatorClass = TrainingDiscriminator;
@@ -59,7 +62,27 @@ export class EditEventComponent<T extends BaseTraining> extends BaseEditComponen
       if (this.appHelper.isNewObject(this.data)) {
         this.data.startTime = this.appHelper.getGmtDate(this.data.startTime);
         this.data.finishTime = this.appHelper.getGmtDate(this.data.finishTime);
-        this.data.durationMs = Date.parse(this.data.finishTime.toString()) - Date.parse(this.data.startTime.toString());
+
+        if (this.data.startTime && this.data.finishTime) {
+          this.data.durationMs = Date.parse(this.data.finishTime.toString()) - Date.parse(this.data.startTime.toString());
+        } else {
+          this.data.durationMs = 1000;
+        }
+
+        if (this.data.eventPlan) {
+          let leftBorderDate = new Date();
+          if (this.data.eventPlan.startTime) {
+            leftBorderDate = new Date(this.data.eventPlan.startTime);
+          }
+          leftBorderDate.setHours(0, 0, 0, 0);
+          this.date.setHours(0, 0, 0, 0);
+
+          if (leftBorderDate.getTime() > this.date.getTime()) {
+            await this.appHelper.showErrorMessage('dateOutsidePlan');
+          } else {
+            this.data.daysOffset = Math.round((this.date.getTime() - leftBorderDate.getTime()) / (24 * 60 * 60 * 1000));
+          }
+        }
 
         this.appHelper.updateObject(this.data, await this.participantRestApiService.createBaseTraining(this.data));
       } else {

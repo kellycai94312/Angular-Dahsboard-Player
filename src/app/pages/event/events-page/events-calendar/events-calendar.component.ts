@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {CalendarDateFormatter, CalendarEvent, DAYS_OF_WEEK} from 'angular-calendar';
 import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
@@ -17,6 +17,7 @@ import {EventTypeComponent} from '../../event-type/event-type.component';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {AppHelper} from '../../../../utils/app-helper';
 import {EditEventComponent} from '../../edit-event/edit-event.component';
+import {EventPlan} from '../../../../data/remote/model/training/plan/event-plan';
 
 @Component({
   selector: 'app-events-calendar',
@@ -30,6 +31,9 @@ import {EditEventComponent} from '../../edit-event/edit-event.component';
   ]
 })
 export class EventsCalendarComponent implements OnInit {
+
+  @Input()
+  public eventPlan: EventPlan;
 
   view = 'month';
 
@@ -67,14 +71,20 @@ export class EventsCalendarComponent implements OnInit {
     const end = await this.getDateTo();
     end.setDate(end.getDate() + 1);
 
+    if (this.eventPlan) {
+      this._trainingQuery.eventPlanId = this.eventPlan.id;
+    } else {
+      delete this._trainingQuery.eventPlanId;
+    }
+
     this._trainingQuery.dateFrom = new Date(this.formatDate(start));
     this._trainingQuery.dateTo = new Date(this.formatDate(end));
 
     this.events = (await this._participantRestApiService.getBaseTrainings(this._trainingQuery)).list.map((event: BaseTraining) => {
       return {
         title: event.name,
-        start: new Date(event.startTime),
-        end: event.finishTime ? new Date(event.finishTime) : null,
+        start: event.startTime ? new Date(event.startTime) : new Date(Date.now() + event.daysOffset * 24 * 60 * 60 * 1000),
+        end: event.finishTime ? new Date(event.finishTime) : new Date(Date.now() + event.daysOffset * 24 * 60 * 60 * 1000 + event.durationMs),
         color: this._eventsCalendarService.getTrainingColor(event),
         meta: {
           event
@@ -96,10 +106,11 @@ export class EventsCalendarComponent implements OnInit {
       modal.componentInstance.titleKey = 'edit';
       await modal.componentInstance.initializeBody(EditEventComponent, async component => {
         component.manualInitialization = true;
-
-        const event: any = this._appHelper.eventFactory(selectedEventType);
+        component.date = new Date(date);
+        const event: BaseTraining = this._appHelper.eventFactory(selectedEventType);
         event.startTime = date;
         event.finishTime = new Date(date.getTime() + 30 * 60 * 1000);
+        event.eventPlan = this.eventPlan;
         await component.initialize(event);
 
         modal.componentInstance.splitButtonItems = [

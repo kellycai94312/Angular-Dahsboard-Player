@@ -22,7 +22,7 @@ import {EventPlanPersonItemComponent} from './event-plan-person-item/event-plan-
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 import {EventsStepEventPlanComponent} from './event-plan/step/events-step-event-plan/events-step-event-plan.component';
 import {EventPlanLoadsComponent} from './event-plan/step/events-step-event-plan/event-plan-loads/event-plan-loads.component';
-import {EventPlanCalendarComponent} from './event-plan/step/events-step-event-plan/event-plan-calendar/event-plan-calendar.component';
+import {EventModule} from '../event/event.module';
 
 @NgModule({
   imports: [
@@ -44,7 +44,8 @@ import {EventPlanCalendarComponent} from './event-plan/step/events-step-event-pl
     NgxTabModule,
     DxDateBoxModule,
     HtmlContentModule,
-    NgxImageModule
+    NgxImageModule,
+    EventModule
   ],
   declarations: [
     EventPlansComponent,
@@ -55,8 +56,7 @@ import {EventPlanCalendarComponent} from './event-plan/step/events-step-event-pl
     PersonsEventPlanComponent,
     EventPlanPersonItemComponent,
     EventsStepEventPlanComponent,
-    EventPlanLoadsComponent,
-    EventPlanCalendarComponent
+    EventPlanLoadsComponent
   ],
   entryComponents: [EditEventPlanComponent]
 })

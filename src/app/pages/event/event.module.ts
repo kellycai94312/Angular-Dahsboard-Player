@@ -90,6 +90,9 @@ import {EditEventComponent} from './edit-event/edit-event.component';
   providers: [
     CustomDateFormatter,
     EventsCalendarService
+  ],
+  exports: [
+    EventsCalendarComponent
   ]
 })
 export class EventModule {

@@ -474,5 +474,6 @@
   },
   "newEvent": "New event",
   "creatingTemplate": "Creating a template",
-  "templateCreated": "Template created"
+  "templateCreated": "Template created",
+  "dateOutsidePlan": "Date outside event plan"
 }
