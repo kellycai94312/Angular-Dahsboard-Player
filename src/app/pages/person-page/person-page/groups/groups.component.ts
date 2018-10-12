@@ -88,9 +88,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   public async onGroupTypeChanged(value: GroupType) {
     if (value) {
-      this.groupQuery.groupTypeId = value.id;
+      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
     } else {
-      delete this.groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeEnum;
     }
     await this.updateItems();
   }

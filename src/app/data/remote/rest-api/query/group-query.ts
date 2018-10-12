@@ -8,7 +8,6 @@ import {StageTypeEnum} from '../../model/stage/stage-type-enum';
 export class GroupQuery extends PageQuery {
   public id?: number;
   public name?: string;
-  public groupTypeId?: number;
   public groupTypeEnum?: GroupTypeEnum;
   public sportTypeId?: number;
   public ageGroupId?: number;

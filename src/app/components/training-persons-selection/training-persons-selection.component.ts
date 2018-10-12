@@ -11,7 +11,6 @@ import {UserRole} from '../../data/remote/model/user-role';
 import {TrainingGroup} from '../../data/remote/model/training-group';
 import {TrainingPerson} from '../../data/remote/model/training/training-person';
 import {TrainingState} from '../../data/remote/misc/training-state';
-import {PageQuery} from '../../data/remote/rest-api/page-query';
 import {Direction} from '../ngx-virtual-scroll/model/direction';
 import {NgxVirtualScrollComponent} from '../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 
@@ -65,7 +64,7 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
   }
 
   public async initialize() {
-    this.query.userRole = this.userRoleEnum;
+    this.query.userRoleEnum = this.userRoleEnum;
     this.query.groupId = this.trainingGroup.group.id;
 
     this._userRole = this._userRoles.find(x => x.userRoleEnum === this.userRoleEnum);
@@ -73,10 +72,10 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
     const trainingPersonPageContainer = await this._participantRestApiService.getTrainingPersons({},
       {
         unassigned: false,
-        userRole: this.userRoleEnum,
+        userRoleEnum: this.userRoleEnum,
         groupId: this.trainingGroup.group.id
       },
-      {baseTrainingId: this.trainingId});
+      {eventId: this.trainingId});
 
     const game = (await this._participantRestApiService.getBaseTraining({id: this.trainingId})) as Game;
     this._sportRoles = await this._participantRestApiService.getSportRolesBySportType({id: game.sportType.id});
@@ -94,8 +93,8 @@ export class TrainingPersonsSelectionComponent extends BaseSelection<TrainingPer
     }));
   }
 
-  public getItemsWithoutSelected: Function = async (direction: Direction, pageQuery: PageQuery) => {
-    const trainingPersonPageContainer = await this._participantRestApiService.getTrainingPersons({}, pageQuery, {baseTrainingId: this.trainingId});
+  public getItemsWithoutSelected: Function = async (direction: Direction, query: TrainingPersonQuery) => {
+    const trainingPersonPageContainer = await this._participantRestApiService.getTrainingPersons({}, query, {eventId: this.trainingId});
     const pageContainer = await this._appHelper.pageContainerConverter(trainingPersonPageContainer, original => {
       return new TrainingPersonItemViewModel(original);
     });
