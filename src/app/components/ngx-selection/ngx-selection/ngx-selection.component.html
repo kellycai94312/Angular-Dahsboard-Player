@@ -8,7 +8,8 @@
                    [click]="onAdd"></app-busy-button>
 </div>
 <div class="content row cols-padding mt-2">
-  <div class="col">
+  <div [hidden]="!canSelect()"
+       class="col">
     <ngx-virtual-scroll class="list-group-flush overflow-content"
                         [getItems]="getItems"
                         [query]="query">

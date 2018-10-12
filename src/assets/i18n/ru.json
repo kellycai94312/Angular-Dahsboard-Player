@@ -473,5 +473,7 @@
     "BASE": "Основная",
     "VELO": "Вело"
   },
-  "newEvent": "Новое событие"
+  "newEvent": "Новое событие",
+  "creatingTemplate": "Создать шаблон",
+  "templateCreated": "Шаблон создан"
 }

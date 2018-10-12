@@ -27,7 +27,7 @@ export class PersonsEventPlanComponent {
   @Input('class')
   public classes: string;
 
-  public readonly query: PersonQuery;
+  public query: PersonQuery;
   public selectedItems: EventPlanPerson[];
 
   private readonly _userRolesMutex: Mutex;

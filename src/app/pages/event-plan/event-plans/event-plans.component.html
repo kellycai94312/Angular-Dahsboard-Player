@@ -58,6 +58,11 @@
                    [showClearButton]="true">
     </dx-select-box>
   </div>
+  <div class="col">
+    <dx-check-box text="{{'template' | translate}}"
+                  [(value)]="this.query.template"
+                  (onValueChanged)="onTemplateChanged($event.value)"></dx-check-box>
+  </div>
   <div class="col-auto">
     <ngx-button [icon]="iconEnum.ADD"
                 [click]="onAddEventPlan"></ngx-button>

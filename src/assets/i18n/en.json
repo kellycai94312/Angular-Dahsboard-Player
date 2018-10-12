@@ -472,5 +472,7 @@
     "BASE": "Base",
     "VELO": "Velo"
   },
-  "newEvent": "New event"
+  "newEvent": "New event",
+  "creatingTemplate": "Creating a template",
+  "templateCreated": "Template created"
 }

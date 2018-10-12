@@ -46,6 +46,7 @@ export class EventPlansComponent implements OnInit {
               private _router: Router) {
     this.query = new EventPlanQuery();
     this.query.name = '';
+    this.query.template = false;
   }
 
   async ngOnInit() {
@@ -162,6 +163,10 @@ export class EventPlansComponent implements OnInit {
     } else {
       delete this.query.eventPlanStateEnum;
     }
+    await this.resetItems();
+  }
+
+  public async onTemplateChanged() {
     await this.resetItems();
   }
 
