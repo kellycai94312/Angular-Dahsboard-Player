@@ -467,5 +467,11 @@
     "HOURS": "Часы",
     "INTENSITY": "Интенсивность"
   },
-  "loadType": "Тип нагрузки"
+  "loadType": "Тип нагрузки",
+  "trainingType": "Тип тренировки",
+  "trainingTypeEnum": {
+    "BASE": "Основная",
+    "VELO": "Вело"
+  },
+  "newEvent": "Новое событие"
 }

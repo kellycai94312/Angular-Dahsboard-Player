@@ -1,1 +1,7 @@
-<app-event-plan-loads></app-event-plan-loads>
+<ngx-button [icon]="switchButtonIcon"
+            [click]="switchComponent"></ngx-button>
+<div [ngSwitch]="componentType"
+     class="mt-2">
+  <app-event-plan-loads *ngSwitchCase="componentTypeClass.TABLE"></app-event-plan-loads>
+  <app-event-plan-calendar *ngSwitchCase="componentTypeClass.CALENDAR"></app-event-plan-calendar>
+</div>

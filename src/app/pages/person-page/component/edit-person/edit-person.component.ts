@@ -87,7 +87,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       this.data.sex = this.selectedSex.sexEnum;
       const request = new PersonTemplateRequest();
       request.person = this.data;
-      request.person.birthDate = this.appHelper.dateByFormat(request.person.birthDate, PropertyConstant.dateTimeServerFormat);
+      request.person.birthDate = this.appHelper.getGmtDate(request.person.birthDate);
       request.userRoleIds = this.userRoles.map(userRole => new IdRequest(userRole.id));
       request.sportTypeIds = this.sportTypes.map(sportType => new IdRequest(sportType.id));
       request.groupIds = this.groups.map(group => new IdRequest(group.id));

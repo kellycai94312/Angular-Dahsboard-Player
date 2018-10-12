@@ -5,7 +5,7 @@ import {NameWrapper} from '../data/local/name-wrapper';
 @Injectable()
 export class TranslateObjectService {
 
-  constructor(private translateService: TranslateService) {
+  constructor(private _translateService: TranslateService) {
   }
 
   // TODO: set type obj
@@ -13,7 +13,7 @@ export class TranslateObjectService {
     const objType = obj.toString();
     let newKey: string = objType[0].toLowerCase();
     newKey += objType.substr(1, objType.length);
-    return await this.translateService.get(newKey + '.' + name).toPromise();
+    return await this._translateService.get(newKey + '.' + name).toPromise();
   }
 
   // TODO: Have to set auto-generate enumKey
@@ -33,6 +33,10 @@ export class TranslateObjectService {
       items.push(nameWrapper);
     }
     return items;
+  }
+
+  public async getTranslation(key: string): Promise<string> {
+    return await this._translateService.get(key).toPromise();
   }
 
 }

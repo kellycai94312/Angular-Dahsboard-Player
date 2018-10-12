@@ -970,7 +970,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Put,
     path: '/baseTraining/{!id}'
   })
-  updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
+  updateBaseTraining: IRestMethodStrict<BaseTraining, any, { id: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!eventId}'
+  })
+  removeEvent: IRestMethod<{ eventId: number }, BaseTraining>;
 
   @RestAction({
     method: RestRequestMethod.Post,

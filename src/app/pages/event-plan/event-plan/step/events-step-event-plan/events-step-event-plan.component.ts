@@ -5,6 +5,7 @@ import {EventPlan} from '../../../../../data/remote/model/training/plan/event-pl
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
+import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 
 @Component({
   selector: 'app-events-step-event-plan',
@@ -13,7 +14,10 @@ import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/par
 })
 export class EventsStepEventPlanComponent implements OnInit, OnDestroy {
 
+  public readonly componentTypeClass = ComponentType;
   public eventPlan: EventPlan;
+  public componentType: ComponentType;
+  public switchButtonIcon: IconEnum;
 
   private readonly _eventPlanSubscription: ISubscription;
 
@@ -21,6 +25,9 @@ export class EventsStepEventPlanComponent implements OnInit, OnDestroy {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _eventPlanService: EventPlanService) {
+    this.componentType = ComponentType.TABLE;
+    this.switchButtonIcon = IconEnum.CALENDAR;
+
     this._eventPlanSubscription = this._eventPlanService.eventPlanSubject
       .filter(x => !this._appHelper.isUndefinedOrNull(x))
       .subscribe(async value => {
@@ -39,4 +46,14 @@ export class EventsStepEventPlanComponent implements OnInit, OnDestroy {
     this.eventPlan = eventPlan;
   }
 
+  public switchComponent = async () => {
+    this.componentType = this.componentType === ComponentType.TABLE ? ComponentType.CALENDAR : ComponentType.TABLE;
+    this.switchButtonIcon = this.switchButtonIcon === IconEnum.TABLE ? IconEnum.CALENDAR : IconEnum.TABLE;
+  };
+
+}
+
+enum ComponentType {
+  TABLE = 'TABLE',
+  CALENDAR = 'CALENDAR'
 }

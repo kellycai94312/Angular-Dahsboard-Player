@@ -101,8 +101,8 @@ export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate 
           default: true,
           callback: async () => {
             await this._appHelper.trySave(async () => {
-              this.eventPlan.startTime = this._appHelper.dateByFormat(this.eventPlan.startTime, PropertyConstant.dateTimeServerFormat);
-              this.eventPlan.finishTime = this._appHelper.dateByFormat(this.eventPlan.finishTime, PropertyConstant.dateTimeServerFormat);
+              this.eventPlan.startTime = this._appHelper.getGmtDate(this.eventPlan.startTime);
+              this.eventPlan.finishTime = this._appHelper.getGmtDate(this.eventPlan.finishTime);
 
               if (this._changeWatcher.hasChangesObject(this._eventPlanName)) {
                 this._appHelper.updateObject(this.eventPlan, await this._participantRestApiService.updateEventPlan(this.eventPlan, {}, {eventPlanId: this.eventPlan.id}));

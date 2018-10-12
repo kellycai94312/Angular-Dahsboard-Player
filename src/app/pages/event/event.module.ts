@@ -10,7 +10,7 @@ import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-pe
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
 import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-manager-page/game-steps-manager-page.component';
 import {TabModule} from '../../components/tab/tab.module';
-import {DxButtonModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
+import {DxButtonModule, DxCheckBoxModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -30,6 +30,11 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {ReportModule} from '../../components/report/report.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {EventTypeComponent} from './event-type/event-type.component';
+import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
+import {EditEventComponent} from './edit-event/edit-event.component';
 
 @NgModule({
   imports: [
@@ -56,7 +61,11 @@ import {ReportModule} from '../../components/report/report.module';
     CalendarUtilsModule,
     NgxSplitButtonModule,
     NgxGridModule,
-    ReportModule
+    ReportModule,
+    NgxButtonModule,
+    NgxModalModule,
+    NgxTextBoxModule,
+    DxCheckBoxModule
   ],
   declarations: [
     EventPageComponent,
@@ -68,11 +77,15 @@ import {ReportModule} from '../../components/report/report.module';
     EventsListComponent,
     EventsCalendarComponent,
     EventCalendarItemComponent,
-    EventCalendarMonthModalComponent
+    EventCalendarMonthModalComponent,
+    EventTypeComponent,
+    EditEventComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,
-    EventCalendarMonthModalComponent
+    EventCalendarMonthModalComponent,
+    EventTypeComponent,
+    EditEventComponent
   ],
   providers: [
     CustomDateFormatter,

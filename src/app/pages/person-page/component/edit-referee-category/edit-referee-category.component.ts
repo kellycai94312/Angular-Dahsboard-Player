@@ -55,7 +55,7 @@ export class EditRefereeCategoryComponent extends BaseEditComponent<PersonRefere
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      this.data.assignDate = this.appHelper.dateByFormat(this.data.assignDate, this.propertyConstant.dateTimeServerFormat);
+      this.data.assignDate = this.appHelper.getGmtDate(this.data.assignDate);
       this.data = await this.participantRestApiService.updatePersonRefereeCategory(this.data, {}, {
         personId: this.person.id,
         sportTypeId: this.sportType.id

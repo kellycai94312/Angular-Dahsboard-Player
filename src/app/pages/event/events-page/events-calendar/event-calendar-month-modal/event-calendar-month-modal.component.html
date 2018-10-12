@@ -1,16 +1,22 @@
 <div class="modal-header">
   <h4 class="modal-title">{{date}}</h4>
-  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+  <button type="button"
+          class="close"
+          aria-label="Close"
+          (click)="modal.dismiss()">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
 <div class="modal-body">
-  <div *ngFor="let event of events" [ngStyle]="{'background-color': event.color.primary}">
-    <app-event-calendar-item [event]="event" [displayBorderBottom]="true"
-                             [onOpenEvent]="modal.dismiss"></app-event-calendar-item>
+  <div *ngFor="let event of events"
+       [ngStyle]="{'background-color': event.color.primary}">
+    <app-event-calendar-item [event]="event"
+                             [displayBorderBottom]="true"></app-event-calendar-item>
   </div>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
+  <button type="button"
+          class="btn btn-outline-dark"
+          (click)="modal.dismiss()">{{'modal.cancel' | translate }}
   </button>
 </div>

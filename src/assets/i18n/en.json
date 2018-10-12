@@ -466,5 +466,11 @@
     "HOURS": "Hours",
     "INTENSITY": "Intensity"
   },
-  "loadType": "Load type"
+  "loadType": "Load type",
+  "trainingType": "Training type",
+  "trainingTypeEnum": {
+    "BASE": "Base",
+    "VELO": "Velo"
+  },
+  "newEvent": "New event"
 }

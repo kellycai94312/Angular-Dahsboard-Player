@@ -13,7 +13,14 @@ import {environment} from '../../environments/environment';
 import {ListRequest} from '../data/remote/request/list-request';
 import {IdRequest} from '../data/remote/request/id-request';
 import {Period} from '../data/local/period';
+import {BaseTraining} from '../data/remote/model/training/base/base-training';
+import {TrainingDiscriminator} from '../data/remote/model/training/base/training-discriminator';
+import {Training} from '../data/remote/model/training/training/training';
+import {Game} from '../data/remote/model/training/game/game';
+import {Testing} from '../data/remote/model/training/testing/testing';
+import {PropertyConstant} from '../data/local/property-constant';
 
+// TODO: Rename to AppHelperService. Add tests
 @Injectable()
 export class AppHelper {
 
@@ -50,14 +57,16 @@ export class AppHelper {
     return val === undefined || val == null || val === '';
   }
 
-  public getGmtDate(date: Date): any {
-    if (!date) {
+  public getGmtDate(date: Date | string): string | null | any {
+    if (this.isUndefinedOrNull(date)) {
       return null;
     }
 
-    date = new Date(date);
-    const dateWithTimezone = new Date(date.valueOf() + date.getTimezoneOffset() * 60000);
-    return this._datePipe.transform(dateWithTimezone, 'yyyy-MM-dd HH:mm:ss.SSS') + 'GMT';
+    if (typeof date === 'string') {
+      date = new Date(date);
+    }
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    return this.dateByFormat(date, PropertyConstant.dateTimeServerFormat);
   }
 
   public dateByFormat(date: Date, format: string): any {
@@ -300,9 +309,25 @@ export class AppHelper {
         break;
     }
     if (typeof from === 'string') {
-      from = new Date(Date.parse(from));
+      from = new Date(from);
     }
     return new Date(from.getTime() + offset * countDaysInPeriod * 24 * 60 * 60 * 1000);
+  }
+
+  public eventFactory<T extends BaseTraining>(eventType: TrainingDiscriminator): T {
+    let event: BaseTraining = null;
+    switch (eventType) {
+      case TrainingDiscriminator.GAME:
+        event = new Game();
+        break;
+      case TrainingDiscriminator.TESTING:
+        event = new Testing();
+        break;
+      case TrainingDiscriminator.TRAINING:
+        event = new Training();
+        break;
+    }
+    return event as T;
   }
 
   //#region Try actions
