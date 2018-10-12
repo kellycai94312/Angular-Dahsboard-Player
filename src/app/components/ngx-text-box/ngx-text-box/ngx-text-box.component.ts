@@ -15,6 +15,9 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   public class: string;
 
   @Input()
+  public disabled: boolean;
+
+  @Input()
   public placeholderKey: string;
 
   private _value: string;

@@ -11,6 +11,8 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 import {TrainingType} from '../../../data/remote/model/training/training/training-type';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {Training} from '../../../data/remote/model/training/training/training';
+import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
+import {EventLoadsComponent} from '../../event-plan/event-loads/event-loads.component';
 
 @Component({
   selector: 'app-edit-event',
@@ -28,7 +30,8 @@ export class EditEventComponent<T extends BaseTraining> extends BaseEditComponen
   public selectedTrainingType: NameWrapper<TrainingType>;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
   }
 
@@ -126,5 +129,15 @@ export class EditEventComponent<T extends BaseTraining> extends BaseEditComponen
   public onTrainingTypeChanged(val: NameWrapper<TrainingType>) {
     (<BaseTraining>this.data as Training).trainingType = val.data;
   }
+
+  public editLoad = async () => {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+    await modal.componentInstance.initializeBody(EventLoadsComponent, async component => {
+      // TODO: startTime can be null
+      this.date = this.date || new Date(this.data.startTime);
+      await component.initialize(this.date, this.data);
+    });
+  };
 
 }

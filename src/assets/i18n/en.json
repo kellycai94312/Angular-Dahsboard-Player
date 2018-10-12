@@ -475,5 +475,8 @@
   "newEvent": "New event",
   "creatingTemplate": "Creating a template",
   "templateCreated": "Template created",
-  "dateOutsidePlan": "Date outside event plan"
+  "dateOutsidePlan": "Date outside event plan",
+  "editLoad": "Edit load",
+  "fromPlan": "From plan",
+  "planned": "Planned"
 }

@@ -476,5 +476,8 @@
   "newEvent": "Новое событие",
   "creatingTemplate": "Создать шаблон",
   "templateCreated": "Шаблон создан",
-  "dateOutsidePlan": "Дата вне плана"
+  "dateOutsidePlan": "Дата вне плана",
+  "editLoad": "Редактировать нагрузку",
+  "fromPlan": "Из плана",
+  "planned": "Запланировано"
 }

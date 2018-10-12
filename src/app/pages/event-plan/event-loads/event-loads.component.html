@@ -1,0 +1,34 @@
+<label>{{loadTypeSelectBox.placeholder}}</label>
+<dx-select-box #loadTypeSelectBox
+               class="input-height-sm"
+               [items]="loadTypes"
+               [(value)]="selectedLoadType"
+               displayExpr="name"
+               placeholder="{{'loadType' | translate}}"
+               (onValueChanged)="onLoadTypeChanged($event.value)">
+</dx-select-box>
+
+<div *ngIf="rows"
+     class="mt-2 x-scroll-content">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>{{'name' | translate}}</th>
+      <th>{{'fromPlan' | translate}}</th>
+      <th>{{'planned' | translate}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of rows">
+      <td class="row-name">
+        {{item.row.name}}
+      </td>
+      <td *ngFor="let column of item.columns; let i = index">
+        <ngx-text-box [(value)]="column.value"
+                      (focusOut)="onFocusOut(column)"
+                      [disabled]="i==0"></ngx-text-box>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

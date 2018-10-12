@@ -23,6 +23,7 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 import {EventsStepEventPlanComponent} from './event-plan/step/events-step-event-plan/events-step-event-plan.component';
 import {EventPlanLoadsComponent} from './event-plan/step/events-step-event-plan/event-plan-loads/event-plan-loads.component';
 import {EventModule} from '../event/event.module';
+import {EventLoadsComponent} from './event-loads/event-loads.component';
 
 @NgModule({
   imports: [
@@ -56,9 +57,13 @@ import {EventModule} from '../event/event.module';
     PersonsEventPlanComponent,
     EventPlanPersonItemComponent,
     EventsStepEventPlanComponent,
-    EventPlanLoadsComponent
+    EventPlanLoadsComponent,
+    EventLoadsComponent
   ],
-  entryComponents: [EditEventPlanComponent]
+  entryComponents: [
+    EditEventPlanComponent,
+    EventLoadsComponent
+  ]
 })
 export class EventPlanModule {
 }

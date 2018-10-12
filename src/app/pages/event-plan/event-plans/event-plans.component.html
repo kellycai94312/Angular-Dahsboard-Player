@@ -61,7 +61,7 @@
   <div class="col">
     <dx-check-box text="{{'template' | translate}}"
                   [(value)]="this.query.template"
-                  (onValueChanged)="onTemplateChanged($event.value)"></dx-check-box>
+                  (onValueChanged)="onTemplateChanged()"></dx-check-box>
   </div>
   <div class="col-auto">
     <ngx-button [icon]="iconEnum.ADD"

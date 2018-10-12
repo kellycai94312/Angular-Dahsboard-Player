@@ -82,3 +82,8 @@
                     placeholder="{{'sportType' | translate}}">
   </app-input-select>
 </div>
+
+<ngx-button *ngIf="data.id"
+            class="mt-2"
+            nameKey="editLoad"
+            [click]="editLoad"></ngx-button>

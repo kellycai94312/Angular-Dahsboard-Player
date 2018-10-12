@@ -11,6 +11,7 @@ import {Period} from '../../../../../../data/local/period';
 import {EventPlanService} from '../../../service/event-plan.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../../../../utils/app-helper';
+import {Row} from '../../../../../../data/local/row';
 
 @Component({
   selector: 'app-event-plan-loads',
@@ -126,13 +127,4 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
     });
   }
 
-}
-
-class Row<TRow, TColumn> {
-  public row: TRow;
-  public columns: TColumn[];
-
-  constructor() {
-    this.columns = [];
-  }
 }
