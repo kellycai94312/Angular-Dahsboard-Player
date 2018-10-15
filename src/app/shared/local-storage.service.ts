@@ -6,35 +6,35 @@ import {CookieService} from 'ngx-cookie';
 @Injectable()
 export class LocalStorageService {
 
-  private readonly locale: string;
-  private readonly sessionId: string;
+  private readonly localeName: string;
+  private readonly sessionIdName: string;
 
-  constructor(private translateService: TranslateService,
-              private cookieService: CookieService) {
-    this.locale = 'locale';
-    this.sessionId = 'rsi';
+  constructor(private _translateService: TranslateService,
+              private _cookieService: CookieService) {
+    this.localeName = 'locale';
+    this.sessionIdName = 'rsi';
   }
 
   public signOut(): void {
-    this.cookieService.remove(this.sessionId);
+    this._cookieService.remove(this.sessionIdName);
   }
 
   public setLocale(localeKey: string): void {
-    if (localeKey == null || Locale[localeKey] == null) {
+    if (!localeKey || !Locale[localeKey]) {
       localeKey = this.getCurrentLocale();
     }
 
-    localStorage.setItem(this.locale, localeKey);
-    this.translateService.use(localeKey);
+    localStorage.setItem(this.localeName, localeKey);
+    this._translateService.use(localeKey);
   }
 
   public getCurrentLocale(): string {
-    const localeKey = localStorage.getItem(this.locale);
-    if (localeKey == null || Locale[localeKey] == null) {
+    const localeKey = localStorage.getItem(this.localeName);
+    if (!localeKey || !Locale[localeKey]) {
       let locale = Locale.en;
 
-      const browserLocaleKey = this.translateService.getBrowserLang();
-      if (browserLocaleKey == null || Locale[browserLocaleKey] == null) {
+      const browserLocaleKey = this._translateService.getBrowserLang();
+      if (!browserLocaleKey || !Locale[browserLocaleKey]) {
         locale = Locale[browserLocaleKey];
       }
       this.setLocale(locale);
@@ -44,6 +44,7 @@ export class LocalStorageService {
   }
 
   public getSessionId(): string {
-    return this.cookieService.get(this.sessionId);
+    return this._cookieService.get(this.sessionIdName);
   }
+
 }

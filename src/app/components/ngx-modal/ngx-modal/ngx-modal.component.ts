@@ -45,7 +45,7 @@ export class NgxModalComponent {
   }
 
   public onClose() {
-    this.modal.close();
+    this.modal.dismiss();
   }
 
 }

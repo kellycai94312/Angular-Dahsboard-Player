@@ -53,19 +53,19 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   }
 
   public async onGroupTypeChanged(value: GroupType) {
-    if (value != null) {
-      this.groupQuery.groupTypeId = value.id;
+    if (value) {
+      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
     } else {
-      delete this.groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeEnum;
     }
     await this.updateItems();
   }
 
   public async onUserRoleChanged(value: UserRole) {
-    if (value != null) {
-      this.groupQuery.userRoleId = value.id;
+    if (value) {
+      this.groupQuery.userRoleEnum = value.userRoleEnum;
     } else {
-      delete this.groupQuery.userRoleId;
+      delete this.groupQuery.userRoleEnum;
     }
     await this.updateItems();
   }

@@ -1,0 +1,8 @@
+<label>{{eventTypeSelectBox.placeholder}}</label>
+<dx-select-box #eventTypeSelectBox
+               class="input-height-sm"
+               [items]="eventTypes"
+               [(value)]="selectedEventType"
+               displayExpr="name"
+               placeholder="{{'eventType' | translate}}">
+</dx-select-box>

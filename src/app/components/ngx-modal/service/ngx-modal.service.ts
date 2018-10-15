@@ -45,10 +45,23 @@ export class NgxModalService {
     return this._ngbModal.open(NgxModalComponent, options);
   }
 
+  public async awaitModalResult(modal: NgxModalRef): Promise<boolean> {
+    let loadResolve: (val: boolean) => void;
+    const result = new Promise<boolean>(resolve => {
+      loadResolve = resolve;
+    });
+    modal.result.then(async x => {
+      loadResolve(true);
+    }, async reason => {
+      loadResolve(false);
+    });
+    return await result;
+  }
+
   public async save(ngxModalRef: NgxModalRef, component: IBaseEditComponent, closeIfSuccess: boolean = true): Promise<boolean> {
     const isSaved = await component.onSave();
     if (isSaved && closeIfSuccess) {
-      ngxModalRef.dismiss();
+      ngxModalRef.close();
     }
     return isSaved;
   }
@@ -56,7 +69,7 @@ export class NgxModalService {
   public async remove<T>(ngxModalRef: NgxModalRef, component: IBaseEditComponent, closeIfSuccess: boolean = true): Promise<boolean> {
     const isRemoved = await component.onRemove();
     if (isRemoved && closeIfSuccess) {
-      ngxModalRef.dismiss();
+      ngxModalRef.close();
     }
     return isRemoved;
   }
@@ -114,7 +127,7 @@ export class NgxModalService {
               tagFilter += `${item.id}_`;
             }
             await apply(component.selectedItems, tagFilter);
-            modal.dismiss();
+            modal.close();
           }
         }
       ];
@@ -269,16 +282,7 @@ export class NgxModalService {
   }
 
   public async showUnsavedDialogModal(): Promise<boolean> {
-    let loadResolve: (boolean) => void;
-    const result = new Promise<boolean>((resolve, reject) => {
-      loadResolve = resolve;
-    });
     const modal = this.open();
-    modal.result.then(async x => {
-      loadResolve(x || false);
-    }, async reason => {
-      loadResolve(false);
-    });
     modal.componentInstance.titleKey = 'attention';
     await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
       component.html = await this._translateService.get('unsavedChangesOnThisPageQuestion').toPromise();
@@ -287,18 +291,18 @@ export class NgxModalService {
         {
           nameKey: 'discard',
           callback: async () => {
-            modal.close(true);
+            modal.close();
           }
         },
         {
           nameKey: 'cancel',
           callback: async () => {
-            modal.close(false);
+            modal.dismiss();
           }
         }
       ];
     });
-    return await result;
+    return await this.awaitModalResult(modal);
   }
 
 }

@@ -60,7 +60,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._trainingGroups = await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId});
+    this._trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId})).list;
     if (this._trainingGroups.length < 1) {
       return;
     }

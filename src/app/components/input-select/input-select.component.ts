@@ -13,6 +13,9 @@ import {AppHelper} from '../../utils/app-helper';
 })
 export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
 
+  @Input('class')
+  public classes: string;
+
   @Input() loadData: Function;
   @Input() model: any;
   @Input() pageSize: number;
@@ -39,6 +42,7 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
               private _renderer: Renderer2,
               private _appHelper: AppHelper,
               private _scrollService: ScrollService) {
+    this.classes = '';
     this.modelChange = new EventEmitter<any>();
     this.onChange = new EventEmitter<any>();
     this.searchChanged = new Subject<any>();

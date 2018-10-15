@@ -41,18 +41,17 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.groupQuery = new GroupQuery();
     this.groupQuery.from = 0;
     this.groupQuery.count = PropertyConstant.pageSize;
-    this.groupQuery.id = this._personService.personViewModel.data.id;
 
     this._userRoleSubscription = this._personService.userRoleHandler.subscribe(async userRole => {
       this.selectedPublicUserRole = userRole;
       if (userRole) {
-        this.groupQuery.userRoleId = userRole.id;
+        this.groupQuery.userRoleEnum = userRole.userRoleEnum;
       } else {
         if (this._personService.selectedUserRole) {
           this.selectedPublicUserRole = this._personService.selectedUserRole;
-          this.groupQuery.userRoleId = this._personService.selectedUserRole.id;
+          this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
         } else {
-          delete this.groupQuery.userRoleId;
+          delete this.groupQuery.userRoleEnum;
         }
       }
       await this.updateItems();
@@ -69,7 +68,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.selectedPublicUserRole = this._personService.selectedUserRole;
 
     if (this._personService.selectedUserRole) {
-      this.groupQuery.userRoleId = this._personService.selectedUserRole.id;
+      this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
       await this.updateItems();
     }
   }
@@ -88,9 +87,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   public async onGroupTypeChanged(value: GroupType) {
     if (value) {
-      this.groupQuery.groupTypeId = value.id;
+      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
     } else {
-      delete this.groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeEnum;
     }
     await this.updateItems();
   }
@@ -107,13 +106,14 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   loadData = async (from: number, searchText: string) => {
-    return await this._participantRestApiService.getPersonGroups({
-      id: this._personService.personViewModel.data.id,
+    return await this._participantRestApiService.getPersonGroups({}, {
+      personId: this._personService.personViewModel.data.id,
+      userRoleId: this.selectedPublicUserRole.id
+    }, {
       from: from,
       count: this.pageSize,
       name: searchText,
-      select: true,
-      userRoleId: this.selectedPublicUserRole.id,
+      select: true
     });
   };
 

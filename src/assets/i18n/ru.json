@@ -455,5 +455,35 @@
   "finishDate": "Дата окончания",
   "attention": "Внимание",
   "discard": "Отказаться",
-  "unsavedChangesOnThisPageQuestion": "На этой странице есть несохраненные изменения. Вы хотите покинуть эту страницу и отказаться от изменений или остаться на этой странице?"
+  "unsavedChangesOnThisPageQuestion": "На этой странице есть несохраненные изменения. Вы хотите покинуть эту страницу и отказаться от изменений или остаться на этой странице?",
+  "periodEnum": {
+    "DAY": "День",
+    "WEEK": "Неделя",
+    "MONTH": "Месяц",
+    "YEAR": "Год"
+  },
+  "period": "Период",
+  "eventPlanLoadTypeEnum": {
+    "HOURS": "Часы",
+    "INTENSITY": "Интенсивность"
+  },
+  "loadType": "Тип нагрузки",
+  "trainingType": "Тип тренировки",
+  "trainingTypeEnum": {
+    "BASE": "Основная",
+    "VELO": "Вело"
+  },
+  "newEvent": "Новое событие",
+  "createTemplate": "Создать шаблон",
+  "templateCreated": "Шаблон создан",
+  "dateOutsidePlan": "Дата вне плана",
+  "editLoad": "Редактировать нагрузку",
+  "fromPlan": "Из плана",
+  "planned": "Запланировано",
+  "teamTypeEnum": {
+    "AMATEUR": "Любительский",
+    "PROFESSIONAL": "Профессиональный",
+    "NATIONAL": "Национальный"
+  },
+  "language": "Язык"
 }

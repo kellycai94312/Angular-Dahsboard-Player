@@ -15,6 +15,9 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   public class: string;
 
   @Input()
+  public disabled: boolean;
+
+  @Input()
   public placeholderKey: string;
 
   private _value: string;
@@ -35,22 +38,26 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   @Output()
   public readonly valueChange: EventEmitter<string>;
 
+  @Output()
+  public readonly focusOut: EventEmitter<void>;
+
   @Input()
   public debounceTime: number;
 
-  public readonly keyUp = new Subject<KeyboardEvent>();
+  public readonly keyUp: Subject<KeyboardEvent>;
 
-  private _inputKeyupSubscription: ISubscription;
+  private _inputKeyUpSubscription: ISubscription;
 
   constructor(private _appHelper: AppHelper) {
     this.valueChange = new EventEmitter<string>();
+    this.focusOut = new EventEmitter<void>();
     this.keyUp = new Subject<KeyboardEvent>();
     this.value = null;
     this.class = '';
   }
 
   ngOnInit() {
-    this._inputKeyupSubscription = this.keyUp
+    this._inputKeyUpSubscription = this.keyUp
       .map((event: KeyboardEvent) => (event.target as HTMLInputElement).value)
       .pipe(debounceTime(this.debounceTime),
         distinctUntilChanged()
@@ -61,7 +68,11 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._appHelper.unsubscribe(this._inputKeyupSubscription);
+    this._appHelper.unsubscribe(this._inputKeyUpSubscription);
+  }
+
+  public onFocusOut(e: any) {
+    this.focusOut.emit();
   }
 
 }

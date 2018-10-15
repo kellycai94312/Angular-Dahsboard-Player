@@ -52,8 +52,8 @@ export class EditPersonStageComponent extends BaseEditComponent<any> {
 
   public async onSave(): Promise<boolean> {
     return this.appHelper.trySave(async () => {
-      this.data.joinDate = this.appHelper.dateByFormat(this.data.joinDate, PropertyConstant.dateTimeServerFormat);
-      this.data.leaveDate = this.appHelper.dateByFormat(this.data.leaveDate, PropertyConstant.dateTimeServerFormat);
+      this.data.joinDate = this.appHelper.getGmtDate(this.data.joinDate);
+      this.data.leaveDate = this.appHelper.getGmtDate(this.data.leaveDate);
       this.data = await this.participantRestApiService.updatePublicUserRole(this.data, {}, {personId: this.personId, publicUserRoleId: this.data.id});
       this._document.objectId = this.data.id;
       await this._personService.refreshCurrentPersonStage();

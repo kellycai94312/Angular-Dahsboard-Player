@@ -29,10 +29,12 @@ export class PersonReportsComponent {
   public async initialize(event: BaseTraining): Promise<void> {
     this.event = event;
     this.eventPersons = (await this._participantRestApiService.getTrainingPersons({}, {
-      count: PropertyConstant.pageSizeMax,
-      unassigned: false,
-      userRole: UserRoleEnum.ATHLETE
-    }, {baseTrainingId: event.id})).list.map(x => {
+        userRoleEnum: UserRoleEnum.ATHLETE,
+        count: PropertyConstant.pageSizeMax,
+        unassigned: false
+      },
+      {eventId: event.id}
+    )).list.map(x => {
       const nameWrapper = new NameWrapper<TrainingPerson>();
       nameWrapper.data = x;
       nameWrapper.name = `${x.person.firstName} ${x.person.lastName}`;

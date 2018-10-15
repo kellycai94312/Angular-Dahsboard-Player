@@ -11,6 +11,6 @@ export class Game extends BaseTraining {
 
   constructor() {
     super();
-    this.discriminator = TrainingDiscriminator[TrainingDiscriminator.GAME];
+    this.discriminator = TrainingDiscriminator.GAME;
   }
 }

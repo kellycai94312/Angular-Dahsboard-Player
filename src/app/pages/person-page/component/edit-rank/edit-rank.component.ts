@@ -32,7 +32,7 @@ export class EditRankComponent extends BaseEditComponent<PersonRank> {
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      this.data.date = this.appHelper.dateByFormat(this.data.date, PropertyConstant.dateTimeServerFormat);
+      this.data.date = this.appHelper.getGmtDate(this.data.date);
       this.data = await this.participantRestApiService.updateRank(this.data, {}, {personId: this.personId, rankId: this.rankId});
     });
   }

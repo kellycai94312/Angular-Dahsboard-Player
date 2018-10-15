@@ -34,7 +34,6 @@ import {ExerciseResult} from '../bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
 import {Location} from '../model/location';
-import {TrainingQuery} from './query/training-query';
 import {TrainingPerson} from '../model/training/training-person';
 import {TrainingGroup} from '../model/training-group';
 import {TrainingAccess} from '../misc/training-access';
@@ -103,6 +102,12 @@ import {GroupScore} from '../model/training/game/group-score';
 import {EventPlanQuery} from './query/event/plan/event-plan-query';
 import {EventPlan} from '../model/training/plan/event-plan';
 import {EventPlanPerson} from '../model/training/plan/event-plan-person';
+import {EventPlanLoadTypeEnum} from '../model/training/plan/event-plan-load-type-enum';
+import {Period} from '../../local/period';
+import {EventPlanLoadPeriod} from '../bean/event-plan-load-period';
+import {EventPlanLoad} from '../model/training/plan/event-plan-load';
+import {EventPlanTrainingValueEnum} from '../model/training/plan/event-plan-training-value-enum';
+import {EventGroupQuery} from './query/event/event-group-query';
 
 @Injectable()
 @RestParams({
@@ -370,9 +375,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/role/{!userRoleId}/groups',
+    path: '/person/{!personId}/role/{!userRoleId}/groups',
   })
-  getPersonGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
+  getPersonGroups: IRestMethodStrict<any, { personId: number, userRoleId: number }, GroupQuery, PageContainer<GroupPerson>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -411,7 +416,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/training',
   })
-  getPersonTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingPerson>>;
+  getPersonTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { personId: number }, PageContainer<TrainingPerson>>;
 
   //#endregion
 
@@ -657,7 +662,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/training',
   })
-  getGroupTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingGroup>>;
+  getGroupTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { groupId: number }, PageContainer<TrainingGroup>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -966,7 +971,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Put,
     path: '/baseTraining/{!id}'
   })
-  updateBaseTraining: IRestMethodStrict<BaseTraining, void, { id: number }, BaseTraining>;
+  updateBaseTraining: IRestMethodStrict<BaseTraining, any, { id: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/baseTraining/{!eventId}'
+  })
+  removeEvent: IRestMethod<{ eventId: number }, BaseTraining>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -978,9 +989,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/baseTraining/{!baseTrainingId}/group'
+    path: '/baseTraining/{!eventId}/group'
   })
-  getTrainingGroupsByBaseTraining: IRestMethod<{ baseTrainingId: number }, TrainingGroup[]>;
+  getTrainingGroupsByBaseTraining: IRestMethodStrict<any, EventGroupQuery, { eventId: number }, PageContainer<TrainingGroup>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1060,9 +1071,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/baseTraining/{!baseTrainingId}/person'
+    path: '/baseTraining/{!eventId}/person'
   })
-  getTrainingPersons: IRestMethodStrict<any, TrainingPersonQuery, { baseTrainingId: number }, PageContainer<TrainingPerson>>;
+  getTrainingPersons: IRestMethodStrict<any, TrainingPersonQuery, { eventId: number }, PageContainer<TrainingPerson>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1116,6 +1127,18 @@ export class ParticipantRestApiService extends Rest {
   })
   removeEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
 
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/template'
+  })
+  createEventPlanTemplate: IRestMethod<IdRequest, EventPlan>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/template'
+  })
+  updateEventPlanTemplate: IRestMethodStrict<IdRequest, any, { eventPlanId: number }, EventPlan>;
+
   //#region Event plan person
 
   @RestAction({
@@ -1143,7 +1166,6 @@ export class ParticipantRestApiService extends Rest {
   removeEventPlanPerson: IRestMethod<{ eventPlanId: number, eventPlanPersonId: number }, EventPlanPerson>;
 
   //#endregion
-
 
   //#region Event plan group
 
@@ -1192,6 +1214,33 @@ export class ParticipantRestApiService extends Rest {
   updateEventPlanEstimatedParameters: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, EstimatedParameter[]>;
 
   //#endregion
+
+
+  //#region Event plan load
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPlan/{!eventPlanId}/load'
+  })
+  getEventPlanLoads: IRestMethod<{ eventPlanId: number, eventPlanLoadTypeEnum: EventPlanLoadTypeEnum, eventPlanPeriodEnum: Period, eventPlanTrainingValueEnum?: EventPlanTrainingValueEnum, trainingId?: number, from?: number, count?: number }, PageContainer<EventPlanLoadPeriod>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPlan/{!eventPlanId}/load'
+  })
+  createEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number }, EventPlanLoad>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
+  })
+  updateEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
+  })
+  removeEventPlanLoad: IRestMethod<{ eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
 
   //#endregion
 

@@ -2,4 +2,6 @@
        type="text"
        placeholder="{{placeholderKey | translate}}"
        [(value)]="value"
-       (keyup)="keyUp.next($event)">
+       (keyup)="keyUp.next($event)"
+       (focusout)="onFocusOut($event)"
+       [disabled]="disabled">

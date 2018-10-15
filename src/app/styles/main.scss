@@ -140,6 +140,10 @@ input[type=file] {
   overflow: auto !important;
 }
 
+.overflow-x-content {
+  overflow-x: auto !important;
+}
+
 .selected-content {
   max-height: 400px;
 }
@@ -178,5 +182,15 @@ select:-webkit-autofill:focus {
     margin-bottom: 0.5rem;
     background-color: #6c757d;
     color: #fff;
+  }
+}
+
+.table-not-flex {
+  td, th {
+    display: table-cell !important;;
+    vertical-align: middle !important;
+    text-align: center !important;;
+    min-width: 100px !important;
+    max-width: 100px !important;
   }
 }

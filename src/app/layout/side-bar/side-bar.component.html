@@ -5,6 +5,8 @@
       <a class="toggle"
          (click)="toggle()"></a>
     </div>
+    <app-locale *ngIf="!isCollapsed"
+                [compact]="true"></app-locale>
     <ul class="sidebar-menu">
       <li *ngFor="let item of menuItems"
           class="menu-item"
@@ -18,9 +20,8 @@
         </a>
       </li>
     </ul>
-    <a
-      href="https://wiki.ar.zone/index.php/Web:%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8F_%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9"
-      target="_blank"
-      class="version ml-2 mt-2">v.1.0.0.2</a>
+    <a class="version ml-2 mt-2"
+       href="https://wiki.ar.zone/index.php/Web:%D0%98%D1%81%D1%82%D0%BE%D1%80%D0%B8%D1%8F_%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B5%D0%BD%D0%B8%D0%B9"
+       target="_blank">v.1.0.0.3</a>
   </div>
 </aside>

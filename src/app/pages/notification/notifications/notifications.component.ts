@@ -1,9 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {DateWrapper} from '../../../data/remote/bean/wrapper/date-wrapper';
 import {AppHelper} from '../../../utils/app-helper';
-import {PropertyConstant} from '../../../data/local/property-constant';
 import {ISubscription} from 'rxjs/Subscription';
 import {NotificationService} from '../../../shared/notification.service';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
@@ -57,9 +55,8 @@ export class NotificationsComponent implements OnInit, OnDestroy {
         this.readBefore = new Date(time);
       }
     }
-    const dateWrapper = new DateWrapper();
-    dateWrapper.date = this._appHelper.dateByFormat(this.readBefore, PropertyConstant.dateTimeServerFormat);
-    await this._participantRestApiService.createReadNotifications(dateWrapper);
+
+    await this._participantRestApiService.createReadNotifications({date: this._appHelper.getGmtDate(this.readBefore)});
     return pageContainer;
   };
 

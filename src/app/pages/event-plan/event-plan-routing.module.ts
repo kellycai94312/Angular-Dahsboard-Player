@@ -5,6 +5,7 @@ import {EventPlanComponent} from './event-plan/event-plan.component';
 import {GeneralStepEventPlanComponent} from './event-plan/step/general-step-event-plan/general-step-event-plan.component';
 import {PersonsStepEventPlanComponent} from './event-plan/step/persons-step-event-plan/persons-step-event-plan.component';
 import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
+import {EventsStepEventPlanComponent} from './event-plan/step/events-step-event-plan/events-step-event-plan.component';
 
 const routes: Routes = [
   {path: '', component: EventPlansComponent},
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'general', pathMatch: 'full'},
       {path: 'general', component: GeneralStepEventPlanComponent, canDeactivate: [CanDeactivateGuard]},
-      {path: 'person', component: PersonsStepEventPlanComponent, canDeactivate: [CanDeactivateGuard]}
+      {path: 'person', component: PersonsStepEventPlanComponent, canDeactivate: [CanDeactivateGuard]},
+      {path: 'event', component: EventsStepEventPlanComponent, canDeactivate: [CanDeactivateGuard]}
     ]
   },
 ];

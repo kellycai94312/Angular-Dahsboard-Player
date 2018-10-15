@@ -46,7 +46,7 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
         return;
       }
 
-      const trainingGroups = await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId});
+      const trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId})).list;
       if (trainingGroups.length < 1) {
         return;
       }

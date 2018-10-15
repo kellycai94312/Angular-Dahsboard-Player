@@ -33,10 +33,10 @@
       </dx-date-box>
 
       <dx-select-box class="mt-2"
-                     [items]="sexValues"
-                     [(value)]="selectedSex"
+                     [items]="sexEnums"
                      displayExpr="name"
-                     placeholder="{{'sex' | translate}}">
+                     placeholder="{{'sex' | translate}}"
+                     (onValueChanged)="onSexChanged($event.value)">
         <dx-validator>
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>

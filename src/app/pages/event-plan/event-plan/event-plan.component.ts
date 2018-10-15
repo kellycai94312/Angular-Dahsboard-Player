@@ -37,6 +37,10 @@ export class EventPlanComponent implements OnInit, OnDestroy {
       {
         nameKey: 'persons.section',
         routerLink: 'person'
+      },
+      {
+        nameKey: 'events',
+        routerLink: 'event'
       }
     ];
   }

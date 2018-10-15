@@ -20,6 +20,10 @@ import {HtmlContentModule} from '../../components/html-content/html-content.modu
 import {PersonsEventPlanComponent} from './persons-event-plan/persons-event-plan.component';
 import {EventPlanPersonItemComponent} from './event-plan-person-item/event-plan-person-item.component';
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {EventsStepEventPlanComponent} from './event-plan/step/events-step-event-plan/events-step-event-plan.component';
+import {EventPlanLoadsComponent} from './event-plan/step/events-step-event-plan/event-plan-loads/event-plan-loads.component';
+import {EventModule} from '../event/event.module';
+import {EventLoadsComponent} from './event-loads/event-loads.component';
 
 @NgModule({
   imports: [
@@ -41,10 +45,25 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
     NgxTabModule,
     DxDateBoxModule,
     HtmlContentModule,
-    NgxImageModule
+    NgxImageModule,
+    EventModule
   ],
-  declarations: [EventPlansComponent, EventPlanComponent, EditEventPlanComponent, GeneralStepEventPlanComponent, PersonsStepEventPlanComponent, PersonsEventPlanComponent, EventPlanPersonItemComponent],
-  entryComponents: [EditEventPlanComponent]
+  declarations: [
+    EventPlansComponent,
+    EventPlanComponent,
+    EditEventPlanComponent,
+    GeneralStepEventPlanComponent,
+    PersonsStepEventPlanComponent,
+    PersonsEventPlanComponent,
+    EventPlanPersonItemComponent,
+    EventsStepEventPlanComponent,
+    EventPlanLoadsComponent,
+    EventLoadsComponent
+  ],
+  entryComponents: [
+    EditEventPlanComponent,
+    EventLoadsComponent
+  ]
 })
 export class EventPlanModule {
 }

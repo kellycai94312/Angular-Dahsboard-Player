@@ -454,5 +454,35 @@
   "finishDate": "Finish date",
   "attention": "Attention",
   "discard": "Discard",
-  "unsavedChangesOnThisPageQuestion": "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?"
+  "unsavedChangesOnThisPageQuestion": "You have unsaved changes on this page. Do you want to leave this page and discard your changes or stay on this page?",
+  "periodEnum": {
+    "DAY": "Day",
+    "WEEK": "Week",
+    "MONTH": "Month",
+    "YEAR": "Year"
+  },
+  "period": "Period",
+  "eventPlanLoadTypeEnum": {
+    "HOURS": "Hours",
+    "INTENSITY": "Intensity"
+  },
+  "loadType": "Load type",
+  "trainingType": "Training type",
+  "trainingTypeEnum": {
+    "BASE": "Base",
+    "VELO": "Velo"
+  },
+  "newEvent": "New event",
+  "createTemplate": "Create a template",
+  "templateCreated": "Template created",
+  "dateOutsidePlan": "Date outside event plan",
+  "editLoad": "Edit load",
+  "fromPlan": "From plan",
+  "planned": "Planned",
+  "teamTypeEnum": {
+    "AMATEUR": "Amateur",
+    "PROFESSIONAL": "Professional",
+    "NATIONAL": "National"
+  },
+  "language": "Language"
 }

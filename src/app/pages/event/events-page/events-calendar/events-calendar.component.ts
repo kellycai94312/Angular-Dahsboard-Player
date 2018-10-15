@@ -1,19 +1,23 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {CalendarDateFormatter, CalendarEvent, DAYS_OF_WEEK} from 'angular-calendar';
 import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {Router} from '@angular/router';
 import {Sort} from '../../../../data/remote/rest-api/sort';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {CustomDateFormatter} from '../../../../components/calendar-utils/custom-date-formatter.prodiver';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
-import {DatePipe} from '@angular/common';
 import {EventsCalendarService} from './events-calendar.service';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EventTypeComponent} from '../../event-type/event-type.component';
+import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
+import {AppHelper} from '../../../../utils/app-helper';
+import {EditEventComponent} from '../../edit-event/edit-event.component';
+import {EventPlan} from '../../../../data/remote/model/training/plan/event-plan';
 
 @Component({
   selector: 'app-events-calendar',
@@ -27,6 +31,9 @@ import {EventsCalendarService} from './events-calendar.service';
   ]
 })
 export class EventsCalendarComponent implements OnInit {
+
+  @Input()
+  public eventPlan: EventPlan;
 
   view = 'month';
 
@@ -45,8 +52,9 @@ export class EventsCalendarComponent implements OnInit {
               private _localStorageService: LocalStorageService,
               private _dateFormatter: CustomDateFormatter,
               private _modalService: NgbModal,
-              private _datePipe: DatePipe,
-              private _router: Router) {
+              private _router: Router,
+              private _ngxModalService: NgxModalService,
+              private _appHelper: AppHelper) {
     this._trainingQuery = new BaseTrainingQuery();
     this._trainingQuery.from = 0;
     this._trainingQuery.count = PropertyConstant.pageSizeMax;
@@ -55,33 +63,34 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.loadEvents();
+    await this.loadEvents();
   }
 
-  async loadEvents() {
+  public async loadEvents() {
     const start = await this.getDateFrom();
     const end = await this.getDateTo();
     end.setDate(end.getDate() + 1);
-    const dateFrom: any = await this.formatDate(start);
-    const dateTo: any = await this.formatDate(end);
 
-    this._trainingQuery.dateFrom = dateFrom;
-    this._trainingQuery.dateTo = dateTo;
+    if (this.eventPlan) {
+      this._trainingQuery.eventPlanId = this.eventPlan.id;
+    } else {
+      delete this._trainingQuery.eventPlanId;
+    }
 
-    this.events = await this._participantRestApiService.getBaseTrainings(this._trainingQuery)
-      .then((pageContainer: PageContainer<BaseTraining>) => {
-        return pageContainer.list.map((event: BaseTraining) => {
-          return {
-            title: event.name,
-            start: new Date(event.startTime),
-            end: event.finishTime ? new Date(event.finishTime) : null,
-            color: this._eventsCalendarService.getTrainingColor(event),
-            meta: {
-              event
-            }
-          };
-        });
-      });
+    this._trainingQuery.dateFrom = new Date(this.formatDate(start));
+    this._trainingQuery.dateTo = new Date(this.formatDate(end));
+
+    this.events = (await this._participantRestApiService.getBaseTrainings(this._trainingQuery)).list.map((event: BaseTraining) => {
+      return {
+        title: event.name,
+        start: event.startTime ? new Date(event.startTime) : new Date(Date.now() + event.daysOffset * 24 * 60 * 60 * 1000),
+        end: event.finishTime ? new Date(event.finishTime) : new Date(Date.now() + event.daysOffset * 24 * 60 * 60 * 1000 + event.durationMs),
+        color: this._eventsCalendarService.getTrainingColor(event),
+        meta: {
+          event
+        }
+      };
+    });
   }
 
   async onDaySelected({date, events}: { date: Date; events: Array<CalendarEvent<{ film: BaseTraining }>>; }) {
@@ -90,11 +99,49 @@ export class EventsCalendarComponent implements OnInit {
     ref.componentInstance.events = events;
   }
 
-  async onEventClicked(calendarEvent: CalendarEvent<{ event: BaseTraining }>) {
-    const event = calendarEvent.meta.event;
-    if (event.discriminator === 'GAME') {
-      await this._router.navigate(['/event', event.id]);
+  public async onDayClick(date: Date) {
+    const selectedEventType = await this.showSelectEventTypeModal();
+    if (selectedEventType) {
+      const modal = this._ngxModalService.open();
+      modal.componentInstance.titleKey = 'edit';
+      await modal.componentInstance.initializeBody(EditEventComponent, async component => {
+        component.manualInitialization = true;
+        component.date = new Date(date);
+        const event: BaseTraining = this._appHelper.eventFactory(selectedEventType);
+        event.startTime = date;
+        event.finishTime = new Date(date.getTime() + 30 * 60 * 1000);
+        event.eventPlan = this.eventPlan;
+        await component.initialize(event);
+
+        modal.componentInstance.splitButtonItems = [
+          this._ngxModalService.saveSplitItemButton(async () => {
+            await this._ngxModalService.save(modal, component);
+          })
+        ];
+      });
+
+      if (await this._ngxModalService.awaitModalResult(modal)) {
+        await this.loadEvents();
+      }
     }
+  }
+
+  private async showSelectEventTypeModal(): Promise<TrainingDiscriminator> {
+    let selectedEventType: TrainingDiscriminator = null;
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'selection';
+    await modal.componentInstance.initializeBody(EventTypeComponent, async component => {
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            selectedEventType = component.selectedEventType.data;
+            modal.close();
+          }
+        }
+      ];
+    });
+    return await this._ngxModalService.awaitModalResult(modal) ? selectedEventType : null;
   }
 
   private async getDateFrom() {
@@ -115,8 +162,8 @@ export class EventsCalendarComponent implements OnInit {
     return getDate(this.viewDate);
   }
 
-  private async formatDate(date: Date) {
-    return this._datePipe.transform(date, PropertyConstant.dateFormat);
+  private formatDate(date: Date): string {
+    return this._appHelper.dateByFormat(date, PropertyConstant.dateFormat);
   }
 
 }

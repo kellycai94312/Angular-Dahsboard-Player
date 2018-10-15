@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {Sex} from '../../../data/local/sex';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {UserRole} from '../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
@@ -18,6 +17,7 @@ import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
 import {Router} from '@angular/router';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-connections-page',
@@ -36,7 +36,7 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
 
   public personQuery: PersonQuery;
 
-  public sexItems: Sex[];
+  public sexEnums: NameWrapper<SexEnum>[];
   public userRoles: UserRole[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -49,19 +49,11 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
     this.personQuery.count = PropertyConstant.pageSize;
 
     this.pageSize = PropertyConstant.pageSize;
-    this.sexItems = [];
     this.userRoles = [];
   }
 
   async ngOnInit() {
-    const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    for (let i = 0; i < temp.length; i++) {
-      const sex = new Sex();
-      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
-      sex.sexEnum = temp[i];
-      this.sexItems.push(sex);
-    }
-
+    this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
@@ -79,7 +71,7 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
 //#region Filter
 
   public async onYearBirthChanged(value: Date) {
-    if (value != null) {
+    if (value) {
       this.personQuery.yearBirth = value.getFullYear();
     } else {
       delete this.personQuery.yearBirth;
@@ -87,9 +79,9 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
     await this.updateItems();
   }
 
-  public async onSexChanged(value: Sex) {
-    if (value != null) {
-      this.personQuery.sex = SexEnum[value.sexEnum].toString();
+  public async onSexChanged(value: NameWrapper<SexEnum>) {
+    if (value) {
+      this.personQuery.sex = value.data;
     } else {
       delete this.personQuery.sex;
     }
@@ -122,7 +114,7 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
   };
 
   public async onGroupChanged(value: Group) {
-    if (value != null) {
+    if (value) {
       this.personQuery.groupId = value.id;
     } else {
       delete this.personQuery.groupId;
@@ -131,7 +123,7 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
   }
 
   public async onSportTypeChanged(value: SportType) {
-    if (value != null) {
+    if (value) {
       this.personQuery.sportTypeId = value.id;
     } else {
       delete this.personQuery.sportTypeId;

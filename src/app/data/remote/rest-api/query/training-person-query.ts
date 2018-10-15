@@ -1,8 +1,6 @@
-import {PageQuery} from '../page-query';
 import {UserRoleEnum} from '../../model/user-role-enum';
+import {PersonQuery} from './person-query';
 
-export class TrainingPersonQuery extends PageQuery {
-  public unassigned?: boolean;
-  public userRole?: UserRoleEnum;
-  public groupId?: number;
+export class TrainingPersonQuery extends PersonQuery {
+  userRoleEnum: UserRoleEnum;
 }

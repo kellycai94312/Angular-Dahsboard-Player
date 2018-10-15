@@ -3,8 +3,8 @@
 <div class="mt-2">
   <ngx-virtual-scroll class="list-group-flush"
                       [getItems]="getItems"
-                      count="99999"
-                      windowScroll="true">
+                      [count]="propertyConstantClass.pageSizeMax"
+                      [windowScroll]="true">
     <ng-template let-item>
       <div class="list-group-item p-0">
         <app-training-report-block [data]="item"></app-training-report-block>

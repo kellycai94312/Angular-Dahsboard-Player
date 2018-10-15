@@ -1,6 +1,6 @@
 <button class="btn btn-primary input-height-sm {{classes}}"
         [disabled]="disabled ? disabled() : false"
-        (click)="onClick($event)"
+        (click)="onClick($event); $event.stopPropagation()"
         (keyup.enter)="onKeyUp($event)">
   <i *ngIf="icon && !busyDisplay"
      [class]="icon"></i>

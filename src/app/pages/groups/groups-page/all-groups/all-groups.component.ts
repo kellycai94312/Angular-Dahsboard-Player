@@ -61,7 +61,7 @@ export class AllGroupsComponent implements OnInit {
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
+    this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     this.stages = await this._participantRestApiService.getStages();
     this.stageTypes = await this._participantRestApiService.getStageTypes();
 
@@ -76,16 +76,16 @@ export class AllGroupsComponent implements OnInit {
   //#region Filters
 
   public async onGroupTypeChanged(value: GroupType) {
-    if (value != null) {
-      this.groupQuery.groupTypeId = value.id;
+    if (value) {
+      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
     } else {
-      delete this.groupQuery.groupTypeId;
+      delete this.groupQuery.groupTypeEnum;
     }
     await this.updateItems();
   }
 
   public async onAgeGroupChanged(value: AgeGroup) {
-    if (value != null) {
+    if (value) {
       this.groupQuery.ageGroupId = value.id;
     } else {
       delete this.groupQuery.ageGroupId;
@@ -94,7 +94,7 @@ export class AllGroupsComponent implements OnInit {
   }
 
   public async onLeagueChanged(value: League) {
-    if (value != null) {
+    if (value) {
       this.groupQuery.leagueId = value.id;
     } else {
       delete this.groupQuery.leagueId;

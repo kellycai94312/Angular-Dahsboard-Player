@@ -1,12 +1,16 @@
-<div class="event-calendar-item"
+<div *ngIf="event.meta.event && !event.meta.event.deleted"
+     class="event-calendar-item"
+     [ngStyle]="{'color' : fontColor}"
      [ngClass]="{'d-inline' : displayInline, 'bordered' : displayBorderBottom}">
-  <p class="d-inline" [ngStyle]="{'color' : fontColor}">{{event.start | date:'HH:mm'}}</p>
-  <p class="d-inline" [ngStyle]="{'color' : fontColor}" *ngIf="event.end"> - {{event.meta.event.finishTime |
-    date:'HH:mm'}}</p>
-  <p [ngClass]="{'pl-1' : displayInline, 'd-inline' : displayInline}">
-    <a routerLink="/event/{{event.meta.event.id}}"
-       [ngStyle]="{'color' : fontColor}"
-       [class.disabled]="event.meta.event.discriminator !== 'GAME'"
-       (click)="onOpenEventClick()">{{event.title}}</a>
-  </p>
+
+  <div class="d-flex flex-row w-100">
+    <div class="mr-auto"
+         (click)="onShow()">
+      <p>{{(event.start | date: propertyConstantClass.timeFormat) + (event.meta.event.finishTime ? ' - ' + (event.meta.event.finishTime | date: propertyConstantClass.timeFormat) : '')}}</p>
+      <a>{{event.title}}</a>
+    </div>
+    <ngx-button class="ml-2"
+                [icon]="iconEnumClass.EDIT"
+                [click]="edit"></ngx-button>
+  </div>
 </div>

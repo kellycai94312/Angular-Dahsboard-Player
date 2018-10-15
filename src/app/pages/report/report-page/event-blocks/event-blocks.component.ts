@@ -14,6 +14,7 @@ import {ReportsService} from '../../../../shared/reports.service';
 import {TrainingReportBlockComponent} from '../../component/training-report-block/training-report-block.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {ReportExtension} from '../../../../data/remote/bean/report-extension';
+import {PropertyConstant} from '../../../../data/local/property-constant';
 
 @Component({
   selector: 'app-event-blocks',
@@ -21,6 +22,8 @@ import {ReportExtension} from '../../../../data/remote/bean/report-extension';
   styleUrls: ['./event-blocks.component.scss']
 })
 export class EventBlocksComponent implements OnInit {
+
+  public readonly propertyConstantClass = PropertyConstant;
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;

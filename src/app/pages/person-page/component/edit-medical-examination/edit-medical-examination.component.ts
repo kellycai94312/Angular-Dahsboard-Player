@@ -48,7 +48,7 @@ export class EditMedicalExaminationComponent extends BaseEditComponent<MedicalEx
 
   async onSave(): Promise<boolean> {
     return this.appHelper.trySave(async () => {
-      this.data.passDate = this.appHelper.dateByFormat(this.data.passDate, PropertyConstant.dateTimeServerFormat);
+      this.data.passDate = this.appHelper.getGmtDate(this.data.passDate);
       if (this.appHelper.isNewObject(this.data)) {
         this.data = await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.personId});
       } else {

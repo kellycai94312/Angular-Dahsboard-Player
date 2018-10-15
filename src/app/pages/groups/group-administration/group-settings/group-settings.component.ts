@@ -24,7 +24,6 @@ export class GroupSettingsComponent implements OnInit {
   public group: Group;
   public leagues: League[];
   public ageGroups: AgeGroup[];
-
   public pageSize: number;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -37,7 +36,7 @@ export class GroupSettingsComponent implements OnInit {
 
     if (this.group.groupType.groupTypeEnum === GroupTypeEnum.TEAM) {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as GroupTeam).sportType.id});
-      this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
+      this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     }
   }
 

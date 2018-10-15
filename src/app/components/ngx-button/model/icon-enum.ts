@@ -4,5 +4,7 @@ export enum IconEnum {
   BOOK = 'fa fa-book',
   DOWNLOAD = 'fa fa-download',
   REMOVE = 'fa fa-trash',
-  IMAGE = 'fa fa-image'
+  IMAGE = 'fa fa-image',
+  TABLE = 'fa fa-table',
+  CALENDAR = 'fa fa-calendar'
 }

@@ -19,6 +19,10 @@ import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-m
 import {Router} from '@angular/router';
 import {ICanDeactivate} from '../../../../../data/local/component/ican-deactivate';
 import {ChangeWatcher} from '../../../../../data/local/util/change-watcher';
+import {NgxSelectionComponent} from '../../../../../components/ngx-selection/ngx-selection/ngx-selection.component';
+import {PreviewNamedObjectComponent} from '../../../../../components/named-object/preview-named-object/preview-named-object.component';
+import {PageContainer} from '../../../../../data/remote/bean/page-container';
+import {EventPlanQuery} from '../../../../../data/remote/rest-api/query/event/plan/event-plan-query';
 
 @Component({
   selector: 'app-general-step-event-plan',
@@ -101,8 +105,8 @@ export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate 
           default: true,
           callback: async () => {
             await this._appHelper.trySave(async () => {
-              this.eventPlan.startTime = this._appHelper.dateByFormat(this.eventPlan.startTime, PropertyConstant.dateTimeServerFormat);
-              this.eventPlan.finishTime = this._appHelper.dateByFormat(this.eventPlan.finishTime, PropertyConstant.dateTimeServerFormat);
+              this.eventPlan.startTime = this._appHelper.getGmtDate(this.eventPlan.startTime);
+              this.eventPlan.finishTime = this._appHelper.getGmtDate(this.eventPlan.finishTime);
 
               if (this._changeWatcher.hasChangesObject(this._eventPlanName)) {
                 this._appHelper.updateObject(this.eventPlan, await this._participantRestApiService.updateEventPlan(this.eventPlan, {}, {eventPlanId: this.eventPlan.id}));
@@ -122,13 +126,59 @@ export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate 
           }
         },
         {
-          nameKey: 'saveAsTemplate',
+          nameKey: 'createTemplate',
           callback: async () => {
+            await this._appHelper.tryAction('templateCreated', 'saveError', async () => {
+              await this._participantRestApiService.createEventPlanTemplate({id: this.eventPlan.id});
+            });
           }
         },
         {
           nameKey: 'applyTemplate',
           callback: async () => {
+            const modal = this._ngxModalService.open();
+            modal.componentInstance.titleKey = 'selection';
+            await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+              const fetchItems = async (query: EventPlanQuery): Promise<PageContainer<EventPlan>> => {
+                query.template = true;
+                return await this._participantRestApiService.getEventPlans(query);
+              };
+
+              const initializeComponent = async (componentItem: PreviewNamedObjectComponent<EventPlan>, data: EventPlan) => {
+                componentItem.data = data;
+
+                let duration = '';
+                if (data.daysAmount) {
+                  duration += `${data.daysAmount} ${await this._translateObjectService.getTranslation('days')}`;
+                }
+                if (data.weeksAmount) {
+                  duration += ` ${data.weeksAmount} ${await this._translateObjectService.getTranslation('weeks')}`;
+                }
+                if (data.monthsAmount) {
+                  duration += ` ${data.monthsAmount} ${await this._translateObjectService.getTranslation('months')}`;
+                }
+                if (data.yearsAmount) {
+                  duration += ` ${data.yearsAmount} ${await this._translateObjectService.getTranslation('years')}`;
+                }
+                componentItem.name = `${data.name} (${duration})`;
+              };
+              component.maxCount = 1;
+              await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, []);
+              modal.componentInstance.splitButtonItems = [
+                {
+                  nameKey: 'apply',
+                  callback: async () => {
+                    if (!component.selectedItems || !component.selectedItems.length) {
+                      return;
+                    }
+                    await this._appHelper.trySave(async () => {
+                      await this._participantRestApiService.updateEventPlanTemplate({id: (component.selectedItems[0] as EventPlan).id}, {}, {eventPlanId: this.eventPlan.id});
+                      modal.close();
+                    });
+                  }
+                }
+              ];
+            });
           }
         },
         {

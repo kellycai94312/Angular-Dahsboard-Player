@@ -3,7 +3,6 @@ import {BaseEditComponent} from '../../../../data/local/component/base/base-edit
 import {Person} from '../../../../data/remote/model/person';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {Sex} from '../../../../data/local/sex';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {Group} from '../../../../data/remote/model/group/base/group';
@@ -23,6 +22,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {EditGroupPersonComponent} from '../../../groups/component/edit-group-person/edit-group-person.component';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {RanksComponent} from '../../person-page/ranks/ranks.component';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-edit-person',
@@ -33,9 +33,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   public readonly dateMin: Date;
   public readonly dateMax: Date;
-  public readonly sexValues: Sex[];
-
-  public selectedSex: Sex;
+  public sexEnums: NameWrapper<SexEnum>[];
+  public selectedSexEnum: NameWrapper<SexEnum>;
   public userRoles: UserRole[];
   public sportTypes: SportType[];
   public groups: Group[];
@@ -48,7 +47,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
               private _modalService: NgbModal,
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
-    this.sexValues = [];
     this.dateMin = PersonContant.getBirthDateMin();
     this.dateMax = PersonContant.getBirthDateMax();
     this.userRoles = [];
@@ -58,15 +56,12 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   async ngOnInit(): Promise<void> {
     await super.ngOnInit();
-    await this.appHelper.tryLoad(async () => {
-      const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-      for (let i = 0; i < temp.length; i++) {
-        const sex = new Sex();
-        sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
-        sex.sexEnum = temp[i];
-        this.sexValues.push(sex);
-      }
-    });
+
+    this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
+    this.selectedSexEnum = this.sexEnums[0];
+    if (this.data.sex) {
+      this.selectedSexEnum = this.sexEnums.find(x => x.data === this.data.sex);
+    }
   }
 
   async onRemove(): Promise<boolean> {
@@ -84,10 +79,9 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     }
 
     return await this.appHelper.trySave(async () => {
-      this.data.sex = this.selectedSex.sexEnum;
       const request = new PersonTemplateRequest();
       request.person = this.data;
-      request.person.birthDate = this.appHelper.dateByFormat(request.person.birthDate, PropertyConstant.dateTimeServerFormat);
+      request.person.birthDate = this.appHelper.getGmtDate(request.person.birthDate);
       request.userRoleIds = this.userRoles.map(userRole => new IdRequest(userRole.id));
       request.sportTypeIds = this.sportTypes.map(sportType => new IdRequest(sportType.id));
       request.groupIds = this.groups.map(group => new IdRequest(group.id));
@@ -187,5 +181,9 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       component.personId = this.data.id;
     });
   };
+
+  public onSexChanged(val: NameWrapper<SexEnum>) {
+    this.data.sex = val.data;
+  }
 
 }

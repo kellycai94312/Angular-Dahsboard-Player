@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {TrainingQuery} from '../../../../data/remote/rest-api/query/training-query';
 import {PersonService} from '../person.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
@@ -13,6 +12,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {ReportsComponent} from '../../../../components/report/reports/reports.component';
 import {EventModalComponent} from './event-modal/event-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 
 @Component({
   selector: 'app-events',
@@ -31,7 +31,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;
 
-  public trainingQuery: TrainingQuery;
+  public trainingQuery: BaseTrainingQuery;
 
   private readonly userRoleSubscription: ISubscription;
 
@@ -42,10 +42,9 @@ export class EventsComponent implements OnInit, OnDestroy {
               private _modalService: NgbModal,
               private _ngxModalService: NgxModalService) {
     this.pageSize = PropertyConstant.pageSize;
-    this.trainingQuery = new TrainingQuery();
+    this.trainingQuery = new BaseTrainingQuery();
     this.trainingQuery.from = 0;
     this.trainingQuery.count = this.pageSize;
-    this.trainingQuery.personId = this._personService.personViewModel.data.id;
 
     if (this._personService.selectedUserRole) {
       this.trainingQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
@@ -130,8 +129,8 @@ export class EventsComponent implements OnInit, OnDestroy {
     });
   };
 
-  public fetchItems: Function = async (query: TrainingQuery) => {
-    return await this._participantRestApiService.getPersonTrainings(query);
+  public fetchItems: Function = async (query: BaseTrainingQuery) => {
+    return await this._participantRestApiService.getPersonTrainings({}, query, {personId: this._personService.personViewModel.data.id});
   };
 
   private async resetItems() {

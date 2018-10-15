@@ -30,6 +30,12 @@ export class EditEventPlanComponent extends BaseEditComponent<EventPlan> {
     super(participantRestApiService, appHelper);
   }
 
+  async initialize(obj: EventPlan): Promise<boolean> {
+    await super.initialize(obj);
+    obj.template = obj.template || false;
+    return true;
+  }
+
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       if (this.appHelper.isNewObject(this.data)) {

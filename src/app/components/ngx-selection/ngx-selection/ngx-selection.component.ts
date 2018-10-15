@@ -39,6 +39,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   @Input()
   public compare: (first: TModel, second: TModel) => boolean;
 
+  @Input()
+  public maxCount: number;
+
   constructor(private _appHelper: AppHelper) {
     this.query = <TQuery>{};
     this.compare = (first, second) => {
@@ -75,6 +78,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   }
 
   public onSelected(item: TModel) {
+    if (!this.canSelect()) {
+      return;
+    }
     this._appHelper.removeItem(this.ngxVirtualScrollComponent.items, item);
     this.selectedItems.push(item);
   }
@@ -89,5 +95,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
       await this.add();
     }
   };
+
+  public canSelect() {
+    return !this.maxCount || this.selectedItems.length < this.maxCount;
+  }
 
 }

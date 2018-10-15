@@ -44,6 +44,7 @@ import {ImageModule} from './components/image/image.module';
 import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
 import {NgxBreadcrumbModule} from './components/ngx-breadcrumb/ngx-breadcrumb.module';
 import {CanDeactivateGuard} from './guard/can-deactivate.guard';
+import {LocaleModule} from './components/locale/locale.module';
 
 registerLocaleData(localeRu);
 
@@ -85,7 +86,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     RoundPipeModule.forRoot(),
     ImageModule,
     MessageToastrModule,
-    NgxBreadcrumbModule
+    NgxBreadcrumbModule,
+    LocaleModule
   ],
   providers: [
     LayoutService,
