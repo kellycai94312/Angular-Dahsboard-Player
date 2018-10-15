@@ -4,12 +4,12 @@ import {TranslateService} from '@ngx-translate/core';
 import notify from 'devextreme/ui/notify';
 
 import {SexEnum} from '../../../data/remote/misc/sex-enum';
-import {Sex} from '../../../data/local/sex';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {Person} from '../../../data/remote/model/person';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {PersonContant} from '../../../data/local/person-contant';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-registration-person-page',
@@ -18,34 +18,23 @@ import {PersonContant} from '../../../data/local/person-contant';
 })
 export class RegistrationPersonPageComponent implements OnInit {
 
-  public person: Person;
-
   public readonly dateMin: Date;
   public readonly dateMax: Date;
-
-  public readonly sexValues: Array<Sex>;
-  public selectedSex: Sex;
+  public person: Person;
+  public sexEnums: NameWrapper<SexEnum>[];
 
   constructor(private _translate: TranslateService,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService,
               private _authorizationService: AuthorizationService,
               private _router: Router) {
-    this.sexValues = [];
     this.person = new Person();
     this.dateMin = PersonContant.getBirthDateMin();
     this.dateMax = PersonContant.getBirthDateMax();
   }
 
   async ngOnInit() {
-    const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    for (let i = 0; i < temp.length; i++) {
-      const sex = new Sex();
-      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
-      sex.sexEnum = temp[i];
-      this.sexValues.push(sex);
-    }
-
+    this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.person.user = await this._participantRestApiService.getUser({id: this._authorizationService.session.userId});
   }
 
@@ -53,7 +42,6 @@ export class RegistrationPersonPageComponent implements OnInit {
     const result = event.validationGroup.validate();
     if (result.isValid) {
       try {
-        this.person.sex = this.selectedSex.sexEnum;
         this.person = await this._participantRestApiService.createPerson(this.person);
         if (this.person) {
           await this._authorizationService.updateSession();
@@ -65,6 +53,10 @@ export class RegistrationPersonPageComponent implements OnInit {
         await this.showErrorMessage();
       }
     }
+  }
+
+  public onSexChanged(val: NameWrapper<SexEnum>) {
+    this.person.sex = val.data;
   }
 
   private async showErrorMessage(): Promise<void> {

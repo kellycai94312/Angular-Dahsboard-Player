@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {TrainingQuery} from '../../../data/remote/rest-api/query/training-query';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
@@ -12,6 +11,7 @@ import {TrainingAccess} from '../../../data/remote/misc/training-access';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 
 @Component({
   selector: 'app-group-events',
@@ -29,7 +29,7 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public trainingQuery: TrainingQuery;
+  public trainingQuery: BaseTrainingQuery;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupService: GroupService,
@@ -38,11 +38,10 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
     this.pageSize = PropertyConstant.pageSize;
     this.isEditAllow = this._groupService.isEditAllow();
 
-    this.trainingQuery = new TrainingQuery();
+    this.trainingQuery = new BaseTrainingQuery();
     this.trainingQuery.name = '';
     this.trainingQuery.from = 0;
     this.trainingQuery.count = this.pageSize;
-    this.trainingQuery.groupId = this._groupService.getGroup().id;
   }
 
   async ngOnInit() {
@@ -94,7 +93,7 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
     ref.componentInstance.trainingGroup = Object.assign({}, item);
     ref.componentInstance.onSave = async (access: TrainingAccess) => {
       await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
-        groupId: this.trainingQuery.groupId,
+        groupId: this._groupService.getGroup().id,
         trainingId: item.baseTraining.id
       });
       item.access = access;

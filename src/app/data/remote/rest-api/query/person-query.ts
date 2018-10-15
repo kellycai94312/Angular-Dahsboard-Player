@@ -1,13 +1,15 @@
 import {PageQuery} from '../page-query';
 import {UserRoleEnum} from '../../model/user-role-enum';
+import {SexEnum} from '../../misc/sex-enum';
 
 export class PersonQuery extends PageQuery {
-  public yearBirth?: number;
-  public sex?: string;
-  public userRoleEnum?: UserRoleEnum;
-  public groupId?: number;
-  public sportTypeId?: number;
-  public cityId?: number;
-  public template?: boolean;
-  public unassigned?: boolean;
+  userRoleEnum?: UserRoleEnum;
+  yearBirth?: number;
+  sex?: SexEnum;
+  groupId?: number;
+  sportTypeId?: number;
+  cityId?: number;
+  template?: boolean;
+
+  unassigned?: boolean;
 }

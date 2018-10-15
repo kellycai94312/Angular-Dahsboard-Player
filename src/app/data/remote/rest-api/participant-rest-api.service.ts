@@ -34,7 +34,6 @@ import {ExerciseResult} from '../bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
 import {Location} from '../model/location';
-import {TrainingQuery} from './query/training-query';
 import {TrainingPerson} from '../model/training/training-person';
 import {TrainingGroup} from '../model/training-group';
 import {TrainingAccess} from '../misc/training-access';
@@ -417,7 +416,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/training',
   })
-  getPersonTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingPerson>>;
+  getPersonTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { personId: number }, PageContainer<TrainingPerson>>;
 
   //#endregion
 
@@ -663,7 +662,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/training',
   })
-  getGroupTrainings: IRestMethod<TrainingQuery, PageContainer<TrainingGroup>>;
+  getGroupTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { groupId: number }, PageContainer<TrainingGroup>>;
 
   @RestAction({
     method: RestRequestMethod.Post,

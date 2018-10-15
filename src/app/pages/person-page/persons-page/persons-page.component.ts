@@ -3,7 +3,6 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
-import {Sex} from '../../../data/local/sex';
 import {SexEnum} from '../../../data/remote/misc/sex-enum';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {UserRole} from '../../../data/remote/model/user-role';
@@ -22,6 +21,7 @@ import {Direction} from '../../../components/ngx-virtual-scroll/model/direction'
 import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
 import {EditPersonComponent} from '../component/edit-person/edit-person.component';
 import {Person} from '../../../data/remote/model/person';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-persons-page',
@@ -39,7 +39,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public personQuery: PersonQuery;
-  public sexItems: Sex[];
+  public sexEnums: NameWrapper<SexEnum>[];
   public userRoles: UserRole[];
   public canCreatePerson: boolean;
 
@@ -55,22 +55,13 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
     this.personQuery.from = 0;
     this.personQuery.count = this.pageSize;
     this.personQuery.template = false;
-
-    this.sexItems = [];
     this.userRoles = [];
   }
 
   async ngOnInit() {
     this.canCreatePerson = await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
 
-    const temp = Object.keys(SexEnum).filter(x => !isNaN(Number(SexEnum[x]))).map(x => SexEnum[x]);
-    for (let i = 0; i < temp.length; i++) {
-      const sex = new Sex();
-      sex.name = await this._translateObjectService.getTranslateName('SexEnum', SexEnum[temp[i]].toString());
-      sex.sexEnum = temp[i];
-      this.sexItems.push(sex);
-    }
-
+    this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
@@ -88,7 +79,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   //#region Filter
 
   public async onYearBirthChanged(value: Date) {
-    if (value != null) {
+    if (value) {
       this.personQuery.yearBirth = value.getFullYear();
     } else {
       delete this.personQuery.yearBirth;
@@ -96,9 +87,9 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
     await this.updateItems();
   }
 
-  public async onSexChanged(value: Sex) {
-    if (value != null) {
-      this.personQuery.sex = SexEnum[value.sexEnum].toString();
+  public async onSexChanged(val: NameWrapper<SexEnum>) {
+    if (val) {
+      this.personQuery.sex = val.data;
     } else {
       delete this.personQuery.sex;
     }
@@ -139,7 +130,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   };
 
   public async onGroupChanged(value: Group) {
-    if (value != null) {
+    if (value) {
       this.personQuery.groupId = value.id;
     } else {
       delete this.personQuery.groupId;
@@ -148,7 +139,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   }
 
   public async onCityChanged(value: City) {
-    if (value != null) {
+    if (value) {
       this.personQuery.cityId = value.id;
     } else {
       delete this.personQuery.cityId;
@@ -157,7 +148,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   }
 
   public async onSportTypeChanged(value: SportType) {
-    if (value != null) {
+    if (value) {
       this.personQuery.sportTypeId = value.id;
     } else {
       delete this.personQuery.sportTypeId;
