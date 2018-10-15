@@ -126,7 +126,7 @@ export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate 
           }
         },
         {
-          nameKey: 'creatingTemplate',
+          nameKey: 'createTemplate',
           callback: async () => {
             await this._appHelper.tryAction('templateCreated', 'saveError', async () => {
               await this._participantRestApiService.createEventPlanTemplate({id: this.eventPlan.id});

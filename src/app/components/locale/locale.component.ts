@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {LocalStorageService} from '../../shared/local-storage.service';
 import {TranslateService} from '@ngx-translate/core';
 
@@ -8,6 +8,9 @@ import {TranslateService} from '@ngx-translate/core';
   styleUrls: ['./locale.component.scss']
 })
 export class LocaleComponent {
+
+  @Input()
+  public compact: boolean;
 
   constructor(public translate: TranslateService,
               private _localStorageService: LocalStorageService) {

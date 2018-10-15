@@ -16,11 +16,11 @@ export class EventGroupQuery extends PageQuery {
   stageEnum?: StageEnum;
   stageTypeEnum?: StageTypeEnum;
   stageYear?: number;
-  //все группы или привязанные к пользователю
+  // Все группы или привязанные к пользователю
   all?: boolean;
-  //подтвержден ли пользователь в группе
+  // Подтвержден ли пользователь в группе
   approved?: boolean;
-  //является ли пользователь администратором группы
+  // Является ли пользователь администратором группы
   admin?: boolean;
   unassigned?: boolean;
 }

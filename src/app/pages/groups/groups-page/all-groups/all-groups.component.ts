@@ -61,7 +61,7 @@ export class AllGroupsComponent implements OnInit {
 
   async ngOnInit() {
     this.groupTypes = await this._participantRestApiService.getGroupTypes();
-    this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: 9999})).list;
+    this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     this.stages = await this._participantRestApiService.getStages();
     this.stageTypes = await this._participantRestApiService.getStageTypes();
 

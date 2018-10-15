@@ -114,8 +114,8 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
         .subscribe(data => this.game.groupScores = data);
     }
 
-    this.locations = (await this._participantRestApiService.getLocations({count: 999999})).list;
-    this.sportTypes = (await this._participantRestApiService.getSportTypes({count: 999999})).list;
+    this.locations = (await this._participantRestApiService.getLocations({count: PropertyConstant.pageSizeMax})).list;
+    this.sportTypes = (await this._participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
   }
 
   public async onSetTrainingPartDuration(trainingPart: TrainingPart, value: Date) {

@@ -473,10 +473,16 @@
     "VELO": "Velo"
   },
   "newEvent": "New event",
-  "creatingTemplate": "Creating a template",
+  "createTemplate": "Create a template",
   "templateCreated": "Template created",
   "dateOutsidePlan": "Date outside event plan",
   "editLoad": "Edit load",
   "fromPlan": "From plan",
-  "planned": "Planned"
+  "planned": "Planned",
+  "teamTypeEnum": {
+    "AMATEUR": "Amateur",
+    "PROFESSIONAL": "Professional",
+    "NATIONAL": "National"
+  },
+  "language": "Language"
 }

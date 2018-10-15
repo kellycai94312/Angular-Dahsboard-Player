@@ -11,6 +11,7 @@ import {EventPlanLoad} from '../../../data/remote/model/training/plan/event-plan
 import {Row} from '../../../data/local/row';
 import {EstimatedParameter} from '../../../data/remote/model/training/testing/estimated-parameter';
 import {EventPlanLoadPeriod} from '../../../data/remote/bean/event-plan-load-period';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'app-event-loads',
@@ -46,7 +47,7 @@ export class EventLoadsComponent {
       eventPlanId: event.eventPlan.id,
       eventPlanPeriodEnum: Period.DAY,
       eventPlanLoadTypeEnum: this.selectedLoadType.data,
-      count: 9999
+      count: PropertyConstant.pageSizeMax
     })).list.find(x => {
       const dateOffset = this._appHelper.getDateByPeriodOffset(event.eventPlan.startTime || new Date(), Period.DAY, x.periodOffset);
       dateOffset.setHours(0, 0, 0, 0);
@@ -59,7 +60,7 @@ export class EventLoadsComponent {
       eventPlanPeriodEnum: Period.DAY,
       eventPlanLoadTypeEnum: this.selectedLoadType.data,
       eventPlanTrainingValueEnum: EventPlanTrainingValueEnum.PLAN,
-      count: 9999
+      count: PropertyConstant.pageSizeMax
     })).list[0];
 
     this.rows = [];
@@ -89,13 +90,13 @@ export class EventLoadsComponent {
 
   public async onFocusOut(eventPlanLoad: EventPlanLoad): Promise<void> {
     const isNew = this._appHelper.isNewObject(eventPlanLoad);
-    const valueIsUndefinedOrNull = this._appHelper.isUndefinedOrNull(eventPlanLoad.value);
-    if (isNew && valueIsUndefinedOrNull) {
+    const value = this._appHelper.isUndefinedOrNull(eventPlanLoad.value);
+    if (isNew && value) {
       return;
     }
 
     await this._appHelper.trySave(async () => {
-      if (valueIsUndefinedOrNull) {
+      if (value) {
         if (!isNew) {
           Object.assign(eventPlanLoad, await this._participantRestApiService.removeEventPlanLoad({eventPlanId: this._event.eventPlan.id, eventPlanLoadId: eventPlanLoad.id}));
           delete eventPlanLoad.value;

@@ -376,9 +376,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/person/{!id}/role/{!userRoleId}/groups',
+    path: '/person/{!personId}/role/{!userRoleId}/groups',
   })
-  getPersonGroups: IRestMethod<GroupQuery, PageContainer<GroupPerson>>;
+  getPersonGroups: IRestMethodStrict<any, { personId: number, userRoleId: number }, GroupQuery, PageContainer<GroupPerson>>;
 
   @RestAction({
     method: RestRequestMethod.Get,

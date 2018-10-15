@@ -63,9 +63,9 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
 
   public async onUserRoleChanged(value: UserRole) {
     if (value) {
-      this.groupQuery.userRoleId = value.id;
+      this.groupQuery.userRoleEnum = value.userRoleEnum;
     } else {
-      delete this.groupQuery.userRoleId;
+      delete this.groupQuery.userRoleEnum;
     }
     await this.updateItems();
   }

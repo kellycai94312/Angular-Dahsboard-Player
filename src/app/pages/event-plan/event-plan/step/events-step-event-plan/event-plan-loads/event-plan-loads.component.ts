@@ -66,7 +66,7 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
       eventPlanId: this.eventPlan.id,
       eventPlanLoadTypeEnum: this.selectedLoadType.data,
       eventPlanPeriodEnum: this.selectedPeriod.data,
-      count: 99999
+      count: PropertyConstant.pageSizeMax
     });
 
     this.rows = [];
@@ -102,13 +102,13 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
 
   public async onFocusOut(eventPlanLoad: EventPlanLoad): Promise<void> {
     const isNew = this._appHelper.isNewObject(eventPlanLoad);
-    const valueIsUndefinedOrNull = this._appHelper.isUndefinedOrNull(eventPlanLoad.value);
-    if (isNew && valueIsUndefinedOrNull) {
+    const value = this._appHelper.isUndefinedOrNull(eventPlanLoad.value);
+    if (isNew && value) {
       return;
     }
 
     await this._appHelper.trySave(async () => {
-      if (valueIsUndefinedOrNull) {
+      if (value) {
         if (!isNew) {
           Object.assign(eventPlanLoad, await this._participantRestApiService.removeEventPlanLoad({eventPlanId: this.eventPlan.id, eventPlanLoadId: eventPlanLoad.id}));
           delete eventPlanLoad.value;
