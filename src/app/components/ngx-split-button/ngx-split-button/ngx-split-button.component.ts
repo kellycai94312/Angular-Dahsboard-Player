@@ -11,6 +11,9 @@ export class NgxSplitButtonComponent {
   @Input('class')
   public classes: string;
 
+  @Input()
+  public placementRight: boolean;
+
   public busy: boolean;
 
   get items(): SplitButtonItem[] {
