@@ -10,18 +10,16 @@
   <div class="col-2">
     <div class="d-flex flex-row">
       <div *ngIf="defaultName!==subgroup.name">
-        <dx-button type="success"
-                   class="mr-2"
-                   (onClick)="onSave()"
-                   [disabled]="subgroup.name.trim().length===0"
-                   text="{{'save' | translate | uppercase}}">
-        </dx-button>
+        <ngx-button [type]="ngxButtonTypeClass.SUCCESS"
+                    class="mr-2"
+                    nameKey="save"
+                    [click]="onSave"
+                    [disabled]="subgroup.name.trim().length == 0"></ngx-button>
       </div>
       <div>
-        <dx-button type="danger"
-                   (onClick)="onRemove()"
-                   text="{{'remove' | translate | uppercase}}">
-        </dx-button>
+        <ngx-button [type]="ngxButtonTypeClass.DANGER"
+                    nameKey="remove"
+                    [click]="onRemove"></ngx-button>
       </div>
     </div>
   </div>

@@ -5,7 +5,6 @@ import {HttpClientModule} from '@angular/common/http';
 import {PersonPageComponent} from './person-page/person-page.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {
-  DxButtonModule,
   DxCheckBoxModule,
   DxDataGridModule,
   DxDateBoxModule,
@@ -98,7 +97,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     GroupPageModule,
     PersonModule,
     DxDataGridModule,
-    DxButtonModule,
     ExerciseMeasureItemModule,
     DxCheckBoxModule,
     MeasureInputModule,

@@ -1,10 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VerificationRequest} from '../../data/remote/model/verification-request';
-import {TranslateService} from '@ngx-translate/core';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 import {EmailRequest} from '../../data/remote/request/email-request';
-import notify from 'devextreme/ui/notify';
+import {AppHelper} from '../../utils/app-helper';
 
 @Component({
   selector: 'app-password-set',
@@ -23,8 +22,6 @@ export class PasswordSetComponent implements OnInit {
   public setEmail: boolean;
 
   public isVisibleApplyButton: boolean;
-  public errorMessage: string;
-
   public isChangePassword: boolean;
 
   public isSuccessPasswordRecoveryRequest: boolean;
@@ -37,10 +34,10 @@ export class PasswordSetComponent implements OnInit {
 
   private code: string;
 
-  constructor(public translate: TranslateService,
-              private _activatedRoute: ActivatedRoute,
+  constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
     this.isVisibleApplyButton = true;
 
     this.isChangePassword = false;
@@ -57,39 +54,31 @@ export class PasswordSetComponent implements OnInit {
     } else {
       await this._router.navigate(['/login']);
     }
-    this.errorMessage = await this.translate.get('password.passwordResetError').toPromise();
   }
 
-  public async onApply(event: any) {
-    const result = event.validationGroup.validate();
-    if (result.isValid) {
-      try {
-        if (!this.isChangePassword) {
-          const emailRequest = new EmailRequest();
-          emailRequest.email = this.email;
-          await this._participantRestApiService.resetPassword(emailRequest);
+  public onApply = async () => {
+    try {
+      if (!this.isChangePassword) {
+        const emailRequest = new EmailRequest();
+        emailRequest.email = this.email;
+        await this._participantRestApiService.resetPassword(emailRequest);
 
-          this.isSuccessPasswordRecoveryRequest = true;
-        } else {
-          const verificationRequest = new VerificationRequest();
-          verificationRequest.code = this.code;
-          verificationRequest.password = this.password;
-          await this._participantRestApiService.verification(verificationRequest);
-          this.isSuccessPasswordChangeRequest = true;
-        }
-        this.isVisibleApplyButton = false;
-      } catch (Error) {
-        this.showErrorMessage();
+        this.isSuccessPasswordRecoveryRequest = true;
+      } else {
+        const verificationRequest = new VerificationRequest();
+        verificationRequest.code = this.code;
+        verificationRequest.password = this.password;
+        await this._participantRestApiService.verification(verificationRequest);
+        this.isSuccessPasswordChangeRequest = true;
       }
+      this.isVisibleApplyButton = false;
+    } catch (e) {
+      await this._appHelper.showErrorMessage('password.passwordResetError');
     }
-  }
+  };
 
   public passwordComparison = () => {
     return this.password;
   };
-
-  private showErrorMessage(): void {
-    notify(this.errorMessage, 'error', 2000);
-  }
 
 }

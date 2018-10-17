@@ -8,7 +8,6 @@ import {AppHelper} from '../../../../../../utils/app-helper';
 import {TrainingPerson} from '../../../../../../data/remote/model/training/training-person';
 import {ReportsService} from '../../../../../../shared/reports.service';
 import {TrainingPersonMeasure} from '../../../../../../data/remote/bean/training-person-measure';
-import {GameReportQuery} from '../../../../../../data/remote/rest-api/query/report/game-report-query';
 import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-parameter-enum';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 
@@ -174,11 +173,11 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async onGetReport() {
-    const gameReportQuery = new GameReportQuery();
-    gameReportQuery.measureParameter = MeasureParameterEnum.GOALS.toString();
-    await this._reportsService.downloadGameReport(this.gameId, this.trainingGroupId, gameReportQuery);
-  }
+  public onGetReport = async () => {
+    await this._appHelper.tryLoad(async () => {
+      await this._reportsService.downloadGameReport(this.gameId, this.trainingGroupId, {measureParameter: MeasureParameterEnum.GOALS});
+    });
+  };
 
   private async initTrainingPartTabs(routerLink: string): Promise<boolean> {
     const trainingParts = await this._participantRestApiService.getTrainingParts({id: this.gameId});

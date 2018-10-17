@@ -6,6 +6,7 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {ContactEnableModalComponent} from './contact-enable-modal/contact-enable-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ContactType} from '../../../../data/remote/model/contact/base/contact-type';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-contact',
@@ -20,7 +21,8 @@ export class ContactComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
-              private _modalService: NgbModal) {
+              private _modalService: NgbModal,
+              private _appHelper: AppHelper) {
   }
 
   async ngOnInit() {
@@ -29,12 +31,11 @@ export class ContactComponent implements OnInit {
     this.contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
   }
 
-  public async onSave(event: any) {
-    const result = event.validationGroup.validate();
-    if (result.isValid) {
+  public onSave = async () => {
+    await this._appHelper.trySave(async () => {
       this.contacts = await this._participantRestApiService.updatePersonContacts(new ListRequest(this.contacts), {}, {personId: this._personService.personViewModel.data.id});
-    }
-  }
+    });
+  };
 
   public enablePerson = () => {
     const ref = this._modalService.open(ContactEnableModalComponent);

@@ -63,11 +63,8 @@
       </tr>
       </tbody>
     </table>
-
-    <dx-button type="default"
-               class="mt-2"
-               (onClick)="onGetReport()"
-               text="{{ 'report' | translate }}">
-    </dx-button>
+    <ngx-button class="mt-2"
+                nameKey="report"
+                [click]="onGetReport"></ngx-button>
   </div>
 </div>

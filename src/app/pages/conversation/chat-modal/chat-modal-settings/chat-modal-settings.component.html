@@ -36,10 +36,8 @@
 
 </div>
 <div class="modal-footer">
-  <dx-button type="default"
-             class="btn-outline-success"
-             text="{{'modal.save' | translate}}"
-             (onClick)="onSave($event)"></dx-button>
+  <ngx-button nameKey="save"
+              [click]="onSave"></ngx-button>
   <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss()">{{'modal.cancel' | translate }}
   </button>
 </div>

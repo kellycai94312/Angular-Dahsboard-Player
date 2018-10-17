@@ -13,7 +13,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 import {ImageModule} from '../../components/image/image.module';
 import {ChatModalCreateComponent} from './chat-modal/chat-modal-create/chat-modal-create.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
-import {DxButtonModule, DxCheckBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
+import {DxCheckBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {ModalItemModule} from '../../components/modal-item/modal-item.module';
 import {PersonModule} from '../../components/person/person.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
@@ -22,6 +22,7 @@ import {ChatModalParticipantsComponent} from './chat-modal/chat-modal-participan
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
 import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
@@ -34,7 +35,6 @@ import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.m
     UrlParserModule,
     ImageModule,
     ModalSelectPageModule,
-    DxButtonModule,
     DxCheckBoxModule,
     DxTextBoxModule,
     DxValidatorModule,
@@ -42,10 +42,25 @@ import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.m
     ModalItemModule,
     PersonModule,
     SafeHtmlModule,
-    ModalConfirmModule
+    ModalConfirmModule,
+    NgxButtonModule
   ],
-  declarations: [ConversationsPageComponent, ConversationPageComponent, MessageComponent, ConversationComponent, ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent, ChatModalDeleteMessageConfirmComponent],
-  entryComponents: [ChatModalCreateComponent, ChatModalSettingsComponent, ChatModalParticipantsComponent, ChatModalDeleteMessageConfirmComponent]
+  declarations: [
+    ConversationsPageComponent,
+    ConversationPageComponent,
+    MessageComponent,
+    ConversationComponent,
+    ChatModalCreateComponent,
+    ChatModalSettingsComponent,
+    ChatModalParticipantsComponent,
+    ChatModalDeleteMessageConfirmComponent
+  ],
+  entryComponents: [
+    ChatModalCreateComponent,
+    ChatModalSettingsComponent,
+    ChatModalParticipantsComponent,
+    ChatModalDeleteMessageConfirmComponent
+  ]
 })
 export class ConversationModule {
 }

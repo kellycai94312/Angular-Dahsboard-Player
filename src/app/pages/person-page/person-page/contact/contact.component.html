@@ -25,7 +25,7 @@
       </dx-check-box>
     </div>
   </div>
-  <dx-button *ngIf="allowEdit" type="default" class="btn-outline-success"
-             text="{{'save' | translate}}"
-             (onClick)="onSave($event)"></dx-button>
+  <ngx-button *ngIf="allowEdit"
+              nameKey="save"
+              [click]="onSave"></ngx-button>
 </div>

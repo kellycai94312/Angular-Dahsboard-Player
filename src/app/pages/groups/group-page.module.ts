@@ -8,18 +8,7 @@ import {GroupPageRoutingModule} from './group-page-routing.module';
 import {LayoutService} from '../../layout/shared/layout.service';
 import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
 import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
-import {
-  DxButtonModule,
-  DxCheckBoxModule,
-  DxDataGridModule,
-  DxDateBoxModule,
-  DxNumberBoxModule,
-  DxSelectBoxModule,
-  DxTemplateModule,
-  DxTextAreaModule,
-  DxTextBoxModule,
-  DxValidatorModule
-} from 'devextreme-angular';
+import {DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
@@ -58,13 +47,13 @@ import {GroupConnectionsGraphComponent} from './group-connections-graph/group-co
 import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
     CommonModule,
     GroupPageRoutingModule,
     TranslateModule.forChild(),
-    DxButtonModule,
     DxValidatorModule,
     DxTextBoxModule,
     DxSelectBoxModule,
@@ -89,7 +78,8 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     NgxGridModule,
     FileModule,
     NgxGraphModule,
-    NgxChartsModule
+    NgxChartsModule,
+    NgxButtonModule
   ],
   exports: [
     GroupComponent,

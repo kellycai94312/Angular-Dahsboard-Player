@@ -18,7 +18,6 @@ import {LayoutService} from '../../layout/shared/layout.service';
 })
 export class LoginPageComponent implements OnDestroy {
 
-  // Store a reference to the enum
   public environmentType = EnvironmentType;
   public auth: Auth;
   public environment: IEnvironment;
@@ -34,7 +33,11 @@ export class LoginPageComponent implements OnDestroy {
     this._layoutService.dark.next(true);
   }
 
-  public signIn = async (event: any) => {
+  ngOnDestroy(): void {
+    this._layoutService.dark.next(false);
+  }
+
+  public signIn = async () => {
     const session: Session = await this._authorizationService.logIn(this.auth);
     if (session) {
       if (session.personId) {
@@ -48,9 +51,5 @@ export class LoginPageComponent implements OnDestroy {
       this.auth.password = null;
     }
   };
-
-  ngOnDestroy(): void {
-    this._layoutService.dark.next(false);
-  }
 
 }

@@ -22,11 +22,11 @@
           <dxi-validation-rule type="required"></dxi-validation-rule>
         </dx-validator>
       </dx-text-box>
-      <app-busy-button #busyButton
-                       classes="mt-4 w-100"
-                       [click]="signIn"
-                       checkPressedEnter="true"
-                       nameKey="login.signIn"></app-busy-button>
+      <ngx-button #busyButton
+                  class="mt-4 w-100"
+                  nameKey="login.signIn"
+                  [click]="signIn"
+                  [checkPressedEnter]="true"></ngx-button>
       <div class="mt-2 text-center">
         <u
           *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL && environment.type!== environmentType.SAINT_PETERSBURG"><a

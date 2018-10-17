@@ -35,7 +35,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  public async onAdd() {
+  public onAdd = async () => {
     let subgroup = new SubGroup();
     subgroup.name = this.name.trim();
     subgroup = await this._participantRestApiService.postSubgroup(subgroup, {}, {groupId: this._groupService.getGroup().id});
@@ -43,7 +43,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
     await this._groupService.updateSubgroups();
 
     this.name = '';
-  }
+  };
 
   onRemove = (subgroup: SubGroup) => {
     this._appHelper.removeItem(this.subgroups, subgroup);
