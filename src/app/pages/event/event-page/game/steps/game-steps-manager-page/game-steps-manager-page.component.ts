@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Tab} from '../../../../../../data/local/tab';
 
 @Component({
@@ -6,25 +6,25 @@ import {Tab} from '../../../../../../data/local/tab';
   templateUrl: './game-steps-manager-page.component.html',
   styleUrls: ['./game-steps-manager-page.component.scss']
 })
-export class GameStepsManagerPageComponent implements OnInit {
+export class GameStepsManagerPageComponent {
 
-  public tabs: Tab[];
+  public readonly tabs: Tab[];
 
   constructor() {
-    this.tabs = [];
-    this.tabs.push(this.createTab('information', '1'));
-    this.tabs.push(this.createTab('participants', '2'));
-    this.tabs.push(this.createTab('execution', '3'));
-  }
-
-  private createTab(nameKey: string, routerLink: string): Tab {
-    const tab = new Tab();
-    tab.nameKey = nameKey;
-    tab.routerLink = routerLink;
-    return tab;
-  }
-
-  ngOnInit() {
+    this.tabs = [
+      {
+        nameKey: 'information',
+        routerLink: '1'
+      },
+      {
+        nameKey: 'participants',
+        routerLink: '2'
+      },
+      {
+        nameKey: 'execution',
+        routerLink: '3'
+      }
+    ];
   }
 
 }

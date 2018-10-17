@@ -38,7 +38,6 @@ import {ModalSelectPageComponent} from '../../components/modal-select-page/modal
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 import {EventModalComponent} from './person-page/events/event-modal/event-modal.component';
-import {TabModule} from '../../components/tab/tab.module';
 import {MyRegionComponent} from './person-page/my-region/my-region.component';
 import {SchoolNoteComponent} from './person-page/my-region/school-note/school-note.component';
 import {TrainerNoteComponent} from './person-page/my-region/trainer-note/trainer-note.component';
@@ -57,7 +56,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {RefereeCategoriesComponent} from './person-page/category/referee-categories/referee-categories.component';
 import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
 import {MyGroupsComponent} from './person-page/my-groups/my-groups.component';
-import {ButtonsModule} from '../../components/buttons/buttons.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {RequisitesComponent} from './person-page/requisites/requisites.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
@@ -75,6 +73,8 @@ import {PersonStageStandardsComponent} from './person-page/person-stage-standard
 import {ReportModule} from '../../components/report/report.module';
 import {EditRefereeCategoryComponent} from './component/edit-referee-category/edit-referee-category.component';
 import {EditNoteComponent} from './component/edit-note/edit-note.component';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
@@ -101,19 +101,19 @@ import {EditNoteComponent} from './component/edit-note/edit-note.component';
     DxButtonModule,
     ExerciseMeasureItemModule,
     DxCheckBoxModule,
-    TabModule,
     MeasureInputModule,
     MeasureHistoryModule,
     BusyButtonModule,
     ImageModule,
     NgxVirtualScrollModule,
-    ButtonsModule,
     NamedObjectItemModule,
     NgxSplitButtonModule,
     NgxButtonGroupModule,
     DxNumberBoxModule,
     NgxGridModule,
-    ReportModule
+    ReportModule,
+    NgxTabModule,
+    NgxButtonModule
   ],
   declarations: [
     PersonPageComponent,

@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Tab} from '../../../../data/local/tab';
 import {MyRegionService} from './my-region.service';
+import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 
 @Component({
   selector: 'app-my-region',
@@ -11,23 +12,15 @@ export class MyRegionComponent {
 
   public readonly tabs: Tab[];
 
-  constructor(public myRegionService: MyRegionService) {
-    this.tabs = [];
-
-    const schoolTab = new Tab();
-    schoolTab.nameKey = 'persons.person.myRegion.school.section';
-    schoolTab.routerLink = 'school';
-    this.tabs.push(schoolTab);
-
-    const trainerTab = new Tab();
-    trainerTab.nameKey = 'persons.person.myRegion.trainer.section';
-    trainerTab.routerLink = 'trainer';
-    this.tabs.push(trainerTab);
-
-    const agentTab = new Tab();
-    agentTab.nameKey = 'persons.person.myRegion.agent.section';
-    agentTab.routerLink = 'agent';
-    this.tabs.push(agentTab);
+  constructor(private _myRegionService: MyRegionService) {
+    const actions: SplitButtonItem[] = [
+      {nameKey: 'add', callback: this._myRegionService.onAdd}
+    ];
+    this.tabs = [
+      {nameKey: 'persons.person.myRegion.school.section', routerLink: 'school', splitButtonsItems: actions},
+      {nameKey: 'persons.person.myRegion.trainer.section', routerLink: 'trainer', splitButtonsItems: actions},
+      {nameKey: 'persons.person.myRegion.agent.section', routerLink: 'agent', splitButtonsItems: actions},
+    ];
   }
 
 }

@@ -119,7 +119,7 @@ export class NgxTabComponent implements OnInit, OnDestroy {
 
   public onCheckingVisible(item: Tab): boolean {
     if (item.visible) {
-      return item.visible();
+      return item.visible(item);
     }
     return true;
   }

@@ -23,7 +23,6 @@ import {
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
-import {TabModule} from '../../components/tab/tab.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupService} from './group.service';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
@@ -58,6 +57,7 @@ import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/e
 import {GroupConnectionsGraphComponent} from './group-connections-graph/group-connections-graph.component';
 import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 
 @NgModule({
   imports: [
@@ -69,7 +69,7 @@ import {NgxChartsModule} from '@swimlane/ngx-charts';
     DxTextBoxModule,
     DxSelectBoxModule,
     NgxVirtualScrollModule,
-    TabModule,
+    NgxTabModule,
     InputSelectModule,
     NgbModule,
     PersonModule,

@@ -10,6 +10,7 @@ import {ReportsService} from '../../../../../../shared/reports.service';
 import {TrainingPersonMeasure} from '../../../../../../data/remote/bean/training-person-measure';
 import {GameReportQuery} from '../../../../../../data/remote/rest-api/query/report/game-report-query';
 import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-parameter-enum';
+import {PropertyConstant} from '../../../../../../data/local/property-constant';
 
 @Component({
   selector: 'app-game-step-execution-page',
@@ -60,7 +61,7 @@ export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this._trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId})).list;
+    this._trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({}, {count: PropertyConstant.pageSizeMax}, {eventId: this.gameId})).list;
     if (this._trainingGroups.length < 1) {
       return;
     }
