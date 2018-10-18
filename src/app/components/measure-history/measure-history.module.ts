@@ -6,10 +6,10 @@ import {MeasureHistoryComponent} from './measure-history.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {DxDateBoxModule} from 'devextreme-angular';
 import {FormsModule} from '@angular/forms';
-import {TabModule} from '../tab/tab.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MeasureHistoryService} from './measure-history.service';
 import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {NgxTabModule} from '../ngx-tab/ngx-tab.module';
 
 @NgModule({
   imports: [
@@ -17,7 +17,7 @@ import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.m
     FormsModule,
     TranslateModule.forChild(),
     DxDateBoxModule,
-    TabModule,
+    NgxTabModule,
     NgxVirtualScrollModule,
     NgbModule
   ],

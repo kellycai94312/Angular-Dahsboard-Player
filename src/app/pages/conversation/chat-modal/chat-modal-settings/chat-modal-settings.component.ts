@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, ViewChild} from '@angular/core';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -6,13 +6,14 @@ import {ImageComponent} from '../../../../components/image/image.component';
 import {Image} from '../../../../data/remote/model/file/image/image';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-chat-modal-edit',
   templateUrl: './chat-modal-settings.component.html',
   styleUrls: ['./chat-modal-settings.component.scss']
 })
-export class ChatModalSettingsComponent implements OnInit {
+export class ChatModalSettingsComponent {
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -27,10 +28,8 @@ export class ChatModalSettingsComponent implements OnInit {
   logoChange: () => void;
 
   constructor(public modal: NgbActiveModal,
-              private _participantRestApiService: ParticipantRestApiService) {
-  }
-
-  ngOnInit() {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
   }
 
   public async onLogoChange(event) {
@@ -48,12 +47,12 @@ export class ChatModalSettingsComponent implements OnInit {
     }
   }
 
-  public async onSave(event: any) {
-    const result = event.validationGroup.validate();
-    if (result.isValid) {
+  public onSave = async () => {
+    await this._appHelper.trySave(async () => {
       this.chat = await this._participantRestApiService.updateChat(this.chat, {}, {conversationId: this.chat.id});
       await this.chatChange(this.chat);
       this.modal.dismiss();
-    }
-  }
+    });
+  };
+
 }

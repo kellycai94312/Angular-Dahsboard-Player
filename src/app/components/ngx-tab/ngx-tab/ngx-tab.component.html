@@ -12,12 +12,12 @@
       </a>
     </li>
     <li *ngIf="selectedTab && selectedTab.splitButtonsItems && selectedTab.splitButtonsItems.length"
-        class="new-element">
-      <ngx-split-button [items]="selectedTab.splitButtonsItems"></ngx-split-button>
+        class="action-element">
+      <ngx-split-button [placementRight]="true"
+                        [items]="selectedTab.splitButtonsItems"></ngx-split-button>
     </li>
   </ul>
-  <div *ngIf="selectedTab"
-       class="mt-2">
+  <div class="mt-2">
     <router-outlet></router-outlet>
   </div>
 </div>

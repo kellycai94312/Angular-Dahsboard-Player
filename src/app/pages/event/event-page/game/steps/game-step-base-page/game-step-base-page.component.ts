@@ -22,6 +22,7 @@ import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-p
 import {Observable} from 'rxjs';
 import {ISubscription} from 'rxjs/src/Subscription';
 import {GroupScore} from '../../../../../../data/remote/model/training/game/group-score';
+import {NgxButtonType} from '../../../../../../components/ngx-button/model/ngx-button-type';
 
 @Component({
   selector: 'app-game-step-base-page',
@@ -30,6 +31,8 @@ import {GroupScore} from '../../../../../../data/remote/model/training/game/grou
 })
 export class GameStepBasePageComponent implements OnInit, OnDestroy {
 
+  public readonly propertyConstantClass = PropertyConstant;
+  public readonly ngxButtonTypeClass = NgxButtonType;
   public game: Game;
   public trainingParts: TrainingPart[];
   public trainingPart: TrainingPart;
@@ -61,7 +64,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
         nameKey: 'save',
         default: true,
         callback: async () => {
-          try {
+          await this._appHelper.trySave(async () => {
             if (this.appHelper.isNewObject(this.game)) {
               this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
               this.game.manualMode = true;
@@ -75,20 +78,15 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
               this.game = (await this._participantRestApiService.updateBaseTraining(this.game, null, {id: this.game.id})) as Game;
               await this.initialize();
             }
-            await  this.appHelper.showSuccessMessage('saved');
-          } catch (e) {
-            await this.appHelper.showErrorMessage('saveError');
-          }
+          });
         }
       },
       {
         nameKey: 'stop',
         callback: async () => {
-          try {
+          await this._appHelper.trySave(async () => {
             this.game = <Game>(await this._participantRestApiService.updateBaseTrainingState({trainingState: TrainingState.STOP}, {}, {id: this.game.id}));
-          } catch (e) {
-            await this.appHelper.showErrorMessage('saveError');
-          }
+          });
         }
       }
     ];
@@ -108,7 +106,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
       this.game = (await this._participantRestApiService.getBaseTraining({id: id, measureParameterEnum: MeasureParameterEnum.GOALS})) as Game;
       this.trainingParts = await this._participantRestApiService.getTrainingParts({id: this.game.id});
       this._groupScoresSubscription = Observable
-        .interval(5 * 1000) //every 5 seconds
+        .interval(5 * 1000) // Every 5 seconds
         .timeInterval()
         .flatMap(async () => await this._participantRestApiService.getGameGroupScores({gameId: id, measureParameterEnum: MeasureParameterEnum.GOALS}))
         .subscribe(data => this.game.groupScores = data);
@@ -129,17 +127,15 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
     return new Date(0, 0, 0, 0, 0, 0, trainingPart.durationMs);
   }
 
-  public async onAddTrainingPart(item: TrainingPart) {
-    try {
+  public onAddTrainingPart = async (item: TrainingPart) => {
+    await this._appHelper.trySave(async () => {
       item.type = TrainingPartType[TrainingPartType.BASIC];
       const trainingPart = await this._participantRestApiService.createTrainingPart(item, {}, {baseTrainingId: this.game.id});
       this.trainingParts.push(trainingPart);
       item.name = null;
       item.durationMs = 5 * 60 * 1000;
-    } catch (e) {
-      await this._appHelper.showErrorMessage('addError');
-    }
-  }
+    });
+  };
 
   public async onUpdateTrainingPart(item: TrainingPart) {
     try {
@@ -152,17 +148,15 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async onRemoveTrainingPart(item: TrainingPart) {
-    try {
+  public onRemoveTrainingPart = async (item: TrainingPart) => {
+    await this._appHelper.tryRemove(async () => {
       await this._participantRestApiService.removeTrainingPart({
         baseTrainingId: item.baseTraining.id,
         trainingPartId: item.id
       });
       this.appHelper.removeItem(this.trainingParts, item);
-    } catch (e) {
-      await this._appHelper.showErrorMessage('removeError');
-    }
-  }
+    });
+  };
 
   public isValidTrainingPart(item: TrainingPart): boolean {
     return item.name != null &&
@@ -171,7 +165,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
       !this.appHelper.isNewObject(this.game);
   }
 
-  public async onEditGroups() {
+  public onEditGroups = async () => {
     const groupQuery = new GroupQuery();
     groupQuery.from = 0;
     groupQuery.count = PropertyConstant.pageSize;
@@ -199,6 +193,6 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
       }
     };
     await componentInstance.initialize(this.game.groupScores.map(groupScore => groupScore.group));
-  }
+  };
 
 }

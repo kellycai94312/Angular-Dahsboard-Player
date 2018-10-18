@@ -14,6 +14,7 @@ import {EditGroupPersonLogComponent} from '../../component/edit-group-person-log
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {NgxModalRef} from '../../../../components/ngx-modal/bean/ngx-modal-ref';
+import {NgxButtonType} from '../../../../components/ngx-button/model/ngx-button-type';
 
 @Component({
   selector: 'app-requests',
@@ -21,6 +22,8 @@ import {NgxModalRef} from '../../../../components/ngx-modal/bean/ngx-modal-ref';
   styleUrls: ['./requests.component.scss']
 })
 export class RequestsComponent implements OnInit {
+
+  public readonly ngxButtonTypeClass = NgxButtonType;
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
@@ -45,7 +48,7 @@ export class RequestsComponent implements OnInit {
     await this.updateItems();
   }
 
-  public async onAdd(groupPerson: GroupPerson) {
+  public onAdd = async (groupPerson: GroupPerson) => {
     await this.showModal(groupPerson, async (modal: NgxModalRef, component: EditGroupPersonLogComponent) => {
       return {
         nameKey: 'save',
@@ -63,9 +66,9 @@ export class RequestsComponent implements OnInit {
         }
       };
     });
-  }
+  };
 
-  public async onRemove(groupPerson: GroupPerson) {
+  public onRemove = async (groupPerson: GroupPerson) => {
     await this.showModal(groupPerson, async (modal: NgxModalRef, component: EditGroupPersonLogComponent) => {
       return {
         nameKey: 'remove',
@@ -82,7 +85,7 @@ export class RequestsComponent implements OnInit {
         }
       };
     });
-  }
+  };
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);

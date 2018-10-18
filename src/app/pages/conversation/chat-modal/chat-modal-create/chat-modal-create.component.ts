@@ -13,6 +13,7 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {AppHelper} from '../../../../utils/app-helper';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {ConversationQuery} from '../../../../data/remote/rest-api/query/conversation-query';
+import {ClientError} from '../../../../data/local/error/client-error';
 
 @Component({
   selector: 'app-chat-modal',
@@ -87,16 +88,15 @@ export class ChatModalCreateComponent implements OnInit {
     );
   };
 
-  public async onSave(event: any) {
-    const result = event.validationGroup.validate();
-    if (result.isValid) {
+  public onSave = async () => {
+    await this._appHelper.trySave(async () => {
       if (this.selectedItems.length > 0) {
         const request = new ChatRequest();
         request.name = this.chatName;
         request.personIds = this.selectedItems.map(person => new IdRequest(person.id));
         const chat = await this._participantRestApiService.createChat(request);
 
-        //reload children when on the same state /conversation/:id
+        // Reload children when on the same state /conversation/:id
         if (this._router.url.indexOf('/conversation/') == 0) {
           await this._router.navigate(['/conversation']);
         }
@@ -104,10 +104,10 @@ export class ChatModalCreateComponent implements OnInit {
         await this._router.navigate(['/conversation', chat.id]);
         this.modal.dismiss();
       } else {
-        this._appHelper.showErrorMessage('chatMustContainOneParticipant');
+        throw new ClientError('chatMustContainOneParticipant');
       }
-    }
-  }
+    });
+  };
 
   private async updateItems() {
     await this.itemsNgxVirtualScrollComponent.reset();

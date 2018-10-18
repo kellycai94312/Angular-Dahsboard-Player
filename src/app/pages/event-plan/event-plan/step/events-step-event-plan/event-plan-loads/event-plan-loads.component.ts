@@ -88,7 +88,9 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
         }
         this.rows.push(row);
       }
-      this.columns = this.rows[0].columns.map(x => this._appHelper.dateByFormat(this._appHelper.getDateByPeriodOffset(this.eventPlan.startTime || new Date(), this.selectedPeriod.data, x.periodOffset), PropertyConstant.dateFormat));
+      if (this.rows.length) {
+        this.columns = this.rows[0].columns.map(x => this._appHelper.dateByFormat(this._appHelper.getDateByPeriodOffset(this.eventPlan.startTime || new Date(), this.selectedPeriod.data, x.periodOffset), PropertyConstant.dateFormat));
+      }
     }
   }
 

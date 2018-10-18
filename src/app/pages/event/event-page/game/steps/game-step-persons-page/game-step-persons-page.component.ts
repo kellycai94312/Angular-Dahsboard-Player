@@ -5,6 +5,7 @@ import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
 import {TrainingGroup} from '../../../../../../data/remote/model/training-group';
 import {TrainingPersonsSelectionComponent} from '../../../../../../components/training-persons-selection/training-persons-selection.component';
+import {PropertyConstant} from '../../../../../../data/local/property-constant';
 
 @Component({
   selector: 'app-game-step-persons-page',
@@ -46,7 +47,7 @@ export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDe
         return;
       }
 
-      const trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({baseTrainingId: this.gameId})).list;
+      const trainingGroups = (await this._participantRestApiService.getTrainingGroupsByBaseTraining({}, {count: PropertyConstant.pageSizeMax}, {eventId: this.gameId})).list;
       if (trainingGroups.length < 1) {
         return;
       }

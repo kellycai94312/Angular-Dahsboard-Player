@@ -1,5 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import 'rxjs/add/operator/debounceTime';
+import {Component} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
 
 @Component({
@@ -7,24 +6,21 @@ import {Tab} from '../../../data/local/tab';
   templateUrl: './events-page.component.html',
   styleUrls: ['./events-page.component.scss']
 })
-export class EventsPageComponent implements OnInit {
+export class EventsPageComponent {
 
-  public tabs: Tab[];
+  public readonly tabs: Tab[];
 
   constructor() {
-  }
-
-  async ngOnInit() {
-    this.tabs = [];
-    const list = new Tab();
-    list.nameKey = 'list';
-    list.routerLink = 'list';
-    this.tabs.push(list);
-
-    const calendar = new Tab();
-    calendar.nameKey = 'calendar';
-    calendar.routerLink = 'calendar';
-    this.tabs.push(calendar);
+    this.tabs = [
+      {
+        nameKey: 'list',
+        routerLink: 'list'
+      },
+      {
+        nameKey: 'calendar',
+        routerLink: 'calendar'
+      }
+    ];
   }
 
 }

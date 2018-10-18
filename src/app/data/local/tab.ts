@@ -6,7 +6,7 @@ export class Tab {
   public nameKey?: string;
   public routerLink: string;
   public queryParams?: Params;
-  public visible?: () => boolean;
+  public visible?: (item: Tab) => boolean;
   public splitButtonsItems?: SplitButtonItem[];
   public canNavigate?: () => boolean;
 }

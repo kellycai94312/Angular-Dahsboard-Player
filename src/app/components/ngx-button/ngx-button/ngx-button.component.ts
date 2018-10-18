@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {IconEnum} from '../model/icon-enum';
 import {Observable} from 'rxjs/Observable';
+import {NgxButtonType} from '../model/ngx-button-type';
 
 @Component({
   selector: 'ngx-button',
@@ -22,13 +23,16 @@ export class NgxButtonComponent<TData extends any> {
   public icon: IconEnum;
 
   @Input()
+  public type: NgxButtonType;
+
+  @Input()
   public click: (data?: TData, event?: Event) => Promise<void>;
 
   @Input()
   public data: TData;
 
   @Input()
-  public disabled: () => boolean;
+  public disabled: (() => boolean) | boolean;
 
   @Input()
   public checkPressedEnter: boolean;
@@ -39,6 +43,7 @@ export class NgxButtonComponent<TData extends any> {
   constructor() {
     this.enterKeyCode = 13;
     this.delayDisplayBusy = 300;
+    this.type = NgxButtonType.PRIMARY;
   }
 
   public async onClick(e: Event): Promise<void> {
@@ -63,6 +68,17 @@ export class NgxButtonComponent<TData extends any> {
   public async onKeyUp(event: any): Promise<void> {
     if (this.checkPressedEnter && event.keyCode == this.enterKeyCode) {
       await this.onClick(event);
+    }
+  }
+
+  public isDisabled(): boolean {
+    if (this.disabled === undefined || this.disabled === null) {
+      return false;
+    }
+    if (typeof this.disabled === 'function') {
+      return this.disabled ? this.disabled() : false;
+    } else {
+      return this.disabled;
     }
   }
 

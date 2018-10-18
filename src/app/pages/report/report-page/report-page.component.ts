@@ -15,20 +15,13 @@ export class ReportPageComponent implements OnInit {
   constructor(private _eventReportService: EventReportService,
               private _activatedRoute: ActivatedRoute) {
     this.tabs = [
-      this.createTab('general', 'general'),
-      this.createTab('blocks', 'block')
+      {nameKey: 'general', routerLink: 'general'},
+      {nameKey: 'blocks', routerLink: 'block'}
     ];
   }
 
   ngOnInit(): void {
     this._eventReportService.setTrainingReportId(this._activatedRoute.snapshot.params.id);
-  }
-
-  private createTab(nameKey: string, routerLink: string): Tab {
-    const tab = new Tab();
-    tab.nameKey = nameKey;
-    tab.routerLink = routerLink;
-    return tab;
   }
 
 }

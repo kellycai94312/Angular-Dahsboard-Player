@@ -62,29 +62,75 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _modalService: NgbModal) {
-    //#region Tabs
-    this.tabs = [];
+    this.tabs = [
+      {
+        nameKey: 'persons.person.personal.section', routerLink: 'personal',
+        restrictedRoles: []
+      },
+      {
+        nameKey: 'persons.person.anthropometry.section', routerLink: 'anthropometry',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'persons.person.ranks.section', routerLink: 'ranks',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'persons.person.achievements.section', routerLink: 'achievements',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true,
+        personal: true
+      },
+      {
+        nameKey: 'persons.person.myRegion.section', routerLink: 'my_region',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE],
+        hasAnyRole: true,
+        personal: true
+      },
+      {
+        nameKey: 'persons.person.contact.section', routerLink: 'contact',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE]
+      },
+      {
+        nameKey: 'persons.person.testsResults.section', routerLink: 'tests_results',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'events', routerLink: 'events',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'groups', routerLink: 'groups',
+        restrictedRoles: [],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'categories', routerLink: 'category',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER],
+        hasAnyRole: true
+      },
+      {
+        nameKey: 'stages', routerLink: 'stage',
+        restrictedRoles: []
+      },
+      {
+        nameKey: 'medicalExaminations', routerLink: 'medical-examination',
+        restrictedRoles: []
+      },
+      {
+        nameKey: 'controlTransferStandards', routerLink: 'stage-standard',
+        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE],
+        hasAnyRole: true
+      }
+    ];
 
-    this.tabs.push(new PersonTab('persons.person.personal.section', 'personal', []));
-    this.tabs.push(new PersonTab('persons.person.anthropometry.section', 'anthropometry',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(new PersonTab('persons.person.ranks.section', 'ranks',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(new PersonTab('persons.person.achievements.section', 'achievements',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
-    this.tabs.push(new PersonTab('persons.person.myRegion.section', 'my_region',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE], true, true));
-    this.tabs.push(new PersonTab('persons.person.contact.section', 'contact', []));
-    this.tabs.push(new PersonTab('persons.person.testsResults.section', 'tests_results',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT], true));
-    this.tabs.push(new PersonTab('events', 'events', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR], true));
-    this.tabs.push(new PersonTab('groups', 'groups', [], true));
-    this.tabs.push(new PersonTab('categories', 'category',
-      [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER], true));
-    this.tabs.push(new PersonTab('stages', 'stage', []));
-    this.tabs.push(new PersonTab('medicalExaminations', 'medical-examination', []));
-    this.tabs.push(new PersonTab('controlTransferStandards', 'stage-standard', [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], true));
-    //#endregion
+    for (const tab of this.tabs) {
+      tab.visible = this.tabVisible;
+    }
 
     this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {
       if (value && this.groupComponent) {
@@ -117,9 +163,21 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
     if (this.allowEdit) {
       if (this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR) && !this._myProfile) {
-        this.tabs.push(new PersonTab('myGroups', 'my-group', [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE], false));
+        this.tabs.push(
+          {
+            nameKey: 'myGroups', routerLink: 'my-group',
+            restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE],
+            visible: this.tabVisible
+          }
+        );
       }
-      this.tabs.push(new PersonTab('requisites', 'requisites', [], false));
+      this.tabs.push(
+        {
+          nameKey: 'requisites', routerLink: 'requisites',
+          restrictedRoles: [],
+          visible: this.tabVisible
+        }
+      );
     }
 
     //#region SplitButton

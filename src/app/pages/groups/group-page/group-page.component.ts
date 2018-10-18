@@ -47,7 +47,7 @@ export class GroupPageComponent implements OnInit {
     });
     this.groupService.subgroupsSubject.subscribe(async subgroups => {
       this.subGroups = subgroups;
-      await  this.initTabs();
+      await this.initTabs();
     });
   }
 
@@ -83,34 +83,20 @@ export class GroupPageComponent implements OnInit {
   private async initTabs() {
     this.tabs = [];
     for (let i = 0; i < this.subGroups.length; i++) {
-      const tab = new Tab();
-      tab.name = this.subGroups[i].name;
-      tab.routerLink = this.getSubGroupRouterLink(this.subGroups[i].id);
-      this.tabs.push(tab);
+      this.tabs.push({name: this.subGroups[i].name, routerLink: this.getSubGroupRouterLink(this.subGroups[i].id)});
     }
-    const defaultTab = new Tab();
-    defaultTab.nameKey = 'members';
-    defaultTab.routerLink = this.getSubGroupRouterLink(0);
-    this.tabs.push(defaultTab);
+
+    this.tabs.push({nameKey: 'members', routerLink: this.getSubGroupRouterLink(0)});
 
     if (this.groupService.isEditAllow()) {
-      const managementTab = new Tab();
-      managementTab.nameKey = 'administration';
-      managementTab.routerLink = 'administration';
-      this.tabs.push(managementTab);
+      this.tabs.push({nameKey: 'administration', routerLink: 'administration'});
     }
 
     if (this.groupService.hasEvents()) {
-      const eventsTab = new Tab();
-      eventsTab.nameKey = 'events';
-      eventsTab.routerLink = 'events';
-      this.tabs.push(eventsTab);
+      this.tabs.push({nameKey: 'events', routerLink: 'events'});
     }
 
-    const connectionsGraphTab = new Tab();
-    connectionsGraphTab.nameKey = 'connectionsGraph';
-    connectionsGraphTab.routerLink = 'connections-graph';
-    this.tabs.push(connectionsGraphTab);
+    this.tabs.push({nameKey: 'connectionsGraph', routerLink: 'connections-graph'});
   }
 
   private getSubGroupRouterLink(subGroupId: number): string {

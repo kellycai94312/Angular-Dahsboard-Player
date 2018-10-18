@@ -14,7 +14,6 @@ import {EventReportGeneralComponent} from './report-page/event-report-general/ev
 import {PersonsEventBlockComponent} from './report-page/event-blocks/event-block/persons-event-block/persons-event-block.component';
 import {GeneralEventBlockComponent} from './report-page/event-blocks/event-block/general-event-block/general-event-block.component';
 import {ExercisesEventBlockComponent} from './report-page/event-blocks/event-block/exercises-event-block/exercises-event-block.component';
-import {TabModule} from '../../components/tab/tab.module';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {EventReportService} from './report-page/service/event-report.service';
 import {TrainingReportBlockComponent} from './component/training-report-block/training-report-block.component';
@@ -25,6 +24,7 @@ import {GroupPageModule} from '../groups/group-page.module';
 import {PersonModule} from '../../components/person/person.module';
 import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 
 @NgModule({
   imports: [
@@ -36,7 +36,7 @@ import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button
     NgxModalModule,
     ModalSelectPageModule,
     NamedObjectModule,
-    TabModule,
+    NgxTabModule,
     NgxSplitButtonModule,
     DxDateBoxModule,
     DxSelectBoxModule,
