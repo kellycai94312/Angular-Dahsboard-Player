@@ -947,8 +947,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Event
-
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/baseTraining'
@@ -978,6 +976,18 @@ export class ParticipantRestApiService extends Rest {
     path: '/baseTraining/{!eventId}'
   })
   removeEvent: IRestMethod<{ eventId: number }, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/template'
+  })
+  createEventTemplate: IRestMethod<IdRequest, BaseTraining>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/baseTraining/{!eventId}/template'
+  })
+  updateEventTemplate: IRestMethodStrict<IdRequest, any, { eventId: number }, BaseTraining>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1830,6 +1840,22 @@ export class ParticipantRestApiService extends Rest {
     path: '/tag/{!tagId}'
   })
   removeTag: IRestMethod<{ tagId: number }, Tag>;
+
+  //#endregion
+
+  //#region Testing
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/testing/{!testingId}/sportRole'
+  })
+  getTestingSportRoles: IRestMethod<{ testingId: number }, SportRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/testing/{!testingId}/sportRole'
+  })
+  updateTestingSportRoles: IRestMethodStrict<ListRequest<SportRole>, {}, { testingId: number }, SportRole[]>;
 
   //#endregion
 

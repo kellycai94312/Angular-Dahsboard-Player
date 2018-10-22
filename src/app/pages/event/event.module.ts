@@ -35,6 +35,10 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
 import {EditEventComponent} from './edit-event/edit-event.component';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {GeneralTestingStepComponent} from './event-page/testing/step/general-testing-step/general-testing-step.component';
+import {TestingStepsManagerComponent} from './event-page/testing/step/testing-steps-manager/testing-steps-manager.component';
+import {NamedObjectModule} from '../../components/named-object/named-object.module';
+import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 
 @NgModule({
   imports: [
@@ -64,7 +68,9 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     NgxButtonModule,
     NgxModalModule,
     NgxTextBoxModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
+    NamedObjectModule,
+    NgxSelectionModule
   ],
   declarations: [
     EventPageComponent,
@@ -78,7 +84,9 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     EventCalendarItemComponent,
     EventCalendarMonthModalComponent,
     EventTypeComponent,
-    EditEventComponent
+    EditEventComponent,
+    GeneralTestingStepComponent,
+    TestingStepsManagerComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,

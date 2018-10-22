@@ -40,9 +40,9 @@ export class LoginPageComponent implements OnDestroy {
   public signIn = async () => {
     const session: Session = await this._authorizationService.logIn(this.auth);
     if (session) {
-      if (session.personId) {
+      if (session.person) {
         this._profileService.init();
-        await this.router.navigate(['/person', session.personId]);
+        await this.router.navigate(['/person', session.person.id]);
       } else {
         await this.router.navigate(['/registration/person']);
       }

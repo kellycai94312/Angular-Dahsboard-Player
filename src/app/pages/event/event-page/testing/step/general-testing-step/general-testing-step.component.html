@@ -1,0 +1,86 @@
+<div *ngIf="event">
+  <div class="d-flex flex-row">
+    <div class="w-100 mr-auto">
+      <label>{{'name' | translate}}</label>
+      <ngx-text-box [(value)]="event.name"></ngx-text-box>
+    </div>
+    <div class="ml-2">
+      <label>{{startDateDateBox.placeholder}}</label>
+      <dx-date-box #startDateDateBox
+                   type="datetime"
+                   class="input-height-sm"
+                   [(value)]="event.startTime"
+                   [displayFormat]="propertyConstantClass.dateTimeFormat"
+                   placeholder="{{'startDate' | translate}}"
+                   (onValueChanged)="onStartDateChanged($event.value)">
+      </dx-date-box>
+    </div>
+    <div class="ml-2">
+      <label>{{durationDateBox.placeholder}}</label>
+      <dx-date-box #durationDateBox
+                   type="time"
+                   class="input-height-sm"
+                   [value]="duration"
+                   [displayFormat]="propertyConstantClass.timeWithSecondsFormat"
+                   placeholder="{{'duration' | translate}}"
+                   (onValueChanged)="onDurationChanged($event.value)">
+      </dx-date-box>
+    </div>
+  </div>
+
+  <label class="mt-2">{{'description' | translate}}</label>
+  <dx-text-area [(value)]="event.description"
+                height="150"></dx-text-area>
+
+  <div class="mt-2 d-flex flex-row">
+    <div>
+      <label>{{locationInputSelect.placeholder}}</label>
+      <app-input-select #locationInputSelect
+                        [loadData]="fetchLocations"
+                        [(model)]="event.location"
+                        [getKey]="getKey"
+                        [getName]="getName"
+                        placeholder="{{'location' | translate}}">
+      </app-input-select>
+    </div>
+    <div class="ml-2">
+      <label>{{ageGroupInputSelect.placeholder}}</label>
+      <app-input-select #ageGroupInputSelect
+                        [loadData]="fetchAgeGroups"
+                        [(model)]="event.ageGroup"
+                        [getKey]="getKey"
+                        [getName]="getName"
+                        placeholder="{{'ageGroup' | translate}}">
+      </app-input-select>
+    </div>
+    <div class="ml-2">
+      <label>{{sportTypeInputSelect.placeholder}}</label>
+      <app-input-select #sportTypeInputSelect
+                        [loadData]="fetchSportTypes"
+                        [(model)]="event.sportType"
+                        [getKey]="getKey"
+                        [getName]="getName"
+                        (onChange)="onSportTypeChange($event)"
+                        placeholder="{{'sportType' | translate}}">
+      </app-input-select>
+    </div>
+  </div>
+
+  <ngx-button class="mt-2"
+              nameKey="sportRoles"
+              [click]="onSelectSportRoles"
+              [disabled]="disabledSportRoles"></ngx-button>
+  <div class="tags-content mt-2">
+    <div *ngFor="let item of sportRoles">
+      {{item.name + " (" + item.shortName + ")"}}
+    </div>
+  </div>
+
+  <ngx-button nameKey="groups"
+              [click]="onSelectGroups"></ngx-button>
+  <div class="tags-content mt-2">
+    <div *ngFor="let item of groups">
+      {{item.name}}
+    </div>
+  </div>
+</div>

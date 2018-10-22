@@ -15,4 +15,5 @@ export class BaseTraining extends NamedObject {
   location: Location;
   daysOffset: number;
   eventPlan?: EventPlan;
+  templateParent?: BaseTraining;
 }

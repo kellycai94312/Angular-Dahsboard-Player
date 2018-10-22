@@ -10,7 +10,7 @@ export class RegistrationPersonPageGuard implements CanActivate {
   }
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (this._authorizationService.session && !this._authorizationService.session.personId) {
+    if (this._authorizationService.session && !this._authorizationService.session.person) {
       return true;
     }
     return false;

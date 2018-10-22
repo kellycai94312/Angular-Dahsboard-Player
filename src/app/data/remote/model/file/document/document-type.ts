@@ -1,6 +1,6 @@
 export enum DocumentType {
-  CONTRACT,
-  ORDER,
-  DISPOSITION,
-  OTHER
+  CONTRACT = 'CONTRACT',
+  ORDER = 'ORDER',
+  DISPOSITION = 'DISPOSITION',
+  OTHER = 'OTHER'
 }
