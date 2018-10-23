@@ -20,7 +20,7 @@ export class LocalStorageService {
   }
 
   public setLocale(localeKey: string): void {
-    if (!localeKey || !Locale[localeKey]) {
+    if (!this.existLocaleKey(localeKey)) {
       localeKey = this.getCurrentLocale();
     }
 
@@ -30,21 +30,23 @@ export class LocalStorageService {
 
   public getCurrentLocale(): string {
     const localeKey = localStorage.getItem(this.localeName);
-    if (!localeKey || !Locale[localeKey]) {
+    if (!this.existLocaleKey(localeKey)) {
       let locale = Locale.en;
-
       const browserLocaleKey = this._translateService.getBrowserLang();
-      if (!browserLocaleKey || !Locale[browserLocaleKey]) {
+      if (!this.existLocaleKey(browserLocaleKey)) {
         locale = Locale[browserLocaleKey];
       }
-      this.setLocale(locale);
       return locale;
     }
-    return Locale[localeKey].toString();
+    return Locale[localeKey];
   }
 
   public getSessionId(): string {
     return this._cookieService.get(this.sessionIdName);
+  }
+
+  private existLocaleKey(key: string): boolean {
+    return key && Locale[key];
   }
 
 }
