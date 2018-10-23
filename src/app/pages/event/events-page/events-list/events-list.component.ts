@@ -111,7 +111,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   };
 
   public onShowEvent = async (item: BaseTraining) => {
-    if (item.discriminator === TrainingDiscriminator.GAME) {
+    if (item.discriminator !== TrainingDiscriminator.TRAINING) {
       await this._router.navigate([`/event/${item.id}`]);
     }
   };
