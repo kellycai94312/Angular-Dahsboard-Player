@@ -22,13 +22,13 @@ export class GroupsPageComponent implements OnInit {
     this._actions = [];
     this.tabs = [
       {
-        nameKey: 'all',
-        routerLink: 'all',
+        nameKey: 'my',
+        routerLink: 'my',
         splitButtonsItems: this._actions
       },
       {
-        nameKey: 'my',
-        routerLink: 'my',
+        nameKey: 'all',
+        routerLink: 'all',
         splitButtonsItems: this._actions
       }
     ];
