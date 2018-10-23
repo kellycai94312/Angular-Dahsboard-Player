@@ -37,20 +37,20 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     // TODO: Use PersonViewModel
-    const personId = this._authorizationService.session.personId;
-    if (personId) {
-      this.person = await this._profileService.getPerson(personId);
+    const person = this._authorizationService.session.person;
+    if (person) {
+      this.person = await this._profileService.getPerson(person.id);
     } else {
       await this._router.navigate(['/registration/person']);
     }
   }
 
   public async openProfile() {
-    //reload children when on the same state /person/:id
+    // Reload children when on the same state /person/:id
     if (this._router.url.indexOf('/person/') == 0) {
       await this._router.navigate(['/person']);
     }
-    await this._router.navigate(['/person', this._authorizationService.session.personId]);
+    await this._router.navigate(['/person', this._authorizationService.session.person.id]);
   }
 
   ngOnDestroy(): void {

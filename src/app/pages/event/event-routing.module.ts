@@ -8,6 +8,9 @@ import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
 import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
+import {GeneralTestingStepComponent} from './event-page/testing/step/general-testing-step/general-testing-step.component';
+import {TestingStepsManagerComponent} from './event-page/testing/step/testing-steps-manager/testing-steps-manager.component';
+import {CanDeactivateGuard} from '../../guard/can-deactivate.guard';
 
 const routes: Routes = [
   {
@@ -32,6 +35,14 @@ const routes: Routes = [
           {path: '3', component: GameStepExecutionPageComponent}
         ]
       },
+      {path: 'testing', redirectTo: 'testing/step', pathMatch: 'full'},
+      {
+        path: 'testing/step', component: TestingStepsManagerComponent,
+        children: [
+          {path: '', redirectTo: '1', pathMatch: 'full'},
+          {path: '1', component: GeneralTestingStepComponent, canDeactivate: [CanDeactivateGuard]}
+        ]
+      }
     ]
   }
 ];

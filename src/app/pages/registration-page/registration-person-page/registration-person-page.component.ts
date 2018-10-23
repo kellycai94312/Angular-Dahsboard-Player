@@ -36,7 +36,7 @@ export class RegistrationPersonPageComponent implements OnInit {
 
   async ngOnInit() {
     this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
-    this.person.user = await this._participantRestApiService.getUser({id: this._authorizationService.session.userId});
+    this.person.user = await this._participantRestApiService.getUser({id: this._authorizationService.session.user.id});
   }
 
   public onApply = async () => {

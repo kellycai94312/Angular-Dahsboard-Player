@@ -41,7 +41,7 @@ export class AuthorizationService {
       this.session = await this._participantRestApiService.login(auth);
       if (this.session) {
         this.handleLogIn.next(this.session);
-        const person = await this._participantRestApiService.getPerson({id: this.session.personId});
+        const person = await this._participantRestApiService.getPerson({id: this.session.person.id});
         this.personSubject.next(person);
       }
     } catch (e) {
@@ -81,7 +81,7 @@ export class AuthorizationService {
   public async getPerson(): Promise<Person> {
     if (!this._person && this.session) {
       try {
-        this._person = await this._participantRestApiService.getPerson({id: this.session.personId});
+        this._person = await this._participantRestApiService.getPerson({id: this.session.person.id});
       } catch (e) {
       }
     }
@@ -91,15 +91,15 @@ export class AuthorizationService {
   public async getUserRoles(): Promise<UserRole[]> {
     let userRoles: UserRole[] = [];
     try {
-      userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.session.userId});
+      userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.session.user.id});
     } catch (e) {
     }
     return userRoles;
   }
 
-  public async hasUserRole(userRoleEnum: UserRoleEnum) {
+  public async hasUserRole(userRoleEnum: UserRoleEnum): Promise<boolean> {
     const userRoles = await this.getUserRoles();
-    return userRoles.filter(userRole => userRole.userRoleEnum == userRoleEnum).length != 0;
+    return userRoles.filter(userRole => userRole.userRoleEnum === userRoleEnum).length != 0;
   }
 
   public isAuthenticated(): boolean {

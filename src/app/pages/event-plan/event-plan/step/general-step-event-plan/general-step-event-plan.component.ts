@@ -69,14 +69,7 @@ export class GeneralStepEventPlanComponent implements OnDestroy, ICanDeactivate 
   }
 
   async canDeactivate(): Promise<boolean> {
-    if (this._changeWatcher.hasChanges()) {
-      if (await this._ngxModalService.showUnsavedDialogModal()) {
-        this._changeWatcher.reset();
-      } else {
-        return false;
-      }
-    }
-    return true;
+    return this._ngxModalService.showCanDeactivateModal(this._changeWatcher);
   }
 
   public async initialize(eventPlan: EventPlan) {

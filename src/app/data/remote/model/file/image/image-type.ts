@@ -1,5 +1,5 @@
 export enum ImageType {
-  LOGO,
-  BACKGROUND,
-  GALLERY
+  LOGO = 'LOGO',
+  BACKGROUND = 'BACKGROUND',
+  GALLERY = 'GALLERY'
 }

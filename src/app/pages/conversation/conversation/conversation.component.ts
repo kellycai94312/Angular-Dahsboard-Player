@@ -50,14 +50,14 @@ export class ConversationComponent implements OnInit {
     } else {
 
       this.conversation = messageWrapper.message.content.baseConversation;
-      if (this._authorizationService.session.personId == messageWrapper.message.sender.person.id) {
+      if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
         this.senderPerson = messageWrapper.message.sender.person;
       }
 
       switch (this.conversation.discriminator) {
         case BaseConversationType.DIALOGUE:
           this.conversationImageClazz = FileClass.PERSON;
-          if (this._authorizationService.session.personId == messageWrapper.message.sender.person.id) {
+          if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
             this.conversationImageId = messageWrapper.message.receiver.person.id;
             this.conversationName = this.getPersonFullName(messageWrapper.message.receiver.person);
           } else {

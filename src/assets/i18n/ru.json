@@ -485,5 +485,13 @@
     "PROFESSIONAL": "Профессиональный",
     "NATIONAL": "Национальный"
   },
-  "language": "Язык"
+  "language": "Язык",
+  "eventStateEnum": {
+    "DRAFT": "Черновик",
+    "PLAN": "План",
+    "START": "Выполнение",
+    "PAUSE": "Пауза",
+    "RESUME": "Возобновлено",
+    "STOP": "Завершено"
+  }
 }

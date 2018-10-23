@@ -29,6 +29,7 @@ import {QueryParams} from '../../../data/remote/rest-api/query-params';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 import {TranslateService} from '@ngx-translate/core';
+import {ChangeWatcher} from '../../../data/local/util/change-watcher';
 
 @Injectable()
 export class NgxModalService {
@@ -303,6 +304,17 @@ export class NgxModalService {
       ];
     });
     return await this.awaitModalResult(modal);
+  }
+
+  public async showCanDeactivateModal(changeWatcher: ChangeWatcher): Promise<boolean> {
+    if (changeWatcher.hasChanges()) {
+      if (await this.showUnsavedDialogModal()) {
+        changeWatcher.reset();
+      } else {
+        return false;
+      }
+    }
+    return true;
   }
 
 }

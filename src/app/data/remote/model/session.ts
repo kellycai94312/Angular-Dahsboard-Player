@@ -1,8 +1,11 @@
+import {User} from './user';
+import {Person} from './person';
+
 export class Session {
-  created: string;
-  updated: string;
+  created: Date;
+  updated: Date;
   expired: number;
   uuid: string;
-  userId: number;
-  personId: number;
+  user: User;
+  person: Person;
 }

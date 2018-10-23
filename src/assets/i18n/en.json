@@ -484,5 +484,13 @@
     "PROFESSIONAL": "Professional",
     "NATIONAL": "National"
   },
-  "language": "Language"
+  "language": "Language",
+  "eventStateEnum": {
+    "DRAFT": "Draft",
+    "PLAN": "Plan",
+    "START": "Start",
+    "PAUSE": "Pause",
+    "RESUME": "Resume",
+    "STOP": "Stop"
+  }
 }
