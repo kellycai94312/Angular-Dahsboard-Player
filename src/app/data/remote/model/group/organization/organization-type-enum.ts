@@ -1,0 +1,9 @@
+export enum OrganizationTypeEnum {
+  MINISTRY = 'MINISTRY',
+  COMMITTEE = 'COMMITTEE',
+  DEPARTMENT = 'DEPARTMENT',
+  FEDERATION = 'FEDERATION',
+  SCHOOL = 'SCHOOL',
+  SECTION = 'SECTION',
+  OTHER = 'OTHER'
+}

@@ -10,9 +10,9 @@ import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type
 import {StageType} from '../../../../data/remote/model/stage/stage-type';
 import {Stage} from '../../../../data/remote/model/stage/stage';
 import {Router} from '@angular/router';
-import {environment} from '../../../../../environments/environment';
-import {EnvironmentType} from '../../../../../environments/environment-type';
 import {TeamType} from '../../../../data/remote/model/group/team/team-type';
+import {LocalStorageService} from '../../../../shared/local-storage.service';
+import {OrganizationType} from '../../../../data/remote/model/group/organization/organization-type';
 
 @Component({
   selector: 'app-edit-group',
@@ -22,32 +22,40 @@ import {TeamType} from '../../../../data/remote/model/group/team/team-type';
 export class EditGroupComponent extends BaseEditComponent<Group> {
 
   public readonly groupTypeEnum = GroupTypeEnum;
-
   public group: Group;
   public groupTypes: GroupType[];
   public sportTypes: SportType[];
   public stages: Stage[];
   public stageTypes: StageType[];
   public teamTypes: TeamType[];
+  public organizationTypes: OrganizationType[];
+  public rememberName: boolean;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _router: Router) {
+              private _router: Router,
+              private _localStorageService: LocalStorageService) {
     super(participantRestApiService, appHelper);
+    this.rememberName = false;
   }
 
   async initialize(obj: Group): Promise<boolean> {
     await super.initialize(obj);
 
+    const lastGroupName = this._localStorageService.getLastGroupName();
+    if (lastGroupName) {
+      this.rememberName = true;
+    }
+
+    obj.name = obj.name || lastGroupName;
+    obj.visible = obj.visible || true;
+
     return await this.appHelper.tryLoad(async () => {
       this.groupTypes = await this.participantRestApiService.getGroupTypes();
-      if (environment.type === EnvironmentType.SCHOOL || environment.type === EnvironmentType.SAINT_PETERSBURG) {
-        this.groupTypes = [this.groupTypes.find(x => x.groupTypeEnum === GroupTypeEnum.TEAM)];
-      }
-
       this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
       this.stages = await this.participantRestApiService.getStages();
       this.teamTypes = await this.participantRestApiService.getTeamTypes();
       this.stageTypes = await this.participantRestApiService.getStageTypes();
+      // TODO: Get organization types this.organizationTypes = await this.participantRestApiService.get;
     });
   }
 
@@ -60,6 +68,8 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
       } else {
         this.data = await this.participantRestApiService.putGroup(this.data);
       }
+
+      this._localStorageService.setLastGroupName(this.rememberName ? this.data.name : null);
     });
   }
 
