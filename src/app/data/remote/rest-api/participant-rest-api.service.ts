@@ -108,6 +108,7 @@ import {EventPlanLoadPeriod} from '../bean/event-plan-load-period';
 import {EventPlanLoad} from '../model/training/plan/event-plan-load';
 import {EventPlanTrainingValueEnum} from '../model/training/plan/event-plan-training-value-enum';
 import {EventGroupQuery} from './query/event/event-group-query';
+import {Rank} from '../model/rank';
 
 @Injectable()
 @RestParams({
@@ -319,19 +320,19 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/rank'
   })
-  getRanks: IRestMethod<{ personId: number }, PersonRank[]>;
+  getPersonRanks: IRestMethod<{ personId: number }, PersonRank[]>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/person/{!personId}/rank/{!rankId}'
+    path: '/person/{!personId}/rank/{!rankId}/sportType/{!sportTypeId}'
   })
-  updateRank: IRestMethodStrict<PersonRank, any, { personId: number, rankId: number }, PersonRank>;
+  updatePersonRank: IRestMethodStrict<PersonRank, any, { personId: number, rankId: number, sportTypeId: number }, PersonRank>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/person/{!personId}/rank/{!rankId}'
+    path: '/person/{!personId}/rank/{!rankId}/sportType/{!sportTypeId}'
   })
-  removeRank: IRestMethod<{ personId: number, rankId: number }, void>;
+  removePersonRank: IRestMethod<{ personId: number, rankId: number, sportTypeId: number }, PersonRank>;
 
   //#endregion
 
@@ -546,7 +547,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/medicalExamination'
   })
-  getMedicalExaminations: IRestMethodStrict<any, PageQuery, { personId: number }, PageContainer<MedicalExamination>>;
+  getMedicalExaminations: IRestMethodStrict<any, { sportTypeId: number, from?: number, count?: number }, { personId: number }, PageContainer<MedicalExamination>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -718,12 +719,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/userRole',
-  })
-  postPersonUserRole: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
     path: '/group/{!groupId}/person/{!personId}/mentor',
   })
   postPersonMentor: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
@@ -741,10 +736,16 @@ export class ParticipantRestApiService extends Rest {
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/admin',
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}/userRole',
   })
-  postPersonAdmin: IRestMethodStrict<{ admin?: boolean }, any, { groupId: number, personId: number }, GroupPerson>;
+  getGroupPersonUserRoles: IRestMethod<{ groupId: number, personId: number }, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/userRole',
+  })
+  updateGroupPersonUserRoles: IRestMethodStrict<ListRequest<UserRole>, any, { groupId: number, personId: number }, UserRole[]>;
 
   //#region Subgroup
 
@@ -930,6 +931,9 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getFileUrl(documentQuery: DocumentQuery): string {
+    if (!documentQuery) {
+      return '';
+    }
     let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
     if (documentQuery.type) {
       url += `&type=${documentQuery.type}`;
@@ -1856,6 +1860,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/testing/{!testingId}/sportRole'
   })
   updateTestingSportRoles: IRestMethodStrict<ListRequest<SportRole>, {}, { testingId: number }, SportRole[]>;
+
+  //#endregion
+
+  //#region Rank
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/rank',
+  })
+  getRanks: IRestMethod<void, Rank[]>;
 
   //#endregion
 

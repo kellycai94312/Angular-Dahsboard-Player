@@ -511,5 +511,8 @@
   "middleName": "Middle name",
   "transfer": "Transfer",
   "deduct": "Deduct",
-  "someFieldsNotValid": "Some fields not valid"
+  "someFieldsNotValid": "Some fields not valid",
+  "allowed": "Allowed",
+  "yes": "Yes",
+  "no": "No"
 }

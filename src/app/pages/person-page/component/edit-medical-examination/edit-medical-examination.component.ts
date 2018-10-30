@@ -1,100 +1,84 @@
 import {Component, Input} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {Document} from '../../../../data/remote/model/file/document/document';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {Person} from '../../../../data/remote/model/person';
+import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
 
 @Component({
   selector: 'app-edit-medical-examination',
   templateUrl: './edit-medical-examination.component.html',
   styleUrls: ['./edit-medical-examination.component.scss']
 })
-export class EditMedicalExaminationComponent extends BaseEditComponent<MedicalExamination> {
+export class EditMedicalExaminationComponent extends ComponentWithAttach<MedicalExamination> {
 
-  public propertyConstant = PropertyConstant;
+  public readonly propertyConstant = PropertyConstant;
 
   @Input()
-  public personId: number;
+  public person: Person;
 
-  private _document: Document;
+  public sportTypes: SportType[];
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
 
-    this._document = new Document();
-    this._document.clazz = FileClass.MEDICAL_EXAMINATION;
+    this.document.clazz = FileClass.MEDICAL_EXAMINATION;
+    this.documentQuery.clazz = FileClass.MEDICAL_EXAMINATION;
   }
 
-
   async initialize(obj: MedicalExamination): Promise<boolean> {
-    await  super.initialize(obj);
-    this._document.objectId = this.data.id;
+    return await this.appHelper.tryLoad(async () => {
+      await super.initialize(obj);
+      obj.allowed = obj.allowed || false;
+      this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
 
-    return this.appHelper.tryLoad(async () => {
-      if (this.data && this.data.id) {
-        const documents = await this.participantRestApiService.getDocuments({clazz: FileClass.MEDICAL_EXAMINATION, objectId: this.data.id, count: 1});
-        if (documents.list.length) {
-          this._document = documents.list[0];
-        }
-      }
+      await this.attachFileComponent.initialize();
     });
   }
 
   async onSave(): Promise<boolean> {
-    return this.appHelper.trySave(async () => {
-      this.data.passDate = this.appHelper.getGmtDate(this.data.passDate);
+    if (!this.changeWatcher.hasChanges()) {
+      return true;
+    }
+
+    if (!(await this.validWithNotify())) {
+      return false;
+    }
+    return await this.appHelper.trySave(async () => {
       if (this.appHelper.isNewObject(this.data)) {
-        this.data = await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.personId});
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.person.id}));
       } else {
-        this.data = await this.participantRestApiService.updateMedicalExamination(this.data, {}, {personId: this.personId, medicalExaminationId: this.data.id});
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {personId: this.person.id, medicalExaminationId: this.data.id}));
       }
-      this._document.objectId = this.data.id;
+      this.document.number = this.data.number;
+      this.document.date = this.data.startDate;
+
+      if (this.attachFileComponent.hasChanges()) {
+        this.document.objectId = this.data.id;
+        await this.attachFileComponent.updateFile();
+      }
     });
   }
 
   async onRemove(): Promise<boolean> {
-    return this.appHelper.tryRemove(async () => {
-      if (!this.appHelper.isNewObject(this.data)) {
-        this.data = await this.participantRestApiService.removeMedicalExamination({personId: this.personId, medicalExaminationId: this.data.id});
-      }
+    return this.appHelper.isNewObject(this.data) || await this.appHelper.tryRemove(async () => {
+      this.data = await this.participantRestApiService.removeMedicalExamination({personId: this.person.id, medicalExaminationId: this.data.id});
     });
   }
 
-  public editDocument = async () => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
+  valid(): boolean {
+    return super.valid() && !!(this.data.sportType && this.data.number && this.data.startDate && this.data.finishDate);
+  }
 
-    await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
-      component.manualInitialization = true;
-      await component.initialize(this.appHelper.cloneObject(this._document));
+  public onStartDateChanged(val: Date) {
+    this.data.startDate = this.appHelper.getGmtDate(val);
+  }
 
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'save',
-          default: true,
-          callback: async () => {
-            await this._ngxModalService.save(modal, component);
-          },
-        },
-        {
-          nameKey: 'remove',
-          callback: async () => {
-            await this._ngxModalService.remove(modal, component);
-          },
-        }
-      ];
-
-      modal.result.then(async x => {
-      }, async reason => {
-        this._document = component.data;
-      });
-    });
-  };
+  public onFinishDateChanged(val: Date) {
+    this.data.finishDate = this.appHelper.getGmtDate(val);
+  }
 
 }

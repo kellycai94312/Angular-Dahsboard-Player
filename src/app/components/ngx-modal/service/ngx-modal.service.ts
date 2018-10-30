@@ -30,6 +30,7 @@ import {Group} from '../../../data/remote/model/group/base/group';
 import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 import {TranslateService} from '@ngx-translate/core';
 import {ChangeWatcher} from '../../../data/local/util/change-watcher';
+import {UserRole} from '../../../data/remote/model/user-role';
 
 @Injectable()
 export class NgxModalService {
@@ -238,6 +239,17 @@ export class NgxModalService {
       },
       data => {
         return `${data.name} (${data.shortName})`;
+      },
+      selectedItems, apply);
+  }
+
+  public async showSelectionUserRolesModal<T extends UserRole>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async query => {
+        const items = await this._participantRestApiService.getUserRoles();
+        return this._appHelper.arrayToPageContainer(items);
+      },
+      data => {
+        return data.name;
       },
       selectedItems, apply);
   }

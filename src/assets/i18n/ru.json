@@ -512,5 +512,8 @@
   "middleName": "Отчество",
   "transfer": "Перевести",
   "deduct": "Отчислить",
-  "someFieldsNotValid": "Некоторые поля заполнены неверно"
+  "someFieldsNotValid": "Некоторые поля заполнены неверно",
+  "allowed": "Допущен",
+  "yes": "Да",
+  "no": "Нет"
 }
