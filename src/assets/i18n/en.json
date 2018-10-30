@@ -19,10 +19,6 @@
       "cancel": "Cancel",
       "personal": {
         "section": "Personal information",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "middleName": "Middle name",
-        "birthDate": "Birth date",
         "country": "Country",
         "region": "Region",
         "city": "City"
@@ -494,5 +490,26 @@
     "STOP": "Stop"
   },
   "remember": "Remember",
-  "organizationType": "Organization type"
+  "organizationType": "Organization type",
+  "roles": "Roles",
+  "decree": "Decree",
+  "decrees": "Decrees",
+  "decreeType": "Decree type",
+  "sportRanks": "Sport ranks",
+  "issued": "Issued",
+  "actual": "Actual",
+  "documents": "Documents",
+  "birthCertificate": "Birth certificate",
+  "issuedBy": "Issued by",
+  "orderTypeEnum": {
+    "ENROLLMENT": "Enrollment",
+    "TRANSFER": "Transfer",
+    "DEDUCTION": "Deduction"
+  },
+  "firstName": "First name",
+  "lastName": "Last name",
+  "middleName": "Middle name",
+  "transfer": "Transfer",
+  "deduct": "Deduct",
+  "someFieldsNotValid": "Some fields not valid"
 }

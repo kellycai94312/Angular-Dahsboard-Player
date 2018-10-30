@@ -6,5 +6,6 @@ export enum IconEnum {
   REMOVE = 'fa fa-trash',
   IMAGE = 'fa fa-image',
   TABLE = 'fa fa-table',
-  CALENDAR = 'fa fa-calendar'
+  CALENDAR = 'fa fa-calendar',
+  ATTACH = 'fa fa-paperclip'
 }

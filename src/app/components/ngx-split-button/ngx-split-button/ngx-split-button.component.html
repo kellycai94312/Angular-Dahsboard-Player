@@ -16,7 +16,7 @@
            [ngClass]="{'fixed-right': placementRight}"
            ngbDropdownMenu>
         <span *ngFor="let item of items">
-          <button *ngIf="item !== defaultItem"
+          <button *ngIf="item !== defaultItem && (!item.visible || item.visible())"
                   class="dropdown-item"
                   (click)="onClick(item)">{{item.nameKey | translate}}
           </button>

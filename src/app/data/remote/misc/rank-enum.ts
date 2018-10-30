@@ -1,8 +1,12 @@
 export enum RankEnum {
-  RANK_3,
-  RANK_2,
-  RANK_1,
-  KMS,
-  SPORTS_MASTER,
-  MSMK
+  JUNIOR_3 = 'JUNIOR_3',
+  JUNIOR_2 = 'JUNIOR_2',
+  JUNIOR_1 = 'JUNIOR_1',
+  SPORTS_3 = 'SPORTS_3',
+  SPORTS_2 = 'SPORTS_2',
+  SPORTS_1 = 'SPORTS_1',
+  KMS = 'KMS',
+  MS = 'MS',
+  MSMK = 'MSMK',
+  ZMS = 'ZMS'
 }

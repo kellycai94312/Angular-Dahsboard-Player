@@ -20,10 +20,6 @@
       "cancel": "Отмена",
       "personal": {
         "section": "Основные данные",
-        "firstName": "Имя",
-        "lastName": "Фамилия",
-        "middleName": "Отчество",
-        "birthDate": "Дата рождения",
         "country": "Страна",
         "region": "Регион",
         "city": "Город"
@@ -195,7 +191,7 @@
   "organization": "Организация",
   "report": "Отчет",
   "reportError": "Недостаточно данных для формирования отчета",
-  "rank": "Разряд, звание",
+  "rank": "Разряд",
   "assignee": "Кем присвоен(о)",
   "orderNumber": "№ приказа, распоряжения",
   "certificateNumber": "№ удостоверения",
@@ -495,5 +491,26 @@
     "STOP": "Завершено"
   },
   "remember": "Запомнить",
-  "organizationType": "Тип организации"
+  "organizationType": "Тип организации",
+  "roles": "Роли",
+  "decree": "Приказ",
+  "decrees": "Приказы",
+  "decreeType": "Тип приказа",
+  "sportRanks": "Спортивные звания",
+  "issued": "Выдан",
+  "actual": "Действителен",
+  "documents": "Документы",
+  "birthCertificate": "Свидетельство о рождении",
+  "issuedBy": "Кем выдан",
+  "orderTypeEnum": {
+    "ENROLLMENT": "Зачисление",
+    "TRANSFER": "Перевод",
+    "DEDUCTION": "Отчисление"
+  },
+  "firstName": "Имя",
+  "lastName": "Фамилия",
+  "middleName": "Отчество",
+  "transfer": "Перевести",
+  "deduct": "Отчислить",
+  "someFieldsNotValid": "Некоторые поля заполнены неверно"
 }
