@@ -1,0 +1,17 @@
+<div class="d-flex flex-row align-items-center mt-2 {{classes}}">
+  <label class="btn btn-primary input-height-sm">
+    {{'uploadFile' | translate}}<input type="file"
+                                       (change)="onFileChange($event)">
+  </label>
+  <div *ngIf="baseFile.resource && baseFile.resource.name"
+       class="ml-2">
+    <div class="d-flex flex-row align-items-center">
+      <p>{{baseFile.resource.name}}</p>
+      <button type="button"
+              class="close ml-2"
+              (click)="onRemoveFile()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+</div>
