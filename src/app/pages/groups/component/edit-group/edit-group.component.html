@@ -1,4 +1,13 @@
-<label>{{'name' | translate}}</label>
+<label>{{'parentGroup' | translate}}</label>
+<app-input-select [loadData]="loadGroups"
+                  [(model)]="parentGroup"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  [disabled]="data.id"
+                  ngDefaultControl>
+</app-input-select>
+
+<label class="mt-2">{{'name' | translate}}</label>
 <div class="d-flex flex-row">
   <dx-text-box class="w-100"
                [(value)]="data.name"
@@ -14,17 +23,17 @@
 </div>
 
 <label class="mt-2">{{'groupType' | translate}}</label>
-<dx-select-box [items]="groupTypes"
-               [(value)]="data.groupType"
+<dx-select-box [items]="groupTypeEnums"
                displayExpr="name"
                [disabled]="data.id"
-               placeholder="{{'groupType' | translate}}">
+               placeholder="{{'groupType' | translate}}"
+               (onValueChanged)="onGroupTypeChanged($event.value)">
   <dx-validator>
     <dxi-validation-rule type="required"></dxi-validation-rule>
   </dx-validator>
 </dx-select-box>
 
-<div *ngIf="data.groupType?.groupTypeEnum === groupTypeEnum.ORGANIZATION">
+<div *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION">
   <label class="mt-2">{{'organizationType' | translate }}</label>
   <dx-select-box [items]="organizationTypes"
                  [(value)]="data.organizationType"
@@ -37,7 +46,7 @@
 </div>
 
 <div
-  *ngIf="data.groupType?.groupTypeEnum === groupTypeEnum.TEAM || data.groupType?.groupTypeEnum === groupTypeEnum.PREPARATION">
+  *ngIf="data?.discriminator === groupTypeEnum.TEAM || data?.discriminator === groupTypeEnum.PREPARATION_GROUP">
   <label class="mt-2">{{'sportType' | translate}}</label>
   <dx-select-box [items]="sportTypes"
                  [(value)]="data.sportType"
@@ -49,7 +58,7 @@
     </dx-validator>
   </dx-select-box>
 
-  <div *ngIf="data.groupType?.groupTypeEnum === groupTypeEnum.TEAM">
+  <div *ngIf="data?.discriminator === groupTypeEnum.TEAM">
     <label class="mt-2">{{'teamType' | translate }}</label>
     <dx-select-box [items]="teamTypes"
                    [(value)]="data.teamType"

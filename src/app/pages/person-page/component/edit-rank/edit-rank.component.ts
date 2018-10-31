@@ -43,12 +43,12 @@ export class EditRankComponent extends ComponentWithAttach<PersonRank> {
 
   async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
-      await this.participantRestApiService.removePersonRank({personId: this.person.id, rankId: this.data.rank.id, sportTypeId: this.data.sportType.id});
+      await this.participantRestApiService.removePersonRank({personId: this.person.id, personRankId: this.data.id});
     });
   }
 
   async onSave(): Promise<boolean> {
-    if (!this.changeWatcher.hasChanges()) {
+    if (!this.changeWatcher.hasChanges() && !this.attachFileComponent.hasChanges()) {
       return true;
     }
 
@@ -57,13 +57,20 @@ export class EditRankComponent extends ComponentWithAttach<PersonRank> {
     }
 
     return await this.appHelper.trySave(async () => {
-      this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePersonRank(this.data, {}, {
-        personId: this.person.id,
-        rankId: this.data.rank.id,
-        sportTypeId: this.data.sportType.id
-      }));
-      this.document.number = this.data.number;
-      this.document.date = this.data.date;
+      if (this.changeWatcher.hasChanges()) {
+        if (this.appHelper.isNewObject(this.data)) {
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.createPersonRank(this.data, {}, {
+            personId: this.person.id
+          }));
+        } else {
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePersonRank(this.data, {}, {
+            personId: this.person.id,
+            personRankId: this.data.id
+          }));
+        }
+        this.document.number = this.data.number;
+        this.document.date = this.data.date;
+      }
 
       if (this.attachFileComponent.hasChanges()) {
         this.document.objectId = this.data.id;

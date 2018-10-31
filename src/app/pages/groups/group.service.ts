@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Group } from '../../data/remote/model/group/base/group';
-import { Subject } from 'rxjs/Subject';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { SubGroup } from '../../data/remote/model/group/sub-group';
-import { GroupPerson } from '../../data/remote/model/group/group-person';
-import { GroupPersonState } from '../../data/local/group-person-state';
-import { GroupTypeEnum } from '../../data/remote/model/group/base/group-type-enum';
+import {Injectable} from '@angular/core';
+import {Group} from '../../data/remote/model/group/base/group';
+import {Subject} from 'rxjs/Subject';
+import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {SubGroup} from '../../data/remote/model/group/sub-group';
+import {GroupPerson} from '../../data/remote/model/group/group-person';
+import {GroupPersonState} from '../../data/local/group-person-state';
+import {GroupTypeEnum} from '../../data/remote/model/group/base/group-type-enum';
 
 @Injectable()
 export class GroupService {
@@ -74,7 +74,7 @@ export class GroupService {
       this._isOwner = this._group.owner.id === this._groupPerson.person.user.id;
     }
 
-    this._hasEvents = this._group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM];
+    this._hasEvents = this._group.discriminator === GroupTypeEnum.TEAM;
 
     return this._groupPerson;
   }

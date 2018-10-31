@@ -1,5 +1,4 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -10,6 +9,9 @@ import {GroupViewModel} from '../../../../data/local/view-model/group/group-view
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../../utils/app-helper';
+import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-my-groups',
@@ -26,11 +28,12 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
 
   public groupQuery: GroupQuery;
 
-  public groupTypes: GroupType[];
+  public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
   public userRoles: UserRole[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _translateObjectService: TranslateObjectService) {
     this.groupQuery = new GroupQuery();
     this.groupQuery.name = '';
     this.groupQuery.from = 0;
@@ -39,7 +42,7 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.groupTypes = await this._participantRestApiService.getGroupTypes();
+    this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
   }
 
@@ -52,18 +55,18 @@ export class MyGroupsComponent implements OnInit, AfterViewInit {
     await this.updateItems();
   }
 
-  public async onGroupTypeChanged(value: GroupType) {
-    if (value) {
-      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
+  public async onGroupTypeChanged(val: NameWrapper<GroupTypeEnum>) {
+    if (val) {
+      this.groupQuery.groupTypeEnum = val.data;
     } else {
       delete this.groupQuery.groupTypeEnum;
     }
     await this.updateItems();
   }
 
-  public async onUserRoleChanged(value: UserRole) {
-    if (value) {
-      this.groupQuery.userRoleEnum = value.userRoleEnum;
+  public async onUserRoleChanged(val: UserRole) {
+    if (val) {
+      this.groupQuery.userRoleEnum = val.userRoleEnum;
     } else {
       delete this.groupQuery.userRoleEnum;
     }

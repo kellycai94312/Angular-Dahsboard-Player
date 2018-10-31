@@ -40,7 +40,7 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
   }
 
   async onSave(): Promise<boolean> {
-    if (!this.changeWatcher.hasChanges()) {
+    if (!this.changeWatcher.hasChanges() && !this.attachFileComponent.hasChanges()) {
       return true;
     }
 
@@ -48,13 +48,15 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
       return false;
     }
     return await this.appHelper.trySave(async () => {
-      if (this.appHelper.isNewObject(this.data)) {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.person.id}));
-      } else {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {personId: this.person.id, medicalExaminationId: this.data.id}));
+      if (this.changeWatcher.hasChanges()) {
+        if (this.appHelper.isNewObject(this.data)) {
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.person.id}));
+        } else {
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {personId: this.person.id, medicalExaminationId: this.data.id}));
+        }
+        this.document.number = this.data.number;
+        this.document.date = this.data.startDate;
       }
-      this.document.number = this.data.number;
-      this.document.date = this.data.startDate;
 
       if (this.attachFileComponent.hasChanges()) {
         this.document.objectId = this.data.id;

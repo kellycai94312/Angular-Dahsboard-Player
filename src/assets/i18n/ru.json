@@ -523,5 +523,7 @@
     "AGENCY": "Агентство",
     "PREPARATION_GROUP": "Группа подготовки"
   },
-  "legalRepresentativesPhone": "Телефон законных представителей"
+  "legalRepresentativesPhone": "Телефон законных представителей",
+  "parentGroup": "Родительская группа",
+  "orderDocument": "Приказ"
 }

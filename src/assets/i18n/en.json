@@ -522,5 +522,7 @@
     "AGENCY": "Agency",
     "PREPARATION_GROUP": "Preparation group"
   },
-  "legalRepresentativesPhone": "Legal representatives phone"
+  "legalRepresentativesPhone": "Legal representatives phone",
+  "parentGroup": "Parent group",
+  "orderDocument": "Order"
 }

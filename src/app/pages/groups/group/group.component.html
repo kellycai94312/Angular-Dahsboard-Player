@@ -8,7 +8,7 @@
                [format]="'SQUARE'"></app-image>
     <div class="d-flex flex-column ml-2">
       <h6>{{data.name}} {{data?.stage?.shortName}}{{data.stageYear}}{{data?.stageType?.shortName}}</h6>
-      <p>{{data.groupType.name}}</p>
+      <p>{{('groupTypeEnum.' + data.discriminator) | translate}}</p>
     </div>
   </div>
 </div>

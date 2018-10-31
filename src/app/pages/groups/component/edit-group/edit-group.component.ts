@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
@@ -13,6 +12,9 @@ import {Router} from '@angular/router';
 import {TeamType} from '../../../../data/remote/model/group/team/team-type';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {OrganizationType} from '../../../../data/remote/model/group/organization/organization-type';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {GroupRequest} from '../../../../data/remote/request/group-request';
 
 @Component({
   selector: 'app-edit-group',
@@ -22,18 +24,19 @@ import {OrganizationType} from '../../../../data/remote/model/group/organization
 export class EditGroupComponent extends BaseEditComponent<Group> {
 
   public readonly groupTypeEnum = GroupTypeEnum;
-  public group: Group;
-  public groupTypes: GroupType[];
+  public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
   public sportTypes: SportType[];
   public stages: Stage[];
   public stageTypes: StageType[];
   public teamTypes: TeamType[];
   public organizationTypes: OrganizationType[];
   public rememberName: boolean;
+  public parentGroup: Group;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _router: Router,
-              private _localStorageService: LocalStorageService) {
+              private _localStorageService: LocalStorageService,
+              private _translateObjectService: TranslateObjectService) {
     super(participantRestApiService, appHelper);
     this.rememberName = false;
   }
@@ -50,23 +53,26 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
     obj.visible = obj.visible || true;
 
     return await this.appHelper.tryLoad(async () => {
-      this.groupTypes = await this.participantRestApiService.getGroupTypes();
+      this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
       this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
       this.stages = await this.participantRestApiService.getStages();
       this.teamTypes = await this.participantRestApiService.getTeamTypes();
       this.stageTypes = await this.participantRestApiService.getStageTypes();
-      // TODO: Get organization types this.organizationTypes = await this.participantRestApiService.get;
+      this.organizationTypes = await this.participantRestApiService.getOrganizationTypes();
     });
   }
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      this.data.discriminator = this.data.groupType.groupTypeEnum;
-
       if (this.appHelper.isNewObject(this.data)) {
-        this.data = await this.participantRestApiService.postGroup(this.data);
+        const groupRequest = new GroupRequest();
+        groupRequest.group = this.data;
+        if (this.parentGroup) {
+          groupRequest.topGroupId = this.parentGroup.id;
+        }
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.createGroup(groupRequest));
       } else {
-        this.data = await this.participantRestApiService.putGroup(this.data);
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.putGroup(this.data));
       }
 
       this._localStorageService.setLastGroupName(this.rememberName ? this.data.name : null);
@@ -79,6 +85,27 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
 
   public async navigateToPage(): Promise<void> {
     await this._router.navigate(['/group', this.data.id]);
+  }
+
+  public onGroupTypeChanged(val: NameWrapper<GroupTypeEnum>) {
+    this.data.discriminator = val.data;
+  }
+
+  public loadGroups = async (from: number, searchText: string) => {
+    return this.participantRestApiService.getGroups({
+      from: from,
+      count: PropertyConstant.pageSize,
+      name: searchText,
+      canEdit: true
+    });
+  };
+
+  getKey(group: Group) {
+    return group.id;
+  }
+
+  getName(group: Group) {
+    return group.name;
   }
 
 }

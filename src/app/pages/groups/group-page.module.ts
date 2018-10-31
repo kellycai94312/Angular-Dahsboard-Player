@@ -48,6 +48,8 @@ import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {GroupPersonTransferComponent} from './component/group-person-transfer/group-person-transfer.component';
+import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 
 @NgModule({
   imports: [
@@ -79,11 +81,15 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     FileModule,
     NgxGraphModule,
     NgxChartsModule,
-    NgxButtonModule
+    NgxButtonModule,
+    NgxModalModule,
+    AttachFileModule
   ],
   exports: [
     GroupComponent,
-    EditGroupPersonComponent
+    EditGroupPersonComponent,
+    GroupPersonTransferComponent,
+    EditGroupComponent
   ],
   providers: [
     LayoutService,
@@ -113,7 +119,8 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     EditDocumentComponent,
     EditGroupComponent,
     EditGroupPersonLogsComponent,
-    GroupConnectionsGraphComponent
+    GroupConnectionsGraphComponent,
+    GroupPersonTransferComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -124,7 +131,8 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     EditDocumentComponent,
     EditGroupComponent,
     EditGroupPersonLogComponent,
-    EditGroupPersonLogsComponent
+    EditGroupPersonLogsComponent,
+    GroupPersonTransferComponent
   ]
 })
 export class GroupPageModule {

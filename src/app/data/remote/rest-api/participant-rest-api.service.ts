@@ -111,6 +111,8 @@ import {Rank} from '../model/rank';
 import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
 import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
 import {GroupTransition} from '../model/group/transition/group-transition';
+import {OrganizationType} from '../model/group/organization/organization-type';
+import {GroupRequest} from '../request/group-request';
 
 @Injectable()
 @RestParams({
@@ -629,7 +631,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group',
   })
-  postGroup: IRestMethod<Group, Group>;
+  createGroup: IRestMethod<GroupRequest, Group>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -1906,6 +1908,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/rank',
   })
   getRanks: IRestMethod<void, Rank[]>;
+
+  //#endregion
+
+  //#region Organization Type
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organizationType',
+  })
+  getOrganizationTypes: IRestMethod<void, OrganizationType[]>;
 
   //#endregion
 

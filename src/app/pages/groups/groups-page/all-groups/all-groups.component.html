@@ -7,7 +7,7 @@
     </dx-text-box>
   </div>
   <div class="col">
-    <dx-select-box [items]="groupTypes"
+    <dx-select-box [items]="groupTypeEnums"
                    displayExpr="name"
                    (onValueChanged)="onGroupTypeChanged($event.value)"
                    placeholder="{{'groupType' | translate}}"

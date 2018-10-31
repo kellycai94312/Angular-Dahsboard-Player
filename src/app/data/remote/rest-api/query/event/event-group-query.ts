@@ -20,7 +20,7 @@ export class EventGroupQuery extends PageQuery {
   all?: boolean;
   // Подтвержден ли пользователь в группе
   approved?: boolean;
-  // Является ли пользователь администратором группы
-  admin?: boolean;
+  // Может ли пользователь редактировать группу
+  canEdit?: boolean;
   unassigned?: boolean;
 }

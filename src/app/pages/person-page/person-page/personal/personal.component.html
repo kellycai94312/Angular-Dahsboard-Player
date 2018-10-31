@@ -1,7 +1,7 @@
 <div class="row cols-padding">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="lastName">{{'persons.person.personal.lastName' | translate}}</label>
+      <label for="lastName">{{'lastName' | translate}}</label>
       <dx-text-box id="lastName"
                    [(value)]="person.lastName"
                    [readOnly]="!allowEdit">
@@ -13,7 +13,7 @@
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="firstName">{{'persons.person.personal.firstName' | translate}}</label>
+      <label for="firstName">{{'firstName' | translate}}</label>
       <dx-text-box id="firstName"
                    [(value)]="person.firstName"
                    [readOnly]="!allowEdit">
@@ -25,7 +25,7 @@
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="middleName">{{'persons.person.personal.middleName' | translate}}</label>
+      <label for="middleName">{{'middleName' | translate}}</label>
       <dx-text-box id="middleName"
                    [(value)]="person.patronymic"
                    [showClearButton]="true"
@@ -37,7 +37,7 @@
 <div class="row cols-padding">
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="birthDate">{{'persons.person.personal.birthDate' | translate}}</label>
+      <label for="birthDate">{{'birthDate' | translate}}</label>
       <dx-date-box id="birthDate"
                    [(value)]="person.birthDate"
                    type="date"
