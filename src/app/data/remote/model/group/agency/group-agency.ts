@@ -4,6 +4,6 @@ import {GroupTypeEnum} from '../base/group-type-enum';
 export class GroupAgency extends Group {
   constructor() {
     super();
-    this.discriminator = GroupTypeEnum[GroupTypeEnum.AGENCY];
+    this.discriminator = GroupTypeEnum.AGENCY;
   }
 }

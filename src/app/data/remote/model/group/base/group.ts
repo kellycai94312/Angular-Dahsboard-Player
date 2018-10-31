@@ -1,11 +1,10 @@
 import {NamedObject} from '../../../base/named-object';
-import {GroupType} from './group-type';
 import {Address} from '../../address';
+import {GroupTypeEnum} from './group-type-enum';
 
 export class Group extends NamedObject {
-  public discriminator: string;
-  public groupType: GroupType;
-  public address: Address;
-  public approved: boolean;
-  public visible: boolean;
+  discriminator: GroupTypeEnum;
+  address: Address;
+  approved: boolean;
+  visible: boolean;
 }

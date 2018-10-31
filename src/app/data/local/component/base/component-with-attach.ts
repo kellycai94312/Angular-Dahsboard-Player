@@ -39,6 +39,12 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
     });
   }
 
+  public initializeTempFile(document: Document) {
+    this.document = document;
+    this.document.objectId = this.data.id;
+    this.documentQuery.objectId = this.data.id;
+  }
+
   public valid(): boolean {
     return true;
   }

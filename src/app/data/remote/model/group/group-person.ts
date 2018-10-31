@@ -5,6 +5,7 @@ import {Person} from '../person';
 import {UserRole} from '../user-role';
 import {SportRole} from '../sport-role';
 import {PublicUserRole} from './public-user-role';
+import {StageType} from '../stage/stage-type';
 
 export class GroupPerson extends IdentifiedObject {
   public group: Group;
@@ -18,4 +19,5 @@ export class GroupPerson extends IdentifiedObject {
   public admin: boolean;
   public number: number;
   public leadTrainer: boolean;
+  public stageType: StageType;
 }
