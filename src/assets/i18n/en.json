@@ -501,10 +501,10 @@
   "documents": "Documents",
   "birthCertificate": "Birth certificate",
   "issuedBy": "Issued by",
-  "orderTypeEnum": {
-    "ENROLLMENT": "Enrollment",
+  "groupTransitionTypeEnum": {
+    "ENROLL": "Enroll",
     "TRANSFER": "Transfer",
-    "DEDUCTION": "Deduction"
+    "EXPEL": "Expel"
   },
   "firstName": "First name",
   "lastName": "Last name",
@@ -514,5 +514,13 @@
   "someFieldsNotValid": "Some fields not valid",
   "allowed": "Allowed",
   "yes": "Yes",
-  "no": "No"
+  "no": "No",
+  "groupTypeEnum": {
+    "TEAM": "Team",
+    "COMMUNITY": "Community",
+    "ORGANIZATION": "Organization",
+    "AGENCY": "Agency",
+    "PREPARATION_GROUP": "Preparation group"
+  },
+  "legalRepresentativesPhone": "Legal representatives phone"
 }

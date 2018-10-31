@@ -502,10 +502,10 @@
   "documents": "Документы",
   "birthCertificate": "Свидетельство о рождении",
   "issuedBy": "Кем выдан",
-  "orderTypeEnum": {
-    "ENROLLMENT": "Зачисление",
-    "TRANSFER": "Перевод",
-    "DEDUCTION": "Отчисление"
+  "groupTransitionTypeEnum": {
+    "ENROLL": "Зачислить",
+    "TRANSFER": "Перевести",
+    "EXPEL": "Отчислить"
   },
   "firstName": "Имя",
   "lastName": "Фамилия",
@@ -515,5 +515,13 @@
   "someFieldsNotValid": "Некоторые поля заполнены неверно",
   "allowed": "Допущен",
   "yes": "Да",
-  "no": "Нет"
+  "no": "Нет",
+  "groupTypeEnum": {
+    "TEAM": "Команда",
+    "COMMUNITY": "Сообщество",
+    "ORGANIZATION": "Организация",
+    "AGENCY": "Агентство",
+    "PREPARATION_GROUP": "Группа подготовки"
+  },
+  "legalRepresentativesPhone": "Телефон законных представителей"
 }
