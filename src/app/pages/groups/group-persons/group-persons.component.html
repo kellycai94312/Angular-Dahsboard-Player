@@ -1,7 +1,7 @@
 <dx-text-box #searchDxTextBoxComponent
              placeholder="{{'search' | translate}}"
              mode="search"
-             showClearButton="true">
+             [showClearButton]="true">
 </dx-text-box>
 
 <table class="table table-hover mt-2">
@@ -11,7 +11,7 @@
     <th class="col-1">{{'yearBirth' | translate}}</th>
     <th class="col-2">{{'group' | translate}}</th>
     <th class="col-1">{{'userRole' | translate}}</th>
-    <th *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"
+    <th *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM"
         class="col-1">{{'sportRole' | translate}}
     </th>
     <th class="{{groupService.isEditAllow()? 'col-3':'col-4'}}">{{'mentor' | translate}}
@@ -24,7 +24,7 @@
   <ngx-virtual-scroll class="list-group-flush"
                       [query]="groupPersonQuery"
                       [getItems]="getItems"
-                      windowScroll="true">
+                      [windowScroll]="true">
     <ng-template let-item>
       <tr class="d-flex">
         <td class="col-3">
@@ -41,7 +41,7 @@
         <td class="col-1">
           <h6>{{item.data?.userRole?.name}}</h6>
         </td>
-        <td *ngIf="groupService.getGroup().groupType.groupTypeEnum.toString() === 'TEAM'"
+        <td *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM"
             class="col-1">
           <h6>{{item.data?.sportRole?.name}}</h6>
         </td>

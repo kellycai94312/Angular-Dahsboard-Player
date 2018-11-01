@@ -6,18 +6,24 @@ import {UserRole} from '../user-role';
 import {SportRole} from '../sport-role';
 import {PublicUserRole} from './public-user-role';
 import {StageType} from '../stage/stage-type';
+import {PersonRank} from '../person-rank';
+import {GroupTransition} from './transition/group-transition';
 
 export class GroupPerson extends IdentifiedObject {
-  public group: Group;
-  public subGroup: SubGroup;
-  public person: Person;
-  public mentor: GroupPerson;
-  public userRole: UserRole;
-  public publicUserRoles: PublicUserRole[];
-  public sportRole: SportRole;
-  public approved: boolean;
-  public admin: boolean;
-  public number: number;
-  public leadTrainer: boolean;
-  public stageType: StageType;
+  group: Group;
+  subGroup: SubGroup;
+  person: Person;
+  mentor: GroupPerson;
+  userRole: UserRole;
+  publicUserRoles: PublicUserRole[];
+  sportRole: SportRole;
+  approved: boolean;
+  admin: boolean;
+  number: number;
+  leadTrainer: boolean;
+  stageType: StageType;
+
+  // transient
+  personRank: PersonRank;
+  groupTransition: GroupTransition;
 }

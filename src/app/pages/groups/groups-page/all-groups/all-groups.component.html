@@ -140,7 +140,7 @@
             {{item.data?.stage?.shortName}}{{item.data.stageYear}}{{item.data?.stageType?.shortName}}</h6>
         </td>
         <td class="col-sm-1">
-          <h6>{{item.data.groupType.name}}</h6>
+          <h6>{{('groupTypeEnum.' + item.data.discriminator) | translate}}</h6>
         </td>
         <td class="col-sm-1">
           <h6>{{item.data?.sportType?.name}}</h6>

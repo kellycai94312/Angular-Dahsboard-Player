@@ -14,6 +14,7 @@ import {AppHelper} from '../../../utils/app-helper';
 import {EditGroupPersonComponent} from '../component/edit-group-person/edit-group-person.component';
 import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
 import {Params} from '@angular/router/src/shared';
+import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
 
 @Component({
   selector: 'app-group-persons',
@@ -21,6 +22,8 @@ import {Params} from '@angular/router/src/shared';
   styleUrls: ['./group-persons.component.scss']
 })
 export class GroupPersonsComponent implements OnInit, OnDestroy {
+
+  public readonly groupTypeEnumClass = GroupTypeEnum;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
