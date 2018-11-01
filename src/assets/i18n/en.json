@@ -524,5 +524,7 @@
   },
   "legalRepresentativesPhone": "Legal representatives phone",
   "parentGroup": "Parent group",
-  "orderDocument": "Order"
+  "orderDocument": "Order",
+  "leadTrainer": "Lead trainer",
+  "trainer": "Trainer"
 }

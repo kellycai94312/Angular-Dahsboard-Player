@@ -525,5 +525,7 @@
   },
   "legalRepresentativesPhone": "Телефон законных представителей",
   "parentGroup": "Родительская группа",
-  "orderDocument": "Приказ"
+  "orderDocument": "Приказ",
+  "leadTrainer": "Ведущий тренер",
+  "trainer": "Тренер"
 }

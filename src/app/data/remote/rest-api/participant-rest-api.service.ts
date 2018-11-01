@@ -948,6 +948,12 @@ export class ParticipantRestApiService extends Rest {
   })
   removeFile: IRestMethod<{ fileId: number }, BaseFile>;
 
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/file/{!fileId}/resource'
+  })
+  removeFileResource: IRestMethod<{ fileId: number }, BaseFile>;
+
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
     if (files) {

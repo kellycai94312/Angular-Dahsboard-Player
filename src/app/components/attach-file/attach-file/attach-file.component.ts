@@ -65,8 +65,16 @@ export class AttachFileComponent<T extends BaseFile> {
       this._appHelper.updateObject(this.baseFile, baseFile);
     } else {
       const baseFile = await this._participantRestApiService.updateFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? this.baseFile.resource.file : null);
+      try {
+        if (!this.baseFile.resource) {
+          await this._participantRestApiService.removeFileResource({fileId: this.baseFile.id});
+        }
+      } catch (e) {
+      }
+
       this._appHelper.updateObject(this.baseFile, baseFile);
     }
+
     this.baseFileChange.emit(this.baseFile);
   }
 
