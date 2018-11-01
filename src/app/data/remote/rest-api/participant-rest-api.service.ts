@@ -710,7 +710,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/person/{!personId}/stageType',
   })
-  updateGroupPersonStageType: IRestMethodStrict<StageType, {}, { groupId: number, personId: number }, GroupPerson>;
+  updateGroupPersonStageType: IRestMethodStrict<IdRequest, any, { groupId: number, personId: number }, GroupPerson>;
 
   //#endregion
 

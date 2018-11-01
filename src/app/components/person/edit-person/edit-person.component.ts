@@ -160,7 +160,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       }
       await this.participantRestApiService.updateUserUserRoles(new ListRequest(this.userRoles), {}, {userId: this.data.user.id});
       await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(this.groupPersonUserRoles), {}, {groupId: this.group.id, personId: this.data.id});
-      await this.participantRestApiService.updateGroupPersonStageType(this.selectedStageType, {}, {groupId: this.group.id, personId: this.data.id});
+      await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {groupId: this.group.id, personId: this.data.id});
 
       this.document.objectId = groupTransition.id;
       await this.attachFileComponent.updateFile();
