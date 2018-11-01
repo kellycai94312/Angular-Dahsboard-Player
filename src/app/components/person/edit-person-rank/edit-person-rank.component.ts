@@ -1,20 +1,20 @@
 import {Component, Input} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PersonRank} from '../../../../data/remote/model/person-rank';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Rank} from '../../../../data/remote/model/rank';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {Person} from '../../../../data/remote/model/person';
-import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
+import {ComponentWithAttach} from '../../../data/local/component/base/component-with-attach';
+import {PersonRank} from '../../../data/remote/model/person-rank';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {Person} from '../../../data/remote/model/person';
+import {Rank} from '../../../data/remote/model/rank';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../utils/app-helper';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
 
 @Component({
-  selector: 'app-edit-rank',
-  templateUrl: './edit-rank.component.html',
-  styleUrls: ['./edit-rank.component.scss']
+  selector: 'app-edit-person-rank',
+  templateUrl: './edit-person-rank.component.html',
+  styleUrls: ['./edit-person-rank.component.scss']
 })
-export class EditRankComponent extends ComponentWithAttach<PersonRank> {
+export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
 
   public readonly propertyConstant = PropertyConstant;
 

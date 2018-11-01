@@ -1,12 +1,12 @@
 import {Component, Input} from '@angular/core';
-import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {Person} from '../../../../data/remote/model/person';
-import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
+import {ComponentWithAttach} from '../../../data/local/component/base/component-with-attach';
+import {MedicalExamination} from '../../../data/remote/model/person/medical-examination';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {Person} from '../../../data/remote/model/person';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../utils/app-helper';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-edit-medical-examination',

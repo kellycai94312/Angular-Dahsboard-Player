@@ -6,7 +6,7 @@ export class Document extends BaseFile {
   type: DocumentType;
   number: number;
   date: Date;
-  issueBy: string;
+  issueBy?: string;
 
   constructor() {
     super();

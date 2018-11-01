@@ -2,11 +2,11 @@ import {Injectable} from '@angular/core';
 import {NgxModalService} from '../components/ngx-modal/service/ngx-modal.service';
 import {Group} from '../data/remote/model/group/base/group';
 import {Person} from '../data/remote/model/person';
-import {GroupPersonTransferComponent} from '../pages/groups/component/group-person-transfer/group-person-transfer.component';
 import {AppHelper} from '../utils/app-helper';
 import {EditGroupComponent} from '../pages/groups/component/edit-group/edit-group.component';
-import {EditPersonComponent} from '../pages/person-page/component/edit-person/edit-person.component';
 import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
+import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
+import {EditPersonComponent} from '../components/person/edit-person/edit-person.component';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class TemplateModalService {
   public async showGroupPersonTransferModal(groupTransitionType: GroupTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = `groupTransitionTypeEnum.${groupTransitionType}`;
-    await modal.componentInstance.initializeBody(GroupPersonTransferComponent, async component => {
+    await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
       await component.initialize(groupTransitionType, currentGroup, persons);
       modal.componentInstance.splitButtonItems = [
         {

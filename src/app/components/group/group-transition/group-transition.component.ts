@@ -1,24 +1,24 @@
 import {Component, Input, ViewChild} from '@angular/core';
-import {Person} from '../../../../data/remote/model/person';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {GroupTransitionType} from '../../../../data/remote/model/group/transition/group-transition-type';
-import {Document} from '../../../../data/remote/model/file/document/document';
-import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
-import {ListRequest} from '../../../../data/remote/request/list-request';
-import {AttachFileComponent} from '../../../../components/attach-file/attach-file/attach-file.component';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
+import {NgxGridComponent} from '../../ngx-grid/ngx-grid/ngx-grid.component';
+import {AttachFileComponent} from '../../attach-file/attach-file/attach-file.component';
+import {Document} from '../../../data/remote/model/file/document/document';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {Person} from '../../../data/remote/model/person';
+import {AppHelper} from '../../../utils/app-helper';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {DocumentType} from '../../../data/remote/model/file/document/document-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {GroupTransition} from '../../../data/remote/model/group/transition/group-transition';
+import {ListRequest} from '../../../data/remote/request/list-request';
 
 @Component({
-  selector: 'app-group-person-transfer',
-  templateUrl: './group-person-transfer.component.html',
-  styleUrls: ['./group-person-transfer.component.scss']
+  selector: 'app-group-transition',
+  templateUrl: './group-transition.component.html',
+  styleUrls: ['./group-transition.component.scss']
 })
-export class GroupPersonTransferComponent {
+export class GroupTransitionComponent {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTransitionTypeClass = GroupTransitionType;

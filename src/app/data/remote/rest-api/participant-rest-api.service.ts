@@ -522,9 +522,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/person/{!id}'
+    path: '/person/{!personId}'
   })
-  updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
+  updatePerson: IRestMethodStrict<Person, any, { personId: number }, Person>;
 
   @RestAction({
     method: RestRequestMethod.Put,

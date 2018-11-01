@@ -37,16 +37,21 @@ export class AttachFileComponent<T extends BaseFile> {
     this._baseFileName = 'baseFile';
   }
 
-  public async initialize() {
-    const items = await this._participantRestApiService.getDocuments(this.documentQuery);
-    if (items.list.length) {
-      this.baseFile = <any>items.list[0];
+  public async initialize(): Promise<boolean> {
+    if (!this.documentQuery || !this.documentQuery.objectId || !this.documentQuery.clazz) {
+      return false;
+    }
+
+    const pageContainer = await this._participantRestApiService.getDocuments(this.documentQuery);
+    if (pageContainer.list.length) {
+      this.baseFile = <any>pageContainer.list[0];
       this.baseFileChange.emit(this.baseFile);
     } else if (!this.baseFile) {
       this.baseFile = Object.create(<T>{});
       this.baseFileChange.emit(this.baseFile);
     }
     this._changeWatcher.addOrUpdate(this._baseFileName, this.baseFile);
+    return true;
   }
 
   public async onFileChange(event) {
@@ -65,14 +70,14 @@ export class AttachFileComponent<T extends BaseFile> {
       this._appHelper.updateObject(this.baseFile, baseFile);
     } else {
       const baseFile = await this._participantRestApiService.updateFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? this.baseFile.resource.file : null);
+      this._appHelper.updateObject(this.baseFile, baseFile);
+
       try {
         if (!this.baseFile.resource) {
           await this._participantRestApiService.removeFileResource({fileId: this.baseFile.id});
         }
       } catch (e) {
       }
-
-      this._appHelper.updateObject(this.baseFile, baseFile);
     }
 
     this.baseFileChange.emit(this.baseFile);

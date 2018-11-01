@@ -45,6 +45,9 @@ import {MessageToastrModule} from './components/message-toastr/message-toastr.mo
 import {NgxBreadcrumbModule} from './components/ngx-breadcrumb/ngx-breadcrumb.module';
 import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 import {LocaleModule} from './components/locale/locale.module';
+import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
+import {GroupModule} from './components/group/group.module';
+import {PersonModule} from './components/person/person.module';
 
 registerLocaleData(localeRu);
 
@@ -72,7 +75,7 @@ export function HttpLoaderFactory(http: HttpClient) {
       timeOut: 3000,
       maxOpened: 7
     }),
-    NgbModule.forRoot(),
+    NgbModule,
     RestModule.forRoot(),
     CookieModule.forRoot(),
     TranslateModule.forRoot({
@@ -87,7 +90,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageModule,
     MessageToastrModule,
     NgxBreadcrumbModule,
-    LocaleModule
+    LocaleModule,
+    NgxModalModule,
+    GroupModule,
+    PersonModule
   ],
   providers: [
     LayoutService,
