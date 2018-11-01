@@ -8,7 +8,6 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditRankComponent} from '../../component/edit-rank/edit-rank.component';
 
 @Component({
   selector: 'app-ranks',
@@ -39,36 +38,36 @@ export class RanksComponent implements OnInit {
   }
 
   public fetchItems = async () => {
-    return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getRanks({personId: this.personId}));
+    // return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getRanks({personId: this.personId}));
   };
 
   public onEdit = async (obj: PersonRank) => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-    await modal.componentInstance.initializeBody(EditRankComponent, async component => {
-      component.rankId = obj.rank.id;
-      component.personId = this.personId;
-      await component.initialize(this._appHelper.cloneObject(obj));
-      modal.componentInstance.splitButtonItems = [
-        {
-          default: true,
-          nameKey: 'save',
-          callback: async () => {
-            if (await this._ngxModalService.save(modal, component)) {
-              await this.resetItems();
-            }
-          }
-        },
-        {
-          nameKey: 'remove',
-          callback: async () => {
-            if (await this._ngxModalService.remove(modal, component)) {
-              await this.resetItems();
-            }
-          }
-        }
-      ];
-    });
+    // const modal = this._ngxModalService.open();
+    // modal.componentInstance.titleKey = 'edit';
+    // await modal.componentInstance.initializeBody(EditRankComponent, async component => {
+    //   component.rankId = obj.rank.id;
+    //   component.personId = this.personId;
+    //   await component.initialize(this._appHelper.cloneObject(obj));
+    //   modal.componentInstance.splitButtonItems = [
+    //     {
+    //       default: true,
+    //       nameKey: 'save',
+    //       callback: async () => {
+    //         if (await this._ngxModalService.save(modal, component)) {
+    //           await this.resetItems();
+    //         }
+    //       }
+    //     },
+    //     {
+    //       nameKey: 'remove',
+    //       callback: async () => {
+    //         if (await this._ngxModalService.remove(modal, component)) {
+    //           await this.resetItems();
+    //         }
+    //       }
+    //     }
+    //   ];
+    // });
   };
 
   private async resetItems(): Promise<void> {

@@ -15,12 +15,7 @@ import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
-import {AuthorizationService} from '../../../shared/authorization.service';
-import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
-import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
-import {EditPersonComponent} from '../component/edit-person/edit-person.component';
-import {Person} from '../../../data/remote/model/person';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
@@ -41,12 +36,9 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   public personQuery: PersonQuery;
   public sexEnums: NameWrapper<SexEnum>[];
   public userRoles: UserRole[];
-  public canCreatePerson: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
-              private _authorizationService: AuthorizationService,
-              private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
 
@@ -59,8 +51,6 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.canCreatePerson = await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
-
     this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
 
@@ -172,24 +162,6 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
       const personViewModel = new PersonViewModel(original);
       await personViewModel.initialize();
       return personViewModel;
-    });
-  };
-
-  public addPerson = async () => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'add';
-    await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
-      await component.initialize(new Person());
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'save',
-          callback: async () => {
-            if (await this._ngxModalService.save(modal, component, !this._appHelper.isNewObject(component.data))) {
-              await component.navigateToPage();
-            }
-          }
-        }
-      ];
     });
   };
 

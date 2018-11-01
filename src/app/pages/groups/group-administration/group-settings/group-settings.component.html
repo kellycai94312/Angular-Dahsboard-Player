@@ -8,7 +8,7 @@
   <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
     <h5>{{'additionalInformation' | translate }}</h5>
 
-    <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
+    <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM">
 
       <label>{{'league' | translate }}</label>
       <dx-select-box [items]="leagues"
@@ -72,6 +72,14 @@
       ngDefaultControl>
     </app-input-select>
 
+    <label class="mt-2">{{'leadTrainer' | translate}}</label>
+    <app-input-select
+      [loadData]="fetchPersons"
+      [(model)]="leadTrainer"
+      [getKey]="getKey"
+      [getName]="getPersonName"
+      ngDefaultControl>
+    </app-input-select>
   </div>
 </div>
 

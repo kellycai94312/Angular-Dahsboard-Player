@@ -9,7 +9,10 @@ import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
-import {EditGroupComponent} from '../../component/edit-group/edit-group.component';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {AppHelper} from '../../../../utils/app-helper';
+import {EditGroupComponent} from '../../../../components/group/edit-group/edit-group.component';
 
 @Component({
   selector: 'app-group-settings',
@@ -18,6 +21,8 @@ import {EditGroupComponent} from '../../component/edit-group/edit-group.componen
 })
 export class GroupSettingsComponent implements OnInit {
 
+  public readonly groupTypeEnumClass = GroupTypeEnum;
+
   @ViewChild(EditGroupComponent)
   public editGroupComponent: EditGroupComponent;
 
@@ -25,9 +30,13 @@ export class GroupSettingsComponent implements OnInit {
   public leagues: League[];
   public ageGroups: AgeGroup[];
   public pageSize: number;
+  public leadTrainer: GroupPerson;
+
+  private _initialLeadTrainer: GroupPerson;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService) {
+              private _groupService: GroupService,
+              private _appHelper: AppHelper) {
     this.pageSize = PropertyConstant.pageSize;
   }
 
@@ -38,6 +47,14 @@ export class GroupSettingsComponent implements OnInit {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as GroupTeam).sportType.id});
       this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     }
+
+    // TODO: Optimize getting lead trainer
+    this.leadTrainer = (await this._participantRestApiService.getGroupPersonsByGroup({
+      id: this.group.id,
+      count: PropertyConstant.pageSizeMax,
+      userRoleEnum: UserRoleEnum.TRAINER
+    })).list.find(x => x.leadTrainer);
+    this._initialLeadTrainer = this._appHelper.cloneObject(this.leadTrainer);
   }
 
   //#region Position
@@ -87,9 +104,29 @@ export class GroupSettingsComponent implements OnInit {
 
   //#endregion
 
+  fetchPersons = async (from: number, searchText: string) => {
+    return await this._participantRestApiService.getGroupPersonsByGroup({
+      id: this.group.id,
+      from: from,
+      count: this.pageSize,
+      name: searchText,
+      userRoleEnum: UserRoleEnum.TRAINER
+    });
+  };
+
+  getPersonName(item: GroupPerson) {
+    return `${item.person.lastName} ${item.person.firstName}`;
+  }
+
   public onSave = async () => {
     if (await this.editGroupComponent.onSave()) {
       this._groupService.updateGroup(this.group);
+
+      if (this.leadTrainer) {
+        await this._participantRestApiService.setGroupPersonLeadTrainer({personId: this.leadTrainer.person.id, groupId: this.leadTrainer.group.id});
+      } else if (this._initialLeadTrainer) {
+        await this._participantRestApiService.unsetGroupPersonLeadTrainer({personId: this._initialLeadTrainer.person.id, groupId: this._initialLeadTrainer.group.id});
+      }
     }
   };
 

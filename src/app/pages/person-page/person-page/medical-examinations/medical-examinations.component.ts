@@ -9,10 +9,10 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {PersonService} from '../person.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
-import {EditMedicalExaminationComponent} from '../../component/edit-medical-examination/edit-medical-examination.component';
 import {MedicalExaminationViewModel} from '../../../../data/local/view-model/person/medical-examination-view-model';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AuthorizationService} from '../../../../shared/authorization.service';
+import {EditMedicalExaminationComponent} from '../../../../components/person/edit-medical-examination/edit-medical-examination.component';
 
 @Component({
   selector: 'app-medical-examinations',
@@ -54,12 +54,12 @@ export class MedicalExaminationsComponent implements OnInit {
   }
 
   public getItems: Function = async (direction: Direction, query: DocumentQuery) => {
-    const pageContainer = await this._participantRestApiService.getMedicalExaminations({}, query, {personId: this._personService.personViewModel.data.id});
-    return await this._appHelper.pageContainerConverter(pageContainer, async obj => {
-      const viewModel = new MedicalExaminationViewModel(obj);
-      await viewModel.initialize();
-      return viewModel;
-    });
+    // const pageContainer = await this._participantRestApiService.getMedicalExaminations({}, query, {personId: this._personService.personViewModel.data.id});
+    // return await this._appHelper.pageContainerConverter(pageContainer, async obj => {
+    //   const viewModel = new MedicalExaminationViewModel(obj);
+    //   await viewModel.initialize();
+    //   return viewModel;
+    // });
   };
 
   private async showModal(obj: MedicalExamination) {
@@ -71,7 +71,7 @@ export class MedicalExaminationsComponent implements OnInit {
 
     await modal.componentInstance.initializeBody(EditMedicalExaminationComponent, async component => {
       component.manualInitialization = true;
-      component.personId = this._personService.personViewModel.data.id;
+      // component.personId = this._personService.personViewModel.data.id;
       await component.initialize(this._appHelper.cloneObject(obj));
 
       modal.componentInstance.splitButtonItems = [

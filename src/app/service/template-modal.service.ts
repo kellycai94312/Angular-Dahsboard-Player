@@ -3,10 +3,10 @@ import {NgxModalService} from '../components/ngx-modal/service/ngx-modal.service
 import {Group} from '../data/remote/model/group/base/group';
 import {Person} from '../data/remote/model/person';
 import {AppHelper} from '../utils/app-helper';
-import {EditGroupComponent} from '../pages/groups/component/edit-group/edit-group.component';
 import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
 import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
 import {EditPersonComponent} from '../components/person/edit-person/edit-person.component';
+import {EditGroupComponent} from '../components/group/edit-group/edit-group.component';
 
 @Injectable({
   providedIn: 'root'

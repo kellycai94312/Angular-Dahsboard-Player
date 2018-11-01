@@ -1,20 +1,20 @@
 import {Component} from '@angular/core';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {StageType} from '../../../../data/remote/model/stage/stage-type';
-import {Stage} from '../../../../data/remote/model/stage/stage';
+import {BaseEditComponent} from '../../../data/local/component/base/base-edit-component';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
+import {NameWrapper} from '../../../data/local/name-wrapper';
+import {SportType} from '../../../data/remote/model/sport-type';
+import {Stage} from '../../../data/remote/model/stage/stage';
+import {StageType} from '../../../data/remote/model/stage/stage-type';
+import {TeamType} from '../../../data/remote/model/group/team/team-type';
+import {OrganizationType} from '../../../data/remote/model/group/organization/organization-type';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../utils/app-helper';
 import {Router} from '@angular/router';
-import {TeamType} from '../../../../data/remote/model/group/team/team-type';
-import {LocalStorageService} from '../../../../shared/local-storage.service';
-import {OrganizationType} from '../../../../data/remote/model/group/organization/organization-type';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {GroupRequest} from '../../../../data/remote/request/group-request';
+import {LocalStorageService} from '../../../shared/local-storage.service';
+import {TranslateObjectService} from '../../../shared/translate-object.service';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {GroupRequest} from '../../../data/remote/request/group-request';
 
 @Component({
   selector: 'app-edit-group',

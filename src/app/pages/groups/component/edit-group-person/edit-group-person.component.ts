@@ -15,6 +15,7 @@ import {BaseEditComponent} from '../../../../data/local/component/base/base-edit
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
+import {ListRequest} from '../../../../data/remote/request/list-request';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -49,7 +50,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
       // TODO: Subgroups have to stored in GroupService
       this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
 
-      switch (this.data.group.groupType.groupTypeEnum) {
+      switch (this.data.group.discriminator) {
         case GroupTypeEnum.TEAM:
           this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as GroupTeam).sportType.id});
           this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
@@ -90,39 +91,31 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   public async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       const subGroupId = this.data.subGroup === undefined ? null : this.data.subGroup.id;
-      await  this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
+      await this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
-      const userRoleId = this.data.userRole === undefined || this.data.userRole === null ? null : this.data.userRole.id;
-      await  this.participantRestApiService.postPersonUserRole({id: userRoleId}, {}, {
+      const userRoles = this.data.userRole ? [this.data.userRole] : [];
+      await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(userRoles), {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
       const sportRoleId = this.data.sportRole === undefined || this.data.sportRole === null ? null : this.data.sportRole.id;
-      await  this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
+      await this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
-      await  this.participantRestApiService.postPersonNumber({number: this.data.number}, {}, {
+      await this.participantRestApiService.postPersonNumber({number: this.data.number}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
       try {
         const mentorId = this.data.mentor === undefined || this.data.mentor === null ? null : this.data.mentor.person.id;
-        await  this.participantRestApiService.postPersonMentor({id: mentorId}, {}, {
-          groupId: this.data.group.id,
-          personId: this.data.person.id
-        });
-      } catch (e) {
-      }
-
-      try {
-        await  this.participantRestApiService.postPersonAdmin({admin: this.data.admin}, {}, {
+        await this.participantRestApiService.postPersonMentor({id: mentorId}, {}, {
           groupId: this.data.group.id,
           personId: this.data.person.id
         });

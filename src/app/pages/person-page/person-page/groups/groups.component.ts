@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
@@ -10,6 +9,9 @@ import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs/src/Subscription';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-groups',
@@ -24,7 +26,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public groupTypes: GroupType[];
+  public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
   public newGroup: GroupPerson;
   public groupQuery: GroupQuery;
 
@@ -35,7 +37,8 @@ export class GroupsComponent implements OnInit, OnDestroy {
   private readonly _baseGroupSubscription: ISubscription;
 
   constructor(private _personService: PersonService,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _translateObjectService: TranslateObjectService) {
     this.pageSize = PropertyConstant.pageSize;
 
     this.groupQuery = new GroupQuery();
@@ -63,7 +66,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.canEdit = await this._personService.allowEdit();
-    this.groupTypes = await this._participantRestApiService.getGroupTypes();
+    this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
     this.selectedBaseGroup = this._personService.baseGroup;
     this.selectedPublicUserRole = this._personService.selectedUserRole;
 
@@ -85,9 +88,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
     await this.updateItems();
   }
 
-  public async onGroupTypeChanged(value: GroupType) {
-    if (value) {
-      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
+  public async onGroupTypeChanged(val: NameWrapper<GroupTypeEnum>) {
+    if (val) {
+      this.groupQuery.groupTypeEnum = val.data;
     } else {
       delete this.groupQuery.groupTypeEnum;
     }
