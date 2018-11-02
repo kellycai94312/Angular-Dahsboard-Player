@@ -1,9 +1,10 @@
-import {Component, ContentChildren, Input, OnInit, QueryList, ViewChild} from '@angular/core';
+import {Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
 import {NgxVirtualScrollComponent} from '../../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {NgxColumnComponent} from '../ngx-column/ngx-column.component';
+import {SelectionType} from '../bean/selection-type';
 
 @Component({
   selector: 'ngx-grid',
@@ -46,12 +47,23 @@ export class NgxGridComponent implements OnInit {
   public windowScroll: boolean;
 
   @Input()
+  public selectionType: SelectionType;
+
+  @Input()
+  public selectedItems: any[];
+
+  @Output()
+  public selectedItemsChange: EventEmitter<any[]>;
+
+  @Input()
   public fetchItems: (query: PageQuery) => Promise<PageContainer<any>>;
 
   constructor() {
     this.query = new PageQuery();
     this.query.from = 0;
     this.enabledAdd = true;
+    this.selectionType = SelectionType.SINGLE;
+    this.selectedItems = [];
   }
 
   async ngOnInit() {
@@ -89,6 +101,20 @@ export class NgxGridComponent implements OnInit {
     if (column.click) {
       await column.click(column);
     }
+  }
+
+  public onSelectOrDeselectItem(item: any) {
+    const selectedItemIndex = this.selectedItems.findIndex(x => x === item);
+    if (selectedItemIndex >= 0) {
+      this.selectedItems.splice(selectedItemIndex, 1);
+    } else if (this.selectionType === SelectionType.MULTIPLE ||
+      (this.selectionType === SelectionType.SINGLE && this.selectedItems.length < 1)) {
+      this.selectedItems.push(item);
+    }
+  }
+
+  public selectedItem(item: any): boolean {
+    return this.selectedItems.findIndex(x => x === item) >= 0;
   }
 
 }

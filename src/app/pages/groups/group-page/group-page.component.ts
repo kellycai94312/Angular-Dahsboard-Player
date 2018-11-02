@@ -28,6 +28,7 @@ import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.s
 import {GroupAdministrationComponent} from '../group-administration/group-administration.component';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../shared/permission.service';
+import {SelectionType} from '../../../components/ngx-grid/bean/selection-type';
 
 @Component({
   selector: 'app-group-page',
@@ -39,6 +40,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
   public readonly iconEnumClass = IconEnum;
+  public readonly selectionTypeClass = SelectionType;
 
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;

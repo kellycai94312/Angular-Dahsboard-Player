@@ -53,6 +53,7 @@
             [add]="onAddGroupPerson"
             [edit]="onEditGroupPerson"
             [windowScroll]="true"
+            [selectionType]="selectionTypeClass.MULTIPLE"
             [canEdit]="canEdit">
     <ngx-column nameKey="lastName">
       <ng-template let-item>
@@ -69,22 +70,24 @@
         {{item.person.patronymic}}
       </ng-template>
     </ngx-column>
-    <ngx-column nameKey="birthDate">
+    <ngx-column *ngIf="group.discriminator !== groupTypeEnumClass.ORGANIZATION"
+                nameKey="birthDate"
+                style="'col-2'">
       <ng-template let-item>
         {{item.person.birthDate | date: propertyConstantClass.dateFormat}}
       </ng-template>
     </ngx-column>
     <div
       *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
-      <!--<ngx-column nameKey="orderDocument">-->
-      <!--<ng-template let-item>-->
-      <!--&lt;!&ndash;<pre ngIf="item?.groupTransition?.documents">{{item?.groupTransition?.documents | json}}</pre>&ndash;&gt;-->
-      <!--&lt;!&ndash;<pre *ngIf="item.data.groupTransition && item.data.groupTransition.documents">{{item.data.groupTransition.documents | json}}</pre>&ndash;&gt;-->
-      <!--&lt;!&ndash;<p *ngFor="let document of item?.groupTransition?.documents">&ndash;&gt;-->
-      <!--&lt;!&ndash;{{document.number}} {{document.date | date: propertyConstantClass.dateFormat}}<br />&ndash;&gt;-->
-      <!--&lt;!&ndash;</p>&ndash;&gt;-->
-      <!--</ng-template>-->
-      <!--</ngx-column>-->
+      <ngx-column nameKey="orderDocument">
+        <ng-template let-item>
+          <div *ngIf="item?.groupTransition?.documents">
+            <p *ngFor="let document of item.groupTransition.documents">
+              №{{document.number}} {{document.date | date: propertyConstantClass.dateFormat}}
+            </p>
+          </div>
+        </ng-template>
+      </ngx-column>
       <ngx-column nameKey="rank">
         <ng-template let-item>
           {{item?.personRank?.rank?.name}}
@@ -98,4 +101,3 @@
     </div>
   </ngx-grid>
 </div>
-
