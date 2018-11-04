@@ -1,5 +1,5 @@
 <div *ngIf="defaultItem">
-  <div *ngIf="items.length < 2; else elseTemplate">
+  <div *ngIf="!canShowDropDownMenu(); else elseTemplate">
     <button class="btn btn-primary input-height-sm"
             (click)="onClick(defaultItem)">{{defaultItem.nameKey | translate}}
     </button>

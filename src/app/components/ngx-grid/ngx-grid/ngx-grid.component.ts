@@ -49,9 +49,6 @@ export class NgxGridComponent implements OnInit {
   @Input()
   public selectionType: SelectionType;
 
-  @Input()
-  public selectedItems: any[];
-
   @Output()
   public selectedItemsChange: EventEmitter<any[]>;
 
@@ -63,7 +60,7 @@ export class NgxGridComponent implements OnInit {
     this.query.from = 0;
     this.enabledAdd = true;
     this.selectionType = SelectionType.SINGLE;
-    this.selectedItems = [];
+    this.selectedItemsChange = new EventEmitter<any[]>();
   }
 
   async ngOnInit() {
@@ -104,17 +101,13 @@ export class NgxGridComponent implements OnInit {
   }
 
   public onSelectOrDeselectItem(item: any) {
-    const selectedItemIndex = this.selectedItems.findIndex(x => x === item);
-    if (selectedItemIndex >= 0) {
-      this.selectedItems.splice(selectedItemIndex, 1);
-    } else if (this.selectionType === SelectionType.MULTIPLE ||
-      (this.selectionType === SelectionType.SINGLE && this.selectedItems.length < 1)) {
-      this.selectedItems.push(item);
+    const selectedName = 'selected';
+    if (item[selectedName]) {
+      delete item[selectedName];
+    } else {
+      item[selectedName] = true;
     }
-  }
-
-  public selectedItem(item: any): boolean {
-    return this.selectedItems.findIndex(x => x === item) >= 0;
+    this.selectedItemsChange.emit(this.ngxVirtualScrollComponent.items.filter(x => x[selectedName]));
   }
 
 }

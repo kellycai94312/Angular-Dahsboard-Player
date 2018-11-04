@@ -13,7 +13,8 @@
                       [windowScroll]="windowScroll">
     <ng-template let-item>
       <tr class="d-flex"
-          (click)="onSelectOrDeselectItem(item)"
+          [ngClass]="{'selected': item?.selected}"
+          (click)="onSelectOrDeselectItem(item); $event.stopPropagation()"
           (dblclick)="onEdit($event,item); $event.stopPropagation()">
         <td *ngFor="let column of ngxColumnComponents.toArray()"
             class="{{column.style}}">
@@ -30,7 +31,7 @@
   </tbody>
 </table>
 
-<app-busy-button *ngIf="canEdit&&enabledAdd"
+<app-busy-button *ngIf="canEdit && enabledAdd"
                  classes="mt-2"
                  nameKey="add"
                  [click]="onAdd"></app-busy-button>

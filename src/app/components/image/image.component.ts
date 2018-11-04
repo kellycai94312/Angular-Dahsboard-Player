@@ -10,6 +10,7 @@ import {FileClass} from '../../data/remote/model/file/base/file-class';
   templateUrl: './image.component.html',
   styleUrls: ['./image.component.scss']
 })
+// @deprecated Use NgxImage
 export class ImageComponent implements OnInit, OnChanges {
 
   @Input()
