@@ -26,7 +26,14 @@ import {PersonStageStandardsComponent} from './person-page/person-stage-standard
 
 
 const routes: Routes = [
-  {path: '', component: PersonsPageComponent},
+  {
+    path: '', component: PersonsPageComponent,
+    children: [
+      {path: '', redirectTo: 'my', pathMatch: 'full'},
+      {path: 'my'},
+      {path: 'all'}
+    ]
+  },
   {
     path: ':id', component: PersonPageComponent,
     children: [

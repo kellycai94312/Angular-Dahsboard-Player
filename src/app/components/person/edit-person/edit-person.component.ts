@@ -57,7 +57,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public readonly dateMax: Date;
   public sexEnums: NameWrapper<SexEnum>[];
   public selectedSexEnum: NameWrapper<SexEnum>;
-  public userRoles: UserRole[];
   public groupPersonUserRoles: UserRole[];
   public joinGroupPersonTransitionTypes: NameWrapper<GroupTransitionType>[];
   public selectedJoinGroupPersonTransitionType: NameWrapper<GroupTransitionType>;
@@ -88,7 +87,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
     this._personRankComponents = [];
     this._medicalExaminationComponents = [];
-    this.userRoles = [];
     this.groupPersonUserRoles = [];
   }
 
@@ -112,10 +110,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
       if (this.appHelper.isNewObject(obj)) {
         const userRoles = await this.participantRestApiService.getUserRoles();
-        this.userRoles = [userRoles.find(x => x.userRoleEnum === UserRoleEnum.ATHLETE)];
-        this.groupPersonUserRoles = [this.userRoles[0]];
+        this.groupPersonUserRoles = [userRoles.find(x => x.userRoleEnum === UserRoleEnum.ATHLETE)];
       } else {
-        this.userRoles = await this.participantRestApiService.getUserUserRoles({userId: obj.user.id});
         if (this.group) {
           try {
             this.groupPersonUserRoles = await this.participantRestApiService.getGroupPersonUserRoles({groupId: this.group.id, personId: obj.id});
@@ -158,7 +154,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
-      await this.participantRestApiService.updateUserUserRoles(new ListRequest(this.userRoles), {}, {userId: this.data.user.id});
       await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(this.groupPersonUserRoles), {}, {groupId: this.group.id, personId: this.data.id});
       await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {groupId: this.group.id, personId: this.data.id});
 
@@ -182,12 +177,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     }
   }
 
-  public onEditUserRoles = async () => {
-    await this._ngxModalService.showSelectionUserRolesModal(this.userRoles, async selectedItems => {
-      this.userRoles = selectedItems;
-    });
-  };
-
   public onEditGroupPersonUserRoles = async () => {
     await this._ngxModalService.showSelectionUserRolesModal(this.groupPersonUserRoles, async selectedItems => {
       this.groupPersonUserRoles = selectedItems;
@@ -208,6 +197,23 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     }
     const items = (await this.participantRestApiService.getMedicalExaminations({}, {count: PropertyConstant.pageSizeMax}, {personId: this.data.id})).list;
     return this.appHelper.arrayToPageContainer(items);
+  };
+
+  getKey(group: Group) {
+    return group.id;
+  }
+
+  getName(group: any): string {
+    return group.name;
+  }
+
+  public fetchGroups = async (from: number, searchText: string) => {
+    return await this.participantRestApiService.getGroups({
+      from: from,
+      count: PropertyConstant.pageSize,
+      name: searchText,
+      canEdit: true
+    });
   };
 
   //#region Person ranks
@@ -317,10 +323,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   //#endregion
 
   //#region Other
-
-  public onBirthDateChanged(val: Date) {
-    this.data.birthDate = this.appHelper.getGmtDate(val);
-  }
 
   public onSexChanged(val: NameWrapper<SexEnum>) {
     this.data.sex = val.data;

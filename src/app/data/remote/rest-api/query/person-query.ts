@@ -10,6 +10,7 @@ export class PersonQuery extends PageQuery {
   sportTypeId?: number;
   cityId?: number;
   template?: boolean;
+  canEdit?: boolean;
 
   unassigned?: boolean;
 }

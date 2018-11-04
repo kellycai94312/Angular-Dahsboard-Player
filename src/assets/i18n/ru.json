@@ -523,7 +523,7 @@
     "AGENCY": "Агентство",
     "PREPARATION_GROUP": "Группа подготовки"
   },
-  "legalRepresentativesPhone": "Телефон законных представителей",
+  "contactPhoneNumber": "Контактный номер телефона",
   "parentGroup": "Родительская группа",
   "orderDocument": "Приказ",
   "leadTrainer": "Ведущий тренер",

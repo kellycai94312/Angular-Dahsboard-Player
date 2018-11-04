@@ -1,3 +1,5 @@
+<ngx-tab [tabs]="tabs"
+         (tabChange)="onTabChange($event)"></ngx-tab>
 <div class="row cols-padding">
   <div class="col">
     <dx-text-box #searchDxTextBoxComponent
@@ -64,12 +66,6 @@
                       ngDefaultControl
                       (onChange)="onCityChanged($event.current)">
     </app-input-select>
-  </div>
-  <div class="col">
-    <dx-check-box [(value)]="personQuery.template"
-                  (valueChange)="updateItems()"
-                  text="{{'personTemplate' | translate}}">
-    </dx-check-box>
   </div>
 </div>
 

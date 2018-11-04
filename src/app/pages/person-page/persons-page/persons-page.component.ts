@@ -17,6 +17,10 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 import {AppHelper} from '../../../utils/app-helper';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {NameWrapper} from '../../../data/local/name-wrapper';
+import {ActionTab} from '../../../components/ngx-tab/model/action-tab';
+import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
+import {TemplateModalService} from '../../../service/template-modal.service';
+import {Person} from '../../../data/remote/model/person';
 
 @Component({
   selector: 'app-persons-page',
@@ -33,21 +37,50 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  public readonly tabs: ActionTab[];
   public personQuery: PersonQuery;
   public sexEnums: NameWrapper<SexEnum>[];
   public userRoles: UserRole[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _templateModalService: TemplateModalService) {
     this.pageSize = PropertyConstant.pageSize;
 
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
     this.personQuery.from = 0;
     this.personQuery.count = this.pageSize;
-    this.personQuery.template = false;
     this.userRoles = [];
+    const addSplitButtonItem: SplitButtonItem = {
+      nameKey: 'add',
+      callback: async () => {
+        if (await this._templateModalService.showEditPersonModal(new Person())) {
+          await this.updateItems();
+        }
+      }
+    };
+    this.tabs = [
+      {
+        nameKey: 'my',
+        routerLink: 'my',
+        splitButtonsItems: [addSplitButtonItem],
+        action: async () => {
+          this.personQuery.canEdit = true;
+          await this.updateItems();
+        },
+      },
+      {
+        nameKey: 'all',
+        routerLink: 'all',
+        splitButtonsItems: [addSplitButtonItem],
+        action: async () => {
+          delete this.personQuery.canEdit;
+          await this.updateItems();
+        }
+      }
+    ];
   }
 
   async ngOnInit() {
@@ -59,11 +92,14 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
         this.personQuery.name = value;
         await this.updateItems();
       });
-    await this.updateItems();
   }
 
   ngOnDestroy(): void {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
+  }
+
+  public async onTabChange(val: ActionTab) {
+    await val.action();
   }
 
   //#region Filter

@@ -38,10 +38,13 @@
       </div>
     </div>
 
-    <div class="ml-auto">
+    <div class="ml-auto d-flex flex-row">
       <!--<app-busy-button [nameKey]="textStateInGroup"-->
       <!--[click]="onGroupPersonState">-->
       <!--</app-busy-button>-->
+      <ngx-split-button *ngIf="selectedGroupPersons.length"
+                        class="mr-2"
+                        [items]="splitButtonsItems"></ngx-split-button>
       <ngx-button [icon]="iconEnumClass.EDIT"
                   [click]="onEditSettings"></ngx-button>
     </div>
@@ -54,6 +57,7 @@
             [edit]="onEditGroupPerson"
             [windowScroll]="true"
             [selectionType]="selectionTypeClass.MULTIPLE"
+            (selectedItemsChange)="onSelectedItemsChange($event)"
             [canEdit]="canEdit">
     <ngx-column nameKey="lastName">
       <ng-template let-item>
@@ -70,20 +74,17 @@
         {{item.person.patronymic}}
       </ng-template>
     </ngx-column>
-    <ngx-column *ngIf="group.discriminator !== groupTypeEnumClass.ORGANIZATION"
-                nameKey="birthDate"
-                style="'col-2'">
-      <ng-template let-item>
-        {{item.person.birthDate | date: propertyConstantClass.dateFormat}}
-      </ng-template>
-    </ngx-column>
-    <div
-      *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+    <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+      <ngx-column nameKey="birthDate">
+        <ng-template let-item>
+          {{item.person.birthDate | date: propertyConstantClass.dateFormat}}
+        </ng-template>
+      </ngx-column>
       <ngx-column nameKey="orderDocument">
         <ng-template let-item>
           <div *ngIf="item?.groupTransition?.documents">
             <p *ngFor="let document of item.groupTransition.documents">
-              №{{document.number}} {{document.date | date: propertyConstantClass.dateFormat}}
+              {{document.number}} {{document.date | date: propertyConstantClass.dateFormat}}
             </p>
           </div>
         </ng-template>

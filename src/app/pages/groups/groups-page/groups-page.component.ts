@@ -36,14 +36,12 @@ export class GroupsPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    if (await this._permissionService.hasAnyRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR])) {
-      this._actions.push({
-        nameKey: 'add',
-        callback: async () => {
-          await this._templateModalService.showEditGroupModal(new Group());
-        }
-      });
-    }
+    this._actions.push({
+      nameKey: 'add',
+      callback: async () => {
+        await this._templateModalService.showEditGroupModal(new Group());
+      }
+    });
   }
 
 }

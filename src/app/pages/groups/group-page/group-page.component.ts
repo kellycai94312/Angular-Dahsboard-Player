@@ -29,6 +29,8 @@ import {GroupAdministrationComponent} from '../group-administration/group-admini
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../shared/permission.service';
 import {SelectionType} from '../../../components/ngx-grid/bean/selection-type';
+import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
+import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
 
 @Component({
   selector: 'app-group-page',
@@ -57,6 +59,8 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public tabs: Tab[];
   public canEdit: boolean;
   public trainerGroupPersons: GroupPerson[];
+  public selectedGroupPersons: GroupPerson[];
+  public splitButtonsItems: SplitButtonItem[];
   private readonly _groupSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -72,10 +76,19 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     this._groupSubscription = this._groupService.groupSubject.subscribe(group => {
       this.group = group;
     });
+    this.selectedGroupPersons = [];
     // this.groupService.subgroupsSubject.subscribe(async subgroups => {
     //   this.subGroups = subgroups;
     //   await this.initTabs();
     // });
+    this.splitButtonsItems = [
+      this.groupTransitionModalSplitButtonItem(GroupTransitionType.EXPEL),
+      this.groupTransitionModalSplitButtonItem(GroupTransitionType.TRANSFER, () => {
+        const res = this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
+        console.log(res);
+        return res;
+      })
+    ];
   }
 
   async ngOnInit() {
@@ -253,9 +266,25 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  public onSelectedItemsChange(items: GroupPerson[]) {
+    this.selectedGroupPersons = items;
+  }
+
   private async resetItems() {
     await this._appHelper.delay();
     await this.ngxGridComponent.reset();
+  }
+
+  private groupTransitionModalSplitButtonItem(type: GroupTransitionType, visible?: () => boolean): SplitButtonItem {
+    return {
+      nameKey: `groupTransitionTypeEnum.${type}`,
+      callback: async () => {
+        if (await this._templateModalService.showGroupPersonTransferModal(type, this.group, this.selectedGroupPersons.map(x => x.person))) {
+          await this.resetItems();
+        }
+      },
+      visible: visible
+    };
   }
 
 }

@@ -32,11 +32,11 @@
     <dx-date-box class="w-100"
                  [(value)]="data.birthDate"
                  [displayFormat]="propertyConstantClass.dateFormat"
+                 [dateSerializationFormat]="propertyConstantClass.dateTimeServerFormat"
                  type="date"
                  [min]="dateMin"
                  [max]="dateMax"
-                 placeholder="{{'birthDate' | translate}}"
-                 (onValueChanged)="onBirthDateChanged($event.value)">
+                 placeholder="{{'birthDate' | translate}}">
       <dx-validator>
         <dxi-validation-rule type="required"></dxi-validation-rule>
       </dx-validator>
@@ -57,7 +57,7 @@
 
 <dx-text-box class="mt-2"
              mode="text"
-             placeholder="{{'legalRepresentativesPhone' | translate}}"
+             placeholder="{{'contactPhoneNumber' | translate}}"
              [(value)]="data.legalRepresentativesPhone"
              [showClearButton]="true">
   <dx-validator>
@@ -65,78 +65,74 @@
   </dx-validator>
 </dx-text-box>
 
+<h6 class="mt-2">{{'decrees' | translate}}</h6>
+<hr/>
+
+<dx-select-box class="mt-2"
+               displayExpr="name"
+               [items]="joinGroupPersonTransitionTypes"
+               [(value)]="selectedJoinGroupPersonTransitionType"
+               [disabled]="true"
+               placeholder="{{'decreeType' | translate}}">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>
+<div class="row cols-padding mt-2">
+  <div class="col">
+    <dx-text-box [(value)]="document.number"
+                 placeholder="{{'number' | translate}}"></dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 [(value)]="document.date"
+                 [displayFormat]="propertyConstantClass.dateFormat"
+                 type="date"
+                 placeholder="{{'date' | translate}}"
+                 (onValueChanged)="onJoinDateChanged($event.value)">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+  </div>
+</div>
+<app-attach-file class="mt-2"
+                 [(baseFile)]="document"
+                 [documentQuery]="documentQuery"></app-attach-file>
+
+<h6 class="mt-2">{{'group' | translate}}</h6>
+<hr/>
+
+<app-input-select *ngIf="!joinGroupTransition || !joinGroupTransition.id"
+                  class="mt-2 w-100"
+                  [loadData]="fetchGroups"
+                  [(model)]="group"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  placeholder="{{'group' | translate}}"
+                  ngDefaultControl>
+</app-input-select>
+
+<dx-select-box class="mt-2"
+               [items]="stageTypes"
+               [(value)]="selectedStageType"
+               [showClearButton]="true"
+               [acceptCustomValue]="true"
+               displayExpr="name"
+               placeholder="{{'stageType' | translate}}">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>
+
 <div class="d-flex flex-row mt-2">
   <ngx-button class="mr-2"
               nameKey="roles"
-              [click]="onEditUserRoles"></ngx-button>
-  <div *ngIf="userRoles && userRoles.length"
+              [click]="onEditGroupPersonUserRoles"></ngx-button>
+  <div *ngIf="groupPersonUserRoles && groupPersonUserRoles.length"
        class="tags-content w-100">
-    <div *ngFor="let item of userRoles">
+    <div *ngFor="let item of groupPersonUserRoles">
       {{item.name}}
-    </div>
-  </div>
-</div>
-
-<div *ngIf="group">
-  <h6 class="mt-2">{{'decrees' | translate}}</h6>
-  <hr/>
-
-  <dx-select-box class="mt-2"
-                 displayExpr="name"
-                 [items]="joinGroupPersonTransitionTypes"
-                 [(value)]="selectedJoinGroupPersonTransitionType"
-                 [disabled]="true"
-                 placeholder="{{'decreeType' | translate}}">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
-  </dx-select-box>
-  <div class="row cols-padding mt-2">
-    <div class="col">
-      <dx-text-box [(value)]="document.number"
-                   placeholder="{{'number' | translate}}"></dx-text-box>
-    </div>
-    <div class="col">
-      <dx-date-box class="w-100"
-                   [(value)]="document.date"
-                   [displayFormat]="propertyConstantClass.dateFormat"
-                   type="date"
-                   placeholder="{{'date' | translate}}"
-                   (onValueChanged)="onJoinDateChanged($event.value)">
-        <dx-validator>
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dx-validator>
-      </dx-date-box>
-    </div>
-  </div>
-  <app-attach-file class="mt-2"
-                   [(baseFile)]="document"
-                   [documentQuery]="documentQuery"></app-attach-file>
-
-  <h6 class="mt-2">{{'group' | translate}} - {{group.name}}</h6>
-  <hr/>
-
-  <dx-select-box class="mt-2"
-                 [items]="stageTypes"
-                 [(value)]="selectedStageType"
-                 [showClearButton]="true"
-                 [acceptCustomValue]="true"
-                 displayExpr="name"
-                 placeholder="{{'stageType' | translate}}">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
-  </dx-select-box>
-
-  <div class="d-flex flex-row mt-2">
-    <ngx-button class="mr-2"
-                nameKey="roles"
-                [click]="onEditGroupPersonUserRoles"></ngx-button>
-    <div *ngIf="groupPersonUserRoles && groupPersonUserRoles.length"
-         class="tags-content w-100">
-      <div *ngFor="let item of groupPersonUserRoles">
-        {{item.name}}
-      </div>
     </div>
   </div>
 </div>
