@@ -526,5 +526,8 @@
   "parentGroup": "Parent group",
   "orderDocument": "Order",
   "leadTrainer": "Lead trainer",
-  "trainer": "Trainer"
+  "trainer": "Trainer",
+  "matchWasFoundQuestion": "Match was found in the object being created. Still create or select an existing one?",
+  "createNew": "Create new",
+  "chooseExisting": "Choose existing"
 }

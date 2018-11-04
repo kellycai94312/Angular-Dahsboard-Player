@@ -81,7 +81,7 @@
 <div class="row cols-padding mt-2">
   <div class="col">
     <dx-text-box [(value)]="document.number"
-                 placeholder="{{'number' | translate}}"></dx-text-box>
+                 placeholder="{{'documentNumber' | translate}}"></dx-text-box>
   </div>
   <div class="col">
     <dx-date-box class="w-100"
@@ -158,7 +158,7 @@
       {{item.sportType.name}}
     </ng-template>
   </ngx-column>
-  <ngx-column nameKey="number">
+  <ngx-column nameKey="documentNumber">
     <ng-template let-item>
       {{item.number}}
     </ng-template>
@@ -191,7 +191,7 @@
       {{item.allowed ? ('yes' | translate) : ('no' | translate)}}
     </ng-template>
   </ngx-column>
-  <ngx-column nameKey="number">
+  <ngx-column nameKey="documentNumber">
     <ng-template let-item>
       {{item.number}}
     </ng-template>

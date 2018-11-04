@@ -48,6 +48,7 @@ import {LocaleModule} from './components/locale/locale.module';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {PersonModule} from './components/person/person.module';
+import {HtmlContentModule} from './components/html-content/html-content.module';
 
 registerLocaleData(localeRu);
 
@@ -93,7 +94,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LocaleModule,
     NgxModalModule,
     GroupModule,
-    PersonModule
+    PersonModule,
+    HtmlContentModule
   ],
   providers: [
     LayoutService,

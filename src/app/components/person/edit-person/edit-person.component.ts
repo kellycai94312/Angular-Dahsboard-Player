@@ -31,6 +31,7 @@ import {GroupPerson} from '../../../data/remote/model/group/group-person';
 import {EditPersonRankComponent} from '../edit-person-rank/edit-person-rank.component';
 import {EditMedicalExaminationComponent} from '../edit-medical-examination/edit-medical-examination.component';
 import {ListRequest} from '../../../data/remote/request/list-request';
+import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 
 @Component({
   selector: 'app-edit-person',
@@ -148,9 +149,32 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     return await this.appHelper.trySave(async () => {
       let groupTransition = this.joinGroupTransition;
       if (this.appHelper.isNewObject(this.data)) {
-        const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-        groupTransition = groupPersonTransition.groupTransition;
-        this.appHelper.updateObject(this.data, groupPersonTransition.person);
+        let personFullName = `${this.data.firstName} ${this.data.lastName}`;
+        if (this.data.patronymic) {
+          personFullName += ` ${this.data.patronymic}`;
+        }
+        const query: PersonQuery = {
+          name: personFullName,
+          dateBirth: this.appHelper.dateByFormat(this.data.birthDate, this.propertyConstantClass.dateFormat),
+          sex: this.data.sex,
+          count: 1
+        };
+        let selectedPerson: Person;
+        if ((await this.participantRestApiService.getPersons(query)).list.length && await this._ngxModalService.showMatchWasFoundDialogModal()) {
+          await this._ngxModalService.showSelectionPersonsModal(query, async selectedItems => {
+            if (selectedItems.length) {
+              selectedPerson = selectedItems[0];
+              this.appHelper.updateObject(this.data, selectedPerson);
+            }
+          });
+        }
+        if (selectedPerson) {
+          groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+        } else {
+          const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
+          groupTransition = groupPersonTransition.groupTransition;
+          this.appHelper.updateObject(this.data, groupPersonTransition.person);
+        }
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }

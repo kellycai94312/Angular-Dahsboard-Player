@@ -29,7 +29,7 @@
                   [checkPressedEnter]="true"></ngx-button>
       <div class="mt-2 text-center">
         <u
-          *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL && environment.type!== environmentType.SAINT_PETERSBURG"><a
+          *ngIf="environment.type!== environmentType.BELARUS && environment.type!== environmentType.SCHOOL && environment.type!== environmentType.SAINT_PETERSBURG && environment.type !== environmentType.PRODUCTION"><a
           routerLink="/registration"
           class="mr-5">{{'registration.signUp' | translate}}</a></u>
         <u><a routerLink="/password/reset">{{'login.forgotYourPassword' | translate}}</a></u>

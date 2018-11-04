@@ -84,9 +84,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     this.splitButtonsItems = [
       this.groupTransitionModalSplitButtonItem(GroupTransitionType.EXPEL),
       this.groupTransitionModalSplitButtonItem(GroupTransitionType.TRANSFER, () => {
-        const res = this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
-        console.log(res);
-        return res;
+        return this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
       })
     ];
   }
@@ -230,7 +228,13 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     if (this.group.discriminator === GroupTypeEnum.TEAM || this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP) {
       query.userRoleEnum = UserRoleEnum.ATHLETE;
     }
-    return await this._participantRestApiService.getGroupPersonsByGroup(query);
+    const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(query);
+    // Group owner hidden in list
+    const groupOwnerIndex = pageContainer.list.findIndex(x => x.person.user.id == this.group.owner.id);
+    if (groupOwnerIndex > -1) {
+      pageContainer.list.splice(groupOwnerIndex, 1);
+    }
+    return pageContainer;
   };
 
   public onEditSettings = async () => {

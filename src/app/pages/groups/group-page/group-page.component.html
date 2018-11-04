@@ -38,10 +38,8 @@
       </div>
     </div>
 
-    <div class="ml-auto d-flex flex-row">
-      <!--<app-busy-button [nameKey]="textStateInGroup"-->
-      <!--[click]="onGroupPersonState">-->
-      <!--</app-busy-button>-->
+    <div *ngIf="canEdit"
+         class="ml-auto d-flex flex-row">
       <ngx-split-button *ngIf="selectedGroupPersons.length"
                         class="mr-2"
                         [items]="splitButtonsItems"></ngx-split-button>
@@ -49,7 +47,6 @@
                   [click]="onEditSettings"></ngx-button>
     </div>
   </div>
-  <!--<ngx-tab [tabs]="tabs"></ngx-tab>-->
 
   <ngx-grid class="mt-2"
             [fetchItems]="fetchItems"
@@ -74,7 +71,8 @@
         {{item.person.patronymic}}
       </ng-template>
     </ngx-column>
-    <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+    <div
+      *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
       <ngx-column nameKey="birthDate">
         <ng-template let-item>
           {{item.person.birthDate | date: propertyConstantClass.dateFormat}}

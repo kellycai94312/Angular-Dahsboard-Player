@@ -31,6 +31,8 @@ import {GroupQuery} from '../../../data/remote/rest-api/query/group-query';
 import {TranslateService} from '@ngx-translate/core';
 import {ChangeWatcher} from '../../../data/local/util/change-watcher';
 import {UserRole} from '../../../data/remote/model/user-role';
+import {Person} from '../../../data/remote/model/person';
+import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 
 @Injectable()
 export class NgxModalService {
@@ -194,11 +196,28 @@ export class NgxModalService {
           nameKey: 'apply',
           callback: async () => {
             await apply(component.selectedItems);
-            modal.dismiss();
+            modal.close();
           }
         }
       ];
     });
+  }
+
+  public async showSelectionPersonsModal(personQuery: PersonQuery, apply: (selectedItems: Person[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal<Person>(async (query: PersonQuery) => {
+        query.name = personQuery.name;
+        query.dateBirth = personQuery.dateBirth;
+        query.sex = personQuery.sex;
+        return await this._participantRestApiService.getPersons(query);
+      },
+      data => {
+        let personFullName = `${data.firstName} ${data.lastName}`;
+        if (data.patronymic) {
+          personFullName += ` ${data.patronymic}`;
+        }
+        return personFullName;
+      },
+      [], apply, 1);
   }
 
   public async showSelectionEstimatedParametersModal<T extends EstimatedParameter>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
@@ -257,10 +276,11 @@ export class NgxModalService {
   public async showSelectionNameObjectsModal<T>(fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<T>>,
                                                 displayName: (data: T) => string,
                                                 selectedItems: T[],
-                                                apply: (selectedItems: EstimatedParameter[]) => Promise<void>) {
+                                                apply: (selectedItems: T[]) => Promise<void>, maxCount: number = null): Promise<boolean> {
     const modal = this.open();
     modal.componentInstance.titleKey = 'selection';
     await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+      component.maxCount = maxCount;
       const initializeComponent = async (componentItem: PreviewNamedObjectComponent<T>, data: T) => {
         componentItem.data = data;
         componentItem.name = displayName(data);
@@ -272,11 +292,12 @@ export class NgxModalService {
           nameKey: 'apply',
           callback: async () => {
             await apply(component.selectedItems);
-            modal.dismiss();
+            modal.close();
           }
         }
       ];
     });
+    return await this.awaitModalResult(modal);
   }
 
   public async showFullImage(objectId: number, imageType: ImageType, fileClass: FileClass);
@@ -309,6 +330,30 @@ export class NgxModalService {
         },
         {
           nameKey: 'cancel',
+          callback: async () => {
+            modal.dismiss();
+          }
+        }
+      ];
+    });
+    return await this.awaitModalResult(modal);
+  }
+
+  public async showMatchWasFoundDialogModal(): Promise<boolean> {
+    const modal = this.open();
+    modal.componentInstance.titleKey = 'attention';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.html = await this._translateService.get('matchWasFoundQuestion').toPromise();
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'chooseExisting',
+          callback: async () => {
+            modal.close();
+          }
+        },
+        {
+          nameKey: 'createNew',
           callback: async () => {
             modal.dismiss();
           }

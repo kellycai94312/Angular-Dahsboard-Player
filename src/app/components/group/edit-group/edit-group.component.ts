@@ -53,7 +53,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
     obj.visible = obj.visible || true;
 
     return await this.appHelper.tryLoad(async () => {
-      this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
+      this.groupTypeEnums = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum')).filter(x => x.data !== GroupTypeEnum.AGENCY);
       this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
       this.stages = await this.participantRestApiService.getStages();
       this.teamTypes = await this.participantRestApiService.getTeamTypes();
@@ -64,7 +64,8 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      if (this.appHelper.isNewObject(this.data)) {
+      const isNew = this.appHelper.isNewObject(this.data);
+      if (isNew) {
         const groupRequest = new GroupRequest();
         groupRequest.group = this.data;
         if (this.parentGroup) {
@@ -76,6 +77,9 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
       }
 
       this._localStorageService.setLastGroupName(this.rememberName ? this.data.name : null);
+      if (isNew) {
+        await this.navigateToPage();
+      }
     });
   }
 
