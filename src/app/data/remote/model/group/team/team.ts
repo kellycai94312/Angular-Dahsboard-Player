@@ -6,7 +6,7 @@ import {League} from './league';
 import {AgeGroup} from '../../age-group';
 import {Stage} from '../../stage/stage';
 
-export class GroupTeam extends Group {
+export class Team extends Group {
   sportType: SportType;
   league: League;
   teamType: TeamType;

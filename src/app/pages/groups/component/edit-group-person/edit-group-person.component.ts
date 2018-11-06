@@ -6,7 +6,6 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -15,6 +14,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
 import {PermissionService} from '../../../../shared/permission.service';
+import {Team} from '../../../../data/remote/model/group/team/team';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -51,7 +51,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
       switch (this.data.group.discriminator) {
         case GroupTypeEnum.TEAM:
-          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as GroupTeam).sportType.id});
+          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as Team).sportType.id});
           this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
           break;
         case GroupTypeEnum.AGENCY:

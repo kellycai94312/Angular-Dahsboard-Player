@@ -1,7 +1,6 @@
 import {PageQuery} from '../../page-query';
 import {GroupTypeEnum} from '../../../model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../model/user-role-enum';
-import {StageTypeEnum} from '../../../model/stage/stage-type-enum';
 import {StageEnum} from '../../../model/stage/stage-enum';
 
 export class EventGroupQuery extends PageQuery {
@@ -14,7 +13,6 @@ export class EventGroupQuery extends PageQuery {
   regionId?: number;
   cityId?: number;
   stageEnum?: StageEnum;
-  stageTypeEnum?: StageTypeEnum;
   stageYear?: number;
   // Все группы или привязанные к пользователю
   all?: boolean;

@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {League} from '../../../../data/remote/model/group/team/league';
-import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
 import {GroupService} from '../../group.service';
 import {Group} from '../../../../data/remote/model/group/base/group';
@@ -14,6 +13,7 @@ import {EditGroupComponent} from '../../../../components/group/edit-group/edit-g
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
+import {Team} from '../../../../data/remote/model/group/team/team';
 
 @Component({
   selector: 'app-group-settings',
@@ -47,7 +47,7 @@ export class GroupSettingsComponent implements OnInit {
     this.group = this._groupService.getGroup();
 
     if (this.group.discriminator === GroupTypeEnum.TEAM) {
-      this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as GroupTeam).sportType.id});
+      this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as Team).sportType.id});
       this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     }
 

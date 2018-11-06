@@ -18,7 +18,6 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Stage} from '../../../../data/remote/model/stage/stage';
-import {StageType} from '../../../../data/remote/model/stage/stage-type';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
@@ -44,7 +43,6 @@ export class AllGroupsComponent implements OnInit {
   public ageGroups: AgeGroup[];
   public leagues: League[];
   public stages: Stage[];
-  public stageTypes: StageType[];
 
   public selectedSportType: SportType;
   public selectedCountry: Country;
@@ -66,7 +64,6 @@ export class AllGroupsComponent implements OnInit {
     this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     this.stages = await this._participantRestApiService.getStages();
-    this.stageTypes = await this._participantRestApiService.getStageTypes();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
@@ -254,15 +251,6 @@ export class AllGroupsComponent implements OnInit {
       this.groupQuery.stageYear = value;
     } else {
       delete this.groupQuery.stageYear;
-    }
-    await this.updateItems();
-  }
-
-  public async onStageTypeChanged(value: StageType) {
-    if (value != null) {
-      this.groupQuery.stageTypeEnum = value.stageTypeEnum;
-    } else {
-      delete this.groupQuery.stageTypeEnum;
     }
     await this.updateItems();
   }
