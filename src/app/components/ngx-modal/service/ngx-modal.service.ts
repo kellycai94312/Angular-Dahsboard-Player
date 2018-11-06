@@ -33,6 +33,7 @@ import {ChangeWatcher} from '../../../data/local/util/change-watcher';
 import {UserRole} from '../../../data/remote/model/user-role';
 import {Person} from '../../../data/remote/model/person';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
+import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
 
 @Injectable()
 export class NgxModalService {
@@ -218,6 +219,18 @@ export class NgxModalService {
         return personFullName;
       },
       [], apply, 1);
+  }
+
+  public async showSelectionOrganizationTrainersModal<T extends OrganizationTrainer>(group: Group, selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal(async query => {
+        const items = await this._participantRestApiService.getOrganizationTrainers(query, {unassigned: true}, {groupId: group.id});
+        return this._appHelper.arrayToPageContainer(items);
+      },
+      data => {
+        const person = data.groupPerson.person;
+        return `${person.firstName} ${person.lastName}`;
+      },
+      selectedItems, apply);
   }
 
   public async showSelectionEstimatedParametersModal<T extends EstimatedParameter>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {

@@ -348,6 +348,8 @@
     "CONTRACT": "Контракт",
     "ORDER": "Приказ",
     "DISPOSITION": "Распоряжение",
+    "PASSPORT": "Паспорт",
+    "CERTIFICATE_NUMBER": "Номер сертификата",
     "OTHER": "Другой"
   },
   "stages": "Этапы",

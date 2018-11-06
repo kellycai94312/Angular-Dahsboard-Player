@@ -31,6 +31,7 @@ import {PermissionService} from '../../../shared/permission.service';
 import {SelectionType} from '../../../components/ngx-grid/bean/selection-type';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
+import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
 
 @Component({
   selector: 'app-group-page',
@@ -58,7 +59,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
 
   public tabs: Tab[];
   public canEdit: boolean;
-  public trainerGroupPersons: GroupPerson[];
+  public organizationTrainers: OrganizationTrainer[];
   public selectedGroupPersons: GroupPerson[];
   public splitButtonsItems: SplitButtonItem[];
   private readonly _groupSubscription: ISubscription;
@@ -123,15 +124,15 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   }
 
   public async updateTrainerGroupPersons() {
-    this.trainerGroupPersons = (await this._participantRestApiService.getGroupPersonsByGroup({
-      id: this.group.id,
-      count: PropertyConstant.pageSizeMax,
-      userRoleEnum: UserRoleEnum.TRAINER
-    })).list.sort((a, b) => {
-      if (a.leadTrainer && !b.leadTrainer) {
+    this.organizationTrainers = (await this._participantRestApiService.getOrganizationTrainers({}, {},
+      {
+        groupId: this.group.id
+      }
+    )).sort((a, b) => {
+      if (a.lead && !b.lead) {
         return -1;
       }
-      if (!a.leadTrainer && b.leadTrainer) {
+      if (!a.lead && b.lead) {
         return 1;
       }
       return 0;

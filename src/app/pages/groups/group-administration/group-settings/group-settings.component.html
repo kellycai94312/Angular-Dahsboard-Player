@@ -14,7 +14,7 @@
       <dx-select-box [items]="leagues"
                      [(value)]="group.league"
                      displayExpr="name"
-                     acceptCustomValue="true"
+                     [acceptCustomValue]="true"
                      [showClearButton]="true"
                      placeholder="{{'league' | translate}}">
       </dx-select-box>
@@ -24,7 +24,7 @@
                      [(value)]="group.ageGroup"
                      displayExpr="name"
                      [showClearButton]="true"
-                     acceptCustomValue="true"
+                     [acceptCustomValue]="true"
                      placeholder="{{'ageGroup' | translate}}">
       </dx-select-box>
     </div>
@@ -72,14 +72,30 @@
       ngDefaultControl>
     </app-input-select>
 
-    <label class="mt-2">{{'leadTrainer' | translate}}</label>
-    <app-input-select
-      [loadData]="fetchPersons"
-      [(model)]="leadTrainer"
-      [getKey]="getKey"
-      [getName]="getPersonName"
-      ngDefaultControl>
-    </app-input-select>
+    <div
+      *ngIf="group?.discriminator === groupTypeEnumClass.TEAM || group?.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+
+      <div class="d-flex flex-row mt-2">
+        <div>
+          <ngx-button nameKey="trainers"
+                      [click]="onSelectTrainers"></ngx-button>
+        </div>
+        <div class="ml-2">
+          <p *ngFor="let item of organizationTrainers">
+            {{item.groupPerson.person.lastName + " " + item.groupPerson.person.firstName}}
+          </p>
+        </div>
+      </div>
+
+      <label class="mt-2 w-100">{{'leadTrainer' | translate}}</label>
+      <app-input-select [loadData]="fetchOrganizationTrainers"
+                        [(model)]="selectedOrganizationTrainer"
+                        [getKey]="getKey"
+                        [getName]="getPersonName"
+                        ngDefaultControl>
+      </app-input-select>
+
+    </div>
   </div>
 </div>
 

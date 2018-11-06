@@ -347,6 +347,8 @@
     "CONTRACT": "Contract",
     "ORDER": "Order",
     "DISPOSITION": "Disposition",
+    "PASSPORT": "Passport",
+    "CERTIFICATE_NUMBER": "Certificate number",
     "OTHER": "Other"
   },
   "stages": "Stages",

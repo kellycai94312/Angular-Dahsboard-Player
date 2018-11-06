@@ -7,7 +7,6 @@ import {UserRole} from '../../../../data/remote/model/user-role';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
-import {Person} from '../../../../data/remote/model/person';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -15,7 +14,7 @@ import {BaseEditComponent} from '../../../../data/local/component/base/base-edit
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
-import {ListRequest} from '../../../../data/remote/request/list-request';
+import {PermissionService} from '../../../../shared/permission.service';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -35,6 +34,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   private _mentorUserRoleEnum: UserRoleEnum;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+              private _permissionService: PermissionService,
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
     this.pageSize = PropertyConstant.pageSize;
@@ -42,10 +42,9 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   async initialize(obj: GroupPerson): Promise<boolean> {
     await super.initialize(obj);
-    this.isOwner = this.data.group.owner.id == this.data.person.user.id;
+    this.isOwner = this._permissionService.areYouCreator(this.data.group, this.data.person);
 
     return await this.appHelper.tryLoad(async () => {
-      await this.initBaseGroupPerson(obj.person, obj.userRole);
       this.userRoles = await this.participantRestApiService.getUserUserRoles({userId: this.data.person.user.id});
       // TODO: Subgroups have to stored in GroupService
       this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
@@ -85,7 +84,6 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   }
 
   public async onUserRoleChange(userRole: UserRole) {
-    await this.initBaseGroupPerson(this.data.person, userRole);
   }
 
   public async onSave(): Promise<boolean> {
@@ -96,11 +94,11 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
         personId: this.data.person.id
       });
 
-      const userRoles = this.data.userRole ? [this.data.userRole] : [];
-      await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(userRoles), {}, {
-        groupId: this.data.group.id,
-        personId: this.data.person.id
-      });
+      // TODO: Update user role
+      // await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(userRoles), {}, {
+      //   groupId: this.data.group.id,
+      //   personId: this.data.person.id
+      // });
 
       const sportRoleId = this.data.sportRole === undefined || this.data.sportRole === null ? null : this.data.sportRole.id;
       await this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
@@ -167,16 +165,5 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
       }];
     });
   };
-
-  private async initBaseGroupPerson(person: Person, userRole: UserRole) {
-    try {
-      this.baseGroupPerson = await this.participantRestApiService.getPersonBaseGroup({
-        personId: person.id,
-        userRoleId: userRole.id
-      });
-    } catch (e) {
-      this.baseGroupPerson = null;
-    }
-  }
 
 }

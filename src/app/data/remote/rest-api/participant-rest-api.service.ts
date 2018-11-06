@@ -112,6 +112,7 @@ import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-req
 import {GroupTransition} from '../model/group/transition/group-transition';
 import {OrganizationType} from '../model/group/organization/organization-type';
 import {GroupRequest} from '../request/group-request';
+import {OrganizationTrainer} from '../model/group/organization-trainer';
 
 @Injectable()
 @RestParams({
@@ -755,6 +756,29 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}/userRole',
   })
   updateGroupPersonUserRoles: IRestMethodStrict<ListRequest<UserRole>, any, { groupId: number, personId: number }, UserRole[]>;
+
+  //#region Organization trainer
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/organizationTrainer',
+  })
+  getOrganizationTrainers: IRestMethodStrict<any, { unassigned?: boolean }, { groupId: number }, OrganizationTrainer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/organizationTrainer',
+  })
+  updateOrganizationTrainers: IRestMethodStrict<ListRequest<GroupPerson>, {}, { groupId: number }, OrganizationTrainer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
+  })
+  updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
+
+  //#endregion
+
 
   //#region Subgroup
 

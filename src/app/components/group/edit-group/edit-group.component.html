@@ -1,11 +1,13 @@
-<label>{{'parentGroup' | translate}}</label>
-<app-input-select [loadData]="loadGroups"
-                  [(model)]="parentGroup"
-                  [getKey]="getKey"
-                  [getName]="getName"
-                  [disabled]="data.id"
-                  ngDefaultControl>
-</app-input-select>
+<div *ngIf="!data.id">
+  <label>{{'parentGroup' | translate}}</label>
+  <app-input-select [loadData]="loadGroups"
+                    [(model)]="parentGroup"
+                    [getKey]="getKey"
+                    [getName]="getName"
+                    [disabled]="data.id"
+                    ngDefaultControl>
+  </app-input-select>
+</div>
 
 <label class="mt-2">{{'name' | translate}}</label>
 <div class="d-flex flex-row">
@@ -26,6 +28,7 @@
 <dx-select-box [items]="groupTypeEnums"
                displayExpr="name"
                [disabled]="data.id"
+               [acceptCustomValue]="true"
                placeholder="{{'groupType' | translate}}"
                (onValueChanged)="onGroupTypeChanged($event.value)">
   <dx-validator>
@@ -37,6 +40,7 @@
   <label class="mt-2">{{'organizationType' | translate }}</label>
   <dx-select-box [items]="organizationTypes"
                  [(value)]="data.organizationType"
+                 [acceptCustomValue]="true"
                  displayExpr="name"
                  placeholder="{{'organizationType' | translate}}">
     <dx-validator>
@@ -50,6 +54,7 @@
   <label class="mt-2">{{'sportType' | translate}}</label>
   <dx-select-box [items]="sportTypes"
                  [(value)]="data.sportType"
+                 [acceptCustomValue]="true"
                  displayExpr="name"
                  [disabled]="data.id"
                  placeholder="{{'sportType' | translate}}">
@@ -62,6 +67,7 @@
     <label class="mt-2">{{'teamType' | translate }}</label>
     <dx-select-box [items]="teamTypes"
                    [(value)]="data.teamType"
+                   [acceptCustomValue]="true"
                    displayExpr="name"
                    placeholder="{{'teamType' | translate}}">
       <dx-validator>
@@ -73,6 +79,7 @@
   <label class="mt-2">{{'stage' | translate}}</label>
   <dx-select-box [items]="stages"
                  [(value)]="data.stage"
+                 [acceptCustomValue]="true"
                  displayExpr="name"
                  placeholder="{{'stage' | translate}}">
     <dx-validator>
