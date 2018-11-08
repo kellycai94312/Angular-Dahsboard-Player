@@ -13,14 +13,14 @@ import {City} from '../../../data/remote/model/city';
 import {NamedObject} from '../../../data/remote/base/named-object';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
-import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
-import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 import {ActionTab} from '../../../components/ngx-tab/model/action-tab';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 import {TemplateModalService} from '../../../service/template-modal.service';
 import {Person} from '../../../data/remote/model/person';
+import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
 @Component({
   selector: 'app-persons-page',
@@ -29,7 +29,7 @@ import {Person} from '../../../data/remote/model/person';
 })
 export class PersonsPageComponent implements OnInit, OnDestroy {
 
-  public readonly pageSize: number;
+  public readonly propertyConstantClass = PropertyConstant;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -46,12 +46,10 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
               private _translateObjectService: TranslateObjectService,
               private _appHelper: AppHelper,
               private _templateModalService: TemplateModalService) {
-    this.pageSize = PropertyConstant.pageSize;
-
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
     this.personQuery.from = 0;
-    this.personQuery.count = this.pageSize;
+    this.personQuery.count = this.propertyConstantClass.pageSize;
     this.userRoles = [];
     const addSplitButtonItem: SplitButtonItem = {
       nameKey: 'add',

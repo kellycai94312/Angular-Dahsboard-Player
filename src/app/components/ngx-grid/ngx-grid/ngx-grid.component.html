@@ -1,33 +1,43 @@
-<table class="table table-bordered table-hover {{class}}">
+<table class="table table-bordered table-hover {{class}}"
+       ngxScroll
+       [autoScroll]="autoScroll"
+       [windowScroll]="windowScroll"
+       (scrollUp)="onScrollUp()"
+       (scrollDown)="onScrollDown()">
   <thead>
-  <tr class="d-flex">
+  <tr>
+    <th *ngIf="selectionType === selectionTypeClass.MULTIPLE"></th>
     <th *ngFor="let item of ngxColumnComponents.toArray()"
-        (click)="onColumnClick(item)"
-        class="{{item.style}}">{{item.name ? (item.name) : (item.nameKey | translate)}}
+        [class]="item.class"
+        (click)="onColumnClick(item)">{{item.name ? (item.name) : (item.nameKey | translate)}}
+      <span [ngSwitch]="item.sort">
+      <ng-container *ngSwitchCase="sortClass.ASC">
+        <i class="fa fa-angle-up"></i>
+      </ng-container>
+        <ng-container *ngSwitchCase="sortClass.DESC">
+        <i class="fa fa-angle-down"></i>
+      </ng-container>
+    </span>
     </th>
   </tr>
   </thead>
   <tbody>
-  <ngx-virtual-scroll [getItems]="onFetchItems"
-                      [query]="query"
-                      [windowScroll]="windowScroll">
-    <ng-template let-item>
-      <tr class="d-flex"
-          [ngClass]="{'selected': item?.selected}"
-          (click)="onSelectOrDeselectItem(item); $event.stopPropagation()"
-          (dblclick)="onEdit($event,item); $event.stopPropagation()">
-        <td *ngFor="let column of ngxColumnComponents.toArray()"
-            class="{{column.style}}">
-          <div *ngIf="column.templateRef; then linkTemplate else defaultTemplate"></div>
-          <ng-template #linkTemplate
-                       *ngTemplateOutlet="column.templateRef; context: {$implicit: item, column:column}"></ng-template>
-          <ng-template #defaultTemplate>
-            {{column.displayValue ? column.displayValue(item) : null}}
-          </ng-template>
-        </td>
-      </tr>
-    </ng-template>
-  </ngx-virtual-scroll>
+  <tr *ngFor="let item of items"
+      [ngClass]="{'selected': item?.selected}"
+      (dblclick)="onEdit($event,item); $event.stopPropagation()">
+    <td *ngIf="selectionType === selectionTypeClass.MULTIPLE">
+      <ngx-check-box [(value)]="item.selected"
+                     (valueChange)="onSelectOrDeselectItem(item)"></ngx-check-box>
+    </td>
+    <td *ngFor="let column of ngxColumnComponents.toArray()">
+      <div *ngIf="column.templateRef; then linkTemplate else defaultTemplate"></div>
+      <ng-template #linkTemplate
+                   *ngTemplateOutlet="column.templateRef; context: {$implicit: item, column: column}"></ng-template>
+      <ng-template #defaultTemplate>
+        {{column.displayValue ? column.displayValue(item) : null}}
+      </ng-template>
+    </td>
+  </tr>
   </tbody>
 </table>
 

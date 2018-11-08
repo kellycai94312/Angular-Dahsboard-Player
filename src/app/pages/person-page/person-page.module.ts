@@ -75,6 +75,7 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
 import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   imports: [
@@ -116,7 +117,8 @@ import {AttachFileModule} from '../../components/attach-file/attach-file.module'
     NgxSelectionModule,
     NgxTextBoxModule,
     NgxModalModule,
-    AttachFileModule
+    AttachFileModule,
+    NgxImageModule
   ],
   declarations: [
     PersonPageComponent,

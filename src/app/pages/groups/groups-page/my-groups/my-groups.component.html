@@ -27,7 +27,7 @@
 <ngx-virtual-scroll class="list-group-flush"
                     [(query)]="groupQuery"
                     [getItems]="getItems"
-                    windowScroll="true">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div class="list-group-item pb-2 cols-padding px-2">
       <app-group [data]="item.data"></app-group>

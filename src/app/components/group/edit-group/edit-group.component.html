@@ -18,7 +18,8 @@
       <dxi-validation-rule type="required"></dxi-validation-rule>
     </dx-validator>
   </dx-text-box>
-  <div class="ml-2">
+  <div *ngIf="!data.id"
+       class="ml-2">
     <dx-check-box [(value)]="rememberName"
                   text="{{'remember' | translate}}"></dx-check-box>
   </div>

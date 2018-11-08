@@ -14,6 +14,9 @@ import {FileClass} from '../../data/remote/model/file/base/file-class';
 export class ImageComponent implements OnInit, OnChanges {
 
   @Input()
+  class: string;
+
+  @Input()
   type: ImageType;
 
   @Input()

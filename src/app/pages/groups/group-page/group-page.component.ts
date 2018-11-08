@@ -32,6 +32,7 @@ import {SelectionType} from '../../../components/ngx-grid/bean/selection-type';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
 import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
+import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 
 @Component({
   selector: 'app-group-page',
@@ -58,6 +59,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public logo: ImageComponent;
 
   public tabs: Tab[];
+  public personQuery: PersonQuery;
   public canEdit: boolean;
   public organizationTrainers: OrganizationTrainer[];
   public selectedGroupPersons: GroupPerson[];
@@ -74,6 +76,9 @@ export class GroupPageComponent implements OnInit, OnDestroy {
               private _permissionService: PermissionService,
               private _ngxModalService: NgxModalService,
               private _groupService: GroupService) {
+    this.personQuery = new PersonQuery();
+    this.personQuery.name = '';
+    this.personQuery.count = PropertyConstant.pageSize;
     this._groupSubscription = this._groupService.groupSubject.subscribe(group => {
       this.group = group;
     });
@@ -269,6 +274,15 @@ export class GroupPageComponent implements OnInit, OnDestroy {
         await this._participantRestApiService.leaveGroup({id: this.group.id});
       }
     });
+  }
+
+  public async onSortChange(val: string) {
+    if (val) {
+      this.personQuery.sort = val;
+    } else {
+      delete this.personQuery.sort;
+    }
+    await this.resetItems();
   }
 
   public onSelectedItemsChange(items: GroupPerson[]) {

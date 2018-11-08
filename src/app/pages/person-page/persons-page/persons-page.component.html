@@ -39,7 +39,7 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="loadGroups"
-                      [pageSize]="pageSize"
+                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'group' | translate}}"
@@ -49,7 +49,7 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="loadSportTypes"
-                      [pageSize]="pageSize"
+                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'sportType' | translate}}"
@@ -59,7 +59,7 @@
   </div>
   <div class="col">
     <app-input-select [loadData]="loadCities"
-                      [pageSize]="pageSize"
+                      [pageSize]="propertyConstantClass.pageSize"
                       [getKey]="getKey"
                       [getName]="getName"
                       placeholder="{{'city' | translate}}"

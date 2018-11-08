@@ -134,8 +134,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
         await this.medicalExaminationNgxGridComponent.reset();
       }
 
-      this._initialPersonRanks = this.sportRankNgxGridComponent.ngxVirtualScrollComponent.items.slice(0);
-      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.ngxVirtualScrollComponent.items.slice(0);
+      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice(0);
+      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice(0);
     });
   }
 
@@ -184,11 +184,11 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       this.document.objectId = groupTransition.id;
       await this.attachFileComponent.updateFile();
 
-      await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.ngxVirtualScrollComponent.items, this._personRankComponents,
+      await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
         async (obj: PersonRank) => {
           return await this.participantRestApiService.removePersonRank({personId: this.data.id, personRankId: obj.id});
         });
-      await this.applyComponentsData(this._initialMedicalExaminations, this.medicalExaminationNgxGridComponent.ngxVirtualScrollComponent.items, this._medicalExaminationComponents,
+      await this.applyComponentsData(this._initialMedicalExaminations, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents,
         async (obj: MedicalExamination) => {
           return await this.participantRestApiService.removeMedicalExamination({personId: this.data.id, medicalExaminationId: obj.id});
         });
@@ -273,14 +273,14 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             if (!(await component.validWithNotify())) {
               return;
             }
-            this.updateComponentData(component, this.sportRankNgxGridComponent.ngxVirtualScrollComponent.items, this._personRankComponents);
+            this.updateComponentData(component, this.sportRankNgxGridComponent.items, this._personRankComponents);
             modal.close();
           }
         },
         {
           nameKey: 'remove',
           callback: async () => {
-            this.removeComponentData(component, this.sportRankNgxGridComponent.ngxVirtualScrollComponent.items, this._personRankComponents);
+            this.removeComponentData(component, this.sportRankNgxGridComponent.items, this._personRankComponents);
             modal.close();
           }
         }
@@ -326,14 +326,14 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             if (!(await component.validWithNotify())) {
               return;
             }
-            this.updateComponentData(component, this.medicalExaminationNgxGridComponent.ngxVirtualScrollComponent.items, this._medicalExaminationComponents);
+            this.updateComponentData(component, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents);
             modal.close();
           }
         },
         {
           nameKey: 'remove',
           callback: async () => {
-            this.removeComponentData(component, this.medicalExaminationNgxGridComponent.ngxVirtualScrollComponent.items, this._medicalExaminationComponents);
+            this.removeComponentData(component, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents);
             modal.close();
           }
         }

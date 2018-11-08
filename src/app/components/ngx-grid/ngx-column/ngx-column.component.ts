@@ -1,4 +1,7 @@
 import {Component, ContentChild, Input, TemplateRef} from '@angular/core';
+import {Subject} from 'rxjs';
+import {NameWrapper} from '../../../data/local/name-wrapper';
+import {Sort} from '../../../data/remote/rest-api/sort';
 
 @Component({
   selector: 'ngx-column',
@@ -34,7 +37,7 @@ export class NgxColumnComponent {
   public displayValue: (obj: any) => string;
 
   @Input()
-  public style: string;
+  public class: string;
 
   @Input()
   public data: any;
@@ -42,8 +45,27 @@ export class NgxColumnComponent {
   @Input()
   public click: (column: NgxColumnComponent) => Promise<void>;
 
+  @Input()
+  public sortName: string;
+
+  public sort: Sort;
+
+  public readonly sortSubject: Subject<NameWrapper<Sort>>;
+
   constructor() {
-    this.style = 'col';
+    this.sortSubject = new Subject<NameWrapper<Sort>>();
+  }
+
+  public onSortChange() {
+    const items = Object.keys(Sort);
+    let itemIndex = items.findIndex(x => x === this.sort);
+    itemIndex++;
+    if (itemIndex >= items.length) {
+      this.sort = null;
+    } else {
+      this.sort = Sort[items[itemIndex]];
+    }
+    this.sortSubject.next({name: this.sortName, data: this.sort});
   }
 
 }
