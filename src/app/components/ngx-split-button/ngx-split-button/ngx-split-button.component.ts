@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {SplitButtonItem} from '../bean/split-button-item';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'ngx-split-button',
@@ -38,7 +39,7 @@ export class NgxSplitButtonComponent {
 
   private _items: SplitButtonItem[];
 
-  constructor() {
+  constructor(private _appHelper: AppHelper) {
     this.classes = '';
   }
 
@@ -51,5 +52,9 @@ export class NgxSplitButtonComponent {
       this.busy = false;
     }
   }
+
+  public canShowDropDownMenu = (): boolean => {
+    return this.items.filter(x => this._appHelper.isUndefinedOrNull(x.visible) || x.visible()).length > 1;
+  };
 
 }

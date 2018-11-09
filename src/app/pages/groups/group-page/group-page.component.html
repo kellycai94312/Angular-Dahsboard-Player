@@ -1,5 +1,4 @@
 <div *ngIf="group">
-  <!-- group head -->
   <div class="d-flex flex-row mb-2">
     <app-image #logo
                [type]="'LOGO'"
@@ -7,7 +6,8 @@
                [id]="group.id"
                [dimension]="'W130xH130'"
                [format]="'SQUARE'"></app-image>
-    <div class="logo-xl-change" *ngIf="groupService.isEditAllow()">
+    <div *ngIf="canEdit"
+         class="logo-xl-change">
       <div class="logo-content">
         <input type="file"
                (change)="onLogoChange($event)" accept="image/*">
@@ -17,28 +17,97 @@
     </div>
     <div class="p-2">
       <h4>{{group.name}}</h4>
-      <p>{{'groupType' | translate }} - {{group.groupType.name}}</p>
-      <div *ngIf="group.groupType.groupTypeEnum === 'TEAM'">
-        <p>{{'sportType' | translate }} - {{group.sportType.name}}</p>
-        <p *ngIf="group.teamType!=null">{{'teamType' | translate }} - {{group.teamType.name}}</p>
-        <p *ngIf="group.league!=null">{{'league' | translate }} - {{group.league.name}}</p>
-        <p *ngIf="group.ageGroup!=null">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
+      <p>{{'groupType' | translate }} - {{('groupTypeEnum.' + group.discriminator) | translate}}</p>
+      <p
+        *ngIf="(group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP) && group.sportType">
+        {{'sportType' | translate }} - {{group.sportType.name}}</p>
+      <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM">
+        <p *ngIf="group.teamType">{{'teamType' | translate }} - {{group.teamType.name}}</p>
+        <p *ngIf="group.league">{{'league' | translate }} - {{group.league.name}}</p>
+        <p *ngIf="group.ageGroup">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
       </div>
-      <div class="d-flex flex-row">
-        <p *ngIf="group.address?.country!=null">{{'country' | translate }} - {{group.address.country.name}}</p>
-        <p *ngIf="group.address?.region!=null" class="ml-1">{{'region' | translate }} -
-          {{group.address.region.name}}</p>
-        <p *ngIf="group.address?.city!=null" class="ml-1">{{'city' | translate }} - {{group.address.city.name}}</p>
+    </div>
+    <div class="ml-2">
+      <div *ngFor="let item of organizationTrainers; let i = index">
+        <div *ngIf="item.lead; else elseTemplate">
+          {{('leadTrainer' | translate) + ": " + item.groupPerson.person.lastName + " " +
+          item.groupPerson.person.firstName}}
+        </div>
+        <ng-template #elseTemplate>
+          {{('trainer' | translate) + " №" + (i + 1) + ": " + item.groupPerson.person.lastName + " " +
+          item.groupPerson.person.firstName}}
+        </ng-template>
       </div>
     </div>
 
-    <div class="ml-auto">
-      <app-busy-button [nameKey]="textStateInGroup"
-                       [click]="onGroupPersonState">
-      </app-busy-button>
+    <div *ngIf="canEdit"
+         class="ml-auto d-flex flex-row">
+      <ngx-split-button *ngIf="selectedGroupPersons.length"
+                        class="mr-2"
+                        [items]="splitButtonsItems"></ngx-split-button>
+      <ngx-button [icon]="iconEnumClass.EDIT"
+                  [click]="onEditSettings"></ngx-button>
     </div>
   </div>
 
-  <ngx-tab [tabs]="tabs"></ngx-tab>
+  <ngx-grid class="mt-2"
+            [fetchItems]="fetchItems"
+            [(query)]="personQuery"
+            [add]="onAddGroupPerson"
+            [edit]="onEditGroupPerson"
+            [windowScroll]="true"
+            [selectionType]="selectionTypeClass.MULTIPLE"
+            (selectedItemsChange)="onSelectedItemsChange($event)"
+            (sortChange)="onSortChange($event)"
+            [canEdit]="canEdit">
+    <ngx-column nameKey="lastName"
+                sortName="lastName">
+      <ng-template let-item>
+        {{item.person.lastName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="firstName"
+                sortName="firstName">
+      <ng-template let-item>
+        {{item.person.firstName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="patronymic"
+                sortName="patronymic">
+      <ng-template let-item>
+        {{item.person.patronymic}}
+      </ng-template>
+    </ngx-column>
+    <div
+      *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+      <ngx-column nameKey="birthDate"
+                  sortName="birthDate">
+        <ng-template let-item>
+          {{item.person.birthDate | date: propertyConstantClass.dateFormat}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="orderDocument">
+        <ng-template let-item>
+          <div *ngIf="item?.groupTransition?.documents">
+            <div *ngFor="let document of item.groupTransition.documents">
+              <p *ngIf="document.number && document.date">№: {{document.number}} {{('date' | translate) + ": " +
+                (document.date | date: propertyConstantClass.dateFormat)}}</p>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="rank"
+                  sortName="rank">
+        <ng-template let-item>
+          {{item?.personRank?.rank?.name}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="stageType"
+                  sortName="stageType">
+        <ng-template let-item>
+          {{item?.stageType?.name}}
+        </ng-template>
+      </ngx-column>
+    </div>
+  </ngx-grid>
 </div>
-

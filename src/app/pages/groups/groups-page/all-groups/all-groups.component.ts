@@ -1,5 +1,4 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {GroupType} from '../../../../data/remote/model/group/base/group-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
@@ -19,7 +18,9 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Stage} from '../../../../data/remote/model/stage/stage';
-import {StageType} from '../../../../data/remote/model/stage/stage-type';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-all-groups',
@@ -38,11 +39,10 @@ export class AllGroupsComponent implements OnInit {
 
   public groupQuery: GroupQuery;
 
-  public groupTypes: GroupType[];
+  public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
   public ageGroups: AgeGroup[];
   public leagues: League[];
   public stages: Stage[];
-  public stageTypes: StageType[];
 
   public selectedSportType: SportType;
   public selectedCountry: Country;
@@ -50,7 +50,8 @@ export class AllGroupsComponent implements OnInit {
   public selectedCity: City;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper) {
+              private _appHelper: AppHelper,
+              private _translateObjectService: TranslateObjectService) {
     this.pageSize = PropertyConstant.pageSize;
 
     this.groupQuery = new GroupQuery();
@@ -60,10 +61,9 @@ export class AllGroupsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.groupTypes = await this._participantRestApiService.getGroupTypes();
+    this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     this.stages = await this._participantRestApiService.getStages();
-    this.stageTypes = await this._participantRestApiService.getStageTypes();
 
     this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async value => {
@@ -75,9 +75,9 @@ export class AllGroupsComponent implements OnInit {
 
   //#region Filters
 
-  public async onGroupTypeChanged(value: GroupType) {
-    if (value) {
-      this.groupQuery.groupTypeEnum = value.groupTypeEnum;
+  public async onGroupTypeChanged(val: NameWrapper<GroupTypeEnum>) {
+    if (val) {
+      this.groupQuery.groupTypeEnum = val.data;
     } else {
       delete this.groupQuery.groupTypeEnum;
     }
@@ -93,9 +93,9 @@ export class AllGroupsComponent implements OnInit {
     await this.updateItems();
   }
 
-  public async onLeagueChanged(value: League) {
-    if (value) {
-      this.groupQuery.leagueId = value.id;
+  public async onLeagueChanged(val: League) {
+    if (val) {
+      this.groupQuery.leagueId = val.id;
     } else {
       delete this.groupQuery.leagueId;
     }
@@ -251,15 +251,6 @@ export class AllGroupsComponent implements OnInit {
       this.groupQuery.stageYear = value;
     } else {
       delete this.groupQuery.stageYear;
-    }
-    await this.updateItems();
-  }
-
-  public async onStageTypeChanged(value: StageType) {
-    if (value != null) {
-      this.groupQuery.stageTypeEnum = value.stageTypeEnum;
-    } else {
-      delete this.groupQuery.stageTypeEnum;
     }
     await this.updateItems();
   }

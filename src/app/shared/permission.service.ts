@@ -22,7 +22,7 @@ export class PermissionService {
       return true;
     }
 
-    if (await this.hasAnyRole(person, [UserRoleEnum.ADMIN])) {
+    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
       return true;
     }
 
@@ -35,7 +35,7 @@ export class PermissionService {
       return true;
     }
 
-    if (await this.hasAnyRole(person, [UserRoleEnum.ADMIN])) {
+    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
       return true;
     }
 
@@ -48,7 +48,7 @@ export class PermissionService {
       return true;
     }
 
-    if (await this.hasAnyRole(person, [UserRoleEnum.ADMIN])) {
+    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
       return true;
     }
 
@@ -60,7 +60,8 @@ export class PermissionService {
     return userRoles.find(x => x.userRoleEnum === userRoleEnum) !== null;
   }
 
-  public async hasAnyRole(person: Person, userRoleEnums: UserRoleEnum[]): Promise<boolean> {
+  public async hasAnyRole(userRoleEnums: UserRoleEnum[], person: Person = null): Promise<boolean> {
+    person = await this.getDefaultPerson(person);
     const userRoles = await this._participantRestApiService.getUserUserRoles({userId: person.user.id});
     let result = false;
     for (const item of userRoleEnums) {

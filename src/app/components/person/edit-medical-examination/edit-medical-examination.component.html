@@ -1,0 +1,49 @@
+<label class="mt-2">{{'sportType' | translate}}</label>
+<dx-select-box [items]="sportTypes"
+               [(value)]="data.sportType"
+               [acceptCustomValue]="true"
+               [disabled]="data.id"
+               displayExpr="name">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-select-box>
+
+<dx-check-box class="mt-2 w-100"
+              text="{{'allowed' | translate}}"
+              [(value)]="data.allowed"></dx-check-box>
+
+<label class="mt-2">{{'number' | translate}}</label>
+<dx-text-box [(value)]="data.number">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-text-box>
+
+<label class="mt-2">{{'issued' | translate}}</label>
+<dx-date-box class="w-100"
+             [(value)]="data.startDate"
+             type="date"
+             [max]="data.finishDate"
+             [displayFormat]="propertyConstant.dateFormat"
+             (onValueChanged)="onStartDateChanged($event.value)">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-date-box>
+
+<label class="mt-2">{{'actual' | translate}}</label>
+<dx-date-box class="w-100"
+             [(value)]="data.finishDate"
+             type="date"
+             [min]="data.startDate"
+             [displayFormat]="propertyConstant.dateFormat"
+             (onValueChanged)="onFinishDateChanged($event.value)">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-date-box>
+
+<app-attach-file class="mt-2"
+                 [(baseFile)]="document"
+                 [documentQuery]="documentQuery"></app-attach-file>

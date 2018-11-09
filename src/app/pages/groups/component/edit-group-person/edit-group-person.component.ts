@@ -6,8 +6,6 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {GroupTeam} from '../../../../data/remote/model/group/team/group-team';
-import {Person} from '../../../../data/remote/model/person';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -15,6 +13,8 @@ import {BaseEditComponent} from '../../../../data/local/component/base/base-edit
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditGroupPersonLogsComponent} from '../edit-group-person-logs/edit-group-person-logs.component';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
+import {PermissionService} from '../../../../shared/permission.service';
+import {Team} from '../../../../data/remote/model/group/team/team';
 
 @Component({
   selector: 'app-edit-group-person',
@@ -34,6 +34,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   private _mentorUserRoleEnum: UserRoleEnum;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+              private _permissionService: PermissionService,
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
     this.pageSize = PropertyConstant.pageSize;
@@ -41,17 +42,16 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   async initialize(obj: GroupPerson): Promise<boolean> {
     await super.initialize(obj);
-    this.isOwner = this.data.group.owner.id == this.data.person.user.id;
+    this.isOwner = this._permissionService.areYouCreator(this.data.group, this.data.person);
 
     return await this.appHelper.tryLoad(async () => {
-      await this.initBaseGroupPerson(obj.person, obj.userRole);
       this.userRoles = await this.participantRestApiService.getUserUserRoles({userId: this.data.person.user.id});
       // TODO: Subgroups have to stored in GroupService
       this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
 
-      switch (this.data.group.groupType.groupTypeEnum) {
+      switch (this.data.group.discriminator) {
         case GroupTypeEnum.TEAM:
-          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as GroupTeam).sportType.id});
+          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as Team).sportType.id});
           this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
           break;
         case GroupTypeEnum.AGENCY:
@@ -84,45 +84,36 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
   }
 
   public async onUserRoleChange(userRole: UserRole) {
-    await this.initBaseGroupPerson(this.data.person, userRole);
   }
 
   public async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       const subGroupId = this.data.subGroup === undefined ? null : this.data.subGroup.id;
-      await  this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
+      await this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
-      const userRoleId = this.data.userRole === undefined || this.data.userRole === null ? null : this.data.userRole.id;
-      await  this.participantRestApiService.postPersonUserRole({id: userRoleId}, {}, {
-        groupId: this.data.group.id,
-        personId: this.data.person.id
-      });
+      // TODO: Update user role
+      // await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(userRoles), {}, {
+      //   groupId: this.data.group.id,
+      //   personId: this.data.person.id
+      // });
 
       const sportRoleId = this.data.sportRole === undefined || this.data.sportRole === null ? null : this.data.sportRole.id;
-      await  this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
+      await this.participantRestApiService.postPersonSportRole({id: sportRoleId}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
-      await  this.participantRestApiService.postPersonNumber({number: this.data.number}, {}, {
+      await this.participantRestApiService.postPersonNumber({number: this.data.number}, {}, {
         groupId: this.data.group.id,
         personId: this.data.person.id
       });
 
       try {
         const mentorId = this.data.mentor === undefined || this.data.mentor === null ? null : this.data.mentor.person.id;
-        await  this.participantRestApiService.postPersonMentor({id: mentorId}, {}, {
-          groupId: this.data.group.id,
-          personId: this.data.person.id
-        });
-      } catch (e) {
-      }
-
-      try {
-        await  this.participantRestApiService.postPersonAdmin({admin: this.data.admin}, {}, {
+        await this.participantRestApiService.postPersonMentor({id: mentorId}, {}, {
           groupId: this.data.group.id,
           personId: this.data.person.id
         });
@@ -174,16 +165,5 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
       }];
     });
   };
-
-  private async initBaseGroupPerson(person: Person, userRole: UserRole) {
-    try {
-      this.baseGroupPerson = await this.participantRestApiService.getPersonBaseGroup({
-        personId: person.id,
-        userRoleId: userRole.id
-      });
-    } catch (e) {
-      this.baseGroupPerson = null;
-    }
-  }
 
 }

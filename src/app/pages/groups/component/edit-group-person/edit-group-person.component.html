@@ -17,46 +17,30 @@
                showClearButton="true"
                placeholder="{{'subgroup' | translate}}">
 </dx-select-box>
+<!--TODO -->
+<!--<div *ngIf="data.userRole && data.userRole.userRoleEnum === 'ATHLETE'">-->
+<!--<label class="mt-2">{{'mentor' | translate}}</label>-->
+<!--<app-input-select-->
+<!--[loadData]="loadMentors"-->
+<!--[(model)]="data.mentor"-->
+<!--[pageSize]="pageSize"-->
+<!--[getKey]="getKey"-->
+<!--[getName]="getName"-->
+<!--ngDefaultControl>-->
+<!--</app-input-select>-->
 
-<label class="mt-2">{{'userRole' | translate }}</label>
-<dx-select-box [items]="userRoles"
-               [(value)]="data.userRole"
-               displayExpr="name"
-               acceptCustomValue="true"
-               showClearButton="true"
-               (onSelectionChanged)="onUserRoleChange($event.selectedItem)"
-               placeholder="{{'userRole' | translate}}">
-</dx-select-box>
+<!--<label class="mt-2">{{'sportRole' | translate }}</label>-->
+<!--<dx-select-box [items]="sportRoles"-->
+<!--[(value)]="data.sportRole"-->
+<!--displayExpr="name"-->
+<!--acceptCustomValue="true"-->
+<!--showClearButton="true"-->
+<!--placeholder="{{'sportRole' | translate}}">-->
+<!--</dx-select-box>-->
 
-<div *ngIf="data.userRole && data.userRole.userRoleEnum === 'ATHLETE'">
-  <label class="mt-2">{{'mentor' | translate}}</label>
-  <app-input-select
-    [loadData]="loadMentors"
-    [(model)]="data.mentor"
-    [pageSize]="pageSize"
-    [getKey]="getKey"
-    [getName]="getName"
-    ngDefaultControl>
-  </app-input-select>
-
-  <label class="mt-2">{{'sportRole' | translate }}</label>
-  <dx-select-box [items]="sportRoles"
-                 [(value)]="data.sportRole"
-                 displayExpr="name"
-                 acceptCustomValue="true"
-                 showClearButton="true"
-                 placeholder="{{'sportRole' | translate}}">
-  </dx-select-box>
-
-  <label class="mt-2">{{'number' | translate }}</label>
-  <dx-text-box [(value)]="data.number"></dx-text-box>
-</div>
-
-<dx-check-box *ngIf="!isOwner"
-              class="w-100 mt-2"
-              [(value)]="data.admin"
-              text="{{ 'administrator' | translate }}">
-</dx-check-box>
+<!--<label class="mt-2">{{'number' | translate }}</label>-->
+<!--<dx-text-box [(value)]="data.number"></dx-text-box>-->
+<!--</div>-->
 
 <div class="mt-2">
   <app-busy-button nameKey="showPersonLog"

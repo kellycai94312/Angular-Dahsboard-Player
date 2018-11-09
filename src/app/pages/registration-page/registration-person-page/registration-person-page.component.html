@@ -4,14 +4,14 @@
       <img src="/assets/img/athlete-readiness-logo.png" alt="">
 
       <dx-text-box mode="text"
-                   placeholder="{{'persons.person.personal.firstName' | translate}}"
+                   placeholder="{{'firstName' | translate}}"
                    [(value)]="person.firstName"
                    [showClearButton]="true">
       </dx-text-box>
 
       <dx-text-box class="mt-2"
                    mode="text"
-                   placeholder="{{'persons.person.personal.lastName' | translate}}"
+                   placeholder="{{'lastName' | translate}}"
                    [(value)]="person.lastName"
                    [showClearButton]="true">
       </dx-text-box>
@@ -21,7 +21,7 @@
                    [max]="dateMax"
                    [type]="'date'"
                    [displayFormat]="propertyConstantClass.dateFormat"
-                   placeholder="{{'persons.person.personal.birthDate' | translate}}"
+                   placeholder="{{'birthDate' | translate}}"
                    (onValueChanged)="onBirthDateChanged($event.value)">
       </dx-date-box>
 

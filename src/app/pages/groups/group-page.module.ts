@@ -39,7 +39,6 @@ import {TableGroupConnectionComponent} from './component/table-group-connection/
 import {EditGroupConnectionComponent} from './component/edit-group-connection/edit-group-connection.component';
 import {EditDocumentComponent} from './component/edit-document/edit-document.component';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
-import {EditGroupComponent} from './component/edit-group/edit-group.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {FileModule} from '../../components/file/file.module';
 import {EditGroupPersonLogsComponent} from './component/edit-group-person-logs/edit-group-person-logs.component';
@@ -48,6 +47,8 @@ import {NgxGraphModule} from '@swimlane/ngx-graph';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {AttachFileModule} from '../../components/attach-file/attach-file.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -79,7 +80,10 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     FileModule,
     NgxGraphModule,
     NgxChartsModule,
-    NgxButtonModule
+    NgxButtonModule,
+    NgxModalModule,
+    AttachFileModule,
+    GroupModule
   ],
   exports: [
     GroupComponent,
@@ -111,7 +115,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     TableGroupConnectionComponent,
     EditGroupConnectionComponent,
     EditDocumentComponent,
-    EditGroupComponent,
     EditGroupPersonLogsComponent,
     GroupConnectionsGraphComponent
   ],
@@ -122,9 +125,9 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     EditGroupPersonComponent,
     EditGroupConnectionComponent,
     EditDocumentComponent,
-    EditGroupComponent,
     EditGroupPersonLogComponent,
-    EditGroupPersonLogsComponent
+    EditGroupPersonLogsComponent,
+    GroupAdministrationComponent
   ]
 })
 export class GroupPageModule {

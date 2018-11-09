@@ -1,0 +1,54 @@
+<ngx-grid [fetchItems]="fetchItems">
+  <ngx-column nameKey="firstName">
+    <ng-template let-item>
+      {{item.firstName}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="lastName">
+    <ng-template let-item>
+      {{item.lastName}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="patronymic">
+    <ng-template let-item>
+      {{item.patronymic}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="birthDate">
+    <ng-template let-item>
+      {{item.birthDate | date: propertyConstantClass.dateFormat}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>
+
+<div class="row cols-padding mt-2">
+  <div class="col">
+    <dx-text-box class="input-height-sm"
+                 [(value)]="document.number"
+                 placeholder="{{'documentNumber' | translate}}"></dx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100 input-height-sm"
+                 [displayFormat]="propertyConstantClass.dateFormat"
+                 type="date"
+                 placeholder="{{'date' | translate}}"
+                 (onValueChanged)="onDateChanged($event.value)">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+  </div>
+  <div *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER"
+       class="col">
+    <app-input-select class="w-100"
+                      [loadData]="fetchGroups"
+                      [(model)]="transferToGroup"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'group' | translate}}"
+                      ngDefaultControl>
+    </app-input-select>
+  </div>
+</div>
+<app-attach-file class="mt-2"
+                 [(baseFile)]="document"></app-attach-file>

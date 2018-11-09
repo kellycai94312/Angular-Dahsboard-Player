@@ -7,7 +7,7 @@
     </dx-text-box>
   </div>
   <div class="col">
-    <dx-select-box [items]="groupTypes"
+    <dx-select-box [items]="groupTypeEnums"
                    displayExpr="name"
                    (onValueChanged)="onGroupTypeChanged($event.value)"
                    placeholder="{{'groupType' | translate}}"
@@ -94,15 +94,6 @@
     </dx-number-box>
   </div>
 
-  <div class="col">
-    <dx-select-box [items]="stageTypes"
-                   displayExpr="name"
-                   (onValueChanged)="onStageTypeChanged($event.value)"
-                   placeholder="{{'stageType' | translate}}"
-                   showClearButton="true">
-    </dx-select-box>
-  </div>
-
 </div>
 
 <table class="table table-hover mt-2">
@@ -140,7 +131,7 @@
             {{item.data?.stage?.shortName}}{{item.data.stageYear}}{{item.data?.stageType?.shortName}}</h6>
         </td>
         <td class="col-sm-1">
-          <h6>{{item.data.groupType.name}}</h6>
+          <h6>{{('groupTypeEnum.' + item.data.discriminator) | translate}}</h6>
         </td>
         <td class="col-sm-1">
           <h6>{{item.data?.sportType?.name}}</h6>

@@ -1,14 +1,28 @@
-import {Component, ContentChild, Input, OnInit, TemplateRef} from '@angular/core';
+import {Component, ContentChild, Input, TemplateRef} from '@angular/core';
+import {Subject} from 'rxjs';
+import {NameWrapper} from '../../../data/local/name-wrapper';
+import {Sort} from '../../../data/remote/rest-api/sort';
 
 @Component({
   selector: 'ngx-column',
   templateUrl: './ngx-column.component.html',
   styleUrls: ['./ngx-column.component.scss']
 })
-export class NgxColumnComponent implements OnInit {
+export class NgxColumnComponent {
+
+  get contentChild(): TemplateRef<any> {
+    return this._contentChild;
+  }
 
   @ContentChild(TemplateRef)
-  public contentChild: TemplateRef<any>;
+  set contentChild(value: TemplateRef<any>) {
+    this._contentChild = value;
+    if (!this.templateRef && this._contentChild) {
+      this.templateRef = this._contentChild;
+    }
+  }
+
+  private _contentChild: TemplateRef<any>;
 
   @Input()
   public name: string;
@@ -23,7 +37,7 @@ export class NgxColumnComponent implements OnInit {
   public displayValue: (obj: any) => string;
 
   @Input()
-  public style: string;
+  public class: string;
 
   @Input()
   public data: any;
@@ -31,14 +45,27 @@ export class NgxColumnComponent implements OnInit {
   @Input()
   public click: (column: NgxColumnComponent) => Promise<void>;
 
+  @Input()
+  public sortName: string;
+
+  public sort: Sort;
+
+  public readonly sortSubject: Subject<NameWrapper<Sort>>;
+
   constructor() {
-    this.style = 'col';
+    this.sortSubject = new Subject<NameWrapper<Sort>>();
   }
 
-  ngOnInit(): void {
-    if (!this.templateRef && this.contentChild) {
-      this.templateRef = this.contentChild;
+  public onSortChange() {
+    const items = Object.keys(Sort);
+    let itemIndex = items.findIndex(x => x === this.sort);
+    itemIndex++;
+    if (itemIndex >= items.length) {
+      this.sort = null;
+    } else {
+      this.sort = Sort[items[itemIndex]];
     }
+    this.sortSubject.next({name: this.sortName, data: this.sort});
   }
 
 }

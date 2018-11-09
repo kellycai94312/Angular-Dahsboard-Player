@@ -9,5 +9,6 @@ import {ImageComponent} from './image.component';
   declarations: [ImageComponent],
   exports: [ImageComponent]
 })
+// @deprecated Use NgxImage
 export class ImageModule {
 }

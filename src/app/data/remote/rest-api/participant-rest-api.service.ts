@@ -18,12 +18,10 @@ import {HttpClient} from '@angular/common/http';
 import {Address} from '../model/address';
 import {PersonAnthropometry} from '../model/person-anthropometry';
 import {EmailRequest} from '../request/email-request';
-import {GroupType} from '../model/group/base/group-type';
 import {Group} from '../model/group/base/group';
 import {GroupQuery} from './query/group-query';
 import {GroupPerson} from '../model/group/group-person';
 import {SubGroup} from '../model/group/sub-group';
-import {GroupPersonQuery} from './query/group-person-query';
 import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
@@ -70,7 +68,6 @@ import {ImageQuery} from './query/file/image-query';
 import {DocumentQuery} from './query/file/document-query';
 import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
-import {PersonTemplateRequest} from '../request/person-template-request';
 import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
@@ -94,7 +91,6 @@ import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
 import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
-import {Organization} from '../model/organization';
 import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {Tag} from '../model/tag';
@@ -108,6 +104,14 @@ import {EventPlanLoadPeriod} from '../bean/event-plan-load-period';
 import {EventPlanLoad} from '../model/training/plan/event-plan-load';
 import {EventPlanTrainingValueEnum} from '../model/training/plan/event-plan-training-value-enum';
 import {EventGroupQuery} from './query/event/event-group-query';
+import {Rank} from '../model/rank';
+import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
+import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
+import {GroupTransition} from '../model/group/transition/group-transition';
+import {OrganizationType} from '../model/group/organization/organization-type';
+import {GroupRequest} from '../request/group-request';
+import {OrganizationTrainer} from '../model/group/organization-trainer';
+import {GroupPersonQuery} from './query/group-person-query';
 
 @Injectable()
 @RestParams({
@@ -319,19 +323,25 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/rank'
   })
-  getRanks: IRestMethod<{ personId: number }, PersonRank[]>;
+  getPersonRanks: IRestMethodStrict<any, { sportTypeId?: number }, { personId: number }, PersonRank[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/person/{!personId}/rank'
+  })
+  createPersonRank: IRestMethodStrict<PersonRank, any, { personId: number }, PersonRank>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/person/{!personId}/rank/{!rankId}'
+    path: '/person/{!personId}/rank/{!personRankId}'
   })
-  updateRank: IRestMethodStrict<PersonRank, any, { personId: number, rankId: number }, PersonRank>;
+  updatePersonRank: IRestMethodStrict<PersonRank, any, { personId: number, personRankId: number }, PersonRank>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/person/{!personId}/rank/{!rankId}'
+    path: '/person/{!personId}/rank/{!personRankId}'
   })
-  removeRank: IRestMethod<{ personId: number, rankId: number }, void>;
+  removePersonRank: IRestMethod<{ personId: number, personRankId: number }, PersonRank>;
 
   //#endregion
 
@@ -432,12 +442,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/person/template'
-  })
-  createTemplatePerson: IRestMethod<PersonTemplateRequest, Person>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
     path: '/person/{!personId}/sportType'
   })
   updatePersonSportTypes: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { personId: number }, SportType[]>;
@@ -512,9 +516,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/person/{!id}'
+    path: '/person/{!personId}'
   })
-  updatePerson: IRestMethodStrict<Person, QueryParams, void, Person>;
+  updatePerson: IRestMethodStrict<Person, any, { personId: number }, Person>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -546,7 +550,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/{!personId}/medicalExamination'
   })
-  getMedicalExaminations: IRestMethodStrict<any, PageQuery, { personId: number }, PageContainer<MedicalExamination>>;
+  getMedicalExaminations: IRestMethodStrict<any, { sportTypeId?: number, from?: number, count?: number }, { personId: number }, PageContainer<MedicalExamination>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -612,12 +616,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/groupType',
-  })
-  getGroupTypes: IRestMethod<void, GroupType[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/group',
   })
   getGroups: IRestMethod<GroupQuery, PageContainer<Group>>;
@@ -626,7 +624,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group',
   })
-  postGroup: IRestMethod<Group, Group>;
+  createGroup: IRestMethod<GroupRequest, Group>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -684,11 +682,29 @@ export class ParticipantRestApiService extends Rest {
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!id}/person',
-  })
-  getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
+  // @RestAction({
+  //   method: RestRequestMethod.Get,
+  //   path: '/group/{!id}/person',
+  // })
+  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+
+  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
+    let queryStr = '';
+    const keys = Object.keys(query).filter(x => x !== 'id');
+    if (keys.length) {
+      queryStr = '?';
+      for (let i = 0; i < keys.length; i++) {
+        const item = keys[i];
+        queryStr += `${item}=${query[item]}`;
+        if (i < keys.length - 1) {
+          queryStr += '&';
+        }
+      }
+    }
+
+    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
+  }
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -701,6 +717,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!id}/join',
   })
   leaveGroup: IRestMethod<QueryParams, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/stageType',
+  })
+  updateGroupPersonStageType: IRestMethodStrict<IdRequest, any, { groupId: number, personId: number }, GroupPerson>;
 
   //#endregion
 
@@ -715,12 +737,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}/subgroup',
   })
   postPersonSubgroup: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/userRole',
-  })
-  postPersonUserRole: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -741,10 +757,39 @@ export class ParticipantRestApiService extends Rest {
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/admin',
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}/userRole',
   })
-  postPersonAdmin: IRestMethodStrict<{ admin?: boolean }, any, { groupId: number, personId: number }, GroupPerson>;
+  getGroupPersonUserRoles: IRestMethod<{ groupId: number, personId: number }, UserRole[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/{!personId}/userRole',
+  })
+  updateGroupPersonUserRoles: IRestMethodStrict<ListRequest<UserRole>, any, { groupId: number, personId: number }, UserRole[]>;
+
+  //#region Organization trainer
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/organizationTrainer',
+  })
+  getOrganizationTrainers: IRestMethodStrict<any, { unassigned?: boolean }, { groupId: number }, OrganizationTrainer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/organizationTrainer',
+  })
+  updateOrganizationTrainers: IRestMethodStrict<ListRequest<GroupPerson>, {}, { groupId: number }, OrganizationTrainer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
+  })
+  updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
+
+  //#endregion
+
 
   //#region Subgroup
 
@@ -870,6 +915,40 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
+  //#region GroupTransition
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/person/{!personId}/transition',
+  })
+  getGroupTransitions: IRestMethodStrict<any, { from?: number, count?: number }, { groupId: number, personId: number }, PageContainer<GroupTransition>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/new',
+  })
+  createAndEnrollToGroup: IRestMethodStrict<Person, any, { groupId: number }, GroupPersonTransition>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person',
+  })
+  enrollPersonsToGroup: IRestMethodStrict<ListRequest<Person>, any, { groupId: number }, GroupPersonTransition[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/person',
+  })
+  expelPersonsFromGroup: IRestMethodStrict<ListRequest<Person>, any, { groupId: number }, GroupPersonTransition[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person/transfer',
+  })
+  transferPersonsToGroup: IRestMethodStrict<GroupPersonsTransferRequest, any, { groupId: number }, GroupPersonTransition[]>;
+
+  //#endregion
+
   //#endregion
 
   //#region File
@@ -904,6 +983,12 @@ export class ParticipantRestApiService extends Rest {
   })
   removeFile: IRestMethod<{ fileId: number }, BaseFile>;
 
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/file/{!fileId}/resource'
+  })
+  removeFileResource: IRestMethod<{ fileId: number }, BaseFile>;
+
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
     if (files) {
@@ -930,6 +1015,9 @@ export class ParticipantRestApiService extends Rest {
   }
 
   getFileUrl(documentQuery: DocumentQuery): string {
+    if (!documentQuery) {
+      return '';
+    }
     let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
     if (documentQuery.type) {
       url += `&type=${documentQuery.type}`;
@@ -1699,64 +1787,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Organization
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/organization'
-  })
-  getOrganizations: IRestMethod<void, Organization[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/organization/{!organizationId}'
-  })
-  getOrganization: IRestMethod<{ organizationId: number }, Organization>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/organization'
-  })
-  createOrganization: IRestMethod<Organization, Organization>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/organization/{!organizationId}'
-  })
-  updateOrganization: IRestMethodStrict<Organization, any, { organizationId: number }, Organization>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/organization/{!organizationId}'
-  })
-  removeOrganization: IRestMethod<{ organizationId: number }, Organization>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/organization/{!organizationId}/person'
-  })
-  getOrganizationPersons: IRestMethodStrict<any, PersonQuery, { organizationId: number }, PageContainer<Person>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/organization/{!organizationId}/person'
-  })
-  updateOrganizationPersons: IRestMethodStrict<ListRequest<Person>, any, { organizationId: number }, Person[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/organization/{!organizationId}/group'
-  })
-  getOrganizationGroups: IRestMethodStrict<any, GroupQuery, { organizationId: number }, PageContainer<Group>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/organization/{!organizationId}/group'
-  })
-  updateOrganizationGroups: IRestMethodStrict<ListRequest<Group>, any, { organizationId: number }, Group[]>;
-
-  //#endregion
-
   //#region Activity
 
   @RestAction({
@@ -1856,6 +1886,26 @@ export class ParticipantRestApiService extends Rest {
     path: '/testing/{!testingId}/sportRole'
   })
   updateTestingSportRoles: IRestMethodStrict<ListRequest<SportRole>, {}, { testingId: number }, SportRole[]>;
+
+  //#endregion
+
+  //#region Rank
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/rank',
+  })
+  getRanks: IRestMethod<void, Rank[]>;
+
+  //#endregion
+
+  //#region Organization Type
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/organizationType',
+  })
+  getOrganizationTypes: IRestMethod<void, OrganizationType[]>;
 
   //#endregion
 

@@ -17,9 +17,6 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
-import {OrganizationsDictionaryComponent} from './organizations-dictionary/organizations-dictionary.component';
-import {OrganizationDictionaryComponent} from './organization-dictionary/organization-dictionary.component';
-import {EditOrganizationComponent} from './component/edit-organization/edit-organization.component';
 import {GroupPageModule} from '../groups/group-page.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
@@ -80,9 +77,6 @@ import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.modu
     EditStageTypeComponent,
     SportTypeDictionaryComponent,
     EditStageStandardComponent,
-    OrganizationsDictionaryComponent,
-    OrganizationDictionaryComponent,
-    EditOrganizationComponent,
     ExercisesDictionaryComponent,
     TestsDictionaryComponent,
     ActivitiesComponent,
@@ -95,7 +89,6 @@ import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.modu
     EditStageComponent,
     EditStageTypeComponent,
     EditStageStandardComponent,
-    EditOrganizationComponent,
     PersonComponent,
     EditActivityComponent,
     EditTagComponent

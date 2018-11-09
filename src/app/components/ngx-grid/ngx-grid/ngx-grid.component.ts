@@ -1,25 +1,30 @@
-import {Component, ContentChildren, Input, OnInit, QueryList, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewEncapsulation} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
-import {NgxVirtualScrollComponent} from '../../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {NgxColumnComponent} from '../ngx-column/ngx-column.component';
+import {SelectionType} from '../bean/selection-type';
+import {NgxVirtualScroll} from '../../ngx-virtual-scroll/bean/ngx-virtual-scroll';
+import {AppHelper} from '../../../utils/app-helper';
+import {Sort} from '../../../data/remote/rest-api/sort';
+import {Observable} from 'rxjs';
+import {mergeAll} from 'rxjs/operators';
+import {ISubscription} from 'rxjs-compat/Subscription';
+import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
   selector: 'ngx-grid',
   templateUrl: './ngx-grid.component.html',
-  styleUrls: ['./ngx-grid.component.scss']
+  styleUrls: ['./ngx-grid.component.scss'],
+  encapsulation: ViewEncapsulation.Emulated
 })
-export class NgxGridComponent implements OnInit {
+export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterViewInit, OnDestroy {
+
+  public readonly selectionTypeClass = SelectionType;
+  public readonly sortClass = Sort;
 
   @ContentChildren(NgxColumnComponent)
   public ngxColumnComponents: QueryList<NgxColumnComponent>;
-
-  @ViewChild(NgxVirtualScrollComponent)
-  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
-
-  @Input()
-  public class: string;
 
   @Input()
   public canEdit: boolean;
@@ -40,22 +45,63 @@ export class NgxGridComponent implements OnInit {
   public dblClickByItem: (obj: any) => Promise<boolean>;
 
   @Input()
-  public query: PageQuery;
+  public selectionType: SelectionType;
 
-  @Input()
-  public windowScroll: boolean;
+  @Output()
+  public selectedItemsChange: EventEmitter<any[]>;
+
+  @Output()
+  public sortChange: EventEmitter<string>;
 
   @Input()
   public fetchItems: (query: PageQuery) => Promise<PageContainer<any>>;
 
-  constructor() {
-    this.query = new PageQuery();
-    this.query.from = 0;
+  private readonly _sorts: NameWrapper<Sort>[];
+  private _sortSubscription: ISubscription;
+
+  constructor(private appHelper: AppHelper) {
+    super(appHelper);
     this.enabledAdd = true;
+    this.selectionType = SelectionType.SINGLE;
+    this.selectedItemsChange = new EventEmitter<any[]>();
+    this.sortChange = new EventEmitter<string>();
+    this._sorts = [];
   }
 
-  async ngOnInit() {
-    await this.ngxVirtualScrollComponent.reset();
+
+  async ngOnInit(): Promise<void> {
+    this.getItems = (direction, pageQuery) => {
+      return this.fetchItems(pageQuery);
+    };
+    // TODO: Turn off auto update items
+    await this.reset();
+  }
+
+  ngAfterViewInit(): void {
+    this._sortSubscription = Observable.merge(this.ngxColumnComponents.toArray().map(x => x.sortSubject))
+      .pipe(mergeAll())
+      .subscribe((val: NameWrapper<Sort>) => {
+        const itemIndex = this._sorts.findIndex(x => x.name === val.name);
+        if (itemIndex > -1) {
+          if (val.data) {
+            this._sorts[itemIndex] = val;
+          } else {
+            this._sorts.splice(itemIndex, 1);
+          }
+        } else {
+          this._sorts.push(val);
+        }
+
+        let sortQuery = '';
+        for (const item of this._sorts) {
+          sortQuery += item.data === Sort.ASC ? `%2B${item.name}` : `-${item.name}`;
+        }
+        this.sortChange.emit(sortQuery);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.appHelper.unsubscribe(this._sortSubscription);
   }
 
   public onAdd = async () => {
@@ -81,14 +127,17 @@ export class NgxGridComponent implements OnInit {
     return null;
   };
 
-  public async reset(): Promise<void> {
-    await this.ngxVirtualScrollComponent.reset();
-  }
-
   public async onColumnClick(column: NgxColumnComponent): Promise<void> {
+    if (column.sortName) {
+      column.onSortChange();
+    }
     if (column.click) {
       await column.click(column);
     }
+  }
+
+  public onSelectOrDeselectItem(item: any) {
+    this.selectedItemsChange.emit(this.items.filter(x => x['selected']));
   }
 
 }

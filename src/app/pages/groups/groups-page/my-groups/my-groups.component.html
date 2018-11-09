@@ -7,11 +7,11 @@
     </dx-text-box>
   </div>
   <div class="col-2">
-    <dx-select-box [items]="groupTypes"
+    <dx-select-box [items]="groupTypeEnums"
                    displayExpr="name"
                    (onValueChanged)="onGroupTypeChanged($event.value)"
                    placeholder="{{'groupType' | translate}}"
-                   showClearButton="true">
+                   [showClearButton]="true">
     </dx-select-box>
   </div>
   <div class="col-2">
@@ -27,7 +27,7 @@
 <ngx-virtual-scroll class="list-group-flush"
                     [(query)]="groupQuery"
                     [getItems]="getItems"
-                    windowScroll="true">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div class="list-group-item pb-2 cols-padding px-2">
       <app-group [data]="item.data"></app-group>

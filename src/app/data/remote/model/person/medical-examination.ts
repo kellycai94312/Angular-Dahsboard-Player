@@ -1,7 +1,10 @@
 import {IdentifiedObject} from '../../base/identified-object';
+import {SportType} from '../sport-type';
 
 export class MedicalExamination extends IdentifiedObject {
-  public passDate: Date;
-  public approved: boolean;
-  public recommendations: string;
+  sportType: SportType;
+  number: number;
+  startDate: Date;
+  finishDate: Date;
+  allowed: boolean;
 }

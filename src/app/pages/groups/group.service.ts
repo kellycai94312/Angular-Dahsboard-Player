@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Group } from '../../data/remote/model/group/base/group';
-import { Subject } from 'rxjs/Subject';
-import { ParticipantRestApiService } from '../../data/remote/rest-api/participant-rest-api.service';
-import { SubGroup } from '../../data/remote/model/group/sub-group';
-import { GroupPerson } from '../../data/remote/model/group/group-person';
-import { GroupPersonState } from '../../data/local/group-person-state';
-import { GroupTypeEnum } from '../../data/remote/model/group/base/group-type-enum';
+import {Injectable} from '@angular/core';
+import {Group} from '../../data/remote/model/group/base/group';
+import {Subject} from 'rxjs/Subject';
+import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {SubGroup} from '../../data/remote/model/group/sub-group';
+import {GroupPerson} from '../../data/remote/model/group/group-person';
+import {GroupPersonState} from '../../data/local/group-person-state';
+import {GroupTypeEnum} from '../../data/remote/model/group/base/group-type-enum';
+import {UserRoleEnum} from '../../data/remote/model/user-role-enum';
+import {PermissionService} from '../../shared/permission.service';
 
 @Injectable()
 export class GroupService {
@@ -23,7 +25,8 @@ export class GroupService {
   public imageLogoSubject: Subject<any>;
   public imageBackgroundSubject: Subject<any>;
 
-  constructor(private  _participantRestApiService: ParticipantRestApiService) {
+  constructor(private  _participantRestApiService: ParticipantRestApiService,
+              private _permissionService: PermissionService) {
     this.groupSubject = new Subject<Group>();
     this.subgroupsSubject = new Subject<SubGroup[]>();
     this._groupPersonState = GroupPersonState.NOT_MEMBER;
@@ -69,12 +72,13 @@ export class GroupService {
         this._groupPersonState = GroupPersonState.CONSIDERATION;
       }
 
-      this._isEditAllow = this._groupPerson.admin;
+      const userRoles = await this._participantRestApiService.getGroupPersonUserRoles({groupId: this._group.id, personId: this._groupPerson.person.id});
+      this._isEditAllow = !!userRoles.filter(x => x.userRoleEnum === UserRoleEnum.ADMIN || x.userRoleEnum === UserRoleEnum.OPERATOR).length;
 
-      this._isOwner = this._group.owner.id === this._groupPerson.person.user.id;
+      this._isOwner = this._permissionService.areYouCreator(this._group, this._groupPerson.person);
     }
 
-    this._hasEvents = this._group.groupType.groupTypeEnum.toString() === GroupTypeEnum[GroupTypeEnum.TEAM];
+    this._hasEvents = this._group.discriminator === GroupTypeEnum.TEAM;
 
     return this._groupPerson;
   }

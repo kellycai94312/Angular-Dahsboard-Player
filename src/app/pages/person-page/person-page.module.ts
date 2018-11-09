@@ -3,7 +3,6 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {PersonPageRoutingModule} from './person-page-routing.module';
 import {HttpClientModule} from '@angular/common/http';
 import {PersonPageComponent} from './person-page/person-page.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {
   DxCheckBoxModule,
   DxDataGridModule,
@@ -64,16 +63,19 @@ import {GroupPersonLogsComponent} from './component/group-person-logs/group-pers
 import {PersonStagesComponent} from './person-page/person-stages/person-stages.component';
 import {EditPersonStageComponent} from './component/edit-person-stage/edit-person-stage.component';
 import {MedicalExaminationsComponent} from './person-page/medical-examinations/medical-examinations.component';
-import {EditMedicalExaminationComponent} from './component/edit-medical-examination/edit-medical-examination.component';
-import {EditPersonComponent} from './component/edit-person/edit-person.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
-import {EditRankComponent} from './component/edit-rank/edit-rank.component';
 import {PersonStageStandardsComponent} from './person-page/person-stage-standards/person-stage-standards.component';
 import {ReportModule} from '../../components/report/report.module';
 import {EditRefereeCategoryComponent} from './component/edit-referee-category/edit-referee-category.component';
 import {EditNoteComponent} from './component/edit-note/edit-note.component';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {NamedObjectModule} from '../../components/named-object/named-object.module';
+import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
+import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
+import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
+import {AttachFileModule} from '../../components/attach-file/attach-file.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   imports: [
@@ -81,7 +83,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     HttpClientModule,
     PersonPageRoutingModule,
     TranslateModule.forChild(),
-    NgbModule.forRoot(),
     DxSelectBoxModule,
     DxTextAreaModule,
     DxDateBoxModule,
@@ -111,7 +112,13 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     NgxGridModule,
     ReportModule,
     NgxTabModule,
-    NgxButtonModule
+    NgxButtonModule,
+    NamedObjectModule,
+    NgxSelectionModule,
+    NgxTextBoxModule,
+    NgxModalModule,
+    AttachFileModule,
+    NgxImageModule
   ],
   declarations: [
     PersonPageComponent,
@@ -141,9 +148,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     PersonStagesComponent,
     EditPersonStageComponent,
     MedicalExaminationsComponent,
-    EditMedicalExaminationComponent,
-    EditPersonComponent,
-    EditRankComponent,
     PersonStageStandardsComponent,
     EditRefereeCategoryComponent,
     EditNoteComponent
@@ -160,9 +164,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     EventModalComponent,
     ContactEnableModalComponent,
     EditPersonStageComponent,
-    EditMedicalExaminationComponent,
-    EditPersonComponent,
-    EditRankComponent,
     RanksComponent,
     EditRefereeCategoryComponent,
     EditNoteComponent

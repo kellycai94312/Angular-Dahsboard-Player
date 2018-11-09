@@ -19,10 +19,6 @@
       "cancel": "Cancel",
       "personal": {
         "section": "Personal information",
-        "firstName": "First name",
-        "lastName": "Last name",
-        "middleName": "Middle name",
-        "birthDate": "Birth date",
         "country": "Country",
         "region": "Region",
         "city": "City"
@@ -351,6 +347,8 @@
     "CONTRACT": "Contract",
     "ORDER": "Order",
     "DISPOSITION": "Disposition",
+    "PASSPORT": "Passport",
+    "CERTIFICATE_NUMBER": "Certificate number",
     "OTHER": "Other"
   },
   "stages": "Stages",
@@ -492,5 +490,46 @@
     "PAUSE": "Pause",
     "RESUME": "Resume",
     "STOP": "Stop"
-  }
+  },
+  "remember": "Remember",
+  "organizationType": "Organization type",
+  "roles": "Roles",
+  "decree": "Decree",
+  "decrees": "Decrees",
+  "decreeType": "Decree type",
+  "sportRanks": "Sport ranks",
+  "issued": "Issued",
+  "actual": "Actual",
+  "documents": "Documents",
+  "birthCertificate": "Birth certificate",
+  "issuedBy": "Issued by",
+  "groupTransitionTypeEnum": {
+    "ENROLL": "Enroll",
+    "TRANSFER": "Transfer",
+    "EXPEL": "Expel"
+  },
+  "firstName": "First name",
+  "lastName": "Last name",
+  "patronymic": "Patronymic",
+  "transfer": "Transfer",
+  "deduct": "Deduct",
+  "someFieldsNotValid": "Some fields not valid",
+  "allowed": "Allowed",
+  "yes": "Yes",
+  "no": "No",
+  "groupTypeEnum": {
+    "TEAM": "Team",
+    "COMMUNITY": "Community",
+    "ORGANIZATION": "Organization",
+    "AGENCY": "Agency",
+    "PREPARATION_GROUP": "Preparation group"
+  },
+  "contactPhoneNumber": "Contact phone number",
+  "parentGroup": "Parent group",
+  "orderDocument": "Order",
+  "leadTrainer": "Lead trainer",
+  "trainer": "Trainer",
+  "matchWasFoundQuestion": "Match was found in the object being created. Still create or select an existing one?",
+  "createNew": "Create new",
+  "chooseExisting": "Choose existing"
 }

@@ -1,9 +1,8 @@
 @import "variables";
 
-.table-header {
-  text-align: center;
+thead > tr {
   text-transform: uppercase;
-  color: #999;
+  color: $light-blue;
 }
 
 .table {
@@ -11,11 +10,21 @@
 
   th, td {
     justify-content: center;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0.5rem !important;
+  }
+
+  thead th {
+    font-size: 12px;
+    font-weight: normal;
+    color: $active-color;
   }
 
   tbody tr:nth-of-type(odd) {
     background-color: $odd-item-color;
   }
+
   tbody tr {
     cursor: pointer;
     p, h1, h2, h3, h4, h5, h6 {
@@ -30,22 +39,7 @@
   }
 }
 
-.list-group-item {
-  &:nth-child(odd) {
-    background-color: $odd-item-color;
-  }
-
-  &:hover {
-    background-color: $odd-item-color;
-  }
-}
-
-thead > tr {
-  text-transform: uppercase;
-  color: $light-blue;
-}
-
-.table {
+.flex-table {
   td, th {
     display: flex;
     align-items: center;
@@ -56,6 +50,16 @@ thead > tr {
     font-size: 12px;
     font-weight: normal;
     color: $active-color;
+  }
+}
+
+.list-group-item {
+  &:nth-child(odd) {
+    background-color: $odd-item-color;
+  }
+
+  &:hover {
+    background-color: $odd-item-color;
   }
 }
 

@@ -20,10 +20,6 @@
       "cancel": "Отмена",
       "personal": {
         "section": "Основные данные",
-        "firstName": "Имя",
-        "lastName": "Фамилия",
-        "middleName": "Отчество",
-        "birthDate": "Дата рождения",
         "country": "Страна",
         "region": "Регион",
         "city": "Город"
@@ -195,7 +191,7 @@
   "organization": "Организация",
   "report": "Отчет",
   "reportError": "Недостаточно данных для формирования отчета",
-  "rank": "Разряд, звание",
+  "rank": "Разряд",
   "assignee": "Кем присвоен(о)",
   "orderNumber": "№ приказа, распоряжения",
   "certificateNumber": "№ удостоверения",
@@ -352,6 +348,8 @@
     "CONTRACT": "Контракт",
     "ORDER": "Приказ",
     "DISPOSITION": "Распоряжение",
+    "PASSPORT": "Паспорт",
+    "CERTIFICATE_NUMBER": "Номер сертификата",
     "OTHER": "Другой"
   },
   "stages": "Этапы",
@@ -493,5 +491,46 @@
     "PAUSE": "Пауза",
     "RESUME": "Возобновлено",
     "STOP": "Завершено"
-  }
+  },
+  "remember": "Запомнить",
+  "organizationType": "Тип организации",
+  "roles": "Роли",
+  "decree": "Приказ",
+  "decrees": "Приказы",
+  "decreeType": "Тип приказа",
+  "sportRanks": "Спортивные звания",
+  "issued": "Выдан",
+  "actual": "Действителен",
+  "documents": "Документы",
+  "birthCertificate": "Свидетельство о рождении",
+  "issuedBy": "Кем выдан",
+  "groupTransitionTypeEnum": {
+    "ENROLL": "Зачислить",
+    "TRANSFER": "Перевести",
+    "EXPEL": "Отчислить"
+  },
+  "firstName": "Имя",
+  "lastName": "Фамилия",
+  "patronymic": "Отчество",
+  "transfer": "Перевести",
+  "deduct": "Отчислить",
+  "someFieldsNotValid": "Некоторые поля заполнены неверно",
+  "allowed": "Допущен",
+  "yes": "Да",
+  "no": "Нет",
+  "groupTypeEnum": {
+    "TEAM": "Команда",
+    "COMMUNITY": "Сообщество",
+    "ORGANIZATION": "Организация",
+    "AGENCY": "Агентство",
+    "PREPARATION_GROUP": "Группа подготовки"
+  },
+  "contactPhoneNumber": "Контактный номер телефона",
+  "parentGroup": "Родительская группа",
+  "orderDocument": "Приказ",
+  "leadTrainer": "Ведущий тренер",
+  "trainer": "Тренер",
+  "matchWasFoundQuestion": "Найдено совпадение в создаваемом объекте. Все равно создать или выбрать существующий?",
+  "createNew": "Создать новый",
+  "chooseExisting": "Выбрать существующий"
 }

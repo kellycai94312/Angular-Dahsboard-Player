@@ -1,0 +1,5 @@
+@import "../../../styles/variables";
+
+.selected {
+  background: #{$light-blue + '29'} !important;
+}
