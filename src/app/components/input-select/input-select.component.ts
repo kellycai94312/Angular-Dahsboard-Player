@@ -78,7 +78,7 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
 
   /** show dropdown list */
   async showList() {
-    if (this.disabled) {
+    if (this.disabled || this.active) {
       return;
     }
     this.active = true;

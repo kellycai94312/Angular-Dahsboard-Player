@@ -22,7 +22,6 @@ import {Group} from '../model/group/base/group';
 import {GroupQuery} from './query/group-query';
 import {GroupPerson} from '../model/group/group-person';
 import {SubGroup} from '../model/group/sub-group';
-import {GroupPersonQuery} from './query/group-person-query';
 import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
@@ -112,6 +111,7 @@ import {GroupTransition} from '../model/group/transition/group-transition';
 import {OrganizationType} from '../model/group/organization/organization-type';
 import {GroupRequest} from '../request/group-request';
 import {OrganizationTrainer} from '../model/group/organization-trainer';
+import {GroupPersonQuery} from './query/group-person-query';
 
 @Injectable()
 @RestParams({
@@ -682,11 +682,29 @@ export class ParticipantRestApiService extends Rest {
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!id}/person',
-  })
-  getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
+  // @RestAction({
+  //   method: RestRequestMethod.Get,
+  //   path: '/group/{!id}/person',
+  // })
+  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+
+  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
+    let queryStr = '';
+    const keys = Object.keys(query).filter(x => x !== 'id');
+    if (keys.length) {
+      queryStr = '?';
+      for (let i = 0; i < keys.length; i++) {
+        const item = keys[i];
+        queryStr += `${item}=${query[item]}`;
+        if (i < keys.length - 1) {
+          queryStr += '&';
+        }
+      }
+    }
+
+    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
+  }
 
   @RestAction({
     method: RestRequestMethod.Post,
