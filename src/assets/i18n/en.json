@@ -510,7 +510,7 @@
   },
   "firstName": "First name",
   "lastName": "Last name",
-  "middleName": "Middle name",
+  "patronymic": "Patronymic",
   "transfer": "Transfer",
   "deduct": "Deduct",
   "someFieldsNotValid": "Some fields not valid",

@@ -11,7 +11,7 @@
     <th class="col-1">{{'yearBirth' | translate}}</th>
     <th class="col-2">{{'group' | translate}}</th>
     <th class="col-1">{{'userRole' | translate}}</th>
-    <th *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM"
+    <th *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM || groupService.getGroup().discriminator === groupTypeEnumClass.PREPARATION_GROUP"
         class="col-1">{{'sportRole' | translate}}
     </th>
     <th class="{{groupService.isEditAllow()? 'col-3':'col-4'}}">{{'mentor' | translate}}
@@ -41,7 +41,7 @@
         <td class="col-1">
           <h6>{{item.data?.userRole?.name}}</h6>
         </td>
-        <td *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM"
+        <td *ngIf="groupService.getGroup().discriminator === groupTypeEnumClass.TEAM || groupService.getGroup().discriminator === groupTypeEnumClass.PREPARATION_GROUP"
             class="col-1">
           <h6>{{item.data?.sportRole?.name}}</h6>
         </td>

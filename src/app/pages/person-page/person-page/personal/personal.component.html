@@ -25,9 +25,8 @@
   </div>
   <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="form-group">
-      <label for="middleName">{{'middleName' | translate}}</label>
-      <dx-text-box id="middleName"
-                   [(value)]="person.patronymic"
+      <label>{{'patronymic' | translate}}</label>
+      <dx-text-box [(value)]="person.patronymic"
                    [showClearButton]="true"
                    [readOnly]="!allowEdit">
       </dx-text-box>

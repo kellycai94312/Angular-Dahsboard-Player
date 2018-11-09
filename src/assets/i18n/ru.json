@@ -511,7 +511,7 @@
   },
   "firstName": "Имя",
   "lastName": "Фамилия",
-  "middleName": "Отчество",
+  "patronymic": "Отчество",
   "transfer": "Перевести",
   "deduct": "Отчислить",
   "someFieldsNotValid": "Некоторые поля заполнены неверно",

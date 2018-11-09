@@ -28,6 +28,7 @@ export class AttachFileComponent<T extends BaseFile> {
   public url: string;
   private readonly _changeWatcher: ChangeWatcher;
   private readonly _baseFileName: string;
+  private _removedResource: Resource;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
@@ -69,15 +70,13 @@ export class AttachFileComponent<T extends BaseFile> {
       const baseFile = (await this._participantRestApiService.uploadFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? [this.baseFile.resource.file] : null))[0];
       this._appHelper.updateObject(this.baseFile, baseFile);
     } else {
+      if (this._removedResource && !this.baseFile.resource) {
+        await this._participantRestApiService.removeFileResource({fileId: this.baseFile.id});
+      }
+      this._removedResource = null;
+
       const baseFile = await this._participantRestApiService.updateFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? this.baseFile.resource.file : null);
       this._appHelper.updateObject(this.baseFile, baseFile);
-
-      try {
-        if (!this.baseFile.resource) {
-          await this._participantRestApiService.removeFileResource({fileId: this.baseFile.id});
-        }
-      } catch (e) {
-      }
     }
 
     this.baseFileChange.emit(this.baseFile);
@@ -88,6 +87,7 @@ export class AttachFileComponent<T extends BaseFile> {
   }
 
   public onRemoveFile() {
+    this._removedResource = this._appHelper.cloneObject(this.baseFile.resource);
     delete this.baseFile.resource;
     this.baseFileChange.emit(this.baseFile);
   }
