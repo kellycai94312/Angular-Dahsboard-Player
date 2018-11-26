@@ -7,6 +7,11 @@ import {NotificationRoutingModule} from './notification-routing.module';
 import {NotificationComponent} from './notification/notification.component';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {AllNotificationsComponent} from './notifications/all-notifications/all-notifications.component';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
+import {ChangeNotificationsComponent} from './notifications/change-notifications/change-notifications.component';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
@@ -14,9 +19,12 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     NotificationRoutingModule,
     NgxVirtualScrollModule,
     SafeHtmlModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    NgxTabModule,
+    NgxGridModule,
+    NgxButtonModule
   ],
-  declarations: [NotificationsComponent, NotificationComponent]
+  declarations: [NotificationsComponent, NotificationComponent, AllNotificationsComponent, ChangeNotificationsComponent]
 })
 export class NotificationModule {
 }

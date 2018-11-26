@@ -112,6 +112,8 @@ import {OrganizationType} from '../model/group/organization/organization-type';
 import {GroupRequest} from '../request/group-request';
 import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
+import {VersionObject} from '../base/version/version-object';
+import {VersionObjectRequest} from '../request/version-object-request';
 
 @Injectable()
 @RestParams({
@@ -1032,6 +1034,28 @@ export class ParticipantRestApiService extends Rest {
 
     return `${environment.restUrl}/file/download/document/${documentId}`;
   }
+
+  //#endregion
+
+  //#region Version object
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/versionObject'
+  })
+  getVersionObjects: IRestMethod<PageQuery, PageContainer<VersionObject>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/versionObject'
+  })
+  approveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/versionObject'
+  })
+  disapproveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
 
   //#endregion
 

@@ -48,6 +48,9 @@ export class NgxColumnComponent {
   @Input()
   public sortName: string;
 
+  @Input()
+  public width: string;
+
   public sort: Sort;
 
   public readonly sortSubject: Subject<NameWrapper<Sort>>;

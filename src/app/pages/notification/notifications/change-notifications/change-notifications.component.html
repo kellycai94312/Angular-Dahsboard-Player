@@ -1,0 +1,61 @@
+<ngx-grid [fetchItems]="fetchItems"
+          [windowScroll]="true">
+  <ngx-column nameKey="who">
+    <ng-template let-item>
+      {{item.author.lastName + ' ' + item.author.firstName}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="what">
+    <ng-template let-item>
+      <h6>{{('versionActionTypeEnum.' + item.versionActionType) | translate}}</h6>
+      <div [ngSwitch]="true">
+        <div *ngSwitchCase="item.versionActionType === versionActionTypeClass.DOCUMENT_CREATE || item.versionActionType === versionActionTypeClass.DOCUMENT_REMOVE">
+          <p *ngIf="item.number">№{{item.number}}</p>
+          <p *ngIf="item.date">{{'date' | translate}}: {{item.date| date: propertyConstantClass.dateFormat}}</p>
+        </div>
+        <div
+          *ngSwitchCase="item.versionActionType === versionActionTypeClass.GROUP_PERSON_TRANSITION_TRANSFER || item.versionActionType === versionActionTypeClass.GROUP_PERSON_TRANSITION_EXPEL">
+          <p>{{'person' | translate}}: {{item.person.lastName + " " + item.person.firstName}}</p>
+          <p>{{'group' | translate}}: {{item.groupTransition.groupJoin ? item.groupTransition.groupJoin.name :
+            item.groupTransition.groupLeave.name}}</p>
+        </div>
+        <div
+          *ngSwitchCase="item.versionActionType === versionActionTypeClass.MEDICAL_EXAMINATION_CREATE || item.versionActionType === versionActionTypeClass.MEDICAL_EXAMINATION_REMOVE">
+          <p>{{'person' | translate}}: {{item.person.lastName + " " + item.person.firstName}}</p>
+          <p>{{'sportType' | translate}}: {{item.sportType.name}}</p>
+          <p>№{{item.number}}</p>
+          <p>{{'startDate' | translate}}: {{item.startDate | date: propertyConstantClass.dateFormat}}</p>
+          <p>{{'finishDate' | translate}}: {{item.finishDate | date: propertyConstantClass.dateFormat}}</p>
+          <p>{{'allowed' | translate}}: {{(item.allowed ? 'yes' : 'no') | translate}}</p>
+        </div>
+        <div *ngSwitchCase="item.versionActionType === versionActionTypeClass.PERSON_RANK_CREATE || item.versionActionType === versionActionTypeClass.PERSON_RANK_REMOVE">
+          <p>{{'person' | translate}}: {{item.person.lastName + " " + item.person.firstName}}</p>
+          <p>{{'sportType' | translate}}: {{item.sportType.name}}</p>
+          <p>{{'rank' | translate}}: {{item.rank.name}}</p>
+          <p *ngIf="item.number">№{{item.number}}</p>
+          <p *ngIf="item.date">{{'date' | translate}}: {{item.date | date: propertyConstantClass.dateFormat}}</p>
+        </div>
+        <div *ngSwitchDefault>
+          <pre><p>{{getChangedInfo(item)}}</p></pre>
+        </div>
+      </div>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="when">
+    <ng-template let-item>
+      {{item.created | date: propertyConstantClass.dateTimeFormat}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column [width]="'1%'">
+    <ng-template let-item>
+      <ngx-button class="w-100"
+                  nameKey="approve"
+                  [click]="onApprove"
+                  [data]="item"></ngx-button>
+      <ngx-button class="mt-2 w-100"
+                  nameKey="disapprove"
+                  [click]="onDisapprove"
+                  [data]="item"></ngx-button>
+    </ng-template>
+  </ngx-column>
+</ngx-grid>
