@@ -49,4 +49,15 @@ export class ValidationService {
     return '';
   }
 
+  public async compareValidation<T>(val1: T, val2: T): Promise<string> {
+    if (!val1 || !val2) {
+      return await this._translateObjectService.getTranslation('valuesNotMatch');
+    }
+
+    if (val1 !== val2) {
+      return await this._translateObjectService.getTranslation('valuesNotMatchParams', {val1: val1 || '', val2: val2 || ''});
+    }
+    return '';
+  }
+
 }

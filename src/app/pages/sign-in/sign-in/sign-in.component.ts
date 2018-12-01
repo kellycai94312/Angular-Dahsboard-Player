@@ -67,7 +67,7 @@ export class SignInComponent implements OnDestroy {
             this._profileService.init();
             await this._router.navigate(['/person', session.person.id]);
           } else {
-            await this._router.navigate(['/registration/person']);
+            await this._router.navigate(['/sign-up/person']);
           }
         } else {
           await this.showWrongLoginOrPasswordMessage();

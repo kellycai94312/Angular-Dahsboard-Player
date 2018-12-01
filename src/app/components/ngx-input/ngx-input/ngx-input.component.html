@@ -2,7 +2,7 @@
        [ngClass]="{'is-invalid': valid == false}"
        [title]="getErrorText()"
        [type]="type"
-       [(value)]="innerValue"
+       [(ngModel)]="innerValue"
        (keyup)="keyUp.next($event)"
        (focusout)="onFocusOut($event)"
        placeholder="{{placeholderKey | translate}}"

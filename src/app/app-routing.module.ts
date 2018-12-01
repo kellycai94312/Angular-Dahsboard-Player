@@ -17,6 +17,10 @@ const routes: Routes = [
     canActivate: [AuthDenyGuard]
   },
   {
+    path: 'sign-up',
+    loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
+  },
+  {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
     canActivate: [AuthGuard, LayoutService]
@@ -30,10 +34,6 @@ const routes: Routes = [
     path: 'notification',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard, LayoutService]
-  },
-  {
-    path: 'registration',
-    loadChildren: './pages/registration-page/registration-page.module#RegistrationPageModule'
   },
   {
     path: 'person',

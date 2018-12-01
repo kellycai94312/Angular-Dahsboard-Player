@@ -41,7 +41,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     if (person) {
       this.person = await this._profileService.getPerson(person.id);
     } else {
-      await this._router.navigate(['/registration/person']);
+      await this._router.navigate(['/sign-up/person']);
     }
   }
 

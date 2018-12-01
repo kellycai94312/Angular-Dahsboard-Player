@@ -563,5 +563,8 @@
   },
   "minLengthParam": "The minimum length must be at least {{length}} characters",
   "maxLengthParam": "The maximum length must be at more {{length}} characters",
-  "invalidValue": "Invalid value"
+  "invalidValue": "Invalid value",
+  "valuesNotMatch": "Values not match",
+  "valuesNotMatchParams": "Values '{{val1}}' and '{{val2}}' not match",
+  "checkEmailInSpamFolder": "Check if the email is in your spam folder"
 }

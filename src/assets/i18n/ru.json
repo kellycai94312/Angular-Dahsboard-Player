@@ -564,5 +564,8 @@
   },
   "minLengthParam": "Минимальная длина должна быть не менее {{length}} символов",
   "maxLengthParam": "Максимальная длина должна быть не более {{length}} символов",
-  "invalidValue": "Неверное значение"
+  "invalidValue": "Неверное значение",
+  "valuesNotMatch": "Значения не совпадают",
+  "valuesNotMatchParams": "Значения '{{val1}}' и '{{val2}}' не совпадают",
+  "checkEmailInSpamFolder": "Проверьте, не попало ли письмо в папку со спамом"
 }
