@@ -9,6 +9,7 @@
     <th *ngIf="selectionType === selectionTypeClass.MULTIPLE"></th>
     <th *ngFor="let item of ngxColumnComponents.toArray()"
         [class]="item.class"
+        [width]="item.width"
         (click)="onColumnClick(item)">{{item.name ? (item.name) : (item.nameKey | translate)}}
       <span [ngSwitch]="item.sort">
       <ng-container *ngSwitchCase="sortClass.ASC">
@@ -29,7 +30,8 @@
       <ngx-check-box [(value)]="item.selected"
                      (valueChange)="onSelectOrDeselectItem(item)"></ngx-check-box>
     </td>
-    <td *ngFor="let column of ngxColumnComponents.toArray()">
+    <td *ngFor="let column of ngxColumnComponents.toArray()"
+        [width]="item.width">
       <div *ngIf="column.templateRef; then linkTemplate else defaultTemplate"></div>
       <ng-template #linkTemplate
                    *ngTemplateOutlet="column.templateRef; context: {$implicit: item, column: column}"></ng-template>
