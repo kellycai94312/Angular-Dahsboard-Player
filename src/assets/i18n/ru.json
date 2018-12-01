@@ -68,13 +68,11 @@
       }
     }
   },
-  "login": {
-    "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
-    "enterPassword": "Введите пароль",
-    "signIn": "Вход",
-    "alreadyRegistered": "Уже зарегистрированы?",
-    "forgotYourPassword": "Забыли пароль?"
-  },
+  "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
+  "enterPassword": "Введите пароль",
+  "signIn": "Вход",
+  "alreadyRegistered": "Уже зарегистрированы?",
+  "forgotYourPassword": "Забыли пароль?",
   "registration": {
     "enterEmail": "Введите электронную почту",
     "createPassword": "Создайте пароль",
@@ -563,5 +561,8 @@
     "PERSON_VERSION_PATRONYMIC": "Изменено поле 'отчество' у пользователя",
     "PERSON_VERSION_SEX": "Изменено поле 'пол' у пользователя",
     "PERSON_VERSION_BIRTH_DATE": "Изменено поле 'дата рождения' у пользователя"
-  }
+  },
+  "minLengthParam": "Минимальная длина должна быть не менее {{length}} символов",
+  "maxLengthParam": "Максимальная длина должна быть не более {{length}} символов",
+  "invalidValue": "Неверное значение"
 }

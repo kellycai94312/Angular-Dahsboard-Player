@@ -52,7 +52,7 @@ export class PasswordSetComponent implements OnInit {
     } else if (this.setEmail) {
       this.isChangePassword = false;
     } else {
-      await this._router.navigate(['/login']);
+      await this._router.navigate(['/sign-in']);
     }
   }
 

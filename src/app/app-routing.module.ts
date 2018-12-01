@@ -8,12 +8,12 @@ import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'sign-in',
     pathMatch: 'full'
   },
   {
-    path: 'login',
-    loadChildren: './pages/login-page/login-page.module#LoginPageModule',
+    path: 'sign-in',
+    loadChildren: './pages/sign-in/sign-in.module#SignInModule',
     canActivate: [AuthDenyGuard]
   },
   {

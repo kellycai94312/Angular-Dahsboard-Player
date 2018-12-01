@@ -40,9 +40,9 @@
                   [click]="onSave"></ngx-button>
 
       <div class="mt-2 text-center">
-        <p>{{'login.alreadyRegistered'| translate}}
-          <u><a routerLink="/login"
-                routerLinkActive="active">{{'login.signIn' | translate}}</a></u>
+        <p>{{'alreadyRegistered'| translate}}
+          <u><a routerLink="/sign-in"
+                routerLinkActive="active">{{'signIn' | translate}}</a></u>
         </p>
       </div>
     </div>
@@ -52,7 +52,7 @@
         <p>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate }} <br>
           {{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
           {{'registration.followTheInstructionsInIt' | translate }}</p>
-        <u><a routerLink="/login">{{'login.signIn' | translate}}</a></u>
+        <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
       </div>
     </ng-template>
   </div>

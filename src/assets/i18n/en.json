@@ -67,13 +67,11 @@
       }
     }
   },
-  "login": {
-    "enterEmailOrPhoneNumber": "Enter email or phone number",
-    "enterPassword": "Enter password",
-    "signIn": "Sign in",
-    "alreadyRegistered": "Already registered?",
-    "forgotYourPassword": "Forgot your password?"
-  },
+  "enterEmailOrPhoneNumber": "Enter email or phone number",
+  "enterPassword": "Enter password",
+  "signIn": "Sign in",
+  "alreadyRegistered": "Already registered?",
+  "forgotYourPassword": "Forgot your password?",
   "registration": {
     "enterEmail": "Enter email",
     "createPassword": "Create password",
@@ -562,5 +560,8 @@
     "PERSON_VERSION_PATRONYMIC": "Was changed field 'patronymic' in the person",
     "PERSON_VERSION_SEX": "Was changed field 'sex' in the person",
     "PERSON_VERSION_BIRTH_DATE": "Was changed field 'birth date' in the person"
-  }
+  },
+  "minLengthParam": "The minimum length must be at least {{length}} characters",
+  "maxLengthParam": "The maximum length must be at more {{length}} characters",
+  "invalidValue": "Invalid value"
 }

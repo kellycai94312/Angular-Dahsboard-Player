@@ -1,0 +1,9 @@
+<input class="form-control input-height-sm {{class}}"
+       [ngClass]="{'is-invalid': valid == false}"
+       [title]="getErrorText()"
+       [type]="type"
+       [(value)]="innerValue"
+       (keyup)="keyUp.next($event)"
+       (focusout)="onFocusOut($event)"
+       placeholder="{{placeholderKey | translate}}"
+       [disabled]="disabled">

@@ -6,7 +6,6 @@ import {RegistrationPageComponent} from './registration-page.component';
 import {RegistrationPersonPageComponent} from './registration-person-page/registration-person-page.component';
 import {RegistrationPageRoutingModule} from './registration-page-routing.module';
 import {LocaleModule} from '../../components/locale/locale.module';
-import {RegistrationVerificationPageComponent} from './registration-verification-page/registration-verification-page.component';
 import {BusyIndicatorModule} from '../../components/busy-indicator/busy-indicator.module';
 import {RegistrationPersonEnableComponent} from './registration-person-enable/registration-person-enable.component';
 import {PasswordSetModule} from '../../components/password-set/password-set.module';
@@ -29,7 +28,6 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
   declarations: [
     RegistrationPageComponent,
     RegistrationPersonPageComponent,
-    RegistrationVerificationPageComponent,
     RegistrationPersonEnableComponent
   ]
 })

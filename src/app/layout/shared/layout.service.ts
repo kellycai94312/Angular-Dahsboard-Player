@@ -10,7 +10,7 @@ export class LayoutService implements CanActivate {
   public readonly hidden: Subject<boolean>;
   public readonly dark: Subject<boolean>;
 
-  private hiddenRoutes: string[] = ['login', 'registration', 'password', 'not-found'];
+  private hiddenRoutes: string[] = ['sign-in', 'registration', 'password', 'not-found'];
 
   constructor() {
     this.hidden = new Subject<boolean>();
