@@ -3,9 +3,9 @@ import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '
 import {Observable} from 'rxjs';
 import {Type} from '@angular/core/src/type';
 import {EnvironmentType} from '../../environments/environment-type';
-import {RegistrationPageComponent} from '../pages/registration-page/registration-page.component';
 import {environment} from '../../environments/environment';
-import {RegistrationPersonPageComponent} from '../pages/registration-page/registration-person-page/registration-person-page.component';
+import {GeneralSignUpComponent} from '../pages/sign-up/step/general-sign-up/general-sign-up.component';
+import {PersonSignUpComponent} from '../pages/sign-up/step/person-sign-up/person-sign-up.component';
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +17,8 @@ export class EnvironmentGuard implements CanActivate {
   constructor(private _router: Router) {
     this._environmentDeactivationComponents = [
       {
-        environmentTypes: [EnvironmentType.BELARUS, EnvironmentType.SCHOOL, EnvironmentType.SAINT_PETERSBURG],
-        deactivationComponents: [RegistrationPageComponent, RegistrationPersonPageComponent]
+        environmentTypes: [EnvironmentType.PRODUCTION],
+        deactivationComponents: [GeneralSignUpComponent, PersonSignUpComponent]
       }
     ];
   }

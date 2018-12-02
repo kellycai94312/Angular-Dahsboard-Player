@@ -80,9 +80,9 @@
     "signUp": "Зарегистрироваться",
     "notRegistered": "Не зарегистрированы?",
     "registrationComplete": "Регистрация завершена",
-    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать.",
-    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации.",
-    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям.",
+    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать",
+    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации",
+    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям",
     "invalidCredentials": "Недопустимые учетные данные"
   },
   "password": {
@@ -567,5 +567,10 @@
   "invalidValue": "Неверное значение",
   "valuesNotMatch": "Значения не совпадают",
   "valuesNotMatchParams": "Значения '{{val1}}' и '{{val2}}' не совпадают",
-  "checkEmailInSpamFolder": "Проверьте, не попало ли письмо в папку со спамом"
+  "checkEmailInSpamFolder": "Проверьте, не попало ли письмо в папку со спамом",
+  "userAgreement": "Пользовательское соглашение",
+  "clickOnButtonYouAgreeWith": "Нажав на кнопку, вы соглашаетесь с условиями",
+  "agree": "Согласен",
+  "disagree": "Не согласен",
+  "accountActivationSent": "Account activation sent"
 }

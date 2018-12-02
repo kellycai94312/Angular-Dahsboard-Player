@@ -1,6 +1,5 @@
 <div class="d-flex align-items-center flex-column h-100">
-  <div class="mt-auto"></div>
-  <div class="mb-auto max-width-content">
+  <div class="m-auto max-width-content">
     <div *ngIf="!isRegistrationComplete; else content"
          class="form">
       <img src="/assets/img/athlete-readiness-logo.png">
@@ -20,12 +19,13 @@
                    [(value)]="repeatPassword"
                    [checkValidation]="onCompareValidation"></ngx-input>
       </ngx-form>
-
       <ngx-button class="mt-3 w-100"
                   nameKey="registration.signUp"
                   [click]="onSave"></ngx-button>
 
       <div class="mt-2 text-center">
+        <p>{{'clickOnButtonYouAgreeWith' | translate}} <a (click)="onShowUserAgreement()">{{'userAgreement' |
+          translate}}</a></p>
         <p>{{'alreadyRegistered'| translate}}
           <u><a routerLink="/sign-in"
                 routerLinkActive="active">{{'signIn' | translate}}</a></u>
@@ -34,9 +34,8 @@
     </div>
     <ng-template #content>
       <div class="m-2 text-center text-white">
-        <h1>{{'registration.registrationComplete' | translate | uppercase}}</h1>
-        <p>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate }}<br>
-          {{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
+        <h1>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate | uppercase}}</h1>
+        <p>{{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
           {{'registration.followTheInstructionsInIt' | translate }}<br>
           {{'checkEmailInSpamFolder' | translate }}</p>
         <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
