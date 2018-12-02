@@ -51,6 +51,7 @@ import {AttachFileModule} from '../../components/attach-file/attach-file.module'
 import {GroupModule} from '../../components/group/group.module';
 import {GroupNewsComponent} from './component/group-news/group-news.component';
 import {GroupMembersComponent} from './component/group-members/group-members.component';
+import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-news.component';
 
 @NgModule({
   imports: [
@@ -120,7 +121,8 @@ import {GroupMembersComponent} from './component/group-members/group-members.com
     EditGroupPersonLogsComponent,
     GroupConnectionsGraphComponent,
     GroupNewsComponent,
-    GroupMembersComponent
+    GroupMembersComponent,
+    EditGroupNewsComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -131,7 +133,8 @@ import {GroupMembersComponent} from './component/group-members/group-members.com
     EditDocumentComponent,
     EditGroupPersonLogComponent,
     EditGroupPersonLogsComponent,
-    GroupAdministrationComponent
+    GroupAdministrationComponent,
+    EditGroupNewsComponent
   ]
 })
 export class GroupPageModule {

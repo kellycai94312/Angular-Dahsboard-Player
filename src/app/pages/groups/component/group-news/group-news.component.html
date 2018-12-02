@@ -1,3 +1,25 @@
-<p>
-  group-news works!
-</p>
+<ngx-button *ngIf="canEdit"
+            class="mb-2"
+            [icon]="iconEnumClass.ADD"
+            [click]="onAdd">
+</ngx-button>
+<ngx-virtual-scroll [getItems]="fetchItems"
+                    [windowScroll]="true"
+                    class="list-group-flush">
+  <ng-template let-item>
+    <div class="list-group-item pb-2 px-2">
+      <div class="d-flex flex-row">
+        <div class="w-100"><strong>{{item.title}}</strong></div>
+        <div *ngIf="canEdit"
+             class="flex-shrink-1">
+          <ngx-button class="ml-2"
+                      [icon]="iconEnumClass.EDIT"
+                      [click]="onEdit"
+                      [data]="item">
+          </ngx-button>
+        </div>
+      </div>
+      <pre class="m-0">{{item.content}}</pre>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

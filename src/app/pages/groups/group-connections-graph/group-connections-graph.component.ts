@@ -67,7 +67,7 @@ export class GroupConnectionsGraphComponent implements OnInit {
   private async initializeGroupConnections(depth: number) {
     this.nodes = [];
     this.links = [];
-    const groupId = this._groupService.getGroup().id;
+    const groupId = this._groupService.groupSubject.getValue().id;
     const groupConnections = await this._participantRestApiService.getGraphGroupConnections({}, {depth: depth}, {groupId: groupId});
     for (const groupConnection of groupConnections) {
       this.pushToNodes(groupConnection.source);

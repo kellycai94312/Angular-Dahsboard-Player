@@ -14,8 +14,6 @@ import {Router} from '@angular/router';
 import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
 import {Message} from './data/remote/model/chat/message/message';
 import {AssetsService} from './data/remote/rest-api/assets.service';
-import {environment} from '../environments/environment';
-import {EnvironmentType} from '../environments/environment-type';
 
 @Component({
   selector: 'app-root',
@@ -131,10 +129,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initLangs(): void {
     this._translate.addLangs(Object.keys(Locale));
-    let currentLocale = this._localStorageService.getCurrentLocale();
-    if (environment.type === EnvironmentType.SAINT_PETERSBURG || environment.type === EnvironmentType.PRODUCTION) {
-      currentLocale = Locale.ru;
-    }
+    const currentLocale = Locale.ru;
     const localeKey = Locale[currentLocale];
     this._localStorageService.setLocale(localeKey);
     this._translate.setDefaultLang(localeKey);

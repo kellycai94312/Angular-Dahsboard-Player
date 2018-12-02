@@ -114,6 +114,7 @@ import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
+import {GroupNews} from '../model/group/group-news';
 
 @Injectable()
 @RestParams({
@@ -948,6 +949,40 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/transfer',
   })
   transferPersonsToGroup: IRestMethodStrict<GroupPersonsTransferRequest, any, { groupId: number }, GroupPersonTransition[]>;
+
+  //#endregion
+
+  //#region Group news
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/news',
+  })
+  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/news/{!groupNewsId}',
+  })
+  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/news',
+  })
+  createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/group/{!groupId}/news/{!groupNewsId}',
+  })
+  updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}/news/{!groupNewsId}',
+  })
+  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
 
   //#endregion
 

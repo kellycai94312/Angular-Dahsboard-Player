@@ -575,5 +575,7 @@
   "accountActivationSent": "Account activation sent",
   "myPage": "Моя страница",
   "education": "Обучение",
-  "news": "Новости"
+  "news": "Новости",
+  "title": "Заголовок",
+  "content": "Содержание"
 }
