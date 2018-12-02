@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MenuItem} from '../../data/local/menu-item';
 import {ConversationService} from '../../shared/conversation.service';
-import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
@@ -9,14 +8,13 @@ import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.scss']
 })
-export class SideBarComponent implements OnInit, OnDestroy {
+export class SideBarComponent implements OnInit {
 
   readonly className: string = 'collapsed';
 
   public isCollapsed: boolean;
   public menuItems: MenuItem[];
 
-  public readonly _unreadTotalMessageSubscription: ISubscription;
   public readonly conversationMenuItem: MenuItem;
 
   constructor(private _conversationService: ConversationService,
@@ -41,10 +39,6 @@ export class SideBarComponent implements OnInit, OnDestroy {
       this.conversationMenuItem.count = (await this._participantRestApiService.getUnreadTotalMessages()).value;
     } catch (e) {
     }
-  }
-
-  ngOnDestroy(): void {
-    this._unreadTotalMessageSubscription.unsubscribe();
   }
 
   toggle() {

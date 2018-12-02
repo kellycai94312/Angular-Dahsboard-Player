@@ -8,23 +8,12 @@
       <div class="nav-bar-dropdown-toggle"
            ngbDropdownToggle>
         <div class="dropdown-toggle-content">
-          <app-image #logo
-                     *ngIf="person.id"
-                     [type]="'LOGO'"
-                     [clazz]="'PERSON'"
-                     [id]="person.id"
-                     [dimension]="'W40xH40'"
-                     [format]="'CIRCLE'"></app-image>
-          <div class="fullname">
-            <p>{{person.firstName}}</p>
-          </div>
-          <span class="fa fa-chevron-down"></span>
+          <i *ngFor="let item of menuItems"
+             [class]="item.iconClassName"
+             [routerLink]="item.routerLink"
+             routerLinkActive="active"
+             (click)="item.action ? item.action(item) : null">{{item.count}}</i>
         </div>
-      </div>
-      <div ngbDropdownMenu
-           class="menu">
-        <button class="dropdown-item" (click)="openProfile()">{{'profile' | translate }}</button>
-        <button class="dropdown-item" (click)="signOut()">{{'signOut' | translate}}</button>
       </div>
     </div>
   </nav>

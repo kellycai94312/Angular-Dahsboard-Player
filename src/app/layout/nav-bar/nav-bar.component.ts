@@ -6,6 +6,9 @@ import {ProfileService} from '../../shared/profile.service';
 import {ISubscription} from 'rxjs/Subscription';
 import {AuthorizationService} from '../../shared/authorization.service';
 import {ImageComponent} from '../../components/image/image.component';
+import {MenuItem} from '../../data/local/menu-item';
+import {ConversationService} from '../../shared/conversation.service';
+import {AppHelper} from '../../utils/app-helper';
 
 @Component({
   selector: 'app-nav-bar',
@@ -14,18 +17,27 @@ import {ImageComponent} from '../../components/image/image.component';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
 
-  public person: Person;
-
   @ViewChild('logo')
   public logo: ImageComponent;
 
+  public readonly menuItems: MenuItem[];
+  public person: Person;
+
   private readonly _fullNameChangeSubscription: ISubscription;
   private readonly _logoChangeSubscription: ISubscription;
+  private readonly _conversationMenuItem: MenuItem;
+  private readonly _unreadTotalMessageSubscription: ISubscription;
 
   constructor(private _router: Router,
               private _imageService: ImageService,
               private _profileService: ProfileService,
-              private _authorizationService: AuthorizationService) {
+              private _authorizationService: AuthorizationService,
+              private _conversationService: ConversationService,
+              private _appHelper: AppHelper) {
+    this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
+      this._conversationMenuItem.count = x.value;
+    });
+
     this.person = new Person();
 
     // TODO: Use PersonViewModel
@@ -33,6 +45,17 @@ export class NavBarComponent implements OnInit, OnDestroy {
       .subscribe(person => this.person.firstName = person.firstName);
     this._logoChangeSubscription = _profileService.logoChangeEmitted$
       .subscribe(() => this.logo.refresh());
+
+    this._conversationMenuItem = {iconClassName: 'fa fa-comments', routerLink: 'conversation'};
+    this.menuItems = [
+      {iconClassName: 'fa fa-bell', routerLink: 'notification'},
+      this._conversationMenuItem,
+      {
+        iconClassName: 'fa fa-sign-out', routerLink: 'sign-in', action: async () => {
+          await this._authorizationService.logOut();
+        }
+      }
+    ];
   }
 
   async ngOnInit() {
@@ -45,21 +68,18 @@ export class NavBarComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._fullNameChangeSubscription);
+    this._appHelper.unsubscribe(this._logoChangeSubscription);
+    this._appHelper.unsubscribe(this._unreadTotalMessageSubscription);
+  }
+
   public async openProfile() {
     // Reload children when on the same state /person/:id
     if (this._router.url.indexOf('/person/') == 0) {
       await this._router.navigate(['/person']);
     }
     await this._router.navigate(['/person', this._authorizationService.session.person.id]);
-  }
-
-  ngOnDestroy(): void {
-    this._fullNameChangeSubscription.unsubscribe();
-    this._logoChangeSubscription.unsubscribe();
-  }
-
-  public async signOut() {
-    await this._authorizationService.logOut();
   }
 
 }
