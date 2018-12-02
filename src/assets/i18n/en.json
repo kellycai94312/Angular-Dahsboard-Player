@@ -571,5 +571,7 @@
   "clickOnButtonYouAgreeWith": "Clicking on the button you agree with terms",
   "agree": "Agree",
   "disagree": "Disagree",
-  "accountActivationSent": "Account activation sent"
+  "accountActivationSent": "Account activation sent",
+  "myPage": "My page",
+  "education": "Education"
 }

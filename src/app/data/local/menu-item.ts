@@ -3,4 +3,5 @@ export class MenuItem {
   public nameKey: string;
   public iconClassName: string;
   public count: number;
+  public enabled?: boolean;
 }

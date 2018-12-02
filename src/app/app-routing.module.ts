@@ -4,6 +4,7 @@ import {AuthGuard} from './guard/auth.guard';
 import {LayoutService} from './layout/shared/layout.service';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
+import {DeactivateGuard} from './guard/deactivate/deactivate.guard';
 
 const routes: Routes = [
   {
@@ -21,9 +22,14 @@ const routes: Routes = [
     loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
   },
   {
+    path: 'dashboard',
+    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+  },
+  {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
   },
   {
     path: 'event-plan',
@@ -58,12 +64,12 @@ const routes: Routes = [
   {
     path: 'report',
     loadChildren: './pages/report/report.module#ReportModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
   },
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
-    canActivate: [AuthGuard, LayoutService],
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'dictionaries'} as BreadcrumbItem
     }
@@ -76,7 +82,7 @@ const routes: Routes = [
   {
     path: 'statistics',
     loadChildren: './pages/statistics/statistics.module#StatisticsModule',
-    canActivate: [AuthGuard, LayoutService],
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'statistics'} as BreadcrumbItem
     }

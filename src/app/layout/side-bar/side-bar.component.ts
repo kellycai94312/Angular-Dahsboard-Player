@@ -3,10 +3,6 @@ import {MenuItem} from '../../data/local/menu-item';
 import {ConversationService} from '../../shared/conversation.service';
 import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
-import {AuthorizationService} from '../../shared/authorization.service';
-import {UserRoleEnum} from '../../data/remote/model/user-role-enum';
-import {environment} from '../../../environments/environment';
-import {EnvironmentType} from '../../../environments/environment-type';
 
 @Component({
   selector: 'app-side-bar',
@@ -24,30 +20,19 @@ export class SideBarComponent implements OnInit, OnDestroy {
   public readonly conversationMenuItem: MenuItem;
 
   constructor(private _conversationService: ConversationService,
-              private _participantRestApiService: ParticipantRestApiService,
-              private _authorizationService: AuthorizationService) {
-    this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
-      this.conversationMenuItem.count = x.value;
-    });
-
-    this.menuItems = [];
-    this.menuItems.push(this.createMenuItem('fa fa-users', 'persons.section', 'person'));
-    this.menuItems.push(this.createMenuItem('fa fa-users', 'groups', 'group'));
-    if (environment.type !== EnvironmentType.SAINT_PETERSBURG && environment.type !== EnvironmentType.PRODUCTION) {
-      this.menuItems.push(this.createMenuItem('fa fa-calendar', 'events', 'event'));
-      this.menuItems.push(this.createMenuItem('fa fa-exchange', 'eventPlans', 'event-plan'));
-      this.menuItems.push(this.createMenuItem('fa fa-bell', 'notifications', 'notification'));
-      this.menuItems.push(this.createMenuItem('fa fa-address-book', 'contacts', 'connection'));
-      this.menuItems.push(this.createMenuItem('fa fa-file', 'reports', 'report'));
-      this.menuItems.push(this.createMenuItem('fa fa-book', 'statistics', 'statistics'));
-
-      if (this._authorizationService.hasUserRole(UserRoleEnum.ADMIN)) {
-        this.menuItems.push(this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary'));
-      }
-    }
-
-    this.conversationMenuItem = this.createMenuItem('fa fa-comments', 'messages.section', 'conversation');
-    this.menuItems.push(this.conversationMenuItem);
+              private _participantRestApiService: ParticipantRestApiService) {
+    this.menuItems = [
+      this.createMenuItem('fa fa-home', 'myPage', 'dashboard', null, false),
+      this.createMenuItem('fa fa-user', 'persons.section', 'person'),
+      this.createMenuItem('fa fa-users', 'groups', 'group'),
+      this.createMenuItem('fa fa-calendar', 'calendar', 'event', null, false),
+      // this.createMenuItem('fa fa-exchange', 'eventPlans', 'event-plan'),
+      this.createMenuItem('fa fa-file', 'reports', 'report', null, false),
+      this.createMenuItem('fa fa-book', 'statistics', 'statistics', null, false),
+      this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary', null, false),
+      this.createMenuItem('fa fa-graduation-cap', 'education', 'education', null, false),
+      // this.createMenuItem('fa fa-address-book', 'contacts', 'connection')
+    ];
   }
 
   async ngOnInit() {
@@ -67,12 +52,13 @@ export class SideBarComponent implements OnInit, OnDestroy {
     localStorage.setItem(this.className, String(this.isCollapsed));
   }
 
-  private createMenuItem(iconClassName: string, nameKey: string, routerLink: string, count: number = null): MenuItem {
+  private createMenuItem(iconClassName: string, nameKey: string, routerLink: string, count: number = null, enabled: boolean = true): MenuItem {
     const menuItem = new MenuItem();
     menuItem.iconClassName = iconClassName;
     menuItem.nameKey = nameKey;
     menuItem.routerLink = routerLink;
     menuItem.count = count;
+    menuItem.enabled = enabled;
     return menuItem;
   }
 
