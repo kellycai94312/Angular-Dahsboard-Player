@@ -49,6 +49,8 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 import {GroupModule} from '../../components/group/group.module';
+import {GroupNewsComponent} from './component/group-news/group-news.component';
+import {GroupMembersComponent} from './component/group-members/group-members.component';
 
 @NgModule({
   imports: [
@@ -116,7 +118,9 @@ import {GroupModule} from '../../components/group/group.module';
     EditGroupConnectionComponent,
     EditDocumentComponent,
     EditGroupPersonLogsComponent,
-    GroupConnectionsGraphComponent
+    GroupConnectionsGraphComponent,
+    GroupNewsComponent,
+    GroupMembersComponent
   ],
   entryComponents: [
     GroupComponent,

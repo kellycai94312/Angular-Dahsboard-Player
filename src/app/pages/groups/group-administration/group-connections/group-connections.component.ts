@@ -1,20 +1,22 @@
 import {Component} from '@angular/core';
-import {GroupService} from '../../group.service';
 import {GroupConnectionType} from '../../../../data/remote/model/group/group-connection-type';
+import {Group} from '../../../../data/remote/model/group/base/group';
+import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
+import {GroupService} from '../../group.service';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-group-connections',
   templateUrl: './group-connections.component.html',
   styleUrls: ['./group-connections.component.scss']
 })
-export class GroupConnectionsComponent {
+export class GroupConnectionsComponent extends BaseGroupComponent<Group> {
 
-  public readonly groupConnectionType = GroupConnectionType;
+  public readonly groupConnectionTypeClass = GroupConnectionType;
   public readonly object = Object;
-  public readonly groupId: number;
 
-  constructor(private _groupService: GroupService) {
-    this.groupId = _groupService.getGroup().id;
+  constructor(groupService: GroupService, appHelper: AppHelper) {
+    super(groupService, appHelper);
   }
 
 }

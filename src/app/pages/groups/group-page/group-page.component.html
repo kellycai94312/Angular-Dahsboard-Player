@@ -42,72 +42,11 @@
 
     <div *ngIf="canEdit"
          class="ml-auto d-flex flex-row">
-      <ngx-split-button *ngIf="selectedGroupPersons.length"
-                        class="mr-2"
-                        [items]="splitButtonsItems"></ngx-split-button>
       <ngx-button [icon]="iconEnumClass.EDIT"
                   [click]="onEditSettings"></ngx-button>
     </div>
   </div>
 
-  <ngx-grid class="mt-2"
-            [fetchItems]="fetchItems"
-            [(query)]="personQuery"
-            [add]="onAddGroupPerson"
-            [edit]="onEditGroupPerson"
-            [windowScroll]="true"
-            [selectionType]="selectionTypeClass.MULTIPLE"
-            (selectedItemsChange)="onSelectedItemsChange($event)"
-            (sortChange)="onSortChange($event)"
-            [canEdit]="canEdit">
-    <ngx-column nameKey="lastName"
-                sortName="lastName">
-      <ng-template let-item>
-        {{item.person.lastName}}
-      </ng-template>
-    </ngx-column>
-    <ngx-column nameKey="firstName"
-                sortName="firstName">
-      <ng-template let-item>
-        {{item.person.firstName}}
-      </ng-template>
-    </ngx-column>
-    <ngx-column nameKey="patronymic"
-                sortName="patronymic">
-      <ng-template let-item>
-        {{item.person.patronymic}}
-      </ng-template>
-    </ngx-column>
-    <div
-      *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
-      <ngx-column nameKey="birthDate"
-                  sortName="birthDate">
-        <ng-template let-item>
-          {{item.person.birthDate | date: propertyConstantClass.dateFormat}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="orderDocument">
-        <ng-template let-item>
-          <div *ngIf="item?.groupTransition?.documents">
-            <div *ngFor="let document of item.groupTransition.documents">
-              <p *ngIf="document.number && document.date">№: {{document.number}} {{('date' | translate) + ": " +
-                (document.date | date: propertyConstantClass.dateFormat)}}</p>
-            </div>
-          </div>
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="rank"
-                  sortName="rank">
-        <ng-template let-item>
-          {{item?.personRank?.rank?.name}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="stageType"
-                  sortName="stageType">
-        <ng-template let-item>
-          {{item?.stageType?.name}}
-        </ng-template>
-      </ngx-column>
-    </div>
-  </ngx-grid>
+  <ngx-tab class="mt-2"
+           [tabs]="tabs"></ngx-tab>
 </div>

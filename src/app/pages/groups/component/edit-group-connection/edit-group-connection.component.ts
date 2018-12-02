@@ -42,7 +42,7 @@ export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnect
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
 
-    this._currentGroup = _groupService.getGroup();
+    this._currentGroup = _groupService.groupSubject.getValue();
     this.isSource = true;
     this.query = new DocumentQuery();
     this.query.clazz = FileClass.GROUP_CONNECTION;

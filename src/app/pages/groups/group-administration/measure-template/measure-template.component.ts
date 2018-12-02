@@ -27,7 +27,7 @@ export class MeasureTemplateComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.groupMeasures = await this._participantRestApiService.getGroupMeasureTemplate({groupId: this._groupService.getGroup().id});
+    this.groupMeasures = await this._participantRestApiService.getGroupMeasureTemplate({groupId: this._groupService.groupSubject.getValue().id});
   }
 
   async editTemplates() {
@@ -47,7 +47,7 @@ export class MeasureTemplateComponent implements OnInit {
     ref.componentInstance.onSave = async selectedItems => {
       try {
         const items = await this._participantRestApiService.updateGroupMeasureTemplate(new ListRequest(selectedItems),
-          {}, {groupId: this._groupService.getGroup().id});
+          {}, {groupId: this._groupService.groupSubject.getValue().id});
         this.groupMeasures = items;
         ref.dismiss();
       } catch (e) {
