@@ -51,7 +51,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
       {iconClassName: 'fa fa-bell', routerLink: 'notification'},
       this._conversationMenuItem,
       {
-        iconClassName: 'fa fa-sign-out', routerLink: 'sign-in', action: async () => {
+        iconClassName: 'fa fa-power-off', routerLink: 'sign-in', action: async () => {
           await this._authorizationService.logOut();
         }
       }

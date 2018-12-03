@@ -13,7 +13,8 @@
             HH:mm') )
             : (message.content.created | date:'dd.MM.yyyy HH:mm')}}</p>
         </div>
-        <div [innerHTML]="messageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
+        <pre [innerHTML]="messageViewModel.body | urlParser | async"
+             (click)="onDataClick($event)"></pre>
       </div>
     </div>
   </div>
@@ -22,8 +23,10 @@
     <div class="d-flex flex-row w-100">
       <div class="d-flex flex-column">
         <p *ngIf="!onlyContent" class="date">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</p>
-        <div *ngIf="messageViewModel.body" class="system-message"
-             [innerHTML]="messageViewModel.body | urlParser" (click)="onDataClick($event)"></div>
+        <div *ngIf="messageViewModel.body"
+             class="system-message"
+             [innerHTML]="messageViewModel.body | urlParser | async"
+             (click)="onDataClick($event)"></div>
       </div>
     </div>
   </ng-template>

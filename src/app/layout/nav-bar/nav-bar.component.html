@@ -12,7 +12,7 @@
              [class]="item.iconClassName"
              [routerLink]="item.routerLink"
              routerLinkActive="active"
-             (click)="item.action ? item.action(item) : null">{{item.count}}</i>
+             (click)="item.action ? item.action(item) : null">{{item.count ? item.count : null}}</i>
         </div>
       </div>
     </div>

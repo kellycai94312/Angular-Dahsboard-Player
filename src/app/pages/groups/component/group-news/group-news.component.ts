@@ -51,7 +51,7 @@ export class GroupNewsComponent extends BaseGroupComponent<Group> implements OnI
 
   private async showModal(obj: GroupNews) {
     const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
+    modal.componentInstance.titleKey = this.appHelper.isNewObject(obj) ? 'add' : 'edit';
     await modal.componentInstance.initializeBody(EditGroupNewsComponent, async component => {
       await component.initialize(this.appHelper.cloneObject(obj));
       modal.componentInstance.splitButtonItems = [

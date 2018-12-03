@@ -9,7 +9,7 @@
   <ng-template let-item>
     <div class="list-group-item pb-2 px-2">
       <div class="d-flex flex-row">
-        <div class="w-100"><strong>{{item.title}}</strong></div>
+        <div class="w-100"><strong [innerHTML]="item.title | urlParser | async"></strong></div>
         <div *ngIf="canEdit"
              class="flex-shrink-1">
           <ngx-button class="ml-2"
@@ -19,7 +19,8 @@
           </ngx-button>
         </div>
       </div>
-      <pre class="m-0">{{item.content}}</pre>
+      <pre class="m-0"
+           [innerHTML]="item.content | urlParser | async"></pre>
     </div>
   </ng-template>
 </ngx-virtual-scroll>

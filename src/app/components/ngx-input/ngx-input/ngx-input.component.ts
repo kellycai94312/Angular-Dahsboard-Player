@@ -94,7 +94,7 @@ export class NgxInputComponent implements OnInit, OnDestroy {
     this.focusOut.emit();
   }
 
-  public async onCheckValidation(whitNotification: boolean = true): Promise<boolean> {
+  public async onCheckValidation(withNotification: boolean = true): Promise<boolean> {
     let errorMessages = [];
     if (this.checkValidation) {
       errorMessages = (await this.checkValidation(this.value)).filter(x => x);
@@ -102,7 +102,7 @@ export class NgxInputComponent implements OnInit, OnDestroy {
 
     // tslint:disable:triple-equals
     const valid = errorMessages.length == 0;
-    if (whitNotification) {
+    if (withNotification) {
       this.valid = valid;
       this.errorMessages = errorMessages;
     }

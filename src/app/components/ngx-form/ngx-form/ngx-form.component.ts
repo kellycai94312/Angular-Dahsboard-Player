@@ -12,13 +12,13 @@ export class NgxFormComponent {
   @ContentChildren(NgxInputComponent)
   public ngxColumnComponents: QueryList<NgxInputComponent>;
 
-  public async valid(whitNotification: boolean = true): Promise<boolean> {
+  public async valid(withNotification: boolean = true): Promise<boolean> {
     const items = this.ngxColumnComponents.toArray();
     let valid = true;
     for (const item of items) {
-      if (!(await item.onCheckValidation(whitNotification))) {
+      if (!(await item.onCheckValidation(withNotification))) {
         valid = false;
-        if (!whitNotification) {
+        if (!withNotification) {
           break;
         }
       }

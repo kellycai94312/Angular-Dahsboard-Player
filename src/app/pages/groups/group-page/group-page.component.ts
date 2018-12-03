@@ -66,12 +66,12 @@ export class GroupPageComponent implements OnInit, OnDestroy {
 
     this.tabs = [
       {
-        nameKey: 'members',
-        routerLink: 'member'
-      },
-      {
         nameKey: 'news',
         routerLink: 'news'
+      },
+      {
+        nameKey: 'members',
+        routerLink: 'member'
       }
     ];
   }

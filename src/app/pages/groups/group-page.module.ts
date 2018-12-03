@@ -52,6 +52,7 @@ import {GroupModule} from '../../components/group/group.module';
 import {GroupNewsComponent} from './component/group-news/group-news.component';
 import {GroupMembersComponent} from './component/group-members/group-members.component';
 import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-news.component';
+import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
 @NgModule({
   imports: [
@@ -86,7 +87,8 @@ import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-new
     NgxButtonModule,
     NgxModalModule,
     AttachFileModule,
-    GroupModule
+    GroupModule,
+    UrlParserModule
   ],
   exports: [
     GroupComponent,

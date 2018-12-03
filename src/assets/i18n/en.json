@@ -562,7 +562,7 @@
     "PERSON_VERSION_BIRTH_DATE": "Was changed field 'birth date' in the person"
   },
   "minLengthParam": "The minimum length must be at least {{length}} characters",
-  "maxLengthParam": "The maximum length must be at more {{length}} characters",
+  "maxLengthParam": "The maximum length must be at no more {{length}} characters",
   "invalidValue": "Invalid value",
   "valuesNotMatch": "Values not match",
   "valuesNotMatchParams": "Values '{{val1}}' and '{{val2}}' not match",
@@ -571,7 +571,6 @@
   "clickOnButtonYouAgreeWith": "Clicking on the button you agree with terms",
   "agree": "Agree",
   "disagree": "Disagree",
-  "accountActivationSent": "Account activation sent",
   "myPage": "My page",
   "education": "Education",
   "news": "News",
