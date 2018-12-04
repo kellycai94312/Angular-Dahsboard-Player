@@ -1,16 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {VerificationRequest} from '../../data/remote/model/verification-request';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 import {EmailRequest} from '../../data/remote/request/email-request';
 import {AppHelper} from '../../utils/app-helper';
+import {LayoutService} from '../../layout/shared/layout.service';
 
 @Component({
   selector: 'app-password-set',
   templateUrl: './password-set.component.html',
   styleUrls: ['./password-set.component.scss']
 })
-export class PasswordSetComponent implements OnInit {
+export class PasswordSetComponent implements OnInit, OnDestroy {
 
   @Input()
   public passwordSetHeader: string;
@@ -37,12 +38,14 @@ export class PasswordSetComponent implements OnInit {
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
+              private _layoutService: LayoutService,
               private _appHelper: AppHelper) {
     this.isVisibleApplyButton = true;
-
     this.isChangePassword = false;
     this.isSuccessPasswordRecoveryRequest = false;
     this.isSuccessPasswordChangeRequest = false;
+
+    this._layoutService.dark.next(true);
   }
 
   async ngOnInit() {
@@ -52,8 +55,12 @@ export class PasswordSetComponent implements OnInit {
     } else if (this.setEmail) {
       this.isChangePassword = false;
     } else {
-      await this._router.navigate(['/login']);
+      await this._router.navigate(['/sign-in']);
     }
+  }
+
+  ngOnDestroy(): void {
+    this._layoutService.dark.next(false);
   }
 
   public onApply = async () => {

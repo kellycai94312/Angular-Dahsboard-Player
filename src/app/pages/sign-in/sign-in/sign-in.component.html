@@ -1,0 +1,30 @@
+<div class="d-flex align-items-center flex-column h-100">
+  <div class="m-auto">
+    <div class="m-2 form"
+         (keyup.enter)="busyButton.onKeyUp($event)">
+      <img src="/assets/img/athlete-readiness-logo.png">
+      <ngx-form>
+        <ngx-input [type]="ngxInputTypeClass.TEXT"
+                   placeholderKey="enterEmailOrPhoneNumber"
+                   [(value)]="auth.email"
+                   [checkValidation]="onRequiredValidation"></ngx-input>
+        <ngx-input class="mt-2"
+                   [type]="ngxInputTypeClass.PASSWORD"
+                   placeholderKey="enterPassword"
+                   [(value)]="auth.password"
+                   [checkValidation]="onPasswordValidation"></ngx-input>
+      </ngx-form>
+      <ngx-button #busyButton
+                  class="mt-3 w-100"
+                  nameKey="signIn"
+                  [click]="signIn"
+                  [checkPressedEnter]="true"></ngx-button>
+      <div class="mt-2 text-center">
+        <u *ngIf="environment.type !== environmentTypeClass.PRODUCTION"><a
+          routerLink="/sign-up"
+          class="mr-5">{{'registration.signUp' | translate}}</a></u>
+        <u><a routerLink="/password/reset">{{'forgotYourPassword' | translate}}</a></u>
+      </div>
+    </div>
+  </div>
+</div>

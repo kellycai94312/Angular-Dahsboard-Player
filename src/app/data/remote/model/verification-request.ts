@@ -1,4 +1,4 @@
 export class VerificationRequest {
-  code: string;
-  password: string;
+  code?: string;
+  password?: string;
 }

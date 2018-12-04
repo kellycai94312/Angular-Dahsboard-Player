@@ -62,10 +62,8 @@ export class AuthorizationService {
 
     if (withNavigate) {
       const router = this._injector.get(Router);
-      if (router.url !== '/login') {
-        await router.navigate(['login']);
-        this._layoutService.hidden.next(true);
-      }
+      this._layoutService.hidden.next(true);
+      await router.navigate(['/sign-in']);
     }
   }
 

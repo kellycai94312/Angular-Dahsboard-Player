@@ -16,7 +16,7 @@ export class AuthGuard implements CanActivate {
     }
 
     setTimeout(async () => {
-      await this._router.navigate(['/login']);
+      await this._router.navigate(['/sign-in']);
     });
     return false;
   }

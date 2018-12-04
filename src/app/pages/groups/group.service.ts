@@ -8,6 +8,7 @@ import {GroupPersonState} from '../../data/local/group-person-state';
 import {GroupTypeEnum} from '../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../data/remote/model/user-role-enum';
 import {PermissionService} from '../../shared/permission.service';
+import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class GroupService {
@@ -19,16 +20,18 @@ export class GroupService {
   private _isOwner: boolean;
   private _hasEvents: boolean;
 
-  public groupSubject: Subject<Group>;
+  public groupSubject: BehaviorSubject<Group>;
   public subgroupsSubject: Subject<SubGroup[]>;
+  public refreshMembers: Subject<void>;
 
   public imageLogoSubject: Subject<any>;
   public imageBackgroundSubject: Subject<any>;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService) {
-    this.groupSubject = new Subject<Group>();
+    this.groupSubject = new BehaviorSubject<Group>(null);
     this.subgroupsSubject = new Subject<SubGroup[]>();
+    this.refreshMembers = new Subject<void>();
     this._groupPersonState = GroupPersonState.NOT_MEMBER;
     this._isEditAllow = false;
     this._isOwner = false;
@@ -41,11 +44,6 @@ export class GroupService {
 
   public emitImageBackgroundChanged() {
     this.imageBackgroundSubject.next(null);
-  }
-
-  public updateGroup(group: Group) {
-    this._group = group;
-    this.groupSubject.next(group);
   }
 
   public async updateSubgroups() {
@@ -98,10 +96,6 @@ export class GroupService {
     return this._groupPersonState;
   }
 
-  public getGroup(): Group {
-    return this._group;
-  }
-
   public isEditAllow(): boolean {
     return this._isEditAllow;
   }
@@ -112,6 +106,34 @@ export class GroupService {
 
   public hasEvents(): boolean {
     return this._hasEvents;
+  }
+
+  public async canEdit(): Promise<boolean> {
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
+  }
+
+  public async canEditNews(): Promise<boolean> {
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN]);
+  }
+
+  private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
+    // TODO: Fix possible NPE in this.groupSubject.getValue()!
+    const group = this.groupSubject.getValue();
+    const groupId = group.id;
+    try {
+      const groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: groupId});
+      if (groupPerson) {
+        const userRoles = await this._participantRestApiService.getGroupPersonUserRoles(
+          {
+            groupId: groupId,
+            personId: groupPerson.person.id
+          }
+        );
+        return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || this._permissionService.areYouCreator(group, groupPerson.person);
+      }
+    } catch (e) {
+    }
+    return false;
   }
 
 }

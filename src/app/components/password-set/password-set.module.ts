@@ -4,6 +4,7 @@ import {PasswordSetComponent} from './password-set.component';
 import {DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -11,6 +12,7 @@ import {NgxButtonModule} from '../ngx-button/ngx-button.module';
     DxTextBoxModule,
     DxValidatorModule,
     TranslateModule.forChild(),
+    RouterModule.forChild([]),
     NgxButtonModule
   ],
   exports: [PasswordSetComponent],

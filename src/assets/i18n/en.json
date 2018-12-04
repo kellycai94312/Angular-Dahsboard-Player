@@ -67,13 +67,11 @@
       }
     }
   },
-  "login": {
-    "enterEmailOrPhoneNumber": "Enter email or phone number",
-    "enterPassword": "Enter password",
-    "signIn": "Sign in",
-    "alreadyRegistered": "Already registered?",
-    "forgotYourPassword": "Forgot your password?"
-  },
+  "enterEmailOrPhoneNumber": "Enter email or phone number",
+  "enterPassword": "Enter password",
+  "signIn": "Sign in",
+  "alreadyRegistered": "Already registered?",
+  "forgotYourPassword": "Forgot your password?",
   "registration": {
     "enterEmail": "Enter email",
     "createPassword": "Create password",
@@ -81,9 +79,9 @@
     "signUp": "Sign up",
     "notRegistered": "Not registered?",
     "registrationComplete": "Registration complete",
-    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it.",
-    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "An email with a key for activation will be sent to your e-mail.",
-    "followTheInstructionsInIt": "Follow the instructions in it.",
+    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it",
+    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "An email with a key for activation will be sent to your e-mail",
+    "followTheInstructionsInIt": "Follow the instructions in it",
     "invalidCredentials": "Invalid credentials"
   },
   "password": {
@@ -562,5 +560,20 @@
     "PERSON_VERSION_PATRONYMIC": "Was changed field 'patronymic' in the person",
     "PERSON_VERSION_SEX": "Was changed field 'sex' in the person",
     "PERSON_VERSION_BIRTH_DATE": "Was changed field 'birth date' in the person"
-  }
+  },
+  "minLengthParam": "The minimum length must be at least {{length}} characters",
+  "maxLengthParam": "The maximum length must be at no more {{length}} characters",
+  "invalidValue": "Invalid value",
+  "valuesNotMatch": "Values not match",
+  "valuesNotMatchParams": "Values '{{val1}}' and '{{val2}}' not match",
+  "checkEmailInSpamFolder": "Check if the email is in your spam folder",
+  "userAgreement": "User agreement",
+  "clickOnButtonYouAgreeWith": "Clicking on the button you agree with terms",
+  "agree": "Agree",
+  "disagree": "Disagree",
+  "myPage": "My page",
+  "education": "Education",
+  "news": "News",
+  "title": "Title",
+  "content": "Content"
 }

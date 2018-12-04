@@ -1,5 +1,6 @@
-<div *ngFor="let item of object.keys(groupConnectionType)"
+<div *ngFor="let item of object.keys(groupConnectionTypeClass)"
      class="mb-4">
-  <app-table-group-connection [groupId]="groupId"
+  <app-table-group-connection *ngIf="group"
+                              [groupId]="group.id"
                               [type]="item"></app-table-group-connection>
 </div>

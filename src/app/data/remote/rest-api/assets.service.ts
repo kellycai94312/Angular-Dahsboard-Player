@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Rest, RestHandler, RestParams} from 'rest-core';
+import {IRestMethod, Rest, RestAction, RestHandler, RestParams, RestRequestMethod, RestResponseBodyType} from 'rest-core';
 
 export const assetsPath = 'assets';
 
@@ -8,6 +8,13 @@ export const assetsPath = 'assets';
   url: assetsPath
 })
 export class AssetsService extends Rest {
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: `/html/user-agreement.html`,
+    responseBodyType: RestResponseBodyType.Text
+  })
+  getUserAgreement: IRestMethod<void, any>;
 
   constructor(restHandler: RestHandler) {
     super(restHandler);

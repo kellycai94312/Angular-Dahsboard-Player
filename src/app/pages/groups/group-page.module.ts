@@ -49,6 +49,10 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 import {GroupModule} from '../../components/group/group.module';
+import {GroupNewsComponent} from './component/group-news/group-news.component';
+import {GroupMembersComponent} from './component/group-members/group-members.component';
+import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-news.component';
+import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
 @NgModule({
   imports: [
@@ -83,7 +87,8 @@ import {GroupModule} from '../../components/group/group.module';
     NgxButtonModule,
     NgxModalModule,
     AttachFileModule,
-    GroupModule
+    GroupModule,
+    UrlParserModule
   ],
   exports: [
     GroupComponent,
@@ -116,7 +121,10 @@ import {GroupModule} from '../../components/group/group.module';
     EditGroupConnectionComponent,
     EditDocumentComponent,
     EditGroupPersonLogsComponent,
-    GroupConnectionsGraphComponent
+    GroupConnectionsGraphComponent,
+    GroupNewsComponent,
+    GroupMembersComponent,
+    EditGroupNewsComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -127,7 +135,8 @@ import {GroupModule} from '../../components/group/group.module';
     EditDocumentComponent,
     EditGroupPersonLogComponent,
     EditGroupPersonLogsComponent,
-    GroupAdministrationComponent
+    GroupAdministrationComponent,
+    EditGroupNewsComponent
   ]
 })
 export class GroupPageModule {

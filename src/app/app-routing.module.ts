@@ -4,22 +4,32 @@ import {AuthGuard} from './guard/auth.guard';
 import {LayoutService} from './layout/shared/layout.service';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
+import {DeactivateGuard} from './guard/deactivate/deactivate.guard';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'sign-in',
     pathMatch: 'full'
   },
   {
-    path: 'login',
-    loadChildren: './pages/login-page/login-page.module#LoginPageModule',
+    path: 'sign-in',
+    loadChildren: './pages/sign-in/sign-in.module#SignInModule',
     canActivate: [AuthDenyGuard]
+  },
+  {
+    path: 'sign-up',
+    loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
+  },
+  {
+    path: 'dashboard',
+    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
   },
   {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
   },
   {
     path: 'event-plan',
@@ -30,10 +40,6 @@ const routes: Routes = [
     path: 'notification',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard, LayoutService]
-  },
-  {
-    path: 'registration',
-    loadChildren: './pages/registration-page/registration-page.module#RegistrationPageModule'
   },
   {
     path: 'person',
@@ -58,12 +64,12 @@ const routes: Routes = [
   {
     path: 'report',
     loadChildren: './pages/report/report.module#ReportModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
   },
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
-    canActivate: [AuthGuard, LayoutService],
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'dictionaries'} as BreadcrumbItem
     }
@@ -76,7 +82,7 @@ const routes: Routes = [
   {
     path: 'statistics',
     loadChildren: './pages/statistics/statistics.module#StatisticsModule',
-    canActivate: [AuthGuard, LayoutService],
+    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'statistics'} as BreadcrumbItem
     }

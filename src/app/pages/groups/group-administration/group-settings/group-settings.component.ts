@@ -44,7 +44,7 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.group = this._groupService.getGroup();
+    this.group = this._groupService.groupSubject.getValue();
 
     if (this.group.discriminator === GroupTypeEnum.TEAM) {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as Team).sportType.id});
@@ -121,7 +121,7 @@ export class GroupSettingsComponent implements OnInit {
 
   public onSave = async () => {
     if (await this.editGroupComponent.onSave()) {
-      this._groupService.updateGroup(this.group);
+      this._groupService.groupSubject.next(this.group);
 
       this.organizationTrainers = await this._participantRestApiService.updateOrganizationTrainers(new ListRequest(this.organizationTrainers.map(x => x.groupPerson)), {}, {groupId: this.group.id});
 

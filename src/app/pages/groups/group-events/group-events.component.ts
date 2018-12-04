@@ -93,7 +93,7 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
     ref.componentInstance.trainingGroup = Object.assign({}, item);
     ref.componentInstance.onSave = async (access: TrainingAccess) => {
       await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
-        groupId: this._groupService.getGroup().id,
+        groupId: this._groupService.groupSubject.getValue().id,
         trainingId: item.baseTraining.id
       });
       item.access = access;

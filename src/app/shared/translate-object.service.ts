@@ -35,8 +35,8 @@ export class TranslateObjectService {
     return items;
   }
 
-  public async getTranslation(key: string): Promise<string> {
-    return await this._translateService.get(key).toPromise();
+  public async getTranslation(key: string, interpolateParams?: Object): Promise<string> {
+    return await this._translateService.get(key, interpolateParams).toPromise();
   }
 
 }

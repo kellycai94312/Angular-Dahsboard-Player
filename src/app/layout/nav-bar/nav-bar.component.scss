@@ -2,7 +2,7 @@
 
 $navbar-background: $light-blue;
 $navbar-background-dark: darken($navbar-background, 12%);
-$user-panel-width: 250px;
+$user-panel-width: 150px;
 
 .nav-bar-dropdown-toggle {
   height: $navbar-height;
@@ -49,13 +49,27 @@ $user-panel-width: 250px;
 
     cursor: pointer;
 
-
     &:hover {
       > p, > .fa {
         color: $white-light;
       }
       background-color: darken($navbar-background-dark, 2%);
     }
+
+    i {
+      font-size: 24px !important;
+      padding-right: 10px;
+
+      &:hover, &:active, &:focus {
+        color: #ccc !important;
+        opacity: 0.6;
+      }
+    }
+
+    i:last-child {
+      padding-right: 0;
+    }
+
   }
 
 }

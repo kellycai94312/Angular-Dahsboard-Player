@@ -7,6 +7,7 @@ import {BaseExercise} from '../data/remote/model/exercise/base/base-exercise';
 import {AuthorizationService} from './authorization.service';
 import {BaseFile} from '../data/remote/model/file/base/base-file';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
+import {UserRole} from '../data/remote/model/user-role';
 
 @Injectable({
   providedIn: 'root'
@@ -63,9 +64,13 @@ export class PermissionService {
   public async hasAnyRole(userRoleEnums: UserRoleEnum[], person: Person = null): Promise<boolean> {
     person = await this.getDefaultPerson(person);
     const userRoles = await this._participantRestApiService.getUserUserRoles({userId: person.user.id});
+    return this.hasAnyRoles(userRoles, userRoleEnums);
+  }
+
+  public hasAnyRoles(source: UserRole[], target: UserRoleEnum[]): boolean {
     let result = false;
-    for (const item of userRoleEnums) {
-      if (userRoles.find(x => x.userRoleEnum === item)) {
+    for (const item of target) {
+      if (source.find(x => x.userRoleEnum === item)) {
         result = true;
         break;
       }

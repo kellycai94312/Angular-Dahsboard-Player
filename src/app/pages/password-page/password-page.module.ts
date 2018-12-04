@@ -1,8 +1,7 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-
-import { PasswordPageRoutingModule } from "./password-page-routing.module";
-import { PasswordResetPageModule } from "./password-reset-page/password-reset-page.module";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {PasswordPageRoutingModule} from './password-page-routing.module';
+import {PasswordResetPageModule} from './password-reset-page/password-reset-page.module';
 
 @NgModule({
   imports: [
@@ -12,4 +11,5 @@ import { PasswordResetPageModule } from "./password-reset-page/password-reset-pa
   ],
   declarations: []
 })
-export class PasswordPageModule { }
+export class PasswordPageModule {
+}

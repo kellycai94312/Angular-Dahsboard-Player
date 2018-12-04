@@ -25,7 +25,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this._groupService.getGroup().id});
+    this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this._groupService.groupSubject.getValue().id});
   }
 
   ngAfterViewInit(): void {
@@ -38,7 +38,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   public onAdd = async () => {
     let subgroup = new SubGroup();
     subgroup.name = this.name.trim();
-    subgroup = await this._participantRestApiService.postSubgroup(subgroup, {}, {groupId: this._groupService.getGroup().id});
+    subgroup = await this._participantRestApiService.postSubgroup(subgroup, {}, {groupId: this._groupService.groupSubject.getValue().id});
     this.subgroups.push(subgroup);
     await this._groupService.updateSubgroups();
 

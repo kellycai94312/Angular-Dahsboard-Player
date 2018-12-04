@@ -68,13 +68,11 @@
       }
     }
   },
-  "login": {
-    "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
-    "enterPassword": "Введите пароль",
-    "signIn": "Вход",
-    "alreadyRegistered": "Уже зарегистрированы?",
-    "forgotYourPassword": "Забыли пароль?"
-  },
+  "enterEmailOrPhoneNumber": "Введите электронную почту или номер телефона",
+  "enterPassword": "Введите пароль",
+  "signIn": "Вход",
+  "alreadyRegistered": "Уже зарегистрированы?",
+  "forgotYourPassword": "Забыли пароль?",
   "registration": {
     "enterEmail": "Введите электронную почту",
     "createPassword": "Создайте пароль",
@@ -82,9 +80,9 @@
     "signUp": "Зарегистрироваться",
     "notRegistered": "Не зарегистрированы?",
     "registrationComplete": "Регистрация завершена",
-    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать.",
-    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации.",
-    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям.",
+    "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать",
+    "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации",
+    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям",
     "invalidCredentials": "Недопустимые учетные данные"
   },
   "password": {
@@ -563,5 +561,20 @@
     "PERSON_VERSION_PATRONYMIC": "Изменено поле 'отчество' у пользователя",
     "PERSON_VERSION_SEX": "Изменено поле 'пол' у пользователя",
     "PERSON_VERSION_BIRTH_DATE": "Изменено поле 'дата рождения' у пользователя"
-  }
+  },
+  "minLengthParam": "Минимальная длина должна быть не менее {{length}} символов",
+  "maxLengthParam": "Максимальная длина должна быть не более {{length}} символов",
+  "invalidValue": "Неверное значение",
+  "valuesNotMatch": "Значения не совпадают",
+  "valuesNotMatchParams": "Значения '{{val1}}' и '{{val2}}' не совпадают",
+  "checkEmailInSpamFolder": "Проверьте, не попало ли письмо в папку со спамом",
+  "userAgreement": "Пользовательское соглашение",
+  "clickOnButtonYouAgreeWith": "Нажав на кнопку, вы соглашаетесь с условиями",
+  "agree": "Согласен",
+  "disagree": "Не согласен",
+  "myPage": "Моя страница",
+  "education": "Обучение",
+  "news": "Новости",
+  "title": "Заголовок",
+  "content": "Содержание"
 }

@@ -12,6 +12,6 @@
              [format]="'CIRCLE'"></app-image>
   <div class="d-flex flex-column ml-1 message">
     <p class="sender">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
-    <p class="content" [innerHTML]="messageViewModel.body | urlParser"></p>
+    <p class="content" [innerHTML]="messageViewModel.body | urlParser | async"></p>
   </div>
 </div>
