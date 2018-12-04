@@ -51,7 +51,8 @@ export class GeneralSignUpComponent implements OnDestroy {
     const modal = this._ngxModalService.open({size: 'lg', backdrop: true, centered: true});
     modal.componentInstance.titleKey = 'userAgreement';
     await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
-      component.html = await this._assetsService.getUserAgreement();
+      const userAgreementHtml = new DOMParser().parseFromString(await this._assetsService.getUserAgreement(), 'text/html');
+      component.html = (userAgreementHtml.getElementsByTagName('body')[0] as HTMLElement).innerHTML;
     });
   }
 
