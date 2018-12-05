@@ -7,8 +7,13 @@
     width: 230px;
   }
 
+  p {
+    color: #eee;
+  }
+
   a {
     color: #bbb;
+    cursor: pointer;
     &:hover {
       color: #ddd;
     }

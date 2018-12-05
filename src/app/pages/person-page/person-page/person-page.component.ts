@@ -113,14 +113,14 @@ export class PersonPageComponent implements OnInit, OnDestroy {
         restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.ATHLETE, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER],
         hasAnyRole: true
       },
-      {
-        nameKey: 'stages', routerLink: 'stage',
-        restrictedRoles: []
-      },
-      {
-        nameKey: 'medicalExaminations', routerLink: 'medical-examination',
-        restrictedRoles: []
-      },
+      // {
+      //   nameKey: 'stages', routerLink: 'stage',
+      //   restrictedRoles: []
+      // },
+      // {
+      //   nameKey: 'medicalExaminations', routerLink: 'medical-examination',
+      //   restrictedRoles: []
+      // },
       {
         nameKey: 'controlTransferStandards', routerLink: 'stage-standard',
         restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.SCOUT, UserRoleEnum.TRAINER, UserRoleEnum.REFEREE],
@@ -171,13 +171,13 @@ export class PersonPageComponent implements OnInit, OnDestroy {
           }
         );
       }
-      this.tabs.push(
-        {
-          nameKey: 'requisites', routerLink: 'requisites',
-          restrictedRoles: [],
-          visible: this.tabVisible
-        }
-      );
+      // this.tabs.push(
+      //   {
+      //     nameKey: 'requisites', routerLink: 'requisites',
+      //     restrictedRoles: [],
+      //     visible: this.tabVisible
+      //   }
+      // );
     }
 
     //#region SplitButton

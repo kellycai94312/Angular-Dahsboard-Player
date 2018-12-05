@@ -78,6 +78,8 @@
     "createPassword": "Создайте пароль",
     "retypePassword": "Повторите ввод пароля",
     "signUp": "Зарегистрироваться",
+    "newUserSignUp": "Регистрация нового пользователя",
+    "completeYourProfile": "Заполнение профиля",
     "notRegistered": "Не зарегистрированы?",
     "registrationComplete": "Регистрация завершена",
     "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать",
