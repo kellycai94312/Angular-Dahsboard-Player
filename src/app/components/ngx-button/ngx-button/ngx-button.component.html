@@ -1,4 +1,5 @@
-<button class="btn btn-{{type.toString().toLowerCase()}} input-height-sm {{classes}}"
+<button class="btn btn-{{type.toString().toLowerCase()}} input-height-sm text-truncate {{classes}}"
+        [style.max-width.px]="widthBeforeBusy"
         [disabled]="isDisabled()"
         (click)="onClick($event); $event.stopPropagation()"
         (keyup.enter)="onKeyUp($event)">
@@ -7,7 +8,6 @@
   <span *ngIf="!busyDisplay; else elseTemplate">
     {{nameKey | translate}}</span>
   <ng-template #elseTemplate>
-    <span class="is-busy"></span>
-    {{'pleaseWait' | translate}}
+    <span class="is-busy"><span *ngIf="widthBeforeBusy > 55">{{'pleaseWait' | translate}}</span></span>
   </ng-template>
 </button>

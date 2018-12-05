@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, ElementRef, Input} from '@angular/core';
 import {IconEnum} from '../model/icon-enum';
 import {Observable} from 'rxjs/Observable';
 import {NgxButtonType} from '../model/ngx-button-type';
@@ -40,16 +40,18 @@ export class NgxButtonComponent<TData extends any> {
   public busy: boolean;
   public busyDisplay: boolean;
 
-  constructor() {
+  public widthBeforeBusy: number;
+
+  constructor(public elementRef: ElementRef) {
     this.enterKeyCode = 13;
     this.delayDisplayBusy = 300;
     this.type = NgxButtonType.PRIMARY;
   }
 
   public async onClick(e: Event): Promise<void> {
+    this.widthBeforeBusy = ((this.elementRef.nativeElement as HTMLElement).childNodes[0] as HTMLElement).offsetWidth;
     if (this.click && !this.busy) {
       this.busy = true;
-
       const subscription = Observable.of([]).delay(this.delayDisplayBusy).subscribe(() => {
         this.busyDisplay = true;
       });
@@ -61,6 +63,7 @@ export class NgxButtonComponent<TData extends any> {
         subscription.unsubscribe();
         this.busy = false;
         this.busyDisplay = false;
+        delete this.widthBeforeBusy;
       }
     }
   }

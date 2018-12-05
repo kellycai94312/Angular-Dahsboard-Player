@@ -56,7 +56,6 @@ import {Dialogue} from '../model/chat/conversation/dialogue';
 import {Chat} from '../model/chat/conversation/chat';
 import {MessageWrapper} from '../bean/wrapper/message-wrapper';
 import {Message} from '../model/chat/message/message';
-import {MessageContent} from '../model/chat/message/message-content';
 import {BaseConversation} from '../model/chat/conversation/base/base-conversation';
 import {Participant} from '../model/chat/participant';
 import {ConversationQuery} from './query/conversation-query';
@@ -114,7 +113,8 @@ import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
-import {GroupNews} from '../model/group/group-news';
+import {BaseGroupNews} from '../model/group/news/base-group-news';
+import {BaseMessageContent} from '../model/chat/message/base/base-message-content';
 
 @Injectable()
 @RestParams({
@@ -585,6 +585,16 @@ export class ParticipantRestApiService extends Rest {
 
   ///#endregion
 
+  //#region News
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/person/news'
+  })
+  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<BaseGroupNews>>;
+
+  //#endregion
+
   //#endregion
 
   //#region Country
@@ -958,31 +968,31 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news',
   })
-  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
+  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<BaseGroupNews>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
+  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, BaseGroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/news',
   })
-  createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
+  createGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number }, BaseGroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
+  updateGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number, groupNewsId: number }, BaseGroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
+  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, BaseGroupNews>;
 
   //#endregion
 
@@ -1477,13 +1487,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/conversation/{!conversationId}/messageContent'
   })
-  createMessage: IRestMethodStrict<MessageContent, any, { conversationId: number }, Message>;
+  createMessage: IRestMethodStrict<BaseMessageContent, any, { conversationId: number }, Message>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/conversation/{!conversationId}/messageContent/{!messageContentId}'
   })
-  updateMessage: IRestMethodStrict<MessageContent, any, { conversationId: number, messageContentId: number }, MessageContent>;
+  updateMessage: IRestMethodStrict<BaseMessageContent, any, { conversationId: number, messageContentId: number }, BaseMessageContent>;
 
   @RestAction({
     method: RestRequestMethod.Get,

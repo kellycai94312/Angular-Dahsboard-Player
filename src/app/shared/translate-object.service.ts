@@ -1,11 +1,23 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {NameWrapper} from '../data/local/name-wrapper';
+import {ISubscription} from 'rxjs-compat/Subscription';
+import {AppHelper} from '../utils/app-helper';
+import {BehaviorSubject} from 'rxjs';
+import {Locale} from '../data/remote/misc/locale';
 
 @Injectable()
-export class TranslateObjectService {
+export class TranslateObjectService implements OnDestroy {
 
-  constructor(private _translateService: TranslateService) {
+  public readonly langSubject: BehaviorSubject<string>;
+  private readonly _langChangSubscription: ISubscription;
+
+  constructor(private _translateService: TranslateService,
+              private _appHelper: AppHelper) {
+    this.langSubject = new BehaviorSubject<string>(Locale.en);
+    this._langChangSubscription = this._translateService.onLangChange.subscribe(val => {
+      this.langSubject.next(val);
+    });
   }
 
   // TODO: set type obj
@@ -37,6 +49,10 @@ export class TranslateObjectService {
 
   public async getTranslation(key: string, interpolateParams?: Object): Promise<string> {
     return await this._translateService.get(key, interpolateParams).toPromise();
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._langChangSubscription);
   }
 
 }

@@ -23,7 +23,7 @@ export class SideBarComponent implements OnInit {
       this.createMenuItem('fa fa-home', 'myPage', 'dashboard', null, false),
       this.createMenuItem('fa fa-user', 'persons.section', 'person'),
       this.createMenuItem('fa fa-users', 'groups', 'group'),
-      this.createMenuItem('fa fa-calendar', 'calendar', 'event', null, false),
+      this.createMenuItem('fa fa-calendar', 'calendar', 'event'),
       // this.createMenuItem('fa fa-exchange', 'eventPlans', 'event-plan'),
       this.createMenuItem('fa fa-file', 'reports', 'report', null, false),
       this.createMenuItem('fa fa-book', 'statistics', 'statistics', null, false),

@@ -30,15 +30,14 @@ import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {ReportModule} from '../../components/report/report.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
-import {EventTypeComponent} from './event-type/event-type.component';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.module';
-import {EditEventComponent} from './edit-event/edit-event.component';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {GeneralTestingStepComponent} from './event-page/testing/step/general-testing-step/general-testing-step.component';
 import {TestingStepsManagerComponent} from './event-page/testing/step/testing-steps-manager/testing-steps-manager.component';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
+import {EventComponentsModule} from '../../components/event/event-components.module';
 
 @NgModule({
   imports: [
@@ -70,7 +69,8 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
     NgxTextBoxModule,
     DxCheckBoxModule,
     NamedObjectModule,
-    NgxSelectionModule
+    NgxSelectionModule,
+    EventComponentsModule
   ],
   declarations: [
     EventPageComponent,
@@ -83,16 +83,12 @@ import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.m
     EventsCalendarComponent,
     EventCalendarItemComponent,
     EventCalendarMonthModalComponent,
-    EventTypeComponent,
-    EditEventComponent,
     GeneralTestingStepComponent,
     TestingStepsManagerComponent
   ],
   entryComponents: [
     ModalSelectPageComponent,
-    EventCalendarMonthModalComponent,
-    EventTypeComponent,
-    EditEventComponent
+    EventCalendarMonthModalComponent
   ],
   providers: [
     CustomDateFormatter,

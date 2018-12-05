@@ -1,21 +1,23 @@
 import {Component, OnInit} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {GroupNews} from '../../../../data/remote/model/group/group-news';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {GroupService} from '../../group.service';
 import {Group} from '../../../../data/remote/model/group/base/group';
+import {TemplateModalService} from '../../../../service/template-modal.service';
+import {BaseGroupNews} from '../../../../data/remote/model/group/news/base-group-news';
 
 @Component({
   selector: 'app-edit-group-news',
   templateUrl: './edit-group-news.component.html',
   styleUrls: ['./edit-group-news.component.scss']
 })
-export class EditGroupNewsComponent extends BaseEditComponent<GroupNews> implements OnInit {
+export class EditGroupNewsComponent extends BaseEditComponent<BaseGroupNews> implements OnInit {
 
   private _group: Group;
 
   constructor(private _groupService: GroupService,
+              private _templateModalService: TemplateModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
@@ -41,5 +43,9 @@ export class EditGroupNewsComponent extends BaseEditComponent<GroupNews> impleme
       }
     });
   }
+
+  public onAddEvent = async () => {
+    await this._templateModalService.showEditEventModal();
+  };
 
 }

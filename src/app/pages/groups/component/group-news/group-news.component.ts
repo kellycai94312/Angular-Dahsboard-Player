@@ -7,7 +7,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
-import {GroupNews} from '../../../../data/remote/model/group/group-news';
+import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {EditGroupNewsComponent} from '../edit-group-news/edit-group-news.component';

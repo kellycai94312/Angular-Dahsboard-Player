@@ -23,6 +23,7 @@ import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
 import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {EventComponentsModule} from '../../components/event/event-components.module';
 
 @NgModule({
   imports: [
@@ -43,7 +44,8 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     PersonModule,
     SafeHtmlModule,
     ModalConfirmModule,
-    NgxButtonModule
+    NgxButtonModule,
+    EventComponentsModule
   ],
   declarations: [
     ConversationsPageComponent,

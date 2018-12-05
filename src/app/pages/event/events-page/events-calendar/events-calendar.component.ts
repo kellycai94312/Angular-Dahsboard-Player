@@ -13,11 +13,9 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
 import {EventsCalendarService} from './events-calendar.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {EventTypeComponent} from '../../event-type/event-type.component';
-import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {AppHelper} from '../../../../utils/app-helper';
-import {EditEventComponent} from '../../edit-event/edit-event.component';
 import {EventPlan} from '../../../../data/remote/model/training/plan/event-plan';
+import {TemplateModalService} from '../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-events-calendar',
@@ -54,6 +52,7 @@ export class EventsCalendarComponent implements OnInit {
               private _modalService: NgbModal,
               private _router: Router,
               private _ngxModalService: NgxModalService,
+              private _templateModalService: TemplateModalService,
               private _appHelper: AppHelper) {
     this._trainingQuery = new BaseTrainingQuery();
     this._trainingQuery.from = 0;
@@ -100,49 +99,12 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   public async onDayClick(date: Date) {
-    const selectedEventType = await this.showSelectEventTypeModal();
-    if (selectedEventType) {
-      const modal = this._ngxModalService.open();
-      modal.componentInstance.titleKey = 'edit';
-      await modal.componentInstance.initializeBody(EditEventComponent, async component => {
-        component.manualInitialization = true;
-        component.date = new Date(date);
-        const event: BaseTraining = this._appHelper.eventFactory(selectedEventType);
-        event.startTime = date;
-        event.finishTime = new Date(date.getTime() + 30 * 60 * 1000);
-        event.eventPlan = this.eventPlan;
-        await component.initialize(event);
-
-        modal.componentInstance.splitButtonItems = [
-          this._ngxModalService.saveSplitItemButton(async () => {
-            await this._ngxModalService.save(modal, component);
-          })
-        ];
-      });
-
-      if (await this._ngxModalService.awaitModalResult(modal)) {
-        await this.loadEvents();
-      }
+    const dialogResult = await this._templateModalService.showEditEventModal(null, date, this.eventPlan);
+    if (dialogResult.result) {
+      await this.loadEvents();
     }
   }
 
-  private async showSelectEventTypeModal(): Promise<TrainingDiscriminator> {
-    let selectedEventType: TrainingDiscriminator = null;
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'selection';
-    await modal.componentInstance.initializeBody(EventTypeComponent, async component => {
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            selectedEventType = component.selectedEventType.data;
-            modal.close();
-          }
-        }
-      ];
-    });
-    return await this._ngxModalService.awaitModalResult(modal) ? selectedEventType : null;
-  }
 
   private async getDateFrom() {
     const getDate: any = {

@@ -20,9 +20,9 @@ const routes: Routes = [
   {
     path: ':id', component: GroupPageComponent,
     children: [
-      {path: '', redirectTo: 'member', pathMatch: 'full'},
-      {path: 'member', component: GroupMembersComponent},
-      {path: 'news', component: GroupNewsComponent}
+      {path: '', redirectTo: 'news', pathMatch: 'full'},
+      {path: 'news', component: GroupNewsComponent},
+      {path: 'member', component: GroupMembersComponent}
     ]
   }
 ];

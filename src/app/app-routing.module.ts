@@ -29,7 +29,7 @@ const routes: Routes = [
   {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+    canActivate: [AuthGuard, LayoutService]
   },
   {
     path: 'event-plan',

@@ -5,5 +5,4 @@ import {BaseConversation} from '../../conversation/base/base-conversation';
 export class BaseMessageContent extends IdentifiedObject {
   discriminator: BaseMessageContentType;
   baseConversation: BaseConversation;
-  content: string;
 }

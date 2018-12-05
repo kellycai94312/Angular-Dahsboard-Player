@@ -14,6 +14,8 @@ export class EventGroupQuery extends PageQuery {
   cityId?: number;
   stageEnum?: StageEnum;
   stageYear?: number;
+  // Группы, в которых состоят пользователи, находящиеся в беседе
+  conversationId?: number;
   // Все группы или привязанные к пользователю
   all?: boolean;
   // Подтвержден ли пользователь в группе

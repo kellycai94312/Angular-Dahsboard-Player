@@ -31,6 +31,10 @@ import {SystemMessageContentType} from '../../../data/remote/model/chat/message/
 import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 import {MessageToastrService} from '../../../components/message-toastr/message-toastr.service';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {TemplateModalService} from '../../../service/template-modal.service';
+import {IconEnum} from '../../../components/ngx-button/model/icon-enum';
+import {BaseMessageContent} from '../../../data/remote/model/chat/message/base/base-message-content';
+import {EventMessageContent} from '../../../data/remote/model/chat/message/event-message-content';
 
 @Component({
   selector: 'app-conversation-page',
@@ -38,6 +42,8 @@ import {Direction} from '../../../components/ngx-virtual-scroll/model/direction'
   styleUrls: ['./conversation-page.component.scss']
 })
 export class ConversationPageComponent implements OnInit, OnDestroy {
+
+  public readonly iconEnumClass = IconEnum;
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -74,6 +80,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
               private _translateService: TranslateService,
               private _messageToastrService: MessageToastrService,
               private _modalService: NgbModal,
+              private _templateModalService: TemplateModalService,
               private _router: Router) {
     this._conversationId = this._activatedRoute.snapshot.params.id;
     this.messageContent = new MessageContent();
@@ -227,16 +234,8 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         await this._appHelper.showErrorMessage('sendError');
       }
     } else {
-      // Create message
-      try {
-        const message = await this._participantRestApiService.createMessage(this.messageContent, {}, {conversationId: this._conversationId});
-        this.addSendMessageInList(message);
+      if (await this.createMessage(this.messageContent)) {
         this.messageContent.content = null;
-
-        // TODO: Optimize read message algorithm!
-        this.readMessageFrom(message.content.created);
-      } catch (e) {
-        await this._appHelper.showErrorMessage('sendError');
       }
     }
   };
@@ -319,7 +318,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public updateCanEditMessage() {
     this.canEditMessage = this.selectedMessages.size() == 1
-      && this.selectedMessages.data.filter(message => message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT
+      && this.selectedMessages.data.filter(message => message.content.discriminator === BaseMessageContentType.MESSAGE_CONTENT
         && message.sender.person.id == this.person.id).length == 1;
   }
 
@@ -360,6 +359,15 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.enabled = !this.enabled;
   }
 
+  public onAddEvent = async () => {
+    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.conversation);
+    if (dialogResult.result) {
+      const message = new EventMessageContent();
+      message.training = dialogResult.data;
+      await this.createMessage(message);
+    }
+  };
+
   private addSendMessageInList(message: Message) {
     this.ngxVirtualScrollComponent.addItem(message, true);
   }
@@ -368,6 +376,15 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this._participantStompService.publishConversationRead({
       id: this._conversationId,
       lastDate: this._appHelper.getGmtDate(date)
+    });
+  }
+
+  private async createMessage<T extends BaseMessageContent>(messageContent: T): Promise<boolean> {
+    return await this._appHelper.tryAction('', 'sendError', async () => {
+      const message = await this._participantRestApiService.createMessage(messageContent, {}, {conversationId: this._conversationId});
+      this.addSendMessageInList(message);
+      // TODO: Optimize read message algorithm!
+      this.readMessageFrom(message.content.created);
     });
   }
 
