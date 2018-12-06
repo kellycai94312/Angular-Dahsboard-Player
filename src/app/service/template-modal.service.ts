@@ -107,6 +107,7 @@ export class TemplateModalService {
     date = date || new Date();
     const modal = this._ngxModalService.open();
     this.updateTitleKeyModal(modal, event);
+    let eventResult: T = null;
     let editEventComponent: EditEventComponent<T> = null;
     await modal.componentInstance.initializeBody(EditEventComponent, async component => {
       editEventComponent = component as EditEventComponent<T>;
@@ -124,6 +125,17 @@ export class TemplateModalService {
       await component.initialize(this._appHelper.cloneObject(event));
 
       modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'addExistingEvent',
+          callback: async () => {
+            await this._ngxModalService.showSelectionEventModal(async selectedItems => {
+              if (selectedItems.length > 0) {
+                eventResult = selectedItems[0] as T;
+                modal.close();
+              }
+            });
+          }
+        },
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component, !this._appHelper.isNewObject(component.data));
         }),
@@ -133,7 +145,7 @@ export class TemplateModalService {
       ];
     });
     const result = await this._ngxModalService.awaitModalResult(modal);
-    return {result: result, data: editEventComponent.data};
+    return {result: result, data: eventResult || editEventComponent.data};
   }
 
   public async showEditGroupNewsModal<T extends BaseGroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
@@ -150,14 +162,26 @@ export class TemplateModalService {
           callback: async () => {
             const dialogResult = await this.showEditEventModal();
             if (dialogResult.result) {
-              await this._appHelper.trySave(async () => {
-                let eventGroupNews = new EventGroupNews();
-                eventGroupNews.training = dialogResult.data;
-                eventGroupNews = (await this._participantRestApiService.createGroupNews(eventGroupNews, {}, {groupId: group.id})) as EventGroupNews;
+              const eventGroupNews = await this.createEventGroupNews(dialogResult.data, group);
+              if (eventGroupNews) {
                 this._appHelper.updateObject(component.data, eventGroupNews);
                 modal.close();
-              });
+              }
             }
+          }
+        },
+        {
+          nameKey: 'addExistingEvent',
+          callback: async () => {
+            await this._ngxModalService.showSelectionEventModal(async selectedItems => {
+              if (selectedItems.length > 0) {
+                const eventGroupNews = await this.createEventGroupNews(selectedItems[0], group);
+                if (eventGroupNews) {
+                  this._appHelper.updateObject(component.data, eventGroupNews);
+                  modal.close();
+                }
+              }
+            });
           }
         },
         this._ngxModalService.saveSplitItemButton(async () => {
@@ -177,6 +201,16 @@ export class TemplateModalService {
   private updateTitleKeyModal<T extends IdentifiedObject>(modal: NgxModalRef, obj: T): void {
     const isNew = this._appHelper.isNewObject(obj);
     modal.componentInstance.titleKey = isNew ? 'add' : 'edit';
+  }
+
+  private async createEventGroupNews<T extends BaseTraining>(event: T, group: Group): Promise<EventGroupNews> {
+    let eventGroupNews: EventGroupNews = null;
+    await this._appHelper.trySave(async () => {
+      eventGroupNews = new EventGroupNews();
+      eventGroupNews.training = event;
+      eventGroupNews = (await this._participantRestApiService.createGroupNews(eventGroupNews, {}, {groupId: group.id})) as EventGroupNews;
+    });
+    return eventGroupNews;
   }
 
 }

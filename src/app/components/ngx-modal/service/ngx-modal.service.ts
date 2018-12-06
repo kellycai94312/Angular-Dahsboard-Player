@@ -37,6 +37,7 @@ import {OrganizationTrainer} from '../../../data/remote/model/group/organization
 import {TrainingPerson} from '../../../data/remote/model/training/training-person';
 import {TrainingPersonQuery} from '../../../data/remote/rest-api/query/training-person-query';
 import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
+import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 
 @Injectable()
 export class NgxModalService {
@@ -230,6 +231,16 @@ export class NgxModalService {
         return personFullName;
       },
       selectedItems, apply, null, compare);
+  }
+
+  public async showSelectionEventModal(apply: (selectedItems: BaseTraining[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal<BaseTraining>(async (query: BaseTrainingQuery) => {
+        return await this._participantRestApiService.getBaseTrainings(query);
+      },
+      data => {
+        return data.name;
+      },
+      [], apply, 1);
   }
 
   //#endregion

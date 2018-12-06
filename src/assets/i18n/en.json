@@ -578,5 +578,6 @@
   "news": "News",
   "title": "Title",
   "content": "Content",
-  "addEvent": "Add event"
+  "addEvent": "Add event",
+  "addExistingEvent": "Add existing event"
 }
