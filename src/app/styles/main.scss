@@ -45,11 +45,13 @@ hr {
 }
 
 .input-height {
+  z-index: initial !important;
   height: $input-height;
   line-height: 1.35715;
 }
 
 .input-height-sm {
+  z-index: initial !important;
   height: $input-height-sm;
   line-height: 1;
 }

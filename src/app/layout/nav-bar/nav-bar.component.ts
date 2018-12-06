@@ -49,12 +49,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     this._conversationMenuItem = {iconClassName: 'fa fa-comments', routerLink: 'conversation'};
     this.menuItems = [
       {iconClassName: 'fa fa-bell', routerLink: 'notification'},
-      this._conversationMenuItem,
-      {
-        iconClassName: 'fa fa-power-off', routerLink: 'sign-in', action: async () => {
-          await this._authorizationService.logOut();
-        }
-      }
+      this._conversationMenuItem
     ];
   }
 
@@ -80,6 +75,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
       await this._router.navigate(['/person']);
     }
     await this._router.navigate(['/person', this._authorizationService.session.person.id]);
+  }
+
+  public async signOut() {
+    await this._authorizationService.logOut();
   }
 
 }
