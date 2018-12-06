@@ -29,6 +29,9 @@ export class ContactComponent implements OnInit {
     this.allowEdit = await this._personService.allowEdit();
     this.enabled = await this._personService.personViewModel.data.user.enabled;
     this.contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
+    this.contacts.forEach(value => {
+      value.visible = value.visible || false;
+    });
   }
 
   public onSave = async () => {

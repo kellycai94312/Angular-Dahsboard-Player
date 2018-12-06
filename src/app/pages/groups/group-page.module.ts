@@ -13,7 +13,6 @@ import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {GroupService} from './group.service';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
 import {MembersComponent} from './group-administration/members/members.component';
@@ -94,8 +93,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditGroupPersonComponent
   ],
   providers: [
-    LayoutService,
-    GroupService
+    LayoutService
   ],
   declarations: [
     GroupsPageComponent,

@@ -25,7 +25,8 @@ import {OrganizationTrainer} from '../../../data/remote/model/group/organization
 @Component({
   selector: 'app-group-page',
   templateUrl: './group-page.component.html',
-  styleUrls: ['./group-page.component.scss']
+  styleUrls: ['./group-page.component.scss'],
+  providers: [GroupService]
 })
 export class GroupPageComponent implements OnInit, OnDestroy {
 
