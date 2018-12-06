@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center flex-column h-100">
-  <div class="m-auto max-width-content">
-    <div *ngIf="!isRegistrationComplete; else content"
-         class="form">
+  <div class="m-auto max-width-content form">
+    <div *ngIf="!isRegistrationComplete; else content">
+      <h3 class="text-center text-white">{{'registration.newUserSignUp' | translate | uppercase}}</h3>
       <img src="/assets/img/athlete-readiness-logo.png">
       <ngx-form>
         <ngx-input [type]="ngxInputTypeClass.EMAIL"
@@ -24,8 +24,8 @@
                   [click]="onSave"></ngx-button>
 
       <div class="mt-2 text-center">
-        <p>{{'clickOnButtonYouAgreeWith' | translate}} <a (click)="onShowUserAgreement()">{{'userAgreement' |
-          translate}}</a></p>
+        <p>{{'clickOnButtonYouAgreeWith' | translate}}</p>
+        <a (click)="onShowUserAgreement()">{{'userAgreement' | translate}}</a>
         <p>{{'alreadyRegistered'| translate}}
           <u><a routerLink="/sign-in"
                 routerLinkActive="active">{{'signIn' | translate}}</a></u>
@@ -34,7 +34,8 @@
     </div>
     <ng-template #content>
       <div class="m-2 text-center text-white">
-        <h1>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate | uppercase}}</h1>
+        <img src="/assets/img/athlete-readiness-logo.png">
+        <h3>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate | uppercase}}</h3>
         <p>{{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
           {{'registration.followTheInstructionsInIt' | translate }}<br>
           {{'checkEmailInSpamFolder' | translate }}</p>

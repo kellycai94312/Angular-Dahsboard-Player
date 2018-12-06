@@ -77,6 +77,8 @@
     "createPassword": "Create password",
     "retypePassword": "Retype password",
     "signUp": "Sign up",
+    "newUserSignUp": "New user sign up",
+    "completeYourProfile": "Complete your profile",
     "notRegistered": "Not registered?",
     "registrationComplete": "Registration complete",
     "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it",

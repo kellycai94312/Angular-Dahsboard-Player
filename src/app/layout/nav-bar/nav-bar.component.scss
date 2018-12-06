@@ -1,78 +1,9 @@
 @import "../layout.component";
 
 $navbar-background: $light-blue;
-$navbar-background-dark: darken($navbar-background, 12%);
-$user-panel-width: 150px;
-
-.nav-bar-dropdown-toggle {
-  height: $navbar-height;
-  width: $user-panel-width;
-  background: $navbar-background-dark;
-  border: none;
-  line-height: $navbar-height;
-
-  &::after {
-    display: none;
-  }
-
-  > .dropdown-toggle-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 5px;
-
-    background-color: darken($light-blue, 12%);
-
-    > .fullname {
-      padding-left: 5px;
-      width: ($user-panel-width - $logo-size-sm) * .85;
-      height: $logo-size-sm;
-      display: flex;
-      align-items: center;
-      font-weight: 400;
-      color: $white;
-      white-space: nowrap;
-      > p {
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-      }
-    }
-
-    > .fa {
-      color: $white;
-      font-size: .6em;
-      font-weight: 900;
-      padding-left: 2px;
-    }
-
-    cursor: pointer;
-
-    &:hover {
-      > p, > .fa {
-        color: $white-light;
-      }
-      background-color: darken($navbar-background-dark, 2%);
-    }
-
-    i {
-      font-size: 24px !important;
-      padding-right: 10px;
-
-      &:hover, &:active, &:focus {
-        color: #ccc !important;
-        opacity: 0.6;
-      }
-    }
-
-    i:last-child {
-      padding-right: 0;
-    }
-
-  }
-
-}
+$notifications-background: darken($navbar-background, 20%);
+$profile-background: darken($navbar-background, 12%);
+$user-panel-width: 300px;
 
 .navbar-wrapper {
   user-select: none;
@@ -106,7 +37,7 @@ $user-panel-width: 150px;
     transition: width $sidebar-mini-transition ease;
 
     font-size: 20px;
-    line-height: 50px;
+    line-height: $navbar-height;
     text-align: center;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 300;
@@ -116,36 +47,117 @@ $user-panel-width: 150px;
     padding: 0 15px;
     overflow: hidden;
 
-    background-color: $navbar-background-dark;
+    background-color: $profile-background;
   }
 
-  .menu {
-    width: 100%;
-    padding-top: 0;
-    padding-bottom: 0;
+  > .tools-wrapper {
+    height: $navbar-height;
+    width: $user-panel-width;
+    line-height: $navbar-height;
+    display: flex;
 
-    > .dropdown-item {
+    .notifications-wrapper {
+      background: $notifications-background;
+      width: 100px;
+      max-width: 100px;
+      display: flex;
+      align-items: center;
+      padding: 0 5px;
 
-      outline: none;
-      cursor: pointer;
-      padding-top: 5px;
-      padding-bottom: 5px;
+      i {
+        color: $white;
+        font-size: 24px !important;
+        width: 45px;
+        cursor: pointer;
 
-      &:hover, &:active, &:focus {
-        background-color: #ddd;
-        color: #000;
+        &:hover, &:active, &:focus {
+          color: #ccc !important;
+        }
       }
 
-      &:not(:last-child) {
-        border-bottom: 1px solid #ccc;
-      }
     }
 
-  }
+    .profile-wrapper {
+      background: $profile-background;
+      width: 100%;
 
-  > nav {
-    margin-bottom: 0;
-    border: 0;
+      .nav-bar-dropdown-toggle {
+        border: none;
+
+        &::after {
+          display: none;
+        }
+
+        > .dropdown-toggle-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 5px;
+
+          background-color: darken($light-blue, 12%);
+
+          > .fullname {
+            padding-left: 5px;
+            height: $logo-size-sm;
+            display: flex;
+            align-items: center;
+            font-weight: 400;
+            color: $white;
+            white-space: nowrap;
+            > p {
+              overflow: hidden !important;
+              text-overflow: ellipsis;
+            }
+          }
+
+          > span.fa {
+            color: $white;
+            font-size: .6em;
+            font-weight: 900;
+            padding-left: 2px;
+          }
+
+          cursor: pointer;
+
+          &:hover {
+            > p, > span.fa {
+              color: $white-light;
+            }
+            background-color: darken($profile-background, 2%);
+          }
+
+        }
+
+      }
+
+      .menu {
+        width: 100%;
+        padding-top: 0;
+        padding-bottom: 0;
+        z-index: 2;
+
+        > .dropdown-item {
+
+          height: 30px;
+          line-height: 20px;
+          outline: none;
+          cursor: pointer;
+          padding: 5px 5px;
+
+          &:hover, &:active, &:focus {
+            background-color: #ddd;
+            color: #000;
+          }
+
+          &:not(:last-child) {
+            border-bottom: 1px solid #ccc;
+          }
+        }
+
+      }
+
+    }
+
   }
 
 }

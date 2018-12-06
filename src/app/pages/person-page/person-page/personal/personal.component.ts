@@ -66,7 +66,7 @@ export class PersonalComponent implements OnInit {
   public onSave = async () => {
     await this._appHelper.trySave(async () => {
       this.person.sex = this.selectedSexEnum.data;
-      const person = await this._participantRestApiService.updatePerson(this.person, {id: this.person.id});
+      const person = await this._participantRestApiService.updatePerson(this.person, {}, {personId: this.person.id});
       this.personService.personViewModel.update(person);
 
       // TODO: this._profileService.emitFullNameChange(this.person);
