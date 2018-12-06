@@ -53,6 +53,10 @@ export class AppHelper {
     return this.isUndefinedOrNull(obj) || obj.id === undefined || obj.id == null || obj.id < 1;
   }
 
+  public isRemovedObject<T extends IdentifiedObject>(obj: T): boolean {
+    return !!obj.deleted;
+  }
+
   public isUndefinedOrNull(val: any): boolean {
     return val === undefined || val == null || val === '';
   }

@@ -51,7 +51,6 @@ import {AttachFileModule} from '../../components/attach-file/attach-file.module'
 import {GroupModule} from '../../components/group/group.module';
 import {GroupNewsComponent} from './component/group-news/group-news.component';
 import {GroupMembersComponent} from './component/group-members/group-members.component';
-import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-news.component';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
 @NgModule({
@@ -87,8 +86,8 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     NgxButtonModule,
     NgxModalModule,
     AttachFileModule,
-    GroupModule,
-    UrlParserModule
+    UrlParserModule,
+    GroupModule
   ],
   exports: [
     GroupComponent,
@@ -123,8 +122,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditGroupPersonLogsComponent,
     GroupConnectionsGraphComponent,
     GroupNewsComponent,
-    GroupMembersComponent,
-    EditGroupNewsComponent
+    GroupMembersComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -135,8 +133,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditDocumentComponent,
     EditGroupPersonLogComponent,
     EditGroupPersonLogsComponent,
-    GroupAdministrationComponent,
-    EditGroupNewsComponent
+    GroupAdministrationComponent
   ]
 })
 export class GroupPageModule {
