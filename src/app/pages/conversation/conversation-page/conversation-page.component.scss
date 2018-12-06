@@ -5,7 +5,7 @@ $conversation-footer-height: 80px;
 $conversation-edit-height: 40px;
 $margin: 0.5rem;
 // TODO: Set dynamic calc
-$nav-bar-height: 70px;
+$navbar-offset: $navbar-height + 20px;
 
 textarea {
   min-height: 60px;
@@ -13,10 +13,10 @@ textarea {
 }
 
 .conversation-content {
-  height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$margin*2} + #{$nav-bar-height}));
+  height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$margin*2} + #{$navbar-offset}));
 
   &.editable {
-    height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$conversation-edit-height} + #{$margin*2} + #{$nav-bar-height}));
+    height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$conversation-edit-height} + #{$margin*2} + #{$navbar-offset}));
   }
 
 }
