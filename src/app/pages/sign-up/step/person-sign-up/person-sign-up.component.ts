@@ -55,7 +55,7 @@ export class PersonSignUpComponent implements OnInit, OnDestroy {
     await this._appHelper.trySave(async () => {
       this.person = await this._participantRestApiService.createPerson(this.person);
       await this._authorizationService.updateSession();
-      await this._router.navigate(['/person', this.person.id]);
+      await this._router.navigate(['/dashboard']);
     });
   };
 
