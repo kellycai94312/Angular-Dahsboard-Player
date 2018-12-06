@@ -8,6 +8,7 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {AppHelper} from '../../../utils/app-helper';
 import {TemplateModalService} from '../../../service/template-modal.service';
 import {IconEnum} from '../../ngx-button/model/icon-enum';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'app-group-news-item',
@@ -17,6 +18,7 @@ import {IconEnum} from '../../ngx-button/model/icon-enum';
 export class GroupNewsItemComponent implements OnInit {
 
   public readonly iconEnumClass = IconEnum;
+  public readonly propertyConstantClass = PropertyConstant;
   public readonly groupNewsDiscriminatorClass = GroupNewsDiscriminator;
 
   @Input()

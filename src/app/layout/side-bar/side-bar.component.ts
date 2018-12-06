@@ -20,7 +20,7 @@ export class SideBarComponent implements OnInit {
   constructor(private _conversationService: ConversationService,
               private _participantRestApiService: ParticipantRestApiService) {
     this.menuItems = [
-      this.createMenuItem('fa fa-home', 'myPage', 'dashboard', null, false),
+      this.createMenuItem('fa fa-home', 'myPage', 'dashboard'),
       this.createMenuItem('fa fa-user', 'persons.section', 'person'),
       this.createMenuItem('fa fa-users', 'groups', 'group'),
       this.createMenuItem('fa fa-calendar', 'calendar', 'event'),

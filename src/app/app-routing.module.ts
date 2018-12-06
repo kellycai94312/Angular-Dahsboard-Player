@@ -24,7 +24,7 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+    canActivate: [AuthGuard, LayoutService]
   },
   {
     path: 'event',

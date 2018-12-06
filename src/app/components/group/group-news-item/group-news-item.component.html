@@ -6,6 +6,8 @@
     </strong>
     <pre class="m-0"
          [innerHTML]="content | urlParser | async"></pre>
+    <p class="date"><a routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' +
+      data.person.firstName}}</a> / {{data.created | date: propertyConstantClass.dateTimeFormat}}</p>
   </div>
   <div *ngIf="canEdit"
        class="flex-shrink-1">

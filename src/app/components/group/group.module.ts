@@ -11,6 +11,7 @@ import {EditGroupNewsComponent} from './edit-group-news/edit-group-news.componen
 import {GroupNewsItemComponent} from './group-news-item/group-news-item.component';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
+import {RouterModule} from '@angular/router';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     DxTextAreaModule,
     InputSelectModule,
     NgxButtonModule,
-    UrlParserModule
+    UrlParserModule,
+    RouterModule.forChild([])
   ],
   declarations: [
     GroupTransitionComponent,

@@ -5,6 +5,7 @@ import {AppHelper} from '../../../utils/app-helper';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {TemplateModalService} from '../../../service/template-modal.service';
 import {BaseGroupNews} from '../../../data/remote/model/group/news/base-group-news';
+import {GroupNews} from '../../../data/remote/model/group/news/group-news';
 
 @Component({
   selector: 'app-edit-group-news',
@@ -35,6 +36,10 @@ export class EditGroupNewsComponent extends BaseEditComponent<BaseGroupNews> imp
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updateGroupNews(this.data, {}, {groupId: this.group.id, groupNewsId: this.data.id}));
       }
     });
+  }
+
+  public asGroupNews(obj: BaseGroupNews): GroupNews {
+    return obj as GroupNews;
   }
 
 }
