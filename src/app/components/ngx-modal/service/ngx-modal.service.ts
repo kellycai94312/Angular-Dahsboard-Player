@@ -34,6 +34,10 @@ import {UserRole} from '../../../data/remote/model/user-role';
 import {Person} from '../../../data/remote/model/person';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
+import {TrainingPerson} from '../../../data/remote/model/training/training-person';
+import {TrainingPersonQuery} from '../../../data/remote/rest-api/query/training-person-query';
+import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
+import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 
 @Injectable()
 export class NgxModalService {
@@ -204,6 +208,43 @@ export class NgxModalService {
     });
   }
 
+  //#region Event
+
+  public async showSelectionTrainingPersonsModal(event: BaseTraining, trainingPersonQuery: TrainingPersonQuery, selectedItems: TrainingPerson[],
+                                                 apply: (selectedItems: TrainingPerson[]) => Promise<void>,
+                                                 compare: (first: TrainingPerson, second: TrainingPerson) => boolean = null) {
+    await this.showSelectionNameObjectsModal<TrainingPerson>(async (query: TrainingPersonQuery) => {
+        if (query.from) {
+          trainingPersonQuery.from = query.from;
+        }
+        trainingPersonQuery.count = query.count;
+        if (query.name) {
+          trainingPersonQuery.name = query.name;
+        }
+        return await this._participantRestApiService.getTrainingPersons({}, trainingPersonQuery, {eventId: event.id});
+      },
+      data => {
+        let personFullName = `${data.person.lastName} ${data.person.firstName}`;
+        if (data.person.patronymic) {
+          personFullName += ` ${data.person.patronymic}`;
+        }
+        return personFullName;
+      },
+      selectedItems, apply, null, compare);
+  }
+
+  public async showSelectionEventModal(apply: (selectedItems: BaseTraining[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal<BaseTraining>(async (query: BaseTrainingQuery) => {
+        return await this._participantRestApiService.getBaseTrainings(query);
+      },
+      data => {
+        return data.name;
+      },
+      [], apply, 1);
+  }
+
+  //#endregion
+
   public async showSelectionPersonsModal(personQuery: PersonQuery, apply: (selectedItems: Person[]) => Promise<void>) {
     await this.showSelectionNameObjectsModal<Person>(async (query: PersonQuery) => {
         query.name = personQuery.name;
@@ -212,7 +253,7 @@ export class NgxModalService {
         return await this._participantRestApiService.getPersons(query);
       },
       data => {
-        let personFullName = `${data.firstName} ${data.lastName}`;
+        let personFullName = `${data.lastName} ${data.firstName}`;
         if (data.patronymic) {
           personFullName += ` ${data.patronymic}`;
         }
@@ -289,16 +330,18 @@ export class NgxModalService {
   public async showSelectionNameObjectsModal<T>(fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<T>>,
                                                 displayName: (data: T) => string,
                                                 selectedItems: T[],
-                                                apply: (selectedItems: T[]) => Promise<void>, maxCount: number = null): Promise<boolean> {
+                                                apply: (selectedItems: T[]) => Promise<void>, maxCount: number = null, compare: (first: T, second: T) => boolean = null): Promise<boolean> {
     const modal = this.open();
     modal.componentInstance.titleKey = 'selection';
     await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
       component.maxCount = maxCount;
+      if (compare) {
+        component.compare = compare;
+      }
       const initializeComponent = async (componentItem: PreviewNamedObjectComponent<T>, data: T) => {
         componentItem.data = data;
         componentItem.name = displayName(data);
       };
-
       await component.initialize(PreviewNamedObjectComponent, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));
       modal.componentInstance.splitButtonItems = [
         {

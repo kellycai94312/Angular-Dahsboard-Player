@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {EventTypeComponent} from './event-type.component';
+import {GroupNewsItemComponent} from './group-news-item.component';
 
-describe('EventTypeComponent', () => {
-  let component: EventTypeComponent;
-  let fixture: ComponentFixture<EventTypeComponent>;
+describe('GroupNewsItemComponent', () => {
+  let component: GroupNewsItemComponent;
+  let fixture: ComponentFixture<GroupNewsItemComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [EventTypeComponent]
+      declarations: [GroupNewsItemComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EventTypeComponent);
+    fixture = TestBed.createComponent(GroupNewsItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -50,7 +50,11 @@ export class AppHelper {
   }
 
   public isNewObject<T extends IdentifiedObject>(obj: T): boolean {
-    return obj.id === undefined || obj.id == null || obj.id < 1;
+    return this.isUndefinedOrNull(obj) || obj.id === undefined || obj.id == null || obj.id < 1;
+  }
+
+  public isRemovedObject<T extends IdentifiedObject>(obj: T): boolean {
+    return !!obj.deleted;
   }
 
   public isUndefinedOrNull(val: any): boolean {
@@ -328,6 +332,33 @@ export class AppHelper {
         break;
     }
     return event as T;
+  }
+
+  public getListChanges<T extends IdentifiedObject>(aItems: T[] = [], bItems: T[] = [], equals: (a: T, b: T) => boolean): { newItems: T[], removedItems: T[] } {
+    let baseItems: T[] = [];
+    let innerItems: T[] = [];
+    if (aItems.length > bItems.length) {
+      baseItems = aItems;
+      innerItems = bItems;
+    } else {
+      baseItems = bItems;
+      innerItems = aItems;
+    }
+
+    const newItems: T[] = [];
+    const removedItems: T[] = [];
+
+    for (const item of baseItems) {
+      const itemIndex = innerItems.findIndex(x => equals(x, item));
+      if (itemIndex < 0) {
+        if (this.isNewObject(item)) {
+          newItems.push(item);
+        } else {
+          removedItems.push(item);
+        }
+      }
+    }
+    return {newItems: newItems, removedItems: removedItems};
   }
 
   //#region Try actions

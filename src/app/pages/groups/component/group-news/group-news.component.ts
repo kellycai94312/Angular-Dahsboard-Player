@@ -7,10 +7,11 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
-import {GroupNews} from '../../../../data/remote/model/group/group-news';
+import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {EditGroupNewsComponent} from '../edit-group-news/edit-group-news.component';
+import {TemplateModalService} from '../../../../service/template-modal.service';
+import {HtmlService} from '../../../../service/html/html.service';
 
 @Component({
   selector: 'app-group-news',
@@ -28,6 +29,8 @@ export class GroupNewsComponent extends BaseGroupComponent<Group> implements OnI
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _ngxModalService: NgxModalService,
+              private _templateModalService: TemplateModalService,
+              private _htmlService: HtmlService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
   }
@@ -45,25 +48,9 @@ export class GroupNewsComponent extends BaseGroupComponent<Group> implements OnI
     await this.showModal(new GroupNews());
   };
 
-  public onEdit = async (obj: GroupNews) => {
-    await this.showModal(obj);
-  };
-
   private async showModal(obj: GroupNews) {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = this.appHelper.isNewObject(obj) ? 'add' : 'edit';
-    await modal.componentInstance.initializeBody(EditGroupNewsComponent, async component => {
-      await component.initialize(this.appHelper.cloneObject(obj));
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
-    });
-    if (await this._ngxModalService.awaitModalResult(modal)) {
+    const dialogResult = await this._templateModalService.showEditGroupNewsModal(obj, this.group);
+    if (dialogResult.result) {
       await this.resetItems();
     }
   }

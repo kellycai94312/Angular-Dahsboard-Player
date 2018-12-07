@@ -24,12 +24,12 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+    canActivate: [AuthGuard, LayoutService]
   },
   {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+    canActivate: [AuthGuard, LayoutService]
   },
   {
     path: 'event-plan',

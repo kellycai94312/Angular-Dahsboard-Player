@@ -7,7 +7,7 @@ import {Router} from '@angular/router';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 import {TrainingDiscriminator} from '../../../../../data/remote/model/training/base/training-discriminator';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditEventComponent} from '../../../edit-event/edit-event.component';
+import {EditEventComponent} from '../../../../../components/event/edit-event/edit-event.component';
 
 @Component({
   selector: 'app-event-calendar-item',

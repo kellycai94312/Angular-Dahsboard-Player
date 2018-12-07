@@ -49,6 +49,7 @@ import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {PersonModule} from './components/person/person.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
+import {EventComponentsModule} from './components/event/event-components.module';
 
 registerLocaleData(localeRu);
 
@@ -95,6 +96,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxModalModule,
     GroupModule,
     PersonModule,
+    EventComponentsModule,
     HtmlContentModule
   ],
   providers: [

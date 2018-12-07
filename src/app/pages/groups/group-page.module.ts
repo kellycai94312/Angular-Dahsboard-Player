@@ -13,7 +13,6 @@ import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
 import {GroupSettingsComponent} from './group-administration/group-settings/group-settings.component';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {GroupService} from './group.service';
 import {SubgroupsComponent} from './group-administration/subgroups/subgroups.component';
 import {SubgroupComponent} from './group-administration/subgroups/subgroup/subgroup.component';
 import {MembersComponent} from './group-administration/members/members.component';
@@ -51,7 +50,6 @@ import {AttachFileModule} from '../../components/attach-file/attach-file.module'
 import {GroupModule} from '../../components/group/group.module';
 import {GroupNewsComponent} from './component/group-news/group-news.component';
 import {GroupMembersComponent} from './component/group-members/group-members.component';
-import {EditGroupNewsComponent} from './component/edit-group-news/edit-group-news.component';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
 @NgModule({
@@ -87,16 +85,15 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     NgxButtonModule,
     NgxModalModule,
     AttachFileModule,
-    GroupModule,
-    UrlParserModule
+    UrlParserModule,
+    GroupModule
   ],
   exports: [
     GroupComponent,
     EditGroupPersonComponent
   ],
   providers: [
-    LayoutService,
-    GroupService
+    LayoutService
   ],
   declarations: [
     GroupsPageComponent,
@@ -123,8 +120,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditGroupPersonLogsComponent,
     GroupConnectionsGraphComponent,
     GroupNewsComponent,
-    GroupMembersComponent,
-    EditGroupNewsComponent
+    GroupMembersComponent
   ],
   entryComponents: [
     GroupComponent,
@@ -135,8 +131,7 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditDocumentComponent,
     EditGroupPersonLogComponent,
     EditGroupPersonLogsComponent,
-    GroupAdministrationComponent,
-    EditGroupNewsComponent
+    GroupAdministrationComponent
   ]
 })
 export class GroupPageModule {

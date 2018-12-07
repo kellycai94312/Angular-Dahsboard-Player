@@ -1,6 +1,6 @@
 <label>{{'title' | translate}}</label>
 <dx-text-box class="w-100"
-             [(value)]="data.title"
+             [(value)]="asGroupNews(data).title"
              type="date">
   <dx-validator>
     <dxi-validation-rule type="required"></dxi-validation-rule>
@@ -9,6 +9,6 @@
 
 <label class="mt-2">{{'content' | translate}}</label>
 <dx-text-area class="w-100"
-              [(value)]="data.content"
+              [(value)]="asGroupNews(data).content"
               [maxLength]="4096"
               [height]="150"></dx-text-area>

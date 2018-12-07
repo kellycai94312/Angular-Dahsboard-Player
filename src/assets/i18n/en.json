@@ -577,5 +577,7 @@
   "education": "Education",
   "news": "News",
   "title": "Title",
-  "content": "Content"
+  "content": "Content",
+  "addEvent": "Add event",
+  "addExistingEvent": "Add existing event"
 }

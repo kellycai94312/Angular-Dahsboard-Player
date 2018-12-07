@@ -23,8 +23,8 @@
     <div class="d-flex flex-column ml-4">
       <div class="d-flex flex-row h-100">
         <div class="align-self-center full-name">
-          <h4>{{personViewModel.data?.firstName | uppercase}}</h4>
           <h4>{{personViewModel.data?.lastName | uppercase}}</h4>
+          <h4>{{personViewModel.data?.firstName | uppercase}}</h4>
           <h4>{{personViewModel.data?.patronymic | uppercase}}</h4>
           <br>
           <p *ngIf="personService.selectedPublicUserRole">{{'stage' | translate}}:

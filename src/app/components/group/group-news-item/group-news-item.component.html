@@ -1,0 +1,30 @@
+<div *ngIf="!data.deleted"
+     class="d-flex flex-row">
+  <div class="w-100">
+    <strong *ngIf="data.discriminator === groupNewsDiscriminatorClass.GROUP_NEWS"
+            [innerHTML]="data.title | urlParser | async">
+    </strong>
+    <pre class="m-0"
+         [innerHTML]="content | urlParser | async"></pre>
+    <p class="date"><a routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' +
+      data.person.firstName}}</a> / {{data.created | date: propertyConstantClass.dateTimeFormat}}</p>
+  </div>
+  <div *ngIf="canEdit"
+       class="flex-shrink-1">
+    <div [ngSwitch]="data.discriminator">
+      <div *ngSwitchCase="groupNewsDiscriminatorClass.GROUP_NEWS"
+           class="ml-2">
+        <ngx-button [icon]="iconEnumClass.EDIT"
+                    [click]="onEdit"
+                    [data]="data">
+        </ngx-button>
+      </div>
+      <div *ngSwitchCase="groupNewsDiscriminatorClass.EVENT_GROUP_NEWS">
+        <ngx-button [icon]="iconEnumClass.REMOVE"
+                    [click]="onRemove"
+                    [data]="data">
+        </ngx-button>
+      </div>
+    </div>
+  </div>
+</div>
