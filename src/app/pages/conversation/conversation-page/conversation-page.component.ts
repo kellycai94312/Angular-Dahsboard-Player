@@ -360,7 +360,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   }
 
   public onAddEvent = async () => {
-    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.conversation);
+    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.conversation, true);
     if (dialogResult.result) {
       const message = new EventMessageContent();
       message.training = dialogResult.data;

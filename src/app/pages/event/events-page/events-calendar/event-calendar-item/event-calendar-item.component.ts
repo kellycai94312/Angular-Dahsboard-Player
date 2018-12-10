@@ -6,8 +6,7 @@ import {PropertyConstant} from '../../../../../data/local/property-constant';
 import {Router} from '@angular/router';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 import {TrainingDiscriminator} from '../../../../../data/remote/model/training/base/training-discriminator';
-import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditEventComponent} from '../../../../../components/event/edit-event/edit-event.component';
+import {TemplateModalService} from '../../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-event-calendar-item',
@@ -32,7 +31,7 @@ export class EventCalendarItemComponent implements OnInit {
 
   constructor(private _eventsCalendarService: EventsCalendarService,
               private _router: Router,
-              private _ngxModalService: NgxModalService) {
+              private _templateModalService: TemplateModalService) {
     this.displayInline = false;
     this.displayBorderBottom = false;
   }
@@ -44,23 +43,10 @@ export class EventCalendarItemComponent implements OnInit {
   }
 
   public edit = async () => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-    await modal.componentInstance.initializeBody(EditEventComponent, async component => {
-      component.manualInitialization = true;
-      await component.initialize(this.event.meta.event);
-
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          if (await this._ngxModalService.save(modal, component)) {
-            this.event.meta.event = component.data;
-          }
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
-    });
+    const dialogResult = await this._templateModalService.showEditEventModal(this.event.meta.event);
+    if (dialogResult.result) {
+      this.event.meta.event = dialogResult.data;
+    }
   };
 
   public async onShow() {

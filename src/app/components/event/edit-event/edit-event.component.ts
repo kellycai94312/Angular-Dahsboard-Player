@@ -17,6 +17,7 @@ import {Group} from '../../../data/remote/model/group/base/group';
 import {TrainingPerson} from '../../../data/remote/model/training/training-person';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../data/remote/model/user-role';
+import {TrainingPersonQuery} from '../../../data/remote/rest-api/query/training-person-query';
 
 @Component({
   selector: 'app-edit-event',
@@ -189,12 +190,14 @@ export class EditEventComponent<T extends BaseTraining> extends BaseEditComponen
   }
 
   private async getTrainingPersons(event: BaseTraining, query: { userRoleEnum: UserRoleEnum, unassigned: boolean, conversationId?: number }) {
-    return (await this.participantRestApiService.getTrainingPersons({}, {
+    const trainingPersonQuery: TrainingPersonQuery = {
       count: PropertyConstant.pageSizeMax,
       conversationId: query.conversationId,
       unassigned: query.unassigned,
       userRoleEnum: query.userRoleEnum
-    }, {eventId: event.id})).list;
+    };
+    this.appHelper.removeUndefinedField(trainingPersonQuery);
+    return (await this.participantRestApiService.getTrainingPersons({}, trainingPersonQuery, {eventId: event.id})).list;
   }
 
   public onEventTypeChanged(val: NameWrapper<TrainingDiscriminator>): void {
