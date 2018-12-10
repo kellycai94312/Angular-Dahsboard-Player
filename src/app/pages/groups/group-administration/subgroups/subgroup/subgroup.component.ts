@@ -6,11 +6,11 @@ import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
 import {AppHelper} from '../../../../../utils/app-helper';
 
-@Component({
-  selector: 'app-subgroup',
-  templateUrl: './subgroup.component.html',
-  styleUrls: ['./subgroup.component.scss']
-})
+// @Component({
+//   selector: 'app-subgroup',
+//   templateUrl: './subgroup.component.html',
+//   styleUrls: ['./subgroup.component.scss']
+// })
 export class SubgroupComponent implements OnInit, AfterViewInit {
 
   public readonly ngxButtonTypeClass = NgxButtonType;

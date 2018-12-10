@@ -11,11 +11,11 @@ import {GroupConnection} from '../../../../data/remote/model/group/group-connect
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {Document} from '../../../../data/remote/model/file/document/document';
 
-@Component({
-  selector: 'app-table-group-connection',
-  templateUrl: './table-group-connection.component.html',
-  styleUrls: ['./table-group-connection.component.scss']
-})
+// @Component({
+//   selector: 'app-table-group-connection',
+//   templateUrl: './table-group-connection.component.html',
+//   styleUrls: ['./table-group-connection.component.scss']
+// })
 export class TableGroupConnectionComponent implements OnInit {
 
   @ViewChild(NgxVirtualScrollComponent)

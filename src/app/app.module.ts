@@ -50,6 +50,11 @@ import {GroupModule} from './components/group/group.module';
 import {PersonModule} from './components/person/person.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
 import {EventComponentsModule} from './components/event/event-components.module';
+import {NgxButtonModule} from './components/ngx-button/ngx-button.module';
+import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
+import {InputSelectModule} from './components/input-select/input-select.module';
+import {DxSelectBoxModule} from 'devextreme-angular';
+import {GroupSettingsComponent} from './pages/group/group-page/group-settings/group-settings.component';
 
 registerLocaleData(localeRu);
 
@@ -63,7 +68,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     LayoutComponent,
     SideBarComponent,
     NavBarComponent,
-    UserPanelDirective
+    UserPanelDirective,
+    GroupSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -97,7 +103,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupModule,
     PersonModule,
     EventComponentsModule,
-    HtmlContentModule
+    HtmlContentModule,
+    NgxButtonModule,
+    NgxTabModule,
+    NgxButtonModule,
+    InputSelectModule,
+    DxSelectBoxModule,
+    GroupModule,
   ],
   providers: [
     LayoutService,
@@ -138,6 +150,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     StompRService
   ],
+  entryComponents: [GroupSettingsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -17,11 +17,11 @@ import {NgxModalRef} from '../../../../components/ngx-modal/bean/ngx-modal-ref';
 import {NgxButtonType} from '../../../../components/ngx-button/model/ngx-button-type';
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
 
-@Component({
-  selector: 'app-requests',
-  templateUrl: './requests.component.html',
-  styleUrls: ['./requests.component.scss']
-})
+// @Component({
+//   selector: 'app-requests',
+//   templateUrl: './requests.component.html',
+//   styleUrls: ['./requests.component.scss']
+// })
 export class RequestsComponent extends BaseGroupComponent<Group> implements OnInit {
 
   public readonly ngxButtonTypeClass = NgxButtonType;

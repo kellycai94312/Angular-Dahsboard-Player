@@ -9,7 +9,6 @@
     <h5>{{'additionalInformation' | translate }}</h5>
 
     <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM">
-
       <label>{{'league' | translate }}</label>
       <dx-select-box [items]="leagues"
                      [(value)]="group.league"
@@ -29,52 +28,42 @@
       </dx-select-box>
     </div>
 
-    <label for="country"
-           class="mt-2">{{'persons.person.personal.country' | translate}}</label>
-    <app-input-select
-      id="country"
-      [loadData]="loadCountries"
-      [(model)]="group.address.country"
-      [pageSize]="pageSize"
-      (onChange)="onCountryChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a country"
-      ngDefaultControl>
+    <label class="mt-2">{{'persons.person.personal.country' | translate}}</label>
+    <app-input-select [loadData]="loadCountries"
+                      [(model)]="group.address.country"
+                      [pageSize]="pageSize"
+                      (onChange)="onCountryChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a country"
+                      ngDefaultControl>
     </app-input-select>
 
-    <label for="region"
-           class="mt-2">{{'persons.person.personal.region' | translate}}</label>
-    <app-input-select
-      id="region"
-      [loadData]="loadRegions"
-      [(model)]="group.address.region"
-      [pageSize]="pageSize"
-      [disabled]="group.address.country == null"
-      (onChange)="onRegionChange($event)"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a region"
-      ngDefaultControl>
+    <label class="mt-2">{{'persons.person.personal.region' | translate}}</label>
+    <app-input-select [loadData]="loadRegions"
+                      [(model)]="group.address.region"
+                      [pageSize]="pageSize"
+                      [disabled]="group.address.country == null"
+                      (onChange)="onRegionChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a region"
+                      ngDefaultControl>
     </app-input-select>
 
-    <label for="city"
-           class="mt-2">{{'persons.person.personal.city' | translate}}</label>
-    <app-input-select
-      id="city"
-      [loadData]="loadCities"
-      [(model)]="group.address.city"
-      [pageSize]="pageSize"
-      [disabled]="group.address.region == null"
-      [getKey]="getKey"
-      [getName]="getName"
-      placeholder="Select a city"
-      ngDefaultControl>
+    <label class="mt-2">{{'persons.person.personal.city' | translate}}</label>
+    <app-input-select [loadData]="loadCities"
+                      [(model)]="group.address.city"
+                      [pageSize]="pageSize"
+                      [disabled]="group.address.region == null"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a city"
+                      ngDefaultControl>
     </app-input-select>
 
     <div
       *ngIf="group?.discriminator === groupTypeEnumClass.TEAM || group?.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
-
       <div class="d-flex flex-row mt-2">
         <div>
           <ngx-button nameKey="trainers"
@@ -98,7 +87,6 @@
     </div>
   </div>
 </div>
-
-<app-busy-button classes="mt-2"
-                 nameKey="save"
-                 [click]="onSave"></app-busy-button>
+<ngx-button class="mt-2"
+            nameKey="save"
+            [click]="onSave"></ngx-button>

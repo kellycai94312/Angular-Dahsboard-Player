@@ -16,11 +16,11 @@ import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-p
 import {PermissionService} from '../../../../shared/permission.service';
 import {Team} from '../../../../data/remote/model/group/team/team';
 
-@Component({
-  selector: 'app-edit-group-person',
-  templateUrl: './edit-group-person.component.html',
-  styleUrls: ['./edit-group-person.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-group-person',
+//   templateUrl: './edit-group-person.component.html',
+//   styleUrls: ['./edit-group-person.component.scss']
+// })
 export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   public readonly pageSize: number;

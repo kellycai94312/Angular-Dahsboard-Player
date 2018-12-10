@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
 
-@Component({
-  selector: 'app-group-administration',
-  templateUrl: './group-administration.component.html',
-  styleUrls: ['./group-administration.component.scss']
-})
+// @Component({
+//   selector: 'app-group-administration',
+//   templateUrl: './group-administration.component.html',
+//   styleUrls: ['./group-administration.component.scss']
+// })
 export class GroupAdministrationComponent {
 
   public readonly tabs: Tab[];

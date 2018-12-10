@@ -16,7 +16,6 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
 import {TrainingPersonsSelectionModule} from '../../components/training-persons-selection/training-persons-selection.module';
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {GroupPageModule} from '../groups/group-page.module';
 import {CalendarUtilsModule} from '../../components/calendar-utils/calendar-utils.module';
 import {CalendarModule} from 'angular-calendar';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
@@ -59,7 +58,6 @@ import {GroupModule} from '../../components/group/group.module';
     TrainingPersonModule,
     TrainingPersonsSelectionModule,
     InputSelectModule,
-    GroupPageModule,
     CalendarModule.forRoot(),
     CalendarUtilsModule,
     NgxSplitButtonModule,

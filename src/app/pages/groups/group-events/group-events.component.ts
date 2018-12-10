@@ -13,11 +13,11 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 
-@Component({
-  selector: 'app-group-events',
-  templateUrl: './group-events.component.html',
-  styleUrls: ['./group-events.component.scss']
-})
+// @Component({
+//   selector: 'app-group-events',
+//   templateUrl: './group-events.component.html',
+//   styleUrls: ['./group-events.component.scss']
+// })
 export class GroupEventsComponent implements OnInit, OnDestroy {
 
   public readonly isEditAllow: boolean;

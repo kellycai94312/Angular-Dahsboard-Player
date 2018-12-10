@@ -10,11 +10,11 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {ExerciseMeasureItemComponent} from '../../../../components/exercise-measure-item/exercise-measure-item.component';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 
-@Component({
-  selector: 'app-measure-template',
-  templateUrl: './measure-template.component.html',
-  styleUrls: ['./measure-template.component.scss']
-})
+// @Component({
+//   selector: 'app-measure-template',
+//   templateUrl: './measure-template.component.html',
+//   styleUrls: ['./measure-template.component.scss']
+// })
 export class MeasureTemplateComponent implements OnInit {
 
   readonly isEditAllow: boolean;

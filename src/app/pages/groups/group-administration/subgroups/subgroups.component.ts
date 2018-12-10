@@ -5,11 +5,11 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AppHelper} from '../../../../utils/app-helper';
 import {DxTextBoxComponent} from 'devextreme-angular';
 
-@Component({
-  selector: 'app-subgroups',
-  templateUrl: './subgroups.component.html',
-  styleUrls: ['./subgroups.component.scss']
-})
+// @Component({
+//   selector: 'app-subgroups',
+//   templateUrl: './subgroups.component.html',
+//   styleUrls: ['./subgroups.component.scss']
+// })
 export class SubgroupsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DxTextBoxComponent)

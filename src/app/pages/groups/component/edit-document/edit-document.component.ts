@@ -8,11 +8,11 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
-@Component({
-  selector: 'app-edit-document',
-  templateUrl: './edit-document.component.html',
-  styleUrls: ['./edit-document.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-document',
+//   templateUrl: './edit-document.component.html',
+//   styleUrls: ['./edit-document.component.scss']
+// })
 export class EditDocumentComponent extends BaseEditComponent<Document> {
 
   public readonly propertyConstant = PropertyConstant;

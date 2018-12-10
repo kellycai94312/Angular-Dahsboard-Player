@@ -12,11 +12,11 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditGroupPersonLogComponent} from '../edit-group-person-log/edit-group-person-log.component';
 
-@Component({
-  selector: 'app-edit-group-person-logs',
-  templateUrl: './edit-group-person-logs.component.html',
-  styleUrls: ['./edit-group-person-logs.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-group-person-logs',
+//   templateUrl: './edit-group-person-logs.component.html',
+//   styleUrls: ['./edit-group-person-logs.component.scss']
+// })
 export class EditGroupPersonLogsComponent extends BaseEditComponent<GroupPerson> {
 
   public readonly propertyConstant = PropertyConstant;

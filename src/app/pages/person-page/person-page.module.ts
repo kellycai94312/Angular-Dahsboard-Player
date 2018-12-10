@@ -29,7 +29,6 @@ import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
-import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
 import {PersonModule} from '../../components/person/person.module';
 import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
@@ -96,7 +95,6 @@ import {GroupModule} from '../../components/group/group.module';
     FormsModule,
     InputSelectModule,
     ModalSelectPageModule,
-    GroupPageModule,
     PersonModule,
     DxDataGridModule,
     ExerciseMeasureItemModule,

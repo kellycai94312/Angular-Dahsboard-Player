@@ -17,10 +17,10 @@ import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {GroupAdministrationComponent} from '../../../groups/group-administration/group-administration.component';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
+import {GroupSettingsComponent} from '../group-settings/group-settings.component';
 
 @Component({
   selector: 'app-group-page',
@@ -146,9 +146,13 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public onEditSettings = async () => {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'settings';
-    await modal.componentInstance.initializeBody(GroupAdministrationComponent, async component => {
+    let groupSettingsComponent: GroupSettingsComponent = null;
+    await modal.componentInstance.initializeBody(GroupSettingsComponent, async component => {
+      groupSettingsComponent = component;
+      component.group = this._appHelper.cloneObject(this.group);
     });
     await this._ngxModalService.awaitModalResult(modal);
+    this._groupService.groupSubject.next(groupSettingsComponent.group);
     await this.updateTrainerGroupPersons();
   };
 

@@ -12,11 +12,11 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 import {Subject} from 'rxjs';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 
-@Component({
-  selector: 'app-group-connections-graph',
-  templateUrl: './group-connections-graph.component.html',
-  styleUrls: ['./group-connections-graph.component.scss']
-})
+// @Component({
+//   selector: 'app-group-connections-graph',
+//   templateUrl: './group-connections-graph.component.html',
+//   styleUrls: ['./group-connections-graph.component.scss']
+// })
 export class GroupConnectionsGraphComponent implements OnInit {
 
   public nesting: NameWrapper<NestingEnum>;

@@ -17,11 +17,11 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {INgxContent} from '../../../../components/ngx-modal/bean/ingx-content';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
-  selector: 'app-edit-group-connection',
-  templateUrl: './edit-group-connection.component.html',
-  styleUrls: ['./edit-group-connection.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-group-connection',
+//   templateUrl: './edit-group-connection.component.html',
+//   styleUrls: ['./edit-group-connection.component.scss']
+// })
 export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnection> implements INgxContent {
 
   @ViewChild(NgxVirtualScrollComponent)

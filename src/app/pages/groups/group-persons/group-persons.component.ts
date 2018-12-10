@@ -16,11 +16,11 @@ import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.s
 import {Params} from '@angular/router/src/shared';
 import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
 
-@Component({
-  selector: 'app-group-persons',
-  templateUrl: './group-persons.component.html',
-  styleUrls: ['./group-persons.component.scss']
-})
+// @Component({
+//   selector: 'app-group-persons',
+//   templateUrl: './group-persons.component.html',
+//   styleUrls: ['./group-persons.component.scss']
+// })
 export class GroupPersonsComponent implements OnInit, OnDestroy {
 
   public readonly groupTypeEnumClass = GroupTypeEnum;

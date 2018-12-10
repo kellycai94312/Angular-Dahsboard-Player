@@ -1,8 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {League} from '../../../../data/remote/model/group/team/league';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
-import {GroupService} from '../../../group/group-page/service/group.service';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -27,7 +26,9 @@ export class GroupSettingsComponent implements OnInit {
   @ViewChild(EditGroupComponent)
   public editGroupComponent: EditGroupComponent;
 
+  @Input()
   public group: Group;
+
   public leagues: League[];
   public ageGroups: AgeGroup[];
   public pageSize: number;
@@ -37,15 +38,12 @@ export class GroupSettingsComponent implements OnInit {
   private _initialLeadOrganizationTrainer: OrganizationTrainer;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _groupService: GroupService,
               private _appHelper: AppHelper,
               private _ngxModalService: NgxModalService) {
     this.pageSize = PropertyConstant.pageSize;
   }
 
   async ngOnInit() {
-    this.group = this._groupService.groupSubject.getValue();
-
     if (this.group.discriminator === GroupTypeEnum.TEAM) {
       this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as Team).sportType.id});
       this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
@@ -121,8 +119,6 @@ export class GroupSettingsComponent implements OnInit {
 
   public onSave = async () => {
     if (await this.editGroupComponent.onSave()) {
-      this._groupService.groupSubject.next(this.group);
-
       this.organizationTrainers = await this._participantRestApiService.updateOrganizationTrainers(new ListRequest(this.organizationTrainers.map(x => x.groupPerson)), {}, {groupId: this.group.id});
 
       if (this._initialLeadOrganizationTrainer) {
