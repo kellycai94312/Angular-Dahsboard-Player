@@ -35,8 +35,8 @@
           <h6>{{item.data.person?.birthDate | date:'yyyy'}}</h6>
         </td>
         <td class="col-2">
-          <app-group *ngIf="item.personViewModel?.baseGroupViewModel?.data"
-                     [data]="item.personViewModel.baseGroupViewModel.data"></app-group>
+          <app-group-item *ngIf="item.personViewModel?.baseGroupViewModel?.data"
+                          [data]="item.personViewModel.baseGroupViewModel.data"></app-group-item>
         </td>
         <td class="col-1">
           <h6>{{item.data?.userRole?.name}}</h6>

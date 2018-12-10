@@ -20,11 +20,11 @@ import {TrainingReportBlockComponent} from './component/training-report-block/tr
 import {EventBlockComponent} from './report-page/event-blocks/event-block/event-block.component';
 import {DxDateBoxModule, DxSelectBoxModule} from 'devextreme-angular';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
-import {GroupPageModule} from '../groups/group-page.module';
 import {PersonModule} from '../../components/person/person.module';
 import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -41,10 +41,10 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     DxDateBoxModule,
     DxSelectBoxModule,
     NamedObjectItemModule,
-    GroupPageModule,
     PersonModule,
     ExerciseMeasureItemModule,
-    NgxButtonGroupModule
+    NgxButtonGroupModule,
+    GroupModule
   ],
   declarations: [
     ReportsPageComponent,

@@ -17,7 +17,6 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
-import {GroupPageModule} from '../groups/group-page.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -53,7 +52,6 @@ import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.modu
     DxValidatorModule,
     PersonModule,
     OperatorValueModule,
-    GroupPageModule,
     NamedObjectModule,
     NamedObjectItemModule,
     ModalSelectPageModule,

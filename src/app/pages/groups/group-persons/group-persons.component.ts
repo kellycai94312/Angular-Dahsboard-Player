@@ -5,7 +5,7 @@ import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-view-model';
-import {GroupService} from '../group.service';
+import {GroupService} from '../../group/group-page/service/group.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ISubscription} from 'rxjs/Subscription';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
@@ -16,11 +16,11 @@ import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.s
 import {Params} from '@angular/router/src/shared';
 import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
 
-@Component({
-  selector: 'app-group-persons',
-  templateUrl: './group-persons.component.html',
-  styleUrls: ['./group-persons.component.scss']
-})
+// @Component({
+//   selector: 'app-group-persons',
+//   templateUrl: './group-persons.component.html',
+//   styleUrls: ['./group-persons.component.scss']
+// })
 export class GroupPersonsComponent implements OnInit, OnDestroy {
 
   public readonly groupTypeEnumClass = GroupTypeEnum;

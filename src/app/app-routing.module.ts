@@ -48,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: 'group',
-    loadChildren: './pages/groups/group-page.module#GroupPageModule',
+    loadChildren: './pages/group/base-group-page.module#BaseGroupPageModule',
     canActivate: [AuthGuard, LayoutService]
   },
   {

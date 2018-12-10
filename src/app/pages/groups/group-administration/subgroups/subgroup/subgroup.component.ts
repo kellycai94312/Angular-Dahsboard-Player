@@ -1,16 +1,16 @@
 import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {SubGroup} from '../../../../../data/remote/model/group/sub-group';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupService} from '../../../group.service';
+import {GroupService} from '../../../../group/group-page/service/group.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
 import {AppHelper} from '../../../../../utils/app-helper';
 
-@Component({
-  selector: 'app-subgroup',
-  templateUrl: './subgroup.component.html',
-  styleUrls: ['./subgroup.component.scss']
-})
+// @Component({
+//   selector: 'app-subgroup',
+//   templateUrl: './subgroup.component.html',
+//   styleUrls: ['./subgroup.component.scss']
+// })
 export class SubgroupComponent implements OnInit, AfterViewInit {
 
   public readonly ngxButtonTypeClass = NgxButtonType;

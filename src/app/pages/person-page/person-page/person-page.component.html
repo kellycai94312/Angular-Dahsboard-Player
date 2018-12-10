@@ -33,9 +33,9 @@
       </div>
     </div>
     <div class="d-flex flex-column ml-4">
-      <app-group *ngIf="personService.baseGroup"
-                 [data]="personService.baseGroup.group"
-                 [dimension]="'W130xH130'"></app-group>
+      <app-group-item *ngIf="personService.baseGroup"
+                      [data]="personService.baseGroup.group"
+                      [dimension]="'W130xH130'"></app-group-item>
     </div>
   </div>
   <ngx-split-button [items]="splitButtonItems">

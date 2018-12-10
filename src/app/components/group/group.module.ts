@@ -12,6 +12,8 @@ import {GroupNewsItemComponent} from './group-news-item/group-news-item.componen
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 import {RouterModule} from '@angular/router';
+import {GroupItemComponent} from './group-item/group-item.component';
+import {ImageModule} from '../image/image.module';
 
 @NgModule({
   imports: [
@@ -29,24 +31,28 @@ import {RouterModule} from '@angular/router';
     InputSelectModule,
     NgxButtonModule,
     UrlParserModule,
-    RouterModule.forChild([])
+    RouterModule.forChild([]),
+    ImageModule
   ],
   declarations: [
     GroupTransitionComponent,
     EditGroupComponent,
     EditGroupNewsComponent,
-    GroupNewsItemComponent
+    GroupNewsItemComponent,
+    GroupItemComponent
   ],
   entryComponents: [
     GroupTransitionComponent,
     EditGroupComponent,
-    EditGroupNewsComponent
+    EditGroupNewsComponent,
+    GroupItemComponent
   ],
   exports: [
     GroupTransitionComponent,
     EditGroupComponent,
     EditGroupNewsComponent,
-    GroupNewsItemComponent
+    GroupNewsItemComponent,
+    GroupItemComponent
   ]
 })
 export class GroupModule {

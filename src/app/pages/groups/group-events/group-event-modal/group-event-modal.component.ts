@@ -3,11 +3,11 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { TrainingGroup } from '../../../../data/remote/model/training-group';
 import { TrainingAccess } from '../../../../data/remote/misc/training-access';
 
-@Component({
-  selector: 'app-group-event-modal',
-  templateUrl: './group-event-modal.component.html',
-  styleUrls: ['./group-event-modal.component.scss']
-})
+// @Component({
+//   selector: 'app-group-event-modal',
+//   templateUrl: './group-event-modal.component.html',
+//   styleUrls: ['./group-event-modal.component.scss']
+// })
 export class GroupEventModalComponent implements OnInit {
 
   @Input()

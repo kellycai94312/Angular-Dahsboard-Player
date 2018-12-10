@@ -12,11 +12,11 @@ import {Document} from '../../../../data/remote/model/file/document/document';
 import {EditDocumentComponent} from '../edit-document/edit-document.component';
 import {FilesComponent} from '../../../../components/file/files/files.component';
 
-@Component({
-  selector: 'app-edit-group-person-log',
-  templateUrl: './edit-group-person-log.component.html',
-  styleUrls: ['./edit-group-person-log.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-group-person-log',
+//   templateUrl: './edit-group-person-log.component.html',
+//   styleUrls: ['./edit-group-person-log.component.scss']
+// })
 export class EditGroupPersonLogComponent extends BaseEditComponent<GroupPersonLog> {
 
   public readonly propertyConstant = PropertyConstant;

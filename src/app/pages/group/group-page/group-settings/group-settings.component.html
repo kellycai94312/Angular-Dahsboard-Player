@@ -1,0 +1,92 @@
+<div *ngIf="group"
+     class="row">
+  <div class="col-12 col-md-6 col-lg-4">
+    <h5>{{'basicInformation' | translate }}</h5>
+    <app-edit-group [(data)]="group"></app-edit-group>
+  </div>
+
+  <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
+    <h5>{{'additionalInformation' | translate }}</h5>
+
+    <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM">
+      <label>{{'league' | translate }}</label>
+      <dx-select-box [items]="leagues"
+                     [(value)]="group.league"
+                     displayExpr="name"
+                     [acceptCustomValue]="true"
+                     [showClearButton]="true"
+                     placeholder="{{'league' | translate}}">
+      </dx-select-box>
+
+      <label class="mt-2">{{'ageGroup' | translate }}</label>
+      <dx-select-box [items]="ageGroups"
+                     [(value)]="group.ageGroup"
+                     displayExpr="name"
+                     [showClearButton]="true"
+                     [acceptCustomValue]="true"
+                     placeholder="{{'ageGroup' | translate}}">
+      </dx-select-box>
+    </div>
+
+    <label class="mt-2">{{'persons.person.personal.country' | translate}}</label>
+    <app-input-select [loadData]="loadCountries"
+                      [(model)]="group.address.country"
+                      [pageSize]="pageSize"
+                      (onChange)="onCountryChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a country"
+                      ngDefaultControl>
+    </app-input-select>
+
+    <label class="mt-2">{{'persons.person.personal.region' | translate}}</label>
+    <app-input-select [loadData]="loadRegions"
+                      [(model)]="group.address.region"
+                      [pageSize]="pageSize"
+                      [disabled]="group.address.country == null"
+                      (onChange)="onRegionChange($event)"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a region"
+                      ngDefaultControl>
+    </app-input-select>
+
+    <label class="mt-2">{{'persons.person.personal.city' | translate}}</label>
+    <app-input-select [loadData]="loadCities"
+                      [(model)]="group.address.city"
+                      [pageSize]="pageSize"
+                      [disabled]="group.address.region == null"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="Select a city"
+                      ngDefaultControl>
+    </app-input-select>
+
+    <div
+      *ngIf="group?.discriminator === groupTypeEnumClass.TEAM || group?.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+      <div class="d-flex flex-row mt-2">
+        <div>
+          <ngx-button nameKey="trainers"
+                      [click]="onSelectTrainers"></ngx-button>
+        </div>
+        <div class="ml-2">
+          <p *ngFor="let item of organizationTrainers">
+            {{item.groupPerson.person.lastName + " " + item.groupPerson.person.firstName}}
+          </p>
+        </div>
+      </div>
+
+      <label class="mt-2 w-100">{{'leadTrainer' | translate}}</label>
+      <app-input-select [loadData]="fetchOrganizationTrainers"
+                        [(model)]="selectedOrganizationTrainer"
+                        [getKey]="getKey"
+                        [getName]="getPersonName"
+                        ngDefaultControl>
+      </app-input-select>
+
+    </div>
+  </div>
+</div>
+<ngx-button class="mt-2"
+            nameKey="save"
+            [click]="onSave"></ngx-button>

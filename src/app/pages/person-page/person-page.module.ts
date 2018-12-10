@@ -29,7 +29,6 @@ import {EventsComponent} from './person-page/events/events.component';
 import {PersonService} from './person-page/person.service';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {GroupsComponent} from './person-page/groups/groups.component';
-import {GroupPageModule} from '../groups/group-page.module';
 import {GroupPersonComponent} from './person-page/group-person/group-person.component';
 import {PersonModule} from '../../components/person/person.module';
 import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
@@ -76,6 +75,7 @@ import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.modul
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -95,7 +95,6 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
     FormsModule,
     InputSelectModule,
     ModalSelectPageModule,
-    GroupPageModule,
     PersonModule,
     DxDataGridModule,
     ExerciseMeasureItemModule,
@@ -118,7 +117,8 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
     NgxTextBoxModule,
     NgxModalModule,
     AttachFileModule,
-    NgxImageModule
+    NgxImageModule,
+    GroupModule
   ],
   declarations: [
     PersonPageComponent,

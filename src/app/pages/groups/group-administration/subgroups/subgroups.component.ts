@@ -1,15 +1,15 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {DxTextBoxComponent} from 'devextreme-angular';
 
-@Component({
-  selector: 'app-subgroups',
-  templateUrl: './subgroups.component.html',
-  styleUrls: ['./subgroups.component.scss']
-})
+// @Component({
+//   selector: 'app-subgroups',
+//   templateUrl: './subgroups.component.html',
+//   styleUrls: ['./subgroups.component.scss']
+// })
 export class SubgroupsComponent implements OnInit, AfterViewInit {
 
   @ViewChild(DxTextBoxComponent)

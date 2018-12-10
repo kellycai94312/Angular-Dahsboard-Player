@@ -16,7 +16,6 @@ import {NamedObjectItemModule} from '../../components/named-object-item/named-ob
 import {TrainingPersonsSelectionModule} from '../../components/training-persons-selection/training-persons-selection.module';
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {GroupPageModule} from '../groups/group-page.module';
 import {CalendarUtilsModule} from '../../components/calendar-utils/calendar-utils.module';
 import {CalendarModule} from 'angular-calendar';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
@@ -38,6 +37,7 @@ import {TestingStepsManagerComponent} from './event-page/testing/step/testing-st
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 import {EventComponentsModule} from '../../components/event/event-components.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -58,7 +58,6 @@ import {EventComponentsModule} from '../../components/event/event-components.mod
     TrainingPersonModule,
     TrainingPersonsSelectionModule,
     InputSelectModule,
-    GroupPageModule,
     CalendarModule.forRoot(),
     CalendarUtilsModule,
     NgxSplitButtonModule,
@@ -70,7 +69,8 @@ import {EventComponentsModule} from '../../components/event/event-components.mod
     DxCheckBoxModule,
     NamedObjectModule,
     NgxSelectionModule,
-    EventComponentsModule
+    EventComponentsModule,
+    GroupModule
   ],
   declarations: [
     EventPageComponent,

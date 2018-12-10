@@ -4,7 +4,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {GroupConnection} from '../../../../data/remote/model/group/group-connection';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {EditDocumentComponent} from '../edit-document/edit-document.component';
@@ -17,11 +17,11 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {INgxContent} from '../../../../components/ngx-modal/bean/ingx-content';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 
-@Component({
-  selector: 'app-edit-group-connection',
-  templateUrl: './edit-group-connection.component.html',
-  styleUrls: ['./edit-group-connection.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-group-connection',
+//   templateUrl: './edit-group-connection.component.html',
+//   styleUrls: ['./edit-group-connection.component.scss']
+// })
 export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnection> implements INgxContent {
 
   @ViewChild(NgxVirtualScrollComponent)

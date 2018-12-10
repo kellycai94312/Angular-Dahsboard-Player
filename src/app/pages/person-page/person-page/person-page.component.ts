@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ImageComponent} from '../../../components/image/image.component';
-import {GroupComponent} from '../../groups/group/group.component';
 import {PersonTab} from './person-tab';
 import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
 import {ISubscription} from 'rxjs-compat/Subscription';
@@ -24,6 +23,7 @@ import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-b
 import {Dialogue} from '../../../data/remote/model/chat/conversation/dialogue';
 import {ButtonGroupItem} from '../../../components/ngx-button-group/bean/button-group-item';
 import {NamedObjectItemComponent} from '../../../components/named-object-item/named-object-item.component';
+import {GroupItemComponent} from '../../../components/group/group-item/group-item.component';
 
 @Component({
   selector: 'app-person-page',
@@ -35,8 +35,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   @ViewChild('logo')
   public logoImageComponent: ImageComponent;
 
-  @ViewChild(GroupComponent)
-  public groupComponent: GroupComponent;
+  @ViewChild(GroupItemComponent)
+  public groupItemComponent: GroupItemComponent;
 
   public readonly tabs: PersonTab[];
   public allowEdit: boolean;
@@ -133,8 +133,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     }
 
     this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {
-      if (value && this.groupComponent) {
-        this.groupComponent.update(value.group);
+      if (value && this.groupItemComponent) {
+        this.groupItemComponent.update(value.group);
       }
     });
   }

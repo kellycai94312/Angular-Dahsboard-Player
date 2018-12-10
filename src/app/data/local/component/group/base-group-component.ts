@@ -1,7 +1,7 @@
 import {Group} from '../../../remote/model/group/base/group';
 import {OnDestroy} from '@angular/core';
 import {ISubscription} from 'rxjs-compat/Subscription';
-import {GroupService} from '../../../../pages/groups/group.service';
+import {GroupService} from '../../../../pages/group/group-page/service/group.service';
 import {AppHelper} from '../../../../utils/app-helper';
 
 export abstract class BaseGroupComponent<T extends Group> implements OnDestroy {
