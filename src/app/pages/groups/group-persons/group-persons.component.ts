@@ -5,7 +5,7 @@ import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-view-model';
-import {GroupService} from '../group.service';
+import {GroupService} from '../../group/group-page/service/group.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {ISubscription} from 'rxjs/Subscription';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';

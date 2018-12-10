@@ -76,6 +76,7 @@ import {NgxTextBoxModule} from '../../components/ngx-text-box/ngx-text-box.modul
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -118,7 +119,8 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
     NgxTextBoxModule,
     NgxModalModule,
     AttachFileModule,
-    NgxImageModule
+    NgxImageModule,
+    GroupModule
   ],
   declarations: [
     PersonPageComponent,

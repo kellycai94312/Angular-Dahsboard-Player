@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';

@@ -14,9 +14,9 @@
 </div>
 <div class="d-flex justify-content-center w-100 mb-3">
   <div class="d-flex justify-content-center w-50">
-    <app-group *ngFor="let groupScore of game.groupScores;let i = index"
-               [data]="groupScore.group"
-               [ngClass]="{'mr-5' : i == 0, 'ml-5' : i == 1}"></app-group>
+    <app-group-item *ngFor="let groupScore of game.groupScores; let i = index"
+                    [data]="groupScore.group"
+                    [ngClass]="{'mr-5' : i == 0, 'ml-5' : i == 1}"></app-group-item>
   </div>
 </div>
 <div class="d-flex justify-content-center w-100 mb-4">

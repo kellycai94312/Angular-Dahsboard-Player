@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as shape from 'd3-shape';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupService} from '../group.service';
+import {GroupService} from '../../group/group-page/service/group.service';
 import {GroupConnection} from '../../../data/remote/model/group/group-connection';
 import {Group} from '../../../data/remote/model/group/base/group';
 import {GroupConnectionType} from '../../../data/remote/model/group/group-connection-type';

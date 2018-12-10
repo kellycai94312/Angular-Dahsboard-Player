@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {DictionaryType} from '../../../../data/remote/misc/dictionary-type';
 import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';

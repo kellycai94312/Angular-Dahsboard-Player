@@ -1,13 +1,10 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-
-import {GroupsPageComponent} from './groups-page/groups-page.component';
-import {GroupPageComponent} from './group-page/group-page.component';
-import {GroupPageRoutingModule} from './group-page-routing.module';
+// import {GroupsPageComponent} from '../group/groups-page/groups-page/groups-page.component';
 import {LayoutService} from '../../layout/shared/layout.service';
-import {AllGroupsComponent} from './groups-page/all-groups/all-groups.component';
-import {MyGroupsComponent} from './groups-page/my-groups/my-groups.component';
+// import {AllGroupsComponent} from '../group/groups-page/page/all-groups/all-groups-page/all-groups.component';
+// import {MyGroupsComponent} from '../group/groups-page/page/my-groups/my-groups-page/my-groups.component';
 import {DxCheckBoxModule, DxDataGridModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTemplateModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {GroupPersonsComponent} from './group-persons/group-persons.component';
 import {GroupAdministrationComponent} from './group-administration/group-administration.component';
@@ -25,7 +22,6 @@ import {ModalSelectPageModule} from '../../components/modal-select-page/modal-se
 import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 import {GroupEventsComponent} from './group-events/group-events.component';
 import {GroupEventModalComponent} from './group-events/group-event-modal/group-event-modal.component';
-import {GroupComponent} from './group/group.component';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
@@ -48,14 +44,12 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {AttachFileModule} from '../../components/attach-file/attach-file.module';
 import {GroupModule} from '../../components/group/group.module';
-import {GroupNewsComponent} from './component/group-news/group-news.component';
-import {GroupMembersComponent} from './component/group-members/group-members.component';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 
+// @deprecated
 @NgModule({
   imports: [
     CommonModule,
-    GroupPageRoutingModule,
     TranslateModule.forChild(),
     DxValidatorModule,
     DxTextBoxModule,
@@ -89,17 +83,12 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     GroupModule
   ],
   exports: [
-    GroupComponent,
     EditGroupPersonComponent
   ],
   providers: [
     LayoutService
   ],
   declarations: [
-    GroupsPageComponent,
-    GroupPageComponent,
-    AllGroupsComponent,
-    MyGroupsComponent,
     GroupPersonsComponent,
     GroupAdministrationComponent,
     GroupSettingsComponent,
@@ -110,7 +99,6 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     MeasureTemplateComponent,
     GroupEventsComponent,
     GroupEventModalComponent,
-    GroupComponent,
     EditGroupPersonComponent,
     EditGroupPersonLogComponent,
     GroupConnectionsComponent,
@@ -118,12 +106,9 @@ import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
     EditGroupConnectionComponent,
     EditDocumentComponent,
     EditGroupPersonLogsComponent,
-    GroupConnectionsGraphComponent,
-    GroupNewsComponent,
-    GroupMembersComponent
+    GroupConnectionsGraphComponent
   ],
   entryComponents: [
-    GroupComponent,
     ModalSelectPageComponent,
     GroupEventModalComponent,
     EditGroupPersonComponent,

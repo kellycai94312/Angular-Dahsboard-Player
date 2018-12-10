@@ -1,0 +1,20 @@
+@import "../../../../styles/variables";
+@import "../../../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../../../node_modules/bootstrap/scss/variables";
+
+a, p, h3, h4 {
+  color: $light-blue;
+}
+
+a {
+  text-decoration: none;
+  &.nav-link {
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: max-width-sm()) {
+  .full-name > h3 {
+    font-size: 14px;
+  }
+}

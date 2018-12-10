@@ -4,7 +4,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {GroupService} from '../group.service';
+import {GroupService} from '../../group/group-page/service/group.service';
 import {TrainingGroup} from '../../../data/remote/model/training-group';
 import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
 import {TrainingAccess} from '../../../data/remote/misc/training-access';

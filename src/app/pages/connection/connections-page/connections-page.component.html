@@ -99,8 +99,8 @@
         </td>
         <td class="col-3"
             [routerLink]="item.url">
-          <app-group *ngIf="item.baseGroupViewModel"
-                     [data]="item.baseGroupViewModel.data"></app-group>
+          <app-group-item *ngIf="item.baseGroupViewModel"
+                          [data]="item.baseGroupViewModel.data"></app-group-item>
         </td>
         <td class="col-2">
           <app-busy-wrapper #busyWrapper>

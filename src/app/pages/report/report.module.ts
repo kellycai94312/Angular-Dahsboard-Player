@@ -25,6 +25,7 @@ import {PersonModule} from '../../components/person/person.module';
 import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/exercise-measure-item.module';
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
   imports: [
@@ -44,7 +45,8 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
     GroupPageModule,
     PersonModule,
     ExerciseMeasureItemModule,
-    NgxButtonGroupModule
+    NgxButtonGroupModule,
+    GroupModule
   ],
   declarations: [
     ReportsPageComponent,

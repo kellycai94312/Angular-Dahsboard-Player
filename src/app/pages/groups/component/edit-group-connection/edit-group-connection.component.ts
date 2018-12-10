@@ -4,7 +4,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {GroupConnection} from '../../../../data/remote/model/group/group-connection';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {EditDocumentComponent} from '../edit-document/edit-document.component';

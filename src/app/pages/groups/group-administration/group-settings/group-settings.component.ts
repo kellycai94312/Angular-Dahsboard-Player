@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {League} from '../../../../data/remote/model/group/team/league';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
-import {GroupService} from '../../group.service';
+import {GroupService} from '../../../group/group-page/service/group.service';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {PropertyConstant} from '../../../../data/local/property-constant';
