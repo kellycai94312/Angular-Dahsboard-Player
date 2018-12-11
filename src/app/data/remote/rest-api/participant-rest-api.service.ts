@@ -646,6 +646,12 @@ export class ParticipantRestApiService extends Rest {
   putGroup: IRestMethod<Group, Group>;
 
   @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}',
+  })
+  removeGroup: IRestMethod<{ groupId: number }, Group>;
+
+  @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!id}/person/{!personId}/approve',
   })

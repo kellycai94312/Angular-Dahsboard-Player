@@ -149,10 +149,22 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     let groupSettingsComponent: GroupSettingsComponent = null;
     await modal.componentInstance.initializeBody(GroupSettingsComponent, async component => {
       groupSettingsComponent = component;
-      component.group = this._appHelper.cloneObject(this.group);
+      await component.initialize(this._appHelper.cloneObject(this.group));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await this._ngxModalService.save(modal, component)) {
+            this._appHelper.updateObject(this.group, component.data);
+          }
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+          await this._router.navigate(['/group']);
+        })
+      ];
     });
     await this._ngxModalService.awaitModalResult(modal);
-    this._groupService.groupSubject.next(groupSettingsComponent.group);
+    this._groupService.groupSubject.next(groupSettingsComponent.data);
     await this.updateTrainerGroupPersons();
   };
 

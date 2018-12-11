@@ -68,7 +68,7 @@
   <ngx-column nameKey="eventState"
               [style]="'col-1'">
     <ng-template let-item>
-      {{item.trainingState}}
+      {{'eventStateEnum.' + item.trainingState | translate}}
     </ng-template>
   </ngx-column>
 

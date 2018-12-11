@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {League} from '../../../../data/remote/model/group/team/league';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
@@ -13,21 +13,19 @@ import {OrganizationTrainer} from '../../../../data/remote/model/group/organizat
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {Team} from '../../../../data/remote/model/group/team/team';
+import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 
 @Component({
   selector: 'app-group-settings',
   templateUrl: './group-settings.component.html',
   styleUrls: ['./group-settings.component.scss']
 })
-export class GroupSettingsComponent implements OnInit {
+export class GroupSettingsComponent extends BaseEditComponent<Group> implements OnInit {
 
   public readonly groupTypeEnumClass = GroupTypeEnum;
 
   @ViewChild(EditGroupComponent)
   public editGroupComponent: EditGroupComponent;
-
-  @Input()
-  public group: Group;
 
   public leagues: League[];
   public ageGroups: AgeGroup[];
@@ -37,29 +35,29 @@ export class GroupSettingsComponent implements OnInit {
 
   private _initialLeadOrganizationTrainer: OrganizationTrainer;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
+  constructor(private _ngxModalService: NgxModalService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+    super(participantRestApiService, appHelper);
     this.pageSize = PropertyConstant.pageSize;
   }
 
   async ngOnInit() {
-    if (this.group.discriminator === GroupTypeEnum.TEAM) {
-      this.leagues = await this._participantRestApiService.getLeaguesBySportType({sportTypeId: (this.group as Team).sportType.id});
-      this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
+    if (this.data.discriminator === GroupTypeEnum.TEAM) {
+      this.leagues = await this.participantRestApiService.getLeaguesBySportType({sportTypeId: (this.data as Team).sportType.id});
+      this.ageGroups = (await this.participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     }
 
-    this.organizationTrainers = await this._participantRestApiService.getOrganizationTrainers({}, {unassigned: false}, {groupId: this.group.id});
+    this.organizationTrainers = await this.participantRestApiService.getOrganizationTrainers({}, {unassigned: false}, {groupId: this.data.id});
 
     // TODO: Optimize getting lead trainer
-    this.selectedOrganizationTrainer = (await this._participantRestApiService.getOrganizationTrainers({}, {}, {groupId: this.group.id})).find(x => x.lead);
-    this._initialLeadOrganizationTrainer = this._appHelper.cloneObject(this.selectedOrganizationTrainer);
+    this.selectedOrganizationTrainer = (await this.participantRestApiService.getOrganizationTrainers({}, {}, {groupId: this.data.id})).find(x => x.lead);
+    this._initialLeadOrganizationTrainer = this.appHelper.cloneObject(this.selectedOrganizationTrainer);
   }
 
   //#region Position
 
   loadCountries = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCountries({
+    return this.participantRestApiService.getCountries({
       from: from,
       count: this.pageSize,
       name: searchText
@@ -67,20 +65,20 @@ export class GroupSettingsComponent implements OnInit {
   };
 
   loadRegions = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getRegions({
+    return this.participantRestApiService.getRegions({
       from: from,
       count: this.pageSize,
       name: searchText,
-      countryId: this.group.address.country.id
+      countryId: this.data.address.country.id
     });
   };
 
   loadCities = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCities({
+    return this.participantRestApiService.getCities({
       from: from,
       count: this.pageSize,
       name: searchText,
-      regionId: this.group.address.region.id
+      regionId: this.data.address.region.id
     });
   };
 
@@ -93,47 +91,55 @@ export class GroupSettingsComponent implements OnInit {
   }
 
   public onCountryChange(e: any) {
-    this.group.address.region = null;
-    this.group.address.city = null;
+    this.data.address.region = null;
+    this.data.address.city = null;
   }
 
   public onRegionChange(e: any) {
-    this.group.address.city = null;
+    this.data.address.city = null;
   }
 
   //#endregion
 
   public onSelectTrainers = async () => {
-    await this._ngxModalService.showSelectionOrganizationTrainersModal(this.group, this.organizationTrainers, async selectedItems => {
+    await this._ngxModalService.showSelectionOrganizationTrainersModal(this.data, this.organizationTrainers, async selectedItems => {
       this.organizationTrainers = selectedItems;
     });
   };
 
   fetchOrganizationTrainers = async (from: number, searchText: string) => {
-    return this._appHelper.arrayToPageContainer(this.organizationTrainers);
+    return this.appHelper.arrayToPageContainer(this.organizationTrainers);
   };
 
   getPersonName(item: OrganizationTrainer) {
     return `${item.groupPerson.person.lastName} ${item.groupPerson.person.firstName}`;
   }
 
-  public onSave = async () => {
-    if (await this.editGroupComponent.onSave()) {
-      this.organizationTrainers = await this._participantRestApiService.updateOrganizationTrainers(new ListRequest(this.organizationTrainers.map(x => x.groupPerson)), {}, {groupId: this.group.id});
+  async onRemove(): Promise<boolean> {
+    return await this.appHelper.tryRemove(async () => {
+      this.appHelper.updateObject(this.data, await this.participantRestApiService.removeGroup({groupId: this.data.id}));
+    });
+  }
 
-      if (this._initialLeadOrganizationTrainer) {
-        this._initialLeadOrganizationTrainer.lead = false;
-        await this._participantRestApiService.updateOrganizationTrainer(this._initialLeadOrganizationTrainer, {}, {
-          groupId: this.group.id,
-          organizationTrainerId: this._initialLeadOrganizationTrainer.id
-        });
-      }
+  async onSave(): Promise<boolean> {
+    return await this.appHelper.trySave(async () => {
+      if (await this.editGroupComponent.onSave()) {
+        this.organizationTrainers = await this.participantRestApiService.updateOrganizationTrainers(new ListRequest(this.organizationTrainers.map(x => x.groupPerson)), {}, {groupId: this.data.id});
 
-      if (this.selectedOrganizationTrainer) {
-        this.selectedOrganizationTrainer.lead = true;
-        await this._participantRestApiService.updateOrganizationTrainer(this.selectedOrganizationTrainer, {}, {groupId: this.group.id, organizationTrainerId: this.selectedOrganizationTrainer.id});
+        if (this._initialLeadOrganizationTrainer) {
+          this._initialLeadOrganizationTrainer.lead = false;
+          await this.participantRestApiService.updateOrganizationTrainer(this._initialLeadOrganizationTrainer, {}, {
+            groupId: this.data.id,
+            organizationTrainerId: this._initialLeadOrganizationTrainer.id
+          });
+        }
+
+        if (this.selectedOrganizationTrainer) {
+          this.selectedOrganizationTrainer.lead = true;
+          await this.participantRestApiService.updateOrganizationTrainer(this.selectedOrganizationTrainer, {}, {groupId: this.data.id, organizationTrainerId: this.selectedOrganizationTrainer.id});
+        }
       }
-    }
-  };
+    });
+  }
 
 }
