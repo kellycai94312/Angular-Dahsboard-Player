@@ -61,7 +61,7 @@ export class PersonsPageComponent implements OnInit, OnDestroy {
     };
     this.tabs = [
       {
-        nameKey: 'my',
+        nameKey: 'myContacts',
         routerLink: 'my',
         splitButtonsItems: [addSplitButtonItem],
         action: async () => {

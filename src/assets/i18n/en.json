@@ -579,5 +579,6 @@
   "title": "Title",
   "content": "Content",
   "addEvent": "Add event",
-  "addExistingEvent": "Add existing event"
+  "addExistingEvent": "Add existing event",
+  "myContacts": "My contacts"
 }
