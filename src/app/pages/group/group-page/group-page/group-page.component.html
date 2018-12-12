@@ -42,7 +42,10 @@
 
     <div *ngIf="canEdit"
          class="ml-auto d-flex flex-row">
-      <ngx-button [icon]="iconEnumClass.EDIT"
+      <ngx-button [nameKey]="groupPersonStateNameKey"
+                  [click]="onChangeGroupPersonState"></ngx-button>
+      <ngx-button class="ml-2"
+                  [icon]="iconEnumClass.EDIT"
                   [click]="onEditSettings"></ngx-button>
     </div>
   </div>

@@ -727,15 +727,15 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/group/{!id}/join',
+    path: '/group/{!groupId}/join',
   })
-  joinGroup: IRestMethod<QueryParams, void>;
+  joinGroup: IRestMethod<{ groupId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/group/{!id}/join',
+    path: '/group/{!groupId}/join',
   })
-  leaveGroup: IRestMethod<QueryParams, void>;
+  leaveGroup: IRestMethod<{ groupId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Post,

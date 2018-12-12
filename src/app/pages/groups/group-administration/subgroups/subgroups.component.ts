@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, OnInit, ViewChild} from '@angular/core';
 import {GroupService} from '../../../group/group-page/service/group.service';
 import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -25,7 +25,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this._groupService.groupSubject.getValue().id});
+    // this.subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this._groupService.groupSubject.getValue().id});
   }
 
   ngAfterViewInit(): void {
@@ -36,13 +36,11 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   }
 
   public onAdd = async () => {
-    let subgroup = new SubGroup();
-    subgroup.name = this.name.trim();
-    subgroup = await this._participantRestApiService.postSubgroup(subgroup, {}, {groupId: this._groupService.groupSubject.getValue().id});
-    this.subgroups.push(subgroup);
-    await this._groupService.updateSubgroups();
-
-    this.name = '';
+    // let subgroup = new SubGroup();
+    // subgroup.name = this.name.trim();
+    // subgroup = await this._participantRestApiService.postSubgroup(subgroup, {}, {groupId: this._groupService.groupSubject.getValue().id});
+    // this.subgroups.push(subgroup);
+    // this.name = '';
   };
 
   onRemove = (subgroup: SubGroup) => {

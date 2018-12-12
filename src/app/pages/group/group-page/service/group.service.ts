@@ -1,87 +1,76 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {Subject} from 'rxjs/Subject';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {GroupPersonState} from '../../../../data/local/group-person-state';
-import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {PermissionService} from '../../../../shared/permission.service';
-import {BehaviorSubject} from 'rxjs';
+import {Observable} from 'rxjs';
+import {AppHelper} from '../../../../utils/app-helper';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Injectable()
-export class GroupService {
+export class GroupService implements OnDestroy {
 
-  private _group: Group;
-  private _groupPerson: GroupPerson;
-  private _groupPersonState: GroupPersonState;
-  private _isEditAllow: boolean;
-  private _isOwner: boolean;
-  private _hasEvents: boolean;
-
-  public groupSubject: BehaviorSubject<Group>;
-  public subgroupsSubject: Subject<SubGroup[]>;
+  public readonly group$: Observable<Group>;
+  public readonly groupPerson$: Observable<GroupPerson>;
   public refreshMembers: Subject<void>;
 
-  public imageLogoSubject: Subject<any>;
-  public imageBackgroundSubject: Subject<any>;
+  private readonly _groupSubject: Subject<Group>;
+  private readonly _groupSubscription: ISubscription;
+  private readonly _groupPersonSubject: Subject<GroupPerson>;
+  private _groupPersonState: GroupPersonState;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
-              private _permissionService: PermissionService) {
-    this.groupSubject = new BehaviorSubject<Group>(null);
-    this.subgroupsSubject = new Subject<SubGroup[]>();
+              private _permissionService: PermissionService,
+              private _appHelper: AppHelper) {
+    this._groupSubject = new Subject<Group>();
+    this.group$ = this._groupSubject.asObservable().shareReplay(1);
+    this._groupSubscription = this.group$.subscribe(async val => {
+      await this.initializeGroupPerson(val);
+    });
+
+    this._groupPersonSubject = new Subject<GroupPerson>();
+    this.groupPerson$ = this._groupPersonSubject.asObservable().shareReplay(1);
+    this._groupPersonState = GroupPersonState.NOT_MEMBER;
     this.refreshMembers = new Subject<void>();
-    this._groupPersonState = GroupPersonState.NOT_MEMBER;
-    this._isEditAllow = false;
-    this._isOwner = false;
-    this._hasEvents = false;
   }
 
-  public emitImageLogoChanged() {
-    this.imageLogoSubject.next(null);
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._groupSubscription);
   }
 
-  public emitImageBackgroundChanged() {
-    this.imageBackgroundSubject.next(null);
+  public async initialize(groupId: number): Promise<boolean> {
+    return await this._appHelper.tryLoad(async () => {
+      const group = await this._participantRestApiService.getGroup({id: groupId});
+      this._groupSubject.next(group);
+    });
   }
 
-  public async updateSubgroups() {
-    const subgroups = await this._participantRestApiService.getSubGroupsByGroup({id: this._group.id});
-    this.subgroupsSubject.next(subgroups);
-  }
-
-  public async getCurrentGroupPerson(): Promise<GroupPerson> {
+  private async initializeGroupPerson(group: Group) {
+    let groupPerson: GroupPerson = null;
     try {
-      this._groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: this._group.id});
+      groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: group.id});
     } catch (e) {
-      this._groupPerson = null;
     }
-    this._groupPersonState = GroupPersonState.NOT_MEMBER;
-
-    if (this._groupPerson == null) {
-      this._groupPersonState = GroupPersonState.NOT_MEMBER;
-      this._isEditAllow = false;
-      this._isOwner = false;
-    } else {
-      if (this._groupPerson.approved) {
-        this._groupPersonState = GroupPersonState.MEMBER;
-      } else {
-        this._groupPersonState = GroupPersonState.CONSIDERATION;
-      }
-
-      const userRoles = await this._participantRestApiService.getGroupPersonUserRoles({groupId: this._group.id, personId: this._groupPerson.person.id});
-      this._isEditAllow = !!userRoles.filter(x => x.userRoleEnum === UserRoleEnum.ADMIN || x.userRoleEnum === UserRoleEnum.OPERATOR).length;
-
-      this._isOwner = this._permissionService.areYouCreator(this._group, this._groupPerson.person);
-    }
-
-    this._hasEvents = this._group.discriminator === GroupTypeEnum.TEAM;
-
-    return this._groupPerson;
+    await this.updateGroupPerson(groupPerson);
   }
 
-  public getKeyNamePersonStateInGroup(groupPersonState: GroupPersonState) {
+  public async updateGroup(group: Group) {
+    this._groupSubject.next(group);
+  }
+
+  public async updateGroupPerson(groupPerson: GroupPerson) {
+    this._groupPersonState = this.getGroupPersonStateByGroupPerson(groupPerson);
+    this._groupPersonSubject.next(groupPerson);
+  }
+
+  public getGroupPersonState(): GroupPersonState {
+    return this._groupPersonState;
+  }
+
+  public getPersonStateKeyName(groupPersonState: GroupPersonState = this._groupPersonState): string {
     switch (GroupPersonState[groupPersonState]) {
       case GroupPersonState[GroupPersonState.NOT_MEMBER]:
         return 'join';
@@ -90,50 +79,52 @@ export class GroupService {
       case GroupPersonState[GroupPersonState.MEMBER]:
         return 'leave';
     }
+    return '';
   }
 
-  public getGroupPersonState(): GroupPersonState {
-    return this._groupPersonState;
+  private getGroupPersonStateByGroupPerson(groupPerson: GroupPerson): GroupPersonState {
+    if (groupPerson) {
+      if (groupPerson.approved) {
+        return GroupPersonState.MEMBER;
+      } else {
+        return GroupPersonState.CONSIDERATION;
+      }
+    }
+    return GroupPersonState.NOT_MEMBER;
   }
 
-  public isEditAllow(): boolean {
-    return this._isEditAllow;
-  }
+  //#region Permission
 
-  public isOwner(): boolean {
-    return this._isOwner;
-  }
-
-  public hasEvents(): boolean {
-    return this._hasEvents;
-  }
-
-  public async canEdit(): Promise<boolean> {
-    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
+  public async canEditGroup(): Promise<boolean> {
+    return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
 
   public async canEditNews(): Promise<boolean> {
     return this.canEditByAnyUserRole([UserRoleEnum.ADMIN]);
   }
 
-  private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
-    // TODO: Fix possible NPE in this.groupSubject.getValue()!
-    const group = this.groupSubject.getValue();
-    const groupId = group.id;
-    try {
-      const groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: groupId});
-      if (groupPerson) {
-        const userRoles = await this._participantRestApiService.getGroupPersonUserRoles(
-          {
-            groupId: groupId,
-            personId: groupPerson.person.id
-          }
-        );
-        return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || this._permissionService.areYouCreator(group, groupPerson.person);
-      }
-    } catch (e) {
+  public async areYouGroupCreator(): Promise<boolean> {
+    const groupPerson = await this._appHelper.toPromise(this._groupPersonSubject);
+    if (groupPerson) {
+      return this._permissionService.areYouCreator(groupPerson.group, groupPerson.person);
     }
     return false;
   }
+
+  private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
+    const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
+    if (groupPerson) {
+      const userRoles = await this._participantRestApiService.getGroupPersonUserRoles(
+        {
+          groupId: groupPerson.group.id,
+          personId: groupPerson.person.id
+        }
+      );
+      return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
+    }
+    return false;
+  }
+
+  //#endregion
 
 }

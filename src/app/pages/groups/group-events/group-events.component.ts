@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
@@ -6,8 +6,6 @@ import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {GroupService} from '../../group/group-page/service/group.service';
 import {TrainingGroup} from '../../../data/remote/model/training-group';
-import {GroupEventModalComponent} from './group-event-modal/group-event-modal.component';
-import {TrainingAccess} from '../../../data/remote/misc/training-access';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
@@ -36,7 +34,7 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
               private _appHelper: AppHelper,
               private _modalService: NgbModal) {
     this.pageSize = PropertyConstant.pageSize;
-    this.isEditAllow = this._groupService.isEditAllow();
+    // this.isEditAllow = this._groupService.isEditAllow();
 
     this.trainingQuery = new BaseTrainingQuery();
     this.trainingQuery.name = '';
@@ -89,16 +87,16 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
   //#endregion
 
   async editAccess(item: TrainingGroup) {
-    const ref = this._modalService.open(GroupEventModalComponent, {size: 'lg'});
-    ref.componentInstance.trainingGroup = Object.assign({}, item);
-    ref.componentInstance.onSave = async (access: TrainingAccess) => {
-      await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
-        groupId: this._groupService.groupSubject.getValue().id,
-        trainingId: item.baseTraining.id
-      });
-      item.access = access;
-      ref.dismiss();
-    };
+    // const ref = this._modalService.open(GroupEventModalComponent, {size: 'lg'});
+    // ref.componentInstance.trainingGroup = Object.assign({}, item);
+    // ref.componentInstance.onSave = async (access: TrainingAccess) => {
+    //   await this._participantRestApiService.updateTrainingVisible({access: access}, {}, {
+    //     groupId: this._groupService.groupSubject.getValue().id,
+    //     trainingId: item.baseTraining.id
+    //   });
+    //   item.access = access;
+    //   ref.dismiss();
+    // };
   }
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {

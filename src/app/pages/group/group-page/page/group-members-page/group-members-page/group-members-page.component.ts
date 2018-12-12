@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
 import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
@@ -16,13 +16,14 @@ import {BaseGroupComponent} from '../../../../../../data/local/component/group/b
 import {SelectionType} from '../../../../../../components/ngx-grid/bean/selection-type';
 import {GroupTransitionType} from '../../../../../../data/remote/model/group/transition/group-transition-type';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
+import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'app-group-members-page',
   templateUrl: './group-members-page.component.html',
   styleUrls: ['./group-members-page.component.scss']
 })
-export class GroupMembersPageComponent extends BaseGroupComponent<Group> implements OnInit {
+export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
@@ -35,6 +36,8 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
   public personQuery: PersonQuery;
   public canEdit: boolean;
   public selectedGroupPersons: GroupPerson[];
+
+  private readonly _groupPersonSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _templateModalService: TemplateModalService,
@@ -51,10 +54,15 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
         return this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
       })
     ];
+
+    this._groupPersonSubscription = this.groupService.groupPerson$.subscribe(async val => {
+      this.canEdit = await this.groupService.canEditGroup();
+    });
   }
 
-  async ngOnInit() {
-    this.canEdit = await this.groupService.canEdit();
+  ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this.appHelper.unsubscribe(this._groupPersonSubscription);
   }
 
   public fetchItems = async (query: GroupPersonQuery) => {
@@ -70,6 +78,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
     }
     return pageContainer;
   };
+
   public onAddGroupPerson = async () => {
     if (await this._templateModalService.showEditPersonModal(new Person(), this.group)) {
       // TODO: Update only edited item!

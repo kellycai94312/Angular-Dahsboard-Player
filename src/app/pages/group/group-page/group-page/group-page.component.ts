@@ -21,6 +21,8 @@ import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
 import {GroupSettingsComponent} from '../group-settings/group-settings.component';
+import {GroupPersonState} from '../../../../data/local/group-person-state';
+import {HtmlContentComponent} from '../../../../components/html-content/html-content/html-content.component';
 
 @Component({
   selector: 'app-group-page',
@@ -36,7 +38,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public group: Group;
   public groupPerson: GroupPerson;
 
-  public textStateInGroup: string;
+  public groupPersonStateNameKey: string;
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -44,8 +46,12 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public readonly tabs: Tab[];
   public canEdit: boolean;
   public organizationTrainers: OrganizationTrainer[];
+
   private readonly _groupSubscription: ISubscription;
+  private readonly _groupPersonSubscription: ISubscription;
   private readonly _refreshMembersSubscription: ISubscription;
+  private _paramRouteSubscription: ISubscription;
+
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -57,8 +63,12 @@ export class GroupPageComponent implements OnInit, OnDestroy {
               private _permissionService: PermissionService,
               private _ngxModalService: NgxModalService,
               private _groupService: GroupService) {
-    this._groupSubscription = this._groupService.groupSubject.subscribe(group => {
-      this.group = group;
+    this._groupSubscription = this._groupService.group$.subscribe(async val => {
+      await this.initialize(val);
+    });
+
+    this._groupPersonSubscription = this._groupService.groupPerson$.subscribe(async val => {
+      await this.initializeGroupPerson(val);
     });
     this._refreshMembersSubscription = this._groupService.refreshMembers.subscribe(async () => {
       await this.updateTrainerGroupPersons();
@@ -77,29 +87,33 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    const groupId = this._activatedRoute.snapshot.params.id;
-
-    try {
-      this.group = await this._participantRestApiService.getGroup({id: groupId});
-      this._groupService.groupSubject.next(this.group);
-      this.canEdit = await this._groupService.canEdit();
-      if (this.group) {
-        await this.baseInit();
-      }
-    } catch (e) {
-      if (e.status == 403) {
+    this._paramRouteSubscription = this._activatedRoute.params.subscribe(async val => {
+      const groupId = val['id'];
+      if (!groupId || !(await this._groupService.initialize(groupId))) {
         await this._router.navigate(['/group']);
       }
-    }
-    await this.updateTrainerGroupPersons();
+      this.canEdit = await this._groupService.canEditGroup();
+    });
   }
 
   ngOnDestroy(): void {
     this._appHelper.unsubscribe(this._groupSubscription);
+    this._appHelper.unsubscribe(this._groupPersonSubscription);
     this._appHelper.unsubscribe(this._refreshMembersSubscription);
+    this._appHelper.unsubscribe(this._paramRouteSubscription);
   }
 
-  public async updateTrainerGroupPersons() {
+  private async initialize(group: Group) {
+    this.group = group;
+    await this.updateTrainerGroupPersons();
+  }
+
+  private async initializeGroupPerson(groupPerson: GroupPerson) {
+    this.groupPerson = groupPerson;
+    this.groupPersonStateNameKey = this._groupService.getPersonStateKeyName();
+  }
+
+  private async updateTrainerGroupPersons() {
     this.organizationTrainers = (await this._participantRestApiService.getOrganizationTrainers({}, {},
       {
         groupId: this.group.id
@@ -113,19 +127,6 @@ export class GroupPageComponent implements OnInit, OnDestroy {
       }
       return 0;
     });
-  }
-
-  async baseInit() {
-    try {
-      this.groupPerson = await this._groupService.getCurrentGroupPerson();
-      this.textStateInGroup = this._groupService.getKeyNamePersonStateInGroup(this._groupService.getGroupPersonState());
-
-      await this._groupService.updateSubgroups();
-    } catch (e) {
-      if (e.status == 403) {
-        await this._router.navigate(['/group']);
-      }
-    }
   }
 
   public async onLogoChange(event) {
@@ -158,14 +159,59 @@ export class GroupPageComponent implements OnInit, OnDestroy {
           }
         }),
         this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-          await this._router.navigate(['/group']);
+          if (await this._ngxModalService.remove(modal, component)) {
+            await this._router.navigate(['/group']);
+          }
         })
       ];
     });
     await this._ngxModalService.awaitModalResult(modal);
-    this._groupService.groupSubject.next(groupSettingsComponent.data);
+    await this._groupService.updateGroup(groupSettingsComponent.data);
     await this.updateTrainerGroupPersons();
   };
+
+  //#region Person group state
+
+  public onChangeGroupPersonState = async () => {
+    if (this._groupService.getGroupPersonState() === GroupPersonState.MEMBER) {
+      const modal = this._ngxModalService.open();
+      modal.componentInstance.titleKey = 'confirmation';
+      await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+        component.html = await this._translateService.get('areYouSureYouWantToLeaveTheGroup').toPromise();
+
+        modal.componentInstance.splitButtonItems = [
+          {
+            nameKey: 'approve',
+            default: true,
+            callback: async () => {
+              if (await this.changePersonStateInGroup()) {
+                modal.close();
+              }
+            }
+          },
+          {
+            nameKey: 'cancel',
+            callback: async () => {
+              modal.dismiss();
+            }
+          }
+        ];
+      });
+    }
+  };
+
+  private async changePersonStateInGroup(): Promise<boolean> {
+    return await this._appHelper.trySave(async () => {
+      let groupPerson: GroupPerson = null;
+      if (this._groupService.getGroupPersonState() === GroupPersonState.NOT_MEMBER) {
+        groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
+      } else {
+        groupPerson = await this._participantRestApiService.leaveGroup({groupId: this.group.id});
+      }
+      await this._groupService.updateGroupPerson(groupPerson);
+    });
+  }
+
+  //#endregion
 
 }

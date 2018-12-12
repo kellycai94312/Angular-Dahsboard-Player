@@ -78,7 +78,7 @@ export class PermissionService {
     return result;
   }
 
-  public areYouCreator<T extends IdentifiedObject>(data: T, person: Person) {
+  public areYouCreator<T extends IdentifiedObject>(data: T, person: Person): boolean {
     if (data.owner && data.owner.id == person.user.id) {
       return true;
     }

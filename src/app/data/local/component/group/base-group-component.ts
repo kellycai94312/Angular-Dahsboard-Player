@@ -12,7 +12,7 @@ export abstract class BaseGroupComponent<T extends Group> implements OnDestroy {
 
   protected constructor(protected groupService: GroupService,
                         protected appHelper: AppHelper) {
-    this._groupSubscription = this.groupService.groupSubject.subscribe(value => {
+    this._groupSubscription = this.groupService.group$.subscribe(value => {
       this.group = value as T;
     });
   }

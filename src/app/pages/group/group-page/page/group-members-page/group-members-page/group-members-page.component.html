@@ -28,8 +28,7 @@
       {{item.person.patronymic}}
     </ng-template>
   </ngx-column>
-  <div
-    *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+  <div *ngIf="group && (group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP)">
     <ngx-column nameKey="birthDate"
                 sortName="birthDate">
       <ng-template let-item>

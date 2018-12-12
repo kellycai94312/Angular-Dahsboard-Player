@@ -43,26 +43,26 @@ export class SubgroupComponent implements OnInit, AfterViewInit {
   }
 
   public onSave = async () => {
-    await this._appHelper.trySave(async () => {
-      this.subgroup = await this._participantRestApiService.putSubgroup(this.subgroup, {}, {
-        groupId: this.subgroup.group.id,
-        subgroupId: this.subgroup.id
-      });
-
-      this.defaultName = this.subgroup.name;
-      await this._groupService.updateSubgroups();
-    });
+    // await this._appHelper.trySave(async () => {
+    //   this.subgroup = await this._participantRestApiService.putSubgroup(this.subgroup, {}, {
+    //     groupId: this.subgroup.group.id,
+    //     subgroupId: this.subgroup.id
+    //   });
+    //
+    //   this.defaultName = this.subgroup.name;
+    //   await this._groupService.updateSubgroups();
+    // });
   };
 
   public onRemove = async () => {
-    await this._appHelper.tryRemove(async () => {
-      await this._participantRestApiService.deleteSubgroup({}, {}, {
-        groupId: this.subgroup.group.id,
-        subgroupId: this.subgroup.id
-      });
-      this.remove(this.subgroup);
-      await this._groupService.updateSubgroups();
-    });
+    // await this._appHelper.tryRemove(async () => {
+    //   await this._participantRestApiService.deleteSubgroup({}, {}, {
+    //     groupId: this.subgroup.group.id,
+    //     subgroupId: this.subgroup.id
+    //   });
+    //   this.remove(this.subgroup);
+    //   await this._groupService.updateSubgroups();
+    // });
   };
 
 }
