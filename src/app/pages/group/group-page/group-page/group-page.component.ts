@@ -81,6 +81,13 @@ export class GroupPageComponent implements OnInit, OnDestroy {
       {
         nameKey: 'members',
         routerLink: 'member'
+      },
+      {
+        nameKey: 'requests',
+        routerLink: 'request',
+        visible: (item: Tab) => {
+          return this.canEdit;
+        }
       }
     ];
 

@@ -1,0 +1,18 @@
+<ngx-virtual-scroll class="list-group-flush"
+                    [query]="groupPersonQuery"
+                    [getItems]="getItems"
+                    [windowScroll]="true">
+  <ng-template let-item>
+    <div class="list-group-item cols-padding px-2">
+      <div class="d-flex flex-row">
+        <div>
+          <app-person [data]="item.person"></app-person>
+        </div>
+        <div class="ml-auto d-flex flex-column">
+          <ngx-split-button [items]="splitButtonsItems"
+                            [data]="item"></ngx-split-button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

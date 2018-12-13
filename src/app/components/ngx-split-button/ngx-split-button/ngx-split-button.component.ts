@@ -14,6 +14,9 @@ export class NgxSplitButtonComponent {
   @Input()
   public placementRight: boolean;
 
+  @Input()
+  public data: any;
+
   public busy: boolean;
 
   get items(): SplitButtonItem[] {
@@ -48,7 +51,8 @@ export class NgxSplitButtonComponent {
     this.busy = true;
     // TODO: Add busy indication
     try {
-      await item.callback();
+      item.data = this.data;
+      await item.callback(item);
     } finally {
       this.busy = false;
     }
@@ -56,7 +60,9 @@ export class NgxSplitButtonComponent {
 
   public canShowDropDownMenu = (): boolean => {
     // TODO: Call updateDefaultItem() when will changed any values within in this method
-    this.updateDefaultItem();
+    setTimeout(() => {
+      this.updateDefaultItem();
+    });
     return this.items.filter(this._visiblePredicate).length > 1;
   };
 
