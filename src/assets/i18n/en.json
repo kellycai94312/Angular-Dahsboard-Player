@@ -225,11 +225,13 @@
     "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
   },
   "groupNotification": {
-    "addPerson": "{{sender}} added {{person}} in group '{{group}}'",
-    "addPersonSelf": "{{sender}} added you to a group '{{group}}'",
-    "deletePerson": "{{sender}} removed {{person}} from the group '{{group}}'",
-    "deletePersonSelf": "{{sender}} removed you from a group '{{group}}'",
-    "joinPerson": "{{person}} applied to the group '{{group}}'"
+    "joinPersonParams": "{{person}} applied to the group '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} added you to a group '{{group}}'",
+    "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
+    "invitePersonParams": "{{sender}} invite you the group '{{group}}'",
+    "invitePersonApproveParams": "{{person}} approved myself to add in the group '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} refused myself to add in the group '{{group}}'",
+    "deletePersonParams": "{{sender}} removed you from a group '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",

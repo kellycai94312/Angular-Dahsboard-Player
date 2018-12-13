@@ -17,36 +17,46 @@ export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupN
       person = this.getPersonLink(this.data.person);
     }
     switch (this.data.groupNotificationType) {
-      case GroupNotificationType.ADD_PERSON:
-        this.body = await this.translateService.get('groupNotification.addPerson', {
+      case GroupNotificationType.JOIN_PERSON:
+        this.body = await this.translateService.get('groupNotification.joinPersonParams', {
           group: group,
-          sender: sender,
           person: person
         }).toPromise();
         break;
-      case GroupNotificationType.ADD_PERSON_SELF:
-        this.body = await this.translateService.get('groupNotification.addPersonSelf', {
+      case GroupNotificationType.JOIN_PERSON_APPROVE:
+        this.body = await this.translateService.get('groupNotification.joinPersonApproveParams', {
           group: group,
           sender: sender
+        }).toPromise();
+        break;
+      case GroupNotificationType.JOIN_PERSON_REFUSE:
+        this.body = await this.translateService.get('groupNotification.joinPersonRefuseParams', {
+          group: group,
+          sender: sender
+        }).toPromise();
+        break;
+      case GroupNotificationType.INVITE_PERSON:
+        this.body = await this.translateService.get('groupNotification.invitePersonParams', {
+          group: group,
+          sender: sender
+        }).toPromise();
+        break;
+      case GroupNotificationType.INVITE_PERSON_APPROVE:
+        this.body = await this.translateService.get('groupNotification.invitePersonApproveParams', {
+          group: group,
+          person: person
+        }).toPromise();
+        break;
+      case GroupNotificationType.INVITE_PERSON_REFUSE:
+        this.body = await this.translateService.get('groupNotification.invitePersonRefuseParams', {
+          group: group,
+          person: person
         }).toPromise();
         break;
       case GroupNotificationType.DELETE_PERSON:
-        this.body = await this.translateService.get('groupNotification.deletePerson', {
-          group: group,
-          sender: sender,
-          person: person
-        }).toPromise();
-        break;
-      case GroupNotificationType.DELETE_PERSON_SELF:
-        this.body = await this.translateService.get('groupNotification.deletePersonSelf', {
+        this.body = await this.translateService.get('groupNotification.deletePersonParams', {
           group: group,
           sender: sender
-        }).toPromise();
-        break;
-      case GroupNotificationType.JOIN_PERSON:
-        this.body = await this.translateService.get('groupNotification.joinPerson', {
-          group: group,
-          person: person
         }).toPromise();
         break;
     }
