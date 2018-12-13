@@ -21,8 +21,8 @@ import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
 import {GroupSettingsComponent} from '../group-settings/group-settings.component';
-import {GroupPersonState} from '../../../../data/local/group-person-state';
-import {HtmlContentComponent} from '../../../../components/html-content/html-content/html-content.component';
+import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
+import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 
 @Component({
   selector: 'app-group-page',
@@ -38,20 +38,19 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   public group: Group;
   public groupPerson: GroupPerson;
 
-  public groupPersonStateNameKey: string;
-
   @ViewChild('logo')
   public logo: ImageComponent;
 
   public readonly tabs: Tab[];
+  public readonly splitButtonsItems: SplitButtonItem[];
   public canEdit: boolean;
+  public isOwner: boolean;
   public organizationTrainers: OrganizationTrainer[];
 
   private readonly _groupSubscription: ISubscription;
   private readonly _groupPersonSubscription: ISubscription;
   private readonly _refreshMembersSubscription: ISubscription;
   private _paramRouteSubscription: ISubscription;
-
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -84,6 +83,27 @@ export class GroupPageComponent implements OnInit, OnDestroy {
         routerLink: 'member'
       }
     ];
+
+    this.splitButtonsItems = [
+      {
+        nameKey: 'join',
+        callback: async () => {
+          await this.joinGroup();
+        },
+        visible: (): boolean => {
+          return !this.isOwner && (!this.groupPerson || this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
+        }
+      },
+      {
+        nameKey: 'leave',
+        callback: async () => {
+          await this.leaveGroup();
+        },
+        visible: () => {
+          return !!(!this.isOwner && this.groupPerson);
+        }
+      }
+    ];
   }
 
   async ngOnInit() {
@@ -110,7 +130,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
 
   private async initializeGroupPerson(groupPerson: GroupPerson) {
     this.groupPerson = groupPerson;
-    this.groupPersonStateNameKey = this._groupService.getPersonStateKeyName();
+    this.isOwner = await this._groupService.areYouGroupCreator();
   }
 
   private async updateTrainerGroupPersons() {
@@ -170,45 +190,25 @@ export class GroupPageComponent implements OnInit, OnDestroy {
     await this.updateTrainerGroupPersons();
   };
 
-  //#region Person group state
+  //#region Change group person state
 
-  public onChangeGroupPersonState = async () => {
-    if (this._groupService.getGroupPersonState() === GroupPersonState.MEMBER) {
-      const modal = this._ngxModalService.open();
-      modal.componentInstance.titleKey = 'confirmation';
-      await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
-        component.html = await this._translateService.get('areYouSureYouWantToLeaveTheGroup').toPromise();
-
-        modal.componentInstance.splitButtonItems = [
-          {
-            nameKey: 'approve',
-            default: true,
-            callback: async () => {
-              if (await this.changePersonStateInGroup()) {
-                modal.close();
-              }
-            }
-          },
-          {
-            nameKey: 'cancel',
-            callback: async () => {
-              modal.dismiss();
-            }
-          }
-        ];
-      });
+  private async joinGroup(): Promise<boolean> {
+    if (this.groupPerson) {
+      return false;
     }
-  };
-
-  private async changePersonStateInGroup(): Promise<boolean> {
     return await this._appHelper.trySave(async () => {
-      let groupPerson: GroupPerson = null;
-      if (this._groupService.getGroupPersonState() === GroupPersonState.NOT_MEMBER) {
-        groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
-      } else {
-        groupPerson = await this._participantRestApiService.leaveGroup({groupId: this.group.id});
-      }
-      await this._groupService.updateGroupPerson(groupPerson);
+      this.groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
+      await this._groupService.updateGroupPerson(this.groupPerson);
+    });
+  }
+
+  private async leaveGroup(): Promise<boolean> {
+    if (!this.groupPerson) {
+      return false;
+    }
+    return await this._appHelper.trySave(async () => {
+      await this._participantRestApiService.leaveGroup({groupId: this.group.id});
+      await this._groupService.updateGroupPerson(null);
     });
   }
 

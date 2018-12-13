@@ -8,23 +8,13 @@ html, body {
     text-decoration: none;
   }
 
-  p {
+  h5, label, pre, p {
     margin: 0;
     padding: 0;
   }
 
   a, p, label {
     font-size: $font-size;
-  }
-
-  label {
-    margin: 0;
-    padding: 0;
-  }
-
-  h5 {
-    margin: 0;
-    padding: 0;
   }
 
 }

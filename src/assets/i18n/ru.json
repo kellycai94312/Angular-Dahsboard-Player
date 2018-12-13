@@ -581,5 +581,11 @@
   "content": "Содержание",
   "addEvent": "Добавить событие",
   "addExistingEvent": "Добавить существующее событие",
-  "myContacts": "Мои контакты"
+  "myContacts": "Мои контакты",
+  "groupPersonStateEnum": {
+    "JOIN_REQUEST": "Запрос был отправлен",
+    "INVITE_REQUEST": "Заявка была отправлена",
+    "APPROVED": "Участник",
+    "FOLLOWING": "Подписчик"
+  }
 }

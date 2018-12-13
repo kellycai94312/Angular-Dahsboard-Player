@@ -580,5 +580,11 @@
   "content": "Content",
   "addEvent": "Add event",
   "addExistingEvent": "Add existing event",
-  "myContacts": "My contacts"
+  "myContacts": "My contacts",
+  "groupPersonStateEnum": {
+    "JOIN_REQUEST": "Request has been sent",
+    "INVITE_REQUEST": "Invite request has been sent",
+    "APPROVED": "Member",
+    "FOLLOWING": "Follower"
+  }
 }

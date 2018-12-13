@@ -44,9 +44,11 @@ import {EventMessageContent} from '../../../data/remote/model/chat/message/event
 export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
+  public readonly baseConversationTypeClass = BaseConversationType;
 
   @ViewChild('logo')
   public logo: ImageComponent;
+
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 

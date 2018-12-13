@@ -32,7 +32,7 @@ export class HtmlService {
       descriptionBlock = `<br>${descriptionLabelName}: <pre>${event.description}</pre>`;
     }
     // TODO: Use id when can will show data by event. /event/${event.id}
-    return this.getUrlLinkTag(`/event`, `<h3 class="m-0 p-0">${event.name}</h3><p class="m-0 p-0 text-truncate flex-nowrap">${eventTypeLabelName}: ${eventTypeName}<br>${startDateLabelName}: ${this._appHelper.dateByFormat(event.startTime, PropertyConstant.dateTimeFormat)} ${finishDateLabelName}: ${this._appHelper.dateByFormat(event.finishTime, PropertyConstant.dateTimeFormat)}${descriptionBlock}</p>`);
+    return this.getUrlLinkTag(`/event`, `<h3 class="m-0 p-0">${event.name}</h3><p class="m-0 p-0 text-truncate flex-nowrap">${eventTypeLabelName}: ${eventTypeName}<br>${startDateLabelName}: ${this._appHelper.dateByFormat(event.startTime, PropertyConstant.dateTimeFormat)}<br>${finishDateLabelName}: ${this._appHelper.dateByFormat(event.finishTime, PropertyConstant.dateTimeFormat)}${descriptionBlock}</p>`);
   }
 
   public getPersonLinkTag(person: Person): string {

@@ -40,11 +40,11 @@
       </div>
     </div>
 
-    <div *ngIf="canEdit"
-         class="ml-auto d-flex flex-row">
-      <ngx-button [nameKey]="groupPersonStateNameKey"
-                  [click]="onChangeGroupPersonState"></ngx-button>
-      <ngx-button class="ml-2"
+    <div class="ml-auto d-flex flex-row">
+      <ngx-split-button title="{{ groupPerson ?(('groupPersonStateEnum.' + groupPerson.state) | translate) : ' '}}"
+                        [items]="splitButtonsItems"></ngx-split-button>
+      <ngx-button *ngIf="canEdit"
+                  class="ml-2"
                   [icon]="iconEnumClass.EDIT"
                   [click]="onEditSettings"></ngx-button>
     </div>

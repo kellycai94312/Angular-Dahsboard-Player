@@ -3,12 +3,12 @@ import {Group} from '../../../../data/remote/model/group/base/group';
 import {Subject} from 'rxjs/Subject';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {GroupPersonState} from '../../../../data/local/group-person-state';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {PermissionService} from '../../../../shared/permission.service';
 import {Observable} from 'rxjs';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ISubscription} from 'rxjs-compat/Subscription';
+import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -20,7 +20,6 @@ export class GroupService implements OnDestroy {
   private readonly _groupSubject: Subject<Group>;
   private readonly _groupSubscription: ISubscription;
   private readonly _groupPersonSubject: Subject<GroupPerson>;
-  private _groupPersonState: GroupPersonState;
 
   constructor(private  _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
@@ -33,7 +32,6 @@ export class GroupService implements OnDestroy {
 
     this._groupPersonSubject = new Subject<GroupPerson>();
     this.groupPerson$ = this._groupPersonSubject.asObservable().shareReplay(1);
-    this._groupPersonState = GroupPersonState.NOT_MEMBER;
     this.refreshMembers = new Subject<void>();
   }
 
@@ -62,35 +60,7 @@ export class GroupService implements OnDestroy {
   }
 
   public async updateGroupPerson(groupPerson: GroupPerson) {
-    this._groupPersonState = this.getGroupPersonStateByGroupPerson(groupPerson);
     this._groupPersonSubject.next(groupPerson);
-  }
-
-  public getGroupPersonState(): GroupPersonState {
-    return this._groupPersonState;
-  }
-
-  public getPersonStateKeyName(groupPersonState: GroupPersonState = this._groupPersonState): string {
-    switch (GroupPersonState[groupPersonState]) {
-      case GroupPersonState[GroupPersonState.NOT_MEMBER]:
-        return 'join';
-      case GroupPersonState[GroupPersonState.CONSIDERATION]:
-        return 'cancelJoin';
-      case GroupPersonState[GroupPersonState.MEMBER]:
-        return 'leave';
-    }
-    return '';
-  }
-
-  private getGroupPersonStateByGroupPerson(groupPerson: GroupPerson): GroupPersonState {
-    if (groupPerson) {
-      if (groupPerson.approved) {
-        return GroupPersonState.MEMBER;
-      } else {
-        return GroupPersonState.CONSIDERATION;
-      }
-    }
-    return GroupPersonState.NOT_MEMBER;
   }
 
   //#region Permission
@@ -104,7 +74,7 @@ export class GroupService implements OnDestroy {
   }
 
   public async areYouGroupCreator(): Promise<boolean> {
-    const groupPerson = await this._appHelper.toPromise(this._groupPersonSubject);
+    const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
     if (groupPerson) {
       return this._permissionService.areYouCreator(groupPerson.group, groupPerson.person);
     }
@@ -120,7 +90,7 @@ export class GroupService implements OnDestroy {
           personId: groupPerson.person.id
         }
       );
-      return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
+      return groupPerson.state === GroupPersonState.APPROVED && this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
     }
     return false;
   }

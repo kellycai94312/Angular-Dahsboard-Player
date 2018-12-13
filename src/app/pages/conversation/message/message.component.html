@@ -1,34 +1,46 @@
-<div class="wrapper p-2" *ngIf="messageViewModel">
-  <div class="d-flex flex-row" *ngIf="message.content.discriminator == 'MESSAGE_CONTENT'; else systemMessageContent">
-    <div class="d-flex flex-row w-100">
-      <app-image *ngIf="!onlyContent" [type]="'LOGO'"
-                 [clazz]="'PERSON'"
-                 [id]="message.sender.person.id"
-                 [dimension]="'W40xH40'"
-                 [format]="'CIRCLE'"></app-image>
-      <div class="d-flex flex-column ml-2">
-        <div *ngIf="!onlyContent" class="d-flex flex-row align-content-center">
-          <a class="link" routerLink="/person/{{message.sender.person.id}}">{{message.sender.person.firstName}}</a>
-          <p class="date ml-2">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:'dd.MM.yyyy
-            HH:mm') )
-            : (message.content.created | date:'dd.MM.yyyy HH:mm')}}</p>
-        </div>
-        <pre [innerHTML]="messageViewModel.body | urlParser | async"
-             (click)="onDataClick($event)"></pre>
-      </div>
-    </div>
-  </div>
-
-  <ng-template #systemMessageContent>
-    <div class="d-flex flex-row w-100">
+<div *ngIf="messageViewModel"
+     class="wrapper p-2 {{class}}">
+  <div [ngSwitch]="message.content.discriminator"
+       class="d-flex flex-row">
+    <div *ngSwitchCase="baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
+         class="d-flex flex-row w-100">
       <div class="d-flex flex-column">
-        <p *ngIf="!onlyContent" class="date">{{message.content.created | date:'dd.MM.yyyy HH:mm'}}</p>
+        <p *ngIf="!onlyContent"
+           class="date">{{message.content.created | date: propertyConstantClass.dateTimeFormat}}</p>
         <div *ngIf="messageViewModel.body"
              class="system-message"
              [innerHTML]="messageViewModel.body | urlParser | async"
              (click)="onDataClick($event)"></div>
       </div>
     </div>
-  </ng-template>
-
+    <div *ngSwitchCase="baseMessageContentTypeClass.MESSAGE_CONTENT"
+         class="d-flex flex-row w-100">
+      <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
+    </div>
+    <div *ngSwitchCase="baseMessageContentTypeClass.EVENT_MESSAGE_CONTENT"
+         class="d-flex flex-row w-100">
+      <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
+    </div>
+  </div>
 </div>
+
+<ng-template #messageContent>
+  <app-image *ngIf="!onlyContent"
+             [type]="'LOGO'"
+             [clazz]="'PERSON'"
+             [id]="message.sender.person.id"
+             [dimension]="'W40xH40'"
+             [format]="'CIRCLE'"></app-image>
+  <div class="d-flex flex-column ml-2">
+    <div *ngIf="!onlyContent"
+         class="d-flex flex-row align-content-center">
+      <a class="link"
+         routerLink="/person/{{message.sender.person.id}}">{{message.sender.person.firstName}}</a>
+      <p class="date ml-2">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:
+        propertyConstantClass.dateTimeFormat) ) : (message.content.created | date:
+        propertyConstantClass.dateTimeFormat)}}</p>
+    </div>
+    <pre [innerHTML]="messageViewModel.body | urlParser | async"
+         (click)="onDataClick($event)"></pre>
+  </div>
+</ng-template>
