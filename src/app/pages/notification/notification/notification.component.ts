@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, Input} from '@angular/core';
 import {NotificationService} from '../../../shared/notification.service';
 import {INotificationViewModel} from '../../../data/local/view-model/notification/i-notification-view-model';
 import {Router} from '@angular/router';
@@ -7,17 +7,22 @@ import {BaseNotification} from '../../../data/remote/model/notification/base/bas
 import {ToastrService} from 'ngx-toastr';
 import {TranslateService} from '@ngx-translate/core';
 import {BaseNotificationViewModel} from '../../../data/local/view-model/notification/base-notification-view-model';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss']
 })
-export class NotificationComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class NotificationComponent implements AfterContentInit, AfterViewInit {
+
+  public readonly propertyConstantClass = PropertyConstant;
 
   @Input()
   public data: BaseNotification;
 
+  public readonly splitButtonsItems: SplitButtonItem[];
   public viewModel: INotificationViewModel;
 
   constructor(private _notificationService: NotificationService,
@@ -26,9 +31,20 @@ export class NotificationComponent implements OnInit, AfterContentInit, AfterVie
               private _toastrService: ToastrService,
               private _translateService: TranslateService) {
     this.viewModel = new BaseNotificationViewModel(new BaseNotification());
-  }
-
-  ngOnInit() {
+    this.splitButtonsItems = [
+      {
+        nameKey: 'approve',
+        callback: async () => {
+          await this.onApprove();
+        }
+      },
+      {
+        nameKey: 'refuse',
+        callback: async () => {
+          await this.onRefuse();
+        }
+      }
+    ];
   }
 
   async ngAfterContentInit() {

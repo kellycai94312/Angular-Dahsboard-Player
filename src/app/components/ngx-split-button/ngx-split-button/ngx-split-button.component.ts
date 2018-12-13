@@ -35,9 +35,12 @@ export class NgxSplitButtonComponent {
     this.classes = '';
     this._visiblePredicate = x => {
       if (typeof x.visible === 'function') {
-        return x.visible && x.visible();
+        if (x.visible) {
+          return x.visible();
+        }
+        return true;
       }
-      return x.visible;
+      return !x.visible || x.visible;
     };
   }
 

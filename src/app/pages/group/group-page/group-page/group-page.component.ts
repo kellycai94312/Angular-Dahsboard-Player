@@ -112,7 +112,6 @@ export class GroupPageComponent implements OnInit, OnDestroy {
       if (!groupId || !(await this._groupService.initialize(groupId))) {
         await this._router.navigate(['/group']);
       }
-      this.canEdit = await this._groupService.canEditGroup();
     });
   }
 
@@ -130,6 +129,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
 
   private async initializeGroupPerson(groupPerson: GroupPerson) {
     this.groupPerson = groupPerson;
+    this.canEdit = await this._groupService.canEditGroup();
     this.isOwner = await this._groupService.areYouGroupCreator();
   }
 
