@@ -84,13 +84,16 @@ export class GroupService implements OnDestroy {
   private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
     const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
     if (groupPerson) {
+      if (groupPerson.state !== GroupPersonState.APPROVED) {
+        return false;
+      }
       const userRoles = await this._participantRestApiService.getGroupPersonUserRoles(
         {
           groupId: groupPerson.group.id,
           personId: groupPerson.person.id
         }
       );
-      return groupPerson.state === GroupPersonState.APPROVED && this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
+      return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
     }
     return false;
   }

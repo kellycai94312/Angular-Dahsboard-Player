@@ -178,6 +178,18 @@ export class GroupPageComponent implements OnInit, OnDestroy {
             this._appHelper.updateObject(this.group, component.data);
           }
         }),
+        {
+          nameKey: 'sendInvites',
+          callback: async () => {
+            await this._ngxModalService.showSelectionGroupPersonsModal({id: this.group.id, unassigned: true}, async selectedItems => {
+              await this._appHelper.tryAction('invitesSent', 'invitesDidNotSend', async () => {
+                for (const item of selectedItems.map(x => x.person)) {
+                  await this._participantRestApiService.inviteIntoGroup({id: item.id}, {}, {groupId: this.group.id});
+                }
+              });
+            });
+          }
+        },
         this._ngxModalService.removeSplitItemButton(async () => {
           if (await this._ngxModalService.remove(modal, component)) {
             await this._router.navigate(['/group']);
@@ -193,7 +205,7 @@ export class GroupPageComponent implements OnInit, OnDestroy {
   //#region Change group person state
 
   private async joinGroup(): Promise<boolean> {
-    if (this.groupPerson) {
+    if (this.groupPerson && this.groupPerson.state !== GroupPersonState.INVITE_REQUEST) {
       return false;
     }
     return await this._appHelper.trySave(async () => {

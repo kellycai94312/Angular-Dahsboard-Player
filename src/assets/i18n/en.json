@@ -588,5 +588,8 @@
     "INVITE_REQUEST": "Invite request has been sent",
     "APPROVED": "Member",
     "FOLLOWING": "Follower"
-  }
+  },
+  "sendInvites": "Send invites",
+  "invitesSent": "Invites sent",
+  "invitesDidNotSend": "Invites didn't send"
 }
