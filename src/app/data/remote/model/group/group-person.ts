@@ -6,6 +6,7 @@ import {SportRole} from '../sport-role';
 import {StageType} from '../stage/stage-type';
 import {PersonRank} from '../person-rank';
 import {GroupTransition} from './transition/group-transition';
+import {GroupPersonState} from './group-person-state';
 
 export class GroupPerson extends IdentifiedObject {
   group: Group;
@@ -13,10 +14,10 @@ export class GroupPerson extends IdentifiedObject {
   person: Person;
   mentor: GroupPerson;
   sportRole: SportRole;
-  approved: boolean;
   number: number;
   leadTrainer: boolean;
   stageType: StageType;
+  state: GroupPersonState;
 
   // transient
   personRank: PersonRank;

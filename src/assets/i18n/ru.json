@@ -226,11 +226,13 @@
     "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
   },
   "groupNotification": {
-    "addPerson": "{{sender}} добавил {{person}} в группу '{{group}}'",
-    "addPersonSelf": "{{sender}} добавил вас в группу '{{group}}'",
-    "deletePerson": "{{sender}} исключил {{person}} из группы '{{group}}'",
-    "deletePersonSelf": "{{sender}} исключил вас из группы '{{group}}'",
-    "joinPerson": "{{person}} подал заявку в группу '{{group}}'"
+    "joinPersonParams": "{{person}} подал заявку в группу '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} одобрил вашу заявку на вступление в группу '{{group}}'",
+    "joinPersonRefuseParams": "{{sender}} отклонил вашу заявку на вступление в группу '{{group}}'",
+    "invitePersonParams": "{{sender}} пригласил вас в группу '{{group}}'",
+    "invitePersonApproveParams": "{{person}} принял приглашение в группу '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} отклонил приглашение в группу '{{group}}'",
+    "deletePersonParams": "{{sender}} исключил вас из группы '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} создал беседу",
@@ -580,5 +582,15 @@
   "title": "Заголовок",
   "content": "Содержание",
   "addEvent": "Добавить событие",
-  "addExistingEvent": "Добавить существующее событие"
+  "addExistingEvent": "Добавить существующее событие",
+  "myContacts": "Мои контакты",
+  "groupPersonStateEnum": {
+    "JOIN_REQUEST": "Запрос был отправлен",
+    "INVITE_REQUEST": "Заявка была отправлена",
+    "APPROVED": "Участник",
+    "FOLLOWING": "Подписчик"
+  },
+  "sendInvites": "Отправить приглашения",
+  "invitesSent": "Приглашения отправлены",
+  "invitesDidNotSend": "Приглашения не отправлены"
 }

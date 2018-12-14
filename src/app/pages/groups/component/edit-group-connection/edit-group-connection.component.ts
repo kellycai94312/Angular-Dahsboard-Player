@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ViewChild} from '@angular/core';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupConnection} from '../../../../data/remote/model/group/group-connection';
@@ -42,7 +42,7 @@ export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnect
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
 
-    this._currentGroup = _groupService.groupSubject.getValue();
+    // TODO: this._currentGroup = _groupService.groupSubject.getValue();
     this.isSource = true;
     this.query = new DocumentQuery();
     this.query.clazz = FileClass.GROUP_CONNECTION;

@@ -4,7 +4,7 @@
                  placeholder="{{'search' | translate}}"
                  mode="search"
                  valueChangeEvent="keyup"
-                 showClearButton="true">
+                 [showClearButton]="true">
     </dx-text-box>
   </div>
   <div class="col">
@@ -26,6 +26,14 @@
     </dx-date-box>
   </div>
   <div class="col">
+    <dx-select-box [items]="eventTypes"
+                   displayExpr="name"
+                   [showClearButton]="true"
+                   placeholder="{{'eventType' | translate }}"
+                   (onValueChanged)="onEventTypeChanged($event.value)">
+    </dx-select-box>
+  </div>
+  <div class="col">
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
   <div *ngIf="canCreateEvent">
@@ -44,64 +52,56 @@
           [canEdit]="true"
           [enabledAdd]="false">
   <ngx-column nameKey="name"
-              [style]="'col-3'"
-              [templateRef]="nameTemplate">
-    <ng-template #nameTemplate let-item>
+              [style]="'col-3'">
+    <ng-template let-item>
       {{item.name}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="trainingType"
-              [style]="'col-1'"
-              [templateRef]="trainingTypeTemplate">
-    <ng-template #trainingTypeTemplate let-item>
+              [style]="'col-1'">
+    <ng-template let-item>
       {{'trainingDiscriminator.' + item.discriminator | translate}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="eventState"
-              [style]="'col-1'"
-              [templateRef]="eventStateTemplate">
-    <ng-template #eventStateTemplate let-item>
-      {{item.trainingState}}
+              [style]="'col-1'">
+    <ng-template let-item>
+      {{'eventStateEnum.' + item.trainingState | translate}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="startDateAndTime"
-              [style]="'col-2'"
-              [templateRef]="startDateAndTimeTemplate">
-    <ng-template #startDateAndTimeTemplate let-item>
+              [style]="'col-2'">
+    <ng-template let-item>
       {{item.startTime | date: propertyConstant.dateTimeFormat}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="location"
-              [style]="'col-1'"
-              [templateRef]="locationTemplate">
-    <ng-template #locationTemplate let-item>
+              [style]="'col-1'">
+    <ng-template let-item>
       {{item.location?.name}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="groups"
-              [style]="'col-2'"
-              [templateRef]="groupsTemplate">
-    <ng-template #groupsTemplate let-item>
+              [style]="'col-2'">
+    <ng-template let-item>
       {{item.discriminator === trainingDiscriminator.GAME ? item.teams : ''}}
     </ng-template>
   </ngx-column>
 
   <ngx-column nameKey="score"
-              [style]="'col-1'"
-              [templateRef]="scoreTemplate">
-    <ng-template #scoreTemplate let-item>
+              [style]="'col-1'">
+    <ng-template let-item>
       {{item.discriminator === trainingDiscriminator.GAME ? item.score : ''}}
     </ng-template>
   </ngx-column>
 
-  <ngx-column [style]="'col-1'"
-              [templateRef]="reportTemplate">
-    <ng-template #reportTemplate let-item>
+  <ngx-column [style]="'col-1'">
+    <ng-template let-item>
       <app-busy-button *ngIf="item.trainingState !== trainingState.DRAFT && item.trainingState !== trainingState.PLAN"
                        icon="fa fa-book"
                        [click]="showReport"

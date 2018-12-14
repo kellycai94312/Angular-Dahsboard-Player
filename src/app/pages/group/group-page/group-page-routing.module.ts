@@ -8,7 +8,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'news', pathMatch: 'full'},
       {path: 'news', loadChildren: './page/group-news-page/group-news-page.module#GroupNewsPageModule'},
-      {path: 'member', loadChildren: './page/group-members-page/group-members-page.module#GroupMembersPageModule'}
+      {path: 'member', loadChildren: './page/group-members-page/group-members-page.module#GroupMembersPageModule'},
+      {path: 'request', loadChildren: './page/group-person-requests-page/group-person-requests-page.module#GroupPersonRequestsPageModule'}
     ]
   }
 ];

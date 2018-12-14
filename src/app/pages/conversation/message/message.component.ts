@@ -6,6 +6,7 @@ import {MessageViewModel} from '../../../data/local/view-model/conversation/mess
 import {Router} from '@angular/router';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
+import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
   selector: 'app-message',
@@ -13,6 +14,12 @@ import {MessageContent} from '../../../data/remote/model/chat/message/message-co
   styleUrls: ['./message.component.scss']
 })
 export class MessageComponent implements OnInit, DoCheck {
+
+  public readonly propertyConstantClass = PropertyConstant;
+  public readonly baseMessageContentTypeClass = BaseMessageContentType;
+
+  @Input()
+  public class: string;
 
   @Input()
   public message: Message;
@@ -28,6 +35,7 @@ export class MessageComponent implements OnInit, DoCheck {
   constructor(private _authorizationService: AuthorizationService,
               private _router: Router,
               differs: KeyValueDiffers) {
+    this.class = '';
     this.differ = differs.find([]).create();
   }
 

@@ -1,7 +1,7 @@
 <div *ngIf="defaultItem">
   <div *ngIf="!canShowDropDownMenu(); else elseTemplate">
     <button class="btn btn-primary input-height-sm"
-            (click)="onClick(defaultItem)">{{defaultItem.nameKey | translate}}
+            (click)="onClick(defaultItem)">{{defaultItem?.nameKey | translate}}
     </button>
   </div>
   <ng-template #elseTemplate>

@@ -100,14 +100,15 @@ export class NgxScrollDirective implements OnInit, OnDestroy {
   }
 
   public scrollTo(position: number): void {
+    const scrollToOptions: ScrollToOptions = {left: 0, top: position};
+    if (this.scrollWithSmooth) {
+      scrollToOptions.behavior = 'smooth';
+    }
+
     if (this.windowScroll) {
-      const scrollToOptions: ScrollToOptions = {left: 0, top: position};
-      if (this.scrollWithSmooth) {
-        scrollToOptions.behavior = 'smooth';
-      }
       window.scrollTo(scrollToOptions);
     } else {
-      this._elementRef.nativeElement.scrollTo(position);
+      (this._elementRef.nativeElement as HTMLElement).scrollTo(scrollToOptions);
     }
   }
 

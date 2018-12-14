@@ -102,7 +102,8 @@ export class TemplateModalService {
   public async showEditEventModal<T extends BaseTraining>(event: T = null,
                                                           date: Date = null,
                                                           eventPlan: EventPlan = null,
-                                                          conversation: BaseConversation = null): Promise<DialogResult<T>> {
+                                                          conversation: BaseConversation = null,
+                                                          canSelectExistEvent: boolean = false): Promise<DialogResult<T>> {
     event = event || new BaseTraining() as T;
     date = date || new Date();
     const modal = this._ngxModalService.open();
@@ -134,6 +135,9 @@ export class TemplateModalService {
                 modal.close();
               }
             });
+          },
+          visible: () => {
+            return canSelectExistEvent && this._appHelper.isNewObject(component.data);
           }
         },
         this._ngxModalService.saveSplitItemButton(async () => {
@@ -156,6 +160,9 @@ export class TemplateModalService {
       editGroupNewsComponent = component;
       component.group = group;
       await component.initialize(this._appHelper.cloneObject(obj));
+      const visibleItemForNew = (): boolean => {
+        return this._appHelper.isNewObject(component.data);
+      };
       modal.componentInstance.splitButtonItems = [
         {
           nameKey: 'addEvent',
@@ -168,7 +175,8 @@ export class TemplateModalService {
                 modal.close();
               }
             }
-          }
+          },
+          visible: visibleItemForNew
         },
         {
           nameKey: 'addExistingEvent',
@@ -182,7 +190,8 @@ export class TemplateModalService {
                 }
               }
             });
-          }
+          },
+          visible: visibleItemForNew
         },
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);

@@ -6,7 +6,7 @@
           [add]="onAddGroupPerson"
           [edit]="onEditGroupPerson"
           [windowScroll]="true"
-          [selectionType]="selectionTypeClass.MULTIPLE"
+          selectionType="{{canEdit ? selectionTypeClass.MULTIPLE : selectionTypeClass.SINGLE}}"
           (selectedItemsChange)="onSelectedItemsChange($event)"
           (sortChange)="onSortChange($event)"
           [canEdit]="canEdit">
@@ -28,8 +28,7 @@
       {{item.person.patronymic}}
     </ng-template>
   </ngx-column>
-  <div
-    *ngIf="group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+  <div *ngIf="group && (group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP)">
     <ngx-column nameKey="birthDate"
                 sortName="birthDate">
       <ng-template let-item>
@@ -40,8 +39,7 @@
       <ng-template let-item>
         <div *ngIf="item?.groupTransition?.documents">
           <div *ngFor="let document of item.groupTransition.documents">
-            <p *ngIf="document.number && document.date">№: {{document.number}} {{('date' | translate) + ": " +
-              (document.date | date: propertyConstantClass.dateFormat)}}</p>
+            <p *ngIf="document.number && document.date">№: {{document.number}} {{('date' | translate) + ": " + (document.date | date: propertyConstantClass.dateFormat)}}</p>
           </div>
         </div>
       </ng-template>

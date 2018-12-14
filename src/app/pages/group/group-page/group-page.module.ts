@@ -6,7 +6,7 @@ import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module'
 import {NgxTabModule} from '../../../components/ngx-tab/ngx-tab.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {GroupService} from './service/group.service';
+import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   imports: [
@@ -15,10 +15,10 @@ import {GroupService} from './service/group.service';
     TranslateModule.forChild(),
     ImageModule,
     NgxButtonModule,
-    NgxTabModule
+    NgxTabModule,
+    NgxSplitButtonModule
   ],
-  declarations: [GroupPageComponent],
-  providers: [GroupService]
+  declarations: [GroupPageComponent]
 })
 export class GroupPageModule {
 }

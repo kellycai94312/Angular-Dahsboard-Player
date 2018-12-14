@@ -646,6 +646,12 @@ export class ParticipantRestApiService extends Rest {
   putGroup: IRestMethod<Group, Group>;
 
   @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/group/{!groupId}',
+  })
+  removeGroup: IRestMethod<{ groupId: number }, Group>;
+
+  @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!id}/person/{!personId}/approve',
   })
@@ -721,15 +727,21 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/group/{!id}/join',
+    path: '/group/{!groupId}/join',
   })
-  joinGroup: IRestMethod<QueryParams, void>;
+  joinGroup: IRestMethod<{ groupId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/group/{!id}/join',
+    path: '/group/{!groupId}/join',
   })
-  leaveGroup: IRestMethod<QueryParams, void>;
+  leaveGroup: IRestMethod<{ groupId: number }, void>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/invite',
+  })
+  inviteIntoGroup: IRestMethodStrict<IdRequest, any, { groupId: number }, GroupPerson>;
 
   @RestAction({
     method: RestRequestMethod.Post,

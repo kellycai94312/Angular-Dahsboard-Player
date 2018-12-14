@@ -38,6 +38,8 @@ import {TrainingPerson} from '../../../data/remote/model/training/training-perso
 import {TrainingPersonQuery} from '../../../data/remote/rest-api/query/training-person-query';
 import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
 import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
+import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
+import {GroupPerson} from '../../../data/remote/model/group/group-person';
 
 @Injectable()
 export class NgxModalService {
@@ -241,6 +243,29 @@ export class NgxModalService {
         return data.name;
       },
       [], apply, 1);
+  }
+
+  //#endregion
+
+  //#region Group
+
+  public async showSelectionGroupPersonsModal(groupPersonQuery: GroupPersonQuery, apply: (selectedItems: GroupPerson[]) => Promise<void>) {
+    await this.showSelectionNameObjectsModal<GroupPerson>(async (query: GroupPersonQuery) => {
+        groupPersonQuery.from = query.from;
+        groupPersonQuery.count = query.count;
+        groupPersonQuery.name = query.name;
+        this._appHelper.removeUndefinedField(groupPersonQuery);
+        return await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
+      },
+      data => {
+        const person = data.person;
+        let personFullName = `${person.lastName} ${person.firstName}`;
+        if (person.patronymic) {
+          personFullName += ` ${person.patronymic}`;
+        }
+        return personFullName;
+      },
+      [], apply);
   }
 
   //#endregion

@@ -1,0 +1,6 @@
+<h4 class="text-truncate">{{data.name}}</h4>
+<p class="m-0 p-0 text-truncate">{{'eventType' | translate}}: {{'trainingDiscriminator.' + data.discriminator |
+  translate}}<br>
+  {{'startDate' | translate}}: {{data.startTime | date: propertyConstantClass.dateTimeFormat}}
+  {{'finishDate' | translate}}: {{data.finishTime | date: propertyConstantClass.dateTimeFormat}}</p>
+<pre>{{data.description}}</pre>

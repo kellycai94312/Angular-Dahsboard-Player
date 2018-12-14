@@ -225,11 +225,13 @@
     "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
   },
   "groupNotification": {
-    "addPerson": "{{sender}} added {{person}} in group '{{group}}'",
-    "addPersonSelf": "{{sender}} added you to a group '{{group}}'",
-    "deletePerson": "{{sender}} removed {{person}} from the group '{{group}}'",
-    "deletePersonSelf": "{{sender}} removed you from a group '{{group}}'",
-    "joinPerson": "{{person}} applied to the group '{{group}}'"
+    "joinPersonParams": "{{person}} applied to the group '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} added you to the group '{{group}}'",
+    "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
+    "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",
+    "invitePersonApproveParams": "{{person}} approved to add in the group '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} refused to add in the group '{{group}}'",
+    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",
@@ -579,5 +581,15 @@
   "title": "Title",
   "content": "Content",
   "addEvent": "Add event",
-  "addExistingEvent": "Add existing event"
+  "addExistingEvent": "Add existing event",
+  "myContacts": "My contacts",
+  "groupPersonStateEnum": {
+    "JOIN_REQUEST": "Request has been sent",
+    "INVITE_REQUEST": "Invite request has been sent",
+    "APPROVED": "Member",
+    "FOLLOWING": "Follower"
+  },
+  "sendInvites": "Send invites",
+  "invitesSent": "Invites sent",
+  "invitesDidNotSend": "Invites didn't send"
 }

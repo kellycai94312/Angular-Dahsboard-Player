@@ -19,6 +19,7 @@ import {Training} from '../data/remote/model/training/training/training';
 import {Game} from '../data/remote/model/training/game/game';
 import {Testing} from '../data/remote/model/training/testing/testing';
 import {PropertyConstant} from '../data/local/property-constant';
+import {Observable} from 'rxjs';
 
 // TODO: Rename to AppHelperService. Add tests
 @Injectable()
@@ -55,6 +56,14 @@ export class AppHelper {
 
   public isRemovedObject<T extends IdentifiedObject>(obj: T): boolean {
     return !!obj.deleted;
+  }
+
+  public removeUndefinedField<T extends Object>(obj: T): void {
+    Object.keys(obj).forEach(key => {
+      if (obj[key] === undefined) {
+        delete obj[key];
+      }
+    });
   }
 
   public isUndefinedOrNull(val: any): boolean {
@@ -359,6 +368,20 @@ export class AppHelper {
       }
     }
     return {newItems: newItems, removedItems: removedItems};
+  }
+
+  public async toPromise<T>(observable: Observable<T>): Promise<T> {
+    let loadResolve: (val: T) => void;
+    const promise = new Promise<T>(resolve => {
+      loadResolve = resolve;
+    });
+    const subscription = observable.subscribe(val => {
+      loadResolve(val);
+    });
+
+    const result = await promise;
+    this.unsubscribe(subscription);
+    return result;
   }
 
   //#region Try actions

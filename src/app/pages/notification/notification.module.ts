@@ -12,6 +12,7 @@ import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {ChangeNotificationsComponent} from './notifications/change-notifications/change-notifications.component';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
     TranslateModule.forChild(),
     NgxTabModule,
     NgxGridModule,
-    NgxButtonModule
+    NgxButtonModule,
+    NgxSplitButtonModule
   ],
   declarations: [NotificationsComponent, NotificationComponent, AllNotificationsComponent, ChangeNotificationsComponent]
 })

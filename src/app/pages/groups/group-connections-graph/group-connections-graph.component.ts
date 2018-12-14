@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {OnInit} from '@angular/core';
 import * as shape from 'd3-shape';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupService} from '../../group/group-page/service/group.service';
@@ -67,17 +67,17 @@ export class GroupConnectionsGraphComponent implements OnInit {
   private async initializeGroupConnections(depth: number) {
     this.nodes = [];
     this.links = [];
-    const groupId = this._groupService.groupSubject.getValue().id;
-    const groupConnections = await this._participantRestApiService.getGraphGroupConnections({}, {depth: depth}, {groupId: groupId});
-    for (const groupConnection of groupConnections) {
-      this.pushToNodes(groupConnection.source);
-      this.pushToNodes(groupConnection.target);
-      const label = await this.getGroupConnectionLabel(groupConnection);
-      const color = this.getGroupConnectionColor(groupConnection);
-      const link = new Link(groupConnection, label, color);
-      this.links.push(link);
-    }
-    this.updateSubject.next(true);
+    // const groupId = this._groupService.groupSubject.getValue().id;
+    // const groupConnections = await this._participantRestApiService.getGraphGroupConnections({}, {depth: depth}, {groupId: groupId});
+    // for (const groupConnection of groupConnections) {
+    //   this.pushToNodes(groupConnection.source);
+    //   this.pushToNodes(groupConnection.target);
+    //   const label = await this.getGroupConnectionLabel(groupConnection);
+    //   const color = this.getGroupConnectionColor(groupConnection);
+    //   const link = new Link(groupConnection, label, color);
+    //   this.links.push(link);
+    // }
+    // this.updateSubject.next(true);
   }
 
   private async getGroupConnectionLabel(groupConnection: GroupConnection) {

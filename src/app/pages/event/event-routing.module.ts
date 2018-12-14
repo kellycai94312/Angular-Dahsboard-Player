@@ -16,9 +16,9 @@ const routes: Routes = [
   {
     path: '', component: EventsPageComponent,
     children: [
-      {path: '', redirectTo: 'list', pathMatch: 'full'},
-      {path: 'list', component: EventsListComponent},
-      {path: 'calendar', component: EventsCalendarComponent}
+      {path: '', redirectTo: 'calendar', pathMatch: 'full'},
+      {path: 'calendar', component: EventsCalendarComponent},
+      {path: 'list', component: EventsListComponent}
     ]
   },
   {

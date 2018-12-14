@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
 import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
@@ -22,7 +22,7 @@ import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bea
   templateUrl: './group-members-page.component.html',
   styleUrls: ['./group-members-page.component.scss']
 })
-export class GroupMembersPageComponent extends BaseGroupComponent<Group> implements OnInit {
+export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
@@ -33,7 +33,6 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
 
   public readonly splitButtonsItems: SplitButtonItem[];
   public personQuery: PersonQuery;
-  public canEdit: boolean;
   public selectedGroupPersons: GroupPerson[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -53,8 +52,9 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
     ];
   }
 
-  async ngOnInit() {
-    this.canEdit = await this.groupService.canEdit();
+  async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
+    await super.initializeGroupPerson(groupPerson);
+    await this.resetItems();
   }
 
   public fetchItems = async (query: GroupPersonQuery) => {
@@ -70,6 +70,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> impleme
     }
     return pageContainer;
   };
+
   public onAddGroupPerson = async () => {
     if (await this._templateModalService.showEditPersonModal(new Person(), this.group)) {
       // TODO: Update only edited item!

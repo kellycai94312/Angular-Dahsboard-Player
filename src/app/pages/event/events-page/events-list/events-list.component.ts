@@ -16,6 +16,8 @@ import {BaseTraining} from '../../../../data/remote/model/training/base/base-tra
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {PersonReportsComponent} from '../../../../components/report/person-reports/person-reports.component';
 import {TrainingState} from '../../../../data/remote/misc/training-state';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-events-list',
@@ -36,11 +38,13 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   public baseTrainingQuery: BaseTrainingQuery;
   public canCreateEvent: boolean;
+  public eventTypes: NameWrapper<TrainingDiscriminator>[];
 
   constructor(private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _profileService: ProfileService,
+              private _translateObjectService: TranslateObjectService,
               private _ngxModalService: NgxModalService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
@@ -49,6 +53,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
+    this.eventTypes = await this._translateObjectService.getTranslatedEnumCollection<TrainingDiscriminator>(TrainingDiscriminator, 'TrainingDiscriminator');
 
     this.searchDxTextBoxComponent.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
       .subscribe(async event => {
@@ -88,6 +93,15 @@ export class EventsListComponent implements OnInit, OnDestroy {
       this.baseTrainingQuery.dateTo = this._appHelper.dateByFormat(event.value, PropertyConstant.dateFormat);
     } else {
       delete this.baseTrainingQuery.dateTo;
+    }
+    await this.updateItems();
+  }
+
+  public async onEventTypeChanged(val: NameWrapper<TrainingDiscriminator>) {
+    if (val) {
+      this.baseTrainingQuery.discriminator = val.data;
+    } else {
+      delete this.baseTrainingQuery.discriminator;
     }
     await this.updateItems();
   }
