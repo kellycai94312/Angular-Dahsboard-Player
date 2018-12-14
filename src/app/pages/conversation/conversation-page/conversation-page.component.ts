@@ -89,7 +89,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.query = new PageQuery();
     this._maxMessageDate = new Date();
     this.participantsTyping = [];
-    this.selectedMessages = new HashSet<Message>();
+    this.selectedMessages = this._conversationService.selectedMessages;
     this.canEditMessage = false;
 
     this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
@@ -201,6 +201,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this._messageDeleteSubscription.unsubscribe();
     this._messageReadSubscription.unsubscribe();
     this._typingSubscription.unsubscribe();
+    this.selectedMessages.removeAll();
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {

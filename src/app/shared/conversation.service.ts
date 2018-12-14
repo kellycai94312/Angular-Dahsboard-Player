@@ -6,6 +6,7 @@ import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
 import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
 import {Participant} from '../data/remote/model/chat/participant';
 import {Message} from '../data/remote/model/chat/message/message';
+import {HashSet} from '../data/local/hash-set';
 
 @Injectable()
 export class ConversationService implements OnDestroy {
@@ -19,6 +20,8 @@ export class ConversationService implements OnDestroy {
   public readonly typingHandle: Subject<Participant>;
 
   public readonly errorHandle: Subject<any>;
+
+  public readonly selectedMessages: HashSet<Message> = new HashSet<Message>();
 
   private _messageCreateSubscription: ISubscription;
   private _messageUpdateSubscription: ISubscription;

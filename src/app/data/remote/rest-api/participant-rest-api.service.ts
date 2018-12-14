@@ -1577,7 +1577,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/conversation/{!conversationId}/participant'
+    path: '/conversation/participant'
   })
   getParticipants: IRestMethod<ConversationQuery, PageContainer<Participant>>;
 

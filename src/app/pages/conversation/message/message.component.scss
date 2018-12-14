@@ -1,17 +1,88 @@
+@import "../../../styles/variables";
+
+$participant-background-color: #f2f2f2;
+$participant-border-color: #e1e1e1;
+$person-background-color: #f2ffe6;
+$person-border-color: #ccff99;
+$person-check-mark-color: #94e9b2;
+$selected-background-color: #cceeff;
+$selected-border-color: $selected-background-color;
+
 .wrapper {
+  width: 100%;
 
-  p {
-    word-break: break-all;
-  }
+  .message-wrapper {
 
-  .date {
-    font-size: 12px;
-    color: #aaa;
-  }
+    &.thin {
+      width: 60%;
+    }
 
-  .system-message {
-    font-size: 14px;
-    color: #888;
+    &.system-message-wrapper {
+
+      margin: auto;
+      border: 0;
+
+      .system-message {
+        font-size: 14px;
+      }
+    }
+
+    &.participant-message-wrapper {
+      float: left;
+
+      .message-content-wrapper {
+        background-color: $participant-background-color;
+        border-bottom: 2px solid $participant-border-color;
+      }
+
+    }
+
+    &.person-message-wrapper {
+      float: right;
+
+      .message-content-wrapper {
+        background-color: $person-background-color;
+        border-bottom: 2px solid $person-border-color;
+      }
+
+    }
+
+    .date {
+      float: right;
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    &.message-wrapper-participant {
+      background-color: $odd-item-color;
+    }
+
+    .message-content-wrapper {
+      padding: 5px;
+
+      .full-name {
+        font-size: 12px;
+        font-weight: bolder;
+      }
+
+      .content {
+        word-break: break-all;
+        white-space: normal;
+        font-size: 12px;
+      }
+
+      .check-mark {
+        margin-top: auto;
+        color: $person-check-mark-color;
+      }
+
+      &.selected {
+        background-color: #cceeff;
+        border-color: #cceeff;
+      }
+
+    }
+
   }
 
 }

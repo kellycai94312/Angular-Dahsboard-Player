@@ -1,155 +1,161 @@
-<div *ngIf="recipient"
-     class="conversation-header">
-  <div class="d-flex flex-row justify-content-between">
-    <div class="d-flex flex-row">
-      <div class="flex-column">
-        <app-image #logo
-                   [type]="'LOGO'"
-                   [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? 'PERSON' : 'CHAT'"
-                   [id]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : conversation.id"
-                   [dimension]="'W80xH80'"
-                   [format]="'CIRCLE'"></app-image>
-      </div>
-      <div class="flex-column align-self-center ml-2">
-        <div *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE; else chatHeader">
-          <h4>{{recipient.person.lastName}} {{recipient.person.firstName}}</h4>
+<div class="d-flex flex-column align-items-center">
+  <div class="w-50">
+    <div *ngIf="recipient"
+         class="conversation-header">
+      <div class="d-flex flex-row justify-content-between">
+        <div class="d-flex flex-row">
+          <div class="flex-column">
+            <app-image #logo
+                       [type]="'LOGO'"
+                       [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? 'PERSON' : 'CHAT'"
+                       [id]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : conversation.id"
+                       [dimension]="'W80xH80'"
+                       [format]="'CIRCLE'"></app-image>
+          </div>
+          <div class="flex-column align-self-center ml-2">
+            <div *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE; else chatHeader">
+              <h4>{{recipient.person.lastName}} {{recipient.person.firstName}}</h4>
+            </div>
+            <ng-template #chatHeader>
+              <h4>{{conversation.name}}</h4>
+            </ng-template>
+          </div>
         </div>
-        <ng-template #chatHeader>
-          <h4>{{conversation.name}}</h4>
-        </ng-template>
-      </div>
-    </div>
-    <div class="d-flex flex-row">
-      <div *ngIf="canEditMessage"
-           class="flex-column">
-        <button class="btn btn-outline-primary input-height-sm mr-2"
-                (click)="startEditMessage()">
-          {{'edit' | translate}} <i class="fa fa-edit"></i>
-        </button>
-      </div>
-      <div *ngIf="selectedMessages.size() > 0"
-           class="flex-column">
-        <button class="btn btn-outline-danger input-height-sm mr-2"
-                (click)="deleteSelectedMessages()">
-          {{'remove' | translate}} <i class="fa fa-remove"></i>
-        </button>
-      </div>
-      <div class="flex-column mr-1"
-           ngbDropdown
-           placement="bottom-right">
-        <button class="btn btn-outline-secondary input-height-sm"
-                ngbDropdownToggle>{{'actions' | translate}}</button>
-        <div ngbDropdownMenu>
-          <button *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT"
-                  class="dropdown-item"
-                  (click)="editParticipants()">
-            {{'participants' | translate}}
-          </button>
-          <button *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT && conversation.owner.id == person.user.id"
-                  class="dropdown-item"
-                  (click)="editChat()">
-            {{'settings' | translate}}
-          </button>
-          <button class="dropdown-item"
-                  (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') | translate}}
-          </button>
-          <button class="dropdown-item"
-                  (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
-          </button>
-          <button *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE"
-                  class="dropdown-item"
-                  (click)="createChat()">
-            {{'createChat' | translate}}
-          </button>
-          <button class="dropdown-item"
-                  (click)="quitChat()"
-                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
-            {{'quitChat' | translate}}
-          </button>
-          <button *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id == person.user.id"
-                  class="dropdown-item"
-                  (click)="deleteChat()">
-            {{'deleteChat' | translate}}
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="conversation-content"
-     [ngClass]="{'editable': editedMessage}">
-  <ngx-virtual-scroll class="list-group-flush"
-                      [getItems]="getItems"
-                      [query]="query"
-                      [autoScroll]="true">
-    <ng-template let-message>
-      <div class="list-group-item message-wrapper p-0"
-           [ngClass]="{'unread-message':  (!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read, 'selected': isMessageSelected(message)}"
-           (click)="toggleSelectMessage(message)">
-        <div class="d-flex flex-row justify-content-between">
-          <app-message [message]="message"
-                       [onlyContent]="false"></app-message>
-          <div class="align-self-center mr-3 check-icon">
-            <i class="fa fa-check-circle"></i>
+        <div class="d-flex flex-row">
+          <div *ngIf="canEditMessage"
+               class="flex-column">
+            <button class="btn btn-outline-primary input-height-sm mr-2"
+                    (click)="startEditMessage()">
+              {{'edit' | translate}} <i class="fa fa-edit"></i>
+            </button>
+          </div>
+          <div *ngIf="selectedMessages.size() > 0"
+               class="flex-column">
+            <button class="btn btn-outline-danger input-height-sm mr-2"
+                    (click)="deleteSelectedMessages()">
+              {{'remove' | translate}} <i class="fa fa-remove"></i>
+            </button>
+          </div>
+          <div class="flex-column mr-1"
+               ngbDropdown
+               placement="bottom-right">
+            <button class="btn btn-outline-secondary input-height-sm"
+                    ngbDropdownToggle>{{'actions' | translate}}
+            </button>
+            <div ngbDropdownMenu>
+              <button *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT"
+                      class="dropdown-item"
+                      (click)="editParticipants()">
+                {{'participants' | translate}}
+              </button>
+              <button
+                *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT && conversation.owner.id == person.user.id"
+                class="dropdown-item"
+                (click)="editChat()">
+                {{'settings' | translate}}
+              </button>
+              <button class="dropdown-item"
+                      (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') |
+                translate}}
+              </button>
+              <button class="dropdown-item"
+                      (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
+              </button>
+              <button *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE"
+                      class="dropdown-item"
+                      (click)="createChat()">
+                {{'createChat' | translate}}
+              </button>
+              <button class="dropdown-item"
+                      (click)="quitChat()"
+                      *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
+                {{'quitChat' | translate}}
+              </button>
+              <button *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id == person.user.id"
+                      class="dropdown-item"
+                      (click)="deleteChat()">
+                {{'deleteChat' | translate}}
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </ng-template>
-  </ngx-virtual-scroll>
-</div>
-
-<div *ngIf="editedMessage"
-     class="conversation-edit p-1">
-  <div class="d-flex flex-row justify-content-between">
-    <p class="edit-label">{{'editMessage' | translate}}</p>
-    <button class="btn btn-outline-secondary input-height-sm"
-            (click)="cancelEditMessage()">
-      <i class="fa fa-times"></i>
-    </button>
-  </div>
-  <div class="d-flex flex-row">
-    <p>{{editedMessage.content.content}}</p>
-  </div>
-</div>
-
-<div class="conversation-footer mt-2"
-     (keyup.enter)="ngxButtonSendMessage.onKeyUp($event)"
-     (keyup.shift.enter)="addNewRow()">
-  <div class="typing-container">
-    <div *ngIf="participantsTyping.length"
-         class="text-typing">
-      <div *ngIf="participantsTyping.length==1; else multiTyping">
-        {{participantsTyping[0].person.firstName}} {{'isTypingAMessage' | translate | lowercase}}
-      </div>
-      <ng-template #multiTyping>
-        <div *ngFor="let item of participantsTyping">
-          {{item.person.firstName}},
-        </div>
-        {{'areTypingMessages' | translate | lowercase}}
-      </ng-template>
     </div>
-  </div>
 
-  <div class="d-flex flex-row align-self-end">
+    <div class="conversation-content"
+         [ngClass]="{'editable': editedMessage}">
+      <ngx-virtual-scroll class="list-group-flush"
+                          [getItems]="getItems"
+                          [query]="query"
+                          [autoScroll]="true">
+        <ng-template let-message>
+          <div class="message-wrapper p-0"
+               [ngClass]="{'unread-message':  (!message.read && !message.sender.person
+                && !person && message.sender.person.id == person.id)
+                || !message.read, 'selected': isMessageSelected(message)}"
+               (click)="toggleSelectMessage(message)">
+            <div class="d-flex flex-row justify-content-between">
+              <app-message class="w-100" [message]="message" [onlyContent]="false"></app-message>
+            </div>
+          </div>
+        </ng-template>
+      </ngx-virtual-scroll>
+    </div>
+
+    <div *ngIf="editedMessage"
+         class="conversation-edit p-1">
+      <div class="d-flex flex-row justify-content-between">
+        <p class="edit-label">{{'editMessage' | translate}}</p>
+        <button class="btn btn-outline-secondary input-height-sm"
+                (click)="cancelEditMessage()">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="d-flex flex-row">
+        <p>{{editedMessage.content.content}}</p>
+      </div>
+    </div>
+
+    <div class="conversation-footer mt-2"
+         (keyup.enter)="ngxButtonSendMessage.onKeyUp($event)"
+         (keyup.shift.enter)="addNewRow()">
+      <div class="typing-container">
+        <div *ngIf="participantsTyping.length"
+             class="text-typing">
+          <div *ngIf="participantsTyping.length==1; else multiTyping">
+            {{participantsTyping[0].person.firstName}} {{'isTypingAMessage' | translate | lowercase}}
+          </div>
+          <ng-template #multiTyping>
+            <div *ngFor="let item of participantsTyping">
+              {{item.person.firstName}},
+            </div>
+            {{'areTypingMessages' | translate | lowercase}}
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="d-flex flex-row align-self-end">
    <textarea type="text"
              [(ngModel)]="messageContent.content"
              class="form-control input-height-sm w-100 mr-2"
              rows="3"
              (input)="onTyping()"
              placeholder="{{'writeMessage' | translate}}"></textarea>
-    <div class="d-flex flex-column">
-      <div>
-        <ngx-button #ngxButtonSendMessage
-                    nameKey="send"
-                    [checkPressedEnter]="true"
-                    [click]="sendMessage"></ngx-button>
-      </div>
-      <div class="mt-2">
-        <ngx-button [icon]="iconEnumClass.CALENDAR"
-                    [click]="onAddEvent">
-        </ngx-button>
+        <div class="d-flex flex-column">
+          <div>
+            <ngx-button #ngxButtonSendMessage
+                        nameKey="send"
+                        [checkPressedEnter]="true"
+                        [click]="sendMessage"></ngx-button>
+          </div>
+          <div class="mt-2">
+            <ngx-button [icon]="iconEnumClass.CALENDAR"
+                        [click]="onAddEvent">
+            </ngx-button>
+          </div>
+        </div>
       </div>
     </div>
+
   </div>
 </div>
