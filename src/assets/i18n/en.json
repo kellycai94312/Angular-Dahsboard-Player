@@ -226,12 +226,12 @@
   },
   "groupNotification": {
     "joinPersonParams": "{{person}} applied to the group '{{group}}'",
-    "joinPersonApproveParams": "{{sender}} added you to a group '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} added you to the group '{{group}}'",
     "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
-    "invitePersonParams": "{{sender}} invite you the group '{{group}}'",
-    "invitePersonApproveParams": "{{person}} approved myself to add in the group '{{group}}'",
-    "invitePersonRefuseParams": "{{person}} refused myself to add in the group '{{group}}'",
-    "deletePersonParams": "{{sender}} removed you from a group '{{group}}'"
+    "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",
+    "invitePersonApproveParams": "{{person}} approved to add in the group '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} refused to add in the group '{{group}}'",
+    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",

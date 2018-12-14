@@ -227,11 +227,11 @@
   },
   "groupNotification": {
     "joinPersonParams": "{{person}} подал заявку в группу '{{group}}'",
-    "joinPersonApproveParams": "{{sender}} добавил вас в группу '{{group}}'",
-    "joinPersonRefuseParams": "{{sender}} отклонил добавление вас в группу '{{group}}'",
-    "invitePersonParams": "{{sender}} приглашает вас в группу '{{group}}'",
-    "invitePersonApproveParams": "{{person}} принял добавление в группу '{{group}}'",
-    "invitePersonRefuseParams": "{{person}} отклонил добавление в группу '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} одобрил вашу заявку на вступление в группу '{{group}}'",
+    "joinPersonRefuseParams": "{{sender}} отклонил вашу заявку на вступление в группу '{{group}}'",
+    "invitePersonParams": "{{sender}} пригласил вас в группу '{{group}}'",
+    "invitePersonApproveParams": "{{person}} принял приглашение в группу '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} отклонил приглашение в группу '{{group}}'",
     "deletePersonParams": "{{sender}} исключил вас из группы '{{group}}'"
   },
   "conversationSystemMessage": {
