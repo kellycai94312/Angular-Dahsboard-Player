@@ -42,6 +42,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   public edit: (obj: any) => Promise<boolean>;
 
   @Input()
+  public clickByItem: (obj: any) => Promise<boolean>;
+
+  @Input()
   public dblClickByItem: (obj: any) => Promise<boolean>;
 
   @Input()
@@ -116,7 +119,13 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     }
   };
 
-  public onEdit = async (e: any, item: any) => {
+  public async onClickByItem(item: any) {
+    if (this.clickByItem) {
+      await this.clickByItem(item);
+    }
+  }
+
+  public async onDblClickByItem(item: any) {
     if (this.canEdit) {
       if (this.edit) {
         await this.edit(item);
@@ -124,7 +133,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
         await this.dblClickByItem(item);
       }
     }
-  };
+  }
 
   public onFetchItems = async (direction: Direction, pageQuery: PageQuery): Promise<PageContainer<any>> => {
     if (this.fetchItems) {

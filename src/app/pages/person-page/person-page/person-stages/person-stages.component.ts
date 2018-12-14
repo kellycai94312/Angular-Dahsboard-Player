@@ -1,8 +1,8 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
@@ -12,11 +12,11 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {PublicUserRoleViewModel} from '../../../../data/local/view-model/person/public-user-role-view-model';
 
-@Component({
-  selector: 'app-person-stages',
-  templateUrl: './person-stages.component.html',
-  styleUrls: ['./person-stages.component.scss']
-})
+// @Component({
+//   selector: 'app-person-stages',
+//   templateUrl: './person-stages.component.html',
+//   styleUrls: ['./person-stages.component.scss']
+// })
 export class PersonStagesComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstant = PropertyConstant;

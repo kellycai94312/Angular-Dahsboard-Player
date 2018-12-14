@@ -6,11 +6,11 @@ import {NoteType} from '../../../../../data/remote/model/note/base/note-type';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 
-@Component({
-  selector: 'app-trainer-note',
-  templateUrl: './trainer-note.component.html',
-  styleUrls: ['./trainer-note.component.scss']
-})
+// @Component({
+//   selector: 'app-trainer-note',
+//   templateUrl: './trainer-note.component.html',
+//   styleUrls: ['./trainer-note.component.scss']
+// })
 export class TrainerNoteComponent implements OnInit, OnDestroy {
 
   @ViewChild(NgxGridComponent)

@@ -3,7 +3,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs/src/Subscription';
@@ -13,11 +13,11 @@ import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
-@Component({
-  selector: 'app-groups',
-  templateUrl: './groups.component.html',
-  styleUrls: ['./groups.component.scss']
-})
+// @Component({
+//   selector: 'app-groups',
+//   templateUrl: './groups.component.html',
+//   styleUrls: ['./groups.component.scss']
+// })
 export class GroupsComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;

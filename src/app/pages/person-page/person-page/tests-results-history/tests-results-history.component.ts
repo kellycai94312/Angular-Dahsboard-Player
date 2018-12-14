@@ -5,17 +5,17 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AppHelper} from '../../../../utils/app-helper';
 import {ExerciseExecMeasureValue} from '../../../../data/remote/model/training/exercise-exec-measure-value';
 import {ActivatedRoute} from '@angular/router';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
 import {ISubscription} from 'rxjs-compat/Subscription';
 
-@Component({
-  selector: 'app-tests-results-history',
-  templateUrl: './tests-results-history.component.html',
-  styleUrls: ['./tests-results-history.component.scss']
-})
+// @Component({
+//   selector: 'app-tests-results-history',
+//   templateUrl: './tests-results-history.component.html',
+//   styleUrls: ['./tests-results-history.component.scss']
+// })
 export class TestsResultsHistoryComponent implements OnInit, OnDestroy {
   public measureValues: ExerciseExecMeasureValue[];
   public readonly query: MeasureTemplateQuery;

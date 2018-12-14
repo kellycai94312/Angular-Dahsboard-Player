@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
 import {ReportsService} from '../../../../shared/reports.service';
@@ -14,11 +14,11 @@ import {EventModalComponent} from './event-modal/event-modal.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 
-@Component({
-  selector: 'app-events',
-  templateUrl: './events.component.html',
-  styleUrls: ['./events.component.scss']
-})
+// @Component({
+//   selector: 'app-events',
+//   templateUrl: './events.component.html',
+//   styleUrls: ['./events.component.scss']
+// })
 export class EventsComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstant = PropertyConstant;

@@ -9,7 +9,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditNoteComponent} from '../../component/edit-note/edit-note.component';
 import {AppHelper} from '../../../../utils/app-helper';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Injectable()

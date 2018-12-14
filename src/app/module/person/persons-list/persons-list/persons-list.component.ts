@@ -17,6 +17,8 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ImageFormat} from '../../../../data/local/image-format';
+import {Person} from '../../../../data/remote/model/person';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-persons-list',
@@ -41,6 +43,7 @@ export class PersonsListComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,
+              private _router: Router,
               private _appHelper: AppHelper) {
     this.personQuery = new PersonQuery();
     this.personQuery.name = '';
@@ -53,6 +56,10 @@ export class PersonsListComponent implements OnInit {
     this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
   }
+
+  public onClickByItem = async (item: Person) => {
+    await this._router.navigate(['/person', item.id]);
+  };
 
   //#region Filter
 

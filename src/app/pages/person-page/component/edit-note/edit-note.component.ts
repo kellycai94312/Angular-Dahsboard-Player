@@ -1,4 +1,3 @@
-import {Component} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -8,11 +7,11 @@ import {AgentNote} from '../../../../data/remote/model/note/agent-note';
 import {TrainerNote} from '../../../../data/remote/model/note/trainer-note';
 import {ClientError} from '../../../../data/local/error/client-error';
 
-@Component({
-  selector: 'app-edit-note',
-  templateUrl: './edit-note.component.html',
-  styleUrls: ['./edit-note.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-note',
+//   templateUrl: './edit-note.component.html',
+//   styleUrls: ['./edit-note.component.scss']
+// })
 export class EditNoteComponent extends BaseEditComponent<Note> {
 
   public noteType = NoteType;

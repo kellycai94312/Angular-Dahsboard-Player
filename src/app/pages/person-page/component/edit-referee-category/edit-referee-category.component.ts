@@ -11,11 +11,11 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
 
-@Component({
-  selector: 'app-edit-referee-category',
-  templateUrl: './edit-referee-category.component.html',
-  styleUrls: ['./edit-referee-category.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-referee-category',
+//   templateUrl: './edit-referee-category.component.html',
+//   styleUrls: ['./edit-referee-category.component.scss']
+// })
 export class EditRefereeCategoryComponent extends BaseEditComponent<PersonRefereeCategory> {
 
   public readonly propertyConstant = PropertyConstant;

@@ -6,7 +6,7 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
 import {MedicalExaminationViewModel} from '../../../../data/local/view-model/person/medical-examination-view-model';
@@ -14,11 +14,11 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {EditMedicalExaminationComponent} from '../../../../components/person/edit-medical-examination/edit-medical-examination.component';
 
-@Component({
-  selector: 'app-medical-examinations',
-  templateUrl: './medical-examinations.component.html',
-  styleUrls: ['./medical-examinations.component.scss']
-})
+// @Component({
+//   selector: 'app-medical-examinations',
+//   templateUrl: './medical-examinations.component.html',
+//   styleUrls: ['./medical-examinations.component.scss']
+// })
 export class MedicalExaminationsComponent implements OnInit {
 
   public propertyConstant = PropertyConstant;

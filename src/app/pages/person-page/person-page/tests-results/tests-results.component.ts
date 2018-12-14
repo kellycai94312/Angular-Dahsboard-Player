@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ExerciseResult} from '../../../../data/remote/bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../../../../data/remote/model/training/exercise-exec-measure-value';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -16,11 +16,11 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
-@Component({
-  selector: 'app-tests-results',
-  templateUrl: './tests-results.component.html',
-  styleUrls: ['./tests-results.component.scss']
-})
+// @Component({
+//   selector: 'app-tests-results',
+//   templateUrl: './tests-results.component.html',
+//   styleUrls: ['./tests-results.component.scss']
+// })
 export class TestsResultsComponent implements OnInit {
 
   @ViewChild(NgxVirtualScrollComponent)

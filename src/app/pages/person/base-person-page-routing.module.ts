@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '', component: BasePersonPageComponent,
     children: [
       {path: '', loadChildren: './persons-page/persons-page.module#PersonsPageModule'},
-      // {path: ':id', loadChildren: './person-page/person-page.module#PersonPageModule'}
+      {path: ':id', loadChildren: './person-page/person-page.module#PersonPageModule'}
     ]
   }
 ];

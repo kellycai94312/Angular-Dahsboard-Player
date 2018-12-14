@@ -1,24 +1,24 @@
 import {Component, OnInit} from '@angular/core';
-import {PersonService} from '../person.service';
-import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {NamedObject} from '../../../../data/remote/base/named-object';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {UserRole} from '../../../../data/remote/model/user-role';
-import {Person} from '../../../../data/remote/model/person';
-import {AppHelper} from '../../../../utils/app-helper';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
-import {AthleteState} from '../../../../data/remote/model/person/athlete-state';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {PropertyConstant} from '../../../../../../data/local/property-constant';
+import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
+import {Person} from '../../../../../../data/remote/model/person';
+import {UserRole} from '../../../../../../data/remote/model/user-role';
+import {NameWrapper} from '../../../../../../data/local/name-wrapper';
+import {SexEnum} from '../../../../../../data/remote/misc/sex-enum';
+import {AthleteState} from '../../../../../../data/remote/model/person/athlete-state';
+import {PersonService} from '../../../service/person.service';
+import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../../../utils/app-helper';
+import {TranslateObjectService} from '../../../../../../shared/translate-object.service';
+import {IdentifiedObject} from '../../../../../../data/remote/base/identified-object';
+import {NamedObject} from '../../../../../../data/remote/base/named-object';
 
 @Component({
-  selector: 'app-personal',
-  templateUrl: './personal.component.html',
-  styleUrls: ['./personal.component.scss']
+  selector: 'app-personal-page',
+  templateUrl: './personal-page.component.html',
+  styleUrls: ['./personal-page.component.scss']
 })
-export class PersonalComponent implements OnInit {
+export class PersonalPageComponent implements OnInit {
 
   public readonly propertyConstant = PropertyConstant;
   public readonly userRoleEnum = UserRoleEnum;

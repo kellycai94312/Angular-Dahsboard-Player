@@ -3,11 +3,11 @@ import {Tab} from '../../../../data/local/tab';
 import {MyRegionService} from './my-region.service';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 
-@Component({
-  selector: 'app-my-region',
-  templateUrl: './my-region.component.html',
-  styleUrls: ['./my-region.component.scss']
-})
+// @Component({
+//   selector: 'app-my-region',
+//   templateUrl: './my-region.component.html',
+//   styleUrls: ['./my-region.component.scss']
+// })
 export class MyRegionComponent {
 
   public readonly tabs: Tab[];

@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ContactEnableModalComponent} from './contact-enable-modal.component';
+import {ContactPageComponent} from './contact-page.component';
 
-describe('ContactEnableModalComponent', () => {
-  let component: ContactEnableModalComponent;
-  let fixture: ComponentFixture<ContactEnableModalComponent>;
+describe('ContactPageComponent', () => {
+  let component: ContactPageComponent;
+  let fixture: ComponentFixture<ContactPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ContactEnableModalComponent]
+      declarations: [ContactPageComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ContactEnableModalComponent);
+    fixture = TestBed.createComponent(ContactPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -136,7 +136,7 @@
     </app-input-select>
   </div>
 </div>
-<app-busy-button *ngIf="allowEdit"
-                 classes="mt-2"
-                 nameKey="save"
-                 [click]="onSave"></app-busy-button>
+<ngx-button *ngIf="allowEdit"
+            class="mt-2"
+            nameKey="save"
+            [click]="onSave"></ngx-button>

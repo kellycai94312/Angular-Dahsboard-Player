@@ -1,26 +1,26 @@
 <div class="row cols-padding">
   <div class="col-xl-6 col-lg-6 col-md-10 col-sm-12">
-    <div class="d-flex flex-row" *ngFor="let contact of contacts">
+    <div *ngFor="let contact of contacts"
+         class="d-flex flex-row">
       <div class="form-group w-100">
-        <label for="value">{{contact.discriminator}}
-          <button *ngIf="!enabled && contact.discriminator == 'EMAIL'"
-                  class="btn btn-outline-primary input-height-sm mb-1"
-                  (click)="enablePerson()">
-            <i class="fa fa-check-circle"></i> {{'activate' | translate}}
-          </button>
+        <label>{{contact.discriminator}}
+          <ngx-button *ngIf="!enabled && contact.discriminator === contactTypeClass.EMAIL"
+                      nameKey="activate"
+                      [click]="onPersonActivation"></ngx-button>
         </label>
         <dx-text-box id="value"
                      [(value)]="contact.value"
                      [readOnly]="!allowEdit"
                      [showClearButton]="true">
           <dx-validator>
-            <dxi-validation-rule *ngIf="contact.discriminator == 'EMAIL'" type="email"></dxi-validation-rule>
+            <dxi-validation-rule *ngIf="contact.discriminator === contactTypeClass.EMAIL"
+                                 type="email"></dxi-validation-rule>
           </dx-validator>
         </dx-text-box>
       </div>
       <div class="align-self-center">
         <dx-check-box *ngIf="allowEdit"
-                      class="ml-3"
+                      class="ml-2"
                       [(value)]="contact.visible"
                       text="{{'public' | translate}}">
         </dx-check-box>

@@ -1,14 +1,14 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
-import {SportType} from '../../../data/remote/model/sport-type';
-import {UserRole} from '../../../data/remote/model/user-role';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {Image} from '../../../data/remote/model/file/image/image';
-import {PersonViewModel} from '../../../data/local/view-model/person-view-model';
-import {GroupPerson} from '../../../data/remote/model/group/group-person';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {Image} from '../../../../data/remote/model/file/image/image';
+import {PersonViewModel} from '../../../../data/local/view-model/person-view-model';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
-import {AppHelper} from '../../../utils/app-helper';
-import {PublicUserRole} from '../../../data/remote/model/group/public-user-role';
+import {AppHelper} from '../../../../utils/app-helper';
+import {PublicUserRole} from '../../../../data/remote/model/group/public-user-role';
 import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
@@ -68,13 +68,13 @@ export class PersonService implements OnDestroy {
       this.personViewModelSubject.next(this.personViewModel);
       if (person && person.id) {
         if (person.user && person.user.id) {
-          this.userRoles = await  this._participantRestApiService.getUserUserRoles({userId: person.user.id});
+          this.userRoles = await this._participantRestApiService.getUserUserRoles({userId: person.user.id});
           if (this.userRoles.length) {
             this.selectedUserRole = this.userRoles[0];
           }
         }
 
-        this.sportTypes = await  this._participantRestApiService.getPersonSportTypes({id: person.id});
+        this.sportTypes = await this._participantRestApiService.getPersonSportTypes({id: person.id});
         if (this.sportTypes.length) {
           this.sportTypeSubject.next(this.sportTypes[0]);
         }
@@ -143,7 +143,7 @@ export class PersonService implements OnDestroy {
   public async allowEdit(): Promise<boolean> {
     try {
       const createdByAnotherPerson = this.personViewModel.data.user.id != this.personViewModel.data.owner.id;
-      const canEdit = (await  this._participantRestApiService.canEditPerson({personId: this.personViewModel.data.id})).value;
+      const canEdit = (await this._participantRestApiService.canEditPerson({personId: this.personViewModel.data.id})).value;
       return !createdByAnotherPerson && canEdit;
     } catch (e) {
     }

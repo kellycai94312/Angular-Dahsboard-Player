@@ -8,13 +8,13 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {PersonService} from '../../person-page/person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 
-@Component({
-  selector: 'app-group-person-logs',
-  templateUrl: './group-person-logs.component.html',
-  styleUrls: ['./group-person-logs.component.scss']
-})
+// @Component({
+//   selector: 'app-group-person-logs',
+//   templateUrl: './group-person-logs.component.html',
+//   styleUrls: ['./group-person-logs.component.scss']
+// })
 export class GroupPersonLogsComponent implements OnDestroy {
 
   private readonly _paramsSubscription: ISubscription;
