@@ -16,7 +16,6 @@ import {BaseGroupComponent} from '../../../../../../data/local/component/group/b
 import {SelectionType} from '../../../../../../components/ngx-grid/bean/selection-type';
 import {GroupTransitionType} from '../../../../../../data/remote/model/group/transition/group-transition-type';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
-import {ISubscription} from 'rxjs-compat/Subscription';
 
 @Component({
   selector: 'app-group-members-page',
@@ -34,10 +33,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
 
   public readonly splitButtonsItems: SplitButtonItem[];
   public personQuery: PersonQuery;
-  public canEdit: boolean;
   public selectedGroupPersons: GroupPerson[];
-
-  private readonly _groupPersonSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _templateModalService: TemplateModalService,
@@ -54,15 +50,11 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
         return this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
       })
     ];
-
-    this._groupPersonSubscription = this.groupService.groupPerson$.subscribe(async val => {
-      this.canEdit = await this.groupService.canEditGroup();
-    });
   }
 
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-    this.appHelper.unsubscribe(this._groupPersonSubscription);
+  async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
+    await super.initializeGroupPerson(groupPerson);
+    await this.resetItems();
   }
 
   public fetchItems = async (query: GroupPersonQuery) => {
