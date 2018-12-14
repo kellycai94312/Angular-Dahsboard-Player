@@ -1,7 +1,5 @@
-import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {Routes} from '@angular/router';
 import {PersonPageComponent} from './person-page/person-page.component';
-import {PersonsPageComponent} from './persons-page/persons-page.component';
 import {AnthropometryComponent} from './person-page/anthropometry/anthropometry.component';
 import {ContactComponent} from './person-page/contact/contact.component';
 import {EventsComponent} from './person-page/events/events.component';
@@ -26,14 +24,6 @@ import {PersonStageStandardsComponent} from './person-page/person-stage-standard
 
 
 const routes: Routes = [
-  {
-    path: '', component: PersonsPageComponent,
-    children: [
-      {path: '', redirectTo: 'my', pathMatch: 'full'},
-      {path: 'my'},
-      {path: 'all'}
-    ]
-  },
   {
     path: ':id', component: PersonPageComponent,
     children: [
@@ -68,9 +58,9 @@ const routes: Routes = [
 
 ];
 
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
-})
+// @NgModule({
+//   imports: [RouterModule.forChild([])],
+//   exports: [RouterModule]
+// })
 export class PersonPageRoutingModule {
 }

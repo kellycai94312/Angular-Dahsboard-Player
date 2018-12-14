@@ -56,6 +56,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   @Input()
   public fetchItems: (query: PageQuery) => Promise<PageContainer<any>>;
 
+  @Input()
+  public autoInit: boolean;
+
   private readonly _sorts: NameWrapper<Sort>[];
   private _sortSubscription: ISubscription;
 
@@ -66,6 +69,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     this.selectedItemsChange = new EventEmitter<any[]>();
     this.sortChange = new EventEmitter<string>();
     this._sorts = [];
+    this.autoInit = true;
   }
 
 
@@ -74,7 +78,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
       return this.fetchItems(pageQuery);
     };
     // TODO: Turn off auto update items
-    await this.reset();
+    if (this.autoInit) {
+      await this.reset();
+    }
   }
 
   ngAfterViewInit(): void {

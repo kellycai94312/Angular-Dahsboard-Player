@@ -43,7 +43,7 @@ const routes: Routes = [
   },
   {
     path: 'person',
-    loadChildren: './pages/person-page/person-page.module#PersonPageModule',
+    loadChildren: './pages/person/base-person-page.module#BasePersonPageModule',
     canActivate: [AuthGuard, LayoutService]
   },
   {
