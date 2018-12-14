@@ -39,7 +39,7 @@
                    [dimension]="'W40xH40'"
                    [format]="'CIRCLE'"></app-image>
         <div class="d-flex flex-column message-content-wrapper w-100 ml-2 mr-2"
-        [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
+             [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
           <div *ngIf="!onlyContent" class="d-flex flex-row justify-content-between">
             <p class="full-name">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
             <p class="date">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:
@@ -53,8 +53,7 @@
               <i class="fa fa-check" *ngIf="(!message.read && !message.sender.person && !person &&
               message.sender.person.id == person.id)  || !message.read; else readMessage"></i>
               <ng-template #readMessage>
-                <!--todo -->
-                <i class="fa fa-check-square"></i>
+                <svg-icon src="/assets/img/check-double-solid.svg" [svgStyle]="{ 'width.px':14 }"></svg-icon>
               </ng-template>
             </div>
           </div>

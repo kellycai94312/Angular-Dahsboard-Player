@@ -24,6 +24,7 @@ import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-de
 import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {EventComponentsModule} from '../../components/event/event-components.module';
+import {AngularSvgIconModule} from 'angular-svg-icon';
 
 @NgModule({
   imports: [
@@ -45,7 +46,8 @@ import {EventComponentsModule} from '../../components/event/event-components.mod
     SafeHtmlModule,
     ModalConfirmModule,
     NgxButtonModule,
-    EventComponentsModule
+    EventComponentsModule,
+    AngularSvgIconModule
   ],
   declarations: [
     ConversationsPageComponent,
