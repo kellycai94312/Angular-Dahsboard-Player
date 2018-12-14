@@ -7,6 +7,7 @@ import {Router} from '@angular/router';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../data/remote/model/chat/message/message-content';
 import {PropertyConstant} from '../../../data/local/property-constant';
+import {ConversationService} from '../../../shared/conversation.service';
 
 @Component({
   selector: 'app-message',
@@ -33,6 +34,7 @@ export class MessageComponent implements OnInit, DoCheck {
   private differ: any;
 
   constructor(private _authorizationService: AuthorizationService,
+              public conversationService: ConversationService,
               private _router: Router,
               differs: KeyValueDiffers) {
     this.class = '';

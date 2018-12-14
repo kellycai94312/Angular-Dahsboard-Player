@@ -81,9 +81,9 @@ export class ChatModalCreateComponent implements OnInit {
 
   public getUnselectedItems: Function = async (direction: Direction, pageQuery: ConversationQuery) => {
     pageQuery.unassigned = true;
-    const pageContainer = await this._participantRestApiService.getPersons(pageQuery);
+    const pageContainer = await this._participantRestApiService.getParticipants(pageQuery);
     return this._appHelper.pageContainerConverter(pageContainer,
-      person => person,
+      participant => participant.person,
       person => person.id != this._person.id
     );
   };
