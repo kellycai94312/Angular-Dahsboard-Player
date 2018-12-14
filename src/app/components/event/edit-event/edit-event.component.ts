@@ -58,7 +58,6 @@ export class EditEventComponent<T extends BaseTraining> extends BaseEditComponen
     this.selectedEventType = this.eventTypes[0];
     this._userRoles = await this.participantRestApiService.getUserRoles();
 
-    obj.name = obj.name || await this._translateObjectService.getTranslation('newEvent');
     obj.template = obj.template || false;
     obj.manualMode = obj.manualMode || true;
     obj.discriminator = obj.discriminator || this.selectedEventType.data;

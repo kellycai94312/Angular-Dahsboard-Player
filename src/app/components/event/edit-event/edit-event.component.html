@@ -16,7 +16,8 @@
   <div class="d-flex flex-row align-items-center">
     <div class="w-100 mr-auto">
       <label>{{'name' | translate}}</label>
-      <ngx-text-box [(value)]="data.name"></ngx-text-box>
+      <ngx-text-box [(value)]="data.name"
+                    placeholderKey="newEvent"></ngx-text-box>
     </div>
     <div *ngIf="!data.id"
          class="ml-2 align-self-end">
