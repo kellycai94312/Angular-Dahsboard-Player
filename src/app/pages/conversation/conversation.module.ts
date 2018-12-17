@@ -23,8 +23,8 @@ import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
 import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
-import {EventComponentsModule} from '../../components/event/event-components.module';
 import {AngularSvgIconModule} from 'angular-svg-icon';
+import {EditEventModule} from '../../module/event/edit-event/edit-event.module';
 
 @NgModule({
   imports: [
@@ -46,7 +46,7 @@ import {AngularSvgIconModule} from 'angular-svg-icon';
     SafeHtmlModule,
     ModalConfirmModule,
     NgxButtonModule,
-    EventComponentsModule,
+    EditEventModule,
     AngularSvgIconModule
   ],
   declarations: [

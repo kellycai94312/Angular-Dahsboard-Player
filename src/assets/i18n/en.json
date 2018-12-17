@@ -591,5 +591,8 @@
   },
   "sendInvites": "Send invites",
   "invitesSent": "Invites sent",
-  "invitesDidNotSend": "Invites didn't send"
+  "invitesDidNotSend": "Invites didn't send",
+  "nextStep": "Next step",
+  "back": "Back",
+  "saveAndSend": "Save and send"
 }

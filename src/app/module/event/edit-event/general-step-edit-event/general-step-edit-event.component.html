@@ -16,8 +16,9 @@
   <div class="d-flex flex-row align-items-center">
     <div class="w-100 mr-auto">
       <label>{{'name' | translate}}</label>
-      <ngx-text-box [(value)]="data.name"
-                    placeholderKey="newEvent"></ngx-text-box>
+      <ngx-input [type]="ngxInputTypeClass.TEXT"
+                 [(value)]="data.name"
+                 placeholderKey="newEvent"></ngx-input>
     </div>
     <div *ngIf="!data.id"
          class="ml-2 align-self-end">
@@ -95,44 +96,5 @@
                       [getName]="getName"
                       placeholder="{{'sportType' | translate}}">
     </app-input-select>
-  </div>
-  <div *ngIf="data.id"
-       class="d-flex flex-column mt-2">
-    <div class="d-flex flex-row">
-      <div class="mr-2">
-        <ngx-button nameKey="groups"
-                    [click]="onEditGroups"></ngx-button>
-      </div>
-      <div *ngIf="groups && groups.length"
-           class="tags-content w-100">
-        <div *ngFor="let item of groups">
-          {{item.name}}
-        </div>
-      </div>
-    </div>
-    <div class="d-flex flex-row mt-2">
-      <div class="mr-2">
-        <ngx-button nameKey="athletes"
-                    [click]="onEditAthleteTrainingPersons"></ngx-button>
-      </div>
-      <div *ngIf="athletePersons && athletePersons.length"
-           class="tags-content w-100">
-        <div *ngFor="let item of athletePersons">
-          {{item.person.lastName + ' ' + item.person.firstName}}
-        </div>
-      </div>
-    </div>
-    <div class="d-flex flex-row mt-2">
-      <div class="mr-2">
-        <ngx-button nameKey="trainers"
-                    [click]="onEditTrainerTrainingPersons"></ngx-button>
-      </div>
-      <div *ngIf="trainerPersons && trainerPersons.length"
-           class="tags-content w-100">
-        <div *ngFor="let item of trainerPersons">
-          {{item.person.lastName + ' ' + item.person.firstName}}
-        </div>
-      </div>
-    </div>
   </div>
 </div>

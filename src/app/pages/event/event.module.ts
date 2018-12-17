@@ -36,7 +36,6 @@ import {GeneralTestingStepComponent} from './event-page/testing/step/general-tes
 import {TestingStepsManagerComponent} from './event-page/testing/step/testing-steps-manager/testing-steps-manager.component';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
-import {EventComponentsModule} from '../../components/event/event-components.module';
 import {GroupModule} from '../../components/group/group.module';
 
 @NgModule({
@@ -69,7 +68,6 @@ import {GroupModule} from '../../components/group/group.module';
     DxCheckBoxModule,
     NamedObjectModule,
     NgxSelectionModule,
-    EventComponentsModule,
     GroupModule
   ],
   declarations: [

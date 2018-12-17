@@ -93,10 +93,11 @@ export class NgxModalService {
     };
   }
 
-  public removeSplitItemButton(callback: () => Promise<void>): SplitButtonItem {
+  public removeSplitItemButton(callback: () => Promise<void>, visible: () => boolean = null): SplitButtonItem {
     return {
       nameKey: 'remove',
-      callback: callback
+      callback: callback,
+      visible: visible
     };
   }
 

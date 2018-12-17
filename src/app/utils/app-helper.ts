@@ -60,7 +60,7 @@ export class AppHelper {
 
   public removeUndefinedField<T extends Object>(obj: T): void {
     Object.keys(obj).forEach(key => {
-      if (obj[key] === undefined) {
+      if (obj[key] === undefined || obj[key] === null) {
         delete obj[key];
       }
     });
