@@ -177,6 +177,10 @@ export class AppHelper {
     return pageContainer;
   }
 
+  public replaceAt(text: string, fromIndex: number, searchValue: string, replaceValue): string {
+    return `${text.substr(0, fromIndex)}${text.substr(fromIndex).replace(searchValue, replaceValue)}`;
+  }
+
   public cloneObject<T>(obj: T): T {
     if (this.isUndefinedOrNull(obj)) {
       return obj;
