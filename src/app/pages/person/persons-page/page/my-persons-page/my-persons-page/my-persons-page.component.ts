@@ -13,7 +13,7 @@ export class MyPersonsPageComponent {
   constructor() {
     this.personQuery = {
       name: '',
-      canEdit: true
+      connected: true
     };
   }
 
