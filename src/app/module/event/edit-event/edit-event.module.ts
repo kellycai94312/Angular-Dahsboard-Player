@@ -7,7 +7,6 @@ import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module'
 import {NgxInputModule} from '../../../components/ngx-input/ngx-input.module';
 import {DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule, DxTextAreaModule} from 'devextreme-angular';
 import {InputSelectModule} from '../../../components/input-select/input-select.module';
-import {GroupsStepEditEventComponent} from './groups-step-edit-event/groups-step-edit-event.component';
 
 @NgModule({
   imports: [
@@ -23,12 +22,10 @@ import {GroupsStepEditEventComponent} from './groups-step-edit-event/groups-step
   ],
   declarations: [
     GeneralStepEditEventComponent,
-    GroupsStepEditEventComponent,
     PersonsStepEditEventComponent
   ],
   entryComponents: [
     GeneralStepEditEventComponent,
-    GroupsStepEditEventComponent,
     PersonsStepEditEventComponent
   ]
 })

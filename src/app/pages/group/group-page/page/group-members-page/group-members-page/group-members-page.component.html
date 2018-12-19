@@ -9,7 +9,8 @@
           selectionType="{{canEdit ? selectionTypeClass.MULTIPLE : selectionTypeClass.SINGLE}}"
           (selectedItemsChange)="onSelectedItemsChange($event)"
           (sortChange)="onSortChange($event)"
-          [canEdit]="canEdit">
+          [canEdit]="canEdit"
+          [enabledAdd]="false">
   <ngx-column nameKey="lastName"
               sortName="lastName">
     <ng-template let-item>
