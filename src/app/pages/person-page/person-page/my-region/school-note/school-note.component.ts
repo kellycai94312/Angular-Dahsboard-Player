@@ -6,11 +6,11 @@ import {MyRegionService} from '../my-region.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 
-@Component({
-  selector: 'app-school-note',
-  templateUrl: './school-note.component.html',
-  styleUrls: ['./school-note.component.scss']
-})
+// @Component({
+//   selector: 'app-school-note',
+//   templateUrl: './school-note.component.html',
+//   styleUrls: ['./school-note.component.scss']
+// })
 export class SchoolNoteComponent implements OnInit, OnDestroy {
 
   @ViewChild(NgxGridComponent)

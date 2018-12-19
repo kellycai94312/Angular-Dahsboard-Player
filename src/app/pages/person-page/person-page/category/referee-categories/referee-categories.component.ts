@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../../../shared/authorization.service';
-import {PersonService} from '../../person.service';
+import {PersonService} from '../../../../person/person-page/service/person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PersonRefereeCategoryViewModel} from '../../../../../data/local/view-model/referee-category/person-referee-category-view-model';
 import {AppHelper} from '../../../../../utils/app-helper';
@@ -12,11 +12,11 @@ import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditRefereeCategoryComponent} from '../../../component/edit-referee-category/edit-referee-category.component';
 
-@Component({
-  selector: 'app-referee-categories',
-  templateUrl: './referee-categories.component.html',
-  styleUrls: ['./referee-categories.component.scss']
-})
+// @Component({
+//   selector: 'app-referee-categories',
+//   templateUrl: './referee-categories.component.html',
+//   styleUrls: ['./referee-categories.component.scss']
+// })
 export class RefereeCategoriesComponent implements OnInit, OnDestroy {
 
   @ViewChild(NgxGridComponent)

@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -11,11 +11,11 @@ import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
 import {ISubscription} from 'rxjs-compat/Subscription';
 
-@Component({
-  selector: 'app-anthropometry-history',
-  templateUrl: './anthropometry-history.component.html',
-  styleUrls: ['./anthropometry-history.component.scss']
-})
+// @Component({
+//   selector: 'app-anthropometry-history',
+//   templateUrl: './anthropometry-history.component.html',
+//   styleUrls: ['./anthropometry-history.component.scss']
+// })
 export class AnthropometryHistoryComponent implements OnInit, OnDestroy {
 
   public anthropometries: PersonAnthropometry[];

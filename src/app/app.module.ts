@@ -49,12 +49,12 @@ import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {PersonModule} from './components/person/person.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
-import {EventComponentsModule} from './components/event/event-components.module';
 import {NgxButtonModule} from './components/ngx-button/ngx-button.module';
 import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
 import {InputSelectModule} from './components/input-select/input-select.module';
 import {DxSelectBoxModule} from 'devextreme-angular';
 import {GroupSettingsComponent} from './pages/group/group-page/group-settings/group-settings.component';
+import {EditEventModule} from './module/event/edit-event/edit-event.module';
 
 registerLocaleData(localeRu);
 
@@ -79,7 +79,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       enableHtml: true,
-      positionClass: 'toast-bottom-right',
+      positionClass: 'toast-top-center',
       timeOut: 3000,
       maxOpened: 7
     }),
@@ -102,7 +102,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxModalModule,
     GroupModule,
     PersonModule,
-    EventComponentsModule,
     HtmlContentModule,
     NgxButtonModule,
     NgxTabModule,
@@ -110,6 +109,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     InputSelectModule,
     DxSelectBoxModule,
     GroupModule,
+    EditEventModule
   ],
   providers: [
     LayoutService,

@@ -45,6 +45,10 @@ export class NgxSplitButtonComponent {
       }
       return !x.visible || x.visible;
     };
+    // TODO: Call updateDefaultItem() when any values will be changed within this method
+    setInterval(() => {
+      this.updateDefaultItem();
+    }, 300);
   }
 
   public async onClick(item: SplitButtonItem) {
@@ -59,10 +63,6 @@ export class NgxSplitButtonComponent {
   }
 
   public canShowDropDownMenu = (): boolean => {
-    // TODO: Call updateDefaultItem() when will changed any values within in this method
-    setTimeout(() => {
-      this.updateDefaultItem();
-    });
     return this.items.filter(this._visiblePredicate).length > 1;
   };
 

@@ -20,6 +20,7 @@ import {Game} from '../data/remote/model/training/game/game';
 import {Testing} from '../data/remote/model/training/testing/testing';
 import {PropertyConstant} from '../data/local/property-constant';
 import {Observable} from 'rxjs';
+import {PageQuery} from '../data/remote/rest-api/page-query';
 
 // TODO: Rename to AppHelperService. Add tests
 @Injectable()
@@ -58,12 +59,14 @@ export class AppHelper {
     return !!obj.deleted;
   }
 
-  public removeUndefinedField<T extends Object>(obj: T): void {
-    Object.keys(obj).forEach(key => {
-      if (obj[key] === undefined) {
-        delete obj[key];
+  public getObjectWithoutUndefinedFields<T extends Object>(obj: T): T {
+    const cloneObj = this.cloneObject(obj);
+    Object.keys(cloneObj).forEach(key => {
+      if (cloneObj[key] === undefined || cloneObj[key] === null || cloneObj[key] === '') {
+        delete cloneObj[key];
       }
     });
+    return cloneObj;
   }
 
   public isUndefinedOrNull(val: any): boolean {
@@ -175,6 +178,10 @@ export class AppHelper {
     pageContainer.size = items.length;
     pageContainer.total = items.length;
     return pageContainer;
+  }
+
+  public replaceAt(text: string, fromIndex: number, searchValue: string, replaceValue): string {
+    return `${text.substr(0, fromIndex)}${text.substr(fromIndex).replace(searchValue, replaceValue)}`;
   }
 
   public cloneObject<T>(obj: T): T {
@@ -382,6 +389,16 @@ export class AppHelper {
     const result = await promise;
     this.unsubscribe(subscription);
     return result;
+  }
+
+  public updatePageQuery<T extends PageQuery>(source: T, target: T = null): T {
+    if (target) {
+      target.from = source.from;
+      target.count = source.count;
+      target.name = source.name;
+      return this.getObjectWithoutUndefinedFields(target);
+    }
+    return source;
   }
 
   //#region Try actions

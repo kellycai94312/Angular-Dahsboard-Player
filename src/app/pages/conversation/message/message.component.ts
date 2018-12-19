@@ -26,7 +26,7 @@ export class MessageComponent implements OnInit, DoCheck {
   public message: Message;
 
   @Input()
-  public onlyContent: boolean = false;
+  public previewContent: boolean;
 
   public messageViewModel: MessageViewModel;
   public person: Person;

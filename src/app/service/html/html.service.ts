@@ -14,9 +14,16 @@ export class HtmlService {
               private _appHelper: AppHelper) {
   }
 
-  public getUrlLinkTag(url: string, content: string = null, target: LinkTarget = LinkTarget.SELF) {
+  public getUrlLinkTag(url: string, content: string = null, target: LinkTarget = LinkTarget.SELF): string {
     return `<a href="${url}" target="${target}">${content}</a>`;
+  }
 
+  public getImageTag(url: string): string {
+    return `<img style="width: inherit" src="${url}"/>`;
+  }
+
+  public getImageIconTag(): string {
+    return `<i class="fa fa-image"></i>`;
   }
 
   public async getEventPreview<T extends BaseTraining>(event: T): Promise<string> {
@@ -39,9 +46,25 @@ export class HtmlService {
     return this.getUrlLinkTag(`/person/${person.id}`, `${person.lastName} ${person.firstName}`);
   }
 
+  public async imageExists(url: string): Promise<boolean> {
+    let loadResolve: (val: boolean) => void;
+    const promise = new Promise<boolean>(resolve => {
+      loadResolve = resolve;
+    });
+    const image = new Image();
+    image.onload = ev => {
+      loadResolve(true);
+    };
+    image.onerror = ev => {
+      loadResolve(false);
+    };
+    image.src = url;
+    return await promise;
+  }
+
 }
 
-enum LinkTarget {
+export enum LinkTarget {
   BLANK = '_blank',
   SELF = '_self',
   PARENT = '_parent',

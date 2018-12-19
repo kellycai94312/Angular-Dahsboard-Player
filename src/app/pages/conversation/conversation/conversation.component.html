@@ -45,8 +45,10 @@
                      [dimension]="'W40xH40'"
                      [format]="'CIRCLE'"></app-image>
         </div>
-        <div class="message" *ngIf="!conversationWrapper.messageWrapper.empty">
-          <app-message [message]="conversationWrapper.messageWrapper.message" [onlyContent]="true"></app-message>
+        <div *ngIf="!conversationWrapper.messageWrapper.empty"
+             class="message">
+          <app-message [message]="conversationWrapper.messageWrapper.message"
+                       [previewContent]="true"></app-message>
         </div>
       </ng-template>
 

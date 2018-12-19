@@ -93,10 +93,11 @@ export class NgxModalService {
     };
   }
 
-  public removeSplitItemButton(callback: () => Promise<void>): SplitButtonItem {
+  public removeSplitItemButton(callback: () => Promise<void>, visible: () => boolean = null): SplitButtonItem {
     return {
       nameKey: 'remove',
-      callback: callback
+      callback: callback,
+      visible: visible
     };
   }
 
@@ -216,14 +217,7 @@ export class NgxModalService {
                                                  apply: (selectedItems: TrainingPerson[]) => Promise<void>,
                                                  compare: (first: TrainingPerson, second: TrainingPerson) => boolean = null) {
     await this.showSelectionNameObjectsModal<TrainingPerson>(async (query: TrainingPersonQuery) => {
-        if (query.from) {
-          trainingPersonQuery.from = query.from;
-        }
-        trainingPersonQuery.count = query.count;
-        if (query.name) {
-          trainingPersonQuery.name = query.name;
-        }
-        return await this._participantRestApiService.getTrainingPersons({}, trainingPersonQuery, {eventId: event.id});
+        return await this._participantRestApiService.getTrainingPersons({}, this._appHelper.updatePageQuery(query, trainingPersonQuery), {eventId: event.id});
       },
       data => {
         let personFullName = `${data.person.lastName} ${data.person.firstName}`;
@@ -251,11 +245,7 @@ export class NgxModalService {
 
   public async showSelectionGroupPersonsModal(groupPersonQuery: GroupPersonQuery, apply: (selectedItems: GroupPerson[]) => Promise<void>) {
     await this.showSelectionNameObjectsModal<GroupPerson>(async (query: GroupPersonQuery) => {
-        groupPersonQuery.from = query.from;
-        groupPersonQuery.count = query.count;
-        groupPersonQuery.name = query.name;
-        this._appHelper.removeUndefinedField(groupPersonQuery);
-        return await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
+        return await this._participantRestApiService.getGroupPersonsByGroup(this._appHelper.updatePageQuery(query, groupPersonQuery));
       },
       data => {
         const person = data.person;
@@ -272,10 +262,7 @@ export class NgxModalService {
 
   public async showSelectionPersonsModal(personQuery: PersonQuery, apply: (selectedItems: Person[]) => Promise<void>) {
     await this.showSelectionNameObjectsModal<Person>(async (query: PersonQuery) => {
-        query.name = personQuery.name;
-        query.dateBirth = personQuery.dateBirth;
-        query.sex = personQuery.sex;
-        return await this._participantRestApiService.getPersons(query);
+        return await this._participantRestApiService.getPersons(this._appHelper.updatePageQuery(query, personQuery));
       },
       data => {
         let personFullName = `${data.lastName} ${data.firstName}`;
@@ -309,9 +296,11 @@ export class NgxModalService {
       selectedItems, apply);
   }
 
-  public async showSelectionGroupsModal<T extends Group>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
+  public async showSelectionGroupsModal<T extends Group>(selectedItems: T[],
+                                                         apply: (selectedItems: T[]) => Promise<void>,
+                                                         groupQuery: GroupQuery = null) {
     await this.showSelectionNameObjectsModal(async (query: GroupQuery) => {
-        return await this._participantRestApiService.getGroups(query);
+        return await this._participantRestApiService.getGroups(this._appHelper.updatePageQuery(query, groupQuery));
       },
       data => {
         return data.name;

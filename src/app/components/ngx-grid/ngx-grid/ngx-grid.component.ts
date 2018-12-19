@@ -42,6 +42,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   public edit: (obj: any) => Promise<boolean>;
 
   @Input()
+  public clickByItem: (obj: any) => Promise<boolean>;
+
+  @Input()
   public dblClickByItem: (obj: any) => Promise<boolean>;
 
   @Input()
@@ -56,6 +59,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   @Input()
   public fetchItems: (query: PageQuery) => Promise<PageContainer<any>>;
 
+  @Input()
+  public autoInit: boolean;
+
   private readonly _sorts: NameWrapper<Sort>[];
   private _sortSubscription: ISubscription;
 
@@ -66,6 +72,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     this.selectedItemsChange = new EventEmitter<any[]>();
     this.sortChange = new EventEmitter<string>();
     this._sorts = [];
+    this.autoInit = true;
   }
 
 
@@ -74,7 +81,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
       return this.fetchItems(pageQuery);
     };
     // TODO: Turn off auto update items
-    await this.reset();
+    if (this.autoInit) {
+      await this.reset();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -110,7 +119,13 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     }
   };
 
-  public onEdit = async (e: any, item: any) => {
+  public async onItemClick(item: any) {
+    if (this.clickByItem) {
+      await this.clickByItem(item);
+    }
+  }
+
+  public async onItemDblClick(item: any) {
     if (this.canEdit) {
       if (this.edit) {
         await this.edit(item);
@@ -118,7 +133,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
         await this.dblClickByItem(item);
       }
     }
-  };
+  }
 
   public onFetchItems = async (direction: Direction, pageQuery: PageQuery): Promise<PageContainer<any>> => {
     if (this.fetchItems) {

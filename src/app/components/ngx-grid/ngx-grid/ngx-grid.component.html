@@ -25,7 +25,8 @@
   <tbody>
   <tr *ngFor="let item of items"
       [ngClass]="{'selected': item?.selected}"
-      (dblclick)="onEdit($event,item); $event.stopPropagation()">
+      (click)="onItemClick(item)"
+      (dblclick)="onItemDblClick(item); $event.stopPropagation()">
     <td *ngIf="selectionType === selectionTypeClass.MULTIPLE">
       <ngx-check-box [(value)]="item.selected"
                      (valueChange)="onSelectOrDeselectItem(item)"></ngx-check-box>

@@ -589,7 +589,11 @@
     "APPROVED": "Member",
     "FOLLOWING": "Follower"
   },
-  "sendInvites": "Send invites",
-  "invitesSent": "Invites sent",
-  "invitesDidNotSend": "Invites didn't send"
+  "sendInvitations": "Send invitations",
+  "invitationsHaveBeenSent": "Invitations have been sent",
+  "invitationsHaveNotBeenSent": "Invitations haven't been sent",
+  "nextStep": "Next step",
+  "back": "Back",
+  "saveAndSend": "Save and send",
+  "images": "Images"
 }

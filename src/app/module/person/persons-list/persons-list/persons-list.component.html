@@ -1,0 +1,94 @@
+<div class="row cols-padding">
+  <div class="col">
+    <ngx-text-box placeholderKey="search"
+                  [debounceTime]="propertyConstantClass.searchDebounceTime"
+                  (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+  </div>
+  <div class="col">
+    <dx-date-box class="w-100"
+                 type="date"
+                 placeholder="{{'yearBirth' | translate}}"
+                 [showClearButton]="true"
+                 displayFormat="year"
+                 maxZoomLevel="decade"
+                 minZoomLevel="century"
+                 (onValueChanged)="onYearBirthChanged($event.value)">
+    </dx-date-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="sexEnums"
+                   displayExpr="name"
+                   [acceptCustomValue]="true"
+                   [showClearButton]="true"
+                   placeholder="{{'sex' | translate}}"
+                   (onSelectionChanged)="onSexChanged($event.selectedItem)">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <dx-select-box [items]="userRoles"
+                   displayExpr="name"
+                   [acceptCustomValue]="true"
+                   [showClearButton]="true"
+                   (onSelectionChanged)="onUserRoleChanged($event.selectedItem)"
+                   placeholder="{{'userRole' | translate}}">
+    </dx-select-box>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadGroups"
+                      [pageSize]="propertyConstantClass.pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'group' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onGroupChanged($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadSportTypes"
+                      [pageSize]="propertyConstantClass.pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'sportType' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onSportTypeChanged($event.current)">
+    </app-input-select>
+  </div>
+  <div class="col">
+    <app-input-select [loadData]="loadCities"
+                      [pageSize]="propertyConstantClass.pageSize"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      placeholder="{{'city' | translate}}"
+                      ngDefaultControl
+                      (onChange)="onCityChanged($event.current)">
+    </app-input-select>
+  </div>
+</div>
+
+<ngx-grid class="mt-2"
+          [fetchItems]="fetchItems"
+          [query]="personQuery"
+          [clickByItem]="onClickByItem"
+          [windowScroll]="true">
+  <ngx-column nameKey="image"
+              width="80">
+    <ng-template let-item>
+      <ngx-image class="mx-auto"
+                 [objectId]="item.id"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="fileClassClass.PERSON"
+                 [format]="imageFormatClass.CIRCLE"></ngx-image>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="fullName">
+    <ng-template let-item>
+      <h6>{{item.lastName}}<br>{{item.firstName}}<br>{{item?.patronymic}}</h6>
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="yearBirth"
+              width="100">
+    <ng-template let-item>
+      <h6>{{item.birthDate | date: propertyConstantClass.dateFormat}}</h6>
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

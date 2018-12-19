@@ -1,15 +1,15 @@
 <div class="wrapper p-1">
   <div class="message-wrapper"
-       [ngClass]="{'thin' : !onlyContent,
-       'system-message-wrapper' : !onlyContent && message.content.discriminator == baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT,
-        'participant-message-wrapper': !onlyContent && message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT
-       && person && message.sender.person.id != person.id,
-       'person-message-wrapper': !onlyContent &&  message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT
-       && person && message.sender.person.id == person.id}">
-    <div *ngIf="messageViewModel" class="{{class}}">
+       [ngClass]="{'thin' : !previewContent,
+       'system-message-wrapper' : !previewContent && message.content.discriminator == baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT,
+       'participant-message-wrapper': !previewContent && message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id != person.id,
+       'person-message-wrapper': !previewContent &&  message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id == person.id}">
+    <div *ngIf="messageViewModel"
+         class="{{class}}">
       <div [ngSwitch]="message.content.discriminator"
            class="d-flex flex-row">
-        <div *ngSwitchCase="baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT" class="message-content-wrapper w-100"
+        <div *ngSwitchCase="baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
+             class="message-content-wrapper w-100"
              [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
           <div class="d-flex flex-row align-items-center justify-content-between"
                [ngClass]="{'message-wrapper-participant' : message.sender.person.id == person.id}">
@@ -17,22 +17,25 @@
                  class="system-message"
                  [innerHTML]="messageViewModel.body | urlParser | async"
                  (click)="onDataClick($event)"></div>
-            <p *ngIf="!onlyContent"
+            <p *ngIf="!previewContent"
                class="date">{{message.content.created | date: propertyConstantClass.dateTimeFormat}}</p>
           </div>
         </div>
-        <div *ngSwitchCase="baseMessageContentTypeClass.MESSAGE_CONTENT" class="w-100">
+        <div *ngSwitchCase="baseMessageContentTypeClass.MESSAGE_CONTENT"
+             class="w-100">
           <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
         </div>
-        <div *ngSwitchCase="baseMessageContentTypeClass.EVENT_MESSAGE_CONTENT" class="w-100">
+        <div *ngSwitchCase="baseMessageContentTypeClass.EVENT_MESSAGE_CONTENT"
+             class="w-100">
           <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
         </div>
       </div>
     </div>
 
     <ng-template #messageContent>
-      <div class="d-flex flex-row w-100" [ngClass]="{'flex-row-reverse' : message.sender.person.id == person.id}">
-        <app-image *ngIf="!onlyContent"
+      <div class="d-flex flex-row w-100"
+           [ngClass]="{'flex-row-reverse' : message.sender.person.id == person.id}">
+        <app-image *ngIf="!previewContent"
                    [type]="'LOGO'"
                    [clazz]="'PERSON'"
                    [id]="message.sender.person.id"
@@ -40,20 +43,24 @@
                    [format]="'CIRCLE'"></app-image>
         <div class="d-flex flex-column message-content-wrapper w-100 ml-2 mr-2"
              [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
-          <div *ngIf="!onlyContent" class="d-flex flex-row justify-content-between">
+          <div *ngIf="!previewContent"
+               class="d-flex flex-row justify-content-between">
             <p class="full-name">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
-            <p class="date">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:
-              propertyConstantClass.dateTimeFormat) ) : (message.content.created | date:
-              propertyConstantClass.dateTimeFormat)}}</p>
+            <p class="date">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat) ) : (message.content.created | date: propertyConstantClass.dateTimeFormat)}}</p>
           </div>
-          <div class="d-flex flex-row justify-content-between">
-            <pre class="content" [innerHTML]="messageViewModel.body | urlParser | async"
+          <div class="d-flex flex-row justify-content-between"
+               [style.width]="'inherit'">
+            <pre class="content"
+                 [style.width]="'inherit'"
+                 [innerHTML]="messageViewModel.body | urlParser: {'previewImage': previewContent}  | async"
                  (click)="onDataClick($event)"></pre>
-            <div class="check-mark" *ngIf="!onlyContent && message.sender.person.id == person.id">
-              <i class="fa fa-check" *ngIf="(!message.read && !message.sender.person && !person &&
-              message.sender.person.id == person.id)  || !message.read; else readMessage"></i>
+            <div *ngIf="!previewContent && message.sender.person.id == person.id"
+                 class="check-mark ml-2" >
+              <i *ngIf="(!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read; else readMessage"
+                 class="fa fa-check"></i>
               <ng-template #readMessage>
-                <svg-icon src="/assets/img/check-double-solid.svg" [svgStyle]="{ 'width.px':14 }"></svg-icon>
+                <svg-icon src="/assets/img/check-double-solid.svg"
+                          [svgStyle]="{'width.px': 14}"></svg-icon>
               </ng-template>
             </div>
           </div>

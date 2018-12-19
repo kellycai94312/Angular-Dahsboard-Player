@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {Requisites} from '../../../../data/remote/model/requisites';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {AppHelper} from '../../../../utils/app-helper';
 
-@Component({
-  selector: 'app-requisites',
-  templateUrl: './requisites.component.html',
-  styleUrls: ['./requisites.component.scss']
-})
+// @Component({
+//   selector: 'app-requisites',
+//   templateUrl: './requisites.component.html',
+//   styleUrls: ['./requisites.component.scss']
+// })
 export class RequisitesComponent implements OnInit {
 
   public requisites: Requisites;

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -10,11 +10,11 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {NamedObjectItemComponent} from '../../../../components/named-object-item/named-object-item.component';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 
-@Component({
-  selector: 'app-my-groups',
-  templateUrl: './my-groups.component.html',
-  styleUrls: ['./my-groups.component.scss']
-})
+// @Component({
+//   selector: 'app-my-groups',
+//   templateUrl: './my-groups.component.html',
+//   styleUrls: ['./my-groups.component.scss']
+// })
 export class MyGroupsComponent implements OnInit {
 
   public groupPersons: GroupPerson[];

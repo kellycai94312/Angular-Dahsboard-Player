@@ -7,11 +7,11 @@ import {MyRegionService} from '../my-region.service';
 import {NoteType} from '../../../../../data/remote/model/note/base/note-type';
 import {NgxGridComponent} from '../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 
-@Component({
-  selector: 'app-agent-note',
-  templateUrl: './agent-note.component.html',
-  styleUrls: ['./agent-note.component.scss']
-})
+// @Component({
+//   selector: 'app-agent-note',
+//   templateUrl: './agent-note.component.html',
+//   styleUrls: ['./agent-note.component.scss']
+// })
 export class AgentNoteComponent implements OnInit, OnDestroy {
 
   @ViewChild(NgxGridComponent)

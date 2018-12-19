@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Person} from '../../../../data/remote/model/person';
@@ -10,11 +10,11 @@ import {Stage} from '../../../../data/remote/model/stage/stage';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
 
-@Component({
-  selector: 'app-person-stage-standards',
-  templateUrl: './person-stage-standards.component.html',
-  styleUrls: ['./person-stage-standards.component.scss']
-})
+// @Component({
+//   selector: 'app-person-stage-standards',
+//   templateUrl: './person-stage-standards.component.html',
+//   styleUrls: ['./person-stage-standards.component.scss']
+// })
 export class PersonStageStandardsComponent implements OnInit, OnDestroy {
 
   public readonly sexEnum = SexEnum;

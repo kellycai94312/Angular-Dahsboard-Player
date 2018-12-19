@@ -7,14 +7,14 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {PersonService} from '../../person-page/person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {PublicUserRole} from '../../../../data/remote/model/group/public-user-role';
 
-@Component({
-  selector: 'app-edit-person-stage',
-  templateUrl: './edit-person-stage.component.html',
-  styleUrls: ['./edit-person-stage.component.scss']
-})
+// @Component({
+//   selector: 'app-edit-person-stage',
+//   templateUrl: './edit-person-stage.component.html',
+//   styleUrls: ['./edit-person-stage.component.scss']
+// })
 // TODO: Use PublicUserRole without any type
 export class EditPersonStageComponent extends BaseEditComponent<any> {
 

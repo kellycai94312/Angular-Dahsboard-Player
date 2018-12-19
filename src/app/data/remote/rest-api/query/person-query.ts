@@ -12,6 +12,7 @@ export class PersonQuery extends PageQuery {
   cityId?: number;
   template?: boolean;
   canEdit?: boolean;
+  connected?: boolean;
   sort?: string;
 
   unassigned?: boolean;

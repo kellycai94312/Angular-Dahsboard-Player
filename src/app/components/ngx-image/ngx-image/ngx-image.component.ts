@@ -55,6 +55,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
     this.imageChange = new EventEmitter<any>();
     this.class = '';
     this.allowFullScreen = true;
+    this.width = 0;
+    this.height = 0;
   }
 
   async ngOnInit() {

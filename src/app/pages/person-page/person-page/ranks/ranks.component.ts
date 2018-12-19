@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {PersonRank} from '../../../../data/remote/model/person-rank';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
@@ -9,11 +9,11 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 
-@Component({
-  selector: 'app-ranks',
-  templateUrl: './ranks.component.html',
-  styleUrls: ['./ranks.component.scss']
-})
+// @Component({
+//   selector: 'app-ranks',
+//   templateUrl: './ranks.component.html',
+//   styleUrls: ['./ranks.component.scss']
+// })
 export class RanksComponent implements OnInit {
 
   @Input()

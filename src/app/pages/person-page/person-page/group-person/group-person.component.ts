@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {PersonService} from '../person.service';
+import {PersonService} from '../../../person/person-page/service/person.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupPersonLog} from '../../../../data/remote/model/group/group-person-log';
@@ -9,11 +9,11 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {ActivatedRoute, Router} from '@angular/router';
 
 // TODO: Remove this component. See app-group-person-new!
-@Component({
-  selector: 'app-group-person',
-  templateUrl: './group-person.component.html',
-  styleUrls: ['./group-person.component.scss']
-})
+// @Component({
+//   selector: 'app-group-person',
+//   templateUrl: './group-person.component.html',
+//   styleUrls: ['./group-person.component.scss']
+// })
 export class GroupPersonComponent implements OnInit {
 
   @Input()
