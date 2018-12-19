@@ -13,7 +13,7 @@ $selected-border-color: $selected-background-color;
 
   .message-wrapper {
 
-    &.dialogue-view {
+    &.dialogue-content {
       width: 60%;
 
       @media (max-width: max-width-sm()) {
