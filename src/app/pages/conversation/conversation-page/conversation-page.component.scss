@@ -7,73 +7,91 @@ $margin: 0.5rem;
 // TODO: Set dynamic calc
 $navbar-offset: $navbar-height + 20px;
 
-textarea {
-  min-height: 70px;
-  max-height: 70px;
-}
+.conversation-wrapper {
 
-.conversation-content {
-  height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$margin*2} + #{$navbar-offset}));
+  width: 50% !important;
 
-  &.editable {
-    height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$conversation-edit-height} + #{$margin*2} + #{$navbar-offset}));
+  @media (max-width: max-width-sm()) {
+    width: 100% !important;
   }
 
-}
-
-.conversation-header {
-  margin-bottom: $margin;
-  height: $conversation-header-height;
-}
-
-.conversation-footer {
-  margin-top: $margin;
-  height: $conversation-footer-height;
-}
-
-.conversation-edit {
-  height: $conversation-edit-height;
-  border-top: 1px solid #999;
-
-  .edit-label {
-    color: $light-blue !important;
+  @media (max-width: max-width-md()) {
+    width: 100% !important;
   }
 
-}
+  @media (max-width: max-width-lg()) {
+    width: 100% !important;
+  }
 
-.typing-container {
-  height: 20px;
-}
+  textarea {
+    min-height: 70px;
+    max-height: 70px;
+  }
 
-.message-wrapper {
-  cursor: pointer;
+  .conversation-content {
+    height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$margin*2} + #{$navbar-offset}));
 
-  &.selected {
-    .check-icon {
-      visibility: visible;
-      opacity: 1;
-      color: $light-blue;
+    &.editable {
+      height: calc(100vh - (#{$conversation-footer-height} + #{$conversation-header-height} + #{$conversation-edit-height} + #{$margin*2} + #{$navbar-offset}));
     }
+
   }
 
-  .check-icon {
-    font-size: 24px;
-    color: #aaa;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0s, opacity 0.2s linear;
+  .conversation-header {
+    margin-bottom: $margin;
+    height: $conversation-header-height;
   }
 
-  :hover {
-    .check-icon {
-      visibility: visible;
-      opacity: 1;
+  .conversation-footer {
+    margin-top: $margin;
+    height: $conversation-footer-height;
+  }
+
+  .conversation-edit {
+    height: $conversation-edit-height;
+    border-top: 1px solid #999;
+
+    .edit-label {
+      color: $light-blue !important;
     }
+
   }
 
-}
+  .typing-container {
+    height: 20px;
+  }
 
-.text-typing {
-  font-size: 12px;
-  color: #888;
+  .message-wrapper {
+    cursor: pointer;
+
+    &.selected {
+      .check-icon {
+        visibility: visible;
+        opacity: 1;
+        color: $light-blue;
+      }
+    }
+
+    .check-icon {
+      font-size: 24px;
+      color: #aaa;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0s, opacity 0.2s linear;
+    }
+
+    :hover {
+      .check-icon {
+        visibility: visible;
+        opacity: 1;
+      }
+    }
+
+  }
+
+  .text-typing {
+    font-size: 12px;
+    color: #888;
+  }
+
 }
