@@ -1,9 +1,9 @@
 <div class="wrapper p-1">
   <div class="message-wrapper"
-       [ngClass]="{'thin' : !onlyContent,
-       'system-message-wrapper' : !onlyContent && message.content.discriminator == baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT,
-       'participant-message-wrapper': !onlyContent && message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id != person.id,
-       'person-message-wrapper': !onlyContent &&  message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id == person.id}">
+       [ngClass]="{'thin' : !previewContent,
+       'system-message-wrapper' : !previewContent && message.content.discriminator == baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT,
+       'participant-message-wrapper': !previewContent && message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id != person.id,
+       'person-message-wrapper': !previewContent &&  message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id == person.id}">
     <div *ngIf="messageViewModel"
          class="{{class}}">
       <div [ngSwitch]="message.content.discriminator"
@@ -17,7 +17,7 @@
                  class="system-message"
                  [innerHTML]="messageViewModel.body | urlParser | async"
                  (click)="onDataClick($event)"></div>
-            <p *ngIf="!onlyContent"
+            <p *ngIf="!previewContent"
                class="date">{{message.content.created | date: propertyConstantClass.dateTimeFormat}}</p>
           </div>
         </div>
@@ -35,7 +35,7 @@
     <ng-template #messageContent>
       <div class="d-flex flex-row w-100"
            [ngClass]="{'flex-row-reverse' : message.sender.person.id == person.id}">
-        <app-image *ngIf="!onlyContent"
+        <app-image *ngIf="!previewContent"
                    [type]="'LOGO'"
                    [clazz]="'PERSON'"
                    [id]="message.sender.person.id"
@@ -43,7 +43,7 @@
                    [format]="'CIRCLE'"></app-image>
         <div class="d-flex flex-column message-content-wrapper w-100 ml-2 mr-2"
              [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
-          <div *ngIf="!onlyContent"
+          <div *ngIf="!previewContent"
                class="d-flex flex-row justify-content-between">
             <p class="full-name">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
             <p class="date">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat) ) : (message.content.created | date: propertyConstantClass.dateTimeFormat)}}</p>
@@ -54,7 +54,7 @@
                  [style.width]="'inherit'"
                  [innerHTML]="messageViewModel.body | urlParser: {'previewImage': previewContent}  | async"
                  (click)="onDataClick($event)"></pre>
-            <div *ngIf="!onlyContent && message.sender.person.id == person.id"
+            <div *ngIf="!previewContent && message.sender.person.id == person.id"
                  class="check-mark ml-2" >
               <i *ngIf="(!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read; else readMessage"
                  class="fa fa-check"></i>

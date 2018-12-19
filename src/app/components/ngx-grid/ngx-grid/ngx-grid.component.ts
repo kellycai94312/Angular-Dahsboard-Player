@@ -119,13 +119,13 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     }
   };
 
-  public async onClickByItem(item: any) {
+  public async onItemClick(item: any) {
     if (this.clickByItem) {
       await this.clickByItem(item);
     }
   }
 
-  public async onDblClickByItem(item: any) {
+  public async onItemDblClick(item: any) {
     if (this.canEdit) {
       if (this.edit) {
         await this.edit(item);

@@ -91,7 +91,8 @@
         <ng-template let-message>
           <div class="message-wrapper p-0" (click)="toggleSelectMessage(message)">
             <div class="d-flex flex-row justify-content-between">
-              <app-message class="w-100" [message]="message" [onlyContent]="false"></app-message>
+              <app-message class="w-100"
+                           [message]="message"></app-message>
             </div>
           </div>
         </ng-template>

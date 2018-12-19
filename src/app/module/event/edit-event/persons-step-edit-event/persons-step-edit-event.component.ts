@@ -50,12 +50,11 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
     return await this.appHelper.tryLoad(async () => {
       this._userRoles = await this.participantRestApiService.getUserRoles();
 
-      let conversationId: number = null;
       if (this._afterCreateEvent && this._conversation) {
-        conversationId = this._conversation.id;
+        await this.initializePersons(true, this._conversation.id);
+      } else {
+        await this.initializePersons(false);
       }
-      this.athletePersons = await this.getTrainingPersons(this.data, {userRoleEnum: UserRoleEnum.ATHLETE, unassigned: true, conversationId: conversationId});
-      this.trainerPersons = await this.getTrainingPersons(this.data, {userRoleEnum: UserRoleEnum.TRAINER, unassigned: true, conversationId: conversationId});
     });
   }
 
@@ -64,20 +63,6 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
       await this.save(UserRoleEnum.ATHLETE, this._athletePersons, this.athletePersons);
       await this.save(UserRoleEnum.TRAINER, this._trainerPersons, this.trainerPersons);
     });
-  }
-
-  private async save(userRoleEnum: UserRoleEnum, items: TrainingPerson[], selectedItems: TrainingPerson[]) {
-    const userRole = this._userRoles.find(x => x.userRoleEnum === userRoleEnum);
-    const result = this.appHelper.getListChanges(items, selectedItems, this._compareTrainingPerson);
-    for (const item of result.newItems) {
-      item.userRole = userRole;
-      const trainingPerson = await this.participantRestApiService.createTrainingPerson(item, {}, {baseTrainingId: this.data.id});
-      const itemIndex = selectedItems.findIndex(x => x.person.id == trainingPerson.person.id);
-      selectedItems[itemIndex] = trainingPerson;
-    }
-    for (const item of result.removedItems) {
-      await this.participantRestApiService.removeTrainingPerson({baseTrainingId: this.data.id, trainingPersonId: item.id});
-    }
   }
 
   async onRemove(): Promise<boolean> {
@@ -108,8 +93,7 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
       unassigned: query.unassigned,
       userRoleEnum: query.userRoleEnum
     };
-    this.appHelper.removeUndefinedField(trainingPersonQuery);
-    const result = (await this.participantRestApiService.getTrainingPersons({}, trainingPersonQuery, {eventId: event.id})).list;
+    const result = (await this.participantRestApiService.getTrainingPersons({}, this.appHelper.getObjectWithoutUndefinedFields(trainingPersonQuery), {eventId: event.id})).list;
     this.updatePersonItems(query.userRoleEnum, result);
     return result;
   }
@@ -123,6 +107,25 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
         this._trainerPersons = this.appHelper.cloneObject(items);
         break;
     }
+  }
+
+  private async save(userRoleEnum: UserRoleEnum, items: TrainingPerson[], selectedItems: TrainingPerson[]) {
+    const userRole = this._userRoles.find(x => x.userRoleEnum === userRoleEnum);
+    const result = this.appHelper.getListChanges(items, selectedItems, this._compareTrainingPerson);
+    for (const item of result.newItems) {
+      item.userRole = userRole;
+      const trainingPerson = await this.participantRestApiService.createTrainingPerson(item, {}, {baseTrainingId: this.data.id});
+      const itemIndex = selectedItems.findIndex(x => x.person.id == trainingPerson.person.id);
+      selectedItems[itemIndex] = trainingPerson;
+    }
+    for (const item of result.removedItems) {
+      await this.participantRestApiService.removeTrainingPerson({baseTrainingId: this.data.id, trainingPersonId: item.id});
+    }
+  }
+
+  private async initializePersons(unassigned: boolean, conversationId: number = null) {
+    this.athletePersons = await this.getTrainingPersons(this.data, {userRoleEnum: UserRoleEnum.ATHLETE, unassigned: unassigned, conversationId: conversationId});
+    this.trainerPersons = await this.getTrainingPersons(this.data, {userRoleEnum: UserRoleEnum.TRAINER, unassigned: unassigned, conversationId: conversationId});
   }
 
 }

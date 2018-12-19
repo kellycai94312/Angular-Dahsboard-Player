@@ -590,9 +590,9 @@
     "APPROVED": "Участник",
     "FOLLOWING": "Подписчик"
   },
-  "sendInvites": "Отправить приглашения",
-  "invitesSent": "Приглашения отправлены",
-  "invitesDidNotSend": "Приглашения не отправлены",
+  "sendInvitations": "Отправить приглашения",
+  "invitesHaveBeenSent": "Приглашения отправлены",
+  "invitesHaveNotSend": "Приглашения не отправлены",
   "nextStep": "Следующий шаг",
   "back": "Назад",
   "saveAndSend": "Сохранить и отправить",

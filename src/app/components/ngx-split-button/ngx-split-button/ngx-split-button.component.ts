@@ -45,10 +45,10 @@ export class NgxSplitButtonComponent {
       }
       return !x.visible || x.visible;
     };
-    // TODO: Call updateDefaultItem() when will changed any values within in this method
+    // TODO: Call updateDefaultItem() when any values will be changed within this method
     setInterval(() => {
       this.updateDefaultItem();
-    }, 500);
+    }, 300);
   }
 
   public async onClick(item: SplitButtonItem) {

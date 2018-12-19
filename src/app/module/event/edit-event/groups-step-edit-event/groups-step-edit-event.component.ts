@@ -38,10 +38,13 @@ export class GroupsStepEditEventComponent<T extends BaseTraining> extends BaseEd
 
     if (this._afterCreateEvent && this._conversation) {
       this.groups = (await this.participantRestApiService.getTrainingGroupsByBaseTraining({}, {
-        count: PropertyConstant.pageSizeMax,
-        conversationId: this._conversation.id,
-        unassigned: true
-      }, {eventId: this.data.id})).list.map(x => x.group);
+            count: PropertyConstant.pageSizeMax,
+            conversationId: this._conversation.id,
+            unassigned: true,
+            canEdit: true
+          },
+          {eventId: this.data.id})
+      ).list.map(x => x.group);
     } else {
       this.groups = (await this.participantRestApiService.getTrainingGroupsByBaseTraining(
           {},
@@ -71,8 +74,12 @@ export class GroupsStepEditEventComponent<T extends BaseTraining> extends BaseEd
 
   public onEditGroups = async () => {
     await this._ngxModalService.showSelectionGroupsModal(this.groups, async selectedItems => {
-      this.appHelper.updateArray(this.groups, selectedItems);
-    });
+        this.appHelper.updateArray(this.groups, selectedItems);
+      },
+      {
+        canEdit: true
+      }
+    );
   };
 
 }

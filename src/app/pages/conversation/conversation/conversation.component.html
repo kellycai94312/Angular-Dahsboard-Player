@@ -48,7 +48,6 @@
         <div *ngIf="!conversationWrapper.messageWrapper.empty"
              class="message">
           <app-message [message]="conversationWrapper.messageWrapper.message"
-                       [onlyContent]="true"
                        [previewContent]="true"></app-message>
         </div>
       </ng-template>
