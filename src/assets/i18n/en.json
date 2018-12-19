@@ -590,8 +590,8 @@
     "FOLLOWING": "Follower"
   },
   "sendInvitations": "Send invitations",
-  "invitesHaveBeenSent": "Invites have been sent",
-  "invitesHaveNotSend": "Invites haven't send",
+  "invitationsHaveBeenSent": "Invitations have been sent",
+  "invitationsHaveNotSend": "Invitations haven't send",
   "nextStep": "Next step",
   "back": "Back",
   "saveAndSend": "Save and send",

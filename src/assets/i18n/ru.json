@@ -591,8 +591,8 @@
     "FOLLOWING": "Подписчик"
   },
   "sendInvitations": "Отправить приглашения",
-  "invitesHaveBeenSent": "Приглашения отправлены",
-  "invitesHaveNotSend": "Приглашения не отправлены",
+  "invitationsHaveBeenSent": "Приглашения отправлены",
+  "invitationsHaveNotSend": "Приглашения не отправлены",
   "nextStep": "Следующий шаг",
   "back": "Назад",
   "saveAndSend": "Сохранить и отправить",
