@@ -1,3 +1,17 @@
+<div class="d-flex flex-column">
+  <div class="d-flex flex-row">
+    <div class="mr-2">
+      <ngx-button nameKey="groups"
+                  [click]="onEditGroups"></ngx-button>
+    </div>
+    <div *ngIf="groups && groups.length"
+         class="tags-content w-100">
+      <div *ngFor="let item of groups">
+        {{item.name}}
+      </div>
+    </div>
+  </div>
+</div>
 <div class="d-flex flex-row mt-2">
   <div class="mr-2">
     <ngx-button nameKey="athletes"

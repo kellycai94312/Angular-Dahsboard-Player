@@ -30,7 +30,7 @@
 
   <label class="mt-2">{{'description' | translate}}</label>
   <dx-text-area [(value)]="data.description"
-                height="150"></dx-text-area>
+                height="90"></dx-text-area>
 
   <div class="row">
     <div class="col">
@@ -75,17 +75,18 @@
     </app-input-select>
   </div>
 
-  <div *ngIf="data.discriminator === trainingDiscriminatorClass.TRAINING">
-    <label class="mt-2">{{trainingTypeSelectBox.placeholder}}</label>
-    <dx-select-box #trainingTypeSelectBox
-                   class="input-height-sm"
-                   [items]="trainingTypes"
-                   [(value)]="selectedTrainingType"
-                   displayExpr="name"
-                   placeholder="{{'trainingType' | translate}}"
-                   (onValueChanged)="onTrainingTypeChanged($event.value)">
-    </dx-select-box>
-  </div>
+  <!--TODO-->
+  <!--<div *ngIf="data.discriminator === trainingDiscriminatorClass.TRAINING">-->
+  <!--<label class="mt-2">{{trainingTypeSelectBox.placeholder}}</label>-->
+  <!--<dx-select-box #trainingTypeSelectBox-->
+  <!--class="input-height-sm"-->
+  <!--[items]="trainingTypes"-->
+  <!--[(value)]="selectedTrainingType"-->
+  <!--displayExpr="name"-->
+  <!--placeholder="{{'trainingType' | translate}}"-->
+  <!--(onValueChanged)="onTrainingTypeChanged($event.value)">-->
+  <!--</dx-select-box>-->
+  <!--</div>-->
 
   <div *ngIf="data.discriminator === trainingDiscriminatorClass.GAME">
     <label class="mt-2">{{sportTypeInputSelect.placeholder}}</label>

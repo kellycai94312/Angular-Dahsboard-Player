@@ -68,6 +68,7 @@ export class GeneralStepEditEventComponent<T extends BaseTraining> extends BaseE
 
     return await this.appHelper.trySave(async () => {
       if (this.appHelper.isNewObject(this.data)) {
+        this.data.name = this.data.name || await this._translateObjectService.getTranslation('newEvent');
         this.data.startTime = this.appHelper.getGmtDate(this.data.startTime);
         this.data.finishTime = this.appHelper.getGmtDate(this.data.finishTime);
 
@@ -132,6 +133,10 @@ export class GeneralStepEditEventComponent<T extends BaseTraining> extends BaseE
 
   public onTrainingTypeChanged(val: NameWrapper<TrainingType>) {
     (<BaseTraining>this.data as Training).trainingType = val.data;
+  }
+
+  public onEventTypeChanged(val: NameWrapper<TrainingDiscriminator>): void {
+    this.data.discriminator = val.data;
   }
 
 }

@@ -11,6 +11,7 @@ import {TranslateObjectService} from '../../../../shared/translate-object.servic
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {TrainingPersonQuery} from '../../../../data/remote/rest-api/query/training-person-query';
+import {Group} from '../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-persons-step-edit-event',
@@ -19,6 +20,7 @@ import {TrainingPersonQuery} from '../../../../data/remote/rest-api/query/traini
 })
 export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseEditComponent<T> implements OnInit {
 
+  public groups: Group[];
   public athletePersons: TrainingPerson[];
   public trainerPersons: TrainingPerson[];
   private _userRoles: UserRole[];
@@ -32,6 +34,7 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
               private _translateObjectService: TranslateObjectService,
               private _ngxModalService: NgxModalService) {
     super(participantRestApiService, appHelper);
+    this.groups = [];
     this.athletePersons = [];
     this.trainerPersons = [];
     this._athletePersons = [];
@@ -51,8 +54,27 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
       this._userRoles = await this.participantRestApiService.getUserRoles();
 
       if (this._afterCreateEvent && this._conversation) {
+        this.groups = (await this.participantRestApiService.getTrainingGroupsByBaseTraining({}, {
+              count: PropertyConstant.pageSizeMax,
+              conversationId: this._conversation.id,
+              unassigned: true,
+              canEdit: true
+            },
+            {eventId: this.data.id})
+        ).list.map(x => x.group);
+
         await this.initializePersons(true, this._conversation.id);
       } else {
+        this.groups = (await this.participantRestApiService.getTrainingGroupsByBaseTraining(
+            {},
+            {
+              count: PropertyConstant.pageSizeMax,
+              unassigned: false
+            },
+            {eventId: obj.id}
+          )
+        ).list.map(x => x.group);
+
         await this.initializePersons(false);
       }
     });
@@ -68,6 +90,18 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
   async onRemove(): Promise<boolean> {
     return undefined;
   }
+
+  public onEditGroups = async () => {
+    await this._ngxModalService.showSelectionGroupsModal(this.groups, async selectedItems => {
+        await this.participantRestApiService.updateGroupsByBaseTraining({list: selectedItems}, {}, {baseTrainingId: this.data.id});
+        this.appHelper.updateArray(this.groups, selectedItems);
+        await this.initializePersons(false);
+      },
+      {
+        canEdit: true
+      }
+    );
+  };
 
   public onEditAthleteTrainingPersons = async () => {
     this.athletePersons = await this.editTrainingPersons(UserRoleEnum.ATHLETE, this.athletePersons);
