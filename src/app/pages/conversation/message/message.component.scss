@@ -13,8 +13,17 @@ $selected-border-color: $selected-background-color;
 
   .message-wrapper {
 
-    &.thin {
+    &.dialogue-content {
       width: 60%;
+
+      @media (max-width: max-width-sm()) {
+        width: 90%;
+      }
+
+      @media (max-width: max-width-md()) {
+        width: 90%;
+      }
+
     }
 
     &.system-message-wrapper {

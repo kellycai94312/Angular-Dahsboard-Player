@@ -1,6 +1,6 @@
 <div class="wrapper p-1">
   <div class="message-wrapper"
-       [ngClass]="{'thin' : !previewContent,
+       [ngClass]="{'dialogue-content' : !previewContent,
        'system-message-wrapper' : !previewContent && message.content.discriminator == baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT,
        'participant-message-wrapper': !previewContent && message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id != person.id,
        'person-message-wrapper': !previewContent &&  message.content.discriminator != baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT && person && message.sender.person.id == person.id}">
