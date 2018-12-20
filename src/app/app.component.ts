@@ -87,7 +87,8 @@ export class AppComponent implements OnInit, OnDestroy {
       {
         toastComponent: MessageToastrComponent,
         disableTimeOut: true,
-        tapToDismiss: false
+        tapToDismiss: false,
+        toastClass: 'toast p-1'
       }
     );
     const instance = toast.toastRef.componentInstance as MessageToastrComponent;
