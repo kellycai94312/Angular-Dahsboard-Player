@@ -34,8 +34,6 @@ import {UserRole} from '../../../data/remote/model/user-role';
 import {Person} from '../../../data/remote/model/person';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
-import {TrainingPerson} from '../../../data/remote/model/training/training-person';
-import {TrainingPersonQuery} from '../../../data/remote/rest-api/query/training-person-query';
 import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
 import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
@@ -212,22 +210,6 @@ export class NgxModalService {
   }
 
   //#region Event
-
-  public async showSelectionTrainingPersonsModal(event: BaseTraining, trainingPersonQuery: TrainingPersonQuery, selectedItems: TrainingPerson[],
-                                                 apply: (selectedItems: TrainingPerson[]) => Promise<void>,
-                                                 compare: (first: TrainingPerson, second: TrainingPerson) => boolean = null) {
-    await this.showSelectionNameObjectsModal<TrainingPerson>(async (query: TrainingPersonQuery) => {
-        return await this._participantRestApiService.getTrainingPersons({}, this._appHelper.updatePageQuery(query, trainingPersonQuery), {eventId: event.id});
-      },
-      data => {
-        let personFullName = `${data.person.lastName} ${data.person.firstName}`;
-        if (data.person.patronymic) {
-          personFullName += ` ${data.person.patronymic}`;
-        }
-        return personFullName;
-      },
-      selectedItems, apply, null, compare);
-  }
 
   public async showSelectionEventModal(apply: (selectedItems: BaseTraining[]) => Promise<void>) {
     await this.showSelectionNameObjectsModal<BaseTraining>(async (query: BaseTrainingQuery) => {

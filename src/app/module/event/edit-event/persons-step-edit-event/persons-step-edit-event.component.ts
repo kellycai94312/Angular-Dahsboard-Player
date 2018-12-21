@@ -115,10 +115,11 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
 
   private async editTrainingPersons(userRoleEnum: UserRoleEnum, items: TrainingPerson[]): Promise<TrainingPerson[]> {
     let resultItems: TrainingPerson[] = [];
-    await this._ngxModalService.showSelectionTrainingPersonsModal(this.data, {userRoleEnum: userRoleEnum, unassigned: true}, items, async selectedItems => {
+    const dialogResult = await this._templateModalService.showSelectionTrainingPersonsModal(this.data, items, {userRoleEnum: userRoleEnum, unassigned: true});
+    if (dialogResult.result) {
       this.updatePersonItems(userRoleEnum, items);
-      resultItems = selectedItems;
-    }, this._compareTrainingPerson);
+      resultItems = dialogResult.data;
+    }
     return resultItems;
   }
 

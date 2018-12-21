@@ -56,6 +56,7 @@ import {DxSelectBoxModule} from 'devextreme-angular';
 import {GroupSettingsComponent} from './pages/group/group-page/group-settings/group-settings.component';
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
+import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 
 registerLocaleData(localeRu);
 
@@ -109,7 +110,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DxSelectBoxModule,
     GroupModule,
     EditEventModule,
-    GroupItemModule
+    GroupItemModule,
+    EventPersonItemModule
   ],
   providers: [
     LayoutService,
