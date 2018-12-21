@@ -55,6 +55,7 @@ import {InputSelectModule} from './components/input-select/input-select.module';
 import {DxSelectBoxModule} from 'devextreme-angular';
 import {GroupSettingsComponent} from './pages/group/group-page/group-settings/group-settings.component';
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
+import {GroupItemModule} from './module/group/group-item/group-item.module';
 
 registerLocaleData(localeRu);
 
@@ -100,16 +101,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     NgxBreadcrumbModule,
     LocaleModule,
     NgxModalModule,
-    GroupModule,
     PersonModule,
     HtmlContentModule,
-    NgxButtonModule,
     NgxTabModule,
     NgxButtonModule,
     InputSelectModule,
     DxSelectBoxModule,
     GroupModule,
-    EditEventModule
+    EditEventModule,
+    GroupItemModule
   ],
   providers: [
     LayoutService,

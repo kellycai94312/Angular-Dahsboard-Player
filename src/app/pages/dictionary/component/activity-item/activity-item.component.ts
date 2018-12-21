@@ -25,7 +25,8 @@ export class ActivityItemComponent<T extends BaseExercise> extends BaseComponent
     super();
   }
 
-  ngOnInit() {
+  async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
     this.fileClass = this._appHelper.exerciseTypeToFileClass(this.data.discriminator);
   }
 

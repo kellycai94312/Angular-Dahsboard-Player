@@ -1,0 +1,15 @@
+<div *ngIf="data"
+     class="d-flex flex-row {{class}}">
+  <div class="mr-2">
+    <ngx-image [objectId]="data.id"
+               [width]="80"
+               [height]="80"
+               [allowFullScreen]="false"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.GROUP"></ngx-image>
+  </div>
+  <div class="my-auto">
+    <h5>{{data.name}}</h5>
+    <p class="text-muted">{{'groupTypeEnum.' + data.discriminator | translate}}</p>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, forwardRef, Inject, OnInit} from '@angular/core';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseConversation} from '../../../../data/remote/model/chat/conversation/base/base-conversation';
@@ -12,6 +12,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {TrainingPersonQuery} from '../../../../data/remote/rest-api/query/training-person-query';
 import {Group} from '../../../../data/remote/model/group/base/group';
+import {TemplateModalService} from '../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-persons-step-edit-event',
@@ -23,6 +24,7 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
   public groups: Group[];
   public athletePersons: TrainingPerson[];
   public trainerPersons: TrainingPerson[];
+
   private _userRoles: UserRole[];
   private _afterCreateEvent: boolean;
   private _conversation: BaseConversation;
@@ -30,9 +32,12 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
   private _trainerPersons: TrainingPerson[];
   private readonly _compareTrainingPerson: (a, b) => boolean;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+  constructor(private _ngxModalService: NgxModalService,
               private _translateObjectService: TranslateObjectService,
-              private _ngxModalService: NgxModalService) {
+              // TODO: TemplateModalService can't inject without forwardRef()
+              @Inject(forwardRef(() => TemplateModalService))
+              private _templateModalService: TemplateModalService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
     this.groups = [];
     this.athletePersons = [];
@@ -92,15 +97,12 @@ export class PersonsStepEditEventComponent<T extends BaseTraining> extends BaseE
   }
 
   public onEditGroups = async () => {
-    await this._ngxModalService.showSelectionGroupsModal(this.groups, async selectedItems => {
-        await this.participantRestApiService.updateGroupsByBaseTraining({list: selectedItems}, {}, {baseTrainingId: this.data.id});
-        this.appHelper.updateArray(this.groups, selectedItems);
-        await this.initializePersons(false);
-      },
-      {
-        canEdit: true
-      }
-    );
+    const dialogResult = await this._templateModalService.showSelectionTrainingGroupsModal(this.data, this.groups, {unassigned: true});
+    if (dialogResult.result) {
+      await this.participantRestApiService.updateGroupsByBaseTraining({list: dialogResult.data}, {}, {baseTrainingId: this.data.id});
+      this.appHelper.updateArray(this.groups, dialogResult.data);
+      await this.initializePersons(false);
+    }
   };
 
   public onEditAthleteTrainingPersons = async () => {

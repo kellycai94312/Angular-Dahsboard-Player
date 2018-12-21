@@ -1,10 +1,10 @@
-<div *ngIf="width && height"
+<div *ngIf="innerWidth && innerHeight"
      class="d-flex flex-column">
   <div class="img-fluid {{class}} "
        [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
        (dblclick)="onShowImage()"
-       [style.width.px]="width"
-       [style.height.px]="height"
+       [style.width.px]="innerWidth"
+       [style.height.px]="innerHeight"
        [style.background-size]="'cover'"
        [style.background-image]="'url('+ url +')'"></div>
 

@@ -41,9 +41,16 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Output()
   public readonly imageChange: EventEmitter<any>;
 
-  public url: string;
+  @Input()
   public width: number;
+
+  @Input()
   public height: number;
+
+  public url: string;
+
+  public innerWidth: number;
+  public innerHeight: number;
 
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
@@ -55,8 +62,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
     this.imageChange = new EventEmitter<any>();
     this.class = '';
     this.allowFullScreen = true;
-    this.width = 0;
-    this.height = 0;
+    this.innerWidth = 0;
+    this.innerHeight = 0;
   }
 
   async ngOnInit() {
@@ -87,17 +94,22 @@ export class NgxImageComponent implements OnInit, OnChanges {
   }
 
   public refresh() {
-    const minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
-    this.width = minSide;
-    this.height = minSide;
+    let minSide = 0;
+    if (this.width || this.height) {
+      minSide = Math.min(this.width, this.height);
+    } else {
+      minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
+    }
+    this.innerWidth = minSide;
+    this.innerHeight = minSide;
 
     let url = `${environment.restUrl}/file/download/image?clazz=${this.fileClass}&objectId=${this.objectId}&type=${this.type}`;
 
-    if (!this._appHelper.isUndefinedOrNull(this.width)) {
-      url += `&width=${this.width}`;
+    if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
+      url += `&width=${this.innerWidth}`;
     }
-    if (!this._appHelper.isUndefinedOrNull(this.height)) {
-      url += `&height=${this.height}`;
+    if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
+      url += `&height=${this.innerHeight}`;
     }
 
     url += `&date=${Date.now()}`;

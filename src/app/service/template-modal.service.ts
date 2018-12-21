@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Type} from '@angular/core';
 import {NgxModalService} from '../components/ngx-modal/service/ngx-modal.service';
 import {Group} from '../data/remote/model/group/base/group';
 import {Person} from '../data/remote/model/person';
@@ -21,6 +21,11 @@ import {GeneralStepEditEventComponent} from '../module/event/edit-event/general-
 import {PersonsStepEditEventComponent} from '../module/event/edit-event/persons-step-edit-event/persons-step-edit-event.component';
 import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-item';
 import {TranslateObjectService} from '../shared/translate-object.service';
+import {PageQuery} from '../data/remote/rest-api/page-query';
+import {PageContainer} from '../data/remote/bean/page-container';
+import {NgxSelectionComponent} from '../components/ngx-selection/ngx-selection/ngx-selection.component';
+import {GroupItemComponent} from '../module/group/group-item/group-item/group-item.component';
+import {EventGroupQuery} from '../data/remote/rest-api/query/event/event-group-query';
 
 @Injectable({
   providedIn: 'root'
@@ -291,4 +296,74 @@ export class TemplateModalService {
     return eventGroupNews;
   }
 
+  public async showSelectionTrainingGroupsModal<TModel extends Group>(event: BaseTraining,
+                                                                      selectedItems: TModel[],
+                                                                      eventGroupQuery: EventGroupQuery = null,
+                                                                      config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
+    config = config || new SelectionItemsModalConfig<TModel>();
+    if (!config.title) {
+      config.title = `${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
+    }
+
+    return await this.showSelectionItemsModal(selectedItems,
+      async (query: EventGroupQuery) => {
+        const pageContainer = await this._participantRestApiService.getTrainingGroupsByBaseTraining({},
+          this._appHelper.updatePageQuery(query, eventGroupQuery),
+          {eventId: event.id});
+        return this._appHelper.pageContainerConverter(pageContainer, async obj => {
+          return obj.group;
+        });
+      },
+      GroupItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      config
+    );
+  }
+
+  public async showSelectionItemsModal<TComponent, TModel>(selectedItems: TModel[],
+                                                           fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<TModel>>,
+                                                           componentType: Type<TComponent>,
+                                                           initializeComponent: (component: TComponent, data: TModel) => Promise<void>,
+                                                           config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
+    const modal = this._ngxModalService.open();
+    if (config) {
+      modal.componentInstance.title = config.title;
+    } else {
+      modal.componentInstance.titleKey = 'selection';
+    }
+    let ngxSelectionComponent: NgxSelectionComponent<any, PageQuery, TModel> = null;
+    await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+      ngxSelectionComponent = component;
+      if (config) {
+        component.maxCount = config.maxCount;
+        component.compare = config.compare;
+      }
+
+      await component.initialize(componentType, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            modal.close();
+          }
+        }
+      ];
+    });
+
+    const dialogResult: DialogResult<TModel> = {result: await this._ngxModalService.awaitModalResult(modal)};
+    if (dialogResult.result) {
+      dialogResult.data = ngxSelectionComponent.selectedItems;
+    }
+    return dialogResult;
+  }
+
+}
+
+class SelectionItemsModalConfig<T> {
+  title?: string;
+  minCount?: number;
+  maxCount?: number;
+  compare?: (first: T, second: T) => boolean;
 }

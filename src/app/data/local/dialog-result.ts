@@ -1,4 +1,4 @@
 export class DialogResult<T> {
   result: boolean;
-  data?: T;
+  data?: T[] | T | any;
 }
