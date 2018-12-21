@@ -148,7 +148,10 @@ export class TemplateModalService {
           callback: async () => {
             const afterCreateEvent = this._appHelper.isNewObject(component.data);
             if (await this._ngxModalService.save(modal, component, false)) {
-              await this.showPersonsStepEditEvent(component.data, afterCreateEvent, conversation);
+              const dialogResult = await this.showPersonsStepEditEvent(component.data, afterCreateEvent, conversation);
+              if (dialogResult.result && afterCreateEvent) {
+                modal.close();
+              }
             }
           }
         },
@@ -302,7 +305,7 @@ export class TemplateModalService {
                                                                       config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
     config = config || new SelectionItemsModalConfig<TModel>();
     if (!config.title) {
-      config.title = `${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
+      config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
     }
 
     return await this.showSelectionItemsModal(selectedItems,
