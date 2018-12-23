@@ -2,16 +2,16 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgxSelectionComponent} from './ngx-selection/ngx-selection.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {NgxTextBoxModule} from '../ngx-text-box/ngx-text-box.module';
 import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {NgxComponentFactoryModule} from '../ngx-component-factory/ngx-component-factory.module';
 import {BusyButtonModule} from '../busy-button/busy-button.module';
+import {NgxInputModule} from '../ngx-input/ngx-input.module';
 
 @NgModule({
   imports: [
     CommonModule,
     TranslateModule.forChild(),
-    NgxTextBoxModule,
+    NgxInputModule,
     NgxVirtualScrollModule,
     NgxComponentFactoryModule,
     BusyButtonModule

@@ -595,5 +595,7 @@
   "nextStep": "Next step",
   "back": "Back",
   "saveAndSend": "Save and send",
-  "images": "Images"
+  "images": "Images",
+  "chat": "Chat",
+  "new": "New"
 }

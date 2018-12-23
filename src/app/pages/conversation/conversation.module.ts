@@ -25,6 +25,9 @@ import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.m
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {AngularSvgIconModule} from 'angular-svg-icon';
 import {EditEventModule} from '../../module/event/edit-event/edit-event.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
+import {NgxInputModule} from '../../components/ngx-input/ngx-input.module';
 
 @NgModule({
   imports: [
@@ -47,7 +50,10 @@ import {EditEventModule} from '../../module/event/edit-event/edit-event.module';
     ModalConfirmModule,
     NgxButtonModule,
     EditEventModule,
-    AngularSvgIconModule
+    AngularSvgIconModule,
+    NgxImageModule,
+    NgxSelectionModule,
+    NgxInputModule
   ],
   declarations: [
     ConversationsPageComponent,

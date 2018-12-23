@@ -57,6 +57,7 @@ import {GroupSettingsComponent} from './pages/group/group-page/group-settings/gr
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
+import {EditChatModule} from './module/conversation/edit-chat/edit-chat.module';
 
 registerLocaleData(localeRu);
 
@@ -111,7 +112,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupModule,
     EditEventModule,
     GroupItemModule,
-    EventPersonItemModule
+    EventPersonItemModule,
+    EditChatModule
   ],
   providers: [
     LayoutService,

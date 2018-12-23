@@ -3,18 +3,18 @@ import {ISubscription} from 'rxjs/Subscription';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {ConversationService} from '../../../shared/conversation.service';
-import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 import {AppHelper} from '../../../utils/app-helper';
 import {ConversationWrapper} from '../conversation-wrapper';
 import {MessageWrapper} from '../../../data/remote/bean/wrapper/message-wrapper';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
+import {TemplateModalService} from '../../../service/template-modal.service';
+import {Chat} from '../../../data/remote/model/chat/conversation/chat';
 
 @Component({
   selector: 'app-conversations-page',
@@ -40,7 +40,7 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
-              private _modalService: NgbModal,
+              private _templateModalService: TemplateModalService,
               private _appHelper: AppHelper) {
     this.query = new PageQuery();
 
@@ -142,8 +142,8 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
     return this._appHelper.pageContainerConverter(pageContainer, messageWrapper => new ConversationWrapper(messageWrapper));
   };
 
-  public createChat(): void {
-    this._modalService.open(ChatModalCreateComponent, {size: 'lg'});
+  public async createChat(): Promise<void> {
+    await this._templateModalService.showEditChat(new Chat());
   }
 
   private async resetItems(): Promise<void> {

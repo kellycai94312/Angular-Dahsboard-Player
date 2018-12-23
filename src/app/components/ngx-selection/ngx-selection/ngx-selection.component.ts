@@ -7,7 +7,7 @@ import {AppHelper} from '../../../utils/app-helper';
 import {PropertyConstant} from '../../../data/local/property-constant';
 
 @Component({
-  selector: 'app-ngx-selection',
+  selector: 'ngx-selection',
   templateUrl: './ngx-selection.component.html',
   styleUrls: ['./ngx-selection.component.scss']
 })
@@ -17,6 +17,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+
+  @Input()
+  public class: string;
 
   @Input()
   public add: () => Promise<void>;
@@ -43,6 +46,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public maxCount: number;
 
   constructor(private _appHelper: AppHelper) {
+    this.class = '';
     this.query = <TQuery>{};
     this.compare = (first, second) => {
       return first.id == second.id;

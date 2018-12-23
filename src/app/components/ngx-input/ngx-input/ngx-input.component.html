@@ -5,5 +5,5 @@
        [(ngModel)]="innerValue"
        (keyup)="keyUp.next($event)"
        (focusout)="onFocusOut($event)"
-       placeholder="{{placeholderKey | translate}}"
+       placeholder="{{placeholder ? placeholder : placeholderKey | translate}}"
        [disabled]="disabled">

@@ -6,7 +6,7 @@
        [style.width.px]="innerWidth"
        [style.height.px]="innerHeight"
        [style.background-size]="'cover'"
-       [style.background-image]="'url('+ url +')'"></div>
+       [style.background-image]="'url('+ url +')' | safeStyle"></div>
 
   <div *ngIf="canEdit">
     <label for="file-upload"

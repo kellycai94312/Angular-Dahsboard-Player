@@ -23,6 +23,9 @@ export class NgxInputComponent implements OnInit, OnDestroy {
   public disabled: boolean;
 
   @Input()
+  public placeholder: string;
+
+  @Input()
   public placeholderKey: string;
 
   private _value: string;
@@ -64,6 +67,7 @@ export class NgxInputComponent implements OnInit, OnDestroy {
     this.keyUp = new Subject<KeyboardEvent>();
     this.class = '';
     this.errorMessages = [];
+    this.type = NgxInputType.TEXT;
   }
 
   ngOnInit() {
