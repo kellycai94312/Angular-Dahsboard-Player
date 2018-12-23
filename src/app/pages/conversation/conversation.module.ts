@@ -16,7 +16,6 @@ import {DxCheckBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-a
 import {ModalItemModule} from '../../components/modal-item/modal-item.module';
 import {PersonModule} from '../../components/person/person.module';
 import {NgbDropdownModule} from '@ng-bootstrap/ng-bootstrap';
-import {ChatModalSettingsComponent} from './chat-modal/chat-modal-settings/chat-modal-settings.component';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {ChatModalDeleteMessageConfirmComponent} from './chat-modal/chat-modal-delete-message-confirm/chat-modal-delete-message-confirm.component';
 import {ModalConfirmModule} from '../../components/modal-confirm/modal-confirm.module';
@@ -58,11 +57,9 @@ import {NgxInputModule} from '../../components/ngx-input/ngx-input.module';
     ConversationPageComponent,
     MessageComponent,
     ConversationComponent,
-    ChatModalSettingsComponent,
     ChatModalDeleteMessageConfirmComponent
   ],
   entryComponents: [
-    ChatModalSettingsComponent,
     ChatModalDeleteMessageConfirmComponent
   ]
 })
