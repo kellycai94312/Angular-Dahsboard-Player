@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -15,6 +15,7 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ClientError} from '../../../../data/local/error/client-error';
 import {Router} from '@angular/router';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
+import {TemplateModalService} from '../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-edit-chat',
@@ -35,6 +36,9 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
   public _ngxSelectionComponent: NgxSelectionComponent<PersonItemComponent, ConversationQuery, Person>;
 
   constructor(private _router: Router,
+              // TODO: TemplateModalService can't inject without forwardRef()
+              @Inject(forwardRef(() => TemplateModalService))
+              private _templateModalService: TemplateModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
@@ -64,6 +68,9 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
   }
 
   async onRemove(): Promise<boolean> {
+    if (!await this._templateModalService.showConfirmModal('areYouSure')) {
+      return;
+    }
     return await this.appHelper.tryRemove(async () => {
       await this.participantRestApiService.deleteChat({conversationId: this.data.id});
     });

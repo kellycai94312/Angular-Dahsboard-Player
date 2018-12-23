@@ -43,11 +43,6 @@
                     ngbDropdownToggle>{{'actions' | translate}}
             </button>
             <div ngbDropdownMenu>
-              <button *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT"
-                      class="dropdown-item"
-                      (click)="editParticipants()">
-                {{'participants' | translate}}
-              </button>
               <button
                 *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT && conversation.owner.id == person.user.id"
                 class="dropdown-item"
@@ -61,20 +56,10 @@
               <button class="dropdown-item"
                       (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
               </button>
-              <button *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE"
-                      class="dropdown-item"
-                      (click)="createChat()">
-                {{'createChat' | translate}}
-              </button>
               <button class="dropdown-item"
                       (click)="quitChat()"
                       *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
                 {{'quitChat' | translate}}
-              </button>
-              <button *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id == person.user.id"
-                      class="dropdown-item"
-                      (click)="deleteChat()">
-                {{'deleteChat' | translate}}
               </button>
             </div>
           </div>

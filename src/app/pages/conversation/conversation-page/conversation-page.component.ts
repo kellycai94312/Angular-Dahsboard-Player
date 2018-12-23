@@ -14,9 +14,7 @@ import {MessageContent} from '../../../data/remote/model/chat/message/message-co
 import {BaseConversationType} from '../../../data/remote/model/chat/conversation/base/base-conversation-type';
 import {BaseConversation} from '../../../data/remote/model/chat/conversation/base/base-conversation';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ChatModalSettingsComponent} from '../chat-modal/chat-modal-settings/chat-modal-settings.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
-import {ChatModalParticipantsComponent} from '../chat-modal/chat-modal-participants/chat-modal-participants.component';
 import {ImageComponent} from '../../../components/image/image.component';
 import {Chat} from '../../../data/remote/model/chat/conversation/chat';
 import {HashSet} from '../../../data/local/hash-set';
@@ -28,7 +26,6 @@ import {TranslateService} from '@ngx-translate/core';
 import {BaseMessageContentType} from '../../../data/remote/model/chat/message/base/base-message-content-type';
 import {SystemMessageContent} from '../../../data/remote/model/chat/message/system-message-content';
 import {SystemMessageContentType} from '../../../data/remote/model/chat/message/system-message-content-type';
-import {ChatModalCreateComponent} from '../chat-modal/chat-modal-create/chat-modal-create.component';
 import {MessageToastrService} from '../../../components/message-toastr/message-toastr.service';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {TemplateModalService} from '../../../service/template-modal.service';
@@ -254,18 +251,12 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     }, 150);
   }
 
-  public editParticipants() {
-    const ref = this._modalService.open(ChatModalParticipantsComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ChatModalParticipantsComponent;
-    componentInstance.chat = this.conversation as Chat;
-  }
-
-  public editChat() {
-    const ref = this._modalService.open(ChatModalSettingsComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ChatModalSettingsComponent;
-    componentInstance.chat = Object.assign({}, this.conversation as Chat);
-    componentInstance.chatChange = (chat: Chat) => this.conversation = chat;
-    componentInstance.logoChange = () => this.logo.refresh();
+  public async editChat() {
+    const dialogResult = await this._templateModalService.showEditChat(this.conversation as Chat);
+    if (dialogResult.result) {
+      this._appHelper.updateObject(this.conversation, dialogResult.data);
+      this.logo.refresh();
+    }
   }
 
   public toggleSelectMessage = (message: Message) => {
@@ -325,12 +316,6 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         && message.sender.person.id == this.person.id).length == 1;
   }
 
-  public async createChat() {
-    const ref = this._modalService.open(ChatModalCreateComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ChatModalCreateComponent;
-    componentInstance.selectedPerson = this.recipient.person;
-  }
-
   public async quitChat() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);
     const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
@@ -338,17 +323,6 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
     componentInstance.onConfirm = async () => {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
-      await this._router.navigate(['/conversation']);
-    };
-  }
-
-  public async deleteChat() {
-    const ref = this._modalService.open(ModalConfirmDangerComponent);
-    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
-    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
-    componentInstance.onConfirm = async () => {
-      await this._participantRestApiService.deleteChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
     };
   }

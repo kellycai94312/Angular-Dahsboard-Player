@@ -31,6 +31,7 @@ import {TrainingPersonQuery} from '../data/remote/rest-api/query/training-person
 import {EventPersonItemComponent} from '../module/event/event-person-item/event-person-item/event-person-item.component';
 import {Chat} from '../data/remote/model/chat/conversation/chat';
 import {EditChatComponent} from '../module/conversation/edit-chat/edit-chat/edit-chat.component';
+import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +42,30 @@ export class TemplateModalService {
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
+  }
+
+  public async showConfirmModal(contentKey: string): Promise<boolean> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'attention';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.html = await this._translateObjectService.getTranslation(contentKey);
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            modal.close();
+          }
+        },
+        {
+          nameKey: 'cancel',
+          callback: async () => {
+            modal.dismiss();
+          }
+        }
+      ];
+    });
+    return await this._ngxModalService.awaitModalResult(modal);
   }
 
   public async showGroupPersonTransferModal(groupTransitionType: GroupTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
