@@ -1,0 +1,22 @@
+<div class="d-flex">
+  <div class="w-100">
+    <ngx-input placeholderKey="search"
+               [debounceTime]="propertyConstantClass.searchDebounceTime"
+               (valueChange)="onSearchTextChanged($event)"></ngx-input>
+  </div>
+  <div class="ml-2">
+    <ngx-button nameKey="createChat"
+                [click]="onCreateChat"></ngx-button>
+  </div>
+</div>
+
+<ngx-virtual-scroll class="mt-2 list-group-flush"
+                    [getItems]="getItems"
+                    [(query)]="query"
+                    [windowScroll]="true">
+  <ng-template let-item>
+    <div class="list-group-item p-0">
+      <app-conversation-item [conversationWrapper]="item"></app-conversation-item>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

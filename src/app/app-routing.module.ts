@@ -58,7 +58,7 @@ const routes: Routes = [
   },
   {
     path: 'conversation',
-    loadChildren: './pages/conversation/conversation.module#ConversationModule',
+    loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard, LayoutService]
   },
   {
