@@ -7,6 +7,8 @@ import {NgxTabModule} from '../../../components/ngx-tab/ngx-tab.module';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-split-button.module';
+import {GroupSettingsModule} from '../../../module/group/group-settings/group-settings.module';
+import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
 
 @NgModule({
   imports: [
@@ -16,7 +18,9 @@ import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-spl
     ImageModule,
     NgxButtonModule,
     NgxTabModule,
-    NgxSplitButtonModule
+    NgxModalModule,
+    NgxSplitButtonModule,
+    GroupSettingsModule
   ],
   declarations: [GroupPageComponent]
 })

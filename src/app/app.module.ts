@@ -18,7 +18,6 @@ import {LayoutComponent} from './layout/layout.component';
 import {LayoutService} from './layout/shared/layout.service';
 import {SideBarComponent} from './layout/side-bar/side-bar.component';
 import {NavBarComponent} from './layout/nav-bar/nav-bar.component';
-import {UserPanelDirective} from './layout/nav-bar/user-panel.directive';
 import {ParticipantRestApiService} from './data/remote/rest-api/participant-rest-api.service';
 import {TranslateObjectService} from './shared/translate-object.service';
 import {LocalStorageService} from './shared/local-storage.service';
@@ -53,7 +52,6 @@ import {NgxButtonModule} from './components/ngx-button/ngx-button.module';
 import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
 import {InputSelectModule} from './components/input-select/input-select.module';
 import {DxSelectBoxModule} from 'devextreme-angular';
-import {GroupSettingsComponent} from './pages/group/group-page/group-settings/group-settings.component';
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
@@ -70,9 +68,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent,
     LayoutComponent,
     SideBarComponent,
-    NavBarComponent,
-    UserPanelDirective,
-    GroupSettingsComponent
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -154,7 +150,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     },
     StompRService
   ],
-  entryComponents: [GroupSettingsComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule {
