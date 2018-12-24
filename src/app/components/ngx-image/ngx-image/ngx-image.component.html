@@ -1,20 +1,24 @@
-<div *ngIf="width && height"
+<div *ngIf="innerWidth && innerHeight"
      class="d-flex flex-column">
   <div class="img-fluid {{class}} "
        [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
        (dblclick)="onShowImage()"
-       [style.width.px]="width"
-       [style.height.px]="height"
+       [style.width.px]="innerWidth"
+       [style.height.px]="innerHeight"
        [style.background-size]="'cover'"
-       [style.background-image]="'url('+ url +')'"></div>
-
-  <div *ngIf="canEdit">
-    <label for="file-upload"
-           class="btn btn-primary input-height-sm w-auto mt-2">{{'changeImage' | translate}}</label>
-    <input id="file-upload"
-           type="file"
-           title=" "
-           (change)="onImageChange($event.target.files)"
-           accept="image/*">
+       [style.background-image]="'url('+ url +')' | safeStyle"></div>
+  <div *ngIf="canEdit"
+       class="img-circle-change"
+       [style.width.px]="innerWidth"
+       [style.height.px]="innerHeight"
+       [style.border-radius]="format === imageFormatClass.CIRCLE ? '100%' : '0px'">
+    <div class="img-content">
+      <input id="file-upload"
+             type="file"
+             title=" "
+             (change)="onImageChange($event.target.files)"
+             accept="image/*">
+      <i class="fa fa-pencil-square-o"></i>
+    </div>
   </div>
 </div>

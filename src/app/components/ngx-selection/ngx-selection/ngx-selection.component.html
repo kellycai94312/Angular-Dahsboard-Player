@@ -1,7 +1,8 @@
-<div class="d-flex">
-  <ngx-text-box class="w-100"
-                [debounceTime]="propertyConstant.searchDebounceTime"
-                (valueChange)="onSearchTextChanged($event)"></ngx-text-box>
+<div class="d-flex {{class}}">
+  <ngx-input class="w-100"
+             placeholderKey="search"
+             [debounceTime]="propertyConstant.searchDebounceTime"
+             (valueChange)="onSearchTextChanged($event)"></ngx-input>
   <app-busy-button *ngIf="add"
                    class="ml-2"
                    nameKey="add"

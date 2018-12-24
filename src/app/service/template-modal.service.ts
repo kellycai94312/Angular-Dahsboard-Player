@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Type} from '@angular/core';
 import {NgxModalService} from '../components/ngx-modal/service/ngx-modal.service';
 import {Group} from '../data/remote/model/group/base/group';
 import {Person} from '../data/remote/model/person';
@@ -21,6 +21,17 @@ import {GeneralStepEditEventComponent} from '../module/event/edit-event/general-
 import {PersonsStepEditEventComponent} from '../module/event/edit-event/persons-step-edit-event/persons-step-edit-event.component';
 import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-item';
 import {TranslateObjectService} from '../shared/translate-object.service';
+import {PageQuery} from '../data/remote/rest-api/page-query';
+import {PageContainer} from '../data/remote/bean/page-container';
+import {NgxSelectionComponent} from '../components/ngx-selection/ngx-selection/ngx-selection.component';
+import {GroupItemComponent} from '../module/group/group-item/group-item/group-item.component';
+import {EventGroupQuery} from '../data/remote/rest-api/query/event/event-group-query';
+import {TrainingPerson} from '../data/remote/model/training/training-person';
+import {TrainingPersonQuery} from '../data/remote/rest-api/query/training-person-query';
+import {EventPersonItemComponent} from '../module/event/event-person-item/event-person-item/event-person-item.component';
+import {Chat} from '../data/remote/model/chat/conversation/chat';
+import {EditChatComponent} from '../module/conversation/edit-chat/edit-chat/edit-chat.component';
+import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +42,30 @@ export class TemplateModalService {
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
+  }
+
+  public async showConfirmModal(contentKey: string): Promise<boolean> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'attention';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.html = await this._translateObjectService.getTranslation(contentKey);
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            modal.close();
+          }
+        },
+        {
+          nameKey: 'cancel',
+          callback: async () => {
+            modal.dismiss();
+          }
+        }
+      ];
+    });
+    return await this._ngxModalService.awaitModalResult(modal);
   }
 
   public async showGroupPersonTransferModal(groupTransitionType: GroupTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
@@ -101,107 +136,6 @@ export class TemplateModalService {
       ];
     });
     return await this._ngxModalService.awaitModalResult(modal);
-  }
-
-  public async showEditEventModal<T extends BaseTraining>(event: T = null,
-                                                          date: Date = null,
-                                                          eventPlan: EventPlan = null,
-                                                          conversation: BaseConversation = null,
-                                                          canSelectExistEvent: boolean = false): Promise<DialogResult<T>> {
-    return await this.showGeneralStepEditEvent(event, date, eventPlan, conversation, canSelectExistEvent);
-  }
-
-  private async showGeneralStepEditEvent<T extends BaseTraining>(event: T,
-                                                                 date: Date = null,
-                                                                 eventPlan: EventPlan = null,
-                                                                 conversation: BaseConversation = null,
-                                                                 canSelectExistEvent: boolean = false): Promise<DialogResult<T>> {
-    event = event || new BaseTraining() as T;
-    date = date || new Date();
-    const modal = this._ngxModalService.open();
-    await this.updateModalTitle(modal, event, event.name || await this._translateObjectService.getTranslation('newEvent'));
-    let eventResult: T = null;
-    let generalStepEditEventComponent: GeneralStepEditEventComponent<T> = null;
-    await modal.componentInstance.initializeBody(GeneralStepEditEventComponent, async component => {
-      generalStepEditEventComponent = component as GeneralStepEditEventComponent<T>;
-      component.manualInitialization = true;
-
-      const isNew = this._appHelper.isNewObject(event);
-      if (isNew) {
-        event.startTime = event.startTime || date;
-        event.finishTime = event.finishTime || new Date(date.getTime() + 30 * 60 * 1000);
-        event.eventPlan = eventPlan;
-      }
-      component.date = isNew ? date : event.startTime;
-
-      await component.initialize(this._appHelper.cloneObject(event));
-
-      modal.componentInstance.splitButtonItems = [
-        {
-          default: true,
-          nameKey: 'nextStep',
-          callback: async () => {
-            const afterCreateEvent = this._appHelper.isNewObject(component.data);
-            if (await this._ngxModalService.save(modal, component, false)) {
-              await this.showPersonsStepEditEvent(component.data, afterCreateEvent, conversation);
-            }
-          }
-        },
-        {
-          nameKey: conversation ? 'saveAndSend' : 'save',
-          callback: async () => {
-            await this._ngxModalService.save(modal, component);
-          }
-        },
-        {
-          nameKey: 'addExistingEvent',
-          callback: async () => {
-            await this._ngxModalService.showSelectionEventModal(async selectedItems => {
-              if (selectedItems.length > 0) {
-                eventResult = selectedItems[0] as T;
-                modal.close();
-              }
-            });
-          },
-          visible: () => {
-            return canSelectExistEvent && this._appHelper.isNewObject(component.data);
-          }
-        },
-        this._ngxModalService.removeSplitItemButton(async () => {
-            await this._ngxModalService.remove(modal, component);
-          },
-          () => {
-            return !this._appHelper.isNewObject(component.data);
-          }
-        )
-      ];
-    });
-
-    const result = await this._ngxModalService.awaitModalResult(modal);
-    return {result: result, data: eventResult || generalStepEditEventComponent.data};
-  }
-
-  private async showPersonsStepEditEvent<T extends BaseTraining>(event: T,
-                                                                 afterCreateEvent: boolean = false,
-                                                                 conversation: BaseConversation = null): Promise<DialogResult<T>> {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'persons.section';
-    let personsStepEditEventComponent: PersonsStepEditEventComponent<T> = null;
-    await modal.componentInstance.initializeBody(PersonsStepEditEventComponent, async component => {
-      personsStepEditEventComponent = component as PersonsStepEditEventComponent<T>;
-      component.manualInitialization = true;
-
-      component.preInitialize(afterCreateEvent, conversation);
-      await component.initialize(this._appHelper.cloneObject(event));
-
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this.backSplitButtonItem(modal)
-      ];
-    });
-    return {result: await this._ngxModalService.awaitModalResult(modal)};
   }
 
   public async showEditGroupNewsModal<T extends BaseGroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
@@ -278,7 +212,7 @@ export class TemplateModalService {
 
   private async updateModalTitle<T extends IdentifiedObject>(modal: NgxModalRef, obj: T, text: string = ''): Promise<void> {
     const isNew = this._appHelper.isNewObject(obj);
-    modal.componentInstance.title = `${await this._translateObjectService.getTranslation(isNew ? 'add' : 'edit')} ${text}`;
+    modal.componentInstance.title = `${text} | ${await this._translateObjectService.getTranslation(isNew ? 'add' : 'edit')}`;
   }
 
   private async createEventGroupNews<T extends BaseTraining>(event: T, group: Group): Promise<EventGroupNews> {
@@ -291,4 +225,239 @@ export class TemplateModalService {
     return eventGroupNews;
   }
 
+  public async showEditChat(chat: Chat): Promise<DialogResult<Chat>> {
+    const modal = this._ngxModalService.open();
+    let defaultName = chat.name;
+    if (!defaultName) {
+      defaultName = `${await this._translateObjectService.getTranslation('new')} ${await this._translateObjectService.getTranslation('chat')}`;
+    }
+    await this.updateModalTitle(modal, chat, defaultName);
+    let editChatComponent: EditChatComponent = null;
+    await modal.componentInstance.initializeBody(EditChatComponent, async component => {
+      editChatComponent = component;
+      await component.initialize(this._appHelper.cloneObject(chat));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await this._ngxModalService.save(modal, component)) {
+            await component.navigateToChat();
+          }
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+            if (await this._ngxModalService.remove(modal, component)) {
+              await component.navigateToBase();
+            }
+          },
+          () => {
+            return !this._appHelper.isNewObject(component.data);
+          }
+        )
+      ];
+    });
+    const dialogResult: DialogResult<Chat> = {result: await this._ngxModalService.awaitModalResult(modal)};
+    if (dialogResult.result) {
+      dialogResult.data = editChatComponent.data;
+    }
+    return dialogResult;
+  }
+
+  //#region Event
+
+  public async showEditEventModal<T extends BaseTraining>(event: T = null,
+                                                          date: Date = null,
+                                                          eventPlan: EventPlan = null,
+                                                          conversation: BaseConversation = null,
+                                                          canSelectExistEvent: boolean = false): Promise<DialogResult<T>> {
+    return await this.showGeneralStepEditEvent(event, date, eventPlan, conversation, canSelectExistEvent);
+  }
+
+  private async showGeneralStepEditEvent<T extends BaseTraining>(event: T,
+                                                                 date: Date = null,
+                                                                 eventPlan: EventPlan = null,
+                                                                 conversation: BaseConversation = null,
+                                                                 canSelectExistEvent: boolean = false): Promise<DialogResult<T>> {
+    event = event || new BaseTraining() as T;
+    date = date || new Date();
+    const modal = this._ngxModalService.open();
+    await this.updateModalTitle(modal, event, event.name || await this._translateObjectService.getTranslation('newEvent'));
+    let eventResult: T = null;
+    let generalStepEditEventComponent: GeneralStepEditEventComponent<T> = null;
+    await modal.componentInstance.initializeBody(GeneralStepEditEventComponent, async component => {
+      generalStepEditEventComponent = component as GeneralStepEditEventComponent<T>;
+      component.manualInitialization = true;
+
+      const isNew = this._appHelper.isNewObject(event);
+      if (isNew) {
+        event.startTime = event.startTime || date;
+        event.finishTime = event.finishTime || new Date(date.getTime() + 30 * 60 * 1000);
+        event.eventPlan = eventPlan;
+      }
+      component.date = isNew ? date : event.startTime;
+
+      await component.initialize(this._appHelper.cloneObject(event));
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          default: true,
+          nameKey: 'nextStep',
+          callback: async () => {
+            const afterCreateEvent = this._appHelper.isNewObject(component.data);
+            if (await this._ngxModalService.save(modal, component, false)) {
+              const dialogResult = await this.showPersonsStepEditEvent(component.data, afterCreateEvent, conversation);
+              if (dialogResult.result && afterCreateEvent) {
+                modal.close();
+              }
+            }
+          }
+        },
+        {
+          nameKey: conversation ? 'saveAndSend' : 'save',
+          callback: async () => {
+            await this._ngxModalService.save(modal, component);
+          }
+        },
+        {
+          nameKey: 'addExistingEvent',
+          callback: async () => {
+            await this._ngxModalService.showSelectionEventModal(async selectedItems => {
+              if (selectedItems.length > 0) {
+                eventResult = selectedItems[0] as T;
+                modal.close();
+              }
+            });
+          },
+          visible: () => {
+            return canSelectExistEvent && this._appHelper.isNewObject(component.data);
+          }
+        },
+        this._ngxModalService.removeSplitItemButton(async () => {
+            await this._ngxModalService.remove(modal, component);
+          },
+          () => {
+            return !this._appHelper.isNewObject(component.data);
+          }
+        )
+      ];
+    });
+
+    const result = await this._ngxModalService.awaitModalResult(modal);
+    return {result: result, data: eventResult || generalStepEditEventComponent.data};
+  }
+
+  private async showPersonsStepEditEvent<T extends BaseTraining>(event: T,
+                                                                 afterCreateEvent: boolean = false,
+                                                                 conversation: BaseConversation = null): Promise<DialogResult<T>> {
+    const modal = this._ngxModalService.open();
+    await this.updateModalTitle(modal, event, await this._translateObjectService.getTranslation('persons.section'));
+    let personsStepEditEventComponent: PersonsStepEditEventComponent<T> = null;
+    await modal.componentInstance.initializeBody(PersonsStepEditEventComponent, async component => {
+      personsStepEditEventComponent = component as PersonsStepEditEventComponent<T>;
+      component.manualInitialization = true;
+
+      component.preInitialize(afterCreateEvent, conversation);
+      await component.initialize(this._appHelper.cloneObject(event));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this.backSplitButtonItem(modal)
+      ];
+    });
+    return {result: await this._ngxModalService.awaitModalResult(modal)};
+  }
+
+  public async showSelectionTrainingGroupsModal<TModel extends Group>(event: BaseTraining,
+                                                                      selectedItems: TModel[],
+                                                                      eventGroupQuery: EventGroupQuery = null,
+                                                                      config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
+    config = config || new SelectionItemsModalConfig<TModel>();
+    if (!config.title) {
+      config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
+    }
+
+    return (await this.showSelectionItemsModal(selectedItems,
+      async (query: EventGroupQuery) => {
+        const pageContainer = await this._participantRestApiService.getTrainingGroupsByBaseTraining({},
+          this._appHelper.updatePageQuery(query, eventGroupQuery),
+          {eventId: event.id});
+        return this._appHelper.pageContainerConverter(pageContainer, async obj => {
+          return obj.group;
+        });
+      },
+      GroupItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      config
+    )) as DialogResult<TModel[]>;
+  }
+
+  public async showSelectionTrainingPersonsModal<TModel extends TrainingPerson>(event: BaseTraining,
+                                                                                selectedItems: TModel[],
+                                                                                trainingPersonQuery: TrainingPersonQuery = null,
+                                                                                config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
+    config = config || new SelectionItemsModalConfig<TModel>();
+    if (!config.title) {
+      config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('persons.section')}`;
+    }
+
+    return (await this.showSelectionItemsModal(selectedItems,
+      async (query: TrainingPersonQuery) => {
+        return await this._participantRestApiService.getTrainingPersons({}, this._appHelper.updatePageQuery(query, trainingPersonQuery), {eventId: event.id});
+      },
+      EventPersonItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      config
+    )) as DialogResult<TModel[]>;
+  }
+
+  //#endregion
+
+  public async showSelectionItemsModal<TComponent, TModel>(selectedItems: TModel[],
+                                                           fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<TModel>>,
+                                                           componentType: Type<TComponent>,
+                                                           initializeComponent: (component: TComponent, data: TModel) => Promise<void>,
+                                                           config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
+    const modal = this._ngxModalService.open();
+    if (config) {
+      modal.componentInstance.title = config.title;
+    } else {
+      modal.componentInstance.titleKey = 'selection';
+    }
+    let ngxSelectionComponent: NgxSelectionComponent<any, PageQuery, TModel> = null;
+    await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
+      ngxSelectionComponent = component;
+      if (config) {
+        component.maxCount = config.maxCount;
+        component.compare = config.compare;
+      }
+
+      await component.initialize(componentType, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            modal.close();
+          }
+        }
+      ];
+    });
+
+    const dialogResult: DialogResult<TModel[]> = {result: await this._ngxModalService.awaitModalResult(modal)};
+    if (dialogResult.result) {
+      dialogResult.data = ngxSelectionComponent.selectedItems;
+    }
+    return dialogResult;
+  }
+
+}
+
+class SelectionItemsModalConfig<T> {
+  title?: string;
+  minCount?: number;
+  maxCount?: number;
+  compare?: (first: T, second: T) => boolean;
 }

@@ -1,0 +1,32 @@
+$img-border-width: 2px;
+$img-change-transition: .5s;
+$img-change-content-background-hover: rgba(0, 0, 0, .8);
+$img-size: 100%;
+$img-content-height: $img-size / 3;
+
+.img-circle-change {
+  position: absolute;
+  overflow: hidden;
+  border-radius: $img-size;
+
+  .img-content {
+    margin-top: calc(#{$img-size} - #{$img-content-height});
+    height: $img-content-height;
+    background: $img-change-content-background-hover;
+    transition: all $img-change-transition;
+    text-align: center;
+
+    &:hover {
+      margin-top: 0;
+      height: $img-size;
+    }
+
+    input[type=file] {
+      display: block;
+    }
+
+    > i {
+      font-size: 14px;
+    }
+  }
+}

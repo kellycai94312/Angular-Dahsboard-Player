@@ -99,10 +99,8 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   public async onDayClick(date: Date) {
-    const dialogResult = await this._templateModalService.showEditEventModal(null, date, this.eventPlan);
-    if (dialogResult.result) {
-      await this.loadEvents();
-    }
+    await this._templateModalService.showEditEventModal(null, date, this.eventPlan);
+    await this.loadEvents();
   }
 
 

@@ -18,8 +18,9 @@ export class TrainingPersonComponent extends BaseComponent<TrainingPersonItemVie
     this.dblClick = new EventEmitter<TrainingPersonItemViewModel>();
   }
 
-  ngOnInit(): void {
-    this.data.initialize();
+  async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+    await this.data.initialize();
   }
 
   public onDblClick() {

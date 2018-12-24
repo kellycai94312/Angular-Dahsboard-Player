@@ -1,0 +1,19 @@
+<div class="d-flex">
+  <div class="mr-2">
+    <ngx-image [object]="data"
+               [width]="80"
+               [height]="80"
+               [allowFullScreen]="false"
+               [format]="imageFormatClass.CIRCLE"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.CHAT"
+               [autoSave]="false"
+               [canEdit]="true"></ngx-image>
+  </div>
+  <div class="my-auto w-100">
+    <label>{{'name' | translate}}</label>
+    <ngx-input placeholderKey="{{('new' | translate) + ' ' + ('chat' | translate)}}"
+               [(value)]="data.name"></ngx-input>
+  </div>
+</div>
+<ngx-selection class="mt-2"></ngx-selection>

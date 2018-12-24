@@ -19,10 +19,10 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
-import {GroupSettingsComponent} from '../group-settings/group-settings.component';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
+import {GroupSettingsComponent} from '../../../../module/group/group-settings/group-settings/group-settings.component';
 
 @Component({
   selector: 'app-group-page',
