@@ -230,8 +230,8 @@
     "joinPersonApproveParams": "{{sender}} одобрил вашу заявку на вступление в группу '{{group}}'",
     "joinPersonRefuseParams": "{{sender}} отклонил вашу заявку на вступление в группу '{{group}}'",
     "invitePersonParams": "{{sender}} пригласил вас в группу '{{group}}'",
-    "invitePersonApproveParams": "{{person}} принято приглашение в группу '{{group}}'",
-    "invitePersonRefuseParams": "{{person}} отклонено приглашение в группу '{{group}}'",
+    "invitePersonApproveParams": "{{person}} принял(а) приглашение в группу '{{group}}'",
+    "invitePersonRefuseParams": "{{person}} отклонил(а) приглашение в группу '{{group}}'",
     "deletePersonParams": "{{sender}} исключил вас из группы '{{group}}'"
   },
   "conversationSystemMessage": {

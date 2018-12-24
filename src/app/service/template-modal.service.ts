@@ -370,13 +370,13 @@ export class TemplateModalService {
   public async showSelectionTrainingGroupsModal<TModel extends Group>(event: BaseTraining,
                                                                       selectedItems: TModel[],
                                                                       eventGroupQuery: EventGroupQuery = null,
-                                                                      config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
+                                                                      config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
     config = config || new SelectionItemsModalConfig<TModel>();
     if (!config.title) {
       config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
     }
 
-    return await this.showSelectionItemsModal(selectedItems,
+    return (await this.showSelectionItemsModal(selectedItems,
       async (query: EventGroupQuery) => {
         const pageContainer = await this._participantRestApiService.getTrainingGroupsByBaseTraining({},
           this._appHelper.updatePageQuery(query, eventGroupQuery),
@@ -390,19 +390,19 @@ export class TemplateModalService {
         await component.initialize(data);
       },
       config
-    );
+    )) as DialogResult<TModel[]>;
   }
 
   public async showSelectionTrainingPersonsModal<TModel extends TrainingPerson>(event: BaseTraining,
                                                                                 selectedItems: TModel[],
                                                                                 trainingPersonQuery: TrainingPersonQuery = null,
-                                                                                config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
+                                                                                config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
     config = config || new SelectionItemsModalConfig<TModel>();
     if (!config.title) {
       config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('persons.section')}`;
     }
 
-    return await this.showSelectionItemsModal(selectedItems,
+    return (await this.showSelectionItemsModal(selectedItems,
       async (query: TrainingPersonQuery) => {
         return await this._participantRestApiService.getTrainingPersons({}, this._appHelper.updatePageQuery(query, trainingPersonQuery), {eventId: event.id});
       },
@@ -411,7 +411,7 @@ export class TemplateModalService {
         await component.initialize(data);
       },
       config
-    );
+    )) as DialogResult<TModel[]>;
   }
 
   //#endregion
@@ -420,7 +420,7 @@ export class TemplateModalService {
                                                            fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<TModel>>,
                                                            componentType: Type<TComponent>,
                                                            initializeComponent: (component: TComponent, data: TModel) => Promise<void>,
-                                                           config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel>> {
+                                                           config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
     const modal = this._ngxModalService.open();
     if (config) {
       modal.componentInstance.title = config.title;
@@ -446,7 +446,7 @@ export class TemplateModalService {
       ];
     });
 
-    const dialogResult: DialogResult<TModel> = {result: await this._ngxModalService.awaitModalResult(modal)};
+    const dialogResult: DialogResult<TModel[]> = {result: await this._ngxModalService.awaitModalResult(modal)};
     if (dialogResult.result) {
       dialogResult.data = ngxSelectionComponent.selectedItems;
     }
