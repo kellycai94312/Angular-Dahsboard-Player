@@ -4,6 +4,7 @@ import {PropertyConstant} from '../../data/local/property-constant';
 import {TranslateObjectService} from '../../shared/translate-object.service';
 import {AppHelper} from '../../utils/app-helper';
 import {Person} from '../../data/remote/model/person';
+import {LinkTarget} from '../../data/local/link-target';
 
 @Injectable({
   providedIn: 'root'
@@ -62,11 +63,4 @@ export class HtmlService {
     return await promise;
   }
 
-}
-
-export enum LinkTarget {
-  BLANK = '_blank',
-  SELF = '_self',
-  PARENT = '_parent',
-  TOP = '_top'
 }

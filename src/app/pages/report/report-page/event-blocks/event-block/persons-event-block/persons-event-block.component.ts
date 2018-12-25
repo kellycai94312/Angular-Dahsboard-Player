@@ -9,9 +9,9 @@ import {ListRequest} from '../../../../../../data/remote/request/list-request';
 import {Direction} from '../../../../../../components/ngx-virtual-scroll/model/direction';
 import {PageQuery} from '../../../../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {ISubscription} from 'rxjs/Subscription';
-import {Observable} from 'rxjs/Observable';
+import {fromEvent, SubscriptionLike as ISubscription} from 'rxjs';
 import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
+import {debounceTime} from 'rxjs/operators';
 
 @Component({
   selector: 'app-persons-event-block',
@@ -45,8 +45,8 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this._searchInputSubscription = Observable.fromEvent(this.searchInputElementRef.nativeElement, 'keyup')
-      .debounceTime(PropertyConstant.searchDebounceTime)
+    this._searchInputSubscription = fromEvent(this.searchInputElementRef.nativeElement, 'keyup')
+      .pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async (event: any) => {
         this.query.name = event.target.value;
         await this.resetItems();
@@ -54,7 +54,10 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
 
     this._trainingBlock = await this._eventReportService.getSelectedTrainingBlock();
     try {
-      this.persons = (await this._participantRestApiService.getTrainingBlockPersons({}, {count: PropertyConstant.pageSizeMax, unassigned: false}, {
+      this.persons = (await this._participantRestApiService.getTrainingBlockPersons({}, {
+        count: PropertyConstant.pageSizeMax,
+        unassigned: false
+      }, {
         trainingReportId: this._trainingBlock.trainingReport.id,
         trainingBlockId: this._trainingBlock.id
       })).list;

@@ -1,4 +1,5 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {debounceTime} from 'rxjs/operators/debounceTime';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PropertyConstant} from '../../../../../data/local/property-constant';
 import {NoteType} from '../../../../../data/remote/model/note/base/note-type';
@@ -41,11 +42,11 @@ export class SchoolNoteComponent implements OnInit, OnDestroy {
 
     await this.myRegionService.initialize(NoteType.SCHOOL);
 
-    this.nameSubscription = this.name.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.nameSubscription = this.name.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setName(event));
-    this.phoneSubscription = this.phone.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.phoneSubscription = this.phone.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setPhone(event));
-    this.emailSubscription = this.email.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.emailSubscription = this.email.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setEmail(event));
   }
 

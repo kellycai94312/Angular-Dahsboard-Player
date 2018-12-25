@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
@@ -56,7 +57,7 @@ export class ConnectionsPageComponent implements OnInit, OnDestroy {
     this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
 
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.personQuery.name = value;
         await this.updateItems();

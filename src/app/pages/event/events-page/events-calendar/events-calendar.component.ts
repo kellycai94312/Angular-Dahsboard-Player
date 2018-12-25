@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {CalendarDateFormatter, CalendarEvent, DAYS_OF_WEEK} from 'angular-calendar';
-import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -16,6 +15,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {AppHelper} from '../../../../utils/app-helper';
 import {EventPlan} from '../../../../data/remote/model/training/plan/event-plan';
 import {TemplateModalService} from '../../../../service/template-modal.service';
+import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 
 @Component({
   selector: 'app-events-calendar',

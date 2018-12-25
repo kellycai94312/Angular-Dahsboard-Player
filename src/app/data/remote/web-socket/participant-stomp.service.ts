@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {StompConfig, StompRService} from '@stomp/ng2-stompjs';
 import {Message} from '@stomp/stompjs';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from 'rxjs';
 import {ConversationReadRequest} from '../request/conversation-read-request';
 import * as SockJS from 'sockjs-client';
 import {environment} from '../../../../environments/environment';
@@ -19,7 +19,9 @@ export class ParticipantStompService {
   public connect(): void {
     if (!this._stompService.connected()) {
       this.stompConfig = new StompConfig();
-      this.stompConfig.url = new SockJS(environment.wsUrl);
+      this.stompConfig.url = () => {
+        return new SockJS(environment.wsUrl);
+      };
       this.stompConfig.headers = {};
       this.stompConfig.heartbeat_in = 0;
       this.stompConfig.heartbeat_out = 20000;

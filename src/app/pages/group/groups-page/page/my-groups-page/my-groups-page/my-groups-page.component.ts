@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {UserRole} from '../../../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
@@ -47,7 +48,7 @@ export class MyGroupsPageComponent implements OnInit, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.groupQuery.name = value;
         await this.updateItems();

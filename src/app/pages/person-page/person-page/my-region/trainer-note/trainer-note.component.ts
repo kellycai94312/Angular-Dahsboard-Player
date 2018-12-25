@@ -1,4 +1,5 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {debounceTime} from 'rxjs/operators/debounceTime';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {MyRegionService} from '../my-region.service';
 import {PropertyConstant} from '../../../../../data/local/property-constant';
@@ -49,15 +50,15 @@ export class TrainerNoteComponent implements OnInit, OnDestroy {
 
     await this.myRegionService.initialize(NoteType.TRAINER);
 
-    this.nameSubscription = this.name.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.nameSubscription = this.name.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setName(event));
-    this.phoneSubscription = this.phone.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.phoneSubscription = this.phone.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setPhone(event));
-    this.emailSubscription = this.email.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.emailSubscription = this.email.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setEmail(event));
-    this.clubSubscription = this.club.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.clubSubscription = this.club.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setClub(event));
-    this.ageSubscription = this.age.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.ageSubscription = this.age.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(event => this.myRegionService.setAge(event));
   }
 

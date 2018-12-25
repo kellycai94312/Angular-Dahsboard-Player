@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {Subject} from 'rxjs';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {Person} from '../data/remote/model/person';
 import {UserRoleEnum} from '../data/remote/model/user-role-enum';

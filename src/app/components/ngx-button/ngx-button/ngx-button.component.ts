@@ -1,7 +1,8 @@
 import {Component, ElementRef, Input} from '@angular/core';
 import {IconEnum} from '../model/icon-enum';
-import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs';
 import {NgxButtonType} from '../model/ngx-button-type';
+import {delay} from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-button',
@@ -52,7 +53,8 @@ export class NgxButtonComponent<TData extends any> {
     this.widthBeforeBusy = ((this.elementRef.nativeElement as HTMLElement).childNodes[0] as HTMLElement).offsetWidth;
     if (this.click && !this.busy) {
       this.busy = true;
-      const subscription = Observable.of([]).delay(this.delayDisplayBusy).subscribe(() => {
+      // TODO: Remove all 'of([])' for create Observable
+      const subscription = of([]).pipe(delay(this.delayDisplayBusy)).subscribe(() => {
         this.busyDisplay = true;
       });
 

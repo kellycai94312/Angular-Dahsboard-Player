@@ -1,4 +1,4 @@
-import {CalendarDateFormatter, DateFormatterParams} from 'angular-calendar';
+import {CalendarDateFormatter, DateAdapter, DateFormatterParams} from 'angular-calendar';
 import {getISOWeek} from 'date-fns';
 import {DatePipe} from '@angular/common';
 import {Injectable} from '@angular/core';
@@ -8,8 +8,9 @@ import {LocalStorageService} from '../../shared/local-storage.service';
 export class CustomDateFormatter extends CalendarDateFormatter {
 
   /*fixme create an issue that locale isn't working in CustomDateFormatter#dayViewHour*/
-  constructor(private _localStorageService: LocalStorageService) {
-    super();
+  constructor(private _localStorageService: LocalStorageService,
+              dateAdapter: DateAdapter) {
+    super(dateAdapter);
   }
 
   /**

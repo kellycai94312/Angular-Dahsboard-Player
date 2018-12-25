@@ -1,7 +1,7 @@
+import {map} from 'rxjs/operators';
 import {Injectable, OnDestroy} from '@angular/core';
 import {ParticipantStompService} from '../data/remote/web-socket/participant-stomp.service';
-import {Subject} from 'rxjs/Subject';
-import {ISubscription} from 'rxjs/Subscription';
+import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
 import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
 import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
 import {Participant} from '../data/remote/model/chat/participant';
@@ -55,8 +55,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._messageCreateSubscription = this._participantStompService.subscribeConversationCreate()
-        .map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
+      this._messageCreateSubscription = this._participantStompService.subscribeConversationCreate().pipe(
+        map(message => this._participantStompService.messageToObject<MessageWrapper>(message)))
         .subscribe(async message => {
           this.messageCreateHandle.next(message);
         });
@@ -81,8 +81,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._messageUpdateSubscription = this._participantStompService.subscribeConversationUpdate()
-        .map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
+      this._messageUpdateSubscription = this._participantStompService.subscribeConversationUpdate().pipe(
+        map(message => this._participantStompService.messageToObject<MessageWrapper>(message)))
         .subscribe(async message => {
           this.messageUpdateHandle.next(message);
         });
@@ -107,8 +107,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._messageDeleteSubscription = this._participantStompService.subscribeConversationDelete()
-        .map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
+      this._messageDeleteSubscription = this._participantStompService.subscribeConversationDelete().pipe(
+        map(message => this._participantStompService.messageToObject<MessageWrapper>(message)))
         .subscribe(async message => {
           this.messageDeleteHandle.next(message);
         });
@@ -133,8 +133,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._messageReadSubscription = this._participantStompService.subscribeConversationRead()
-        .map(message => this._participantStompService.messageToObject<Message>(message))
+      this._messageReadSubscription = this._participantStompService.subscribeConversationRead().pipe(
+        map(message => this._participantStompService.messageToObject<Message>(message)))
         .subscribe(async message => {
           this.messageReadHandle.next(message);
         });
@@ -159,8 +159,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._unreadTotalSubscription = this._participantStompService.subscribeConversationUnreadTotal()
-        .map(message => this._participantStompService.messageToObject<IntegerWrapper>(message))
+      this._unreadTotalSubscription = this._participantStompService.subscribeConversationUnreadTotal().pipe(
+        map(message => this._participantStompService.messageToObject<IntegerWrapper>(message)))
         .subscribe(async message => {
           this.unreadTotalHandle.next(message);
         });
@@ -185,8 +185,8 @@ export class ConversationService implements OnDestroy {
     }
 
     try {
-      this._typingSubscription = this._participantStompService.subscribeConversationTyping()
-        .map(message => this._participantStompService.messageToObject<Participant>(message))
+      this._typingSubscription = this._participantStompService.subscribeConversationTyping().pipe(
+        map(message => this._participantStompService.messageToObject<Participant>(message)))
         .subscribe(async message => {
           this.typingHandle.next(message);
         });

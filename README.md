@@ -1,6 +1,6 @@
 # SportMonitoringWeb
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.3.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.1.4.
 
 ## Development server
 
@@ -12,7 +12,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `npm run build [environment name]` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Run `npm run build [environment name]` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--production` flag for a production build.
 
 ## Running unit tests
 

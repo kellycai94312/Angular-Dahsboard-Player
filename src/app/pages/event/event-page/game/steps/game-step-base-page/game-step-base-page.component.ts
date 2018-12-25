@@ -19,10 +19,11 @@ import {NamedObjectItemComponent} from '../../../../../../components/named-objec
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
 import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-parameter-enum';
-import {Observable} from 'rxjs';
+import {interval} from 'rxjs';
 import {ISubscription} from 'rxjs/src/Subscription';
 import {GroupScore} from '../../../../../../data/remote/model/training/game/group-score';
 import {NgxButtonType} from '../../../../../../components/ngx-button/model/ngx-button-type';
+import {flatMap, timeInterval} from 'rxjs/operators';
 
 @Component({
   selector: 'app-game-step-base-page',
@@ -103,13 +104,20 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
   private async initialize(): Promise<void> {
     const id = this._activatedRoute.snapshot.parent.parent.params.id;
     if (id != 0) {
-      this.game = (await this._participantRestApiService.getBaseTraining({id: id, measureParameterEnum: MeasureParameterEnum.GOALS})) as Game;
+      this.game = (await this._participantRestApiService.getBaseTraining({
+        id: id,
+        measureParameterEnum: MeasureParameterEnum.GOALS
+      })) as Game;
       this.trainingParts = await this._participantRestApiService.getTrainingParts({id: this.game.id});
-      this._groupScoresSubscription = Observable
-        .interval(5 * 1000) // Every 5 seconds
-        .timeInterval()
-        .flatMap(async () => await this._participantRestApiService.getGameGroupScores({gameId: id, measureParameterEnum: MeasureParameterEnum.GOALS}))
-        .subscribe(data => this.game.groupScores = data);
+      this._groupScoresSubscription = interval(5 * 1000)
+        .pipe(
+          timeInterval(),
+          flatMap(async () => await this._participantRestApiService.getGameGroupScores({
+              gameId: id,
+              measureParameterEnum: MeasureParameterEnum.GOALS
+            })
+          )
+        ).subscribe(data => this.game.groupScores = data);
     }
 
     this.locations = (await this._participantRestApiService.getLocations({count: PropertyConstant.pageSizeMax})).list;

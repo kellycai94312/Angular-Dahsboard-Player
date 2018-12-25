@@ -1,8 +1,6 @@
+import {Observable, of, Subject} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
-import {Observable} from 'rxjs/Observable';
-import {Subject} from 'rxjs/Subject';
-import 'rxjs/add/observable/of';
 
 @Injectable()
 export class LayoutService implements CanActivate {
@@ -23,7 +21,7 @@ export class LayoutService implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
     this.toggleLayout(route.url[0].path);
-    return Observable.of(true);
+    return of(true);
   }
 
 }

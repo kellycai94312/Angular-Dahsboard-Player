@@ -1,3 +1,4 @@
+import {filter} from 'rxjs/operators/filter';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {TranslateObjectService} from '../../../../../shared/translate-object.service';
 import {EventPlanService} from '../../service/event-plan.service';
@@ -29,7 +30,9 @@ export class EventsStepEventPlanComponent implements OnInit, OnDestroy {
     this.switchButtonIcon = IconEnum.CALENDAR;
 
     this._eventPlanSubscription = this._eventPlanService.eventPlanSubject
-      .filter(x => !this._appHelper.isUndefinedOrNull(x))
+      .pipe(
+        filter(x => !this._appHelper.isUndefinedOrNull(x))
+      )
       .subscribe(async value => {
         await this.initialize(value);
       });

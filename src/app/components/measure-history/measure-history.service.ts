@@ -1,5 +1,5 @@
-import { Injectable, Input } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
+import {Injectable, Input} from '@angular/core';
+import {Subject} from 'rxjs';
 
 @Injectable()
 export class MeasureHistoryService {

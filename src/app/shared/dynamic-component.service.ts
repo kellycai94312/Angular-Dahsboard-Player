@@ -1,6 +1,6 @@
+import {of} from 'rxjs';
+import {delay} from 'rxjs/operators';
 import {ComponentFactoryResolver, ComponentRef, Injectable, Type, ViewContainerRef} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/delay';
 
 @Injectable()
 export class DynamicComponentService {
@@ -16,7 +16,7 @@ export class DynamicComponentService {
     const componentRef = viewContainerRef.createComponent(componentFactory);
     componentRef.changeDetectorRef.detectChanges();
     // Fix ExpressionChangedAfterItHasBeenCheckedError
-    await Observable.of(null).delay(0).toPromise();
+    await of(null).pipe(delay(0)).toPromise();
     return componentRef;
   }
 

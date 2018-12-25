@@ -1,9 +1,9 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, Renderer2} from '@angular/core';
 import {PageContainer} from '../../data/remote/bean/page-container';
 import {ScrollService} from './scroll/scroll.service';
-import {Subject} from 'rxjs/Rx';
+import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
 import {PropertyConstant} from '../../data/local/property-constant';
-import {ISubscription} from 'rxjs/Subscription';
 import {AppHelper} from '../../utils/app-helper';
 
 @Component({
@@ -47,7 +47,7 @@ export class InputSelectComponent implements OnChanges, OnInit, OnDestroy {
     this.onChange = new EventEmitter<any>();
     this.searchChanged = new Subject<any>();
     this.showClearButton = true;
-    this._searchChangedSubscription = this.searchChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this._searchChangedSubscription = this.searchChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(() => {
         this.clearData();
         this.load();

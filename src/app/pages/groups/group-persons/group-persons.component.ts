@@ -1,4 +1,5 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {debounceTime} from 'rxjs/operators/debounceTime';
+import {Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
@@ -7,7 +8,7 @@ import {DxTextBoxComponent} from 'devextreme-angular';
 import {GroupPersonViewModel} from '../../../data/local/view-model/group-person-view-model';
 import {GroupService} from '../../group/group-page/service/group.service';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {ISubscription} from 'rxjs/Subscription';
+import {SubscriptionLike as ISubscription} from 'rxjs';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {AppHelper} from '../../../utils/app-helper';
@@ -15,6 +16,7 @@ import {EditGroupPersonComponent} from '../component/edit-group-person/edit-grou
 import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
 import {Params} from '@angular/router/src/shared';
 import {GroupTypeEnum} from '../../../data/remote/model/group/base/group-type-enum';
+import {skip} from 'rxjs/operators';
 
 // @Component({
 //   selector: 'app-group-persons',
@@ -56,13 +58,13 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
 
     await this.updateItems();
 
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.groupPersonQuery.name = value;
         await this.updateItems();
       });
 
-    this._activatedRouteSubscription = this._activatedRoute.params.skip(1).subscribe(async params => {
+    this._activatedRouteSubscription = this._activatedRoute.params.pipe(skip(1)).subscribe(async params => {
       this.groupPersonQuery.name = '';
       this.groupPersonQuery.from = 0;
       this.groupPersonQuery.count = PropertyConstant.pageSize;

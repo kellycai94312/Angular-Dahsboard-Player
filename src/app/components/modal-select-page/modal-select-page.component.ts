@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, Input, OnInit, Type, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../data/local/property-constant';
 import {DxTextBoxComponent} from 'devextreme-angular';
@@ -58,7 +59,7 @@ export class ModalSelectPageComponent<T extends IdentifiedObject> implements OnI
   }
 
   async ngOnInit() {
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.pageQuery.name = value;
         await this.updateItems();
