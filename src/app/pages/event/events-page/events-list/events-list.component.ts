@@ -19,6 +19,7 @@ import {PersonReportsComponent} from '../../../../components/report/person-repor
 import {TrainingState} from '../../../../data/remote/misc/training-state';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 
 @Component({
   selector: 'app-events-list',
@@ -30,6 +31,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   public readonly propertyConstant = PropertyConstant;
   public readonly trainingDiscriminator = TrainingDiscriminator;
   public readonly trainingState = TrainingState;
+  public readonly iconEnumClass = IconEnum;
 
   @ViewChild('searchDxTextBoxComponent')
   public searchDxTextBoxComponent: DxTextBoxComponent;
@@ -67,9 +69,9 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.searchDxTextBoxComponent.textChange.unsubscribe();
   }
 
-  public async onCreate() {
+  public onCreate = async () => {
     await this._router.navigate(['/event/0']);
-  }
+  };
 
   public async onLocationChange(e: any) {
     if (e.current) {
@@ -117,7 +119,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     return items;
   };
 
-  public showReport = async (e: any, parameter: BaseTraining) => {
+  public showReport = async (parameter: BaseTraining) => {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'reports';
     await modal.componentInstance.initializeBody(PersonReportsComponent, async component => {

@@ -10,6 +10,7 @@ import {EventReportQuery} from '../../../data/remote/rest-api/query/report/event
 import {TestingReportQuery} from '../../../data/remote/rest-api/query/report/testing-report-query';
 import {TrainingDiscriminator} from '../../../data/remote/model/training/base/training-discriminator';
 import {TrainingPerson} from '../../../data/remote/model/training/training-person';
+import {IconEnum} from '../../ngx-button/model/icon-enum';
 
 @Component({
   selector: 'app-reports',
@@ -17,6 +18,8 @@ import {TrainingPerson} from '../../../data/remote/model/training/training-perso
   styleUrls: ['./reports.component.scss']
 })
 export class ReportsComponent {
+
+  public readonly iconEnumClass = IconEnum;
 
   @Input()
   public class: string;
@@ -123,12 +126,12 @@ export class ReportsComponent {
     }
   }
 
-  public onEdit = async (e: any, parameter: ReportItem) => {
+  public onEdit = async (parameter: ReportItem) => {
     parameter.settings = parameter.settings || new TestingReportQuery();
     await parameter.editSettings(parameter);
   };
 
-  public onDownload = async (e: any, parameter: ReportItem) => {
+  public onDownload = async (parameter: ReportItem) => {
     await parameter.getReport(parameter.settings);
   };
 

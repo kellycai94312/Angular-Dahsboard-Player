@@ -1,5 +1,6 @@
 import {Component, Input, Type, ViewChild} from '@angular/core';
 import {NgxComponentFactoryComponent} from '../../ngx-component-factory/ngx-component-factory/ngx-component-factory.component';
+import {IconEnum} from '../../ngx-button/model/icon-enum';
 
 @Component({
   selector: 'ngx-editable-item',
@@ -7,6 +8,8 @@ import {NgxComponentFactoryComponent} from '../../ngx-component-factory/ngx-comp
   styleUrls: ['./ngx-editable-item.component.scss']
 })
 export class NgxEditableItemComponent<TComponent extends any, TModel extends any> {
+
+  public readonly iconEnumClass = IconEnum;
 
   @ViewChild(NgxComponentFactoryComponent)
   public ngxComponentFactoryComponent: NgxComponentFactoryComponent<TComponent, TModel>;

@@ -31,6 +31,7 @@ import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {ConfirmationRemovingMessageComponent} from '../../../../../module/conversation/confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
 
 @Component({
   selector: 'app-conversation-page',
@@ -41,6 +42,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
   public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly ngxButtonTypeClass = NgxButtonType;
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -228,7 +230,10 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     if (this.editedMessage) {
       // Update message
       try {
-        this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {conversationId: this._conversationId, messageContentId: this.messageContent.id});
+        this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {
+          conversationId: this._conversationId,
+          messageContentId: this.messageContent.id
+        });
         this.cancelEditMessage();
       } catch (e) {
         await this._appHelper.showErrorMessage('sendError');
@@ -272,7 +277,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     return this.selectedMessages.contains(message);
   }
 
-  public startEditMessage = () => {
+  public startEditMessage = async () => {
     this.editedMessage = this.selectedMessages.data[0];
     this.messageContent = Object.assign({}, this.editedMessage.content as MessageContent);
   };
@@ -284,7 +289,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this.updateCanEditMessage();
   }
 
-  public async deleteSelectedMessages() {
+  public deleteSelectedMessages = async () => {
     const messages: Message[] = this.selectedMessages.data;
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'deleteSelectedMessages';
@@ -306,7 +311,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         }
       ];
     });
-  }
+  };
 
   public async clearMessagesHistory() {
     const ref = this._modalService.open(ModalConfirmDangerComponent);

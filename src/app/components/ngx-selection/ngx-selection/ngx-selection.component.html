@@ -3,10 +3,10 @@
              placeholderKey="search"
              [debounceTime]="propertyConstant.searchDebounceTime"
              (valueChange)="onSearchTextChanged($event)"></ngx-input>
-  <app-busy-button *ngIf="add"
-                   class="ml-2"
-                   nameKey="add"
-                   [click]="onAdd"></app-busy-button>
+  <ngx-button *ngIf="add"
+              class="ml-2"
+              nameKey="add"
+              [click]="onAdd"></ngx-button>
 </div>
 <div class="content row cols-padding mt-2">
   <div [hidden]="!canSelect()"

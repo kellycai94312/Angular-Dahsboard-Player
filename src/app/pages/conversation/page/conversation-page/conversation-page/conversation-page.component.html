@@ -24,17 +24,16 @@
         <div class="d-flex flex-row">
           <div *ngIf="canEditMessage"
                class="flex-column">
-            <button class="btn btn-outline-primary input-height-sm mr-2"
-                    (click)="startEditMessage()">
-              {{'edit' | translate}} <i class="fa fa-edit"></i>
-            </button>
+            <ngx-button class="mr-2"
+                        nameKey="edit"
+                        [click]="startEditMessage"></ngx-button>
           </div>
           <div *ngIf="selectedMessages.size() > 0"
                class="flex-column">
-            <button class="btn btn-outline-danger input-height-sm mr-2"
-                    (click)="deleteSelectedMessages()">
-              {{'remove' | translate}} <i class="fa fa-remove"></i>
-            </button>
+            <ngx-button class="mr-2"
+                        nameKey="remove"
+                        [type]="ngxButtonTypeClass.DANGER"
+                        [click]="deleteSelectedMessages"></ngx-button>
           </div>
           <div class="flex-column mr-1"
                ngbDropdown

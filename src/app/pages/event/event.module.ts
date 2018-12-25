@@ -80,7 +80,8 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
     DxCheckBoxModule,
     NamedObjectModule,
     NgxSelectionModule,
-    GroupModule
+    GroupModule,
+    NgxButtonModule
   ],
   declarations: [
     EventPageComponent,

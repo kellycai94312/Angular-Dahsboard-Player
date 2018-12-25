@@ -4,7 +4,6 @@ import {ReportsPageComponent} from './reports-page/reports-page.component';
 import {ReportRoutingModule} from './report-routing.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
@@ -25,6 +24,7 @@ import {ExerciseMeasureItemModule} from '../../components/exercise-measure-item/
 import {NgxButtonGroupModule} from '../../components/ngx-button-group/ngx-button-group.module';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {GroupModule} from '../../components/group/group.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
@@ -32,7 +32,7 @@ import {GroupModule} from '../../components/group/group.module';
     ReportRoutingModule,
     NgxVirtualScrollModule,
     TranslateModule.forChild(),
-    BusyButtonModule,
+    NgxButtonModule,
     NgxModalModule,
     ModalSelectPageModule,
     NamedObjectModule,

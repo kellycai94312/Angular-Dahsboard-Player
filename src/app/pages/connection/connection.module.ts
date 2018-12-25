@@ -6,7 +6,6 @@ import {DxDateBoxModule, DxSelectBoxModule, DxTextBoxModule} from 'devextreme-an
 import {ConnectionsPageComponent} from './connections-page/connections-page.component';
 import {ConnectionRoutingModule} from './connection-routing.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.module';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
@@ -22,7 +21,6 @@ import {GroupModule} from '../../components/group/group.module';
     InputSelectModule,
     NgxVirtualScrollModule,
     TranslateModule.forChild(),
-    BusyButtonModule,
     NgbDropdownModule,
     BusyWrapperModule,
     ImageModule,

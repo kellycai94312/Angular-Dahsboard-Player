@@ -37,10 +37,8 @@
     <app-location-input-select (onChange)="onLocationChange($event)"></app-location-input-select>
   </div>
   <div *ngIf="canCreateEvent">
-    <button class="btn btn-primary"
-            type="button"
-            (click)="onCreate()">{{'create' | translate}}
-    </button>
+    <ngx-button nameKey="create"
+                [click]="onCreate"></ngx-button>
   </div>
 </div>
 
@@ -102,10 +100,10 @@
 
   <ngx-column [style]="'col-1'">
     <ng-template let-item>
-      <app-busy-button *ngIf="item.trainingState !== trainingState.DRAFT && item.trainingState !== trainingState.PLAN"
-                       icon="fa fa-book"
-                       [click]="showReport"
-                       [parameter]="item"></app-busy-button>
+      <ngx-button *ngIf="item.trainingState !== trainingState.DRAFT && item.trainingState !== trainingState.PLAN"
+                  [icon]="iconEnumClass.BOOK"
+                  [click]="showReport"
+                  [data]="item"></ngx-button>
     </ng-template>
   </ngx-column>
 </ngx-grid>

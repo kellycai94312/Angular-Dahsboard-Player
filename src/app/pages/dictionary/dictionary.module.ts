@@ -6,7 +6,6 @@ import {StageStandardDictionaryComponent} from './stage-standard-dictionary/stag
 import {TranslateModule} from '@ngx-translate/core';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
-import {BusyButtonModule} from '../../components/busy-button/busy-button.module';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
 import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
 import {EditStageComponent} from './component/edit-stage/edit-stage.component';
@@ -37,6 +36,8 @@ import {DictionaryTypeModule} from '../../components/dictionary-type/dictionary-
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.module';
+import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -45,7 +46,7 @@ import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.modu
     DictionaryRoutingModule,
     InputSelectModule,
     DxSelectBoxModule,
-    BusyButtonModule,
+    NgxButtonModule,
     NgxGridModule,
     NgxModalModule,
     DxTextBoxModule,
@@ -64,7 +65,8 @@ import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.modu
     NgxImageModule,
     SafeHtmlModule,
     NgxCarouselModule,
-    DxTextAreaModule
+    DxTextAreaModule,
+    NgxVirtualScrollModule
   ],
   declarations: [
     DictionariesComponent,
