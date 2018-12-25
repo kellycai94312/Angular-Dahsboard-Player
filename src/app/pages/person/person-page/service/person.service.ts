@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -9,7 +9,6 @@ import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PublicUserRole} from '../../../../data/remote/model/group/public-user-role';
-import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class PersonService implements OnDestroy {

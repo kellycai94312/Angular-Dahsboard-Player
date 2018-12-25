@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {PageQuery} from '../../../remote/rest-api/page-query';
 import {PropertyConstant} from '../../property-constant';
@@ -29,7 +30,7 @@ export class BaseSelection<T, TQuery extends PageQuery> implements OnInit, OnDes
   }
 
   ngOnInit(): void {
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.query.name = value;
         this.query.from = 0;

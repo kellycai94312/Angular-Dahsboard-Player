@@ -1,7 +1,8 @@
 import {Component, Input, OnDestroy} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
+import {of} from 'rxjs';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../utils/app-helper';
+import {delay} from 'rxjs/operators';
 
 @Component({
   selector: 'app-busy-wrapper',
@@ -29,7 +30,7 @@ export class BusyWrapperComponent implements OnDestroy {
   public setState(busy: boolean) {
     if (busy) {
       if (!this.isBusy && (!this._startBusySubscription || this._startBusySubscription.closed)) {
-        this._startBusySubscription = Observable.of([]).delay(this.startDebounce)
+        this._startBusySubscription = of([]).pipe(delay(this.startDebounce))
           .subscribe(() => {
             this.isBusy = true;
           });
@@ -45,7 +46,7 @@ export class BusyWrapperComponent implements OnDestroy {
   public async invoke(event: Event, callback: Function, parameter: any): Promise<void> {
     if (callback && !this._isLocked) {
       this._isLocked = true;
-      const subscription = Observable.of([]).delay(this.startDebounce)
+      const subscription = of([]).pipe(delay(this.startDebounce))
         .subscribe(() => {
           this.isBusy = true;
         });

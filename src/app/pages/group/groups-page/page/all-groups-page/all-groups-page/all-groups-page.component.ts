@@ -1,9 +1,9 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-query';
 import {DxTextBoxComponent} from 'devextreme-angular';
-import 'rxjs/add/operator/debounceTime';
 import {SportType} from '../../../../../../data/remote/model/sport-type';
 import {AgeGroup} from '../../../../../../data/remote/model/age-group';
 import {League} from '../../../../../../data/remote/model/group/team/league';
@@ -65,7 +65,7 @@ export class AllGroupsPageComponent implements OnInit {
     this.ageGroups = (await this._participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
     this.stages = await this._participantRestApiService.getStages();
 
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.groupQuery.name = value;
         await this.updateItems();

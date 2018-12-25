@@ -3,7 +3,7 @@ import {Person} from '../../data/remote/model/person';
 import {Router} from '@angular/router';
 import {ImageService} from '../../shared/image.service';
 import {ProfileService} from '../../shared/profile.service';
-import {ISubscription} from 'rxjs/Subscription';
+import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AuthorizationService} from '../../shared/authorization.service';
 import {ImageComponent} from '../../components/image/image.component';
 import {MenuItem} from '../../data/local/menu-item';

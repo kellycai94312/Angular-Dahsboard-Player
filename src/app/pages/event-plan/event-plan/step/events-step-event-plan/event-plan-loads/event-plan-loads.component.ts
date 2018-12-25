@@ -1,3 +1,4 @@
+import {filter} from 'rxjs/operators/filter';
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {EventPlanLoadTypeEnum} from '../../../../../../data/remote/model/training/plan/event-plan-load-type-enum';
 import {TranslateObjectService} from '../../../../../../shared/translate-object.service';
@@ -36,7 +37,9 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
               private _eventPlanService: EventPlanService,
               private _appHelper: AppHelper) {
     this._eventPlanSubscription = this._eventPlanService.eventPlanSubject
-      .filter(x => !this._appHelper.isUndefinedOrNull(x))
+      .pipe(
+        filter(x => !this._appHelper.isUndefinedOrNull(x))
+      )
       .subscribe(async value => {
         await this.initialize(value);
       });
@@ -112,7 +115,10 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
     await this._appHelper.trySave(async () => {
       if (value) {
         if (!isNew) {
-          Object.assign(eventPlanLoad, await this._participantRestApiService.removeEventPlanLoad({eventPlanId: this.eventPlan.id, eventPlanLoadId: eventPlanLoad.id}));
+          Object.assign(eventPlanLoad, await this._participantRestApiService.removeEventPlanLoad({
+            eventPlanId: this.eventPlan.id,
+            eventPlanLoadId: eventPlanLoad.id
+          }));
           delete eventPlanLoad.value;
           this._appHelper.setToNewObject(eventPlanLoad);
         }
@@ -123,7 +129,10 @@ export class EventPlanLoadsComponent implements OnInit, OnDestroy {
         if (isNew) {
           Object.assign(eventPlanLoad, await this._participantRestApiService.createEventPlanLoad(eventPlanLoad, {}, {eventPlanId: this.eventPlan.id}));
         } else {
-          Object.assign(eventPlanLoad, await this._participantRestApiService.updateEventPlanLoad(eventPlanLoad, {}, {eventPlanId: this.eventPlan.id, eventPlanLoadId: eventPlanLoad.id}));
+          Object.assign(eventPlanLoad, await this._participantRestApiService.updateEventPlanLoad(eventPlanLoad, {}, {
+            eventPlanId: this.eventPlan.id,
+            eventPlanLoadId: eventPlanLoad.id
+          }));
         }
       }
     });

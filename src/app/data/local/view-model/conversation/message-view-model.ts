@@ -1,5 +1,5 @@
 import {Message} from '../../../remote/model/chat/message/message';
-import {ISubscription} from 'rxjs/Subscription';
+import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AppModule} from '../../../../app.module';
 import {BaseViewModel} from '../base/base-view-model';
 import {SystemMessageContentType} from '../../../remote/model/chat/message/system-message-content-type';

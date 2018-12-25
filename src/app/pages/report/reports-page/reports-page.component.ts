@@ -1,7 +1,8 @@
+import {fromEvent as observableFromEvent, SubscriptionLike as ISubscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {ISubscription} from 'rxjs/Subscription';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -9,9 +10,6 @@ import {NgxModalComponent} from '../../../components/ngx-modal/ngx-modal/ngx-mod
 import {NamedObjectComponent} from '../../../components/named-object/named-object/named-object.component';
 import {Router} from '@angular/router';
 import {TrainingReport} from '../../../data/remote/model/training/report/training-report';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-import 'rxjs/add/operator/debounceTime';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
@@ -40,8 +38,10 @@ export class ReportsPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this._searchInputSubscription = Observable.fromEvent(this.searchInputElementRef.nativeElement, 'keyup')
-      .debounceTime(PropertyConstant.searchDebounceTime)
+    this._searchInputSubscription = observableFromEvent(this.searchInputElementRef.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(PropertyConstant.searchDebounceTime)
+      )
       .subscribe(async (event: any) => {
         this.query.name = event.target.value;
         await this.resetItems();

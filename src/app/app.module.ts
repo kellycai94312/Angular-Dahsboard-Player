@@ -4,7 +4,6 @@ import {DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData} fr
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {RestModule} from 'rest-ngx';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CookieModule} from 'ngx-cookie';
@@ -37,7 +36,6 @@ import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
 import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {ConversationService} from './shared/conversation.service';
-
 import localeRu from '@angular/common/locales/ru';
 import {ImageModule} from './components/image/image.module';
 import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
@@ -56,6 +54,7 @@ import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {EditChatModule} from './module/conversation/edit-chat/edit-chat.module';
+import {RestModule} from 'rest-ngx';
 
 registerLocaleData(localeRu);
 

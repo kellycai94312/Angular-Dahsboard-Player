@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AppHelper} from '../../../../utils/app-helper';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
@@ -55,7 +56,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
     this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
     this.eventTypes = await this._translateObjectService.getTranslatedEnumCollection<TrainingDiscriminator>(TrainingDiscriminator, 'TrainingDiscriminator');
 
-    this.searchDxTextBoxComponent.onValueChanged.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async event => {
         this.baseTrainingQuery.name = event.value;
         await this.updateItems();

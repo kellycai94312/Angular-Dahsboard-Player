@@ -1,7 +1,7 @@
 import {BaseNotification} from '../../../remote/model/notification/base/base-notification';
 import {INotificationViewModel} from './i-notification-view-model';
 import {TranslateService} from '@ngx-translate/core';
-import {ISubscription} from 'rxjs/Subscription';
+import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AppModule} from '../../../../app.module';
 import {BaseViewModel} from '../base/base-view-model';
 import {Person} from '../../../remote/model/person';

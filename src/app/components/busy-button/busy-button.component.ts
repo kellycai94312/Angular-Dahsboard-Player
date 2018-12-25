@@ -1,5 +1,6 @@
+import {of} from 'rxjs';
+import {delay} from 'rxjs/operators/delay';
 import {Component, Input} from '@angular/core';
-import {Observable} from 'rxjs/Observable';
 
 // @deprecated Use ngx-button
 @Component({
@@ -38,7 +39,7 @@ export class BusyButtonComponent {
   public async onClick(event: Event): Promise<void> {
     if (this.click && !this._clicked) {
       this._clicked = true;
-      const subscription = Observable.of([]).delay(200)
+      const subscription = of([]).pipe(delay(200))
         .subscribe(() => {
           this.busy = true;
         });

@@ -1,3 +1,4 @@
+import {debounceTime} from 'rxjs/operators/debounceTime';
 import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../data/local/property-constant';
@@ -43,7 +44,7 @@ export class GroupEventsComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.trainingQuery.name = value;
         await this.updateItems();

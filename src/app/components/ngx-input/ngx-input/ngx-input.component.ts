@@ -3,7 +3,7 @@ import {NgxInputType} from '../model/ngx-input-type';
 import {Subject} from 'rxjs';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   // tslint:disable:component-selector
@@ -71,8 +71,9 @@ export class NgxInputComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    let valueObservable = this.keyUp.map((event: KeyboardEvent) => (event.target as HTMLInputElement).value)
+    let valueObservable = this.keyUp
       .pipe(
+        map((event: KeyboardEvent) => (event.target as HTMLInputElement).value),
         distinctUntilChanged()
       );
     if (this.debounceTime) {

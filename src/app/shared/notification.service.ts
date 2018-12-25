@@ -1,3 +1,4 @@
+import {map} from 'rxjs/operators';
 import {Injectable, OnDestroy} from '@angular/core';
 import {BaseNotification} from '../data/remote/model/notification/base/base-notification';
 import {GroupNotification} from '../data/remote/model/notification/group/group-notification';
@@ -7,8 +8,7 @@ import {INotificationViewModel} from '../data/local/view-model/notification/i-no
 import {GroupNotificationViewModel} from '../data/local/view-model/notification/group-notification-view-model';
 import {TrainingNotificationViewModel} from '../data/local/view-model/notification/training-notification-view-model';
 import {NotificationWrapper} from '../data/remote/bean/wrapper/notification-wrapper';
-import {ISubscription} from 'rxjs/Subscription';
-import {Subject} from 'rxjs/Subject';
+import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
 import {ParticipantStompService} from '../data/remote/web-socket/participant-stomp.service';
 
 @Injectable()
@@ -42,7 +42,9 @@ export class NotificationService implements OnDestroy {
 
     try {
       this._notificationSubscription = this._participantStompService.subscribeNotification()
-        .map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
+        .pipe(
+          map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
+        )
         .subscribe(async notification => {
           const viewModel = this.createNotificationViewModel(notification.notification);
           await viewModel.build();

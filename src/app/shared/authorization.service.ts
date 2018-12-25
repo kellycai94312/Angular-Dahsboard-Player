@@ -1,5 +1,5 @@
 import {Injectable, Injector} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {BehaviorSubject, Subject} from 'rxjs';
 import {Session} from '../data/remote/model/session';
 import {Auth} from '../data/remote/model/auth';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
@@ -9,7 +9,6 @@ import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
 import {UserRole} from '../data/remote/model/user-role';
 import {UserRoleEnum} from '../data/remote/model/user-role-enum';
-import {BehaviorSubject} from 'rxjs';
 
 @Injectable()
 export class AuthorizationService {

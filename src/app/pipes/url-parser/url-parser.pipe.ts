@@ -1,8 +1,9 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {DomSanitizer} from '@angular/platform-browser';
-import {HtmlService, LinkTarget} from '../../service/html/html.service';
+import {HtmlService} from '../../service/html/html.service';
 import {AppHelper} from '../../utils/app-helper';
 import {TranslateObjectService} from '../../shared/translate-object.service';
+import {LinkTarget} from '../../data/local/link-target';
 
 @Pipe({
   name: 'urlParser'

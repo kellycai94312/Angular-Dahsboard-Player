@@ -1,14 +1,14 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {Subject} from 'rxjs/Subject';
+import {Observable, Subject} from 'rxjs';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {PermissionService} from '../../../../shared/permission.service';
-import {Observable} from 'rxjs';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
+import {shareReplay} from 'rxjs/operators';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -25,13 +25,13 @@ export class GroupService implements OnDestroy {
               private _permissionService: PermissionService,
               private _appHelper: AppHelper) {
     this._groupSubject = new Subject<Group>();
-    this.group$ = this._groupSubject.asObservable().shareReplay(1);
+    this.group$ = this._groupSubject.asObservable().pipe(shareReplay(1));
     this._groupSubscription = this.group$.subscribe(async val => {
       await this.initializeGroupPerson(val);
     });
 
     this._groupPersonSubject = new Subject<GroupPerson>();
-    this.groupPerson$ = this._groupPersonSubject.asObservable().shareReplay(1);
+    this.groupPerson$ = this._groupPersonSubject.asObservable().pipe(shareReplay(1));
     this.refreshMembers = new Subject<void>();
   }
 

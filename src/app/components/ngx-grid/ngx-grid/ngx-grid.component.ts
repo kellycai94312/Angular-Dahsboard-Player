@@ -1,4 +1,16 @@
-import {AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewEncapsulation} from '@angular/core';
+import {merge as observableMerge} from 'rxjs';
+import {
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewEncapsulation
+} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -7,7 +19,6 @@ import {SelectionType} from '../bean/selection-type';
 import {NgxVirtualScroll} from '../../ngx-virtual-scroll/bean/ngx-virtual-scroll';
 import {AppHelper} from '../../../utils/app-helper';
 import {Sort} from '../../../data/remote/rest-api/sort';
-import {Observable} from 'rxjs';
 import {mergeAll} from 'rxjs/operators';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {NameWrapper} from '../../../data/local/name-wrapper';
@@ -87,7 +98,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   }
 
   ngAfterViewInit(): void {
-    this._sortSubscription = Observable.merge(this.ngxColumnComponents.toArray().map(x => x.sortSubject))
+    this._sortSubscription = observableMerge(this.ngxColumnComponents.toArray().map(x => x.sortSubject))
       .pipe(mergeAll())
       .subscribe((val: NameWrapper<Sort>) => {
         const itemIndex = this._sorts.findIndex(x => x.name === val.name);

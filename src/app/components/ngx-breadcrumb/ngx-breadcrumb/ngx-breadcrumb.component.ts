@@ -1,6 +1,7 @@
+import {distinctUntilChanged} from 'rxjs/operators/distinctUntilChanged';
+import {filter} from 'rxjs/operators/filter';
 import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import 'rxjs/add/operator/distinctUntilChanged';
 import {BreadcrumbItem} from '../bean/breadcrumb-item';
 import {AppHelper} from '../../../utils/app-helper';
 import {ISubscription} from 'rxjs-compat/Subscription';
@@ -22,8 +23,10 @@ export class NgxBreadcrumbComponent implements OnDestroy {
               private _appHelper: AppHelper) {
     this.update();
     this._routerEventsSubscription = this._router.events
-      .filter(event => event instanceof NavigationEnd)
-      .distinctUntilChanged()
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        distinctUntilChanged()
+      )
       .subscribe(event => {
         this.update();
       });

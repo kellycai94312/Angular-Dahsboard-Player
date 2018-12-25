@@ -9,7 +9,15 @@ import {GameStepBasePageComponent} from './event-page/game/steps/game-step-base-
 import {GameStepPersonsPageComponent} from './event-page/game/steps/game-step-persons-page/game-step-persons-page.component';
 import {GameStepExecutionPageComponent} from './event-page/game/steps/game-step-execution-page/game-step-execution-page.component';
 import {GameStepsManagerPageComponent} from './event-page/game/steps/game-steps-manager-page/game-steps-manager-page.component';
-import {DxCheckBoxModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
+import {
+  DxCheckBoxModule,
+  DxDateBoxModule,
+  DxNumberBoxModule,
+  DxSelectBoxModule,
+  DxTextAreaModule,
+  DxTextBoxModule,
+  DxValidatorModule
+} from 'devextreme-angular';
 import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -17,7 +25,7 @@ import {TrainingPersonsSelectionModule} from '../../components/training-persons-
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {CalendarUtilsModule} from '../../components/calendar-utils/calendar-utils.module';
-import {CalendarModule} from 'angular-calendar';
+import {CalendarModule, DateAdapter} from 'angular-calendar';
 import {EventsListComponent} from './events-page/events-list/events-list.component';
 import {EventsCalendarComponent} from './events-page/events-calendar/events-calendar.component';
 import {EventCalendarItemComponent} from './events-page/events-calendar/event-calendar-item/event-calendar-item.component';
@@ -37,6 +45,7 @@ import {TestingStepsManagerComponent} from './event-page/testing/step/testing-st
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 import {GroupModule} from '../../components/group/group.module';
+import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 
 @NgModule({
   imports: [
@@ -57,7 +66,10 @@ import {GroupModule} from '../../components/group/group.module';
     TrainingPersonModule,
     TrainingPersonsSelectionModule,
     InputSelectModule,
-    CalendarModule.forRoot(),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
     CalendarUtilsModule,
     NgxSplitButtonModule,
     NgxGridModule,

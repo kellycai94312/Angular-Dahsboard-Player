@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {Subject} from 'rxjs';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
-import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
+// @deprecated Use ngx-input
 @Component({
   selector: 'ngx-text-box',
   templateUrl: './ngx-text-box.component.html',
@@ -58,8 +59,9 @@ export class NgxTextBoxComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._inputKeyUpSubscription = this.keyUp
-      .map((event: KeyboardEvent) => (event.target as HTMLInputElement).value)
-      .pipe(debounceTime(this.debounceTime),
+      .pipe(
+        map((event: KeyboardEvent) => (event.target as HTMLInputElement).value),
+        debounceTime(this.debounceTime),
         distinctUntilChanged()
       )
       .subscribe(value => {

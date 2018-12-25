@@ -1,3 +1,4 @@
+import {filter} from 'rxjs/operators/filter';
 import {BaseTraining} from '../../../remote/model/training/base/base-training';
 import {OnDestroy, OnInit} from '@angular/core';
 import {ISubscription} from 'rxjs-compat/Subscription';
@@ -18,13 +19,13 @@ export class BaseEventStepComponent<T extends BaseTraining> implements OnInit, O
   }
 
   ngOnInit() {
-    this._eventSubscription = this.eventService.eventSubject
-      .filter(x => !this.appHelper.isUndefinedOrNull(x))
+    this._eventSubscription = this.eventService.eventSubject.pipe(
+      filter(x => !this.appHelper.isUndefinedOrNull(x)))
       .subscribe(async val => {
         await this.initialize(val);
       });
-    this._tabSubscription = this.eventService.tabSubject
-      .filter(x => !this.appHelper.isUndefinedOrNull(x))
+    this._tabSubscription = this.eventService.tabSubject.pipe(
+      filter(x => !this.appHelper.isUndefinedOrNull(x)))
       .subscribe(async val => {
         this.initializeTab(val);
       });

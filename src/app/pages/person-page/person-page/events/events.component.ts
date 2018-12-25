@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {debounceTime} from 'rxjs/operators/debounceTime';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PersonService} from '../../../person/person-page/service/person.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
 import {TrainingPerson} from '../../../../data/remote/model/training/training-person';
 import {ReportsService} from '../../../../shared/reports.service';
-import {ISubscription} from 'rxjs/Subscription';
+import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AppHelper} from '../../../../utils/app-helper';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
@@ -63,7 +64,7 @@ export class EventsComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     this.canEdit = await this._personService.allowEdit();
 
-    this.searchDxTextBoxComponent.textChange.debounceTime(PropertyConstant.searchDebounceTime)
+    this.searchDxTextBoxComponent.textChange.pipe(debounceTime(PropertyConstant.searchDebounceTime))
       .subscribe(async value => {
         this.trainingQuery.name = value;
         await this.resetItems();
