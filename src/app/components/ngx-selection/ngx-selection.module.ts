@@ -4,8 +4,8 @@ import {NgxSelectionComponent} from './ngx-selection/ngx-selection.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {NgxComponentFactoryModule} from '../ngx-component-factory/ngx-component-factory.module';
-import {BusyButtonModule} from '../busy-button/busy-button.module';
 import {NgxInputModule} from '../ngx-input/ngx-input.module';
+import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 
 @NgModule({
   imports: [
@@ -14,7 +14,7 @@ import {NgxInputModule} from '../ngx-input/ngx-input.module';
     NgxInputModule,
     NgxVirtualScrollModule,
     NgxComponentFactoryModule,
-    BusyButtonModule
+    NgxButtonModule
   ],
   declarations: [NgxSelectionComponent],
   exports: [NgxSelectionComponent],

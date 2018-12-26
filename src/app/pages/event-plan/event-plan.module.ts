@@ -24,6 +24,7 @@ import {EventsStepEventPlanComponent} from './event-plan/step/events-step-event-
 import {EventPlanLoadsComponent} from './event-plan/step/events-step-event-plan/event-plan-loads/event-plan-loads.component';
 import {EventModule} from '../event/event.module';
 import {EventLoadsComponent} from './event-loads/event-loads.component';
+import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import {EventLoadsComponent} from './event-loads/event-loads.component';
     NgxGridModule,
     NgxModalModule,
     NgxTextBoxModule,
+    NgxVirtualScrollModule,
     InputSelectModule,
     TranslateModule.forChild(),
     DxSelectBoxModule,

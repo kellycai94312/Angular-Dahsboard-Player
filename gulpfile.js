@@ -18,8 +18,9 @@ const imageMinifyTaskName = 'image-minify';
 
 gulp.task(plotlyTaskName, function () {
   return gulp.src('node_modules/plotly.js/dist/plotly.min.js')
-    .pipe(babel({presets: ['env'], "compact": true}))
-    .pipe(uglify())
+  /* TODO: Add minify
+  .pipe(babel({presets: ['env'], "compact": true}))
+  .pipe(uglify())*/
     .pipe(gulp.dest('src/assets/js/'));
 });
 

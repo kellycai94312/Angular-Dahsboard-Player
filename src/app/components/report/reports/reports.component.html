@@ -5,13 +5,13 @@
       {{item.nameKey | translate: item.param}}
     </div>
     <div *ngIf="item.editSettings">
-      <app-busy-button icon="fa fa-edit"
-                       [click]="onEdit"
-                       [parameter]="item"></app-busy-button>
+      <ngx-button [icon]="iconEnumClass.EDIT"
+                  [click]="onEdit"
+                  [data]="item"></ngx-button>
     </div>
-    <app-busy-button classes="ml-2"
-                     icon="fa fa-download"
-                     [click]="onDownload"
-                     [parameter]="item"></app-busy-button>
+    <ngx-button class="ml-2"
+                [icon]="iconEnumClass.DOWNLOAD"
+                [click]="onDownload"
+                [data]="item"></ngx-button>
   </div>
 </div>

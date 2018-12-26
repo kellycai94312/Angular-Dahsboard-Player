@@ -15,15 +15,15 @@
            placeholder="{{'search' | translate}}">
   </div>
   <div class="col-auto">
-    <app-busy-button nameKey="save"
-                     [click]="onSave"></app-busy-button>
+    <ngx-button nameKey="save"
+                [click]="onSave"></ngx-button>
   </div>
 </div>
 
 <ngx-virtual-scroll class="d-flex flex-wrap"
                     [getItems]="getItemsWithoutSelected"
                     [(query)]="query"
-                    windowScroll="true">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div class="pr-2 pb-2 item-width"
          (dblclick)="onSelected(item)">

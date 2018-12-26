@@ -9,6 +9,7 @@ import {environment} from '../../../../environments/environment';
 import {PermissionService} from '../../../shared/permission.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
+import {IconEnum} from '../../ngx-button/model/icon-enum';
 
 @Component({
   selector: 'ngx-carousel',
@@ -18,6 +19,7 @@ import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 export class NgxCarouselComponent implements OnInit {
 
   public readonly imageType = ImageType;
+  public readonly iconEnumClass = IconEnum;
 
   @ViewChild('fileInput')
   public fileInputElementRef: ElementRef;
@@ -125,14 +127,14 @@ export class NgxCarouselComponent implements OnInit {
     this.openFileDialog(image);
   };
 
-  public onEditLogoImage = async (e: any, item: Image) => {
+  public onEditLogoImage = async (item: Image) => {
     item.type = ImageType.LOGO;
     await this._participantRestApiService.updateFile(item, null);
     this.currentImage = null;
     await this.initialize();
   };
 
-  public onRemoveImage = async (e: any, item: NameWrapper<Image>) => {
+  public onRemoveImage = async (item: NameWrapper<Image>) => {
     await this._participantRestApiService.removeFile({fileId: item.data.id});
     await this.onPrevious();
     this._appHelper.removeItem(this.images, item);

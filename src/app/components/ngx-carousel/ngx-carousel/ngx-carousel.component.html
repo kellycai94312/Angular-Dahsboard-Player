@@ -16,19 +16,19 @@
       <img (dblclick)="onShowImage(currentImage.data)"
            [src]="currentImage.name">
       <div class="carousel-caption d-none d-md-block">
-        <app-busy-button *ngIf="canEdit"
-                         icon="fa fa-plus"
-                         [click]="onAddImage"></app-busy-button>
-        <app-busy-button *ngIf="canEdit && currentImage.data.type !== imageType[imageType.LOGO]"
-                         icon="fa fa-image"
-                         classes="ml-2"
-                         [click]="onEditLogoImage"
-                         [parameter]="currentImage.data"></app-busy-button>
-        <app-busy-button *ngIf="canEdit"
-                         icon="fa fa-trash"
-                         classes="ml-2"
-                         [click]="onRemoveImage"
-                         [parameter]="currentImage"></app-busy-button>
+        <ngx-button *ngIf="canEdit"
+                    [icon]="iconEnumClass.ADD"
+                    [click]="onAddImage"></ngx-button>
+        <ngx-button *ngIf="canEdit && currentImage.data.type !== imageType.LOGO"
+                    class="ml-2"
+                    [icon]="iconEnumClass.IMAGE"
+                    [click]="onEditLogoImage"
+                    [data]="currentImage.data"></ngx-button>
+        <ngx-button *ngIf="canEdit"
+                    class="ml-2"
+                    [icon]="iconEnumClass.REMOVE"
+                    [click]="onRemoveImage"
+                    [data]="currentImage"></ngx-button>
       </div>
     </div>
   </div>
@@ -54,9 +54,9 @@
 
 <div *ngIf="!images || !images.length"
      [ngClass]="{'bg-light' : !images || !images.length}">
-  <app-busy-button *ngIf="canAdd"
-                   nameKey="addImage"
-                   [click]="onAddImage"></app-busy-button>
+  <ngx-button *ngIf="canAdd"
+              nameKey="addImage"
+              [click]="onAddImage"></ngx-button>
 </div>
 
 <input #fileInput

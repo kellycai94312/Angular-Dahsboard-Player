@@ -44,7 +44,7 @@
   </tbody>
 </table>
 
-<app-busy-button *ngIf="canEdit && enabledAdd"
-                 classes="mt-2"
-                 nameKey="add"
-                 [click]="onAdd"></app-busy-button>
+<ngx-button *ngIf="canEdit && enabledAdd"
+            class="mt-2"
+            nameKey="add"
+            [click]="onAdd"></ngx-button>

@@ -1,21 +1,17 @@
-<!-- filters -->
 <div class="input-group mb-2">
   <input #searchInput
          type="text"
          class="form-control input-height-sm"
          placeholder="{{'search' | translate}}">
   <div class="input-group-append">
-    <app-busy-button nameKey="create"
-                     [click]="onCreate">
-    </app-busy-button>
+    <ngx-button nameKey="create"
+                [click]="onCreate"></ngx-button>
   </div>
 </div>
-
-<!-- content -->
 <ngx-virtual-scroll class="list-group-flush"
                     [getItems]="getItems"
                     [(query)]="query"
-                    windowScroll="true">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div class="list-group-item p-0">
       <p class="p-2"
