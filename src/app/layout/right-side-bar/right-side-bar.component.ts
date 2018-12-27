@@ -22,22 +22,15 @@ import {animate, style, transition, trigger} from '@angular/animations';
 })
 export class RightSideBarComponent {
 
-  public condition = SideBarCondition;
+  public readonly condition = SideBarCondition;
   public currentCondition: SideBarCondition = SideBarCondition.HIDDEN;
-  public sideBarItems: SideBarItem[];
+  public readonly sideBarItems: SideBarItem[];
 
   constructor() {
-    this.sideBarItems = [];
-
-    const calendarItem = new SideBarItem();
-    calendarItem.nameKey = 'calendar';
-    calendarItem.condition = SideBarCondition.CALENDAR;
-    this.sideBarItems.push(calendarItem);
-
-    const messagesItem = new SideBarItem();
-    messagesItem.nameKey = 'messages.section';
-    messagesItem.condition = SideBarCondition.MESSAGES;
-    this.sideBarItems.push(messagesItem);
+    this.sideBarItems = [
+      new SideBarItem('calendar', SideBarCondition.CALENDAR),
+      new SideBarItem('messages.section', SideBarCondition.MESSAGES)
+    ];
   }
 
   toggle(newCondition: SideBarCondition) {
@@ -59,4 +52,10 @@ enum SideBarCondition {
 class SideBarItem {
   nameKey: string;
   condition: SideBarCondition;
+
+  constructor(nameKey: string, condition: SideBarCondition) {
+    this.nameKey = nameKey;
+    this.condition = condition;
+  }
+
 }
