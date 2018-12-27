@@ -44,10 +44,10 @@ import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
 import {InputSelectModule} from './components/input-select/input-select.module';
 import {DxSelectBoxModule} from 'devextreme-angular';
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
-import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {EditChatModule} from './module/conversation/edit-chat/edit-chat.module';
 import {RestModule} from 'rest-ngx';
+import {NamedObjectModule} from './components/named-object/named-object.module';
 import {LayoutModule} from './layout/layout.module';
 import {LayoutService} from './shared/layout.service';
 
@@ -95,10 +95,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     DxSelectBoxModule,
     GroupModule,
     EditEventModule,
-    GroupItemModule,
     EventPersonItemModule,
     EditChatModule,
-    LayoutModule
+    LayoutModule,
+    NamedObjectModule
   ],
   providers: [
     LayoutService,

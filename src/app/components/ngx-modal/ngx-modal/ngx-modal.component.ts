@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactory, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
 import {RefDirective} from '../../../directives/ref/ref.directive';
@@ -36,10 +36,23 @@ export class NgxModalComponent {
                                  config: NgxModalConfiguration = null): Promise<T> {
     this.bodyComponentType = bodyComponentType;
     let componentFactoryResolver = this._componentFactoryResolver;
+    let customComponentFactoryResolver = false;
     if (config && config.componentFactoryResolver) {
+      customComponentFactoryResolver = true;
       componentFactoryResolver = config.componentFactoryResolver;
     }
-    const componentFactory = componentFactoryResolver.resolveComponentFactory(bodyComponentType);
+
+    let componentFactory: ComponentFactory<any> = null;
+    try {
+      componentFactory = componentFactoryResolver.resolveComponentFactory(bodyComponentType);
+    } catch (e) {
+      if (!customComponentFactoryResolver) {
+        componentFactory = this._componentFactoryResolver.resolveComponentFactory(bodyComponentType);
+      } else {
+        throw e;
+      }
+    }
+
     const viewContainerRef = this.bodyTemplate.viewContainerRef;
     viewContainerRef.clear();
 
