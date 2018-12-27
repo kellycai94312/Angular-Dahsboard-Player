@@ -73,18 +73,12 @@ $right-sidebar-width-xl: 400px; //fixme
 
   }
 
-  @mixin openSideBar() {
+  &.opened {
     width: $right-sidebar-width;
-
     @media (max-width: max-width-xl()) {
       width: $right-sidebar-width-xl !important;
     }
-
     transition: width $right-sidebar-mini-transition ease-in;
-  }
-
-  &.opened {
-    @include openSideBar();
 
     .content {
       background-color: #fff;
