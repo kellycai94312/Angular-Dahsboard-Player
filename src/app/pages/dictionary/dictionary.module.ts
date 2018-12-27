@@ -13,13 +13,11 @@ import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
 import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
 import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
-import {PersonModule} from '../../components/person/person.module';
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
-import {PersonComponent} from '../../components/person/person.component';
 import {ExercisesDictionaryComponent} from './exercises-dictionary/exercises-dictionary.component';
 import {TestsDictionaryComponent} from './tests-dictionary/tests-dictionary.component';
 import {ActivitiesComponent} from './component/activities/activities.component';
@@ -51,7 +49,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     NgxModalModule,
     DxTextBoxModule,
     DxValidatorModule,
-    PersonModule,
     OperatorValueModule,
     NamedObjectModule,
     NamedObjectItemModule,
@@ -89,7 +86,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     EditStageComponent,
     EditStageTypeComponent,
     EditStageStandardComponent,
-    PersonComponent,
     EditActivityComponent,
     EditTagComponent
   ]

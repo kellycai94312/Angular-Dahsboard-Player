@@ -38,7 +38,6 @@ import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 import {LocaleModule} from './components/locale/locale.module';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
-import {PersonModule} from './components/person/person.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
 import {NgxButtonModule} from './components/ngx-button/ngx-button.module';
 import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
@@ -89,7 +88,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageToastrModule,
     LocaleModule,
     NgxModalModule,
-    PersonModule,
     HtmlContentModule,
     NgxTabModule,
     NgxButtonModule,
