@@ -13,8 +13,8 @@ import {GroupTransitionType} from '../../../../data/remote/model/group/transitio
 import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
 import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
 import {StageType} from '../../../../data/remote/model/stage/stage-type';
-import {EditPersonRankComponent} from '../../../../components/person/edit-person-rank/edit-person-rank.component';
-import {EditMedicalExaminationComponent} from '../../../../components/person/edit-medical-examination/edit-medical-examination.component';
+import {EditPersonRankComponent} from '../../edit-person-rank/edit-person-rank/edit-person-rank.component';
+import {EditMedicalExaminationComponent} from '../../edit-medical-examination/edit-medical-examination/edit-medical-examination.component';
 import {PersonRank} from '../../../../data/remote/model/person-rank';
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -32,6 +32,7 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {EditPersonService} from '../service/edit-person.service';
 
 @Component({
   selector: 'app-edit-person',
@@ -72,10 +73,11 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   private _initialPersonRanks: PersonRank[];
   private _initialMedicalExaminations: MedicalExamination[];
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
-              private _ngxModalService: NgxModalService,
+  constructor(private _ngxModalService: NgxModalService,
+              private _editPersonService: EditPersonService,
               private _router: Router,
-              private _translateObjectService: TranslateObjectService) {
+              private _translateObjectService: TranslateObjectService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
     this.dateMin = PersonContant.getBirthDateMin();
     this.dateMax = PersonContant.getBirthDateMax();
@@ -259,7 +261,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     await this.onShowSportRankModel(obj);
   };
 
-
   private async onShowSportRankModel(personRank: PersonRank) {
     const tempFile = this.getFileFromTempComponent(personRank, this._personRankComponents);
 
@@ -294,7 +295,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           }
         }
       ];
-    });
+    }, {componentFactoryResolver: this._editPersonService.componentFactoryResolver});
 
     if (!await this._ngxModalService.awaitModalResult(modal)) {
       editRankComponent.changeWatcher.reset();
@@ -347,7 +348,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           }
         }
       ];
-    });
+    }, {componentFactoryResolver: this._editPersonService.componentFactoryResolver});
     if (!await this._ngxModalService.awaitModalResult(modal)) {
       editMedicalExaminationComponent.changeWatcher.reset();
     }

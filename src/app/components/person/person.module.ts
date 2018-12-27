@@ -11,8 +11,6 @@ import {TranslateModule} from '@ngx-translate/core';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {NgxSelectionModule} from '../ngx-selection/ngx-selection.module';
 import {NamedObjectModule} from '../named-object/named-object.module';
-import {EditPersonRankComponent} from './edit-person-rank/edit-person-rank.component';
-import {EditMedicalExaminationComponent} from './edit-medical-examination/edit-medical-examination.component';
 
 @NgModule({
   imports: [
@@ -33,19 +31,13 @@ import {EditMedicalExaminationComponent} from './edit-medical-examination/edit-m
     NamedObjectModule
   ],
   declarations: [
-    PersonComponent,
-    EditPersonRankComponent,
-    EditMedicalExaminationComponent
+    PersonComponent
   ],
   entryComponents: [
-    PersonComponent,
-    EditPersonRankComponent,
-    EditMedicalExaminationComponent
+    PersonComponent
   ],
   exports: [
-    PersonComponent,
-    EditPersonRankComponent,
-    EditMedicalExaminationComponent
+    PersonComponent
   ]
 })
 export class PersonModule {

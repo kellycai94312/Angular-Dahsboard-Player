@@ -1,12 +1,12 @@
 import {Component, Input} from '@angular/core';
-import {ComponentWithAttach} from '../../../data/local/component/base/component-with-attach';
-import {MedicalExamination} from '../../../data/remote/model/person/medical-examination';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {Person} from '../../../data/remote/model/person';
-import {SportType} from '../../../data/remote/model/sport-type';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../utils/app-helper';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
+import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {Person} from '../../../../data/remote/model/person';
+import {SportType} from '../../../../data/remote/model/sport-type';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-edit-medical-examination',
@@ -52,7 +52,10 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
         if (this.appHelper.isNewObject(this.data)) {
           this.appHelper.updateObject(this.data, await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.person.id}));
         } else {
-          this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {personId: this.person.id, medicalExaminationId: this.data.id}));
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {
+            personId: this.person.id,
+            medicalExaminationId: this.data.id
+          }));
         }
         this.document.number = this.data.number;
         this.document.date = this.data.startDate;
@@ -67,7 +70,10 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
 
   async onRemove(): Promise<boolean> {
     return this.appHelper.isNewObject(this.data) || await this.appHelper.tryRemove(async () => {
-      this.data = await this.participantRestApiService.removeMedicalExamination({personId: this.person.id, medicalExaminationId: this.data.id});
+      this.data = await this.participantRestApiService.removeMedicalExamination({
+        personId: this.person.id,
+        medicalExaminationId: this.data.id
+      });
     });
   }
 
