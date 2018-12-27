@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {animate, style, transition, trigger} from '@angular/animations';
 
 @Component({
@@ -20,7 +20,7 @@ import {animate, style, transition, trigger} from '@angular/animations';
     )
   ]
 })
-export class RightSideBarComponent implements OnInit {
+export class RightSideBarComponent {
 
   public condition = SideBarCondition;
   public currentCondition: SideBarCondition = SideBarCondition.HIDDEN;
@@ -38,9 +38,6 @@ export class RightSideBarComponent implements OnInit {
     messagesItem.nameKey = 'messages.section';
     messagesItem.condition = SideBarCondition.MESSAGES;
     this.sideBarItems.push(messagesItem);
-  }
-
-  ngOnInit() {
   }
 
   toggle(newCondition: SideBarCondition) {
