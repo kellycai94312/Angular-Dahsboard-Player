@@ -140,6 +140,7 @@ export class ConversationsPageComponent implements OnInit, OnDestroy {
 
   public onCreateChat = async () => {
     await this._templateModalService.showEditChat(new Chat());
+    await this.resetItems();
   };
 
   private async resetItems(): Promise<void> {

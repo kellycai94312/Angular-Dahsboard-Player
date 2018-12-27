@@ -33,7 +33,10 @@ export class EventsCalendarComponent implements OnInit {
   @Input()
   public eventPlan: EventPlan;
 
-  view = 'month';
+  @Input()
+  public sideBarView: boolean;
+
+  public view: string;
 
   locale: string;
 
@@ -59,10 +62,14 @@ export class EventsCalendarComponent implements OnInit {
     this._trainingQuery.count = PropertyConstant.pageSizeMax;
     this._trainingQuery.sort = Sort[Sort.ASC];
     this.locale = _localStorageService.getCurrentLocale();
+    this.view = 'month';
   }
 
   async ngOnInit() {
     await this.loadEvents();
+    if (this.sideBarView) {
+      this.view = 'week';
+    }
   }
 
   public async loadEvents() {

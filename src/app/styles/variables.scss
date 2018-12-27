@@ -39,3 +39,7 @@ $navbar-height: 40px;
 @function max-width-lg() {
   @return map-get($container-max-widths, 'lg');
 }
+
+@function max-width-xl() {
+  @return map-get($container-max-widths, 'xl');
+}

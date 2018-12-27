@@ -13,6 +13,8 @@ export class CalendarHeaderComponent {
 
   @Input() locale;
 
+  @Input() sideBarView: boolean;
+
   @Output() viewChange: EventEmitter<string> = new EventEmitter();
 
   @Output() viewDateChange: EventEmitter<Date> = new EventEmitter();

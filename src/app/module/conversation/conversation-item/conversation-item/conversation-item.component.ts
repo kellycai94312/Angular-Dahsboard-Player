@@ -10,6 +10,8 @@ import {BaseConversationType} from '../../../../data/remote/model/chat/conversat
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
+import {Router} from '@angular/router';
+import {ConversationService} from '../../../../shared/conversation.service';
 
 @Component({
   selector: 'app-conversation-item',
@@ -30,7 +32,9 @@ export class ConversationItemComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _authorizationService: AuthorizationService) {
+              private _authorizationService: AuthorizationService,
+              private _conversationService: ConversationService,
+              private _router: Router) {
   }
 
   async ngOnInit() {
@@ -79,6 +83,11 @@ export class ConversationItemComponent implements OnInit {
       }
 
     }
+  }
+
+  public async openConversation() {
+    this._conversationService.readMessage(this.conversationWrapper.messageWrapper);
+    await this._router.navigate(['/conversation', this.conversation.id]);
   }
 
   private getPersonFullName(person: Person) {

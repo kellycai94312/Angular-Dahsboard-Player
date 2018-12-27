@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 import {BaseConversationType} from '../../../../../data/remote/model/chat/conversation/base/base-conversation-type';
 import {ImageComponent} from '../../../../../components/image/image.component';
@@ -38,7 +38,7 @@ import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-butt
   templateUrl: './conversation-page.component.html',
   styleUrls: ['./conversation-page.component.scss']
 })
-export class ConversationPageComponent implements OnInit, OnDestroy {
+export class ConversationPageComponent implements OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
   public readonly baseConversationTypeClass = BaseConversationType;
@@ -64,12 +64,13 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
   private _maxMessageDate: Date;
   private _typingTimeout: any;
   private _receiveTypingTimeout: any;
-  private readonly _conversationId: number;
+  private _conversationId: number;
   private readonly _messageCreateSubscription: ISubscription;
   private readonly _messageUpdateSubscription: ISubscription;
   private readonly _messageDeleteSubscription: ISubscription;
   private readonly _messageReadSubscription: ISubscription;
   private readonly _typingSubscription: ISubscription;
+  private readonly _paramsSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -83,7 +84,14 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
               private _templateModalService: TemplateModalService,
               private _ngxModalService: NgxModalService,
               private _router: Router) {
-    this._conversationId = this._activatedRoute.snapshot.params.id;
+    this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {
+      const conversationId = val.id;
+      if (conversationId) {
+        await this.initialize(conversationId);
+      } else {
+        await this._router.navigate(['/conversation']);
+      }
+    });
     this.messageContent = new MessageContent();
     this.query = new PageQuery();
     this._maxMessageDate = new Date();
@@ -96,8 +104,10 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.readMessageFrom(x.message.created);
-      x.message.read = true;
+      if (x.message.sender.person.id != this.person.id) {
+        this.readMessageFrom(x.message.created);
+        this._conversationService.readMessage(x);
+      }
 
       if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT
         && x.message.sender.person.id != this.person.id) { // Exclude update duplication
@@ -171,9 +181,11 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  async ngOnInit() {
-    this.person = await this._authorizationService.getPerson();
-    try {
+  public async initialize(conversationId: number): Promise<boolean> {
+    return await this._appHelper.tryLoad(async () => {
+      this._conversationId = conversationId;
+
+      this.person = await this._authorizationService.getPerson();
       this.conversation = await this._participantRestApiService.getConversation({conversationId: this._conversationId});
       this._messageToastrService.clearToasts(this.conversation.id);
       this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: this._conversationId})).value;
@@ -188,11 +200,10 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
         default:
           this.recipient = new Participant();
       }
-    } catch (e) {
-      await this._router.navigate(['/conversation']);
-    }
-    await this.ngxVirtualScrollComponent.reset();
+      await this.ngxVirtualScrollComponent.reset();
+    });
   }
+
 
   ngOnDestroy(): void {
     this._messageCreateSubscription.unsubscribe();
@@ -200,6 +211,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     this._messageDeleteSubscription.unsubscribe();
     this._messageReadSubscription.unsubscribe();
     this._typingSubscription.unsubscribe();
+    this._paramsSubscription.unsubscribe();
     this.selectedMessages.removeAll();
   }
 
@@ -360,10 +372,6 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
     }
   };
 
-  private addSendMessageInList(message: Message) {
-    this.ngxVirtualScrollComponent.addItem(message, true);
-  }
-
   private readMessageFrom(date: Date): void {
     this._participantStompService.publishConversationRead({
       id: this._conversationId,
@@ -373,10 +381,7 @@ export class ConversationPageComponent implements OnInit, OnDestroy {
 
   private async createMessage<T extends BaseMessageContent>(messageContent: T): Promise<boolean> {
     return await this._appHelper.tryAction('', 'sendError', async () => {
-      const message = await this._participantRestApiService.createMessage(messageContent, {}, {conversationId: this._conversationId});
-      this.addSendMessageInList(message);
-      // TODO: Optimize read message algorithm!
-      this.readMessageFrom(message.content.created);
+      await this._participantRestApiService.createMessage(messageContent, {}, {conversationId: this._conversationId});
     });
   }
 

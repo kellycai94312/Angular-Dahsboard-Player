@@ -4,7 +4,7 @@ import {VerificationRequest} from '../../data/remote/model/verification-request'
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 import {EmailRequest} from '../../data/remote/request/email-request';
 import {AppHelper} from '../../utils/app-helper';
-import {LayoutService} from '../../layout/shared/layout.service';
+import {LayoutService} from '../../shared/layout.service';
 
 @Component({
   selector: 'app-password-set',

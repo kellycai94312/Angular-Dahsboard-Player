@@ -16,7 +16,8 @@ import {ConversationItemModule} from '../../../../module/conversation/conversati
     NgxVirtualScrollModule,
     ConversationItemModule
   ],
-  declarations: [ConversationsPageComponent]
+  declarations: [ConversationsPageComponent],
+  exports: [ConversationsPageComponent]
 })
 export class ConversationsPageModule {
 }

@@ -4,11 +4,11 @@ import {ConversationService} from '../../shared/conversation.service';
 import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
-  selector: 'app-side-bar',
-  templateUrl: './side-bar.component.html',
-  styleUrls: ['./side-bar.component.scss']
+  selector: 'app-left-side-bar',
+  templateUrl: './left-side-bar.component.html',
+  styleUrls: ['./left-side-bar.component.scss']
 })
-export class SideBarComponent implements OnInit {
+export class LeftSideBarComponent implements OnInit {
 
   readonly className: string = 'collapsed';
 
