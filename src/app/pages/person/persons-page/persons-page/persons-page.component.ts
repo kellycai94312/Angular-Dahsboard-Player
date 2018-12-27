@@ -1,7 +1,4 @@
-import {Component, OnInit} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {AppHelper} from '../../../../utils/app-helper';
+import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {Person} from '../../../../data/remote/model/person';
@@ -19,12 +16,10 @@ export class PersonsPageComponent implements OnInit {
 
   public readonly tabs: Tab[];
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _translateObjectService: TranslateObjectService,
-              private _appHelper: AppHelper,
-              private _router: Router,
+  constructor(private _router: Router,
               private _activatedRoute: ActivatedRoute,
               private _templateModalService: TemplateModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _permissionService: PermissionService) {
     this.tabs = [
       {
@@ -43,7 +38,7 @@ export class PersonsPageComponent implements OnInit {
       const addSplitButtonItem: SplitButtonItem = {
         nameKey: 'add',
         callback: async () => {
-          if (await this._templateModalService.showEditPersonModal(new Person())) {
+          if (await this._templateModalService.showEditPersonModal(new Person(), null, {componentFactoryResolver: this._componentFactoryResolver})) {
             await this._router.navigate([], {relativeTo: this._activatedRoute});
           }
         },

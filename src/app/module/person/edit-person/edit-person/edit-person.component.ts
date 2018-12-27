@@ -1,37 +1,37 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {BaseEditComponent} from '../../../data/local/component/base/base-edit-component';
-import {Person} from '../../../data/remote/model/person';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {AttachFileComponent} from '../../attach-file/attach-file/attach-file.component';
-import {Document} from '../../../data/remote/model/file/document/document';
-import {NgxGridComponent} from '../../ngx-grid/ngx-grid/ngx-grid.component';
-import {Group} from '../../../data/remote/model/group/base/group';
-import {NameWrapper} from '../../../data/local/name-wrapper';
-import {SexEnum} from '../../../data/remote/misc/sex-enum';
-import {UserRole} from '../../../data/remote/model/user-role';
-import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
-import {DocumentQuery} from '../../../data/remote/rest-api/query/file/document-query';
-import {GroupTransition} from '../../../data/remote/model/group/transition/group-transition';
-import {StageType} from '../../../data/remote/model/stage/stage-type';
-import {PersonRank} from '../../../data/remote/model/person-rank';
-import {MedicalExamination} from '../../../data/remote/model/person/medical-examination';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../utils/app-helper';
-import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
+import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
+import {Person} from '../../../../data/remote/model/person';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {AttachFileComponent} from '../../../../components/attach-file/attach-file/attach-file.component';
+import {Document} from '../../../../data/remote/model/file/document/document';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {Group} from '../../../../data/remote/model/group/base/group';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {SexEnum} from '../../../../data/remote/misc/sex-enum';
+import {UserRole} from '../../../../data/remote/model/user-role';
+import {GroupTransitionType} from '../../../../data/remote/model/group/transition/group-transition-type';
+import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
+import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
+import {StageType} from '../../../../data/remote/model/stage/stage-type';
+import {EditPersonRankComponent} from '../../../../components/person/edit-person-rank/edit-person-rank.component';
+import {EditMedicalExaminationComponent} from '../../../../components/person/edit-medical-examination/edit-medical-examination.component';
+import {PersonRank} from '../../../../data/remote/model/person-rank';
+import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {AppHelper} from '../../../../utils/app-helper';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {Router} from '@angular/router';
-import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {PersonContant} from '../../../data/local/person-contant';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {DocumentType} from '../../../data/remote/model/file/document/document-type';
-import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {ComponentWithAttach} from '../../../data/local/component/base/component-with-attach';
-import {GroupPerson} from '../../../data/remote/model/group/group-person';
-import {EditPersonRankComponent} from '../edit-person-rank/edit-person-rank.component';
-import {EditMedicalExaminationComponent} from '../edit-medical-examination/edit-medical-examination.component';
-import {ListRequest} from '../../../data/remote/request/list-request';
-import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {PersonContant} from '../../../../data/local/person-contant';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {PersonQuery} from '../../../../data/remote/rest-api/query/person-query';
+import {ListRequest} from '../../../../data/remote/request/list-request';
+import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
+import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 
 @Component({
   selector: 'app-edit-person',
@@ -115,7 +115,10 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         if (this.group) {
           try {
-            this.groupPersonUserRoles = await this.participantRestApiService.getGroupPersonUserRoles({groupId: this.group.id, personId: obj.id});
+            this.groupPersonUserRoles = await this.participantRestApiService.getGroupPersonUserRoles({
+              groupId: this.group.id,
+              personId: obj.id
+            });
           } catch (e) {
           }
 
@@ -178,8 +181,14 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
-      await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(this.groupPersonUserRoles), {}, {groupId: this.group.id, personId: this.data.id});
-      await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {groupId: this.group.id, personId: this.data.id});
+      await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(this.groupPersonUserRoles), {}, {
+        groupId: this.group.id,
+        personId: this.data.id
+      });
+      await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
+        groupId: this.group.id,
+        personId: this.data.id
+      });
 
       this.document.objectId = groupTransition.id;
       await this.attachFileComponent.updateFile();

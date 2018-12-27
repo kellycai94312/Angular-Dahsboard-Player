@@ -5,7 +5,6 @@ import {Person} from '../data/remote/model/person';
 import {AppHelper} from '../utils/app-helper';
 import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
 import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
-import {EditPersonComponent} from '../components/person/edit-person/edit-person.component';
 import {EditGroupComponent} from '../components/group/edit-group/edit-group.component';
 import {BaseTraining} from '../data/remote/model/training/base/base-training';
 import {DialogResult} from '../data/local/dialog-result';
@@ -32,6 +31,8 @@ import {EventPersonItemComponent} from '../module/event/event-person-item/event-
 import {Chat} from '../data/remote/model/chat/conversation/chat';
 import {EditChatComponent} from '../module/conversation/edit-chat/edit-chat/edit-chat.component';
 import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
+import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
+import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-configuration';
 
 @Injectable({
   providedIn: 'root'
@@ -102,7 +103,7 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
-  public async showEditPersonModal(person: Person, group?: Group): Promise<boolean> {
+  public async showEditPersonModal(person: Person, group?: Group, config?: NgxModalConfiguration): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
     await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
@@ -134,7 +135,7 @@ export class TemplateModalService {
           visible: isNewObject
         }
       ];
-    });
+    }, config);
     return await this._ngxModalService.awaitModalResult(modal);
   }
 

@@ -3,11 +3,12 @@ import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
 import {RefDirective} from '../../../directives/ref/ref.directive';
 import {INgxContent} from '../bean/ingx-content';
+import {NgxModalConfiguration} from '../bean/ngx-modal-configuration';
 
 @Component({
   selector: 'ngx-modal',
   templateUrl: './ngx-modal.component.html',
-  styleUrls: ['./ngx-modal.component.scss']
+  styleUrls: ['./ngx-modal.component.scss'],
 })
 export class NgxModalComponent {
 
@@ -30,9 +31,15 @@ export class NgxModalComponent {
     this.splitButtonItems = [];
   }
 
-  public async initializeBody<T>(bodyComponentType: Type<T>, initialize: (component: T) => Promise<void>): Promise<T> {
+  public async initializeBody<T>(bodyComponentType: Type<T>,
+                                 initialize: (component: T) => Promise<void>,
+                                 config: NgxModalConfiguration = null): Promise<T> {
     this.bodyComponentType = bodyComponentType;
-    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(bodyComponentType);
+    let componentFactoryResolver = this._componentFactoryResolver;
+    if (config && config.componentFactoryResolver) {
+      componentFactoryResolver = config.componentFactoryResolver;
+    }
+    const componentFactory = componentFactoryResolver.resolveComponentFactory(bodyComponentType);
     const viewContainerRef = this.bodyTemplate.viewContainerRef;
     viewContainerRef.clear();
 

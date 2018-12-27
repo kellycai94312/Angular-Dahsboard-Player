@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {PersonComponent} from './person.component';
 import {RouterModule} from '@angular/router';
 import {ImageModule} from '../image/image.module';
-import {EditPersonComponent} from './edit-person/edit-person.component';
 import {AttachFileModule} from '../attach-file/attach-file.module';
 import {NgxGridModule} from '../ngx-grid/ngx-grid.module';
 import {DxCheckBoxModule, DxDateBoxModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
@@ -35,19 +34,16 @@ import {EditMedicalExaminationComponent} from './edit-medical-examination/edit-m
   ],
   declarations: [
     PersonComponent,
-    EditPersonComponent,
     EditPersonRankComponent,
     EditMedicalExaminationComponent
   ],
   entryComponents: [
     PersonComponent,
-    EditPersonComponent,
     EditPersonRankComponent,
     EditMedicalExaminationComponent
   ],
   exports: [
     PersonComponent,
-    EditPersonComponent,
     EditPersonRankComponent,
     EditMedicalExaminationComponent
   ]
