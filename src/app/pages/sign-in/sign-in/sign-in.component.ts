@@ -7,7 +7,7 @@ import {AuthorizationService} from '../../../shared/authorization.service';
 import {ProfileService} from '../../../shared/profile.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {LayoutService} from '../../../layout/shared/layout.service';
+import {LayoutService} from '../../../shared/layout.service';
 import {ValidationService} from '../../../service/validation/validation.service';
 import {environment} from '../../../../environments/environment';
 import {NgxInputType} from '../../../components/ngx-input/model/ngx-input-type';

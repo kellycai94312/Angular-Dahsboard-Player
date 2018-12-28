@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
-import {LayoutService} from './layout/shared/layout.service';
+import {LayoutService} from './shared/layout.service';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
 import {DeactivateGuard} from './guard/deactivate/deactivate.guard';

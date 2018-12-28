@@ -149,6 +149,11 @@ export class ConversationService implements OnDestroy {
     }
   }
 
+  public readMessage(messageWrapper: MessageWrapper) {
+    messageWrapper.message.read = true;
+    messageWrapper.unread = undefined;
+  }
+
   //#endregion
 
   //#region UnreadTotal

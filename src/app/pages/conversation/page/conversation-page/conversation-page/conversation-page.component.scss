@@ -11,16 +11,22 @@ $navbar-offset: $navbar-height + 20px;
 
   width: 50% !important;
 
-  @media (max-width: max-width-sm()) {
-    width: 100% !important;
-  }
-
-  @media (max-width: max-width-md()) {
+  @media (max-width: max-width-xl()) {
     width: 100% !important;
   }
 
   @media (max-width: max-width-lg()) {
     width: 100% !important;
+  }
+
+  @media (max-width: max-width-md()) {
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+
+  @media (max-width: max-width-sm()) {
+    width: 100% !important;
+    min-width: 100% !important;
   }
 
   textarea {

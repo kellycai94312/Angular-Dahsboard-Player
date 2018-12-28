@@ -4,7 +4,7 @@ import {Session} from '../data/remote/model/session';
 import {Auth} from '../data/remote/model/auth';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 import {LocalStorageService} from './local-storage.service';
-import {LayoutService} from '../layout/shared/layout.service';
+import {LayoutService} from './layout.service';
 import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
 import {UserRole} from '../data/remote/model/user-role';

@@ -1,9 +1,10 @@
 <app-nav-bar *ngIf="!hidden"></app-nav-bar>
 <div class="content-wrapper"
      [ngClass]="{'hidden' : hidden, 'background':dark}">
-  <app-side-bar *ngIf="!hidden"></app-side-bar>
+  <app-left-side-bar *ngIf="!hidden"></app-left-side-bar>
   <div class="content">
     <ngx-breadcrumb *ngIf="!hidden"></ngx-breadcrumb>
     <router-outlet></router-outlet>
   </div>
+  <app-right-side-bar *ngIf="!hidden"></app-right-side-bar>
 </div>

@@ -1,5 +1,5 @@
 import {Component, OnDestroy} from '@angular/core';
-import {LayoutService} from './shared/layout.service';
+import {LayoutService} from '../shared/layout.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../utils/app-helper';
 

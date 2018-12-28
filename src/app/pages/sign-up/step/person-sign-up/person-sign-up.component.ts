@@ -12,7 +12,7 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {PersonContant} from '../../../../data/local/person-contant';
 import {ValidationService} from '../../../../service/validation/validation.service';
 import {NgxInputType} from '../../../../components/ngx-input/model/ngx-input-type';
-import {LayoutService} from '../../../../layout/shared/layout.service';
+import {LayoutService} from '../../../../shared/layout.service';
 
 @Component({
   selector: 'app-person-sign-up',

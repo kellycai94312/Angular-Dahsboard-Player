@@ -2,7 +2,7 @@ import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {User} from '../../../../data/remote/model/user';
 import {TranslateService} from '@ngx-translate/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {LayoutService} from '../../../../layout/shared/layout.service';
+import {LayoutService} from '../../../../shared/layout.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Locale} from '../../../../data/remote/misc/locale';
 import {NgxInputType} from '../../../../components/ngx-input/model/ngx-input-type';

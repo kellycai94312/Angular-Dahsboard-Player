@@ -5,7 +5,6 @@ import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/h
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {FormsModule} from '@angular/forms';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CookieModule} from 'ngx-cookie';
 import {StompRService} from '@stomp/ng2-stompjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -13,10 +12,6 @@ import {ToastrModule} from 'ngx-toastr';
 
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
-import {LayoutComponent} from './layout/layout.component';
-import {LayoutService} from './layout/shared/layout.service';
-import {SideBarComponent} from './layout/side-bar/side-bar.component';
-import {NavBarComponent} from './layout/nav-bar/nav-bar.component';
 import {ParticipantRestApiService} from './data/remote/rest-api/participant-rest-api.service';
 import {TranslateObjectService} from './shared/translate-object.service';
 import {LocalStorageService} from './shared/local-storage.service';
@@ -39,7 +34,6 @@ import {ConversationService} from './shared/conversation.service';
 import localeRu from '@angular/common/locales/ru';
 import {ImageModule} from './components/image/image.module';
 import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
-import {NgxBreadcrumbModule} from './components/ngx-breadcrumb/ngx-breadcrumb.module';
 import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 import {LocaleModule} from './components/locale/locale.module';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
@@ -55,6 +49,8 @@ import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {EditChatModule} from './module/conversation/edit-chat/edit-chat.module';
 import {RestModule} from 'rest-ngx';
+import {LayoutModule} from './layout/layout.module';
+import {LayoutService} from './shared/layout.service';
 
 registerLocaleData(localeRu);
 
@@ -64,10 +60,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent,
-    LayoutComponent,
-    SideBarComponent,
-    NavBarComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -79,9 +72,8 @@ export function HttpLoaderFactory(http: HttpClient) {
       enableHtml: true,
       positionClass: 'toast-top-center',
       timeOut: 3000,
-      maxOpened: 7
+      maxOpened: 3
     }),
-    NgbModule,
     RestModule.forRoot(),
     CookieModule.forRoot(),
     TranslateModule.forRoot({
@@ -95,7 +87,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     RoundPipeModule.forRoot(),
     ImageModule,
     MessageToastrModule,
-    NgxBreadcrumbModule,
     LocaleModule,
     NgxModalModule,
     PersonModule,
@@ -108,7 +99,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditEventModule,
     GroupItemModule,
     EventPersonItemModule,
-    EditChatModule
+    EditChatModule,
+    LayoutModule
   ],
   providers: [
     LayoutService,

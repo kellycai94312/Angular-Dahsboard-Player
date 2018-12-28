@@ -1,5 +1,5 @@
 <div class="d-flex w-100 p-2"
-     [routerLink]="conversation.id">
+     (click)="openConversation()">
 
   <app-image
     #logo
@@ -19,8 +19,7 @@
       </p>
     </div>
 
-    <div class="d-flex flex-row align-items-center p-2"
-         [ngClass]="{'unread-message': !conversationWrapper.messageWrapper.empty && !conversationWrapper.messageWrapper.message.read}">
+    <div class="d-flex flex-row align-items-center p-2">
 
       <div *ngIf="conversationWrapper.typingParticipants.length; else message"
            class="text-typing">

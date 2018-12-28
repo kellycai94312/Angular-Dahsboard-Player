@@ -7,6 +7,11 @@ $sidebar-width-mini: 50px;
 $sidebar-mini-transition: .3s;
 $sidebar-background: $dark-blue;
 
+$right-sidebar-width: 600px;
+$right-sidebar-width-mini: 24px;
+$right-sidebar-mini-transition: .3s;
+$right-sidebar-background: darken($light-blue, 15%);
+
 .content-wrapper {
   display: flex;
   padding-top: $navbar-height;
@@ -23,3 +28,10 @@ $sidebar-background: $dark-blue;
   }
 
 }
+
+@media (max-width: max-width-lg()) {
+  app-right-side-bar {
+    display: none;
+  }
+}
+
