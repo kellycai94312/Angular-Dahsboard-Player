@@ -25,7 +25,6 @@ import {SystemMessageContent} from '../../../../../data/remote/model/chat/messag
 import {SystemMessageContentType} from '../../../../../data/remote/model/chat/message/system-message-content-type';
 import {Direction} from '../../../../../components/ngx-virtual-scroll/model/direction';
 import {Chat} from '../../../../../data/remote/model/chat/conversation/chat';
-import {ModalConfirmDangerComponent} from '../../../../../components/modal-confirm/modal-confirm-danger.component';
 import {EventMessageContent} from '../../../../../data/remote/model/chat/message/event-message-content';
 import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/base/base-message-content';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
@@ -326,15 +325,11 @@ export class ConversationPageComponent implements OnDestroy {
   };
 
   public async clearMessagesHistory() {
-    const ref = this._modalService.open(ModalConfirmDangerComponent);
-    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
-    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
-    componentInstance.onConfirm = async () => {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
       await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
       this.ngxVirtualScrollComponent.items = [];
       this.updateCanEditMessage();
-    };
+    }
   }
 
   public updateCanEditMessage() {
@@ -344,14 +339,10 @@ export class ConversationPageComponent implements OnDestroy {
   }
 
   public async quitChat() {
-    const ref = this._modalService.open(ModalConfirmDangerComponent);
-    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
-    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
-    componentInstance.onConfirm = async () => {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
-    };
+    }
   }
 
   public async toggleNotifications() {

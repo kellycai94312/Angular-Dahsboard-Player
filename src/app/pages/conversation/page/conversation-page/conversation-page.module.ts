@@ -10,7 +10,6 @@ import {ImageModule} from '../../../../components/image/image.module';
 import {FormsModule} from '@angular/forms';
 import {NgbDropdownModule, NgbModalModule} from '@ng-bootstrap/ng-bootstrap';
 import {ConfirmationRemovingMessageModule} from '../../../../module/conversation/confirmation-removing-message/confirmation-removing-message.module';
-import {ModalConfirmModule} from '../../../../components/modal-confirm/modal-confirm.module';
 import {NgxModalModule} from '../../../../components/ngx-modal/ngx-modal.module';
 
 @NgModule({
@@ -26,8 +25,7 @@ import {NgxModalModule} from '../../../../components/ngx-modal/ngx-modal.module'
     NgxModalModule,
     ImageModule,
     MessageItemModule,
-    ConfirmationRemovingMessageModule,
-    ModalConfirmModule
+    ConfirmationRemovingMessageModule
   ],
   declarations: [ConversationPageComponent]
 })
