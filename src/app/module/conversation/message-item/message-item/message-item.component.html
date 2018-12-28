@@ -42,7 +42,7 @@
                    [dimension]="'W40xH40'"
                    [format]="'CIRCLE'"></app-image>
         <div class="d-flex flex-column message-content-wrapper w-100 ml-2 mr-2"
-             [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
+             [ngClass]="{'selected' : !previewContent && conversationService.selectedMessages.contains(message)}">
           <div *ngIf="!previewContent"
                class="d-flex flex-row justify-content-between">
             <p class="full-name">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
