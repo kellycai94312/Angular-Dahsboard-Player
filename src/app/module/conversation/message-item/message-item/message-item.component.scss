@@ -68,6 +68,7 @@ $selected-border-color: $selected-background-color;
 
     .message-content-wrapper {
       padding: 5px;
+      border-radius: 3px;
 
       .full-name {
         font-size: 12px;
@@ -86,8 +87,8 @@ $selected-border-color: $selected-background-color;
       }
 
       &.selected {
-        background-color: #ccffff;
-        border-color: #99ffff;
+        background-color: #dae8ff;
+        border-color: #79abff;
       }
 
     }
