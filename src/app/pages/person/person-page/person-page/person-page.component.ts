@@ -231,7 +231,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     //#endregion
 
     this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
-    this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
+    // this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
   }
 
   public async onLogoChanged(fileList: FileList) {
