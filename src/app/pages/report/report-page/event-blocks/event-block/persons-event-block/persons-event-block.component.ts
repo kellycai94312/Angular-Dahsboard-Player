@@ -99,7 +99,7 @@ export class PersonsEventBlockComponent implements OnInit, OnDestroy {
 
   public onSave = async () => {
     if (this.persons && this.persons.length > this._maxCountPersons) {
-      await this._appHelper.showErrorMessage('maximumCount', {count: this._maxCountPersons});
+      await this._appHelper.showErrorMessage('maximumCountParam', {count: this._maxCountPersons});
       return;
     }
 

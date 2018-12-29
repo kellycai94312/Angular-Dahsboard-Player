@@ -16,7 +16,6 @@ import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-d
 import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
-import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {ExercisesDictionaryComponent} from './exercises-dictionary/exercises-dictionary.component';
 import {TestsDictionaryComponent} from './tests-dictionary/tests-dictionary.component';
@@ -52,7 +51,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     OperatorValueModule,
     NamedObjectModule,
     NamedObjectItemModule,
-    ModalSelectPageModule,
     ImageModule,
     NgxTextBoxModule,
     NgxSplitButtonModule,

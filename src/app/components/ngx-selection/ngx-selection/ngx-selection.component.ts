@@ -43,7 +43,13 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public compare: (first: TModel, second: TModel) => boolean;
 
   @Input()
+  public minCount: number;
+
+  @Input()
   public maxCount: number;
+
+  public minCountParam: { count: number };
+  public maxCountParam: { count: number };
 
   constructor(private _appHelper: AppHelper) {
     this.class = '';
@@ -62,6 +68,8 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
     this.fetchItems = fetchItems;
     this.selectedItems = selectedItems || [];
 
+    this.minCountParam = {count: this.minCount};
+    this.maxCountParam = {count: this.maxCount};
     await this.reset();
   }
 
@@ -101,6 +109,18 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   };
 
   public canSelect() {
+    return this.includeMaxValue();
+  }
+
+  public isValid() {
+    return this.includeMinValue() && this.includeMaxValue();
+  }
+
+  private includeMinValue(): boolean {
+    return !this.minCount || this.selectedItems.length >= this.minCount;
+  }
+
+  private includeMaxValue(): boolean {
     return !this.maxCount || this.selectedItems.length < this.maxCount;
   }
 

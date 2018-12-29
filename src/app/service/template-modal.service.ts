@@ -33,6 +33,7 @@ import {EditChatComponent} from '../module/conversation/edit-chat/edit-chat/edit
 import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
 import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
 import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-configuration';
+import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 
 @Injectable({
   providedIn: 'root'
@@ -44,6 +45,30 @@ export class TemplateModalService {
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
   }
+
+  //#region Group
+
+  public async showSelectionGroupsModal<TModel extends Group>(selectedItems: TModel[],
+                                                              groupQuery: GroupQuery = null,
+                                                              config: SelectionItemsModalConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
+    config = config || new SelectionItemsModalConfig<TModel>();
+    if (!config.title) {
+      config.title = `${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
+    }
+
+    return (await this.showSelectionItemsModal(selectedItems,
+      async (query: GroupQuery) => {
+        return await this._participantRestApiService.getGroups(this._appHelper.updatePageQuery(query, groupQuery));
+      },
+      GroupItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      config
+    )) as DialogResult<TModel[]>;
+  }
+
+  //#endregion
 
   public async showConfirmModal(contentKey: string): Promise<boolean> {
     const modal = this._ngxModalService.open();
@@ -442,10 +467,13 @@ export class TemplateModalService {
           nameKey: 'apply',
           callback: async () => {
             modal.close();
+          },
+          visible: () => {
+            return component.isValid();
           }
         }
       ];
-    });
+    }, config);
 
     const dialogResult: DialogResult<TModel[]> = {result: await this._ngxModalService.awaitModalResult(modal)};
     if (dialogResult.result) {
@@ -456,7 +484,7 @@ export class TemplateModalService {
 
 }
 
-class SelectionItemsModalConfig<T> {
+class SelectionItemsModalConfig<T> extends NgxModalConfiguration {
   title?: string;
   minCount?: number;
   maxCount?: number;

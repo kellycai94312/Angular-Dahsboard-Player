@@ -33,7 +33,7 @@ export class NgxModalComponent {
 
   public async initializeBody<T>(bodyComponentType: Type<T>,
                                  initialize: (component: T) => Promise<void>,
-                                 config: NgxModalConfiguration = null): Promise<T> {
+                                 config?: NgxModalConfiguration): Promise<T> {
     this.bodyComponentType = bodyComponentType;
     let componentFactoryResolver = this._componentFactoryResolver;
     let customComponentFactoryResolver = false;

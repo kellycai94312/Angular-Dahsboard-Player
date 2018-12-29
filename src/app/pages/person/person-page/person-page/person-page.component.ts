@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ImageComponent} from '../../../../components/image/image.component';
-import {GroupItemComponent} from '../../../../components/group/group-item/group-item.component';
 import {PersonTab} from '../../../person-page/person-page/person-tab';
 import {PersonViewModel} from '../../../../data/local/view-model/person-view-model';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
@@ -17,10 +16,6 @@ import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue
 import {Image} from '../../../../data/remote/model/file/image/image';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
-import {NamedObjectItemComponent} from '../../../../components/named-object-item/named-object-item.component';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {ListRequest} from '../../../../data/remote/request/list-request';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
@@ -35,8 +30,8 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   @ViewChild('logo')
   public logoImageComponent: ImageComponent;
 
-  @ViewChild(GroupItemComponent)
-  public groupItemComponent: GroupItemComponent;
+  // @ViewChild(GroupItemComponent)
+  // public groupItemComponent: GroupItemComponent;
 
   public readonly tabs: PersonTab[];
   public allowEdit: boolean;
@@ -132,11 +127,11 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       tab.visible = this.tabVisible;
     }
 
-    this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {
-      if (value && this.groupItemComponent) {
-        this.groupItemComponent.update(value.group);
-      }
-    });
+    // this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {
+    //   if (value && this.groupItemComponent) {
+    //     this.groupItemComponent.update(value.group);
+    //   }
+    // });
   }
 
   public async ngOnInit() {
@@ -257,36 +252,36 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   //#region UserRole
   public async onEditUserRoles() {
-    const userRoles = await this._participantRestApiService.getUserRoles();
-    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
-    componentInstance.headerNameKey = 'edit';
-    componentInstance.component = NamedObjectItemComponent;
-    componentInstance.getItems = async pageQuery => {
-      const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
-      const pageContainer = new PageContainer();
-      pageContainer.from = 0;
-      pageContainer.size = items.length;
-      pageContainer.total = items.length;
-      pageContainer.list = items;
-      return pageContainer;
-    };
-    componentInstance.onSave = async selectedItems => {
-      try {
-        this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(selectedItems), {}, {userId: this.personService.personViewModel.data.user.id});
-        this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
-
-        await this.onSelectedUserRole(this.personService.selectedUserRole);
-        ref.dismiss();
-      } catch (e) {
-        if (e.status === 409) {
-          await this._appHelper.showErrorMessage('persons.person.roles.conflict');
-        } else {
-          await this._appHelper.showErrorMessage('saveError');
-        }
-      }
-    };
-    await componentInstance.initialize(this.personService.userRoles);
+    // const userRoles = await this._participantRestApiService.getUserRoles();
+    // const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    // const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    // componentInstance.headerNameKey = 'edit';
+    // componentInstance.component = NamedObjectItemComponent;
+    // componentInstance.getItems = async pageQuery => {
+    //   const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
+    //   const pageContainer = new PageContainer();
+    //   pageContainer.from = 0;
+    //   pageContainer.size = items.length;
+    //   pageContainer.total = items.length;
+    //   pageContainer.list = items;
+    //   return pageContainer;
+    // };
+    // componentInstance.onSave = async selectedItems => {
+    //   try {
+    //     this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(selectedItems), {}, {userId: this.personService.personViewModel.data.user.id});
+    //     this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
+    //
+    //     await this.onSelectedUserRole(this.personService.selectedUserRole);
+    //     ref.dismiss();
+    //   } catch (e) {
+    //     if (e.status === 409) {
+    //       await this._appHelper.showErrorMessage('persons.person.roles.conflict');
+    //     } else {
+    //       await this._appHelper.showErrorMessage('saveError');
+    //     }
+    //   }
+    // };
+    // await componentInstance.initialize(this.personService.userRoles);
   }
 
   public async onSelectedUserRole(userRole: UserRole) {
@@ -323,26 +318,26 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   //#region SportType
   public async onEditSportTypes() {
-    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
-    componentInstance.headerNameKey = 'edit';
-    componentInstance.component = NamedObjectItemComponent;
-    componentInstance.getItems = async pageQuery => {
-      return await this._participantRestApiService.getSportTypes(pageQuery);
-    };
-    componentInstance.onSave = async selectedItems => {
-      try {
-        this.personService.sportTypes = await this._participantRestApiService.updatePersonSportTypes(new ListRequest(selectedItems), {}, {personId: this.personService.personViewModel.data.id});
-        this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
-
-        await this.onSelectedSportType(this.personService.sportTypeSubject.getValue());
-        ref.dismiss();
-      } catch (e) {
-        await this._appHelper.showErrorMessage('saveError');
-      }
-    };
-
-    await componentInstance.initialize(this.personService.sportTypes);
+    // const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    // const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    // componentInstance.headerNameKey = 'edit';
+    // componentInstance.component = NamedObjectItemComponent;
+    // componentInstance.getItems = async pageQuery => {
+    //   return await this._participantRestApiService.getSportTypes(pageQuery);
+    // };
+    // componentInstance.onSave = async selectedItems => {
+    //   try {
+    //     this.personService.sportTypes = await this._participantRestApiService.updatePersonSportTypes(new ListRequest(selectedItems), {}, {personId: this.personService.personViewModel.data.id});
+    //     this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
+    //
+    //     await this.onSelectedSportType(this.personService.sportTypeSubject.getValue());
+    //     ref.dismiss();
+    //   } catch (e) {
+    //     await this._appHelper.showErrorMessage('saveError');
+    //   }
+    // };
+    //
+    // await componentInstance.initialize(this.personService.sportTypes);
   }
 
   public async onSelectedSportType(sportType: SportType) {

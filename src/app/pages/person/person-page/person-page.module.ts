@@ -10,6 +10,7 @@ import {GroupModule} from '../../../components/group/group.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-split-button.module';
 import {NgxButtonGroupModule} from '../../../components/ngx-button-group/ngx-button-group.module';
+import {GroupItemModule} from '../../../module/group/group-item/group-item.module';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import {NgxButtonGroupModule} from '../../../components/ngx-button-group/ngx-but
     NgxSplitButtonModule,
     NgxButtonGroupModule,
     ImageModule,
-    GroupModule
+    GroupModule,
+    GroupItemModule
   ],
   declarations: [PersonPageComponent],
   providers: [PersonService]

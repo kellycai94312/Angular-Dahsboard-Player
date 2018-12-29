@@ -18,8 +18,6 @@ import {
   DxTextBoxModule,
   DxValidatorModule
 } from 'devextreme-angular';
-import {ModalSelectPageComponent} from '../../components/modal-select-page/modal-select-page.component';
-import {ModalSelectPageModule} from '../../components/modal-select-page/modal-select-page.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
 import {TrainingPersonsSelectionModule} from '../../components/training-persons-selection/training-persons-selection.module';
 import {TrainingPersonModule} from '../../components/training-person/training-person.module';
@@ -46,6 +44,7 @@ import {NamedObjectModule} from '../../components/named-object/named-object.modu
 import {NgxSelectionModule} from '../../components/ngx-selection/ngx-selection.module';
 import {GroupModule} from '../../components/group/group.module';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
+import {GroupItemModule} from '../../module/group/group-item/group-item.module';
 
 @NgModule({
   imports: [
@@ -61,7 +60,6 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
     DxTextBoxModule,
     DxSelectBoxModule,
     DxNumberBoxModule,
-    ModalSelectPageModule,
     NamedObjectItemModule,
     TrainingPersonModule,
     TrainingPersonsSelectionModule,
@@ -81,7 +79,7 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
     NamedObjectModule,
     NgxSelectionModule,
     GroupModule,
-    NgxButtonModule
+    GroupItemModule,
   ],
   declarations: [
     EventPageComponent,
@@ -98,7 +96,6 @@ import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
     TestingStepsManagerComponent
   ],
   entryComponents: [
-    ModalSelectPageComponent,
     EventCalendarMonthModalComponent
   ],
   providers: [

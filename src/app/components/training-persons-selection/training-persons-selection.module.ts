@@ -4,7 +4,6 @@ import {TrainingPersonsSelectionComponent} from './training-persons-selection.co
 import {DxTextBoxModule} from 'devextreme-angular';
 import {TrainingPersonModule} from '../training-person/training-person.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {ModalItemModule} from '../modal-item/modal-item.module';
 import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.module';
 
 @NgModule({
@@ -13,7 +12,6 @@ import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.m
     DxTextBoxModule,
     TrainingPersonModule,
     TranslateModule.forChild(),
-    ModalItemModule,
     NgxVirtualScrollModule
   ],
   declarations: [TrainingPersonsSelectionComponent],

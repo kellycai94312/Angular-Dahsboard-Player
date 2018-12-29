@@ -29,7 +29,8 @@
                     [getItems]="getItems"
                     [windowScroll]="true">
   <ng-template let-item>
-    <div class="list-group-item pb-2 cols-padding px-2">
+    <div class="list-group-item pb-2 cols-padding px-2"
+         routerLink="{{'/group/' + item.data.id}}">
       <app-group-item [data]="item.data"></app-group-item>
     </div>
   </ng-template>
