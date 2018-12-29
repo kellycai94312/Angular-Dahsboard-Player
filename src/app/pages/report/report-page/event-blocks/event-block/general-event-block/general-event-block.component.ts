@@ -12,9 +12,9 @@ import {Location} from '../../../../../../data/remote/model/location';
 import {Group} from '../../../../../../data/remote/model/group/base/group';
 import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 import {NameWrapper} from '../../../../../../data/local/name-wrapper';
-import {TemplateModalService} from '../../../../../../service/template-modal.service';
 import {GroupItemComponent} from '../../../../../../module/group/group-item/group-item/group-item.component';
 import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
+import {ModalBuilderService} from '../../../../../../service/modal-builder/modal-builder.service';
 
 @Component({
   selector: 'app-general-event-block',
@@ -33,7 +33,7 @@ export class GeneralEventBlockComponent implements OnInit {
 
   constructor(private _eventReportService: EventReportService,
               private _participantRestApiService: ParticipantRestApiService,
-              private _templateModalService: TemplateModalService,
+              private _modalBuilderService: ModalBuilderService,
               private _appHelper: AppHelper,
               private _router: Router,
               private _activatedRoute: ActivatedRoute,
@@ -89,7 +89,7 @@ export class GeneralEventBlockComponent implements OnInit {
   }
 
   public onEditGroups = async () => {
-    const dialogResult = await this._templateModalService.showSelectionItemsModal(this.groups,
+    const dialogResult = await this._modalBuilderService.showSelectionItemsModal(this.groups,
       async (query: TrainingBlockQuery) => {
         query.unassigned = true;
         return await this._participantRestApiService.getTrainingBlockGroups({}, query, {

@@ -6,8 +6,8 @@ import {AppHelper} from '../../../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
 import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
-import {TemplateModalService} from '../../../../../../service/template-modal.service';
 import {ExerciseMeasureItemComponent} from '../../../../../../module/action/exercise-measure-item/exercise-measure-item/exercise-measure-item.component';
+import {ModalBuilderService} from '../../../../../../service/modal-builder/modal-builder.service';
 
 @Component({
   selector: 'app-exercises-event-block',
@@ -26,7 +26,7 @@ export class ExercisesEventBlockComponent implements OnInit {
   constructor(private _eventReportService: EventReportService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _templateModalService: TemplateModalService) {
+              private _modalBuilderService: ModalBuilderService) {
     this._maxCountExercises = 2;
   }
 
@@ -48,7 +48,7 @@ export class ExercisesEventBlockComponent implements OnInit {
   }
 
   public onEdit = async () => {
-    const dialogResult = await this._templateModalService.showSelectionItemsModal(this.exerciseMeasures, async (query: TrainingBlockQuery) => {
+    const dialogResult = await this._modalBuilderService.showSelectionItemsModal(this.exerciseMeasures, async (query: TrainingBlockQuery) => {
         query.unassigned = true;
         return await this._participantRestApiService.getTrainingBlockExerciseMeasures({}, query, this._trainingBlockFilter);
       },

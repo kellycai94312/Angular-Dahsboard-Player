@@ -4,7 +4,6 @@ import {DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData} fr
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule} from '@angular/common/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {FormsModule} from '@angular/forms';
 import {CookieModule} from 'ngx-cookie';
 import {StompRService} from '@stomp/ng2-stompjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -29,23 +28,15 @@ import {ParticipantStompService} from './data/remote/web-socket/participant-stom
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
 import {RegistrationPersonPageGuard} from './guard/registration-person-page.guard';
-import {NgxVirtualScrollModule} from './components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {ConversationService} from './shared/conversation.service';
 import localeRu from '@angular/common/locales/ru';
-import {ImageModule} from './components/image/image.module';
 import {MessageToastrModule} from './components/message-toastr/message-toastr.module';
 import {CanDeactivateGuard} from './guard/can-deactivate.guard';
-import {LocaleModule} from './components/locale/locale.module';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
-import {NgxButtonModule} from './components/ngx-button/ngx-button.module';
-import {NgxTabModule} from './components/ngx-tab/ngx-tab.module';
-import {InputSelectModule} from './components/input-select/input-select.module';
-import {DxSelectBoxModule} from 'devextreme-angular';
 import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
-import {EditChatModule} from './module/conversation/edit-chat/edit-chat.module';
 import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
 import {LayoutModule} from './layout/layout.module';
@@ -62,10 +53,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     AppComponent
   ],
   imports: [
+    AppRoutingModule,
     BrowserModule,
     HttpClientModule,
-    AppRoutingModule,
-    NgxVirtualScrollModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       enableHtml: true,
@@ -82,22 +72,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    FormsModule,
     RoundPipeModule.forRoot(),
-    ImageModule,
-    MessageToastrModule,
-    LocaleModule,
     NgxModalModule,
+    LayoutModule,
+    MessageToastrModule,
     HtmlContentModule,
-    NgxTabModule,
-    NgxButtonModule,
-    InputSelectModule,
-    DxSelectBoxModule,
     GroupModule,
     EditEventModule,
     EventPersonItemModule,
-    EditChatModule,
-    LayoutModule,
     NamedObjectModule
   ],
   providers: [

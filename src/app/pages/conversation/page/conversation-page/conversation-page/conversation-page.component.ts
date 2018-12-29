@@ -31,6 +31,7 @@ import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-m
 import {ConfirmationRemovingMessageComponent} from '../../../../../module/conversation/confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
+import {ConversationModalService} from '../../../service/conversation-modal/conversation-modal.service';
 
 @Component({
   selector: 'app-conversation-page',
@@ -81,6 +82,7 @@ export class ConversationPageComponent implements OnDestroy {
               private _modalService: NgbModal,
               private _messageToastrService: MessageToastrService,
               private _templateModalService: TemplateModalService,
+              private _conversationModalService: ConversationModalService,
               private _ngxModalService: NgxModalService,
               private _router: Router) {
     this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {
@@ -203,7 +205,6 @@ export class ConversationPageComponent implements OnDestroy {
     });
   }
 
-
   ngOnDestroy(): void {
     this._messageCreateSubscription.unsubscribe();
     this._messageUpdateSubscription.unsubscribe();
@@ -268,7 +269,7 @@ export class ConversationPageComponent implements OnDestroy {
   }
 
   public async editChat() {
-    const dialogResult = await this._templateModalService.showEditChat(this.conversation as Chat);
+    const dialogResult = await this._conversationModalService.showEditChat(this.conversation as Chat);
     if (dialogResult.result) {
       this._appHelper.updateObject(this.conversation, dialogResult.data);
       this.logo.refresh();

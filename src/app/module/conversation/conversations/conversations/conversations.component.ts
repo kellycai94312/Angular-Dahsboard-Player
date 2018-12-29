@@ -5,12 +5,12 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ConversationService} from '../../../../shared/conversation.service';
-import {TemplateModalService} from '../../../../service/template-modal.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ConversationWrapper} from '../../../../data/local/conversation-wrapper';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
+import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
 
 @Component({
   selector: 'app-conversations',
@@ -34,7 +34,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
-              private _templateModalService: TemplateModalService,
+              private _conversationModalService: ConversationModalService,
               private _appHelper: AppHelper) {
     this.query = new PageQuery();
 
@@ -139,8 +139,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   };
 
   public onCreateChat = async () => {
-    await this._templateModalService.showEditChat(new Chat());
-    await this.resetItems();
+    if (await this._conversationModalService.showEditChat(new Chat())) {
+      await this.resetItems();
+    }
   };
 
   private async resetItems(): Promise<void> {
