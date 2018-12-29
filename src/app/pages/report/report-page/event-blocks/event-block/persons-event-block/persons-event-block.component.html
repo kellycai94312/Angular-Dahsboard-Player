@@ -2,8 +2,7 @@
   <div *ngFor="let item of persons"
        (dblclick)="onUnselected(item)"
        class="pr-2 pb-2 item-width">
-    <app-person [canNavigate]="false"
-                [data]="item"></app-person>
+    <app-person-item [data]="item"></app-person-item>
   </div>
 </div>
 
@@ -27,8 +26,7 @@
   <ng-template let-item>
     <div class="pr-2 pb-2 item-width"
          (dblclick)="onSelected(item)">
-      <app-person [canNavigate]="false"
-                  [data]="item"></app-person>
+      <app-person-item [data]="item"></app-person-item>
     </div>
   </ng-template>
 </ngx-virtual-scroll>

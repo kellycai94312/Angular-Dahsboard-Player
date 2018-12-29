@@ -25,13 +25,13 @@ import {SystemMessageContent} from '../../../../../data/remote/model/chat/messag
 import {SystemMessageContentType} from '../../../../../data/remote/model/chat/message/system-message-content-type';
 import {Direction} from '../../../../../components/ngx-virtual-scroll/model/direction';
 import {Chat} from '../../../../../data/remote/model/chat/conversation/chat';
-import {ModalConfirmDangerComponent} from '../../../../../components/modal-confirm/modal-confirm-danger.component';
 import {EventMessageContent} from '../../../../../data/remote/model/chat/message/event-message-content';
 import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/base/base-message-content';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {ConfirmationRemovingMessageComponent} from '../../../../../module/conversation/confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
+import {ConversationModalService} from '../../../service/conversation-modal/conversation-modal.service';
 
 @Component({
   selector: 'app-conversation-page',
@@ -82,6 +82,7 @@ export class ConversationPageComponent implements OnDestroy {
               private _modalService: NgbModal,
               private _messageToastrService: MessageToastrService,
               private _templateModalService: TemplateModalService,
+              private _conversationModalService: ConversationModalService,
               private _ngxModalService: NgxModalService,
               private _router: Router) {
     this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {
@@ -204,7 +205,6 @@ export class ConversationPageComponent implements OnDestroy {
     });
   }
 
-
   ngOnDestroy(): void {
     this._messageCreateSubscription.unsubscribe();
     this._messageUpdateSubscription.unsubscribe();
@@ -269,7 +269,7 @@ export class ConversationPageComponent implements OnDestroy {
   }
 
   public async editChat() {
-    const dialogResult = await this._templateModalService.showEditChat(this.conversation as Chat);
+    const dialogResult = await this._conversationModalService.showEditChat(this.conversation as Chat);
     if (dialogResult.result) {
       this._appHelper.updateObject(this.conversation, dialogResult.data);
       this.logo.refresh();
@@ -326,15 +326,11 @@ export class ConversationPageComponent implements OnDestroy {
   };
 
   public async clearMessagesHistory() {
-    const ref = this._modalService.open(ModalConfirmDangerComponent);
-    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
-    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    componentInstance.confirmBtnTitle = await this._translateService.get('modal.delete').toPromise();
-    componentInstance.onConfirm = async () => {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
       await this._participantRestApiService.removeAllMessages({conversationId: this._conversationId});
       this.ngxVirtualScrollComponent.items = [];
       this.updateCanEditMessage();
-    };
+    }
   }
 
   public updateCanEditMessage() {
@@ -344,14 +340,10 @@ export class ConversationPageComponent implements OnDestroy {
   }
 
   public async quitChat() {
-    const ref = this._modalService.open(ModalConfirmDangerComponent);
-    const componentInstance = ref.componentInstance as ModalConfirmDangerComponent;
-    componentInstance.modalTitle = await this._translateService.get('areYouSure').toPromise();
-    componentInstance.confirmBtnTitle = await this._translateService.get('quitChat').toPromise();
-    componentInstance.onConfirm = async () => {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
       await this._router.navigate(['/conversation']);
-    };
+    }
   }
 
   public async toggleNotifications() {

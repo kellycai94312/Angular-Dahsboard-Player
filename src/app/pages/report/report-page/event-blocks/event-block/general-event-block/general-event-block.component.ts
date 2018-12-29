@@ -10,13 +10,11 @@ import {SportType} from '../../../../../../data/remote/model/sport-type';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {Location} from '../../../../../../data/remote/model/location';
 import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ListRequest} from '../../../../../../data/remote/request/list-request';
-import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
-import {NamedObjectItemComponent} from '../../../../../../components/named-object-item/named-object-item.component';
-import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
 import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 import {NameWrapper} from '../../../../../../data/local/name-wrapper';
+import {GroupItemComponent} from '../../../../../../module/group/group-item/group-item/group-item.component';
+import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
+import {ModalBuilderService} from '../../../../../../service/modal-builder/modal-builder.service';
 
 @Component({
   selector: 'app-general-event-block',
@@ -35,11 +33,11 @@ export class GeneralEventBlockComponent implements OnInit {
 
   constructor(private _eventReportService: EventReportService,
               private _participantRestApiService: ParticipantRestApiService,
+              private _modalBuilderService: ModalBuilderService,
               private _appHelper: AppHelper,
               private _router: Router,
               private _activatedRoute: ActivatedRoute,
-              private _translateObjectService: TranslateObjectService,
-              private _modalService: NgbModal) {
+              private _translateObjectService: TranslateObjectService) {
     this.splitButtonItems = [
       {
         nameKey: 'save',
@@ -62,7 +60,10 @@ export class GeneralEventBlockComponent implements OnInit {
         nameKey: 'remove',
         callback: async () => {
           await this._appHelper.tryRemove(async () => {
-            await this._participantRestApiService.removeTrainingBlock({trainingReportId: this.trainingBlock.trainingReport.id, trainingBlockId: this.trainingBlock.id});
+            await this._participantRestApiService.removeTrainingBlock({
+              trainingReportId: this.trainingBlock.trainingReport.id,
+              trainingBlockId: this.trainingBlock.id
+            });
             await this._router.navigate(['../../'], {relativeTo: this._activatedRoute});
           });
         }
@@ -88,32 +89,30 @@ export class GeneralEventBlockComponent implements OnInit {
   }
 
   public onEditGroups = async () => {
-    const trainingBlockQuery = new TrainingBlockQuery();
-    trainingBlockQuery.count = PropertyConstant.pageSize;
-    trainingBlockQuery.unassigned = true;
-
-    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ModalSelectPageComponent<Group>;
-    componentInstance.headerNameKey = 'edit';
-    componentInstance.component = NamedObjectItemComponent;
-    componentInstance.pageQuery = trainingBlockQuery;
-    componentInstance.getItems = async pageQuery => {
-      return await this._participantRestApiService.getTrainingBlockGroups(
-        {},
-        pageQuery,
-        {trainingBlockId: this.trainingBlock.id, trainingReportId: this.trainingBlock.trainingReport.id});
-    };
-    componentInstance.onSave = async selectedItems => {
-      try {
-        this.groups = await this._participantRestApiService.updateTrainingBlockGroups(new ListRequest(selectedItems),
-          {},
-          {trainingBlockId: this.trainingBlock.id, trainingReportId: this.trainingBlock.trainingReport.id});
-        ref.dismiss();
-      } catch (e) {
-        await this._appHelper.showErrorMessage('saveError');
+    const dialogResult = await this._modalBuilderService.showSelectionItemsModal(this.groups,
+      async (query: TrainingBlockQuery) => {
+        query.unassigned = true;
+        return await this._participantRestApiService.getTrainingBlockGroups({}, query, {
+          trainingBlockId: this.trainingBlock.id,
+          trainingReportId: this.trainingBlock.trainingReport.id
+        });
+      },
+      GroupItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      {
+        title: `${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`
       }
-    };
-    await componentInstance.initialize(this.groups);
+    );
+    if (dialogResult.result) {
+      await this._appHelper.trySave(async () => {
+        this.groups = await this._participantRestApiService.updateTrainingBlockGroups({list: dialogResult.data}, {}, {
+          trainingBlockId: this.trainingBlock.id,
+          trainingReportId: this.trainingBlock.trainingReport.id
+        });
+      });
+    }
   };
 
   public onEventTypeChanged(val: NameWrapper<TrainingDiscriminator>) {

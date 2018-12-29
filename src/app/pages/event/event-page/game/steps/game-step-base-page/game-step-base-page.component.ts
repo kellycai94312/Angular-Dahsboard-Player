@@ -8,14 +8,9 @@ import {AppHelper} from '../../../../../../utils/app-helper';
 import {TrainingState} from '../../../../../../data/remote/misc/training-state';
 import {TrainingPart} from '../../../../../../data/remote/model/training/training-part';
 import {TrainingPartType} from '../../../../../../data/remote/misc/training-part-type';
-import {ListRequest} from '../../../../../../data/remote/request/list-request';
-import {ModalSelectPageComponent} from '../../../../../../components/modal-select-page/modal-select-page.component';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {TranslateService} from '@ngx-translate/core';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-query';
 import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
-import {NamedObjectItemComponent} from '../../../../../../components/named-object-item/named-object-item.component';
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
 import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-parameter-enum';
@@ -24,6 +19,7 @@ import {ISubscription} from 'rxjs/src/Subscription';
 import {GroupScore} from '../../../../../../data/remote/model/training/game/group-score';
 import {NgxButtonType} from '../../../../../../components/ngx-button/model/ngx-button-type';
 import {flatMap, timeInterval} from 'rxjs/operators';
+import {TemplateModalService} from '../../../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-game-step-base-page',
@@ -44,12 +40,11 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
 
   private _groupScoresSubscription: ISubscription;
 
-  constructor(public appHelper: AppHelper,
-              private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
               private _router: Router,
               private _translateService: TranslateService,
-              private _modalService: NgbModal,
+              private _templateModalService: TemplateModalService,
               private _appHelper: AppHelper) {
     this.game = new Game();
     this.game.startTime = new Date(Date.now() + 15 * 60 * 1000);
@@ -66,8 +61,8 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
         default: true,
         callback: async () => {
           await this._appHelper.trySave(async () => {
-            if (this.appHelper.isNewObject(this.game)) {
-              this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
+            if (this._appHelper.isNewObject(this.game)) {
+              this.game.startTime = this._appHelper.getGmtDate(this.game.startTime);
               this.game.manualMode = true;
               this.game.durationMs = 1000;
               this.game.template = false;
@@ -75,7 +70,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
               this.game = (await this._participantRestApiService.createBaseTraining(this.game)) as Game;
               await this._router.navigate(['/event/' + this.game.id + '/game/step/']);
             } else {
-              this.game.startTime = this.appHelper.getGmtDate(this.game.startTime);
+              this.game.startTime = this._appHelper.getGmtDate(this.game.startTime);
               this.game = (await this._participantRestApiService.updateBaseTraining(this.game, null, {id: this.game.id})) as Game;
               await this.initialize();
             }
@@ -162,7 +157,7 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
         baseTrainingId: item.baseTraining.id,
         trainingPartId: item.id
       });
-      this.appHelper.removeItem(this.trainingParts, item);
+      this._appHelper.removeItem(this.trainingParts, item);
     });
   };
 
@@ -170,37 +165,28 @@ export class GameStepBasePageComponent implements OnInit, OnDestroy {
     return item.name != null &&
       item.name !== '' &&
       item.durationMs != null &&
-      !this.appHelper.isNewObject(this.game);
+      !this._appHelper.isNewObject(this.game);
   }
 
   public onEditGroups = async () => {
-    const groupQuery = new GroupQuery();
-    groupQuery.from = 0;
-    groupQuery.count = PropertyConstant.pageSize;
-    groupQuery.groupTypeEnum = GroupTypeEnum.TEAM;
-    groupQuery.userRoleEnum = UserRoleEnum.TRAINER;
-    groupQuery.all = false;
-
-    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
-    componentInstance.headerNameKey = 'edit';
-    componentInstance.component = NamedObjectItemComponent;
-    componentInstance.pageQuery = groupQuery;
-    componentInstance.getItems = async pageQuery => {
-      return await this._participantRestApiService.getGroups(pageQuery);
-    };
-    componentInstance.onSave = async selectedItems => {
-      try {
-        const items = await this._participantRestApiService.updateGroupsByBaseTraining(new ListRequest(selectedItems),
-          {},
-          {baseTrainingId: this.game.id});
-        this.game.groupScores = items.map(trainingGroup => new GroupScore(trainingGroup.group, '0'));
-        ref.dismiss();
-      } catch (e) {
-        await this._appHelper.showErrorMessage('gameMustHaveTwoTeams');
+    const dialogResult = await this._templateModalService.showSelectionGroupsModal(
+      this.game.groupScores.map(groupScore => groupScore.group),
+      {
+        groupTypeEnum: GroupTypeEnum.TEAM,
+        userRoleEnum: UserRoleEnum.TRAINER
+      },
+      {
+        minCount: 2,
+        maxCount: 2
       }
-    };
-    await componentInstance.initialize(this.game.groupScores.map(groupScore => groupScore.group));
+    );
+
+    if (dialogResult.result) {
+      await this._appHelper.trySave(async () => {
+        const items = await this._participantRestApiService.updateGroupsByBaseTraining({list: dialogResult.data}, {}, {baseTrainingId: this.game.id});
+        this.game.groupScores = items.map(trainingGroup => new GroupScore(trainingGroup.group, '0'));
+      });
+    }
   };
 
 }

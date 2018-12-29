@@ -49,8 +49,12 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
       return await this.appHelper.tryLoad(async () => {
         let selectedItems: Person[] = [];
         if (!this.appHelper.isNewObject(this.data)) {
-          selectedItems = (await this.participantRestApiService.getParticipants({conversationId: this.data.id, unassigned: false})).list.map(x => x.person);
+          selectedItems = (await this.participantRestApiService.getParticipants({
+            conversationId: this.data.id,
+            unassigned: false
+          })).list.map(x => x.person);
         }
+        this._ngxSelectionComponent.minCount = 1;
         await this._ngxSelectionComponent.initialize(PersonItemComponent,
           async (component, data) => {
             await component.initialize(data);

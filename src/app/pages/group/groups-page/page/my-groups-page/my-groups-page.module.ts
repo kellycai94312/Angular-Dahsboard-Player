@@ -6,6 +6,7 @@ import {MyGroupsPageRoutingModule} from './my-groups-page-routing.module';
 import {NgxVirtualScrollModule} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {MyGroupsPageComponent} from './my-groups-page/my-groups-page.component';
 import {GroupModule} from '../../../../../components/group/group.module';
+import {GroupItemModule} from '../../../../../module/group/group-item/group-item.module';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import {GroupModule} from '../../../../../components/group/group.module';
     DxTextBoxModule,
     DxSelectBoxModule,
     NgxVirtualScrollModule,
-    GroupModule
+    GroupModule,
+    GroupItemModule
   ],
   declarations: [MyGroupsPageComponent]
 })

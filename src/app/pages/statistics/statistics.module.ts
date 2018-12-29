@@ -7,7 +7,6 @@ import {SportTypeStatisticsPageComponent} from './page/sport-type-statistics-pag
 import {StagePersonsComponent} from './component/stage-persons/stage-persons.component';
 import {StagePersonRanksComponent} from './component/stage-person-ranks/stage-person-ranks.component';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
-import {PersonModule} from '../../components/person/person.module';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
@@ -19,7 +18,6 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     StatisticsRoutingModule,
     NgxGridModule,
     NgxVirtualScrollModule,
-    PersonModule,
     NgxModalModule,
     ImageModule
   ],

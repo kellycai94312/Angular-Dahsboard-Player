@@ -10,6 +10,7 @@ import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.modu
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {GroupModule} from '../../components/group/group.module';
+import {GroupItemModule} from '../../module/group/group-item/group-item.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {GroupModule} from '../../components/group/group.module';
     NgbDropdownModule,
     BusyWrapperModule,
     ImageModule,
-    GroupModule
+    GroupModule,
+    GroupItemModule
   ],
   declarations: [ConnectionsPageComponent]
 })

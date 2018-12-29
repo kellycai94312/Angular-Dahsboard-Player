@@ -23,7 +23,7 @@
   <div class="d-flex justify-content-center w-50">
     <ngx-button nameKey="edit"
                 [click]="onEditGroups"
-                [disabled]="appHelper.isNewObject(game)"></ngx-button>
+                [disabled]="game?.id"></ngx-button>
   </div>
 </div>
 <div class="d-flex justify-content-center w-100 mb-1">

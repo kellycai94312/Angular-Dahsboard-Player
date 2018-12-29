@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {PersonService} from '../../../person/person-page/service/person.service';
 import {ExerciseResult} from '../../../../data/remote/bean/exercise-result';
@@ -8,11 +8,6 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {MeasureTemplateQuery} from '../../../../data/remote/rest-api/query/measure-template-query';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {ModalSelectPageComponent} from '../../../../components/modal-select-page/modal-select-page.component';
-import {ExerciseMeasureItemComponent} from '../../../../components/exercise-measure-item/exercise-measure-item.component';
-import {DictionaryType} from '../../../../data/remote/misc/dictionary-type';
-import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
-import {ListRequest} from '../../../../data/remote/request/list-request';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 
@@ -67,31 +62,31 @@ export class TestsResultsComponent implements OnInit {
   }
 
   public async editPersonal() {
-    const measureQuery = new MeasureTemplateQuery();
-    measureQuery.from = 0;
-    measureQuery.count = PropertyConstant.pageSize;
-    measureQuery.dictionaryType = DictionaryType[DictionaryType.SYSTEM].toString();
-
-    const personMeasures: ExerciseMeasure[] = await this._participantRestApiService.getPersonMeasureTemplate();
-
-    const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
-    componentInstance.headerNameKey = 'edit';
-    componentInstance.component = ExerciseMeasureItemComponent;
-    componentInstance.pageQuery = measureQuery;
-    componentInstance.getItems = async pageQuery => {
-      return await this._participantRestApiService.getExerciseMeasures(pageQuery);
-    };
-    componentInstance.onSave = async selectedItems => {
-      try {
-        await this._participantRestApiService.updatePersonMeasureTemplate(new ListRequest(selectedItems));
-        this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
-        ref.dismiss();
-      } catch (e) {
-        await this._appHelper.showErrorMessage('saveError');
-      }
-    };
-    await componentInstance.initialize(personMeasures);
+    // const measureQuery = new MeasureTemplateQuery();
+    // measureQuery.from = 0;
+    // measureQuery.count = PropertyConstant.pageSize;
+    // measureQuery.dictionaryType = DictionaryType[DictionaryType.SYSTEM].toString();
+    //
+    // const personMeasures: ExerciseMeasure[] = await this._participantRestApiService.getPersonMeasureTemplate();
+    //
+    // const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
+    // const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
+    // componentInstance.headerNameKey = 'edit';
+    // componentInstance.component = ExerciseMeasureItemComponent;
+    // componentInstance.pageQuery = measureQuery;
+    // componentInstance.getItems = async pageQuery => {
+    //   return await this._participantRestApiService.getExerciseMeasures(pageQuery);
+    // };
+    // componentInstance.onSave = async selectedItems => {
+    //   try {
+    //     await this._participantRestApiService.updatePersonMeasureTemplate(new ListRequest(selectedItems));
+    //     this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
+    //     ref.dismiss();
+    //   } catch (e) {
+    //     await this._appHelper.showErrorMessage('saveError');
+    //   }
+    // };
+    // await componentInstance.initialize(personMeasures);
   }
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {

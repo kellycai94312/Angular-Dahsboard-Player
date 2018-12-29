@@ -8,6 +8,10 @@
               nameKey="add"
               [click]="onAdd"></ngx-button>
 </div>
+<p class="text-muted text-center">
+  <span *ngIf="minCount">{{'minimumCountParam' | translate: minCountParam}} </span>
+  <span *ngIf="maxCount">{{'maximumCountParam' | translate: maxCountParam}}</span>
+</p>
 <div class="content row cols-padding mt-2">
   <div [hidden]="!canSelect()"
        class="col">

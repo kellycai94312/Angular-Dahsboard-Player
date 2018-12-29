@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, ViewChild} from '@angular/core';
 import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
 import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
 import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
@@ -37,6 +37,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _templateModalService: TemplateModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
     this.personQuery = new PersonQuery();
@@ -72,18 +73,23 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
   };
 
   public onAddGroupPerson = async () => {
-    if (await this._templateModalService.showEditPersonModal(new Person(), this.group)) {
-      // TODO: Update only edited item!
-      await this.resetItems();
-    }
+    await this.showEditGroupPerson();
   };
 
   public onEditGroupPerson = async (obj: GroupPerson) => {
-    if (await this._templateModalService.showEditPersonModal(obj.person, this.group)) {
+    await this.showEditGroupPerson(obj);
+  };
+
+  public async showEditGroupPerson(groupPerson?: GroupPerson) {
+    let person = new Person();
+    if (groupPerson) {
+      person = groupPerson.person;
+    }
+    if (await this._templateModalService.showEditPersonModal(person, this.group, {componentFactoryResolver: this._componentFactoryResolver})) {
       // TODO: Update only edited item!
       await this.resetItems();
     }
-  };
+  }
 
   public async onSortChange(val: string) {
     if (val) {

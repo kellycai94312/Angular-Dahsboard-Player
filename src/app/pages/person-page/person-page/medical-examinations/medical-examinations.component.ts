@@ -12,7 +12,7 @@ import {MedicalExamination} from '../../../../data/remote/model/person/medical-e
 import {MedicalExaminationViewModel} from '../../../../data/local/view-model/person/medical-examination-view-model';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AuthorizationService} from '../../../../shared/authorization.service';
-import {EditMedicalExaminationComponent} from '../../../../components/person/edit-medical-examination/edit-medical-examination.component';
+import {EditMedicalExaminationComponent} from '../../../../module/person/edit-medical-examination/edit-medical-examination/edit-medical-examination.component';
 
 // @Component({
 //   selector: 'app-medical-examinations',

@@ -27,15 +27,16 @@
           <h4>{{personViewModel.data?.firstName | uppercase}}</h4>
           <h4>{{personViewModel.data?.patronymic | uppercase}}</h4>
           <br>
-          <p *ngIf="personService.selectedPublicUserRole">{{'stage' | translate}}: {{personService.selectedPublicUserRole?.groupPerson?.group?.stage.name}}</p>
+          <p *ngIf="personService.selectedPublicUserRole">{{'stage' | translate}}:
+            {{personService.selectedPublicUserRole?.groupPerson?.group?.stage.name}}</p>
         </div>
       </div>
     </div>
-    <div class="d-flex flex-column ml-4">
-      <app-group-item *ngIf="personService.baseGroup"
-                      [data]="personService.baseGroup.group"
-                      [dimension]="'W130xH130'"></app-group-item>
-    </div>
+    <!--<div class="d-flex flex-column ml-4">-->
+    <!--<app-group-item *ngIf="personService.baseGroup"-->
+    <!--[data]="personService.baseGroup.group"-->
+    <!--[dimension]="'W130xH130'"></app-group-item>-->
+    <!--</div>-->
   </div>
   <ngx-split-button [items]="splitButtonItems">
   </ngx-split-button>
@@ -60,23 +61,23 @@
   </div>
 
   <!-- sport types -->
-  <div class="d-flex flex-row my-2">
-    <div class="align-self-center">
-      <p>{{'persons.person.sportTypes.section' | translate | uppercase}}</p>
-    </div>
-    <div class="ml-2 align-self-center">
-      <ngx-button-group [items]="sportTypeButtonGroupItems"
-                        [selectedItem]="selectedSportTypeButtonGroupItem">
-      </ngx-button-group>
-    </div>
-    <!--<div *ngIf="allowEdit"-->
-    <!--class="ml-2 align-self-center">-->
-    <!--<button class="btn btn-default input-height-sm"-->
-    <!--(click)="onEditSportTypes()">-->
-    <!--<i class="fa fa-pencil-square-o"></i>-->
-    <!--</button>-->
+  <!--<div class="d-flex flex-row my-2">-->
+    <!--<div class="align-self-center">-->
+      <!--<p>{{'persons.person.sportTypes.section' | translate | uppercase}}</p>-->
     <!--</div>-->
-  </div>
+    <!--<div class="ml-2 align-self-center">-->
+      <!--<ngx-button-group [items]="sportTypeButtonGroupItems"-->
+                        <!--[selectedItem]="selectedSportTypeButtonGroupItem">-->
+      <!--</ngx-button-group>-->
+    <!--</div>-->
+    <!--&lt;!&ndash;<div *ngIf="allowEdit"&ndash;&gt;-->
+    <!--&lt;!&ndash;class="ml-2 align-self-center">&ndash;&gt;-->
+    <!--&lt;!&ndash;<button class="btn btn-default input-height-sm"&ndash;&gt;-->
+    <!--&lt;!&ndash;(click)="onEditSportTypes()">&ndash;&gt;-->
+    <!--&lt;!&ndash;<i class="fa fa-pencil-square-o"></i>&ndash;&gt;-->
+    <!--&lt;!&ndash;</button>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+  <!--</div>-->
 
   <ngx-tab [tabs]="tabs"></ngx-tab>
 </div>
