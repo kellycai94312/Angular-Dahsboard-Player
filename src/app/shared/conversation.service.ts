@@ -7,6 +7,7 @@ import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
 import {Participant} from '../data/remote/model/chat/participant';
 import {Message} from '../data/remote/model/chat/message/message';
 import {HashSet} from '../data/local/hash-set';
+import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 
 @Injectable()
 export class ConversationService implements OnDestroy {
@@ -32,7 +33,8 @@ export class ConversationService implements OnDestroy {
   private _typingSubscription: ISubscription;
   private _errorSubscription: ISubscription;
 
-  constructor(private _participantStompService: ParticipantStompService) {
+  constructor(private _participantStompService: ParticipantStompService,
+              private _participantRestApiService: ParticipantRestApiService) {
     this.messageCreateHandle = new Subject<MessageWrapper>();
     this.messageUpdateHandle = new Subject<MessageWrapper>();
     this.messageDeleteHandle = new Subject<MessageWrapper>();
@@ -157,6 +159,10 @@ export class ConversationService implements OnDestroy {
   //#endregion
 
   //#region UnreadTotal
+
+  public async getUnreadTotalMessages(): Promise<number> {
+    return (await this._participantRestApiService.getUnreadTotalMessages()).value;
+  }
 
   private unreadTotalSubscribe() {
     if (this._unreadTotalSubscription) {

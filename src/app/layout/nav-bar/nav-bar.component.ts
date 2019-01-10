@@ -34,10 +34,6 @@ export class NavBarComponent implements OnInit, OnDestroy {
               private _authorizationService: AuthorizationService,
               private _conversationService: ConversationService,
               private _appHelper: AppHelper) {
-    this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
-      this._conversationMenuItem.count = x.value;
-    });
-
     this.person = new Person();
 
     // TODO: Use PersonViewModel
@@ -51,9 +47,15 @@ export class NavBarComponent implements OnInit, OnDestroy {
       {iconClassName: 'fa fa-bell', routerLink: 'notification'},
       this._conversationMenuItem
     ];
+
+    this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
+      this._conversationMenuItem.count = x.value;
+    });
   }
 
   async ngOnInit() {
+    this._conversationMenuItem.count = await this._conversationService.getUnreadTotalMessages();
+
     // TODO: Use PersonViewModel
     const person = this._authorizationService.session.person;
     if (person) {
