@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {Person} from '../../../../data/remote/model/person';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -17,6 +17,12 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
   public readonly imageFormatClass = ImageFormat;
+
+  @Input()
+  public width: number;
+
+  @Input()
+  public height: number;
 
   constructor() {
     super();

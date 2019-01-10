@@ -196,3 +196,11 @@ select:-webkit-autofill:focus {
   font-size: 12px;
   color: #ccc;
 }
+
+.list-item {
+
+  &:hover {
+    background: rgba(0, 123, 255, 0.25) !important;
+  }
+
+}

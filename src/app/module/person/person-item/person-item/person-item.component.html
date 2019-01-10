@@ -1,5 +1,7 @@
 <div *ngIf="data"
-     class="d-flex flex-row {{class}}">
+     class="d-flex flex-row p-2 {{class}}"
+     [style.width.px]="width"
+     [style.height.px]="height">
   <div class="mr-2">
     <ngx-image [objectId]="data.id"
                [width]="80"
