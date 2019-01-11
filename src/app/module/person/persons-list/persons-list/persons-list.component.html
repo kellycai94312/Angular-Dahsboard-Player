@@ -65,30 +65,16 @@
   </div>
 </div>
 
-<ngx-grid class="w-50 mt-2 mx-auto"
-          [fetchItems]="fetchItems"
-          [query]="personQuery"
-          [clickByItem]="onClickByItem"
-          [windowScroll]="true">
-  <ngx-column nameKey="image"
-              width="80">
-    <ng-template let-item>
-      <ngx-image class="mx-auto"
-                 [objectId]="item.id"
-                 [type]="imageTypeClass.LOGO"
-                 [fileClass]="fileClassClass.PERSON"
-                 [format]="imageFormatClass.CIRCLE"></ngx-image>
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="fullName">
-    <ng-template let-item>
-      <h6>{{item.lastName}}<br>{{item.firstName}}<br>{{item?.patronymic}}</h6>
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="yearBirth"
-              width="100">
-    <ng-template let-item>
-      <h6>{{item.birthDate | date: propertyConstantClass.dateFormat}}</h6>
-    </ng-template>
-  </ngx-column>
-</ngx-grid>
+<ngx-virtual-scroll class="mt-2 d-flex flex-wrap"
+                    [getItems]="fetchItems"
+                    [query]="personQuery"
+                    [windowScroll]="true">
+  <ng-template let-item>
+    <div class="mr-2 mb-2"
+         (click)="onClickByItem(item)">
+      <app-person-item class=" list-item"
+                       [data]="item"
+                       [width]="250"></app-person-item>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

@@ -50,12 +50,9 @@ export class NgxVirtualScroll {
 
   constructor(private _appHelper: AppHelper) {
     this._mutex = new Mutex();
+    this.query = new PageQuery();
 
     this.class = '';
-    this.count = PropertyConstant.pageSize;
-    this.query = new PageQuery();
-    this.query.count = this.count;
-
     this.afterUpdateItems = new EventEmitter<void>();
 
     this.initialize();
@@ -117,9 +114,8 @@ export class NgxVirtualScroll {
     }
 
     this.downBusy = true;
-
-    if (this.query.from || this.query.from == 0) {
-      this.query.from = this._front;
+    if (!this.query.from) {
+      delete this.query.from;
     }
     this.query.count = this.count;
 
@@ -182,6 +178,10 @@ export class NgxVirtualScroll {
   }
 
   private initialize() {
+    this.count = PropertyConstant.pageSize;
+    this.query.count = this.count;
+    delete this.query.from;
+
     this._rear = Number.MAX_VALUE;
     this._rearCount = this.count;
     this._front = 0;

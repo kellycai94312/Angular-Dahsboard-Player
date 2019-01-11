@@ -16,7 +16,7 @@ export class UrlParserPipe implements PipeTransform {
               private _htmlService: HtmlService,
               private _translateObjectService: TranslateObjectService,
               private _domSanitizer: DomSanitizer) {
-    const urlPattern = '(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]\\.[^\\s]{2,})';
+    const urlPattern = '^(?:http(s)?:\\/\\/)[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&\'\\(\\)\\*\\+,;=.]+$';
     this.urlRegExp = new RegExp(urlPattern, 'mig');
   }
 
@@ -34,7 +34,7 @@ export class UrlParserPipe implements PipeTransform {
             result = `${this._htmlService.getImageIconTag()} ${await this._translateObjectService.getTranslation('image')}`;
             break;
           } else {
-            content = this._htmlService.getImageTag(url);
+            content = this._htmlService.getImageTag(url, '400px');
           }
         }
         result = this._appHelper.replaceAt(result, regExpExecArray.index, url, content);

@@ -19,8 +19,8 @@ export class HtmlService {
     return `<a href="${url}" target="${target}">${content}</a>`;
   }
 
-  public getImageTag(url: string): string {
-    return `<img style="width: inherit" src="${url}"/>`;
+  public getImageTag(url: string, height: string = 'none'): string {
+    return `<img style="max-width: inherit !important; height:${height}" src="${url}"/>`;
   }
 
   public getImageIconTag(): string {

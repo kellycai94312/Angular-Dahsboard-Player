@@ -70,7 +70,6 @@
          [ngClass]="{'editable': editedMessage}">
       <ngx-virtual-scroll class="list-group-flush"
                           [getItems]="getItems"
-                          [query]="query"
                           [autoScroll]="true">
         <ng-template let-message>
           <div class="message-wrapper p-0" (click)="toggleSelectMessage(message)">

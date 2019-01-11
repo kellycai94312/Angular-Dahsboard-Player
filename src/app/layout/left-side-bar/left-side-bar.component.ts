@@ -1,60 +1,61 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MenuItem} from '../../data/local/menu-item';
 import {ConversationService} from '../../shared/conversation.service';
-import {ParticipantRestApiService} from '../../data/remote/rest-api/participant-rest-api.service';
+import {SubscriptionLike as ISubscription} from 'rxjs';
+import {AppHelper} from '../../utils/app-helper';
+import {IEnvironment} from '../../../environments/ienvironment';
+import {environment} from 'src/environments/environment';
 
 @Component({
   selector: 'app-left-side-bar',
   templateUrl: './left-side-bar.component.html',
   styleUrls: ['./left-side-bar.component.scss']
 })
-export class LeftSideBarComponent implements OnInit {
+export class LeftSideBarComponent implements OnInit, OnDestroy {
 
-  readonly className: string = 'collapsed';
-
+  public readonly menuItems: MenuItem[];
+  public readonly environment: IEnvironment;
+  public readonly className: string = 'collapsed';
   public isCollapsed: boolean;
-  public menuItems: MenuItem[];
 
-  public readonly conversationMenuItem: MenuItem;
+  private readonly _conversationMenuItem: MenuItem;
+  private readonly _unreadTotalMessageSubscription: ISubscription;
 
   constructor(private _conversationService: ConversationService,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _appHelper: AppHelper) {
+    this.environment = environment;
+    this._conversationMenuItem = {iconClassName: 'fa fa-comments', nameKey: 'messages.section', routerLink: 'conversation', enabled: true};
     this.menuItems = [
-      this.createMenuItem('fa fa-home', 'myPage', 'dashboard'),
-      this.createMenuItem('fa fa-user', 'persons.section', 'person'),
-      this.createMenuItem('fa fa-users', 'groups', 'group'),
-      this.createMenuItem('fa fa-calendar', 'calendar', 'event'),
-      this.createMenuItem('fa fa-comments', 'messages.section', 'conversation'),
-      // this.createMenuItem('fa fa-exchange', 'eventPlans', 'event-plan'),
-      this.createMenuItem('fa fa-file', 'reports', 'report', null, false),
-      this.createMenuItem('fa fa-book', 'statistics', 'statistics', null, false),
-      this.createMenuItem('fa fa-list-ul', 'dictionaries', 'dictionary', null, false),
-      this.createMenuItem('fa fa-graduation-cap', 'education', 'education', null, false),
-      // this.createMenuItem('fa fa-address-book', 'contacts', 'connection')
+      {iconClassName: 'fa fa-home', nameKey: 'myPage', routerLink: 'dashboard', enabled: true},
+      {iconClassName: 'fa fa-user', nameKey: 'persons.section', routerLink: 'person', enabled: true},
+      {iconClassName: 'fa fa-users', nameKey: 'groups', routerLink: 'group', enabled: true},
+      {iconClassName: 'fa fa-calendar', nameKey: 'calendar', routerLink: 'event', enabled: true},
+      this._conversationMenuItem,
+      // {iconClassName:'fa fa-exchange', nameKey:'eventPlans', routerLink:'event-plan'},
+      {iconClassName: 'fa fa-file', nameKey: 'reports', routerLink: 'report'},
+      {iconClassName: 'fa fa-book', nameKey: 'statistics', routerLink: 'statistics'},
+      {iconClassName: 'fa fa-list-ul', nameKey: 'dictionaries', routerLink: 'dictionary'},
+      {iconClassName: 'fa fa-graduation-cap', nameKey: 'education', routerLink: 'education'},
+      // {iconClassName:'fa fa-address-book', nameKey:'contacts', routerLink:'connection'}
     ];
+
+    this._unreadTotalMessageSubscription = this._conversationService.unreadTotalHandle.subscribe(x => {
+      this._conversationMenuItem.count = x.value;
+    });
   }
 
   async ngOnInit() {
     this.isCollapsed = localStorage.getItem(this.className) === 'true';
-    try {
-      this.conversationMenuItem.count = (await this._participantRestApiService.getUnreadTotalMessages()).value;
-    } catch (e) {
-    }
+    this._conversationMenuItem.count = await this._conversationService.getUnreadTotalMessages();
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._unreadTotalMessageSubscription);
   }
 
   toggle() {
     this.isCollapsed = !this.isCollapsed;
     localStorage.setItem(this.className, String(this.isCollapsed));
-  }
-
-  private createMenuItem(iconClassName: string, nameKey: string, routerLink: string, count: number = null, enabled: boolean = true): MenuItem {
-    const menuItem = new MenuItem();
-    menuItem.iconClassName = iconClassName;
-    menuItem.nameKey = nameKey;
-    menuItem.routerLink = routerLink;
-    menuItem.count = count;
-    menuItem.enabled = enabled;
-    return menuItem;
   }
 
 }

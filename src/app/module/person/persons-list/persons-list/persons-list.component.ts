@@ -1,8 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {PersonQuery} from '../../../../data/remote/rest-api/query/person-query';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
@@ -16,9 +13,10 @@ import {SportType} from '../../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {Person} from '../../../../data/remote/model/person';
 import {Router} from '@angular/router';
+import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
+import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 
 @Component({
   selector: 'app-persons-list',
@@ -28,12 +26,9 @@ import {Router} from '@angular/router';
 export class PersonsListComponent implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly imageTypeClass = ImageType;
-  public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
 
-  @ViewChild(NgxGridComponent)
-  public ngxGridComponent: NgxGridComponent;
+  @ViewChild(NgxVirtualScrollComponent)
+  public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
   public personQuery: PersonQuery;
@@ -55,6 +50,7 @@ export class PersonsListComponent implements OnInit {
   async ngOnInit() {
     this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
     this.userRoles = await this._participantRestApiService.getUserRoles();
+    await this.updateItems();
   }
 
   public onClickByItem = async (item: Person) => {
@@ -160,13 +156,13 @@ export class PersonsListComponent implements OnInit {
 
   // #endregion
 
-  public fetchItems = async (query: PageQuery) => {
+  public fetchItems = async (direction: Direction, query: PageQuery) => {
     return await this._participantRestApiService.getPersons(query);
   };
 
   public async updateItems() {
     await this._appHelper.delay();
-    await this.ngxGridComponent.reset();
+    await this.ngxVirtualScrollComponent.reset();
   }
 
 }

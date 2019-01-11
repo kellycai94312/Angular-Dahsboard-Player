@@ -1,7 +1,6 @@
 import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 import {BaseConversationType} from '../../../../../data/remote/model/chat/conversation/base/base-conversation-type';
-import {ImageComponent} from '../../../../../components/image/image.component';
 import {NgxVirtualScrollComponent} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {MessageContent} from '../../../../../data/remote/model/chat/message/message-content';
 import {Person} from '../../../../../data/remote/model/person';
@@ -32,6 +31,7 @@ import {ConfirmationRemovingMessageComponent} from '../../../../../module/conver
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {NgxButtonType} from '../../../../../components/ngx-button/model/ngx-button-type';
 import {ConversationModalService} from '../../../service/conversation-modal/conversation-modal.service';
+import {ImageComponent} from '../../../../../components/image/image.component';
 
 @Component({
   selector: 'app-conversation-page',
@@ -50,16 +50,15 @@ export class ConversationPageComponent implements OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  public readonly participantsTyping: Participant[];
   public messageContent: MessageContent;
   public person: Person;
-  public query: PageQuery;
   public conversation: BaseConversation;
-  public recipient: Participant;
   public enabled: boolean;
   public selectedMessages: HashSet<Message>;
   public editedMessage: Message;
   public canEditMessage: boolean;
-  public readonly participantsTyping: Participant[];
+  public recipient: Participant;
 
   private _maxMessageDate: Date;
   private _typingTimeout: any;
@@ -85,22 +84,21 @@ export class ConversationPageComponent implements OnDestroy {
               private _conversationModalService: ConversationModalService,
               private _ngxModalService: NgxModalService,
               private _router: Router) {
-    this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {
-      const conversationId = val.id;
-      if (conversationId) {
-        await this.initialize(conversationId);
-      } else {
-        await this._router.navigate(['/conversation']);
-      }
-    });
     this.messageContent = new MessageContent();
-    this.query = new PageQuery();
     this._maxMessageDate = new Date();
     this.participantsTyping = [];
     this.selectedMessages = this._conversationService.selectedMessages;
     this.canEditMessage = false;
 
-    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
+    this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {
+      const conversationId = val.id;
+      if (conversationId) {
+        await this.initialize(conversationId);
+      } else {
+        await this.navigateToConversations();
+      }
+    });
+    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(async x => {
       if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
         return;
       }
@@ -110,8 +108,7 @@ export class ConversationPageComponent implements OnDestroy {
         this._conversationService.readMessage(x);
       }
 
-      if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT
-        && x.message.sender.person.id != this.person.id) { // Exclude update duplication
+      if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
         switch ((x.message.content as SystemMessageContent).systemMessageType) {
           case SystemMessageContentType.UPDATE_LOGO:
             this.logo.refresh();
@@ -121,7 +118,7 @@ export class ConversationPageComponent implements OnDestroy {
         }
       }
 
-      this.ngxVirtualScrollComponent.addItem(x.message);
+      await this.ngxVirtualScrollComponent.addItem(x.message);
     });
     this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {
       if (x.message.content.baseConversation.id != this._conversationId || !this.ngxVirtualScrollComponent) {
@@ -185,7 +182,6 @@ export class ConversationPageComponent implements OnDestroy {
   public async initialize(conversationId: number): Promise<boolean> {
     return await this._appHelper.tryLoad(async () => {
       this._conversationId = conversationId;
-
       this.person = await this._authorizationService.getPerson();
       this.conversation = await this._participantRestApiService.getConversation({conversationId: this._conversationId});
       this._messageToastrService.clearToasts(this.conversation.id);
@@ -241,15 +237,13 @@ export class ConversationPageComponent implements OnDestroy {
 
     if (this.editedMessage) {
       // Update message
-      try {
+      await this._appHelper.tryAction('', 'sendError', async () => {
         this.editedMessage.content = await this._participantRestApiService.updateMessage(this.messageContent, {}, {
           conversationId: this._conversationId,
           messageContentId: this.messageContent.id
         });
         this.cancelEditMessage();
-      } catch (e) {
-        await this._appHelper.showErrorMessage('sendError');
-      }
+      });
     } else {
       if (await this.createMessage(this.messageContent)) {
         this.messageContent.content = null;
@@ -342,7 +336,7 @@ export class ConversationPageComponent implements OnDestroy {
   public async quitChat() {
     if (await this._templateModalService.showConfirmModal('areYouSure')) {
       await this._participantRestApiService.quitChat({conversationId: this._conversationId});
-      await this._router.navigate(['/conversation']);
+      await this.navigateToConversations();
     }
   }
 
@@ -375,6 +369,10 @@ export class ConversationPageComponent implements OnDestroy {
     return await this._appHelper.tryAction('', 'sendError', async () => {
       await this._participantRestApiService.createMessage(messageContent, {}, {conversationId: this._conversationId});
     });
+  }
+
+  private async navigateToConversations(): Promise<void> {
+    await this._router.navigate(['/conversation']);
   }
 
 }

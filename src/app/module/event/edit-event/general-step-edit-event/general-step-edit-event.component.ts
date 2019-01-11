@@ -67,16 +67,17 @@ export class GeneralStepEditEventComponent<T extends BaseTraining> extends BaseE
     this.data.discriminator = this.data.discriminator || this.selectedEventType.data;
 
     return await this.appHelper.trySave(async () => {
+      this.data.startTime = this.appHelper.getGmtDate(this.data.startTime);
+      this.data.finishTime = this.appHelper.getGmtDate(this.data.finishTime);
+
+      if (this.data.startTime && this.data.finishTime) {
+        this.data.durationMs = Date.parse(this.data.finishTime.toString()) - Date.parse(this.data.startTime.toString());
+      } else {
+        this.data.durationMs = 1000;
+      }
+
       if (this.appHelper.isNewObject(this.data)) {
         this.data.name = this.data.name || await this._translateObjectService.getTranslation('newEvent');
-        this.data.startTime = this.appHelper.getGmtDate(this.data.startTime);
-        this.data.finishTime = this.appHelper.getGmtDate(this.data.finishTime);
-
-        if (this.data.startTime && this.data.finishTime) {
-          this.data.durationMs = Date.parse(this.data.finishTime.toString()) - Date.parse(this.data.startTime.toString());
-        } else {
-          this.data.durationMs = 1000;
-        }
 
         if (this.data.eventPlan) {
           let leftBorderDate = new Date();

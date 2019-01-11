@@ -34,7 +34,7 @@ export class RightSideBarComponent {
   }
 
   toggle(newCondition: SideBarCondition) {
-    if (newCondition == this.currentCondition) {
+    if (newCondition === this.currentCondition) {
       this.currentCondition = SideBarCondition.HIDDEN;
     } else {
       this.currentCondition = newCondition;
@@ -57,5 +57,4 @@ class SideBarItem {
     this.nameKey = nameKey;
     this.condition = condition;
   }
-
 }
