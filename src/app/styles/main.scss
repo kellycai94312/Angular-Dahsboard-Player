@@ -81,6 +81,7 @@ hr {
   &:hover {
     border-color: rgba(51, 122, 183, .4);
   }
+
   &:focus {
     box-shadow: none;
     border-color: #337ab7;
@@ -203,4 +204,8 @@ select:-webkit-autofill:focus {
     background: rgba(0, 123, 255, 0.25) !important;
   }
 
+}
+
+.width-inherit {
+  width: inherit !important;
 }
