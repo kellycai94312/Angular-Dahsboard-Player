@@ -5,7 +5,6 @@ import {Person} from '../data/remote/model/person';
 import {AppHelper} from '../utils/app-helper';
 import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
 import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
-import {EditGroupComponent} from '../components/group/edit-group/edit-group.component';
 import {BaseTraining} from '../data/remote/model/training/base/base-training';
 import {DialogResult} from '../data/local/dialog-result';
 import {EventPlan} from '../data/remote/model/training/plan/event-plan';
@@ -30,6 +29,7 @@ import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-conf
 import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
 import {ModalBuilderService} from './modal-builder/modal-builder.service';
+import {EditGroupComponent} from '../module/group/edit-group/edit-group/edit-group.component';
 
 @Injectable({
   providedIn: 'root'
@@ -115,6 +115,7 @@ export class TemplateModalService {
     this._modalBuilderService.updateTitleKeyModal(modal, group);
 
     await modal.componentInstance.initializeBody(EditGroupComponent, async component => {
+      component.manualInitialization = true;
       await component.initialize(group);
 
       modal.componentInstance.splitButtonItems = [

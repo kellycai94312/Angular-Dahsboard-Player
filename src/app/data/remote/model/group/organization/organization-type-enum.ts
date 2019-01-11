@@ -5,5 +5,6 @@ export enum OrganizationTypeEnum {
   FEDERATION = 'FEDERATION',
   SCHOOL = 'SCHOOL',
   SECTION = 'SECTION',
+  CLUB = 'CLUB',
   OTHER = 'OTHER'
 }

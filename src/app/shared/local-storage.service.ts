@@ -8,13 +8,11 @@ export class LocalStorageService {
 
   private readonly localeName: string;
   private readonly sessionIdName: string;
-  private readonly lastGroupNameName: string;
 
   constructor(private _translateService: TranslateService,
               private _cookieService: CookieService) {
     this.localeName = 'locale';
     this.sessionIdName = 'rsi';
-    this.lastGroupNameName = 'lastGroupName';
   }
 
   public signOut(): void {
@@ -45,18 +43,6 @@ export class LocalStorageService {
 
   public getSessionId(): string {
     return this._cookieService.get(this.sessionIdName);
-  }
-
-  public getLastGroupName(): string {
-    return localStorage.getItem(this.lastGroupNameName);
-  }
-
-  public setLastGroupName(val: string): void {
-    if (val) {
-      localStorage.setItem(this.lastGroupNameName, val);
-    } else {
-      localStorage.removeItem(this.lastGroupNameName);
-    }
   }
 
   private existLocaleKey(key: string): boolean {

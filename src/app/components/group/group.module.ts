@@ -4,23 +4,16 @@ import {GroupTransitionComponent} from './group-transition/group-transition.comp
 import {TranslateModule} from '@ngx-translate/core';
 import {AttachFileModule} from '../attach-file/attach-file.module';
 import {NgxGridModule} from '../ngx-grid/ngx-grid.module';
-import {
-  DxCheckBoxModule,
-  DxDateBoxModule,
-  DxNumberBoxModule,
-  DxSelectBoxModule,
-  DxTextAreaModule,
-  DxTextBoxModule,
-  DxValidatorModule
-} from 'devextreme-angular';
+import {DxCheckBoxModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {InputSelectModule} from '../input-select/input-select.module';
-import {EditGroupComponent} from './edit-group/edit-group.component';
 import {EditGroupNewsComponent} from './edit-group-news/edit-group-news.component';
 import {GroupNewsItemComponent} from './group-news-item/group-news-item.component';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
 import {RouterModule} from '@angular/router';
 import {ImageModule} from '../image/image.module';
+import {EditGroupModule} from '../../module/group/edit-group/edit-group.module';
+import {EditGroupComponent} from '../../module/group/edit-group/edit-group/edit-group.component';
 
 @NgModule({
   imports: [
@@ -39,24 +32,23 @@ import {ImageModule} from '../image/image.module';
     NgxButtonModule,
     UrlParserModule,
     RouterModule.forChild([]),
-    ImageModule
+    ImageModule,
+    EditGroupModule
   ],
   declarations: [
     GroupTransitionComponent,
-    EditGroupComponent,
     EditGroupNewsComponent,
     GroupNewsItemComponent
   ],
   entryComponents: [
     GroupTransitionComponent,
-    EditGroupComponent,
     EditGroupNewsComponent
   ],
   exports: [
     GroupTransitionComponent,
-    EditGroupComponent,
     EditGroupNewsComponent,
-    GroupNewsItemComponent
+    GroupNewsItemComponent,
+    EditGroupComponent
   ]
 })
 export class GroupModule {

@@ -2,7 +2,6 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {EditGroupComponent} from '../../../../components/group/edit-group/edit-group.component';
 import {League} from '../../../../data/remote/model/group/team/league';
 import {AgeGroup} from '../../../../data/remote/model/age-group';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
@@ -14,6 +13,7 @@ import {Team} from '../../../../data/remote/model/group/team/team';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {ListRequest} from '../../../../data/remote/request/list-request';
+import {EditGroupComponent} from '../../edit-group/edit-group/edit-group.component';
 
 @Component({
   selector: 'app-group-settings',
