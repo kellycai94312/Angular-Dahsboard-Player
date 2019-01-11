@@ -3,6 +3,8 @@ import {MenuItem} from '../../data/local/menu-item';
 import {ConversationService} from '../../shared/conversation.service';
 import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AppHelper} from '../../utils/app-helper';
+import {IEnvironment} from '../../../environments/ienvironment';
+import {environment} from 'src/environments/environment';
 
 @Component({
   selector: 'app-left-side-bar',
@@ -12,6 +14,7 @@ import {AppHelper} from '../../utils/app-helper';
 export class LeftSideBarComponent implements OnInit, OnDestroy {
 
   public readonly menuItems: MenuItem[];
+  public readonly environment: IEnvironment;
   public readonly className: string = 'collapsed';
   public isCollapsed: boolean;
 
@@ -20,6 +23,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
 
   constructor(private _conversationService: ConversationService,
               private _appHelper: AppHelper) {
+    this.environment = environment;
     this._conversationMenuItem = {iconClassName: 'fa fa-comments', nameKey: 'messages.section', routerLink: 'conversation', enabled: true};
     this.menuItems = [
       {iconClassName: 'fa fa-home', nameKey: 'myPage', routerLink: 'dashboard', enabled: true},

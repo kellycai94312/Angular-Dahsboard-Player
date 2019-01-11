@@ -1,13 +1,15 @@
 const gulp = require('gulp');
-const replace = require('gulp-replace');
 const babel = require('gulp-babel');
+const bump = require('gulp-bump');
+const gulpUtil = require('gulp-util');
 const uglify = require('gulp-uglify');
-const notify = require('gulp-notify');
 const htmlmin = require('gulp-htmlmin');
 const rename = require('gulp-rename');
 const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
 const imagemin = require('gulp-imagemin');
+const replace = require('replace-in-file');
+const package = require('./package.json');
 
 const plotlyTaskName = 'plotly';
 const htmlMinifyTaskName = 'html-minify';
@@ -15,6 +17,8 @@ const cssMinifyTaskName = 'css-minify';
 const jsMinifyTaskName = 'js-minify';
 const jsonMinifyTaskName = 'json-minify';
 const imageMinifyTaskName = 'image-minify';
+const replaceVersionTaskName = 'replace-version';
+const incrementVersionTaskName = 'increment-version';
 
 gulp.task(plotlyTaskName, function () {
   return gulp.src('node_modules/plotly.js/dist/plotly.min.js')
@@ -70,5 +74,26 @@ gulp.task(imageMinifyTaskName, function () {
     }));
 });
 
-gulp.task('default', gulp.series(plotlyTaskName));
-gulp.task('after-build', gulp.parallel(htmlMinifyTaskName, cssMinifyTaskName, jsonMinifyTaskName, imageMinifyTaskName));
+gulp.task(replaceVersionTaskName, function (done) {
+  const buildVersion = package.version;
+  let changedFiles = replace.sync({
+      files: 'src/environments/environment.*',
+      from: /version: '(.*)'/g,
+      to: "version: '" + buildVersion + "'",
+      allowEmptyPaths: false,
+    }
+  );
+  gulpUtil.log(`Changed files '${changedFiles}'`);
+  gulpUtil.log(`Build version set: ${buildVersion}`);
+  done();
+});
+
+gulp.task(incrementVersionTaskName, function () {
+  return gulp.src('./package.json')
+    .pipe(bump())
+    .pipe(gulp.dest('./'));
+});
+
+gulp.task('default', gulp.series([plotlyTaskName, replaceVersionTaskName]));
+
+gulp.task('after-build', gulp.parallel(htmlMinifyTaskName, cssMinifyTaskName, jsonMinifyTaskName, imageMinifyTaskName, incrementVersionTaskName));
