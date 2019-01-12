@@ -598,5 +598,9 @@
   "saveAndSend": "Save and send",
   "images": "Images",
   "chat": "Chat",
-  "new": "New"
+  "new": "New",
+  "subscribe": "Subscribe",
+  "unsubscribe": "Unsubscribe",
+  "editRequest": "Edit request",
+  "viewRequest": "View request"
 }

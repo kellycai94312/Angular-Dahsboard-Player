@@ -1,8 +1,8 @@
 $img-border-width: 2px;
 $img-change-transition: .5s;
-$img-change-content-background-hover: rgba(0, 0, 0, .8);
+$img-change-content-background-hover: rgba(0, 0, 0, .3);
 $img-size: 100%;
-$img-content-height: $img-size / 3;
+$img-content-height: $img-size / 4;
 
 .img-circle-change {
   position: absolute;

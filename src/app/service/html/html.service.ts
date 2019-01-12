@@ -20,7 +20,7 @@ export class HtmlService {
   }
 
   public getImageTag(url: string, height: string = 'none'): string {
-    return `<img style="max-width: inherit !important; height:${height}" src="${url}"/>`;
+    return `<img style="width: auto !important; max-width: -webkit-fill-available; max-height:${height}" src="${url}"/>`;
   }
 
   public getImageIconTag(): string {

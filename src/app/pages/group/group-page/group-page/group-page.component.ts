@@ -1,11 +1,9 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Tab} from '../../../../data/local/tab';
 import {GroupService} from '../service/group.service';
-import {ImageComponent} from '../../../../components/image/image.component';
-import {Image} from '../../../../data/remote/model/file/image/image';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -18,7 +16,6 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
-import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
@@ -35,15 +32,12 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
   public readonly iconEnumClass = IconEnum;
-
-  @ViewChild('logo')
-  public logo: ImageComponent;
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
 
   public readonly tabs: Tab[];
   public readonly splitButtonsItems: SplitButtonItem[];
-  public organizationTrainers: OrganizationTrainer[];
 
-  private readonly _refreshMembersSubscription: ISubscription;
   private _paramRouteSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -56,10 +50,6 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
               private _ngxModalService: NgxModalService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
-
-    this._refreshMembersSubscription = this.groupService.refreshMembers.subscribe(async () => {
-      await this.updateTrainerGroupPersons();
-    });
 
     this.tabs = [
       {
@@ -83,7 +73,26 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       {
         nameKey: 'join',
         callback: async () => {
-          await this.joinGroup();
+          // TODO: Join
+          // await this.joinGroup();
+        },
+        visible: (): boolean => {
+          return !this.isOwner && (!this.groupPerson);
+        }
+      },
+      {
+        nameKey: 'editRequest',
+        callback: async () => {
+          // TODO: Edit request
+        },
+        visible: (): boolean => {
+          return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.JOIN_REQUEST);
+        }
+      },
+      {
+        nameKey: 'viewRequest',
+        callback: async () => {
+          // TODO: View request
         },
         visible: (): boolean => {
           return !this.isOwner && (!this.groupPerson || this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
@@ -97,13 +106,31 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         visible: () => {
           return !!(!this.isOwner && this.groupPerson);
         }
+      },
+      {
+        nameKey: 'subscribe',
+        callback: async () => {
+          // TODO: subscribe
+        },
+        visible: () => {
+          return !this.groupPerson;
+        }
+      },
+      {
+        nameKey: 'unsubscribe',
+        callback: async () => {
+          // TODO: unsubscribe
+        },
+        visible: () => {
+          return this.groupPerson && this.groupPerson.state === GroupPersonState.FOLLOWING;
+        }
       }
     ];
   }
 
   async ngOnInit() {
     this._paramRouteSubscription = this._activatedRoute.params.subscribe(async val => {
-      const groupId = val['id'];
+      const groupId = val.id;
       if (!groupId || !(await this.groupService.initialize(groupId))) {
         await this._router.navigate(['/group']);
       }
@@ -112,44 +139,11 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
 
   ngOnDestroy(): void {
     super.ngOnDestroy();
-    this.appHelper.unsubscribe(this._refreshMembersSubscription);
     this.appHelper.unsubscribe(this._paramRouteSubscription);
   }
 
   async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
-    await this.updateTrainerGroupPersons();
-  }
-
-  private async updateTrainerGroupPersons() {
-    this.organizationTrainers = (await this._participantRestApiService.getOrganizationTrainers({}, {},
-      {
-        groupId: this.group.id
-      }
-    )).sort((a, b) => {
-      if (a.lead && !b.lead) {
-        return -1;
-      }
-      if (!a.lead && b.lead) {
-        return 1;
-      }
-      return 0;
-    });
-  }
-
-  public async onLogoChange(event) {
-    // TODO: Upload in image component
-    const fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      const image: Image = new Image();
-      image.clazz = FileClass.GROUP;
-      image.objectId = this.group.id;
-      image.type = ImageType.LOGO;
-      await this._participantRestApiService.uploadFile(image, [file]);
-
-      this.logo.refresh();
-    }
   }
 
   public onEditSettings = async () => {
@@ -187,7 +181,6 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
     });
     await this._ngxModalService.awaitModalResult(modal);
     await this.groupService.updateGroup(groupSettingsComponent.data);
-    await this.updateTrainerGroupPersons();
   };
 
   //#region Change group person state
