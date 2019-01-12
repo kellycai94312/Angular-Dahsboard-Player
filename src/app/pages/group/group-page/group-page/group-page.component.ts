@@ -57,8 +57,12 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         routerLink: 'news'
       },
       {
-        nameKey: 'members',
-        routerLink: 'member'
+        nameKey: 'employees',
+        routerLink: 'employee'
+      },
+      {
+        nameKey: 'subscribers',
+        routerLink: 'subscriber'
       },
       {
         nameKey: 'requests',
@@ -95,7 +99,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
           // TODO: View request
         },
         visible: (): boolean => {
-          return !this.isOwner && (!this.groupPerson || this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
+          return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
         }
       },
       {

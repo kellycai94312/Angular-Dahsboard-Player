@@ -603,5 +603,7 @@
   "subscribe": "Подписаться",
   "unsubscribe": "Отписаться",
   "editRequest": "Редактировать заявку",
-  "viewRequest": "Посмотреть заявку"
+  "viewRequest": "Посмотреть заявку",
+  "employees": "Сотрудники",
+  "subscribers": "Подписчики"
 }

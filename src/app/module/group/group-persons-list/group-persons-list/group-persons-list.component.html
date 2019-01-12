@@ -1,0 +1,12 @@
+<ngx-virtual-scroll class="mt-2 d-flex flex-wrap"
+                    [getItems]="fetchItems"
+                    [query]="query"
+                    [windowScroll]="true">
+  <ng-template let-item>
+    <div class="mr-2 mb-2"
+         (click)="onClickByItem(item)">
+      <app-group-person-item class="list-item"
+                             [data]="item"></app-group-person-item>
+    </div>
+  </ng-template>
+</ngx-virtual-scroll>

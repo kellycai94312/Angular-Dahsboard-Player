@@ -602,5 +602,6 @@
   "subscribe": "Subscribe",
   "unsubscribe": "Unsubscribe",
   "editRequest": "Edit request",
-  "viewRequest": "View request"
+  "employees": "Employees",
+  "subscribers": "Subscribers"
 }
