@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -73,7 +73,6 @@ export class EditGroupPersonLogsComponent extends BaseEditComponent<GroupPerson>
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
-      component.manualInitialization = true;
       component.groupId = this.data.group.id;
       component.personId = this.data.person.id;
 

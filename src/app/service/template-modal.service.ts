@@ -115,7 +115,6 @@ export class TemplateModalService {
     this._modalBuilderService.updateTitleKeyModal(modal, group);
 
     await modal.componentInstance.initializeBody(EditGroupComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(group);
 
       modal.componentInstance.splitButtonItems = [
@@ -263,7 +262,6 @@ export class TemplateModalService {
     let generalStepEditEventComponent: GeneralStepEditEventComponent<T> = null;
     await modal.componentInstance.initializeBody(GeneralStepEditEventComponent, async component => {
       generalStepEditEventComponent = component as GeneralStepEditEventComponent<T>;
-      component.manualInitialization = true;
 
       const isNew = this._appHelper.isNewObject(event);
       if (isNew) {
@@ -331,8 +329,6 @@ export class TemplateModalService {
     let personsStepEditEventComponent: PersonsStepEditEventComponent<T> = null;
     await modal.componentInstance.initializeBody(PersonsStepEditEventComponent, async component => {
       personsStepEditEventComponent = component as PersonsStepEditEventComponent<T>;
-      component.manualInitialization = true;
-
       component.preInitialize(afterCreateEvent, conversation);
       await component.initialize(this._appHelper.cloneObject(event));
 

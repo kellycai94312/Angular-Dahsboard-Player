@@ -4,7 +4,7 @@
                     [windowScroll]="true">
   <ng-template let-item>
     <div class="mr-2 mb-2"
-         (click)="onClickByItem(item)">
+         (dblclick)="onEditItem(item)">
       <app-group-person-item class="list-item"
                              [data]="item"></app-group-person-item>
     </div>

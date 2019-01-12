@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../../../shared/authorization.service';
 import {PersonService} from '../../../../person/person-page/service/person.service';
@@ -49,7 +49,6 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditRefereeCategoryComponent, async component => {
-      component.manualInitialization = true;
       component.person = this._personService.personViewModel.data;
       component.sportType = this._personService.sportTypeSubject.getValue();
       await component.initialize(this._appHelper.cloneObject(personRefereeCategoryViewModel.data));
@@ -75,7 +74,7 @@ export class RefereeCategoriesComponent implements OnInit, OnDestroy {
     const pageContainer = this._appHelper.arrayToPageContainer(items);
     return this._appHelper.pageContainerConverter(pageContainer, async obj => {
       const personRefereeCategoryViewModel = new PersonRefereeCategoryViewModel(obj);
-      await  personRefereeCategoryViewModel.initialize();
+      await personRefereeCategoryViewModel.initialize();
       return personRefereeCategoryViewModel;
     });
   };

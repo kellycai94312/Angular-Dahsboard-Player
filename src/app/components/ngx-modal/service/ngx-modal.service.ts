@@ -148,7 +148,6 @@ export class NgxModalService {
     const editModal = this.open();
     editModal.componentInstance.titleKey = 'edit';
     await editModal.componentInstance.initializeBody(EditTagComponent, async component1 => {
-      component1.manualInitialization = true;
       await component1.initialize(this._appHelper.cloneObject(data));
 
       editModal.componentInstance.splitButtonItems = [

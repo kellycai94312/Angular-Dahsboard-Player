@@ -53,7 +53,6 @@ export class MyRegionService implements OnDestroy {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditNoteComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this._appHelper.cloneObject(note));
 
       modal.componentInstance.splitButtonItems = [

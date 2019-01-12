@@ -48,7 +48,6 @@ export class ActivitiesComponent implements OnInit {
           const modal = this._ngxModalService.open();
           modal.componentInstance.titleKey = 'edit';
           await modal.componentInstance.initializeBody(EditActivityComponent, async component => {
-            component.manualInitialization = true;
             await component.initialize(activity);
 
             modal.componentInstance.splitButtonItems = [

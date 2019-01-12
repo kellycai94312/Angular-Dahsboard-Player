@@ -269,7 +269,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     let editRankComponent: EditPersonRankComponent = null;
     await modal.componentInstance.initializeBody(EditPersonRankComponent, async component => {
       editRankComponent = component;
-      component.manualInitialization = true;
       component.person = this.data;
       await component.initialize(personRank);
 
@@ -322,7 +321,6 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     let editMedicalExaminationComponent: EditMedicalExaminationComponent = null;
     await modal.componentInstance.initializeBody(EditMedicalExaminationComponent, async component => {
       editMedicalExaminationComponent = component;
-      component.manualInitialization = true;
       component.person = this.data;
       await component.initialize(medicalExamination);
 

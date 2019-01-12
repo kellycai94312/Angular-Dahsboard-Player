@@ -84,7 +84,6 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
     modal.componentInstance.titleKey = 'member';
 
     await modal.componentInstance.initializeBody(EditGroupPersonComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this._appHelper.cloneObject(parameter.data));
 
       modal.componentInstance.splitButtonItems = [
