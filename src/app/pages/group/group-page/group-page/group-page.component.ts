@@ -20,6 +20,7 @@ import {GroupPersonState} from '../../../../data/remote/model/group/group-person
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
 import {GroupSettingsComponent} from '../../../../module/group/group-settings/group-settings/group-settings.component';
+import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 
 @Component({
   selector: 'app-group-page',
@@ -77,8 +78,11 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       {
         nameKey: 'join',
         callback: async () => {
-          // TODO: Join
-          // await this.joinGroup();
+          const params = {groupId: this.group.id};
+          const result = await this.groupService.showSelectionGroupVacanciesModal(false, [], params);
+          if (result.result) {
+            await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => x.position)}, {}, params));
+          }
         },
         visible: (): boolean => {
           return !this.isOwner && (!this.groupPerson);
@@ -87,7 +91,16 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       {
         nameKey: 'editRequest',
         callback: async () => {
-          // TODO: Edit request
+          const groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
+            {unassigned: false, count: PropertyConstant.pageSizeMax},
+            {groupId: this.group.id, personId: this.groupPerson.person.id})).list;
+          const params = {groupId: this.group.id};
+          const result = await this.groupService.showSelectionGroupVacanciesModal(false, groupPersonPositions, params);
+          if (result.result) {
+            await this._participantRestApiService.updateGroupPersonPositions({list: result.data.map(x => x.position)},
+              {}, {groupId: this.group.id, personId: this.groupPerson.person.id}
+            );
+          }
         },
         visible: (): boolean => {
           return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.JOIN_REQUEST);
@@ -108,13 +121,13 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
           await this.leaveGroup();
         },
         visible: () => {
-          return !!(!this.isOwner && this.groupPerson);
+          return !!(!this.isOwner && this.groupPerson && this.groupPerson.state !== GroupPersonState.FOLLOWING);
         }
       },
       {
         nameKey: 'subscribe',
         callback: async () => {
-          // TODO: subscribe
+          await this.groupService.updateGroupPerson(await this._participantRestApiService.followGroup({groupId: this.group.id}));
         },
         visible: () => {
           return !this.groupPerson;
@@ -123,7 +136,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       {
         nameKey: 'unsubscribe',
         callback: async () => {
-          // TODO: unsubscribe
+          await this.leaveGroup();
         },
         visible: () => {
           return this.groupPerson && this.groupPerson.state === GroupPersonState.FOLLOWING;
@@ -174,6 +187,24 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
                 // }
               });
             });
+          }
+        },
+        {
+          nameKey: 'vacancies',
+          callback: async () => {
+            const vacancies = (await this._participantRestApiService.getGroupVacancies({},
+              {unassigned: false, count: PropertyConstant.pageSizeMax},
+              {groupId: this.group.id}
+            )).list.map(x => {
+              const groupPersonPosition = new GroupPersonPosition();
+              groupPersonPosition.position = x;
+              return groupPersonPosition;
+            });
+            const params = {groupId: this.group.id};
+            const result = await this.groupService.showSelectionGroupVacanciesModal(true, vacancies, params);
+            if (result.result) {
+              await this._participantRestApiService.updateGroupVacancies({list: result.data.map(x => x.position)}, {}, params);
+            }
           }
         },
         this._ngxModalService.removeSplitItemButton(async () => {

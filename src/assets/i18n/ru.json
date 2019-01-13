@@ -612,5 +612,6 @@
     "TECH_STAFF": "Технический персонал"
   },
   "personPosition": "Должность",
-  "personPositions": "Должности"
+  "personPositions": "Должности",
+  "vacancies": "Вакансии"
 }

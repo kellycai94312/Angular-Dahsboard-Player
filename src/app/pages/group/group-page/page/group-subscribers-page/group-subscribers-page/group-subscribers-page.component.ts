@@ -6,6 +6,7 @@ import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/gro
 import {GroupService} from '../../../service/group.service';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {GroupPerson} from '../../../../../../data/remote/model/group/group-person';
+import {GroupPersonState} from '../../../../../../data/remote/model/group/group-person-state';
 
 @Component({
   selector: 'app-group-subscribers-page',
@@ -26,8 +27,8 @@ export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
 
   async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
-    this.query.id = groupPerson.group.id;
-    // TODO: Get only subscribers
+    this.query.id = this.group.id;
+    this.query.state = GroupPersonState.FOLLOWING;
     await this.groupPersonsListComponent.updateItems();
   }
 

@@ -9,6 +9,7 @@ import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-spl
 import {GroupSettingsModule} from '../../../module/group/group-settings/group-settings.module';
 import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
+import {GroupPersonPositionItemModule} from '../../../module/group/group-person-position-item/group-person-position-item.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
     NgxTabModule,
     NgxModalModule,
     NgxSplitButtonModule,
-    GroupSettingsModule
+    GroupSettingsModule,
+    GroupPersonPositionItemModule
   ],
   declarations: [GroupPageComponent]
 })

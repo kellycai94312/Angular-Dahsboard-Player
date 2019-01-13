@@ -1,4 +1,4 @@
-import {Injectable, OnDestroy} from '@angular/core';
+import {ComponentFactoryResolver, Injectable, OnDestroy} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {Observable, Subject} from 'rxjs';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -11,6 +11,13 @@ import {GroupPersonState} from '../../../../data/remote/model/group/group-person
 import {shareReplay} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
+import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
+import {DialogResult} from '../../../../data/local/dialog-result';
+import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
+import {GroupPersonPositionItemComponent} from '../../../../module/group/group-person-position-item/group-person-position-item/group-person-position-item.component';
+import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
+import {PageContainer} from '../../../../data/remote/bean/page-container';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -23,8 +30,11 @@ export class GroupService implements OnDestroy {
   private readonly _groupSubscription: ISubscription;
   private readonly _groupPersonSubject: Subject<GroupPerson>;
 
-  constructor(private  _participantRestApiService: ParticipantRestApiService,
+  constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
+              private _translateObjectService: TranslateObjectService,
+              private _modalBuilderService: ModalBuilderService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _appHelper: AppHelper) {
     this._groupSubject = new Subject<Group>();
     this.group$ = this._groupSubject.asObservable().pipe(shareReplay(1));
@@ -63,6 +73,37 @@ export class GroupService implements OnDestroy {
 
   public async updateGroupPerson(groupPerson: GroupPerson) {
     this._groupPersonSubject.next(groupPerson);
+  }
+
+  public async showSelectionGroupVacanciesModal(unassigned: boolean,
+                                                items: GroupPersonPosition[],
+                                                params: { groupId: number }): Promise<DialogResult<GroupPersonPosition[]>> {
+    return await this.showSelectionGroupPersonPositions(items, async (query: GroupPersonPositionQuery) => {
+      query.unassigned = unassigned;
+      return this._appHelper.pageContainerConverter(await this._participantRestApiService.getGroupVacancies({}, query, params), obj => {
+        const result = new GroupPersonPosition();
+        result.position = obj;
+        return result;
+      });
+    }, unassigned ? undefined : 1);
+  }
+
+  private async showSelectionGroupPersonPositions(items: GroupPersonPosition[],
+                                                  fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<GroupPersonPosition>>,
+                                                  minCount?: number): Promise<DialogResult<GroupPersonPosition[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPersonPositionItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      {
+        componentFactoryResolver: this._componentFactoryResolver,
+        compare: (first, second) => {
+          return first.position.id == second.position.id;
+        },
+        title: `${await this._translateObjectService.getTranslation('vacancies')} | ${await this._translateObjectService.getTranslation('selection')}`,
+        minCount: minCount
+      }
+    );
   }
 
   //#region Permission
