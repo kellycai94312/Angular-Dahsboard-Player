@@ -127,11 +127,11 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           const groupPerson = await this.getGroupPerson();
           if (groupPerson) {
             this.selectedStageType = groupPerson.stageType;
-            this.joinGroupTransition = groupPerson.groupTransition;
-            this.documentQuery.objectId = this.joinGroupTransition.id;
-            this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.groupTransitionType);
-
-            await this.attachFileComponent.initialize();
+            // this.joinGroupTransition = groupPerson.groupTransition;
+            // this.documentQuery.objectId = this.joinGroupTransition.id;
+            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.groupTransitionType);
+            //
+            // await this.attachFileComponent.initialize();
           }
         }
 
@@ -152,7 +152,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      let groupTransition = this.joinGroupTransition;
+      // let groupTransition = this.joinGroupTransition;
       if (this.appHelper.isNewObject(this.data)) {
         let personFullName = `${this.data.firstName} ${this.data.lastName}`;
         if (this.data.patronymic) {
@@ -173,13 +173,13 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             }
           });
         }
-        if (selectedPerson) {
-          groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
-        } else {
-          const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-          groupTransition = groupPersonTransition.groupTransition;
-          this.appHelper.updateObject(this.data, groupPersonTransition.person);
-        }
+        // if (selectedPerson) {
+        //   groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+        // } else {
+        //   const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
+        //   groupTransition = groupPersonTransition.groupTransition;
+        //   this.appHelper.updateObject(this.data, groupPersonTransition.person);
+        // }
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
@@ -192,8 +192,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
         personId: this.data.id
       });
 
-      this.document.objectId = groupTransition.id;
-      await this.attachFileComponent.updateFile();
+      // this.document.objectId = groupTransition.id;
+      // await this.attachFileComponent.updateFile();
 
       await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
         async (obj: PersonRank) => {
