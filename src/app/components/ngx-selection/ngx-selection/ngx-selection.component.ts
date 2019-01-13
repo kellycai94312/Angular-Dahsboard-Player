@@ -1,4 +1,4 @@
-import {Component, Input, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -17,6 +17,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+
+  @Input()
+  public componentFactoryResolver: ComponentFactoryResolver;
 
   @Input()
   public class: string;

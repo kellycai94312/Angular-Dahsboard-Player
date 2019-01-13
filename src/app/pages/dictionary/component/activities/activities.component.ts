@@ -81,7 +81,7 @@ export class ActivitiesComponent implements OnInit {
 
   public fetchItems = async (direction: Direction, query: ActivityQuery) => {
     query.exerciseType = this.type;
-    return await this._participantRestApiService.getActivities(query);
+    return await this._participantRestApiService.getBaseExercise(query);
   };
 
   public async resetItems() {

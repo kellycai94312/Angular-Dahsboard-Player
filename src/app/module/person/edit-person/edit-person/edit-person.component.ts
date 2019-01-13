@@ -8,7 +8,6 @@ import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-gri
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {UserRole} from '../../../../data/remote/model/user-role';
 import {GroupTransitionType} from '../../../../data/remote/model/group/transition/group-transition-type';
 import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
 import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
@@ -25,7 +24,6 @@ import {TranslateObjectService} from '../../../../shared/translate-object.servic
 import {PersonContant} from '../../../../data/local/person-contant';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {PersonQuery} from '../../../../data/remote/rest-api/query/person-query';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
@@ -33,6 +31,7 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {EditPersonService} from '../service/edit-person.service';
+import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 
 @Component({
   selector: 'app-edit-person',
@@ -59,7 +58,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public readonly dateMax: Date;
   public sexEnums: NameWrapper<SexEnum>[];
   public selectedSexEnum: NameWrapper<SexEnum>;
-  public groupPersonUserRoles: UserRole[];
+  public groupPersonPositions: GroupPersonPosition[];
   public joinGroupPersonTransitionTypes: NameWrapper<GroupTransitionType>[];
   public selectedJoinGroupPersonTransitionType: NameWrapper<GroupTransitionType>;
   public document: Document;
@@ -90,7 +89,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
     this._personRankComponents = [];
     this._medicalExaminationComponents = [];
-    this.groupPersonUserRoles = [];
+    this.groupPersonPositions = [];
   }
 
   async ngOnInit(): Promise<void> {
@@ -111,16 +110,13 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<GroupTransitionType>(GroupTransitionType, 'GroupTransitionTypeEnum');
       this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === GroupTransitionType.ENROLL);
 
-      if (this.appHelper.isNewObject(obj)) {
-        const userRoles = await this.participantRestApiService.getUserRoles();
-        this.groupPersonUserRoles = [userRoles.find(x => x.userRoleEnum === UserRoleEnum.ATHLETE)];
-      } else {
+      if (!this.appHelper.isNewObject(obj)) {
         if (this.group) {
           try {
-            this.groupPersonUserRoles = await this.participantRestApiService.getGroupPersonUserRoles({
+            this.groupPersonPositions = (await this.participantRestApiService.getGroupPersonPositions({}, {unassigned: false}, {
               groupId: this.group.id,
               personId: obj.id
-            });
+            })).list;
           } catch (e) {
           }
 
@@ -183,7 +179,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
-      await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(this.groupPersonUserRoles), {}, {
+      await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
         groupId: this.group.id,
         personId: this.data.id
       });
@@ -212,10 +208,11 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     }
   }
 
-  public onEditGroupPersonUserRoles = async () => {
-    await this._ngxModalService.showSelectionUserRolesModal(this.groupPersonUserRoles, async selectedItems => {
-      this.groupPersonUserRoles = selectedItems;
-    });
+  public onEditGroupPersonPositions = async () => {
+    const result = await this._editPersonService.showSelectionGroupPersonPositions(this.groupPersonPositions, {groupId: this.group.id, personId: this.data.id});
+    if (result.result) {
+      this.groupPersonPositions = result.data;
+    }
   };
 
   public fetchPersonRanks = async (query: PageQuery) => {

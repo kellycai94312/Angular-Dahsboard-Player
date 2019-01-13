@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactory, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
 import {RefDirective} from '../../../directives/ref/ref.directive';
 import {INgxComponentFactory} from '../model/ingx-component-factory';
 
@@ -14,6 +14,9 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
 
   @Input()
   public manualInitialization: boolean;
+
+  @Input()
+  public componentFactoryResolver: ComponentFactoryResolver;
 
   @Input()
   public class: string;
@@ -45,7 +48,24 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
     this.componentType = componentType;
     this.data = data;
 
-    const componentFactory = this._componentFactoryResolver.resolveComponentFactory(componentType);
+    let componentFactoryResolver = this._componentFactoryResolver;
+    let customComponentFactoryResolver = false;
+    if (this.componentFactoryResolver) {
+      customComponentFactoryResolver = true;
+      componentFactoryResolver = this.componentFactoryResolver;
+    }
+
+    let componentFactory: ComponentFactory<any> = null;
+    try {
+      componentFactory = componentFactoryResolver.resolveComponentFactory(componentType);
+    } catch (e) {
+      if (!customComponentFactoryResolver) {
+        componentFactory = this._componentFactoryResolver.resolveComponentFactory(componentType);
+      } else {
+        throw e;
+      }
+    }
+
     const viewContainerRef = this.refDirective.viewContainerRef;
     viewContainerRef.clear();
 

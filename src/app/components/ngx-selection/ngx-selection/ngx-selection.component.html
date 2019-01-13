@@ -23,6 +23,7 @@
              (dblclick)="onSelected(item)">
           <ngx-component-factory [manualInitialization]="false"
                                  [data]="item"
+                                 [componentFactoryResolver]="componentFactoryResolver"
                                  [componentType]="componentType"
                                  [initializeComponent]="initializeComponent"></ngx-component-factory>
         </div>
@@ -35,6 +36,7 @@
          (dblclick)="onUnselected(item)">
       <ngx-component-factory [manualInitialization]="false"
                              [data]="item"
+                             [componentFactoryResolver]="componentFactoryResolver"
                              [componentType]="componentType"
                              [initializeComponent]="initializeComponent"></ngx-component-factory>
     </div>

@@ -169,9 +169,9 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
           callback: async () => {
             await this._ngxModalService.showSelectionGroupPersonsModal({id: this.group.id, unassigned: true}, async selectedItems => {
               await this.appHelper.tryAction('invitationsHaveBeenSent', 'invitationsHaveNotBeenSent', async () => {
-                for (const item of selectedItems.map(x => x.person)) {
-                  await this._participantRestApiService.inviteIntoGroup({id: item.id}, {}, {groupId: this.group.id});
-                }
+                // for (const item of selectedItems.map(x => x.person)) {
+                //   await this._participantRestApiService.inviteIntoGroup({id: item.id}, {}, {groupId: this.group.id});
+                // }
               });
             });
           }
@@ -194,8 +194,8 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       return false;
     }
     return await this.appHelper.trySave(async () => {
-      this.groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
-      await this.groupService.updateGroupPerson(this.groupPerson);
+      // this.groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
+      // await this.groupService.updateGroupPerson(this.groupPerson);
     });
   }
 

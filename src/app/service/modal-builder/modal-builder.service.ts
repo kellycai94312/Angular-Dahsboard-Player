@@ -37,6 +37,7 @@ export class ModalBuilderService {
       if (config) {
         component.maxCount = config.maxCount;
         component.compare = config.compare;
+        component.componentFactoryResolver = config.componentFactoryResolver;
       }
 
       await component.initialize(componentType, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));

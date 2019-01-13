@@ -603,5 +603,12 @@
   "unsubscribe": "Unsubscribe",
   "editRequest": "Edit request",
   "employees": "Employees",
-  "subscribers": "Subscribers"
+  "subscribers": "Subscribers",
+  "positionLevelEnum": {
+    "HEAD": "Head",
+    "SPECIALIST": "Specialist",
+    "TECH_STAFF": "Tech staff"
+  },
+  "personPosition": "Position",
+  "personPositions": "Positions"
 }

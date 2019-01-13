@@ -1,3 +1,14 @@
 <app-person-item [data]="data.person"
-                 [width]="250"></app-person-item>
-<h1>TODO: Set person position if exist</h1>
+                 [width]="250"
+                 [height]="100"></app-person-item>
+<p *ngIf="groupPersonPositions.length"
+   (click)="toggleGroupPersonPositions()">{{'personPositions' | translate}} <i
+  class="fa fa-chevron-{{visibleGroupPersonPositions ? 'up' : 'down'}}"></i></p>
+<div *ngIf="visibleGroupPersonPositions"
+     (click)="toggleGroupPersonPositions()">
+  <p *ngFor="let item of groupPersonPositions"
+     [style.width.px]="250">
+    {{item.position.name}}
+  </p>
+</div>
+

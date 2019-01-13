@@ -605,5 +605,12 @@
   "editRequest": "Редактировать заявку",
   "viewRequest": "Посмотреть заявку",
   "employees": "Сотрудники",
-  "subscribers": "Подписчики"
+  "subscribers": "Подписчики",
+  "positionLevelEnum": {
+    "HEAD": "Руководитель",
+    "SPECIALIST": "Специалист",
+    "TECH_STAFF": "Технический персонал"
+  },
+  "personPosition": "Должность",
+  "personPositions": "Должности"
 }

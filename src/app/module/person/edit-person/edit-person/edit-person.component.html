@@ -69,36 +69,36 @@
 <!--<h6 class="mt-2">{{'decrees' | translate}}</h6>-->
 <!--<hr/>-->
 <!--<dx-select-box class="mt-2"-->
-               <!--displayExpr="name"-->
-               <!--[items]="joinGroupPersonTransitionTypes"-->
-               <!--[(value)]="selectedJoinGroupPersonTransitionType"-->
-               <!--[disabled]="true"-->
-               <!--placeholder="{{'decreeType' | translate}}">-->
-  <!--<dx-validator>-->
-    <!--<dxi-validation-rule type="required"></dxi-validation-rule>-->
-  <!--</dx-validator>-->
+<!--displayExpr="name"-->
+<!--[items]="joinGroupPersonTransitionTypes"-->
+<!--[(value)]="selectedJoinGroupPersonTransitionType"-->
+<!--[disabled]="true"-->
+<!--placeholder="{{'decreeType' | translate}}">-->
+<!--<dx-validator>-->
+<!--<dxi-validation-rule type="required"></dxi-validation-rule>-->
+<!--</dx-validator>-->
 <!--</dx-select-box>-->
 <!--<div class="row cols-padding mt-2">-->
-  <!--<div class="col">-->
-    <!--<dx-text-box [(value)]="document.number"-->
-                 <!--placeholder="{{'documentNumber' | translate}}"></dx-text-box>-->
-  <!--</div>-->
-  <!--<div class="col">-->
-    <!--<dx-date-box class="w-100"-->
-                 <!--[(value)]="document.date"-->
-                 <!--[displayFormat]="propertyConstantClass.dateFormat"-->
-                 <!--type="date"-->
-                 <!--placeholder="{{'date' | translate}}"-->
-                 <!--(onValueChanged)="onJoinDateChanged($event.value)">-->
-      <!--<dx-validator>-->
-        <!--<dxi-validation-rule type="required"></dxi-validation-rule>-->
-      <!--</dx-validator>-->
-    <!--</dx-date-box>-->
-  <!--</div>-->
+<!--<div class="col">-->
+<!--<dx-text-box [(value)]="document.number"-->
+<!--placeholder="{{'documentNumber' | translate}}"></dx-text-box>-->
+<!--</div>-->
+<!--<div class="col">-->
+<!--<dx-date-box class="w-100"-->
+<!--[(value)]="document.date"-->
+<!--[displayFormat]="propertyConstantClass.dateFormat"-->
+<!--type="date"-->
+<!--placeholder="{{'date' | translate}}"-->
+<!--(onValueChanged)="onJoinDateChanged($event.value)">-->
+<!--<dx-validator>-->
+<!--<dxi-validation-rule type="required"></dxi-validation-rule>-->
+<!--</dx-validator>-->
+<!--</dx-date-box>-->
+<!--</div>-->
 <!--</div>-->
 <!--<app-attach-file class="mt-2"-->
-                 <!--[(baseFile)]="document"-->
-                 <!--[documentQuery]="documentQuery"></app-attach-file>-->
+<!--[(baseFile)]="document"-->
+<!--[documentQuery]="documentQuery"></app-attach-file>-->
 
 <h6 class="mt-2">{{'group' | translate}}</h6>
 <hr/>
@@ -127,12 +127,12 @@
 
 <div class="d-flex flex-row mt-2">
   <ngx-button class="mr-2"
-              nameKey="roles"
-              [click]="onEditGroupPersonUserRoles"></ngx-button>
-  <div *ngIf="groupPersonUserRoles && groupPersonUserRoles.length"
+              nameKey="personPositions"
+              [click]="onEditGroupPersonPositions"></ngx-button>
+  <div *ngIf="groupPersonPositions && groupPersonPositions.length"
        class="tags-content w-100">
-    <div *ngFor="let item of groupPersonUserRoles">
-      {{item.name}}
+    <div *ngFor="let item of groupPersonPositions">
+      {{item.position.name}}
     </div>
   </div>
 </div>

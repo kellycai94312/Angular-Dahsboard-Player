@@ -138,6 +138,7 @@ export class NgxVirtualScroll {
       if (this._total < this._front) {
         this._front = this._total;
       }
+      this.query.from = this._front;
 
       this.afterUpdateItems.emit();
     } catch (e) {

@@ -14,7 +14,6 @@ import {Router} from '@angular/router';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupRequest} from '../../../../data/remote/request/group-request';
 import {PermissionService} from '../../../../shared/permission.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {OrganizationTypeEnum} from '../../../../data/remote/model/group/organization/organization-type-enum';
@@ -27,6 +26,7 @@ import {OrganizationTypeEnum} from '../../../../data/remote/model/group/organiza
 export class EditGroupComponent extends BaseEditComponent<Group> {
 
   public readonly groupTypeEnum = GroupTypeEnum;
+
   public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
   public selectedGroupTypeEnum: NameWrapper<GroupTypeEnum>;
   public sportTypes: SportType[];
@@ -34,8 +34,6 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
   public stageTypes: StageType[];
   public teamTypes: TeamType[];
   public organizationTypes: OrganizationType[];
-  public rememberName: boolean;
-  public parentGroup: Group;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _router: Router,
@@ -43,7 +41,6 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
               private _permissionService: PermissionService,
               private _translateObjectService: TranslateObjectService) {
     super(participantRestApiService, appHelper);
-    this.rememberName = false;
   }
 
   async initialize(obj: Group): Promise<boolean> {
@@ -75,12 +72,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
     return await this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);
       if (isNew) {
-        const groupRequest = new GroupRequest();
-        groupRequest.group = this.data;
-        if (this.parentGroup) {
-          groupRequest.topGroupId = this.parentGroup.id;
-        }
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.createGroup(groupRequest));
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.createGroup(this.data));
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.putGroup(this.data));
       }

@@ -9,6 +9,8 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 import {shareReplay} from 'rxjs/operators';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {UserRole} from '../../../../data/remote/model/user-role';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -87,12 +89,19 @@ export class GroupService implements OnDestroy {
       if (groupPerson.state !== GroupPersonState.APPROVED) {
         return false;
       }
-      const userRoles = await this._participantRestApiService.getGroupPersonUserRoles(
-        {
-          groupId: groupPerson.group.id,
-          personId: groupPerson.person.id
+
+      const positions = (await this._participantRestApiService.getGroupPersonPositions({},
+        {unassigned: false, count: PropertyConstant.pageSizeMax},
+        {groupId: groupPerson.group.id, personId: groupPerson.person.id}
+      )).list.map(x => x.position);
+
+      let userRoles: UserRole[] = [];
+      for (const item of positions) {
+        const result = this._appHelper.except(item.positionUserRoles.map(x => x.userRole), userRoles);
+        if (result.length) {
+          userRoles = userRoles.concat(result);
         }
-      );
+      }
       return this._permissionService.hasAnyRoles(userRoles, userRoleEnums) || await this.areYouGroupCreator();
     }
     return false;
