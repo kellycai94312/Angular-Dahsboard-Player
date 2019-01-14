@@ -616,5 +616,6 @@
   },
   "personPosition": "Должность",
   "personPositions": "Должности",
-  "vacancies": "Вакансии"
+  "vacancies": "Вакансии",
+  "addMissingUserRoles": "Добавить недостающие роли пользователя?"
 }

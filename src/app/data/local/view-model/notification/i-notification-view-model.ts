@@ -7,5 +7,7 @@ export interface INotificationViewModel {
 
   build(): Promise<void>;
 
+  preApprove(): Promise<boolean>;
+
   unsubscribe(): void;
 }

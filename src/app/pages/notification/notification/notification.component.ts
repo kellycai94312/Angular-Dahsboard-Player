@@ -61,6 +61,9 @@ export class NotificationComponent implements AfterContentInit, AfterViewInit {
   }
 
   public async onApprove() {
+    if (!await this.viewModel.preApprove()) {
+      return;
+    }
     await this._appHelper.tryAction('success', 'error', async () => {
       await this._participantRestApiService.approveNotification({id: this.data.id});
       this.data.approved = true;

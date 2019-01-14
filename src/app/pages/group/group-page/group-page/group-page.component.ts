@@ -21,6 +21,7 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
 import {GroupSettingsComponent} from '../../../../module/group/group-settings/group-settings/group-settings.component';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
+import {AuthorizationService} from '../../../../shared/authorization.service';
 
 @Component({
   selector: 'app-group-page',
@@ -45,6 +46,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
               private _activatedRoute: ActivatedRoute,
               private _modalService: NgbModal,
               private _translateService: TranslateService,
+              private _authorizationService: AuthorizationService,
               private _router: Router,
               private _templateModalService: TemplateModalService,
               private _permissionService: PermissionService,
@@ -80,7 +82,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         callback: async () => {
           const params = {groupId: this.group.id};
           const result = await this.groupService.showSelectionGroupVacanciesModal(false, [], params);
-          if (result.result) {
+          if (result.result && await this._templateModalService.addMissingUserRoles(result.data.map(x => x.position))) {
             await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => x.position)}, {}, params));
           }
         },
@@ -96,25 +98,24 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
             {groupId: this.group.id, personId: this.groupPerson.person.id})).list;
           const params = {groupId: this.group.id};
           const result = await this.groupService.showSelectionGroupVacanciesModal(false, groupPersonPositions, params);
-          if (result.result) {
-            await this._participantRestApiService.updateGroupPersonPositions({list: result.data.map(x => x.position)},
-              {}, {groupId: this.group.id, personId: this.groupPerson.person.id}
-            );
+          if (result.result && await this._templateModalService.addMissingUserRoles(result.data.map(x => x.position))) {
+            await this._participantRestApiService.updateGroupPersonPositions({list: result.data.map(x => x.position)}, {}, {groupId: this.group.id, personId: this.groupPerson.person.id});
           }
         },
         visible: (): boolean => {
           return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.JOIN_REQUEST);
         }
       },
-      {
-        nameKey: 'viewRequest',
-        callback: async () => {
-          // TODO: View request
-        },
-        visible: (): boolean => {
-          return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
-        }
-      },
+      // TODO: Approve in notifications
+      // {
+      //   nameKey: 'viewRequest',
+      //   callback: async () => {
+      //     // TODO: View request
+      //   },
+      //   visible: (): boolean => {
+      //     return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.INVITE_REQUEST);
+      //   }
+      // },
       {
         nameKey: 'leave',
         callback: async () => {
@@ -219,16 +220,6 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   };
 
   //#region Change group person state
-
-  private async joinGroup(): Promise<boolean> {
-    if (this.groupPerson && this.groupPerson.state !== GroupPersonState.INVITE_REQUEST) {
-      return false;
-    }
-    return await this.appHelper.trySave(async () => {
-      // this.groupPerson = await this._participantRestApiService.joinGroup({groupId: this.group.id});
-      // await this.groupService.updateGroupPerson(this.groupPerson);
-    });
-  }
 
   private async leaveGroup(): Promise<boolean> {
     if (!this.groupPerson) {

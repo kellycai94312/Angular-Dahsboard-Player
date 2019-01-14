@@ -32,6 +32,8 @@ import {ModalBuilderService} from './modal-builder/modal-builder.service';
 import {EditGroupComponent} from '../module/group/edit-group/edit-group/edit-group.component';
 import {UserRole} from '../data/remote/model/user-role';
 import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
+import {Position} from '../data/remote/model/person-position/position';
+import {AuthorizationService} from '../shared/authorization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,7 @@ export class TemplateModalService {
 
   constructor(private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper,
+              private _authorizationService: AuthorizationService,
               private _modalBuilderService: ModalBuilderService,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
@@ -125,6 +128,32 @@ export class TemplateModalService {
         })];
     });
     return await this._ngxModalService.awaitModalResult(modal);
+  }
+
+  public async addMissingUserRoles(positions: Position[]): Promise<boolean> {
+    let positionUserRoles: UserRole[] = [];
+    const compare: (first: UserRole, second: UserRole) => boolean = (first, second) => first.id == second.id;
+    for (const item of positions) {
+      const items = await this._appHelper.except(positionUserRoles, item.positionUserRoles.map(x => x.userRole), compare);
+      if (items.length) {
+        const newItems = await this._appHelper.except(positionUserRoles, items, compare);
+        if (newItems.length) {
+          positionUserRoles = positionUserRoles.concat(newItems);
+        }
+      }
+    }
+    const userRoles = await this._authorizationService.getUserRoles();
+    const differenceUserRoles = this._appHelper.except(positionUserRoles, userRoles, compare);
+
+    if (differenceUserRoles.length) {
+      if (await this.showConfirmModal('addMissingUserRoles')) {
+        const person = await this._authorizationService.getPerson();
+        await this._participantRestApiService.updateUserUserRoles({list: differenceUserRoles.concat(userRoles)}, {}, {userId: person.user.id});
+      } else {
+        return false;
+      }
+    }
+    return true;
   }
 
   public async showEditPersonModal(person: Person, group?: Group, config?: NgxModalConfiguration): Promise<boolean> {

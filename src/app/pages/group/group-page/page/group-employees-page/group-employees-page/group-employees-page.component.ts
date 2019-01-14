@@ -42,6 +42,7 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
     this.positionLevels = positionLevels;
     this.selectedPositionLevel = this.positionLevels[0];
     this.query.positionLevelEnum = this.selectedPositionLevel.data;
+    await this.groupPersonsListComponent.updateItems();
   }
 
   public async onPositionLevelChanged(item: NameWrapper<PositionLevelEnum>) {

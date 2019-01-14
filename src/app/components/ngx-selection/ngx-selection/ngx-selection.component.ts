@@ -46,6 +46,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public compare: (first: TModel, second: TModel) => boolean;
 
   @Input()
+  public canEdit: boolean;
+
+  @Input()
   public minCount: number;
 
   @Input()
@@ -56,6 +59,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   constructor(private _appHelper: AppHelper) {
     this.class = '';
+    this.canEdit = true;
     this.query = <TQuery>{};
     this.compare = (first, second) => {
       return first.id == second.id;
@@ -101,6 +105,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   }
 
   public onUnselected(item: TModel) {
+    if (!this.canUnselect()) {
+      return;
+    }
     this._appHelper.removeItem(this.selectedItems, item);
     this.ngxVirtualScrollComponent.items.push(item);
   }
@@ -112,7 +119,11 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   };
 
   public canSelect() {
-    return this.includeMaxValue();
+    return (this.canEdit || this.canEdit === undefined) && this.includeMaxValue();
+  }
+
+  public canUnselect() {
+    return (this.canEdit || this.canEdit === undefined);
   }
 
   public isValid() {

@@ -113,7 +113,9 @@ export class AppHelper {
       if (!unique) {
         continue;
       }
-      items.push(baseItems[i]);
+      if (!items.find(x => compare(x, baseItems[i]))) {
+        items.push(baseItems[i]);
+      }
     }
     return items;
   }

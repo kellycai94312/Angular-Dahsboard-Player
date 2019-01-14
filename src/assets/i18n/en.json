@@ -614,5 +614,6 @@
   },
   "personPosition": "Position",
   "personPositions": "Positions",
-  "vacancies": "Vacancies"
+  "vacancies": "Vacancies",
+  "addMissingUserRoles": "Add missing user roles?"
 }
