@@ -4,7 +4,7 @@ import {GroupPersonRequestsPageComponent} from './group-person-requests-page/gro
 import {NgxVirtualScrollModule} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {GroupPersonRequestsPageRoutingModule} from './group-person-requests-page-routing.module';
 import {NgxSplitButtonModule} from '../../../../../components/ngx-split-button/ngx-split-button.module';
-import {PersonItemModule} from '../../../../../module/person/person-item/person-item.module';
+import {GroupPersonItemModule} from '../../../../../module/group/group-person-item/group-person-item.module';
 
 @NgModule({
   imports: [
@@ -12,7 +12,7 @@ import {PersonItemModule} from '../../../../../module/person/person-item/person-
     GroupPersonRequestsPageRoutingModule,
     NgxVirtualScrollModule,
     NgxSplitButtonModule,
-    PersonItemModule
+    GroupPersonItemModule
   ],
   declarations: [GroupPersonRequestsPageComponent]
 })

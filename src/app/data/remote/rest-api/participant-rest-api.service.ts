@@ -171,7 +171,7 @@ export class ParticipantRestApiService extends Rest {
   getUserUserRoles: IRestMethod<{ userId: number }, UserRole[]>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
+    method: RestRequestMethod.Put,
     path: '/user/{!userId}/role'
   })
   updateUserUserRoles: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { userId: number }, UserRole[]>;
