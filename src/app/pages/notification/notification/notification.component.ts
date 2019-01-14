@@ -4,11 +4,10 @@ import {INotificationViewModel} from '../../../data/local/view-model/notificatio
 import {Router} from '@angular/router';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseNotification} from '../../../data/remote/model/notification/base/base-notification';
-import {ToastrService} from 'ngx-toastr';
-import {TranslateService} from '@ngx-translate/core';
 import {BaseNotificationViewModel} from '../../../data/local/view-model/notification/base-notification-view-model';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-notification',
@@ -27,9 +26,8 @@ export class NotificationComponent implements AfterContentInit, AfterViewInit {
 
   constructor(private _notificationService: NotificationService,
               private _router: Router,
-              private _participantRestApiService: ParticipantRestApiService,
-              private _toastrService: ToastrService,
-              private _translateService: TranslateService) {
+              private _appHelper: AppHelper,
+              private _participantRestApiService: ParticipantRestApiService) {
     this.viewModel = new BaseNotificationViewModel(new BaseNotification());
     this.splitButtonsItems = [
       {
@@ -63,29 +61,17 @@ export class NotificationComponent implements AfterContentInit, AfterViewInit {
   }
 
   public async onApprove() {
-    try {
+    await this._appHelper.tryAction('success', 'error', async () => {
       await this._participantRestApiService.approveNotification({id: this.data.id});
       this.data.approved = true;
-
-      this._toastrService.success(await this.translateByKey('success'));
-    } catch (e) {
-      this._toastrService.error(await this.translateByKey('error'));
-    }
+    });
   }
 
   public async onRefuse() {
-    try {
+    await this._appHelper.tryAction('success', 'error', async () => {
       await this._participantRestApiService.refuseNotification({id: this.data.id});
       this.data.approved = false;
-
-      this._toastrService.success(await this.translateByKey('success'));
-    } catch (e) {
-      this._toastrService.error(await this.translateByKey('error'));
-    }
-  }
-
-  private translateByKey(key: string): Promise<string> {
-    return this._translateService.get(key).toPromise();
+    });
   }
 
 }

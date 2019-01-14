@@ -6,7 +6,7 @@ import {GroupPersonPositionStateEnum} from '../../../remote/model/group/position
 export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupNotification> {
 
   async build(): Promise<void> {
-    const group = `<a class="link" link="/group/${this.data.group.id}}">${this.data.group.name}</a>`;
+    const group = `<a class="link" link="/group/${this.data.group.id}">${this.data.group.name}</a>`;
 
     let sender: string;
     if (this.data.sender) {
