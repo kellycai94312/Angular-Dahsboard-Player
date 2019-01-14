@@ -22,6 +22,9 @@ export class GroupPersonsListComponent {
   @Input()
   public query: GroupPersonQuery;
 
+  @Input()
+  public canEdit: boolean;
+
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
@@ -30,7 +33,9 @@ export class GroupPersonsListComponent {
   }
 
   public onEditItem = async (item: GroupPerson) => {
-    await this.showEditGroupPerson(item);
+    if (this.canEdit) {
+      await this.showEditGroupPerson(item);
+    }
   };
 
   public fetchItems = async (direction: Direction, query: PageQuery) => {

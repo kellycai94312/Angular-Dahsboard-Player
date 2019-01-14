@@ -231,7 +231,10 @@
     "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",
     "invitePersonApproveParams": "{{person}} approved to add in the group '{{group}}'",
     "invitePersonRefuseParams": "{{person}} refused to add in the group '{{group}}'",
-    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'"
+    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'",
+    "updatePositionsParams": "{{sender}} updated your positions '{{positions}}' in the '{{group}}'",
+    "updatePositionsApproveParams": "{{person}} approved positions changes in the '{{group}}'",
+    "updatePositionsRefuseParams": "{{person}} refused positions changes in the '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",

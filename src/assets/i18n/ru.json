@@ -226,13 +226,16 @@
     "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
   },
   "groupNotification": {
-    "joinPersonParams": "{{person}} подал заявку в группу '{{group}}'",
-    "joinPersonApproveParams": "{{sender}} одобрил вашу заявку на вступление в группу '{{group}}'",
-    "joinPersonRefuseParams": "{{sender}} отклонил вашу заявку на вступление в группу '{{group}}'",
-    "invitePersonParams": "{{sender}} пригласил вас в группу '{{group}}'",
+    "joinPersonParams": "{{person}} подал(a) заявку в группу '{{group}}'",
+    "joinPersonApproveParams": "{{sender}} одобрил(a) вашу заявку на вступление в группу '{{group}}'",
+    "joinPersonRefuseParams": "{{sender}} отклонил(a) вашу заявку на вступление в группу '{{group}}'",
+    "invitePersonParams": "{{sender}} пригласил(a) вас в группу '{{group}}'",
     "invitePersonApproveParams": "{{person}} принял(а) приглашение в группу '{{group}}'",
     "invitePersonRefuseParams": "{{person}} отклонил(а) приглашение в группу '{{group}}'",
-    "deletePersonParams": "{{sender}} исключил вас из группы '{{group}}'"
+    "deletePersonParams": "{{sender}} исключил(a) вас из группы '{{group}}'",
+    "updatePositionsParams": "{{sender}} обновил(a) ваши должности '{{positions}}' в '{{group}}'",
+    "updatePositionsApproveParams": "{{person}} подтвердил(a) изменение должностей в '{{group}}'",
+    "updatePositionsRefuseParams": "{{person}} отклонил(a) изменение должностей в '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} создал беседу",

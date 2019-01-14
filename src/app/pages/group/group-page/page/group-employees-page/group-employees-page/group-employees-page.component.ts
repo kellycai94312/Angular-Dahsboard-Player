@@ -35,9 +35,8 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
     this.query.state = GroupPersonState.APPROVED;
-
     let positionLevels = await this._translateObjectService.getTranslatedEnumCollection<PositionLevelEnum>(PositionLevelEnum, 'PositionLevelEnum');
-    if (groupPerson.state !== GroupPersonState.APPROVED) {
+    if (!groupPerson || groupPerson.state !== GroupPersonState.APPROVED) {
       positionLevels = positionLevels.filter(x => x.data !== PositionLevelEnum.TECH_STAFF);
     }
     this.positionLevels = positionLevels;
