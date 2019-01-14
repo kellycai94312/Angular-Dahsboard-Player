@@ -21,6 +21,7 @@ export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupN
       case GroupNotificationType.JOIN_PERSON:
         this.body = await this.translateService.get('groupNotification.joinPersonParams', {
           group: group,
+          positions: await this.getGroupPersonPositions(),
           person: person
         }).toPromise();
         break;
@@ -61,21 +62,10 @@ export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupN
         }).toPromise();
         break;
       case GroupNotificationType.UPDATE_POSITIONS:
-        const groupPersonPositions = (await this.participantRestApiService.getGroupPersonPositions({}, {withState: true}, {
-          groupId: this.data.group.id,
-          personId: this.data.person.id
-        })).list.filter(x => !x.state || x.state === GroupPersonPositionStateEnum.ADDED).map(x => x.position.name);
-        let positions = '';
-        for (let i = 0; i < groupPersonPositions.length; i++) {
-          positions += `${groupPersonPositions[i]}`;
-          if (i + 1 < groupPersonPositions.length) {
-            positions += ', ';
-          }
-        }
         this.body = await this.translateService.get('groupNotification.updatePositionsParams', {
           group: group,
           sender: sender,
-          positions: positions
+          positions: await this.getGroupPersonPositions()
         }).toPromise();
         break;
       case GroupNotificationType.UPDATE_POSITIONS_APPROVE:
@@ -91,6 +81,21 @@ export class GroupNotificationViewModel extends BaseNotificationViewModel<GroupN
         }).toPromise();
         break;
     }
+  }
+
+  private async getGroupPersonPositions(): Promise<string> {
+    const groupPersonPositions = (await this.participantRestApiService.getGroupPersonPositions({}, {withState: true}, {
+      groupId: this.data.group.id,
+      personId: this.data.person.id
+    })).list.filter(x => !x.state || x.state === GroupPersonPositionStateEnum.ADDED).map(x => x.position.name);
+    let positions = '';
+    for (let i = 0; i < groupPersonPositions.length; i++) {
+      positions += `${groupPersonPositions[i]}`;
+      if (i + 1 < groupPersonPositions.length) {
+        positions += ', ';
+      }
+    }
+    return positions;
   }
 
 }

@@ -37,12 +37,11 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
     this.query.state = GroupPersonState.APPROVED;
     let positionLevels = await this._translateObjectService.getTranslatedEnumCollection<PositionLevelEnum>(PositionLevelEnum, 'PositionLevelEnum');
     if (!groupPerson || groupPerson.state !== GroupPersonState.APPROVED) {
-      positionLevels = positionLevels.filter(x => x.data !== PositionLevelEnum.TECH_STAFF);
+      positionLevels = positionLevels.filter(x => x.data === PositionLevelEnum.HEAD);
     }
     this.positionLevels = positionLevels;
     this.selectedPositionLevel = this.positionLevels[0];
     this.query.positionLevelEnum = this.selectedPositionLevel.data;
-    await this.groupPersonsListComponent.updateItems();
   }
 
   public async onPositionLevelChanged(item: NameWrapper<PositionLevelEnum>) {

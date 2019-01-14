@@ -225,7 +225,7 @@
     "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
   },
   "groupNotification": {
-    "joinPersonParams": "{{person}} applied to the group '{{group}}'",
+    "joinPersonParams": "{{person}} applied to the group '{{group}}' on positions '{{positions}}'",
     "joinPersonApproveParams": "{{sender}} added you to the group '{{group}}'",
     "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
     "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",

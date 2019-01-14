@@ -226,7 +226,7 @@
     "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
   },
   "groupNotification": {
-    "joinPersonParams": "{{person}} подал(a) заявку в группу '{{group}}'",
+    "joinPersonParams": "{{person}} подал(a) заявку в группу '{{group}}' на должности '{{positions}}'",
     "joinPersonApproveParams": "{{sender}} одобрил(a) вашу заявку на вступление в группу '{{group}}'",
     "joinPersonRefuseParams": "{{sender}} отклонил(a) вашу заявку на вступление в группу '{{group}}'",
     "invitePersonParams": "{{sender}} пригласил(a) вас в группу '{{group}}'",

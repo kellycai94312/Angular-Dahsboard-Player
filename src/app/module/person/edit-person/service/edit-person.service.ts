@@ -26,6 +26,7 @@ export class EditPersonService {
         await component.initialize(data);
       },
       {
+        minCount: 1,
         componentFactoryResolver: this.componentFactoryResolver,
         compare: (first, second) => {
           return first.position.id == second.position.id;

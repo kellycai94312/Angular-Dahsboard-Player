@@ -85,12 +85,11 @@ export class GroupService implements OnDestroy {
         result.position = obj;
         return result;
       });
-    }, unassigned ? undefined : 1);
+    });
   }
 
   private async showSelectionGroupPersonPositions(items: GroupPersonPosition[],
-                                                  fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<GroupPersonPosition>>,
-                                                  minCount?: number): Promise<DialogResult<GroupPersonPosition[]>> {
+                                                  fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<GroupPersonPosition>>): Promise<DialogResult<GroupPersonPosition[]>> {
     return await this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPersonPositionItemComponent,
       async (component, data) => {
         await component.initialize(data);
@@ -101,7 +100,7 @@ export class GroupService implements OnDestroy {
           return first.position.id == second.position.id;
         },
         title: `${await this._translateObjectService.getTranslation('vacancies')} | ${await this._translateObjectService.getTranslation('selection')}`,
-        minCount: minCount
+        minCount: 1
       }
     );
   }
