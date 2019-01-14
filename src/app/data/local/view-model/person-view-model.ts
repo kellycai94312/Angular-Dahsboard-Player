@@ -12,22 +12,6 @@ export class PersonViewModel extends BaseViewModel<Person> {
     super.initialize();
 
     this.url = `/person/${this.data.id}`;
-
-    try {
-      this.baseUserRole = await this.participantRestApiService.getBaseUserRoleByUser({userId: this.data.user.id});
-      if (this.baseUserRole) {
-        const baseGroupPerson = await this.participantRestApiService.getPersonBaseGroup({
-          personId: this.data.id,
-          userRoleId: this.baseUserRole.id
-        });
-
-        if (baseGroupPerson) {
-          this.baseGroupViewModel = new GroupViewModel(baseGroupPerson.group);
-          this.baseGroupViewModel.initialize();
-        }
-      }
-    } catch (e) {
-    }
   }
 
 }

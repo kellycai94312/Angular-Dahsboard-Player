@@ -30,6 +30,8 @@ import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
 import {ModalBuilderService} from './modal-builder/modal-builder.service';
 import {EditGroupComponent} from '../module/group/edit-group/edit-group/edit-group.component';
+import {UserRole} from '../data/remote/model/user-role';
+import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
 
 @Injectable({
   providedIn: 'root'
@@ -228,6 +230,13 @@ export class TemplateModalService {
     };
   }
 
+  public async showSelectionUserRolesModal(items: UserRole[]): Promise<DialogResult<UserRole[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(items, async query => {
+      return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getUserRoles({}, {global: true}, {}));
+    }, PreviewNamedObjectComponent, async (component, data) => {
+      component.data = data;
+    });
+  }
 
   private async createEventGroupNews<T extends BaseTraining>(event: T, group: Group): Promise<EventGroupNews> {
     let eventGroupNews: EventGroupNews = null;
