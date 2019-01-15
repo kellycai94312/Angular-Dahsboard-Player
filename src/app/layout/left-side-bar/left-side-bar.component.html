@@ -12,7 +12,7 @@
           [routerLink]="item.routerLink"
           title="{{item.nameKey | translate}}"
           routerLinkActive="active">
-        <a>
+        <a [ngClass]="{'disable-hover': !item.enabled}">
           <i [class]="item.iconClassName"></i>
           <span>{{item.nameKey | translate}}</span>
           <span *ngIf="item.count"

@@ -44,11 +44,14 @@ $sidebar-item-submenu-transition: .2s;
 
         background: transparent none;
         font-family: FontAwesome, serif;
+
         &:before {
           content: '\f0c9';
         }
+
         color: $sidebar-item-submenu-color;
         text-decoration: none;
+
         &:hover {
           color: $sidebar-item-submenu-color-hover;
           background-color: lighten($sidebar-background, 2%);
@@ -99,10 +102,12 @@ $sidebar-item-submenu-transition: .2s;
           //  transition: transform $sidebar-item-submenu-transition ease;
           //}
         }
+
         &.active {
           border-left-color: $light-blue;
           background-color: $sidebar-item-menu-background-hover;
         }
+
         &.active > a,
         &:hover > a {
           color: $sidebar-item-submenu-color-hover;
@@ -127,6 +132,7 @@ $sidebar-item-submenu-transition: .2s;
     .inner-content {
       white-space: nowrap;
       overflow: hidden;
+
       li.menu-item {
         > a > span {
           visibility: hidden;
@@ -143,4 +149,8 @@ $sidebar-item-submenu-transition: .2s;
     @include collapseSideBar();
   }
 
+}
+
+.disable-hover {
+  color: $sidebar-item-submenu-color !important;
 }
