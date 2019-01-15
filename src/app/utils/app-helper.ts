@@ -91,11 +91,21 @@ export class AppHelper {
 
   // TODO: Use optimized algorithm
   public except<T>(first: T[], second: T[], compare: (first: T, second: T) => boolean = (f: T, s: T) => this.defaultCompare(f, s)): T[] {
+    let baseItems: T[] = [];
+    let innerItems: T[] = [];
+    if (first.length > second.length) {
+      baseItems = first;
+      innerItems = second;
+    } else {
+      baseItems = second;
+      innerItems = first;
+    }
+
     const items = [];
-    for (let i = 0; i < first.length; i++) {
+    for (let i = 0; i < baseItems.length; i++) {
       let unique = true;
-      for (let j = 0; j < second.length; j++) {
-        if (compare(first[i], second[j])) {
+      for (let j = 0; j < innerItems.length; j++) {
+        if (compare(baseItems[i], innerItems[j])) {
           unique = false;
           break;
         }
@@ -103,7 +113,9 @@ export class AppHelper {
       if (!unique) {
         continue;
       }
-      items.push(first[i]);
+      if (!items.find(x => compare(x, baseItems[i]))) {
+        items.push(baseItems[i]);
+      }
     }
     return items;
   }

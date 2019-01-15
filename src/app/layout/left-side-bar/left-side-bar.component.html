@@ -9,11 +9,11 @@
       <li *ngFor="let item of menuItems"
           class="menu-item"
           [ngClass]="{'disabled-item': !item.enabled}"
-          [routerLink]="item.routerLink"
           title="{{item.nameKey | translate}}"
           routerLinkActive="active">
-        <a>
-          <i [class]="item.iconClassName"></i>
+        <a [routerLink]="item.routerLink"
+           [ngClass]="{'disable-hover': !item.enabled}">
+          <i class="{{item.iconClassName}}"></i>
           <span>{{item.nameKey | translate}}</span>
           <span *ngIf="item.count"
                 class="badge badge-primary p-1 ml-2">{{item.count}}</span>

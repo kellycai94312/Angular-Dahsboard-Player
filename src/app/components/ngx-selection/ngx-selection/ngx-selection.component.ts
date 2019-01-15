@@ -1,4 +1,4 @@
-import {Component, Input, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -17,6 +17,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+
+  @Input()
+  public componentFactoryResolver: ComponentFactoryResolver;
 
   @Input()
   public class: string;
@@ -43,6 +46,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   public compare: (first: TModel, second: TModel) => boolean;
 
   @Input()
+  public canEdit: boolean;
+
+  @Input()
   public minCount: number;
 
   @Input()
@@ -53,6 +59,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   constructor(private _appHelper: AppHelper) {
     this.class = '';
+    this.canEdit = true;
     this.query = <TQuery>{};
     this.compare = (first, second) => {
       return first.id == second.id;
@@ -98,6 +105,9 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   }
 
   public onUnselected(item: TModel) {
+    if (!this.canUnselect()) {
+      return;
+    }
     this._appHelper.removeItem(this.selectedItems, item);
     this.ngxVirtualScrollComponent.items.push(item);
   }
@@ -109,7 +119,11 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   };
 
   public canSelect() {
-    return this.includeMaxValue();
+    return (this.canEdit || this.canEdit === undefined) && this.includeMaxValue();
+  }
+
+  public canUnselect() {
+    return (this.canEdit || this.canEdit === undefined);
   }
 
   public isValid() {

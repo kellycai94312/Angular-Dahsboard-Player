@@ -48,7 +48,7 @@ export class PersonalPageComponent implements OnInit {
     try {
       if (this.person && this.person.id) {
         this.person.address = await this._participantRestApiService.getPersonAddress({id: this.person.id});
-        this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({userId: this.person.user.id});
+        // this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({userId: this.person.user.id});
       }
     } catch (e) {
     }

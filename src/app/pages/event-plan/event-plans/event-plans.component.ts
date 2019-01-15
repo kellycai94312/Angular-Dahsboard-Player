@@ -181,7 +181,6 @@ export class EventPlansComponent implements OnInit {
     modal.componentInstance.titleKey = 'add';
 
     await modal.componentInstance.initializeBody(EditEventPlanComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(new EventPlan());
 
       modal.componentInstance.splitButtonItems = [

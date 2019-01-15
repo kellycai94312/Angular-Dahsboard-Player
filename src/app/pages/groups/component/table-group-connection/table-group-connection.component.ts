@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Input, OnInit, ViewChild} from '@angular/core';
 import {GroupConnectionType} from '../../../../data/remote/model/group/group-connection-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -86,7 +86,6 @@ export class TableGroupConnectionComponent implements OnInit {
     modal.componentInstance.titleKey = 'edit';
 
     await modal.componentInstance.initializeBody(EditGroupConnectionComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this._appHelper.cloneObject(groupConnectionViewModel.data));
 
       modal.componentInstance.splitButtonItems = [

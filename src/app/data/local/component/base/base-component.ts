@@ -1,6 +1,6 @@
 import {Input, OnInit} from '@angular/core';
 
-export class BaseComponent<T> implements OnInit {
+export abstract class BaseComponent<T> implements OnInit {
 
   @Input()
   public class: string;
@@ -29,7 +29,7 @@ export class BaseComponent<T> implements OnInit {
     return await this.initializeComponent(data);
   }
 
-  private async initializeComponent(data: T): Promise<boolean> {
+  protected async initializeComponent(data: T): Promise<boolean> {
     this.data = data;
     return true;
   }

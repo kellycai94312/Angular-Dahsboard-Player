@@ -1,5 +1,5 @@
 import {Injectable, OnDestroy} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -9,9 +9,20 @@ import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PublicUserRole} from '../../../../data/remote/model/group/public-user-role';
+import {Person} from '../../../../data/remote/model/person';
+import {shareReplay} from 'rxjs/operators';
 
+// TODO: Do refactoring!
 @Injectable()
 export class PersonService implements OnDestroy {
+
+  public readonly person$: Observable<Person>;
+  public readonly userRoles$: Observable<UserRole[]>;
+  public readonly sportTypes$: Observable<SportType[]>;
+
+  private readonly _personSubject: Subject<Person>;
+  private readonly _userRolesSubject: Subject<UserRole[]>;
+  private readonly _sportTypesSubject: Subject<SportType[]>;
 
   public readonly personViewModelSubject: BehaviorSubject<PersonViewModel>;
   public readonly sportTypeSubject: BehaviorSubject<SportType>;
@@ -38,6 +49,15 @@ export class PersonService implements OnDestroy {
 
   public constructor(private _participantRestApiService: ParticipantRestApiService,
                      private _appHelper: AppHelper) {
+    this._personSubject = new Subject<Person>();
+    this.person$ = this._personSubject.asObservable().pipe(shareReplay(1));
+
+    this._userRolesSubject = new Subject<UserRole[]>();
+    this.userRoles$ = this._userRolesSubject.asObservable().pipe(shareReplay(1));
+
+    this._sportTypesSubject = new Subject<SportType[]>();
+    this.sportTypes$ = this._sportTypesSubject.asObservable().pipe(shareReplay(1));
+
     this.userRoleHandler = new Subject<UserRole>();
     this.sportTypeSubject = new BehaviorSubject<SportType>(null);
     this.personStageSportTypeHandler = new Subject<PublicUserRole>();
@@ -78,27 +98,39 @@ export class PersonService implements OnDestroy {
           this.sportTypeSubject.next(this.sportTypes[0]);
         }
 
-        this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
-          if (value) {
-            try {
-              this.baseGroup = await this._participantRestApiService.getPersonBaseGroup({
-                personId: this.personViewModel.data.id,
-                userRoleId: value.id
-              });
-            } catch (e) {
-              this.baseGroup = null;
-            }
-          } else {
-            this.baseGroup = null;
-          }
-          this.baseGroupHandler.next(this.baseGroup);
-        });
+        // this._userRoleSubscription = this.userRoleHandler.subscribe(async value => {
+        // if (value) {
+        //   try {
+        //     this.baseGroup = await this._participantRestApiService.getPersonBaseGroup({
+        //       personId: this.personViewModel.data.id,
+        //       userRoleId: value.id
+        //     });
+        //   } catch (e) {
+        //     this.baseGroup = null;
+        //   }
+        // } else {
+        //   this.baseGroup = null;
+        // }
+        // this.baseGroupHandler.next(this.baseGroup);
+        // });
       }
 
       return this.personViewModel;
     } catch (e) {
     }
     return null;
+  }
+
+  public updatePerson(person: Person) {
+    this._personSubject.next(person);
+  }
+
+  public updateUserRoles(userRoles: UserRole[]) {
+    this._userRolesSubject.next(userRoles);
+  }
+
+  public updateSportTypes(sportTypes: SportType[]) {
+    this._sportTypesSubject.next(sportTypes);
   }
 
   public setUserRole(userRole: UserRole) {

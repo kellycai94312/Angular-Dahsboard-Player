@@ -70,7 +70,6 @@ export class MedicalExaminationsComponent implements OnInit {
     modal.componentInstance.titleKey = 'edit';
 
     await modal.componentInstance.initializeBody(EditMedicalExaminationComponent, async component => {
-      component.manualInitialization = true;
       // component.personId = this._personService.personViewModel.data.id;
       await component.initialize(this._appHelper.cloneObject(obj));
 

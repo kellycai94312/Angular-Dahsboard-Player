@@ -225,13 +225,16 @@
     "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
   },
   "groupNotification": {
-    "joinPersonParams": "{{person}} applied to the group '{{group}}'",
+    "joinPersonParams": "{{person}} applied to the group '{{group}}' on positions '{{positions}}'",
     "joinPersonApproveParams": "{{sender}} added you to the group '{{group}}'",
     "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
     "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",
     "invitePersonApproveParams": "{{person}} approved to add in the group '{{group}}'",
     "invitePersonRefuseParams": "{{person}} refused to add in the group '{{group}}'",
-    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'"
+    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'",
+    "updatePositionsParams": "{{sender}} updated your positions '{{positions}}' in the '{{group}}'",
+    "updatePositionsApproveParams": "{{person}} approved positions changes in the '{{group}}'",
+    "updatePositionsRefuseParams": "{{person}} refused positions changes in the '{{group}}'"
   },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",
@@ -598,5 +601,19 @@
   "saveAndSend": "Save and send",
   "images": "Images",
   "chat": "Chat",
-  "new": "New"
+  "new": "New",
+  "subscribe": "Subscribe",
+  "unsubscribe": "Unsubscribe",
+  "editRequest": "Edit request",
+  "employees": "Employees",
+  "subscribers": "Subscribers",
+  "positionLevelEnum": {
+    "HEAD": "Head",
+    "SPECIALIST": "Specialist",
+    "TECH_STAFF": "Tech staff"
+  },
+  "personPosition": "Position",
+  "personPositions": "Positions",
+  "vacancies": "Vacancies",
+  "addMissingUserRoles": "Add missing user roles?"
 }

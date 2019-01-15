@@ -161,7 +161,6 @@ export class EditGroupConnectionComponent extends BaseEditComponent<GroupConnect
     modal.componentInstance.titleKey = 'edit';
 
     await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this.appHelper.cloneObject(document));
 
       modal.componentInstance.splitButtonItems = [

@@ -35,4 +35,8 @@ export class BaseNotificationViewModel<T extends BaseNotification> extends BaseV
     return `<a class="link" link="/person/${person.id}">${person.firstName} ${person.lastName}</a>`;
   }
 
+  public async preApprove(): Promise<boolean> {
+    return true;
+  }
+
 }

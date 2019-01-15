@@ -35,8 +35,11 @@ export class ModalBuilderService {
     await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
       ngxSelectionComponent = component;
       if (config) {
+        component.canEdit = config.canEdit;
+        component.minCount = config.minCount;
         component.maxCount = config.maxCount;
         component.compare = config.compare;
+        component.componentFactoryResolver = config.componentFactoryResolver;
       }
 
       await component.initialize(componentType, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));

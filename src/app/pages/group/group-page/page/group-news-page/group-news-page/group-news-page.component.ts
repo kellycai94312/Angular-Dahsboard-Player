@@ -55,6 +55,7 @@ export class GroupNewsPageComponent extends BaseGroupComponent<Group> {
   }
 
   private async resetItems() {
+    await this.appHelper.delay();
     await this.ngxVirtualScrollComponent.reset();
   }
 

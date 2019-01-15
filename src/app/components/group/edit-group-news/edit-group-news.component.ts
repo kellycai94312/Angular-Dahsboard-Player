@@ -6,6 +6,7 @@ import {Group} from '../../../data/remote/model/group/base/group';
 import {TemplateModalService} from '../../../service/template-modal.service';
 import {BaseGroupNews} from '../../../data/remote/model/group/news/base-group-news';
 import {GroupNews} from '../../../data/remote/model/group/news/group-news';
+import {AppModule} from '../../../app.module';
 
 @Component({
   selector: 'app-edit-group-news',
@@ -17,9 +18,11 @@ export class EditGroupNewsComponent extends BaseEditComponent<BaseGroupNews> imp
   @Input()
   public group: Group;
 
-  constructor(private _templateModalService: TemplateModalService,
-              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  private readonly _templateModalService: TemplateModalService;
+
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+    this._templateModalService = AppModule.injector.get(TemplateModalService);
   }
 
   async onRemove(): Promise<boolean> {

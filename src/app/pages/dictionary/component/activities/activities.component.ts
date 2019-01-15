@@ -48,7 +48,6 @@ export class ActivitiesComponent implements OnInit {
           const modal = this._ngxModalService.open();
           modal.componentInstance.titleKey = 'edit';
           await modal.componentInstance.initializeBody(EditActivityComponent, async component => {
-            component.manualInitialization = true;
             await component.initialize(activity);
 
             modal.componentInstance.splitButtonItems = [
@@ -82,7 +81,7 @@ export class ActivitiesComponent implements OnInit {
 
   public fetchItems = async (direction: Direction, query: ActivityQuery) => {
     query.exerciseType = this.type;
-    return await this._participantRestApiService.getActivities(query);
+    return await this._participantRestApiService.getBaseExercise(query);
   };
 
   public async resetItems() {

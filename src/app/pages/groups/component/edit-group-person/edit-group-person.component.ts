@@ -1,4 +1,3 @@
-import {Component} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
@@ -128,7 +127,6 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
       modal.componentInstance.titleKey = 'edit';
 
       await modal.componentInstance.initializeBody(EditGroupPersonLogComponent, async component => {
-        component.manualInitialization = true;
         const groupPersonLog = await this.participantRestApiService.getLatestGroupPersonLog({groupId: this.data.group.id, personId: this.data.person.id});
         await component.initialize(groupPersonLog);
 
@@ -154,7 +152,6 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditGroupPersonLogsComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this.data);
 
       modal.componentInstance.splitButtonItems = [{

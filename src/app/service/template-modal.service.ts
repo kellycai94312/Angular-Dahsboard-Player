@@ -5,7 +5,6 @@ import {Person} from '../data/remote/model/person';
 import {AppHelper} from '../utils/app-helper';
 import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
 import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
-import {EditGroupComponent} from '../components/group/edit-group/edit-group.component';
 import {BaseTraining} from '../data/remote/model/training/base/base-training';
 import {DialogResult} from '../data/local/dialog-result';
 import {EventPlan} from '../data/remote/model/training/plan/event-plan';
@@ -30,6 +29,11 @@ import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-conf
 import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
 import {ModalBuilderService} from './modal-builder/modal-builder.service';
+import {EditGroupComponent} from '../module/group/edit-group/edit-group/edit-group.component';
+import {UserRole} from '../data/remote/model/user-role';
+import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
+import {Position} from '../data/remote/model/person-position/position';
+import {AuthorizationService} from '../shared/authorization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -38,6 +42,7 @@ export class TemplateModalService {
 
   constructor(private _ngxModalService: NgxModalService,
               private _appHelper: AppHelper,
+              private _authorizationService: AuthorizationService,
               private _modalBuilderService: ModalBuilderService,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
@@ -125,6 +130,32 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
+  public async addMissingUserRoles(positions: Position[]): Promise<boolean> {
+    let positionUserRoles: UserRole[] = [];
+    const compare: (first: UserRole, second: UserRole) => boolean = (first, second) => first.id == second.id;
+    for (const item of positions) {
+      const items = await this._appHelper.except(positionUserRoles, item.positionUserRoles.map(x => x.userRole), compare);
+      if (items.length) {
+        const newItems = await this._appHelper.except(positionUserRoles, items, compare);
+        if (newItems.length) {
+          positionUserRoles = positionUserRoles.concat(newItems);
+        }
+      }
+    }
+    const userRoles = await this._authorizationService.getUserRoles();
+    const differenceUserRoles = this._appHelper.except(positionUserRoles, userRoles, compare);
+
+    if (differenceUserRoles.length) {
+      if (await this.showConfirmModal('addMissingUserRoles')) {
+        const person = await this._authorizationService.getPerson();
+        await this._participantRestApiService.updateUserUserRoles({list: differenceUserRoles.concat(userRoles)}, {}, {userId: person.user.id});
+      } else {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public async showEditPersonModal(person: Person, group?: Group, config?: NgxModalConfiguration): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
@@ -138,15 +169,15 @@ export class TemplateModalService {
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);
         }),
-        {
-          nameKey: 'transfer',
-          callback: async () => {
-            if (await this.showGroupPersonTransferModal(GroupTransitionType.TRANSFER, group, [component.data])) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        },
+        // {
+        //   nameKey: 'transfer',
+        //   callback: async () => {
+        //     if (await this.showGroupPersonTransferModal(GroupTransitionType.TRANSFER, group, [component.data])) {
+        //       modal.close();
+        //     }
+        //   },
+        //   visible: isNewObject
+        // },
         {
           nameKey: 'deduct',
           callback: async () => {
@@ -228,6 +259,13 @@ export class TemplateModalService {
     };
   }
 
+  public async showSelectionUserRolesModal(items: UserRole[]): Promise<DialogResult<UserRole[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(items, async query => {
+      return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getUserRoles({}, {global: true}, {}));
+    }, PreviewNamedObjectComponent, async (component, data) => {
+      component.data = data;
+    });
+  }
 
   private async createEventGroupNews<T extends BaseTraining>(event: T, group: Group): Promise<EventGroupNews> {
     let eventGroupNews: EventGroupNews = null;
@@ -262,7 +300,6 @@ export class TemplateModalService {
     let generalStepEditEventComponent: GeneralStepEditEventComponent<T> = null;
     await modal.componentInstance.initializeBody(GeneralStepEditEventComponent, async component => {
       generalStepEditEventComponent = component as GeneralStepEditEventComponent<T>;
-      component.manualInitialization = true;
 
       const isNew = this._appHelper.isNewObject(event);
       if (isNew) {
@@ -330,8 +367,6 @@ export class TemplateModalService {
     let personsStepEditEventComponent: PersonsStepEditEventComponent<T> = null;
     await modal.componentInstance.initializeBody(PersonsStepEditEventComponent, async component => {
       personsStepEditEventComponent = component as PersonsStepEditEventComponent<T>;
-      component.manualInitialization = true;
-
       component.preInitialize(afterCreateEvent, conversation);
       await component.initialize(this._appHelper.cloneObject(event));
 

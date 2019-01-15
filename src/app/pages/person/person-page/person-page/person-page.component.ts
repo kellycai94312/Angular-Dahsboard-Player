@@ -1,24 +1,24 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ImageComponent} from '../../../../components/image/image.component';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PersonTab} from '../../../person-page/person-page/person-tab';
 import {PersonViewModel} from '../../../../data/local/view-model/person-view-model';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {ButtonGroupItem} from '../../../../components/ngx-button-group/bean/button-group-item';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {PersonService} from '../service/person.service';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ActivatedRoute, Router} from '@angular/router';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue';
-import {Image} from '../../../../data/remote/model/file/image/image';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
+import {TemplateModalService} from '../../../../service/template-modal.service';
+import {ListRequest} from '../../../../data/remote/request/list-request';
+import {ImageFormat} from '../../../../data/local/image-format';
+import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 
 @Component({
   selector: 'app-person-page',
@@ -27,12 +27,10 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 })
 export class PersonPageComponent implements OnInit, OnDestroy {
 
-  @ViewChild('logo')
-  public logoImageComponent: ImageComponent;
-
-  // @ViewChild(GroupItemComponent)
-  // public groupItemComponent: GroupItemComponent;
-
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+  public readonly imageFormatClass = ImageFormat;
+  public readonly iconEnumClass = IconEnum;
   public readonly tabs: PersonTab[];
   public allowEdit: boolean;
   public hasConnection: boolean;
@@ -48,15 +46,13 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   private _connectionSplitButtonItem: SplitButtonItem;
   private _myProfile: boolean;
 
-  private readonly _baseGroupSubscription: ISubscription;
-
   constructor(public  personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _authorizationService: AuthorizationService,
               private _appHelper: AppHelper,
+              private _templateModalService: TemplateModalService,
               private _activatedRoute: ActivatedRoute,
-              private _router: Router,
-              private _modalService: NgbModal) {
+              private _router: Router) {
     this.tabs = [
       {
         nameKey: 'persons.person.personal.section', routerLink: 'personal',
@@ -126,12 +122,6 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     for (const tab of this.tabs) {
       tab.visible = this.tabVisible;
     }
-
-    // this._baseGroupSubscription = this.personService.baseGroupHandler.subscribe(value => {
-    //   if (value && this.groupItemComponent) {
-    //     this.groupItemComponent.update(value.group);
-    //   }
-    // });
   }
 
   public async ngOnInit() {
@@ -143,11 +133,10 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     await this.initialize(params.id);
 
     await this.userRoleRefresh();
-    await this.sportTypeRefresh();
+    // await this.sportTypeRefresh();
   }
 
   ngOnDestroy(): void {
-    this._appHelper.unsubscribe(this._baseGroupSubscription);
   }
 
   public async initialize(personId: number) {
@@ -234,55 +223,29 @@ export class PersonPageComponent implements OnInit, OnDestroy {
     // this.sportTypeButtonGroupItems = this.getSportTypeButtonGroupItems(this.personService.sportTypes);
   }
 
-  public async onLogoChanged(fileList: FileList) {
-    // TODO: Upload in image component
-    if (fileList.length > 0) {
-      const file: File = fileList[0];
-      const image: Image = new Image();
-      image.clazz = FileClass.PERSON;
-      image.objectId = this.personService.personViewModel.data.id;
-      image.type = ImageType.LOGO;
-      const files = await this._participantRestApiService.uploadFile(image, [file]);
-      this.personService.logoHandler.next(files[0]);
-      this.logoImageComponent.refresh();
-      // TODO: Add refresh logo
-      // this._navbarService.emitLogoChange(true);
-    }
+  public async onLogoChanged() {
+    const image = (await this._participantRestApiService.getImages({clazz: FileClass.PERSON, objectId: this.personService.personViewModel.data.id, type: ImageType.LOGO})).list[0];
+    this.personService.logoHandler.next(image);
   }
 
   //#region UserRole
-  public async onEditUserRoles() {
-    // const userRoles = await this._participantRestApiService.getUserRoles();
-    // const ref = this._modalService.open(ModalSelectPageComponent, {size: 'lg'});
-    // const componentInstance = ref.componentInstance as ModalSelectPageComponent<any>;
-    // componentInstance.headerNameKey = 'edit';
-    // componentInstance.component = NamedObjectItemComponent;
-    // componentInstance.getItems = async pageQuery => {
-    //   const items = userRoles.filter(userRole => userRole.name.toLowerCase().indexOf(pageQuery.name) > -1);
-    //   const pageContainer = new PageContainer();
-    //   pageContainer.from = 0;
-    //   pageContainer.size = items.length;
-    //   pageContainer.total = items.length;
-    //   pageContainer.list = items;
-    //   return pageContainer;
-    // };
-    // componentInstance.onSave = async selectedItems => {
-    //   try {
-    //     this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(selectedItems), {}, {userId: this.personService.personViewModel.data.user.id});
-    //     this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
-    //
-    //     await this.onSelectedUserRole(this.personService.selectedUserRole);
-    //     ref.dismiss();
-    //   } catch (e) {
-    //     if (e.status === 409) {
-    //       await this._appHelper.showErrorMessage('persons.person.roles.conflict');
-    //     } else {
-    //       await this._appHelper.showErrorMessage('saveError');
-    //     }
-    //   }
-    // };
-    // await componentInstance.initialize(this.personService.userRoles);
-  }
+  public onEditUserRoles = async () => {
+    const result = await this._templateModalService.showSelectionUserRolesModal(this.personService.userRoles);
+    if (result.result) {
+      try {
+        this.personService.userRoles = await this._participantRestApiService.updateUserUserRoles(new ListRequest(result.data), {}, {userId: this.personService.personViewModel.data.user.id});
+        this.userRoleButtonGroupItems = this.getUserRoleButtonGroupItems(this.personService.userRoles);
+
+        await this.onSelectedUserRole(this.personService.selectedUserRole);
+      } catch (e) {
+        if (e.status === 409) {
+          await this._appHelper.showErrorMessage('persons.person.roles.conflict');
+        } else {
+          await this._appHelper.showErrorMessage('saveError');
+        }
+      }
+    }
+  };
 
   public async onSelectedUserRole(userRole: UserRole) {
     await this.userRoleRefresh(userRole);

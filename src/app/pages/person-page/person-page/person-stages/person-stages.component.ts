@@ -63,7 +63,6 @@ export class PersonStagesComponent implements OnInit, OnDestroy {
     modal.componentInstance.titleKey = 'edit';
 
     await modal.componentInstance.initializeBody(EditPersonStageComponent, async component => {
-      component.manualInitialization = true;
       component.personId = this._personService.personViewModel.data.id;
       component.sportTypeId = sportType.id;
 

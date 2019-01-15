@@ -1,20 +1,12 @@
 <div *ngIf="group">
   <div class="d-flex flex-row mb-2">
-    <app-image #logo
-               [type]="'LOGO'"
-               [clazz]="'GROUP'"
-               [id]="group.id"
-               [dimension]="'W130xH130'"
-               [format]="'SQUARE'"></app-image>
-    <div *ngIf="canEdit"
-         class="logo-xl-change">
-      <div class="logo-content">
-        <input type="file"
-               (change)="onLogoChange($event)" accept="image/*">
-        <p>{{'uploadAvatar' | translate | uppercase}}</p>
-        <i class="fa fa-pencil-square-o"></i>
-      </div>
-    </div>
+    <ngx-image [canEdit]="canEdit"
+               [width]="130"
+               [height]="130"
+               [objectId]="group.id"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.GROUP"
+               [allowFullScreen]="false"></ngx-image>
     <div class="p-2">
       <h4>{{group.name}}</h4>
       <p>{{'groupType' | translate }} - {{('groupTypeEnum.' + group.discriminator) | translate}}</p>
@@ -27,22 +19,12 @@
         <p *ngIf="group.ageGroup">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
       </div>
     </div>
-    <div class="ml-2">
-      <div *ngFor="let item of organizationTrainers; let i = index">
-        <div *ngIf="item.lead; else elseTemplate">
-          {{('leadTrainer' | translate) + ": " + item.groupPerson.person.lastName + " " +
-          item.groupPerson.person.firstName}}
-        </div>
-        <ng-template #elseTemplate>
-          {{('trainer' | translate) + " №" + (i + 1) + ": " + item.groupPerson.person.lastName + " " +
-          item.groupPerson.person.firstName}}
-        </ng-template>
-      </div>
-    </div>
 
     <div class="ml-auto d-flex flex-row">
       <ngx-split-button title="{{ groupPerson ?(('groupPersonStateEnum.' + groupPerson.state) | translate) : ' '}}"
+                        [placementRight]="true"
                         [items]="splitButtonsItems"></ngx-split-button>
+
       <ngx-button *ngIf="canEdit"
                   class="ml-2"
                   [icon]="iconEnumClass.EDIT"

@@ -99,7 +99,6 @@ export class StageStandardDictionaryComponent extends BaseDictionaryComponent im
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
     await modal.componentInstance.initializeBody(EditStageStandardComponent, async component => {
-      component.manualInitialization = true;
       await component.initialize(this.appHelper.cloneObject(obj));
 
       modal.componentInstance.splitButtonItems = [

@@ -36,8 +36,6 @@ import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
 import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
 import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
-import {GroupPersonQuery} from '../../../data/remote/rest-api/query/group-person-query';
-import {GroupPerson} from '../../../data/remote/model/group/group-person';
 
 @Injectable()
 export class NgxModalService {
@@ -148,7 +146,6 @@ export class NgxModalService {
     const editModal = this.open();
     editModal.componentInstance.titleKey = 'edit';
     await editModal.componentInstance.initializeBody(EditTagComponent, async component1 => {
-      component1.manualInitialization = true;
       await component1.initialize(this._appHelper.cloneObject(data));
 
       editModal.componentInstance.splitButtonItems = [
@@ -219,25 +216,6 @@ export class NgxModalService {
         return data.name;
       },
       [], apply, 1);
-  }
-
-  //#endregion
-
-  //#region Group
-
-  public async showSelectionGroupPersonsModal(groupPersonQuery: GroupPersonQuery, apply: (selectedItems: GroupPerson[]) => Promise<void>) {
-    await this.showSelectionNameObjectsModal<GroupPerson>(async (query: GroupPersonQuery) => {
-        return await this._participantRestApiService.getGroupPersonsByGroup(this._appHelper.updatePageQuery(query, groupPersonQuery));
-      },
-      data => {
-        const person = data.person;
-        let personFullName = `${person.lastName} ${person.firstName}`;
-        if (person.patronymic) {
-          personFullName += ` ${person.patronymic}`;
-        }
-        return personFullName;
-      },
-      [], apply);
   }
 
   //#endregion

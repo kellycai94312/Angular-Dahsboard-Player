@@ -1,40 +1,15 @@
-<div *ngIf="!data.id">
-  <label>{{'parentGroup' | translate}}</label>
-  <app-input-select [loadData]="loadGroups"
-                    [(model)]="parentGroup"
-                    [getKey]="getKey"
-                    [getName]="getName"
-                    [disabled]="data.id"
-                    ngDefaultControl>
-  </app-input-select>
-</div>
-
 <label class="mt-2">{{'name' | translate}}</label>
-<div class="d-flex flex-row">
-  <dx-text-box class="w-100"
-               [(value)]="data.name"
-               type="text">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
-  </dx-text-box>
-  <div *ngIf="!data.id"
-       class="ml-2">
-    <dx-check-box [(value)]="rememberName"
-                  text="{{'remember' | translate}}"></dx-check-box>
-  </div>
-</div>
+<ngx-input class="w-100"
+           [(value)]="data.name"></ngx-input>
 
 <label class="mt-2">{{'groupType' | translate}}</label>
 <dx-select-box [items]="groupTypeEnums"
+               [(value)]="selectedGroupTypeEnum"
+               [acceptCustomValue]="true"
                displayExpr="name"
                [disabled]="data.id"
-               [acceptCustomValue]="true"
                placeholder="{{'groupType' | translate}}"
                (onValueChanged)="onGroupTypeChanged($event.value)">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
 </dx-select-box>
 
 <div *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION">
@@ -42,16 +17,13 @@
   <dx-select-box [items]="organizationTypes"
                  [(value)]="data.organizationType"
                  [acceptCustomValue]="true"
+                 [disabled]="data.id"
                  displayExpr="name"
                  placeholder="{{'organizationType' | translate}}">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
   </dx-select-box>
 </div>
 
-<div
-  *ngIf="data?.discriminator === groupTypeEnum.TEAM || data?.discriminator === groupTypeEnum.PREPARATION_GROUP">
+<div *ngIf="data?.discriminator === groupTypeEnum.TEAM">
   <label class="mt-2">{{'sportType' | translate}}</label>
   <dx-select-box [items]="sportTypes"
                  [(value)]="data.sportType"
@@ -59,9 +31,6 @@
                  displayExpr="name"
                  [disabled]="data.id"
                  placeholder="{{'sportType' | translate}}">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
   </dx-select-box>
 
   <div *ngIf="data?.discriminator === groupTypeEnum.TEAM">
@@ -71,9 +40,6 @@
                    [acceptCustomValue]="true"
                    displayExpr="name"
                    placeholder="{{'teamType' | translate}}">
-      <dx-validator>
-        <dxi-validation-rule type="required"></dxi-validation-rule>
-      </dx-validator>
     </dx-select-box>
   </div>
 
@@ -83,9 +49,6 @@
                  [acceptCustomValue]="true"
                  displayExpr="name"
                  placeholder="{{'stage' | translate}}">
-    <dx-validator>
-      <dxi-validation-rule type="required"></dxi-validation-rule>
-    </dx-validator>
   </dx-select-box>
 
   <label class="mt-2">{{'yearPreparation' | translate}}</label>
