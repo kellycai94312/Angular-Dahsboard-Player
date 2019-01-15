@@ -1,4 +1,4 @@
-<div *ngIf="environment.type !== environmentTypeClass.SAINT_PETERSBURG  && environment.type !== environmentTypeClass.PRODUCTION"
+<div *ngIf="environment.type !== environmentTypeClass.PRODUCTION"
      [ngClass]="{'compact': compact}">
   <p class="text-white text-center"> {{(compact ? 'language' : 'chooseLanguage')| translate}}</p>
   <div class="d-flex flex-row justify-content-center">
