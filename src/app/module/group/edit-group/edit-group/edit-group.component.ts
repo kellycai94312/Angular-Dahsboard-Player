@@ -43,9 +43,9 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
     super(participantRestApiService, appHelper);
   }
 
-  async initialize(obj: Group): Promise<boolean> {
-    await super.initialize(obj);
-    obj.visible = obj.visible || true;
+  protected async initializeComponent(data: Group): Promise<boolean> {
+    await super.initializeComponent(data);
+    data.visible = data.visible || true;
 
     return await this.appHelper.tryLoad(async () => {
       this.groupTypeEnums = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum')).filter(x => x.data === GroupTypeEnum.ORGANIZATION);

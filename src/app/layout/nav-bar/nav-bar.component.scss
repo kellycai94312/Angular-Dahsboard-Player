@@ -1,8 +1,8 @@
 @import "../layout.component";
 
-$navbar-background: $light-blue;
-$notifications-background: darken($navbar-background, 20%);
-$profile-background: darken($navbar-background, 12%);
+$navbar-background: darken($light-blue, 12%);
+$notifications-background: darken($light-blue, 12%);
+$profile-background: darken($light-blue, 12%);
 $user-panel-width: 300px;
 
 .navbar-wrapper {
@@ -18,12 +18,15 @@ $user-panel-width: 300px;
   > .logo-wrapper {
     height: $navbar-height;
     width: $sidebar-width;
+
     > .large {
       display: block;
     }
+
     > .mini {
       display: none;
     }
+
     @media (max-width: max-width-sm()) {
       width: $sidebar-width-mini;
       padding: 0 10px;
@@ -104,6 +107,7 @@ $user-panel-width: 300px;
             font-weight: 400;
             color: $white;
             white-space: nowrap;
+
             > p {
               overflow: hidden !important;
               text-overflow: ellipsis;
@@ -123,7 +127,8 @@ $user-panel-width: 300px;
             > p, > span.fa {
               color: $white-light;
             }
-            background-color: darken($profile-background, 2%);
+
+            background-color: darken($profile-background, 13%);
           }
 
         }

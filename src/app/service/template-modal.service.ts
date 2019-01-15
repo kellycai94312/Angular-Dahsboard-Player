@@ -169,15 +169,15 @@ export class TemplateModalService {
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);
         }),
-        {
-          nameKey: 'transfer',
-          callback: async () => {
-            if (await this.showGroupPersonTransferModal(GroupTransitionType.TRANSFER, group, [component.data])) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        },
+        // {
+        //   nameKey: 'transfer',
+        //   callback: async () => {
+        //     if (await this.showGroupPersonTransferModal(GroupTransitionType.TRANSFER, group, [component.data])) {
+        //       modal.close();
+        //     }
+        //   },
+        //   visible: isNewObject
+        // },
         {
           nameKey: 'deduct',
           callback: async () => {
