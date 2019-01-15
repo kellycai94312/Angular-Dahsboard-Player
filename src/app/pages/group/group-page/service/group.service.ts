@@ -18,6 +18,8 @@ import {GroupPersonPositionItemComponent} from '../../../../module/group/group-p
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
+import {GroupPersonItemComponent} from '../../../../module/group/group-person-item/group-person-item/group-person-item.component';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -101,6 +103,20 @@ export class GroupService implements OnDestroy {
         },
         title: `${await this._translateObjectService.getTranslation('vacancies')} | ${await this._translateObjectService.getTranslation('selection')}`,
         minCount: 1
+      }
+    );
+  }
+
+  public async showSelectionGroupPersonsModal(items: GroupPerson[], groupPersonQuery: GroupPersonQuery): Promise<DialogResult<GroupPerson[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(items, async (query: GroupPersonQuery) => {
+        return await this._participantRestApiService.getGroupPersonsByGroup(this._appHelper.updatePageQuery(query, groupPersonQuery));
+      }, GroupPersonItemComponent, async (component, data) => {
+        await component.initialize(data);
+      },
+      {
+        title: `${await this._translateObjectService.getTranslation('persons.section')} | ${await this._translateObjectService.getTranslation('selection')}`,
+        componentFactoryResolver: this._componentFactoryResolver,
+        compare: (first, second) => first.person.id == second.person.id
       }
     );
   }

@@ -24,7 +24,7 @@ export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
 
   async initializeComponent(data: GroupPerson): Promise<boolean> {
     const result = super.initializeComponent(data);
-    if (result) {
+    if (result && data.group) {
       return await this._appHelper.tryLoad(async () => {
         this.groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
           {

@@ -181,13 +181,17 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         {
           nameKey: 'sendInvitations',
           callback: async () => {
-            await this._ngxModalService.showSelectionGroupPersonsModal({id: this.group.id, unassigned: true}, async selectedItems => {
-              await this.appHelper.tryAction('invitationsHaveBeenSent', 'invitationsHaveNotBeenSent', async () => {
-                // for (const item of selectedItems.map(x => x.person)) {
-                //   await this._participantRestApiService.inviteIntoGroup({id: item.id}, {}, {groupId: this.group.id});
-                // }
-              });
-            });
+            const groupPersonResult = await this.groupService.showSelectionGroupPersonsModal([], {id: this.group.id, unassigned: true});
+            if (groupPersonResult.result) {
+              const result = await this.groupService.showSelectionGroupVacanciesModal(false, [], {groupId: this.group.id});
+              if (result.result) {
+                await this.appHelper.tryAction('invitationsHaveBeenSent', 'invitationsHaveNotBeenSent', async () => {
+                  for (const item of groupPersonResult.data.map(x => x.person)) {
+                    await this._participantRestApiService.inviteIntoGroup({personId: item.id, positionIds: result.data.map(x => x.position.id)}, {}, {groupId: this.group.id});
+                  }
+                });
+              }
+            }
           }
         },
         {

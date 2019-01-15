@@ -10,6 +10,7 @@ import {GroupSettingsModule} from '../../../module/group/group-settings/group-se
 import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {GroupPersonPositionItemModule} from '../../../module/group/group-person-position-item/group-person-position-item.module';
+import {GroupPersonItemModule} from '../../../module/group/group-person-item/group-person-item.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import {GroupPersonPositionItemModule} from '../../../module/group/group-person-
     NgxModalModule,
     NgxSplitButtonModule,
     GroupSettingsModule,
-    GroupPersonPositionItemModule
+    GroupPersonPositionItemModule,
+    GroupPersonItemModule
   ],
   declarations: [GroupPageComponent]
 })
