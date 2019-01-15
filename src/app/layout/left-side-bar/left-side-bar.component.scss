@@ -85,6 +85,12 @@ $sidebar-item-submenu-transition: .2s;
           padding: 10px 5px 10px 15px;
           text-decoration: none;
 
+          &.disable-hover {
+            color: $sidebar-item-submenu-color !important;
+            pointer-events: none !important;
+            cursor: default;
+          }
+
           > span {
             padding-left: 5px;
           }
@@ -149,10 +155,4 @@ $sidebar-item-submenu-transition: .2s;
     @include collapseSideBar();
   }
 
-}
-
-.disable-hover {
-  color: $sidebar-item-submenu-color !important;
-  pointer-events: none !important;
-  cursor: default;
 }
