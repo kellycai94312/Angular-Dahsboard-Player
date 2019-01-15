@@ -153,4 +153,6 @@ $sidebar-item-submenu-transition: .2s;
 
 .disable-hover {
   color: $sidebar-item-submenu-color !important;
+  pointer-events: none !important;
+  cursor: default;
 }
