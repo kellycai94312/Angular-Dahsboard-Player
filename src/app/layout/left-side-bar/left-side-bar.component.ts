@@ -4,7 +4,7 @@ import {ConversationService} from '../../shared/conversation.service';
 import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AppHelper} from '../../utils/app-helper';
 import {IEnvironment} from '../../../environments/ienvironment';
-import {environment} from 'src/environments/environment';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-left-side-bar',
