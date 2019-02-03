@@ -39,7 +39,7 @@ import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
-import {LayoutModule} from './layout/layout.module';
+import {LayoutModule} from './layout-old/layout.module';
 import {LayoutService} from './shared/layout.service';
 
 registerLocaleData(localeRu);
