@@ -49,3 +49,9 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "../src/app/styles/tables";
 @import "../src/app/styles/tabs";
 @import "../src/app/styles/calendar";
+
+// Import Fuse core library
+@import "@fuse/scss/core";
+
+// Import app.theme.scss
+@import "app/app.theme";

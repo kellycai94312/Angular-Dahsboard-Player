@@ -39,8 +39,10 @@ import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
-import {LayoutModule} from './layout-old/layout.module';
+import {LayoutModule} from './layout/layout.module';
 import {LayoutService} from './shared/layout.service';
+import {fuseConfig} from './fuse-config';
+import {FuseModule} from '../@fuse/fuse.module';
 
 registerLocaleData(localeRu);
 
@@ -80,7 +82,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupModule,
     EditEventModule,
     EventPersonItemModule,
-    NamedObjectModule
+    NamedObjectModule,
+    FuseModule.forRoot(fuseConfig)
   ],
   providers: [
     LayoutService,

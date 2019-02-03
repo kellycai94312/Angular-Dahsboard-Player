@@ -1,7 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageService} from './shared/local-storage.service';
-import {SubscriptionLike as ISubscription} from 'rxjs';
+import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
 import {ToastrService} from 'ngx-toastr';
 import {AuthorizationService} from './shared/authorization.service';
 import {Locale} from './data/remote/misc/locale';
@@ -13,6 +13,12 @@ import {Router} from '@angular/router';
 import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
 import {Message} from './data/remote/model/chat/message/message';
 import {AssetsService} from './data/remote/rest-api/assets.service';
+import {takeUntil} from 'rxjs/operators';
+import {FuseConfigService} from '../@fuse/services/config.service';
+import {DOCUMENT} from '@angular/common';
+import {FuseNavigationService} from '../@fuse/components/navigation/navigation.service';
+import {Platform} from '@angular/cdk/platform';
+import {navigation} from './navigation/navigation';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +35,14 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _messageUpdateSubscription: ISubscription;
   private readonly _messageDeleteSubscription: ISubscription;
 
-  constructor(private _translate: TranslateService,
+  private _fuseConfig: any;
+  private _unsubscribeAll: Subject<any>;
+
+  constructor(@Inject(DOCUMENT) private document: any,
+              private _fuseConfigService: FuseConfigService,
+              private _fuseNavigationService: FuseNavigationService,
+              private _platform: Platform,
+              private _translate: TranslateService,
               private _localStorageService: LocalStorageService,
               private _authorizationService: AuthorizationService,
               private _notificationService: NotificationService,
@@ -79,6 +92,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
       this.unsubscribe();
     });
+
+    this.initFuse();
+    this.initLangs();
   }
 
   private buildToast(message: Message): void {
@@ -112,7 +128,30 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.initLangs();
+    this._fuseConfigService.config
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((config) => {
+
+        this._fuseConfig = config;
+
+        // Boxed
+        if (this._fuseConfig.layout.width === 'boxed') {
+          this.document.body.classList.add('boxed');
+        } else {
+          this.document.body.classList.remove('boxed');
+        }
+
+        // Color theme - Use normal for loop for IE11 compatibility
+        for (let i = 0; i < this.document.body.classList.length; i++) {
+          const className = this.document.body.classList[i];
+
+          if (className.startsWith('theme-')) {
+            this.document.body.classList.remove(className);
+          }
+        }
+
+        this.document.body.classList.add(this._fuseConfig.colorTheme);
+      });
     await this._assetsService.setScriptInDocumentIfNotExist('/assets/js/plotly.min.js', true);
   }
 
@@ -125,6 +164,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this._logOutSubscription.unsubscribe();
 
     this.unsubscribe();
+  }
+
+  private initFuse(): void {
+    this._fuseNavigationService.register('main', navigation);
+
+    this._fuseNavigationService.setCurrentNavigation('main');
+
+    if (this._platform.ANDROID || this._platform.IOS) {
+      this.document.body.classList.add('is-mobile');
+    }
+    this._unsubscribeAll = new Subject();
   }
 
   private initLangs(): void {
