@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnDestroy} from '@angular/core';
 import {Person} from '../data/remote/model/person';
 import {UserRoleEnum} from '../data/remote/model/user-role-enum';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
@@ -8,14 +8,27 @@ import {AuthorizationService} from './authorization.service';
 import {BaseFile} from '../data/remote/model/file/base/base-file';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {UserRole} from '../data/remote/model/user-role';
+import {SubscriptionLike} from 'rxjs';
+import {AppHelper} from '../utils/app-helper';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PermissionService {
+export class PermissionService implements OnDestroy {
+
+  private readonly _personSubscription: SubscriptionLike;
+  private _person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
+    this._personSubscription = this._authorizationService.personSubject.subscribe(val => {
+      this._person = val;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this._appHelper.unsubscribe(this._personSubscription);
   }
 
   public async canEditTag(data: Tag, person: Person): Promise<boolean> {
@@ -86,7 +99,7 @@ export class PermissionService {
   }
 
   private async getDefaultPerson(person: Person): Promise<Person> {
-    return person || await this._authorizationService.getPerson();
+    return person || this._person;
   }
 
 }

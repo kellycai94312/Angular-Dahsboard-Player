@@ -5,6 +5,7 @@ import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -18,11 +19,12 @@ export class DashboardPageComponent implements OnInit {
   public person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
   }
 
   async ngOnInit(): Promise<void> {
-    this.person = await this._authorizationService.getPerson();
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     await this.resetItems();
   }
 

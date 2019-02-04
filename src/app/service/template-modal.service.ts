@@ -147,7 +147,7 @@ export class TemplateModalService {
 
     if (differenceUserRoles.length) {
       if (await this.showConfirmModal('addMissingUserRoles')) {
-        const person = await this._authorizationService.getPerson();
+        const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
         await this._participantRestApiService.updateUserUserRoles({list: differenceUserRoles.concat(userRoles)}, {}, {userId: person.user.id});
       } else {
         return false;

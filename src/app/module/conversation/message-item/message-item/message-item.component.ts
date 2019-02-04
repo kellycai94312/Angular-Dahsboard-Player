@@ -8,6 +8,7 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ConversationService} from '../../../../shared/conversation.service';
 import {Router} from '@angular/router';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
+import {AppHelper} from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-message-item',
@@ -36,14 +37,14 @@ export class MessageItemComponent implements OnInit, DoCheck {
   constructor(private _authorizationService: AuthorizationService,
               public conversationService: ConversationService,
               private _router: Router,
+              private _appHelper: AppHelper,
               differs: KeyValueDiffers) {
     this.class = '';
     this.differ = differs.find([]).create();
   }
 
   async ngOnInit() {
-    this.person = await this._authorizationService.getPerson();
-
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     await this.buildMessage();
   }
 
