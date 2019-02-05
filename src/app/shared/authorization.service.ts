@@ -65,6 +65,7 @@ export class AuthorizationService {
   public async updateSession(): Promise<Session> {
     try {
       this.session = await this._participantRestApiService.getSession();
+      this.personSubject.next(this.session.person);
     } catch (e) {
     }
     return this.session;

@@ -2067,4 +2067,16 @@ export class ParticipantRestApiService extends Rest {
   })
   getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
 
+  getUrlImage(query: ImageQuery): string {
+    let url = `${environment.restUrl}/file/download/image?clazz=${query.clazz}&objectId=${query.objectId}&type=${query.type}`;
+    if (query.width) {
+      url += `&width=${query.width}`;
+    }
+
+    if (query.height) {
+      url += `&height=${query.height}`;
+    }
+    return url;
+  }
+
 }
