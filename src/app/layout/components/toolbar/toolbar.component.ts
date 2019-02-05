@@ -1,163 +1,200 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { TranslateService } from '@ngx-translate/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Subject} from 'rxjs';
+import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {TranslateService} from '@ngx-translate/core';
 import * as _ from 'lodash';
 
-import { FuseConfigService } from '@fuse/services/config.service';
-import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import {FuseConfigService} from '@fuse/services/config.service';
+import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
 
-import { navigation } from 'app/navigation/navigation';
+import {navigation} from 'app/navigation/navigation';
+import {AuthorizationService} from '../../../shared/authorization.service';
+import {Person} from '../../../data/remote/model/person';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {Router} from '@angular/router';
 
 @Component({
-    selector     : 'toolbar',
-    templateUrl  : './toolbar.component.html',
-    styleUrls    : ['./toolbar.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'toolbar',
+  templateUrl: './toolbar.component.html',
+  styleUrls: ['./toolbar.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 
-export class ToolbarComponent implements OnInit, OnDestroy
-{
-    horizontalNavbar: boolean;
-    rightNavbar: boolean;
-    hiddenNavbar: boolean;
-    languages: any;
-    navigation: any;
-    selectedLanguage: any;
-    userStatusOptions: any[];
+export class ToolbarComponent implements OnInit, OnDestroy {
+  horizontalNavbar: boolean;
+  rightNavbar: boolean;
+  hiddenNavbar: boolean;
+  languages: any;
+  navigation: any;
+  selectedLanguage: any;
+  userStatusOptions: any[];
 
-    // Private
-    private _unsubscribeAll: Subject<any>;
+  public person: Person;
+  public personLogoUrl: string;
 
-    /**
-     * Constructor
-     *
-     * @param {FuseConfigService} _fuseConfigService
-     * @param {FuseSidebarService} _fuseSidebarService
-     * @param {TranslateService} _translateService
-     */
-    constructor(
-        private _fuseConfigService: FuseConfigService,
-        private _fuseSidebarService: FuseSidebarService,
-        private _translateService: TranslateService
+  // Private
+  private _unsubscribeAll: Subject<any>;
+
+  /**
+   * Constructor
+   *
+   * @param {FuseConfigService} _fuseConfigService
+   * @param {FuseSidebarService} _fuseSidebarService
+   * @param {TranslateService} _translateService
+   */
+  constructor(
+    private _fuseConfigService: FuseConfigService,
+    private _fuseSidebarService: FuseSidebarService,
+    private _translateService: TranslateService,
+    private _authorizationService: AuthorizationService,
+    private _participantRestApiService: ParticipantRestApiService,
+    private _router: Router
+  ) {
+    // Set the defaults
+    this.userStatusOptions = [
+      {
+        'title': 'Online',
+        'icon': 'icon-checkbox-marked-circle',
+        'color': '#4CAF50'
+      },
+      {
+        'title': 'Away',
+        'icon': 'icon-clock',
+        'color': '#FFC107'
+      },
+      {
+        'title': 'Do not Disturb',
+        'icon': 'icon-minus-circle',
+        'color': '#F44336'
+      },
+      {
+        'title': 'Invisible',
+        'icon': 'icon-checkbox-blank-circle-outline',
+        'color': '#BDBDBD'
+      },
+      {
+        'title': 'Offline',
+        'icon': 'icon-checkbox-blank-circle-outline',
+        'color': '#616161'
+      }
+    ];
+
+    this.languages = [
+      {
+        id: 'en',
+        title: 'English',
+        flag: 'us'
+      },
+      {
+        id: 'ru',
+        title: 'Russian',
+        flag: 'ru'
+      }
+    ];
+
+    this.navigation = navigation;
+
+    // Set the private defaults
+    this._unsubscribeAll = new Subject();
+
+    this._authorizationService.personSubject.pipe(
+      takeUntil(this._unsubscribeAll),
+      distinctUntilChanged()
     )
-    {
-        // Set the defaults
-        this.userStatusOptions = [
-            {
-                'title': 'Online',
-                'icon' : 'icon-checkbox-marked-circle',
-                'color': '#4CAF50'
-            },
-            {
-                'title': 'Away',
-                'icon' : 'icon-clock',
-                'color': '#FFC107'
-            },
-            {
-                'title': 'Do not Disturb',
-                'icon' : 'icon-minus-circle',
-                'color': '#F44336'
-            },
-            {
-                'title': 'Invisible',
-                'icon' : 'icon-checkbox-blank-circle-outline',
-                'color': '#BDBDBD'
-            },
-            {
-                'title': 'Offline',
-                'icon' : 'icon-checkbox-blank-circle-outline',
-                'color': '#616161'
-            }
-        ];
+      .subscribe(val => {
+        this.person = val;
+        if (val) {
+          this.personLogoUrl = this._participantRestApiService.getUrlImage({
+            clazz: FileClass.PERSON,
+            type: ImageType.LOGO,
+            objectId: val.id,
+            width: 40,
+            height: 40
+          });
+        } else {
+          delete this.personLogoUrl;
+        }
+      });
+  }
 
-        this.languages = [
-            {
-                id   : 'en',
-                title: 'English',
-                flag : 'us'
-            },
-            {
-                id   : 'ru',
-                title: 'Russian',
-                flag : 'ru'
-            }
-        ];
+  // -----------------------------------------------------------------------------------------------------
+  // @ Lifecycle hooks
+  // -----------------------------------------------------------------------------------------------------
 
-        this.navigation = navigation;
+  /**
+   * On init
+   */
+  ngOnInit(): void {
+    // Subscribe to the config changes
+    this._fuseConfigService.config
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe((settings) => {
+        this.horizontalNavbar = settings.layout.navbar.position === 'top';
+        this.rightNavbar = settings.layout.navbar.position === 'right';
+        this.hiddenNavbar = settings.layout.navbar.hidden === true;
+      });
 
-        // Set the private defaults
-        this._unsubscribeAll = new Subject();
+    // Set the selected language from default languages
+    this.selectedLanguage = _.find(this.languages, {'id': this._translateService.currentLang});
+  }
+
+  /**
+   * On destroy
+   */
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
+  }
+
+  // -----------------------------------------------------------------------------------------------------
+  // @ Public methods
+  // -----------------------------------------------------------------------------------------------------
+
+  /**
+   * Toggle sidebar open
+   *
+   * @param key
+   */
+  toggleSidebarOpen(key): void {
+    this._fuseSidebarService.getSidebar(key).toggleOpen();
+  }
+
+  /**
+   * Search
+   *
+   * @param value
+   */
+  search(value): void {
+    // Do your search here...
+    console.log(value);
+  }
+
+  /**
+   * Set the language
+   *
+   * @param lang
+   */
+  setLanguage(lang): void {
+    // Set the selected language for the toolbar
+    this.selectedLanguage = lang;
+
+    // Use the selected language for translations
+    this._translateService.use(lang.id);
+  }
+
+  public async openProfile() {
+    // Reload children when on the same state /person/:id
+    if (this._router.url.indexOf('/person/') == 0) {
+      await this._router.navigate(['/person']);
     }
+    await this._router.navigate(['/person', this._authorizationService.session.person.id]);
+  }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
+  public async signOut() {
+    await this._authorizationService.logOut();
+  }
 
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        // Subscribe to the config changes
-        this._fuseConfigService.config
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((settings) => {
-                this.horizontalNavbar = settings.layout.navbar.position === 'top';
-                this.rightNavbar = settings.layout.navbar.position === 'right';
-                this.hiddenNavbar = settings.layout.navbar.hidden === true;
-            });
-
-        // Set the selected language from default languages
-        this.selectedLanguage = _.find(this.languages, {'id': this._translateService.currentLang});
-    }
-
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Toggle sidebar open
-     *
-     * @param key
-     */
-    toggleSidebarOpen(key): void
-    {
-        this._fuseSidebarService.getSidebar(key).toggleOpen();
-    }
-
-    /**
-     * Search
-     *
-     * @param value
-     */
-    search(value): void
-    {
-        // Do your search here...
-        console.log(value);
-    }
-
-    /**
-     * Set the language
-     *
-     * @param lang
-     */
-    setLanguage(lang): void
-    {
-        // Set the selected language for the toolbar
-        this.selectedLanguage = lang;
-
-        // Use the selected language for translations
-        this._translateService.use(lang.id);
-    }
 }
