@@ -1,7 +1,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {LocalStorageService} from './shared/local-storage.service';
-import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {ToastrService} from 'ngx-toastr';
 import {AuthorizationService} from './shared/authorization.service';
 import {Locale} from './data/remote/misc/locale';
@@ -9,7 +9,7 @@ import {NotificationService} from './shared/notification.service';
 import {ConversationService} from './shared/conversation.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {MessageToastrService} from './components/message-toastr/message-toastr.service';
-import {Router} from '@angular/router';
+import {NavigationEnd, Router} from '@angular/router';
 import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
 import {Message} from './data/remote/model/chat/message/message';
 import {AssetsService} from './data/remote/rest-api/assets.service';
@@ -19,6 +19,7 @@ import {DOCUMENT} from '@angular/common';
 import {FuseNavigationService} from '../@fuse/components/navigation/navigation.service';
 import {Platform} from '@angular/cdk/platform';
 import {navigation} from './navigation/navigation';
+import {LayoutService} from './shared/layout.service';
 
 @Component({
   selector: 'app-root',
@@ -27,16 +28,9 @@ import {navigation} from './navigation/navigation';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  private readonly _logInSubscription: ISubscription;
-  private readonly _logOutSubscription: ISubscription;
-
-  private readonly _notificationSubscription: ISubscription;
-  private readonly _messageCreateSubscription: ISubscription;
-  private readonly _messageUpdateSubscription: ISubscription;
-  private readonly _messageDeleteSubscription: ISubscription;
+  private readonly _unsubscribeAll: Subject<any>;
 
   private _fuseConfig: any;
-  private _unsubscribeAll: Subject<any>;
 
   constructor(@Inject(DOCUMENT) private document: any,
               private _fuseConfigService: FuseConfigService,
@@ -50,48 +44,69 @@ export class AppComponent implements OnInit, OnDestroy {
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
               private _messageToastrService: MessageToastrService,
+              private _layoutService: LayoutService,
               private _router: Router,
               private _assetsService: AssetsService) {
+    this._unsubscribeAll = new Subject();
+
     this.subscribe();
-
-    this._notificationSubscription = this._notificationService.handleNotification.subscribe(x => {
-      this._toastrService.info(x.body, null, {
-        enableHtml: true,
-        tapToDismiss: false
+    this._router.events
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async val => {
+        if (val instanceof NavigationEnd) {
+          this._layoutService.toggleLayout(val.url);
+        }
       });
-    });
+    this._notificationService.handleNotification
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        this._toastrService.info(x.body, null, {
+          enableHtml: true,
+          tapToDismiss: false
+        });
+      });
 
-    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
-      if (x.message.receiver.enabled) {
-        if (this._router.url.indexOf('/conversation/') == 0) {
-          const conversationId = +this._router.url.substring('/conversation/'.length);
-          if (x.message.content.baseConversation.id != conversationId) {
+    this._conversationService.messageCreateHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        if (x.message.receiver.enabled) {
+          if (this._router.url.indexOf('/conversation/') == 0) {
+            const conversationId = +this._router.url.substring('/conversation/'.length);
+            if (x.message.content.baseConversation.id != conversationId) {
+              this.buildToast(x.message);
+            }
+          } else if (this._router.url.indexOf('/conversation') < 0) {
             this.buildToast(x.message);
           }
-        } else if (this._router.url.indexOf('/conversation') < 0) {
-          this.buildToast(x.message);
         }
-      }
-    });
+      });
 
-    this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(async x => {
-      if (x.message.receiver.enabled) {
-        await this._messageToastrService.updateToast(x.message);
-      }
-    });
+    this._conversationService.messageUpdateHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async x => {
+        if (x.message.receiver.enabled) {
+          await this._messageToastrService.updateToast(x.message);
+        }
+      });
 
-    this._messageDeleteSubscription = this._conversationService.messageDeleteHandle.subscribe(x => {
-      if (x.message.receiver.enabled) {
-        this._messageToastrService.deleteToast(x.message);
-      }
-    });
+    this._conversationService.messageDeleteHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        if (x.message.receiver.enabled) {
+          this._messageToastrService.deleteToast(x.message);
+        }
+      });
 
-    this._logInSubscription = this._authorizationService.handleLogIn.subscribe(x => {
-      this.subscribe();
-    });
-    this._logOutSubscription = this._authorizationService.handleLogOut.subscribe(x => {
-      this.unsubscribe();
-    });
+    this._authorizationService.handleLogIn
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        this.subscribe();
+      });
+    this._authorizationService.handleLogOut
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        this.unsubscribe();
+      });
 
     this.initFuse();
     this.initLangs();
@@ -156,12 +171,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._notificationSubscription.unsubscribe();
-    this._messageCreateSubscription.unsubscribe();
-    this._messageUpdateSubscription.unsubscribe();
-    this._messageDeleteSubscription.unsubscribe();
-    this._logInSubscription.unsubscribe();
-    this._logOutSubscription.unsubscribe();
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
 
     this.unsubscribe();
   }
@@ -174,7 +185,6 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this._platform.ANDROID || this._platform.IOS) {
       this.document.body.classList.add('is-mobile');
     }
-    this._unsubscribeAll = new Subject();
   }
 
   private initLangs(): void {

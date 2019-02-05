@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
-import {LayoutService} from './shared/layout.service';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
 import {DeactivateGuard} from './guard/deactivate/deactivate.guard';
@@ -24,52 +23,52 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'event',
     loadChildren: './pages/event/event.module#EventModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'event-plan',
     loadChildren: './pages/event-plan/event-plan.module#EventPlanModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'notification',
     loadChildren: './pages/notification/notification.module#NotificationModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'person',
     loadChildren: './pages/person/base-person-page.module#BasePersonPageModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'group',
     loadChildren: './pages/group/base-group-page.module#BaseGroupPageModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'connection',
     loadChildren: './pages/connection/connection.module#ConnectionModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'conversation',
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
-    canActivate: [AuthGuard, LayoutService]
+    canActivate: [AuthGuard]
   },
   {
     path: 'report',
     loadChildren: './pages/report/report.module#ReportModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard]
+    canActivate: [AuthGuard, DeactivateGuard]
   },
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
+    canActivate: [AuthGuard, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'dictionaries'} as BreadcrumbItem
     }
@@ -82,7 +81,7 @@ const routes: Routes = [
   {
     path: 'statistics',
     loadChildren: './pages/statistics/statistics.module#StatisticsModule',
-    canActivate: [AuthGuard, LayoutService, DeactivateGuard],
+    canActivate: [AuthGuard, DeactivateGuard],
     data: {
       breadcrumb: {nameKey: 'statistics'} as BreadcrumbItem
     }

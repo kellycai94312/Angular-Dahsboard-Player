@@ -1,27 +1,40 @@
-import {Observable, of, Subject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
+import {FuseConfigService} from '../../@fuse/services/config.service';
 
 @Injectable()
-export class LayoutService implements CanActivate {
+export class LayoutService {
 
-  public readonly hidden: Subject<boolean>;
-  public readonly dark: Subject<boolean>;
+  public readonly hidden: ReplaySubject<boolean>;
+  public readonly dark: ReplaySubject<boolean>;
 
-  private hiddenRoutes: string[] = ['sign-in', 'registration', 'password', 'not-found'];
+  private hiddenRoutes: string[] = ['/sign-in', '/registration', '/password', '/not-found'];
 
-  constructor() {
-    this.hidden = new Subject<boolean>();
-    this.dark = new Subject<boolean>();
+  constructor(private _fuseConfigService: FuseConfigService) {
+    this.hidden = new ReplaySubject<boolean>(1);
+    this.dark = new ReplaySubject<boolean>(1);
   }
 
-  toggleLayout(urlPath: string) {
-    this.hidden.next(this.hiddenRoutes.indexOf(urlPath) > -1);
-  }
-
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | Observable<boolean> | Promise<boolean> {
-    this.toggleLayout(route.url[0].path);
-    return of(true);
+  public toggleLayout(urlPath: string): boolean {
+    const res = this.hiddenRoutes.indexOf(urlPath) > -1;
+    this._fuseConfigService.config = {
+      layout: {
+        navbar: {
+          hidden: res
+        },
+        toolbar: {
+          hidden: res
+        },
+        footer: {
+          hidden: res
+        },
+        sidepanel: {
+          hidden: res
+        }
+      }
+    };
+    this.hidden.next(res);
+    return res;
   }
 
 }
