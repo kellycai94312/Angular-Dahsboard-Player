@@ -48,8 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
               private _router: Router,
               private _assetsService: AssetsService) {
     this._unsubscribeAll = new Subject();
-
+    this.initFuse();
+    this.initLocalization();
     this.subscribe();
+
     this._router.events
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(async val => {
@@ -107,9 +109,6 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(x => {
         this.unsubscribe();
       });
-
-    this.initFuse();
-    this.initLangs();
   }
 
   private buildToast(message: Message): void {
@@ -187,7 +186,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initLangs(): void {
+  private initLocalization(): void {
     this._translate.addLangs(Object.keys(Locale));
     const currentLocale = Locale.ru;
     const localeKey = Locale[currentLocale];

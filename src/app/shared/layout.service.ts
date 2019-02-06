@@ -8,7 +8,7 @@ export class LayoutService {
   public readonly hidden: ReplaySubject<boolean>;
   public readonly dark: ReplaySubject<boolean>;
 
-  private hiddenRoutes: string[] = ['/sign-in', '/registration', '/password', '/not-found'];
+  private hiddenRoutes: string[] = ['/sign-in', '/sign-up', '/registration', '/password', '/not-found'];
 
   constructor(private _fuseConfigService: FuseConfigService) {
     this.hidden = new ReplaySubject<boolean>(1);

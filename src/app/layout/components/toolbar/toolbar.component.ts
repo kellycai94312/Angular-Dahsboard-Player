@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Subject} from 'rxjs';
 import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
-import * as _ from 'lodash';
 
 import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
@@ -26,9 +25,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   horizontalNavbar: boolean;
   rightNavbar: boolean;
   hiddenNavbar: boolean;
-  languages: any;
   navigation: any;
-  selectedLanguage: any;
   userStatusOptions: any[];
 
   public person: Person;
@@ -81,19 +78,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       }
     ];
 
-    this.languages = [
-      {
-        id: 'en',
-        title: 'English',
-        flag: 'us'
-      },
-      {
-        id: 'ru',
-        title: 'Russian',
-        flag: 'ru'
-      }
-    ];
-
     this.navigation = navigation;
 
     // Set the private defaults
@@ -135,9 +119,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         this.rightNavbar = settings.layout.navbar.position === 'right';
         this.hiddenNavbar = settings.layout.navbar.hidden === true;
       });
-
-    // Set the selected language from default languages
-    this.selectedLanguage = _.find(this.languages, {'id': this._translateService.currentLang});
   }
 
   /**
@@ -170,19 +151,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   search(value): void {
     // Do your search here...
     console.log(value);
-  }
-
-  /**
-   * Set the language
-   *
-   * @param lang
-   */
-  setLanguage(lang): void {
-    // Set the selected language for the toolbar
-    this.selectedLanguage = lang;
-
-    // Use the selected language for translations
-    this._translateService.use(lang.id);
   }
 
   public async openProfile() {

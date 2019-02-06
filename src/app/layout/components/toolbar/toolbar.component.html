@@ -53,38 +53,6 @@
 
       </mat-menu>
 
-      <div class="toolbar-separator"></div>
-
-      <fuse-search-bar (input)="search($event)"></fuse-search-bar>
-
-      <div class="toolbar-separator"></div>
-
-      <button mat-button fxHide fxShow.gt-xs
-              class="language-button"
-              [matMenuTriggerFor]="languageMenu">
-        <div fxLayout="row" fxLayoutAlign="center center">
-          <img class="flag mr-8" [src]="'assets/icons/flags/'+selectedLanguage.flag+'.png'">
-          <span class="iso text-uppercase">{{selectedLanguage.id}}</span>
-        </div>
-      </button>
-
-      <mat-menu #languageMenu="matMenu" [overlapTrigger]="false">
-
-        <button mat-menu-item *ngFor="let lang of languages" (click)="setLanguage(lang)">
-                    <span fxLayout="row" fxLayoutAlign="start center">
-                        <img class="flag mr-16" [src]="'assets/icons/flags/'+lang.flag+'.png'">
-                        <span class="iso">{{lang.title}}</span>
-                    </span>
-        </button>
-
-        <button mat-menu-item [routerLink]="'/components/multi-language'">
-          <div fxLayout="row" fxLayoutAlign="start center">
-            <span>Learn more</span>
-          </div>
-        </button>
-
-      </mat-menu>
-
       <div class="toolbar-separator" fxHide fxShow.gt-xs></div>
 
       <button mat-icon-button fxHide.gt-md
