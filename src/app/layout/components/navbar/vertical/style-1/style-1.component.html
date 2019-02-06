@@ -27,18 +27,6 @@
      fusePerfectScrollbar
      [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
 
-  <div *ngIf="person"
-       class="user"
-       fxLayout="column"
-       [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
-    <div class="h3 username">{{person.lastName + ' ' + person.firstName}}</div>
-    <div class="avatar-container"
-         [ngClass]="fuseConfig.layout.navbar.primaryBackground">
-      <img class="avatar"
-           [src]="personLogoUrl">
-    </div>
-  </div>
-
   <div class="navbar-content">
     <fuse-navigation class="material2" layout="vertical"></fuse-navigation>
   </div>

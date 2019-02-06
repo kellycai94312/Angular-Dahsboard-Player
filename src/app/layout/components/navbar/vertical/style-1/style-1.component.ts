@@ -1,17 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {NavigationEnd, Router} from '@angular/router';
 import {Subject} from 'rxjs';
-import {delay, distinctUntilChanged, filter, take, takeUntil} from 'rxjs/operators';
+import {delay, filter, take, takeUntil} from 'rxjs/operators';
 
 import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
 import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
-import {AuthorizationService} from '../../../../../shared/authorization.service';
-import {Person} from '../../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
-import {FileClass} from '../../../../../data/remote/model/file/base/file-class';
-import {ImageType} from '../../../../../data/remote/model/file/image/image-type';
 
 @Component({
   selector: 'navbar-vertical-style-1',
@@ -27,9 +22,6 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
   private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
   private _unsubscribeAll: Subject<any>;
 
-  public person: Person;
-  public personLogoUrl: string;
-
   /**
    * Constructor
    *
@@ -43,30 +35,9 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSidebarService: FuseSidebarService,
-    private _router: Router,
-    private _authorizationService: AuthorizationService,
-    private _participantRestApiService: ParticipantRestApiService
+    private _router: Router
   ) {
     this._unsubscribeAll = new Subject();
-
-    this._authorizationService.personSubject.pipe(
-      takeUntil(this._unsubscribeAll),
-      distinctUntilChanged()
-    )
-      .subscribe(val => {
-        this.person = val;
-        if (val) {
-          this.personLogoUrl = this._participantRestApiService.getUrlImage({
-            clazz: FileClass.PERSON,
-            type: ImageType.LOGO,
-            objectId: val.id,
-            width: 72,
-            height: 72
-          });
-        } else {
-          delete this.personLogoUrl;
-        }
-      });
   }
 
   // -----------------------------------------------------------------------------------------------------
