@@ -41,12 +41,20 @@ export const navigation: FuseNavigation[] = [
         url: '/event'
       },
       {
-        id: 'conversation',
+        id: 'conversations',
         title: 'Conversation',
         translate: 'messages.section',
         type: 'item',
         icon: 'chat',
         url: '/conversation'
+      },
+      {
+        id: 'notifications',
+        title: 'Notifications',
+        translate: 'notifications',
+        type: 'item',
+        icon: 'notifications',
+        url: '/notification'
       }
     ]
   }

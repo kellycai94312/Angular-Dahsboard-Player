@@ -20,6 +20,7 @@ import {FuseNavigationService} from '../@fuse/components/navigation/navigation.s
 import {Platform} from '@angular/cdk/platform';
 import {navigation} from './navigation/navigation';
 import {LayoutService} from './shared/layout.service';
+import {FuseNavigation} from '../@fuse/types';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ import {LayoutService} from './shared/layout.service';
 export class AppComponent implements OnInit, OnDestroy {
 
   private readonly _unsubscribeAll: Subject<any>;
+  private readonly _navigation: FuseNavigation[];
 
   private _fuseConfig: any;
 
@@ -48,7 +50,20 @@ export class AppComponent implements OnInit, OnDestroy {
               private _router: Router,
               private _assetsService: AssetsService) {
     this._unsubscribeAll = new Subject();
-    this.initFuse();
+
+    //#region Fuse
+
+    this._navigation = navigation;
+    this._fuseNavigationService.register('main', navigation);
+
+    this._fuseNavigationService.setCurrentNavigation('main');
+
+    if (this._platform.ANDROID || this._platform.IOS) {
+      this.document.body.classList.add('is-mobile');
+    }
+
+    //#endregion
+
     this.initLocalization();
     this.subscribe();
 
@@ -99,6 +114,12 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
 
+    this._conversationService.unreadTotalHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        this.updateBadge('conversations', x.value);
+      });
+
     this._authorizationService.handleLogIn
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(x => {
@@ -109,6 +130,20 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(x => {
         this.unsubscribe();
       });
+  }
+
+  private updateBadge(id: string, val: number) {
+    let badge = {badge: null};
+    if (val) {
+      badge = {
+        badge: {
+          title: val,
+          bg: '#EC0C8E',
+          fg: '#FFFFFF'
+        }
+      };
+    }
+    this._fuseNavigationService.updateNavigationItem(id, badge);
   }
 
   private buildToast(message: Message): void {
@@ -174,16 +209,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this._unsubscribeAll.complete();
 
     this.unsubscribe();
-  }
-
-  private initFuse(): void {
-    this._fuseNavigationService.register('main', navigation);
-
-    this._fuseNavigationService.setCurrentNavigation('main');
-
-    if (this._platform.ANDROID || this._platform.IOS) {
-      this.document.body.classList.add('is-mobile');
-    }
   }
 
   private initLocalization(): void {
