@@ -8,7 +8,7 @@ export class LayoutService {
   public readonly hidden: ReplaySubject<boolean>;
   public readonly dark: ReplaySubject<boolean>;
 
-  private hiddenRoutes: string[] = ['/sign-in', '/sign-up', '/registration', '/password', '/not-found'];
+  private hiddenRoutes: string[] = ['sign-in', 'sign-up', 'registration', 'password', 'not-found'];
 
   constructor(private _fuseConfigService: FuseConfigService) {
     this.hidden = new ReplaySubject<boolean>(1);
@@ -16,7 +16,14 @@ export class LayoutService {
   }
 
   public toggleLayout(urlPath: string): boolean {
-    const res = this.hiddenRoutes.indexOf(urlPath) > -1;
+    const items = urlPath.split('/').filter(x => !!x);
+    let res = true;
+    for (const item of items) {
+      res = this.hiddenRoutes.filter(x => item.indexOf(x) > -1).length > 0;
+      if (res) {
+        break;
+      }
+    }
     this._fuseConfigService.config = {
       layout: {
         navbar: {
