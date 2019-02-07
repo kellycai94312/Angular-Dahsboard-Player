@@ -21,7 +21,7 @@
     <ngx-button *ngIf="visibleSendMessage"
                 nameKey="sendMessage"
                 [click]="onSendMessage"></ngx-button>
-    <ngx-button *ngIf="visibleEditConnection"
+    <ngx-button *ngIf="visibleEditConnection && translateConnection"
                 class="ml-2"
                 [nameKey]="translateConnection"
                 [click]="onEditConnection"></ngx-button>
