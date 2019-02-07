@@ -1,21 +1,29 @@
 <div *ngIf="data"
-     class="d-flex flex-row p-2 {{class}}"
+     class="fuse-card {{class}}"
      [style.width.px]="width"
      [style.height.px]="height">
-  <div class="mr-2">
-    <ngx-image [objectId]="data.id"
-               [width]="80"
-               [height]="80"
-               [allowFullScreen]="false"
-               [format]="imageFormatClass.CIRCLE"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.PERSON"></ngx-image>
+  <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="m-2 overflow-content">
+      <div class="h1 text-truncate">{{data.lastName}}</div>
+      <div class="h1 text-truncate">{{data.firstName}}</div>
+    </div>
+    <div class="w-80 h-80">
+      <ngx-image [objectId]="data.id"
+                 [width]="80"
+                 [height]="80"
+                 [allowFullScreen]="false"
+                 [format]="imageFormatClass.CIRCLE"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="fileClassClass.PERSON"></ngx-image>
+    </div>
   </div>
-  <div class="my-auto">
-    <h5>{{data.lastName}}<br>
-      {{data.firstName}}<br>
-      {{data?.patronymic}}
-    </h5>
-    <p class="text-muted">{{'sexEnum.' + data.sex | translate}} {{data.birthDate | date: propertyConstantClass.dateFormat}}</p>
+  <div class="p-8 pt-0" fxLayout="row" fxLayoutAlign="start center">
+    <ngx-button *ngIf="visibleSendMessage"
+                nameKey="sendMessage"
+                [click]="onSendMessage"></ngx-button>
+    <ngx-button *ngIf="visibleEditConnection"
+                class="ml-2"
+                [nameKey]="translateConnection"
+                [click]="onEditConnection"></ngx-button>
   </div>
 </div>
