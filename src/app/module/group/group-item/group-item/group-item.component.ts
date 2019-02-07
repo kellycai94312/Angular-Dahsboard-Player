@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -13,6 +13,12 @@ export class GroupItemComponent<T extends Group> extends BaseComponent<T> implem
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
+
+  @Input()
+  public width: number;
+
+  @Input()
+  public height: number;
 
   constructor() {
     super();

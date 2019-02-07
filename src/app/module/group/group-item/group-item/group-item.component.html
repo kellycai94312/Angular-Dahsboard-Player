@@ -1,15 +1,19 @@
 <div *ngIf="data"
-     class="d-flex flex-row {{class}}">
-  <div class="mr-2">
-    <ngx-image [objectId]="data.id"
-               [width]="80"
-               [height]="80"
-               [allowFullScreen]="false"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.GROUP"></ngx-image>
-  </div>
-  <div class="my-auto">
-    <h5>{{data.name}}</h5>
-    <p class="text-muted">{{'groupTypeEnum.' + data.discriminator | translate}}</p>
+     class="fuse-card {{class}}"
+     [style.width.px]="width"
+     [style.height.px]="height">
+  <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <div class="m-2 overflow-content">
+      <div class="h1 text-truncate">{{data.name}}</div>
+      <div class="h1 text-truncate text-muted">{{('groupTypeEnum.' + data.discriminator) | translate}}</div>
+    </div>
+    <div class="w-80 h-80">
+      <ngx-image [objectId]="data.id"
+                 [width]="80"
+                 [height]="80"
+                 [allowFullScreen]="false"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="fileClassClass.GROUP"></ngx-image>
+    </div>
   </div>
 </div>
