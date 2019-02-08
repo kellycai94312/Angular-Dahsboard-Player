@@ -4,11 +4,10 @@
             [click]="onAdd">
 </ngx-button>
 <ngx-virtual-scroll [getItems]="fetchItems"
-                    [windowScroll]="true"
-                    class="list-group-flush">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div *ngIf="!item.deleted"
-         class="list-group-item pb-2 px-2">
+         class="mb-2">
       <app-group-news-item [data]="item"
                            [canEdit]="canEdit"></app-group-news-item>
     </div>
