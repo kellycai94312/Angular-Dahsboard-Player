@@ -1,4 +1,5 @@
 .form {
+  margin: auto !important;
   width: 370px;
 
   img {
@@ -14,6 +15,7 @@
   a {
     color: #bbb;
     cursor: pointer;
+
     &:hover {
       color: #ddd;
     }
