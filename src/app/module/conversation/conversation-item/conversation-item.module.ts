@@ -5,6 +5,9 @@ import {TranslateModule} from '@ngx-translate/core';
 import {ImageModule} from '../../../components/image/image.module';
 import {MessageItemModule} from '../message-item/message-item.module';
 import {RouterModule} from '@angular/router';
+import {FuseSharedModule} from '../../../../@fuse/shared.module';
+import {MatButtonModule} from '@angular/material';
+import {ChatService} from '../../../pages/conversation/chat/chat.service';
 
 @NgModule({
   imports: [
@@ -12,10 +15,13 @@ import {RouterModule} from '@angular/router';
     TranslateModule.forChild(),
     RouterModule.forChild([]),
     ImageModule,
-    MessageItemModule
+    MessageItemModule,
+    MatButtonModule,
+    FuseSharedModule
   ],
   declarations: [ConversationItemComponent],
-  exports: [ConversationItemComponent]
+  exports: [ConversationItemComponent],
+  providers: [ChatService]
 })
 export class ConversationItemModule {
 }

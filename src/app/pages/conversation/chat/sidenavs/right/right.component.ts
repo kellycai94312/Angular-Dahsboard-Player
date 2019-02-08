@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { fuseAnimations } from '@fuse/animations';
 
-import { ChatService } from 'app/main/apps/chat/chat.service';
+import { ChatService } from 'app/pages/conversation/chat/chat.service';
 
 @Component({
     selector     : 'chat-right-sidenav',

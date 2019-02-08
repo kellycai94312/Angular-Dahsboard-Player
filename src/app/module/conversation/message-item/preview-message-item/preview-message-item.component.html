@@ -1,0 +1,5 @@
+<div *ngIf="messageViewModel">
+  <div *ngIf="messageViewModel.body"
+       [innerHTML]="(messageViewModel.body.length > 30 ? (messageViewModel.body | slice:0:30) + '..' : (messageViewModel.body  | urlParser  : {'previewImage': false}  | async)) "
+       (click)="onDataClick($event)"></div>
+</div>

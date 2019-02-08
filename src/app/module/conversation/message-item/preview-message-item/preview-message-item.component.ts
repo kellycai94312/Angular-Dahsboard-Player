@@ -5,22 +5,17 @@ import {Message} from '../../../../data/remote/model/chat/message/message';
 import {MessageViewModel} from '../../../../data/local/view-model/conversation/message-view-model';
 import {Person} from '../../../../data/remote/model/person';
 import {AuthorizationService} from '../../../../shared/authorization.service';
-import {ConversationService} from '../../../../shared/conversation.service';
 import {Router} from '@angular/router';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
-import {AppHelper} from '../../../../utils/app-helper';
-import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
 
 @Component({
-  selector: 'app-message-item',
-  templateUrl: './message-item.component.html',
-  styleUrls: ['./message-item.component.scss']
+  selector: 'app-preview-message-item',
+  templateUrl: './preview-message-item.component.html',
+  styleUrls: ['./preview-message-item.component.scss']
 })
-export class MessageItemComponent implements OnInit, DoCheck {
+export class PreviewMessageItemComponent implements OnInit, DoCheck {
 
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly baseMessageContentTypeClass = BaseMessageContentType;
-  public readonly baseConversationTypeClass = BaseConversationType;
 
   @Input()
   public class: string;
@@ -28,22 +23,24 @@ export class MessageItemComponent implements OnInit, DoCheck {
   @Input()
   public message: Message;
 
+  @Input()
+  public previewContent: boolean;
+
   public messageViewModel: MessageViewModel;
   public person: Person;
   public updated: Date;
   private differ: any;
 
   constructor(private _authorizationService: AuthorizationService,
-              public conversationService: ConversationService,
               private _router: Router,
-              private _appHelper: AppHelper,
               differs: KeyValueDiffers) {
     this.class = '';
     this.differ = differs.find([]).create();
   }
 
   async ngOnInit() {
-    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
+    this.person = await this._authorizationService.getPerson();
+
     await this.buildMessage();
   }
 

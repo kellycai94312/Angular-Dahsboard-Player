@@ -10,13 +10,15 @@ import {BaseConversationType} from '../../../../data/remote/model/chat/conversat
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
-import {Router} from '@angular/router';
 import {ConversationService} from '../../../../shared/conversation.service';
+import {fuseAnimations} from '../../../../../@fuse/animations';
+import {ChatService} from '../../../../pages/conversation/chat/chat.service';
 
 @Component({
   selector: 'app-conversation-item',
   templateUrl: './conversation-item.component.html',
-  styleUrls: ['./conversation-item.component.scss']
+  styleUrls: ['./conversation-item.component.scss'],
+  animations: fuseAnimations
 })
 export class ConversationItemComponent implements OnInit {
 
@@ -34,7 +36,7 @@ export class ConversationItemComponent implements OnInit {
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService,
               private _conversationService: ConversationService,
-              private _router: Router) {
+              private _chatService: ChatService) {
   }
 
   async ngOnInit() {
@@ -48,7 +50,7 @@ export class ConversationItemComponent implements OnInit {
         case BaseConversationType.CHAT:
           this.conversationImageClazz = FileClass.CHAT;
           this.conversationImageId = this.conversation.id;
-          this.conversationName = (<Chat> this.conversation).name;
+          this.conversationName = (<Chat>this.conversation).name;
       }
 
     } else {
@@ -72,7 +74,7 @@ export class ConversationItemComponent implements OnInit {
         case BaseConversationType.CHAT:
           this.conversationImageClazz = FileClass.CHAT;
           this.conversationImageId = this.conversation.id;
-          this.conversationName = (<Chat> this.conversation).name;
+          this.conversationName = (<Chat>this.conversation).name;
           if (!this.senderPerson) {
             this.senderPerson = messageWrapper.message.sender.person;
           }
@@ -87,7 +89,7 @@ export class ConversationItemComponent implements OnInit {
 
   public async openConversation() {
     this._conversationService.readMessage(this.conversationWrapper.messageWrapper);
-    await this._router.navigate(['/conversation', this.conversation.id]);
+    this._chatService.onChatSelected.next(this.conversation);
   }
 
   private getPersonFullName(person: Person) {

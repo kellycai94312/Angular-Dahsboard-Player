@@ -1,19 +1,55 @@
-.name {
-  color: #222;
-  font-weight: bold;
-}
+@import "../../../../../@fuse/scss/fuse";
+@import "../../../../pages/conversation/chat/chat.theme";
 
-.date {
-  font-size: 12px;
-  text-align: right;
-  color: #656565;
-  min-width: 90px;
-}
-
-.message {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
+.contact {
   width: 100%;
-  color: #656565;
+  white-space: normal;
+  text-align: left;
+  letter-spacing: .010em;
+  min-height: 88px;
+  border-bottom: 1px solid;
+  padding: 16px;
+  font-weight: 400;
+  border-radius: 0;
+  //background-color: #eee;
+
+  .avatar-wrapper {
+
+    .avatar {
+      margin-right: 16px;
+    }
+
+  }
+
+  .contact-name {
+    font-size: 16px;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .contact-last-message {
+    line-height: normal;
+    margin-top: 0;
+  }
+
+  .contact-last-message-time {
+    font-size: 12px;
+    margin-top: 4px;
+  }
+
+  .contact-mood {
+    line-height: normal;
+    margin: 0;
+  }
+
+  .unread-message-count {
+    font-size: 12px;
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+
 }

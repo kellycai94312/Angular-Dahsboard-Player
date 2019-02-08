@@ -1,0 +1,70 @@
+<!-- SIDENAV HEADER -->
+<div class="sidenav-header" *ngIf="person">
+  <!-- CHATS TOOLBAR -->
+  <mat-toolbar>
+
+    <!-- TOOLBAR TOP -->
+    <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+
+      <!-- USER AVATAR WRAPPER -->
+      <div class="avatar-wrapper">
+
+        <ngx-button nameKey="createChat"
+                    [click]="onCreateChat"></ngx-button>
+
+      </div>
+      <!-- / USER AVATAR -->
+
+    </mat-toolbar-row>
+    <!-- / TOOLBAR TOP -->
+
+    <!-- TOOLBAR BOTTOM -->
+    <mat-toolbar-row>
+
+      <!-- SEARCH -->
+      <div class="search-wrapper" fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+        <div class="search" fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <mat-icon class="s-16 secondary-text">search</mat-icon>
+          <ngx-input placeholderKey="search"
+                     [debounceTime]="propertyConstantClass.searchDebounceTime"
+                     (valueChange)="onSearchTextChanged($event)"></ngx-input>
+        </div>
+
+      </div>
+      <!-- / SEARCH -->
+
+    </mat-toolbar-row>
+    <!-- / TOOLBAR BOTTOM -->
+
+  </mat-toolbar>
+  <!-- / CHATS TOOLBAR -->
+
+</div>
+<!-- / SIDENAV HEADER -->
+
+<!-- SIDENAV CONTENT -->
+<div class="sidenav-content" fusePerfectScrollbar fxFlex>
+
+  <!-- CHATS CONTENT -->
+  <!--<div *fuseIfOnDom [@animateStagger]="{value:'50'}">-->
+
+  <!-- CHATS LIST-->
+  <div class="chat-list" fxLayout="column">
+
+    <ngx-virtual-scroll #ngxVirtualScrollComponent [getItems]="getItems"
+                        [(query)]="query"
+                        [windowScroll]="true">
+      <ng-template let-item>
+        <app-conversation-item [conversationWrapper]="item"></app-conversation-item>
+      </ng-template>
+    </ngx-virtual-scroll>
+
+    <!--</div>-->
+    <!-- / CHATS LIST-->
+
+  </div>
+  <!-- / CHATS CONTENT -->
+
+</div>
+<!-- / SIDENAV CONTENT -->

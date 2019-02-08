@@ -1,0 +1,123 @@
+<!-- CHAT -->
+<div class="chat" fxFlex fxLayout="column">
+
+  <!-- CHAT TOOLBAR -->
+  <mat-toolbar class="chat-toolbar">
+
+    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
+
+      <div fxLayout="row" fxLayoutAlign="start center">
+
+        <!-- RESPONSIVE CHATS BUTTON-->
+        <button mat-icon-button fxHide.gt-md class="responsive-chats-button mr-16"
+                fuseMatSidenavToggler="chat-left-sidenav"
+                aria-label="chats button">
+          <mat-icon>chat</mat-icon>
+        </button>
+        <!-- / RESPONSIVE CHATS BUTTON-->
+
+        <!-- CHAT CONTACT-->
+        <div class="chat-contact" fxLayout="row" fxLayoutAlign="start center"
+             fuseMatSidenavToggler="chat-right-sidenav" *ngIf="recipient">
+
+          <div class="avatar-wrapper" *ngIf="conversation.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person">
+            <app-image #logo
+                       class="avatar"
+                       [type]="'LOGO'"
+                       [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? 'PERSON' : 'CHAT'"
+                       [id]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : conversation.id"
+                       [dimension]="'W40xH40'"
+                       [format]="'CIRCLE'"></app-image>
+          </div>
+
+          <div *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE && recipient.person; else chatHeader">
+            <div class="chat-contact-name">{{recipient.person.lastName}} {{recipient.person.firstName}}</div>
+          </div>
+          <ng-template #chatHeader>
+            <div class="chat-contact-name">{{conversation.name}}</div>
+          </ng-template>
+
+        </div>
+        <!-- / CHAT CONTACT-->
+      </div>
+
+      <div *ngIf="conversation">
+        <button mat-icon-button [matMenuTriggerFor]="contactMenu" aria-label="more">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+
+        <mat-menu #contactMenu="matMenu">
+          <button mat-menu-item
+                  *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT && conversation.owner.id == person.user.id"
+                  (click)="editChat()">
+            {{'settings' | translate}}
+          </button>
+          <button mat-menu-item
+                  (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') |
+            translate}}
+          </button>
+          <button mat-menu-item (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
+          </button>
+          <button mat-menu-item (click)="quitChat()"
+                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
+            {{'quitChat' | translate}}
+          </button>
+        </mat-menu>
+      </div>
+
+    </div>
+  </mat-toolbar>
+  <!--/ CHAT TOOLBAR -->
+
+  <!--CHAT CONTENT-->
+  <div id="chat-content" fxFlex="1 1 auto">
+
+    <!-- CHAT MESSAGES -->
+    <div class="chat-messages">
+
+      <ngx-virtual-scroll [getItems]="getItems"
+                          [autoScroll]="true">
+        <ng-template let-message>
+          <div (click)="toggleSelectMessage(message)">
+            <app-message-item [message]="message"></app-message-item>
+          </div>
+        </ng-template>
+      </ngx-virtual-scroll>
+
+    </div>
+    <!-- CHAT MESSAGES -->
+
+  </div>
+  <!-- / CHAT CONTENT -->
+
+  <!-- CHAT FOOTER -->
+  <div class="chat-footer" fxFlex="0 0 auto" fxLayout="column">
+
+    <!-- REPLY FORM -->
+    <div class="reply-form" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center">
+
+      <form #replyForm="ngForm"
+            (ngSubmit)="sendMessage()"
+            (keydown.enter)="sendMessage()"
+            fxFlex fxLayout="row" fxLayoutAlign="start center">
+
+        <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
+          <textarea matInput placeholder="{{'writeMessage' | translate}}"
+                    [(ngModel)]="messageContent.content" name="message" [rows]="1"
+                    [matTextareaAutosize]="true" (input)="onTyping()"></textarea>
+        </mat-form-field>
+
+        <button class="send-message-button" mat-icon-button type="submit">
+          <mat-icon class="secondary-text">send</mat-icon>
+        </button>
+
+      </form>
+
+    </div>
+    <!-- / REPLY FORM -->
+
+  </div>
+  <!-- / CHAT FOOTER-->
+
+</div>
+<!-- / CHAT -->

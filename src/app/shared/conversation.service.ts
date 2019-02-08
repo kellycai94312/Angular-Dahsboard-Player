@@ -60,6 +60,7 @@ export class ConversationService implements OnDestroy {
       this._messageCreateSubscription = this._participantStompService.subscribeConversationCreate().pipe(
         map(message => this._participantStompService.messageToObject<MessageWrapper>(message)))
         .subscribe(async message => {
+          console.log(message);
           this.messageCreateHandle.next(message);
         });
     } catch (e) {
