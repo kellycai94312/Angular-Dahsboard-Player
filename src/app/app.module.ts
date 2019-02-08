@@ -17,7 +17,6 @@ import {LocalStorageService} from './shared/local-storage.service';
 import {AuthGuard} from './guard/auth.guard';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {ImageService} from './shared/image.service';
-import {ProfileService} from './shared/profile.service';
 import {RestApiInterceptor} from './guard/rest-api-interceptor';
 import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
@@ -87,7 +86,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   providers: [
     LayoutService,
-    ProfileService,
     AuthGuard,
     AuthDenyGuard,
     RegistrationPersonPageGuard,

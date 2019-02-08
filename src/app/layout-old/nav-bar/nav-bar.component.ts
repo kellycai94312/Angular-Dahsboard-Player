@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Person} from '../../data/remote/model/person';
 import {Router} from '@angular/router';
 import {ImageService} from '../../shared/image.service';
-import {ProfileService} from '../../shared/profile.service';
 import {SubscriptionLike as ISubscription} from 'rxjs';
 import {AuthorizationService} from '../../shared/authorization.service';
 import {ImageComponent} from '../../components/image/image.component';
@@ -30,17 +29,10 @@ export class NavBarComponent implements OnInit, OnDestroy {
 
   constructor(private _router: Router,
               private _imageService: ImageService,
-              private _profileService: ProfileService,
               private _authorizationService: AuthorizationService,
               private _conversationService: ConversationService,
               private _appHelper: AppHelper) {
     this.person = new Person();
-
-    // TODO: Use PersonViewModel
-    this._fullNameChangeSubscription = _profileService.fullNameChangeEmitted$
-      .subscribe(person => this.person.firstName = person.firstName);
-    this._logoChangeSubscription = _profileService.logoChangeEmitted$
-      .subscribe(() => this.logo.refresh());
 
     this._conversationMenuItem = {iconClassName: 'fa fa-comments', routerLink: 'conversation'};
     this.menuItems = [
@@ -59,7 +51,7 @@ export class NavBarComponent implements OnInit, OnDestroy {
     // TODO: Use PersonViewModel
     const person = this._authorizationService.session.person;
     if (person) {
-      this.person = await this._profileService.getPerson(person.id);
+      // this.person = await this._profileService.getPerson(person.id);
     } else {
       await this._router.navigate(['/sign-up/person']);
     }
