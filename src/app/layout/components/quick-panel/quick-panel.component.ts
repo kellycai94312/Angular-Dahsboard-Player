@@ -1,76 +1,36 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Subject} from 'rxjs';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
+import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
+import {PropertyConstant} from '../../../data/local/property-constant';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
-    selector     : 'quick-panel',
-    templateUrl  : './quick-panel.component.html',
-    styleUrls    : ['./quick-panel.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'quick-panel',
+  templateUrl: './quick-panel.component.html',
+  styleUrls: ['./quick-panel.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class QuickPanelComponent implements OnInit, OnDestroy
-{
-    date: Date;
-    events: any[];
-    notes: any[];
-    settings: any;
+export class QuickPanelComponent implements OnInit {
 
-    // Private
-    private _unsubscribeAll: Subject<any>;
+  public readonly propertyConstantClass = PropertyConstant;
+  date: Date;
+  events: BaseTraining[];
 
-    /**
-     * Constructor
-     *
-     * @param {HttpClient} _httpClient
-     */
-    constructor(
-        private _httpClient: HttpClient
-    )
-    {
-        // Set the defaults
-        this.date = new Date();
-        this.settings = {
-            notify: true,
-            cloud : false,
-            retro : true
-        };
+  private _unsubscribeAll: Subject<any>;
 
-        // Set the private defaults
-        this._unsubscribeAll = new Subject();
-    }
+  constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper) {
+    this.date = new Date();
+    this._unsubscribeAll = new Subject();
+  }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
+  async ngOnInit() {
+    const dateFrom = this._appHelper.dateByFormat(this.date, PropertyConstant.dateFormat);
+    const deteTo = new Date(dateFrom);
+    deteTo.setHours(24);
+    const dateToStr = this._appHelper.dateByFormat(deteTo, PropertyConstant.dateFormat);
+    this.events = (await this._participantRestApiService.getBaseTrainings({count: PropertyConstant.pageSizeMax, dateFrom: dateFrom, dateTo: dateToStr})).list;
+  }
 
-    /**
-     * On init
-     */
-    ngOnInit(): void
-    {
-        // Subscribe to the events
-        this._httpClient.get('api/quick-panel-events')
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((response: any) => {
-                this.events = response;
-            });
-
-        // Subscribe to the notes
-        this._httpClient.get('api/quick-panel-notes')
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((response: any) => {
-                this.notes = response;
-            });
-    }
-
-    /**
-     * On destroy
-     */
-    ngOnDestroy(): void
-    {
-        // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next();
-        this._unsubscribeAll.complete();
-    }
 }
