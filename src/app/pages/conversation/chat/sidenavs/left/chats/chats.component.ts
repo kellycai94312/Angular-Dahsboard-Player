@@ -120,7 +120,7 @@ export class ChatChatsSidenavComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.person = await this._authorizationService.getPerson();
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     await this.resetItems();
   }
 

@@ -162,7 +162,7 @@ export class ChatViewComponent implements OnInit, OnDestroy {
   public async initialize(conversation: BaseConversation) {
     return await this._appHelper.tryLoad(async () => {
       this.conversation = conversation;
-      this.person = await this._authorizationService.getPerson();
+      this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
       this._messageToastrService.clearToasts(this.conversation.id);
       this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: conversation.id})).value;
       switch (this.conversation.discriminator) {
@@ -181,7 +181,7 @@ export class ChatViewComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.person = await this._authorizationService.getPerson();
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     this._chatService.onChatSelected
       .subscribe(conversation => {
         if (conversation) {

@@ -7,6 +7,7 @@ import {ConversationService} from '../../../shared/conversation.service';
 import {BaseConversation} from '../../../data/remote/model/chat/conversation/base/base-conversation';
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
+import {AppHelper} from '../../../utils/app-helper';
 
 @Component({
   selector: 'chat',
@@ -21,18 +22,12 @@ export class ChatComponent implements OnInit {
 
   constructor(private _chatService: ChatService,
               private _conversationService: ConversationService,
-              private _authorizationService: AuthorizationService) {
+              private _authorizationService: AuthorizationService,
+              private _appHelper: AppHelper) {
   }
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Lifecycle hooks
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * On init
-   */
   async ngOnInit() {
-    this.person = await this._authorizationService.getPerson();
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     this._chatService.onChatSelected
       .subscribe(conversation => {
         this.conversation = conversation;
