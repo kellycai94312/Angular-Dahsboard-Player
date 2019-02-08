@@ -38,9 +38,14 @@
        'contact': message.sender.person.id !== person.id,
            'selected' : conversationService.selectedMessages.contains(message)}">
 
-    <img *ngIf="message.sender.person.id != person.id"
-         src="http://localhost:8082/file/download/image?clazz=PERSON&objectId={{message.sender.person.id}}&type=LOGO"
-         class="avatar">
+    <app-image #logo
+               *ngIf="message.sender.person.id != person.id"
+               class="avatar"
+               [type]="'LOGO'"
+               [clazz]="'PERSON'"
+               [id]="message.sender.person.id"
+               [dimension]="'W40xH40'"
+               [format]="'CIRCLE'"></app-image>
 
     <div class="bubble">
       <div class="message d-flex flex-column">
@@ -52,9 +57,10 @@
              (click)="onDataClick($event)"></pre>
       </div>
       <div
-        class="time secondary-text">{{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat)) : (message.content.created | date: propertyConstantClass.dateTimeFormat)}}</div>
+        class="time secondary-text">{{updated ? (('edited' | translate) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat)) : (message.content.created | date: propertyConstantClass.dateTimeFormat)}}</div>
       <div *ngIf="message.sender.person.id == person.id">
-        <i class="fa fa-check" *ngIf="(!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read; else readMessage"></i>
+        <i class="fa fa-check"
+           *ngIf="(!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read; else readMessage"></i>
         <ng-template #readMessage>
           <svg-icon src="/assets/img/check-double-solid.svg"
                     [svgStyle]="{'width.px': 14}"></svg-icon>

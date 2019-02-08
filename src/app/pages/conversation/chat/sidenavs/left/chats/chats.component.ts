@@ -29,7 +29,7 @@ export class ChatChatsSidenavComponent implements OnInit {
   public readonly propertyConstantClass = PropertyConstant;
   public query: PageQuery;
 
-  @ViewChild('ngxVirtualScrollComponent')
+  @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   private readonly _messageCreateSubscription: ISubscription;
@@ -145,9 +145,8 @@ export class ChatChatsSidenavComponent implements OnInit {
   }
 
   private async resetItems(): Promise<void> {
-    setTimeout(async () => {
-      await this.ngxVirtualScrollComponent.reset();
-    });
+    await this._appHelper.delay();
+    await this.ngxVirtualScrollComponent.reset();
   }
 
   private updateItem(messageWrapper: MessageWrapper): void {

@@ -34,6 +34,7 @@ import {NgForm} from '@angular/forms';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {SystemMessageContent} from '../../../../data/remote/model/chat/message/system-message-content';
 import {SystemMessageContentType} from '../../../../data/remote/model/chat/message/system-message-content-type';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'chat-view',
@@ -45,6 +46,7 @@ export class ChatViewComponent implements OnInit, OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
   public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly fileClass = FileClass;
 
   @ViewChild('logo')
   public logo: ImageComponent;
@@ -275,7 +277,7 @@ export class ChatViewComponent implements OnInit, OnDestroy {
   };
 
   public cancelEditMessage() {
-    this.editedMessage = undefined;
+    delete this.editedMessage;
     this.messageContent = new MessageContent();
     this.selectedMessages.removeAll();
     this.updateCanEditMessage();

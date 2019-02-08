@@ -36,6 +36,7 @@ $selected-border-color: $selected-background-color;
 
     .time {
       position: absolute;
+      text-transform: lowercase;
       display: flex;
       width: 100%;
       font-size: 11px;

@@ -24,7 +24,7 @@
             <app-image #logo
                        class="avatar"
                        [type]="'LOGO'"
-                       [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? 'PERSON' : 'CHAT'"
+                       [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
                        [id]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : conversation.id"
                        [dimension]="'W40xH40'"
                        [format]="'CIRCLE'"></app-image>

@@ -52,7 +52,7 @@
   <!-- CHATS LIST-->
   <div class="chat-list" fxLayout="column">
 
-    <ngx-virtual-scroll #ngxVirtualScrollComponent [getItems]="getItems"
+    <ngx-virtual-scroll [getItems]="getItems"
                         [(query)]="query"
                         [windowScroll]="true">
       <ng-template let-item>
