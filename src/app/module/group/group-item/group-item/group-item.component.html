@@ -4,8 +4,8 @@
      [style.height.px]="height">
   <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="m-2 overflow-content">
-      <div class="h1 text-truncate">{{data.name}}</div>
-      <div class="h1 text-truncate text-muted">{{('groupTypeEnum.' + data.discriminator) | translate}}</div>
+      <h4 class="text-truncate">{{data.name}}</h4>
+      <p class="text-truncate text-muted">{{('groupTypeEnum.' + data.discriminator) | translate}}</p>
     </div>
     <div class="w-80 h-80">
       <ngx-image [objectId]="data.id"

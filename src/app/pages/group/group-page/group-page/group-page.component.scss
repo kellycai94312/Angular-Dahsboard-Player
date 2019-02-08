@@ -3,14 +3,20 @@
 @import "../../../../../../node_modules/bootstrap/scss/variables";
 
 a, p, h3, h4 {
-  color: $light-blue;
+  color: #fff;
 }
 
 a {
   text-decoration: none;
+
   &.nav-link {
     text-transform: uppercase;
   }
+}
+
+.header {
+  padding: 1rem !important;
+  background-color: $header-color;
 }
 
 @media (max-width: max-width-sm()) {
