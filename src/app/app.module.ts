@@ -42,6 +42,7 @@ import {LayoutModule} from './layout/layout.module';
 import {LayoutService} from './shared/layout.service';
 import {fuseConfig} from './fuse-config';
 import {FuseModule} from '../@fuse/fuse.module';
+import {NgxSelectionModule} from './components/ngx-selection/ngx-selection.module';
 
 registerLocaleData(localeRu);
 
@@ -82,7 +83,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditEventModule,
     EventPersonItemModule,
     NamedObjectModule,
-    FuseModule.forRoot(fuseConfig)
+    FuseModule.forRoot(fuseConfig),
+    NgxSelectionModule
   ],
   providers: [
     LayoutService,

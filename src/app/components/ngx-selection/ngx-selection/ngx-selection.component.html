@@ -15,11 +15,11 @@
 <div class="content row cols-padding mt-2">
   <div [hidden]="!canSelect()"
        class="col">
-    <ngx-virtual-scroll class="list-group-flush overflow-content"
+    <ngx-virtual-scroll class="overflow-content"
                         [getItems]="getItems"
                         [query]="query">
       <ng-template let-item>
-        <div class="list-group-item p-2"
+        <div class="p-2"
              (dblclick)="onSelected(item)">
           <ngx-component-factory [manualInitialization]="false"
                                  [data]="item"
@@ -30,9 +30,9 @@
       </ng-template>
     </ngx-virtual-scroll>
   </div>
-  <div class="col list-group-flush overflow-content">
+  <div class="col overflow-content">
     <div *ngFor="let item of selectedItems"
-         class="list-group-item p-2"
+         class="p-2"
          (dblclick)="onUnselected(item)">
       <ngx-component-factory [manualInitialization]="false"
                              [data]="item"

@@ -1,3 +1,7 @@
 .content {
   height: 60vh !important;
+
+  .col {
+    height: inherit;
+  }
 }
