@@ -20,7 +20,7 @@
 
   <mat-divider cdkFocusRegionEnd></mat-divider>
 
-  <mat-list>
+  <mat-list *ngIf="events.length; else elseContainer">
     <mat-list-item *ngFor="let item of events">
       <h4 matLine><strong>{{item.name}}</strong></h4>
       <h3 matLine>{{'startDate' | translate}}: {{item.startTime | date: propertyConstantClass.dateTimeFormat}}</h3>
@@ -30,4 +30,8 @@
          class="secondary-text">{{item.description}}</p>
     </mat-list-item>
   </mat-list>
+
+  <ng-template #elseContainer>
+    <h5 class="p-2">{{'todayThereAreNoEvents' | translate}}</h5>
+  </ng-template>
 </div>

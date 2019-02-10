@@ -617,5 +617,6 @@
   "personPosition": "Должность",
   "personPositions": "Должности",
   "vacancies": "Вакансии",
-  "addMissingUserRoles": "Добавить недостающие роли пользователя?"
+  "addMissingUserRoles": "Добавить недостающие роли пользователя?",
+  "todayThereAreNoEvents": "На сегодня событий нет"
 }

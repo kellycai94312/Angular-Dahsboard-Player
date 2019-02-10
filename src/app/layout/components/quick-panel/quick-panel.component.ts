@@ -27,9 +27,9 @@ export class QuickPanelComponent implements OnInit {
 
   async ngOnInit() {
     const dateFrom = this._appHelper.dateByFormat(this.date, PropertyConstant.dateFormat);
-    const deteTo = new Date(dateFrom);
-    deteTo.setHours(24);
-    const dateToStr = this._appHelper.dateByFormat(deteTo, PropertyConstant.dateFormat);
+    const dateTo = new Date(dateFrom);
+    dateTo.setHours(24);
+    const dateToStr = this._appHelper.dateByFormat(dateTo, PropertyConstant.dateFormat);
     this.events = (await this._participantRestApiService.getBaseTrainings({count: PropertyConstant.pageSizeMax, dateFrom: dateFrom, dateTo: dateToStr})).list;
   }
 
