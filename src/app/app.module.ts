@@ -43,6 +43,7 @@ import {LayoutService} from './shared/layout.service';
 import {fuseConfig} from './fuse-config';
 import {FuseModule} from '../@fuse/fuse.module';
 import {NgxSelectionModule} from './components/ngx-selection/ngx-selection.module';
+import {GroupItemModule} from './module/group/group-item/group-item.module';
 
 registerLocaleData(localeRu);
 
@@ -84,7 +85,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     EventPersonItemModule,
     NamedObjectModule,
     FuseModule.forRoot(fuseConfig),
-    NgxSelectionModule
+
+    // TODO: Need for resolve entryComponent
+    NgxSelectionModule,
+    GroupItemModule
   ],
   providers: [
     LayoutService,

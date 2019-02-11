@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 
 import {fuseAnimations} from '@fuse/animations';
 
@@ -8,6 +8,10 @@ import {BaseConversation} from '../../../data/remote/model/chat/conversation/bas
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
 import {AppHelper} from '../../../utils/app-helper';
+import {ActivatedRoute} from '@angular/router';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
   selector: 'chat',
@@ -16,22 +20,44 @@ import {AppHelper} from '../../../utils/app-helper';
   encapsulation: ViewEncapsulation.None,
   animations: fuseAnimations
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
+
+  private readonly _unsubscribeAll: Subject<void>;
+
   conversation: BaseConversation;
   person: Person;
 
   constructor(private _chatService: ChatService,
               private _conversationService: ConversationService,
               private _authorizationService: AuthorizationService,
+              private _activatedRoute: ActivatedRoute,
+              private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
+    this._unsubscribeAll = new Subject<void>();
   }
 
   async ngOnInit() {
     this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     this._chatService.onChatSelected
+      .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(conversation => {
         this.conversation = conversation;
       });
+
+    this._activatedRoute.params
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async val => {
+        const conversationId = val.id;
+        if (conversationId) {
+          const conversation = await this._participantRestApiService.getConversation({conversationId: conversationId});
+          this._chatService.onChatSelected.next(conversation);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
 }

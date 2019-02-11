@@ -7,6 +7,8 @@ import {FuseConfigService} from '@fuse/services/config.service';
 import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
 import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
+import {IEnvironment} from '../../../../../../environments/ienvironment';
+import {environment} from '../../../../../../environments/environment';
 
 @Component({
   selector: 'navbar-vertical-style-1',
@@ -15,6 +17,9 @@ import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
   encapsulation: ViewEncapsulation.None
 })
 export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
+
+  public readonly environment: IEnvironment;
+
   fuseConfig: any;
   navigation: any;
 
@@ -37,6 +42,7 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     private _fuseSidebarService: FuseSidebarService,
     private _router: Router
   ) {
+    this.environment = environment;
     this._unsubscribeAll = new Subject();
   }
 
