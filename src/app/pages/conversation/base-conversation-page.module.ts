@@ -19,6 +19,7 @@ import {ConversationItemModule} from '../../module/conversation/conversation-ite
 import {TranslateModule} from '@ngx-translate/core';
 import {MessageItemModule} from '../../module/conversation/message-item/message-item.module';
 import {ImageModule} from '../../components/image/image.module';
+import {BaseConversationPageComponent} from './base-conversation-page/base-conversation-page.component';
 
 @NgModule({
   imports: [
@@ -51,7 +52,8 @@ import {ImageModule} from '../../components/image/image.module';
     ChatChatsSidenavComponent,
     ChatLeftSidenavComponent,
     ChatRightSidenavComponent,
-    ChatContactSidenavComponent
+    ChatContactSidenavComponent,
+    BaseConversationPageComponent
   ],
   providers: [ConversationModalService, ChatService]
 })

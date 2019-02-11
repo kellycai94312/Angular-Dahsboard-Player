@@ -20,6 +20,13 @@ html, body {
 
 }
 
+pre {
+  overflow: visible;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  white-space: normal;
+}
+
 h5, h6, .fa-pencil-square-o {
   color: $light-blue;
 }

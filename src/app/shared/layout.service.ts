@@ -34,9 +34,6 @@ export class LayoutService {
         },
         footer: {
           hidden: res
-        },
-        sidepanel: {
-          hidden: res
         }
       }
     };

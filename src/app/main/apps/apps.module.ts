@@ -56,7 +56,7 @@ const routes = [
 
 @NgModule({
     imports     : [
-        RouterModule.forChild(routes),
+        RouterModule.forChild([]),
         FuseSharedModule
     ]
 })
