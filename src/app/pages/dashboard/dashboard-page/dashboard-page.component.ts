@@ -6,6 +6,10 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 import {AuthorizationService} from '../../../shared/authorization.service';
 import {Person} from '../../../data/remote/model/person';
 import {AppHelper} from '../../../utils/app-helper';
+import {Tab} from '../../../data/local/tab';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {ImageFormat} from '../../../data/local/image-format';
 
 @Component({
   selector: 'app-dashboard-page',
@@ -14,13 +18,26 @@ import {AppHelper} from '../../../utils/app-helper';
 })
 export class DashboardPageComponent implements OnInit {
 
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+  public readonly imageFormatClass = ImageFormat;
+
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
+
+  public readonly tabs: Tab[];
+
   public person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
+    this.tabs = [
+      {
+        nameKey: 'news',
+        routerLink: '/dashboard'
+      }
+    ];
   }
 
   async ngOnInit(): Promise<void> {
