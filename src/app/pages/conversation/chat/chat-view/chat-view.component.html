@@ -78,21 +78,16 @@
   <!--CHAT CONTENT-->
   <div id="chat-content" fxFlex="1 1 auto">
 
-    <!-- CHAT MESSAGES -->
-    <div class="chat-messages">
-
-      <ngx-virtual-scroll [getItems]="getItems"
-                          [autoScroll]="true">
-        <ng-template let-message>
-          <div (click)="toggleSelectMessage(message)"
-               [ngClass]="{'selected': isMessageSelected(message)}">
-            <app-message-item [message]="message"></app-message-item>
-          </div>
-        </ng-template>
-      </ngx-virtual-scroll>
-
-    </div>
-    <!-- CHAT MESSAGES -->
+    <ngx-virtual-scroll class="chat-messages"
+                        [getItems]="getItems"
+                        [autoScroll]="true">
+      <ng-template let-message>
+        <div (click)="toggleSelectMessage(message)"
+             [ngClass]="{'selected': isMessageSelected(message)}">
+          <app-message-item [message]="message"></app-message-item>
+        </div>
+      </ng-template>
+    </ngx-virtual-scroll>
 
   </div>
   <!-- / CHAT CONTENT -->
