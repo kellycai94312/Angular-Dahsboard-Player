@@ -20,6 +20,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {MessageItemModule} from '../../module/conversation/message-item/message-item.module';
 import {ImageModule} from '../../components/image/image.module';
 import {BaseConversationPageComponent} from './base-conversation-page/base-conversation-page.component';
+import {ConfirmationRemovingMessageModule} from '../../module/conversation/confirmation-removing-message/confirmation-removing-message.module';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import {BaseConversationPageComponent} from './base-conversation-page/base-conve
     MessageItemModule,
     ImageModule,
     TranslateModule.forChild(),
+    ConfirmationRemovingMessageModule,
 
     MatButtonModule,
     MatCardModule,
