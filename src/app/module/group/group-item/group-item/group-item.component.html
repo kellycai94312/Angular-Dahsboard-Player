@@ -3,17 +3,15 @@
      [style.width.px]="width"
      [style.height.px]="height">
   <div class="p-16" fxLayout="row" fxLayoutAlign="space-between center">
+    <ngx-image [objectId]="data.id"
+               [width]="80"
+               [height]="80"
+               [allowFullScreen]="false"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.GROUP"></ngx-image>
     <div class="m-2 overflow-content">
       <h4 class="text-truncate">{{data.name}}</h4>
       <p class="text-truncate text-muted">{{('groupTypeEnum.' + data.discriminator) | translate}}</p>
-    </div>
-    <div class="w-80 h-80">
-      <ngx-image [objectId]="data.id"
-                 [width]="80"
-                 [height]="80"
-                 [allowFullScreen]="false"
-                 [type]="imageTypeClass.LOGO"
-                 [fileClass]="fileClassClass.GROUP"></ngx-image>
     </div>
   </div>
 </div>

@@ -1,6 +1,4 @@
 import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-
-import {fuseAnimations} from '@fuse/animations';
 import {AuthorizationService} from '../../../../../../shared/authorization.service';
 import {Person} from '../../../../../../data/remote/model/person';
 import {Direction} from '../../../../../../components/ngx-virtual-scroll/model/direction';
@@ -20,8 +18,7 @@ import {ConversationModalService} from '../../../../service/conversation-modal/c
   selector: 'chat-chats-sidenav',
   templateUrl: './chats.component.html',
   styleUrls: ['./chats.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  animations: fuseAnimations
+  encapsulation: ViewEncapsulation.None
 })
 export class ChatChatsSidenavComponent implements OnInit {
   person: Person;

@@ -20,7 +20,7 @@
 
   <mat-divider cdkFocusRegionEnd></mat-divider>
 
-  <mat-list *ngIf="events.length; else elseContainer">
+  <mat-list *ngIf="events?.length; else elseContainer">
     <mat-list-item *ngFor="let item of events">
       <h4 matLine><strong>{{item.name}}</strong></h4>
       <h3 matLine>{{'startDate' | translate}}: {{item.startTime | date: propertyConstantClass.dateTimeFormat}}</h3>

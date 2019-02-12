@@ -1,7 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 
-import {fuseAnimations} from '@fuse/animations';
-
 import {ChatService} from 'app/pages/conversation/chat/chat.service';
 import {ConversationService} from '../../../shared/conversation.service';
 import {BaseConversation} from '../../../data/remote/model/chat/conversation/base/base-conversation';
@@ -17,8 +15,7 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
   selector: 'chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  animations: fuseAnimations
+  encapsulation: ViewEncapsulation.None
 })
 export class ChatComponent implements OnInit, OnDestroy {
 

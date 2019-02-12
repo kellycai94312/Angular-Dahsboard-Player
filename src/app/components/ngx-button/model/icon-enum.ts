@@ -1,5 +1,5 @@
 export enum IconEnum {
-  ADD = 'plus',
+  ADD = 'add',
   EDIT = 'edit',
   BOOK = 'book',
   DOWNLOAD = 'download',

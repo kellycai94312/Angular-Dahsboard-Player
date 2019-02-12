@@ -34,7 +34,7 @@ export class UrlParserPipe implements PipeTransform {
             result = `${this._htmlService.getImageIconTag()} ${await this._translateObjectService.getTranslation('image')}`;
             break;
           } else {
-            content = this._htmlService.getImageTag(url, '400px');
+            content = `${this._htmlService.getImageTag(url, '400px')}<br>`;
           }
         }
         result = this._appHelper.replaceAt(result, regExpExecArray.index, url, content);

@@ -29,6 +29,7 @@ chat-view {
       background: transparent;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
+      padding: 0.5rem;
 
       .chat-messages {
         position: relative;
