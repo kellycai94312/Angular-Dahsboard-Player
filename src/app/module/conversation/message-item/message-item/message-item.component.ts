@@ -5,7 +5,6 @@ import {Message} from '../../../../data/remote/model/chat/message/message';
 import {MessageViewModel} from '../../../../data/local/view-model/conversation/message-view-model';
 import {Person} from '../../../../data/remote/model/person';
 import {AuthorizationService} from '../../../../shared/authorization.service';
-import {ConversationService} from '../../../../shared/conversation.service';
 import {Router} from '@angular/router';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -34,7 +33,6 @@ export class MessageItemComponent implements OnInit, DoCheck {
   private differ: any;
 
   constructor(private _authorizationService: AuthorizationService,
-              public conversationService: ConversationService,
               private _router: Router,
               private _appHelper: AppHelper,
               differs: KeyValueDiffers) {

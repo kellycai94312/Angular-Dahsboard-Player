@@ -8,6 +8,7 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {ConfirmationRemovingMessageModule} from '../confirmation-removing-message/confirmation-removing-message.module';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    ConfirmationRemovingMessageModule
   ],
   declarations: [ConversationViewComponent],
   exports: [ConversationViewComponent]

@@ -87,7 +87,7 @@ export class ConversationPageComponent implements OnDestroy {
     this.messageContent = new MessageContent();
     this._maxMessageDate = new Date();
     this.participantsTyping = [];
-    this.selectedMessages = this._conversationService.selectedMessages;
+    this.selectedMessages = new HashSet<Message>();
     this.canEditMessage = false;
 
     this._paramsSubscription = this._activatedRoute.params.subscribe(async val => {

@@ -78,7 +78,7 @@
                         [autoScroll]="true">
       <ng-template let-message>
         <div (click)="toggleSelectMessage(message)"
-             [ngClass]="{'selected': isMessageSelected(message)}">
+             [ngClass]="{'selected': message.selected}">
           <app-message-item [message]="message"></app-message-item>
         </div>
       </ng-template>

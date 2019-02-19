@@ -619,5 +619,6 @@
   "vacancies": "Вакансии",
   "addMissingUserRoles": "Добавить недостающие роли пользователя?",
   "todayThereAreNoEvents": "На сегодня событий нет",
-  "conversations": "Диалоги"
+  "conversations": "Диалоги",
+  "type": "Тип"
 }

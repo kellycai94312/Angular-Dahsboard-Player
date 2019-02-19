@@ -4,7 +4,7 @@
 
     <div *ngSwitchCase="baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
          class="message-row system"
-         [ngClass]="{'selected' : conversationService.selectedMessages.contains(message)}">
+         [ngClass]="{'selected' : message.selected}">
       <div class="bubble">
         <div class="message d-flex flex-column">
           <div *ngIf="messageViewModel.body"
@@ -35,8 +35,8 @@
 
   <div class="message-row" *ngIf="person"
        [ngClass]="{'me': message.sender.person.id === person.id,
-       'contact': message.sender.person.id !== person.id,
-           'selected' : conversationService.selectedMessages.contains(message)}">
+                   'contact': message.sender.person.id !== person.id,
+                   'selected': message.selected}">
 
     <app-image #logo
                *ngIf="message.sender.person.id != person.id"

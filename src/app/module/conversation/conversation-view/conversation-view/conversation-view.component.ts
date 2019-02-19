@@ -35,6 +35,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {Router} from '@angular/router';
+import {ISelected} from '../../../../data/local/iselected';
 
 @Component({
   selector: 'app-conversation-view',
@@ -89,7 +90,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     this._unsubscribeAll = new Subject<void>();
     this.messageContent = new MessageContent();
     this._maxMessageDate = new Date();
-    this.selectedMessages = this._conversationService.selectedMessages;
+    this.selectedMessages = new HashSet<Message>();
 
     this._conversationService.messageCreateHandle
       .pipe(takeUntil(this._unsubscribeAll))
@@ -260,18 +261,16 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     }
   }
 
-  public toggleSelectMessage = (message: Message) => {
-    if (this.isMessageSelected(message)) {
-      this.selectedMessages.remove(message);
+  public toggleSelectMessage = (item: ISelected) => {
+    if (item.selected) {
+      delete item.selected;
+      this.selectedMessages.remove(item as Message);
     } else {
-      this.selectedMessages.add(message);
+      item.selected = true;
+      this.selectedMessages.add(item as Message);
     }
     this.updateCanEditMessage();
   };
-
-  public isMessageSelected(message: Message) {
-    return this.selectedMessages.contains(message);
-  }
 
   public startEditMessage = async () => {
     this.editedMessage = this.selectedMessages.data[0];

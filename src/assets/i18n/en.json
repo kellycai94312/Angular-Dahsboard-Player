@@ -617,5 +617,6 @@
   "vacancies": "Vacancies",
   "addMissingUserRoles": "Add missing user roles?",
   "todayThereAreNoEvents": "Today there are no events",
-  "conversations": "Conversations"
+  "conversations": "Conversations",
+  "type": "Type"
 }

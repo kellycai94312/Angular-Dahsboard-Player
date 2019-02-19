@@ -2,24 +2,24 @@
 <ngx-input class="w-100"
            [(value)]="data.name"></ngx-input>
 
-<label class="mt-2">{{'groupType' | translate}}</label>
-<dx-select-box [items]="groupTypeEnums"
-               [(value)]="selectedGroupTypeEnum"
-               [acceptCustomValue]="true"
-               displayExpr="name"
-               [disabled]="data.id"
-               placeholder="{{'groupType' | translate}}"
-               (onValueChanged)="onGroupTypeChanged($event.value)">
-</dx-select-box>
+<!--<label class="mt-2">{{'groupType' | translate}}</label>-->
+<!--<dx-select-box [items]="groupTypeEnums"-->
+               <!--[(value)]="selectedGroupTypeEnum"-->
+               <!--[acceptCustomValue]="true"-->
+               <!--displayExpr="name"-->
+               <!--[disabled]="data.id"-->
+               <!--placeholder="{{'groupType' | translate}}"-->
+               <!--(onValueChanged)="onGroupTypeChanged($event.value)">-->
+<!--</dx-select-box>-->
 
 <div *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION">
-  <label class="mt-2">{{'organizationType' | translate }}</label>
+  <label class="mt-2">{{'type' | translate }}</label>
   <dx-select-box [items]="organizationTypes"
                  [(value)]="data.organizationType"
                  [acceptCustomValue]="true"
                  [disabled]="data.id"
                  displayExpr="name"
-                 placeholder="{{'organizationType' | translate}}">
+                 placeholder="{{'type' | translate}}">
   </dx-select-box>
 </div>
 
