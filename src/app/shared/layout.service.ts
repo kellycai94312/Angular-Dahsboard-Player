@@ -17,7 +17,7 @@ export class LayoutService {
 
   public toggleLayout(urlPath: string): boolean {
     const items = urlPath.split('/').filter(x => !!x);
-    let res = true;
+    let res: boolean;
     for (const item of items) {
       res = this.hiddenRoutes.filter(x => item.indexOf(x) > -1).length > 0;
       if (res) {
@@ -33,6 +33,9 @@ export class LayoutService {
           hidden: res
         },
         footer: {
+          hidden: res
+        },
+        sidepanel: {
           hidden: res
         }
       }

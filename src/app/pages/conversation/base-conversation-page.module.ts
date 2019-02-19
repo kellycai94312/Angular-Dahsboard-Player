@@ -3,7 +3,6 @@ import {BaseConversationPageRoutingModule} from './base-conversation-page-routin
 import {EditChatModule} from '../../module/conversation/edit-chat/edit-chat.module';
 import {ConversationModalService} from './service/conversation-modal/conversation-modal.service';
 import {ChatComponent} from './chat/chat.component';
-import {ChatViewComponent} from './chat/chat-view/chat-view.component';
 import {ChatStartComponent} from './chat/chat-start/chat-start.component';
 import {ChatChatsSidenavComponent} from './chat/sidenavs/left/chats/chats.component';
 import {ChatLeftSidenavComponent} from './chat/sidenavs/left/left.component';
@@ -21,6 +20,7 @@ import {MessageItemModule} from '../../module/conversation/message-item/message-
 import {ImageModule} from '../../components/image/image.module';
 import {BaseConversationPageComponent} from './base-conversation-page/base-conversation-page.component';
 import {ConfirmationRemovingMessageModule} from '../../module/conversation/confirmation-removing-message/confirmation-removing-message.module';
+import {ConversationViewModule} from '../../module/conversation/conversation-view/conversation-view.module';
 
 @NgModule({
   imports: [
@@ -45,11 +45,11 @@ import {ConfirmationRemovingMessageModule} from '../../module/conversation/confi
     MatRadioModule,
     MatSidenavModule,
     MatToolbarModule,
-    FuseSharedModule
+    FuseSharedModule,
+    ConversationViewModule
   ],
   declarations: [
     ChatComponent,
-    ChatViewComponent,
     ChatStartComponent,
     ChatChatsSidenavComponent,
     ChatLeftSidenavComponent,

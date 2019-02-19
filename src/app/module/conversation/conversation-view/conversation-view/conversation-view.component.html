@@ -1,8 +1,9 @@
-<!-- CHAT -->
-<div class="chat" fxFlex fxLayout="column">
+<div *ngIf="data"
+     class="conversation-view {{class}}"
+     fxFlex
+     fxLayout="column">
 
-  <!-- CHAT TOOLBAR -->
-  <mat-toolbar class="chat-toolbar">
+  <mat-toolbar class="conversation-header">
 
     <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
 
@@ -17,39 +18,36 @@
         <!-- / RESPONSIVE CHATS BUTTON-->
 
         <!-- CHAT CONTACT-->
-        <div class="chat-contact" fxLayout="row" fxLayoutAlign="start center"
+        <div class="chat-contact"
+             fxLayout="row"
+             fxLayoutAlign="start center"
              fuseMatSidenavToggler="chat-right-sidenav" *ngIf="recipient">
-
-          <div *ngIf="conversation.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person"
+          <div *ngIf="data.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person"
                class="avatar-wrapper">
-            <app-image #logo
+            <ngx-image #conversationLogo
                        class="avatar"
-                       [type]="'LOGO'"
-                       [clazz]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
-                       [id]="conversation.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : conversation.id"
-                       [dimension]="'W40xH40'"
-                       [format]="'CIRCLE'"></app-image>
+                       [id]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : data.id"
+                       [type]="imageTypeClass.LOGO"
+                       [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
+                       [format]="imageFormatClass.CIRCLE"
+                       [width]="40"
+                       [height]="40"></ngx-image>
           </div>
 
-          <div *ngIf="conversation.discriminator === baseConversationTypeClass.DIALOGUE && recipient.person; else chatHeader">
-            <div class="chat-contact-name">{{recipient.person.lastName}} {{recipient.person.firstName}}</div>
-          </div>
-          <ng-template #chatHeader>
-            <div class="chat-contact-name">{{conversation.name}}</div>
-          </ng-template>
+          <div class="chat-contact-name">{{conversationName}}</div>
 
         </div>
         <!-- / CHAT CONTACT-->
       </div>
 
-      <div *ngIf="conversation">
+      <div>
         <button mat-icon-button [matMenuTriggerFor]="contactMenu" aria-label="more">
           <mat-icon>more_vert</mat-icon>
         </button>
 
         <mat-menu #contactMenu="matMenu">
           <button mat-menu-item
-                  *ngIf="conversation.discriminator === baseConversationTypeClass.CHAT && conversation.owner.id == person.user.id"
+                  *ngIf="data.discriminator === baseConversationTypeClass.CHAT && person && data.owner.id == person.user.id"
                   (click)="editChat()">
             {{'settings' | translate}}
           </button>
@@ -65,7 +63,7 @@
           <button mat-menu-item (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
           </button>
           <button mat-menu-item (click)="quitChat()"
-                  *ngIf="conversation.discriminator == 'CHAT' && conversation.owner.id != person.user.id">
+                  *ngIf="data.discriminator == 'CHAT' && person && data.owner.id != person.user.id">
             {{'quitChat' | translate}}
           </button>
         </mat-menu>
@@ -73,13 +71,10 @@
 
     </div>
   </mat-toolbar>
-  <!--/ CHAT TOOLBAR -->
 
-  <!--CHAT CONTENT-->
-  <div id="chat-content" fxFlex="1 1 auto">
-
-    <ngx-virtual-scroll class="chat-messages"
-                        [getItems]="getItems"
+  <div class="conversation-content"
+       fxFlex="1 1 auto">
+    <ngx-virtual-scroll [getItems]="getItems"
                         [autoScroll]="true">
       <ng-template let-message>
         <div (click)="toggleSelectMessage(message)"
@@ -88,20 +83,22 @@
         </div>
       </ng-template>
     </ngx-virtual-scroll>
-
   </div>
-  <!-- / CHAT CONTENT -->
 
-  <!-- CHAT FOOTER -->
-  <div class="chat-footer" fxFlex="0 0 auto" fxLayout="column">
+  <div class="conversation-footer"
+       fxFlex="0 0 auto"
+       fxLayout="column">
 
-    <!-- REPLY FORM -->
-    <div class="reply-form" fxFlex="0 0 auto" fxLayout="row" fxLayoutAlign="center center">
+    <div class="reply-form"
+         fxFlex="0 0 auto"
+         fxLayout="row"
+         fxLayoutAlign="center center">
 
       <form #replyForm="ngForm"
             (ngSubmit)="sendMessage()"
             (keydown.enter)="sendMessage()"
-            fxFlex fxLayout="row" fxLayoutAlign="start center">
+            fxFlex fxLayout="row"
+            fxLayoutAlign="start center">
 
         <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
           <textarea matInput placeholder="{{'writeMessage' | translate}}"
@@ -112,14 +109,7 @@
         <button class="send-message-button" mat-icon-button type="submit">
           <mat-icon class="secondary-text">send</mat-icon>
         </button>
-
       </form>
-
     </div>
-    <!-- / REPLY FORM -->
-
   </div>
-  <!-- / CHAT FOOTER-->
-
 </div>
-<!-- / CHAT -->

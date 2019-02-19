@@ -13,6 +13,7 @@ import {MessageWrapper} from '../../../../../../data/remote/bean/wrapper/message
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {Chat} from '../../../../../../data/remote/model/chat/conversation/chat';
 import {ConversationModalService} from '../../../../service/conversation-modal/conversation-modal.service';
+import {ChatService} from '../../../chat.service';
 
 @Component({
   selector: 'chat-chats-sidenav',
@@ -39,6 +40,7 @@ export class ChatChatsSidenavComponent implements OnInit {
               private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
               private _conversationModalService: ConversationModalService,
+              private _chatService: ChatService,
               private _appHelper: AppHelper) {
     this.query = new PageQuery();
 
@@ -184,6 +186,11 @@ export class ChatChatsSidenavComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  public async onShowConversation(val: ConversationWrapper) {
+    this._conversationService.readMessage(val.messageWrapper);
+    this._chatService.onChatSelected.next(val.messageWrapper.message.content.baseConversation);
   }
 
 }

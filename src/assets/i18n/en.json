@@ -616,5 +616,6 @@
   "personPositions": "Positions",
   "vacancies": "Vacancies",
   "addMissingUserRoles": "Add missing user roles?",
-  "todayThereAreNoEvents": "Today there are no events"
+  "todayThereAreNoEvents": "Today there are no events",
+  "conversations": "Conversations"
 }

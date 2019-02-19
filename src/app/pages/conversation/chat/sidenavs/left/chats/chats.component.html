@@ -56,7 +56,8 @@
                         [(query)]="query"
                         [windowScroll]="true">
       <ng-template let-item>
-        <app-conversation-item [conversationWrapper]="item"></app-conversation-item>
+        <app-conversation-item (click)="onShowConversation(item)"
+                               [data]="item"></app-conversation-item>
       </ng-template>
     </ngx-virtual-scroll>
 

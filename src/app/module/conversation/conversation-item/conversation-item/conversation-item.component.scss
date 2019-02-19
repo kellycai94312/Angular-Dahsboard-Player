@@ -1,45 +1,28 @@
-@import "../../../../../@fuse/scss/fuse";
-@import "../../../../pages/conversation/chat/chat.theme";
+$color-muted-text: rgba(0, 0, 0, .5);
 
-.contact {
-  width: 100%;
-  white-space: normal;
-  text-align: left;
-  letter-spacing: .010em;
-  min-height: 88px;
-  border-bottom: 1px solid;
-  padding: 16px;
-  font-weight: 400;
-  border-radius: 0;
+:host {
 
-  .avatar-wrapper {
+  .logo {
+    .unread-message-count {
+      position: absolute;
+      top: 5px;
+      left: 10px;
+    }
+  }
 
-    .avatar {
-      margin-right: 16px;
+  .content {
+
+    .conversation-name {
     }
 
+    .message {
+      color: $color-muted-text;
+    }
   }
 
-  .contact-name {
-    font-size: 16px;
-
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-
-  .contact-last-message {
-    line-height: normal;
-    margin-top: 0;
-  }
-
-  .contact-last-message-time {
+  .message-date {
     font-size: 12px;
-    margin-top: 4px;
-  }
-
-  .contact-mood {
-    line-height: normal;
-    margin: 0;
+    color: $color-muted-text;
   }
 
   .unread-message-count {

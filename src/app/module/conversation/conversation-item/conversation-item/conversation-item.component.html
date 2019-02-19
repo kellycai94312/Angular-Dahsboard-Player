@@ -1,55 +1,56 @@
-<button mat-button class="contact"
-        (click)="openConversation()" [ngClass]="{'unread':conversationWrapper.messageWrapper.unread}"
-        [@animate]="{value:'*',params:{y:'100%'}}">
-
-  <div fxLayout="row" fxLayoutAlign="start center" class="d-flex">
-
-    <div class="avatar-wrapper" fxFlex="0 1 auto" fxLayoutAlign="center center">
-      <app-image #logo
-                 class="avatar"
-                 [type]="'LOGO'"
-                 [clazz]="conversationImageClazz"
-                 [id]="conversationImageId"
-                 [dimension]="'W40xH40'"
-                 [format]="'CIRCLE'"></app-image>
+<div *ngIf="data"
+     class="p-2"
+     [ngClass]="{'unread': data.messageWrapper.unread}">
+  <div fxFlex>
+    <div class="logo"
+         fxFlex="0 1 auto"
+         fxFlexAlign="start">
+      <ngx-image [objectId]="conversationImageId"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="conversationImageClazz"
+                 [format]="imageFormatClass.CIRCLE"
+                 [width]="40"
+                 [height]="40"></ngx-image>
+      <div *ngIf="preview && data.messageWrapper.unread"
+           class="unread-message-count accent">{{data.messageWrapper.unread}}</div>
     </div>
+    <div *ngIf="!preview"
+         class="content ml-2"
+         fxLayout="row"
+         fxFlex>
+      <div fxFlex
+           fxLayout="column"
+           fxLayoutAlign="center start">
+        <div class="conversation-name text-truncate">{{conversationName}}</div>
 
-    <div fxLayout="row" fxFlex>
-
-      <div class="pr-4" fxFlex fxLayout="column" fxLayoutAlign="center start">
-        <div class="contact-name">{{conversationName}}</div>
-
-        <div *ngIf="conversationWrapper.typingParticipants.length; else messageContent"
-             class="contact-last-message">
-          <div *ngIf="conversationWrapper.typingParticipants.length == 1;else multiTyping">
-            {{conversationWrapper.typingParticipants[0].person.firstName}} {{'isTypingAMessage' | translate |
-            lowercase}}
-          </div>
-          <ng-template #multiTyping>
-            <div *ngFor="let item of conversationWrapper.typingParticipants">
-              {{item.person.firstName}},
+        <div class="message">
+          <div *ngIf="data.typingParticipants.length; else messageContent">
+            <div *ngIf="data.typingParticipants.length == 1; else multiTyping"
+                 class="text-lowercase">
+              {{data.typingParticipants[0].person.firstName}} {{'isTypingAMessage' | translate}}
             </div>
-            {{'areTypingMessages' | translate | lowercase}}
+            <ng-template #multiTyping>
+              <div *ngFor="let item of data.typingParticipants">
+                {{item.person.firstName}},
+              </div>
+              <span class="text-lowercase"> {{'areTypingMessages' | translate}}</span>
+            </ng-template>
+          </div>
+          <ng-template #messageContent>
+            <app-preview-message-item [message]="data.messageWrapper.message"></app-preview-message-item>
           </ng-template>
         </div>
-        <ng-template #messageContent>
-          <div class="contact-last-message">
-            <app-preview-message-item [message]="conversationWrapper.messageWrapper.message"></app-preview-message-item>
-          </div>
-        </ng-template>
-
       </div>
 
-      <div fxLayout="column" fxLayoutAlign="start end">
-        <div class="contact-last-message-time">
-          {{updated ? (('edited' | translate | lowercase) + ' ' + (updated | date:'dd.MM.yyyy HH:mm') )
-          : (conversationWrapper.messageWrapper.message.created | date:'dd.MM.yyyy HH:mm')}}
+      <div class="ml-2"
+           fxLayout="column"
+           fxLayoutAlign="start end">
+        <div class="message-date">
+          {{updated ? (('edited' | translate) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat)) : (data.messageWrapper.message.created | date: propertyConstantClass.dateTimeFormat)}}
         </div>
-        <div *ngIf="conversationWrapper.messageWrapper.unread" class="mt-4 unread-message-count accent">{{conversationWrapper.messageWrapper.unread}}</div>
+        <div *ngIf="data.messageWrapper.unread"
+             class="mt-2 unread-message-count accent">{{data.messageWrapper.unread}}</div>
       </div>
-
     </div>
-
   </div>
-
-</button>
+</div>

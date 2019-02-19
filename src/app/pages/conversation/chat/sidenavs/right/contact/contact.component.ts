@@ -23,7 +23,6 @@ export class ChatContactSidenavComponent implements OnInit, OnDestroy
      * @param {ChatService} _chatService
      */
     constructor(
-        private _chatService: ChatService
     )
     {
         // Set the private defaults
@@ -39,11 +38,11 @@ export class ChatContactSidenavComponent implements OnInit, OnDestroy
      */
     ngOnInit(): void
     {
-        this._chatService.onContactSelected
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe(contact => {
-                this.contact = contact;
-            });
+        // this._chatService.onContactSelected
+        //     .pipe(takeUntil(this._unsubscribeAll))
+        //     .subscribe(contact => {
+        //         this.contact = contact;
+        //     });
     }
 
     /**
