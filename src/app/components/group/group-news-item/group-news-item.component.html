@@ -3,7 +3,7 @@
     <div class="w-100">
       <mat-card-title *ngIf="data.discriminator === groupNewsDiscriminatorClass.GROUP_NEWS"
                       [innerHTML]="data.title | urlParser | async"></mat-card-title>
-      <mat-card-subtitle>{{data.group.name}}</mat-card-subtitle>
+      <mat-card-subtitle><a routerLink="/group/{{data.group.id}}">{{data.group.name}}</a></mat-card-subtitle>
     </div>
     <button *ngIf="canEdit"
             mat-icon-button

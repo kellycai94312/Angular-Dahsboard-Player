@@ -26,7 +26,7 @@
                class="avatar-wrapper">
             <ngx-image #conversationLogo
                        class="avatar"
-                       [id]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : data.id"
+                       [object]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person.id : data.id"
                        [type]="imageTypeClass.LOGO"
                        [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
                        [format]="imageFormatClass.CIRCLE"

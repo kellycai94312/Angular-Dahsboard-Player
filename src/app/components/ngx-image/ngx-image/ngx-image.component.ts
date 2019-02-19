@@ -69,7 +69,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<File>();
     this.class = '';
-    this.allowFullScreen = true;
     this.autoSave = true;
     this.innerWidth = 0;
     this.innerHeight = 0;
@@ -134,7 +133,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
       const imageQuery: ImageQuery = {
         clazz: this.fileClass,
         type: this.type,
-        objectId: this.objectId || 0,
+        objectId: this.objectId || this.object.id || 0,
       };
 
       if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
