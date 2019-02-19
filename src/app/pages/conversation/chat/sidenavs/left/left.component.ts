@@ -3,6 +3,7 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {fuseAnimations} from '@fuse/animations';
 
 import {ChatService} from 'app/pages/conversation/chat/chat.service';
+import {ConversationWrapper} from '../../../../../data/local/conversation-wrapper';
 
 @Component({
   selector: 'chat-left-sidenav',
@@ -39,4 +40,9 @@ export class ChatLeftSidenavComponent implements OnInit {
         this.view = view;
       });
   }
+
+  public onSelectedConversation(val: ConversationWrapper) {
+    this._chatService.onChatSelected.next(val.messageWrapper.message.content.baseConversation);
+  }
+
 }

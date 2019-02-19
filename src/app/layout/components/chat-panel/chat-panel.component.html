@@ -24,17 +24,9 @@
 </div>
 
 <div class="content">
-
-  <div id="contacts-list"
-       fusePerfectScrollbar
-       [fusePerfectScrollbarOptions]="{suppressScrollX: true}">
-
-    <div *ngFor="let item of conversations"
-         (click)="toggleChat(item)"
-         class="contacts-list-item">
-      <app-conversation-item [preview]="true"
-                             [data]="item"></app-conversation-item>
-    </div>
+  <div id="contacts-list">
+    <app-conversations [preview]="true"
+                       (selectItemChange)="toggleChat($event)"></app-conversations>
   </div>
 
   <div id="chat"

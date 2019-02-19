@@ -9,6 +9,7 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {ConversationItemModule} from '../../../module/conversation/conversation-item/conversation-item.module';
 import {ConversationViewModule} from '../../../module/conversation/conversation-view/conversation-view.module';
 import {TranslateModule} from '@ngx-translate/core';
+import {ConversationsModule} from '../../../module/conversation/conversations/conversations.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {TranslateModule} from '@ngx-translate/core';
     NgxImageModule,
     ConversationItemModule,
     ConversationViewModule,
+    ConversationsModule,
     TranslateModule.forChild()
   ],
   exports: [

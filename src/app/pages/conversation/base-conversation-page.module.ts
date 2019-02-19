@@ -21,6 +21,7 @@ import {ImageModule} from '../../components/image/image.module';
 import {BaseConversationPageComponent} from './base-conversation-page/base-conversation-page.component';
 import {ConfirmationRemovingMessageModule} from '../../module/conversation/confirmation-removing-message/confirmation-removing-message.module';
 import {ConversationViewModule} from '../../module/conversation/conversation-view/conversation-view.module';
+import {ConversationsModule} from '../../module/conversation/conversations/conversations.module';
 
 @NgModule({
   imports: [
@@ -46,7 +47,8 @@ import {ConversationViewModule} from '../../module/conversation/conversation-vie
     MatSidenavModule,
     MatToolbarModule,
     FuseSharedModule,
-    ConversationViewModule
+    ConversationViewModule,
+    ConversationsModule
   ],
   declarations: [
     ChatComponent,

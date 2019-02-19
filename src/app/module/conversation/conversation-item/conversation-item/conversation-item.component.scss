@@ -2,11 +2,18 @@ $color-muted-text: rgba(0, 0, 0, .5);
 
 :host {
 
+  .preview {
+    display: block;
+    width: max-content;
+    margin: auto;
+  }
+
   .logo {
+    position: relative;
+
     .unread-message-count {
       position: absolute;
-      top: 5px;
-      left: 10px;
+      top: -5px;
     }
   }
 

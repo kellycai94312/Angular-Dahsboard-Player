@@ -18,7 +18,6 @@ import {ConversationWrapper} from '../../../data/local/conversation-wrapper';
 })
 export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  public conversations: ConversationWrapper[];
   public selectedConversation: ConversationWrapper;
 
   chat: any;
@@ -53,12 +52,6 @@ export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Load the contacts
-    this._chatPanelService.loadContacts().then(val => {
-      this.conversations = val;
-    });
-
-    // Subscribe to the foldedChanged observable
     this._fuseSidebarService.getSidebar('chatPanel').foldedChanged
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((folded) => {
@@ -76,23 +69,6 @@ export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
     // Unsubscribe from all subscriptions
     this._unsubscribeAll.next();
     this._unsubscribeAll.complete();
-  }
-
-  private _prepareChatForReplies(): void {
-    setTimeout(() => {
-
-      // Focus to the reply input
-      // this._replyInput.nativeElement.focus();
-
-      // Scroll to the bottom of the messages list
-      if (this._chatViewScrollbar) {
-        this._chatViewScrollbar.update();
-
-        setTimeout(() => {
-          this._chatViewScrollbar.scrollToBottom(0);
-        });
-      }
-    });
   }
 
   foldSidebarTemporarily(): void {

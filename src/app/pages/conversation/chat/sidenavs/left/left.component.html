@@ -1,6 +1,4 @@
-<div [ngSwitch]="view" class="views">
-    <chat-chats-sidenav class="view"
-                        *ngSwitchCase="'chats'"
-                        [@slideInRight]>
-    </chat-chats-sidenav>
+<div class="views">
+  <app-conversations [visibleHeader]="true"
+                     (selectItemChange)="onSelectedConversation($event)"></app-conversations>
 </div>
