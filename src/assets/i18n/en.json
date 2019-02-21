@@ -618,5 +618,9 @@
   "addMissingUserRoles": "Add missing user roles?",
   "todayThereAreNoEvents": "Today there are no events",
   "conversations": "Conversations",
-  "type": "Type"
+  "type": "Type",
+  "localeEnum": {
+    "en": "English",
+    "ru": "Русский"
+  }
 }

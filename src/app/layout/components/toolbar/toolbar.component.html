@@ -40,11 +40,15 @@
       <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
 
         <button mat-menu-item
-                (click)="openProfile()">
+                (click)="navigateToPersonProfile()">
           <mat-icon>account_circle</mat-icon>
           <span>{{'profile' | translate}}</span>
         </button>
-
+        <button mat-menu-item
+                (click)="navigateToPersonSettings()">
+          <mat-icon>settings</mat-icon>
+          <span>{{'settings' | translate}}</span>
+        </button>
         <button mat-menu-item
                 (click)="signOut()">
           <mat-icon>exit_to_app</mat-icon>

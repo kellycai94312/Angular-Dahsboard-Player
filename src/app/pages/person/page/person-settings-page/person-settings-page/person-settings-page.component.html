@@ -1,0 +1,8 @@
+<label>{{'language' | translate }}</label>
+<dx-select-box [items]="languages"
+               displayExpr="name"
+               [(value)]="selectedLanguage"
+               acceptCustomValue="true"
+               (onValueChanged)="onLanguageChanged($event.value)"
+               placeholder="{{'language' | translate}}">
+</dx-select-box>

@@ -620,5 +620,9 @@
   "addMissingUserRoles": "Добавить недостающие роли пользователя?",
   "todayThereAreNoEvents": "На сегодня событий нет",
   "conversations": "Диалоги",
-  "type": "Тип"
+  "type": "Тип",
+  "localeEnum": {
+    "en": "English",
+    "ru": "Русский"
+  }
 }

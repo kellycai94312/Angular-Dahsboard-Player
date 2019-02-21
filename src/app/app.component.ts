@@ -213,7 +213,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private initLocalization(): void {
     this._translate.addLangs(Object.keys(Locale));
-    const currentLocale = Locale.ru;
+    const currentLocale = this._localStorageService.getCurrentLocale();
     const localeKey = Locale[currentLocale];
     this._localStorageService.setLocale(localeKey);
     this._translate.setDefaultLang(localeKey);
