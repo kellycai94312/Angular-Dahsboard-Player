@@ -36,6 +36,8 @@ import {takeUntil} from 'rxjs/operators';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {Router} from '@angular/router';
 import {ISelected} from '../../../../data/local/iselected';
+import {DialogResult} from '../../../../data/local/dialog-result';
+import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 
 @Component({
   selector: 'app-conversation-view',
@@ -339,14 +341,9 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     this.enabled = !this.enabled;
   }
 
-  public onAddEvent = async () => {
-    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.data, true);
-    if (dialogResult.result) {
-      const message = new EventMessageContent();
-      message.training = dialogResult.data;
-      await this.createMessage(message);
-    }
-  };
+  public async onAttachFile() {
+    await this.addEvent();
+  }
 
   public onAddEmoji(e: { emoji: any, $event: MouseEvent }) {
     this.messageContent.content = this.messageContent.content || '';
@@ -379,6 +376,16 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
       return this._appHelper.getPersonFullName(recipient.person);
     }
     return (val as Chat).name;
+  }
+
+  private async addEvent(): Promise<DialogResult<BaseTraining>> {
+    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.data, true);
+    if (dialogResult.result) {
+      const message = new EventMessageContent();
+      message.training = dialogResult.data;
+      await this.createMessage(message);
+    }
+    return dialogResult;
   }
 
 }

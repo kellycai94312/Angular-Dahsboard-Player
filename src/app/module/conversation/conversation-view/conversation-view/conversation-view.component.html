@@ -102,6 +102,12 @@
             (keydown.enter)="sendMessage()"
             fxFlex fxLayout="row"
             fxLayoutAlign="start center">
+        <button class="attach-file-button"
+                mat-icon-button
+                type="button"
+                (click)="onAttachFile()">
+          <mat-icon class="secondary-text">attach_file</mat-icon>
+        </button>
 
         <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
           <textarea matInput placeholder="{{'writeMessage' | translate}}"
