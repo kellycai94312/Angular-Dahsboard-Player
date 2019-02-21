@@ -21,6 +21,12 @@ app-conversation-view {
 
     .conversation-footer {
 
+      emoji-mart {
+        position: absolute;
+        right: 10px;
+        margin: -434px 0 0 0;
+      }
+
       .reply-form {
         position: relative;
 
@@ -43,8 +49,8 @@ app-conversation-view {
 
                 textarea {
                   overflow: hidden;
-                  margin: 16px 48px 16px 16px;
-                  width: calc(100% - 64px);
+                  margin: 16px 98px 16px 16px;
+                  width: calc(100% - 98px);
                   padding: 0;
                 }
               }
@@ -54,6 +60,12 @@ app-conversation-view {
               display: none !important;
             }
           }
+        }
+
+        .add-emoji-button {
+          position: absolute;
+          right: 56px;
+          bottom: 21px;
         }
 
         .send-message-button {

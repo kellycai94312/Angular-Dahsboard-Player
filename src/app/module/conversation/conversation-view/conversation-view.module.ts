@@ -9,6 +9,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ConfirmationRemovingMessageModule} from '../confirmation-removing-message/confirmation-removing-message.module';
+import {PickerModule} from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   imports: [
@@ -26,7 +27,8 @@ import {ConfirmationRemovingMessageModule} from '../confirmation-removing-messag
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),
-    ConfirmationRemovingMessageModule
+    ConfirmationRemovingMessageModule,
+    PickerModule
   ],
   declarations: [ConversationViewComponent],
   exports: [ConversationViewComponent]

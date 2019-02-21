@@ -69,6 +69,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public canEditMessage: boolean;
   public recipient: Participant;
   public conversationName: string;
+  public visibleEmojiPicker: boolean;
 
   private readonly _unsubscribeAll: Subject<void>;
 
@@ -237,7 +238,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
       });
     } else {
       if (await this.createMessage(this.messageContent)) {
-        this.messageContent.content = null;
+        this.messageContent.content = '';
       }
     }
   };
@@ -346,6 +347,15 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
       await this.createMessage(message);
     }
   };
+
+  public onAddEmoji(e: { emoji: any, $event: MouseEvent }) {
+    this.messageContent.content = this.messageContent.content || '';
+    this.messageContent.content += e.emoji.native;
+  }
+
+  public onToggleEmojiPicker() {
+    this.visibleEmojiPicker = !this.visibleEmojiPicker;
+  }
 
   private readMessageFrom(date: Date): void {
     this._participantStompService.publishConversationRead({

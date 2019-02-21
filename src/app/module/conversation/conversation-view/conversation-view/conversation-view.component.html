@@ -88,6 +88,9 @@
   <div class="conversation-footer"
        fxFlex="0 0 auto"
        fxLayout="column">
+    <emoji-mart *ngIf="visibleEmojiPicker"
+                (emojiClick)="onAddEmoji($event)"
+                set="emojione"></emoji-mart>
 
     <div class="reply-form"
          fxFlex="0 0 auto"
@@ -103,9 +106,16 @@
         <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
           <textarea matInput placeholder="{{'writeMessage' | translate}}"
                     [(ngModel)]="messageContent.content" name="message" [rows]="1"
+                    [matAutosizeMaxRows]="10"
                     [matTextareaAutosize]="true" (input)="onTyping()"></textarea>
         </mat-form-field>
 
+        <button class="add-emoji-button"
+                mat-icon-button
+                type="button"
+                (click)="onToggleEmojiPicker()">
+          <mat-icon class="secondary-text">insert_emoticon</mat-icon>
+        </button>
         <button class="send-message-button" mat-icon-button type="submit">
           <mat-icon class="secondary-text">send</mat-icon>
         </button>
