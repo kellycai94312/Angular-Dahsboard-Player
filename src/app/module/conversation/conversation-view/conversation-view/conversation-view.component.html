@@ -10,9 +10,11 @@
       <div fxLayout="row" fxLayoutAlign="start center">
 
         <!-- RESPONSIVE CHATS BUTTON-->
-        <button mat-icon-button fxHide.gt-md class="responsive-chats-button mr-16"
-                fuseMatSidenavToggler="chat-left-sidenav"
-                aria-label="chats button">
+        <button mat-icon-button
+                fxHide.gt-md
+                class="responsive-chats-button mr-16"
+                aria-label="chats button"
+                (click)="onToggleConversations()">
           <mat-icon>chat</mat-icon>
         </button>
         <!-- / RESPONSIVE CHATS BUTTON-->

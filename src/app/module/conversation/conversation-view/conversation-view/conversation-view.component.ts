@@ -38,6 +38,7 @@ import {Router} from '@angular/router';
 import {ISelected} from '../../../../data/local/iselected';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
+import {FuseMatSidenavHelperService} from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
 
 @Component({
   selector: 'app-conversation-view',
@@ -80,6 +81,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
 
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _fuseMatSidenavHelperService: FuseMatSidenavHelperService,
               private _appHelper: AppHelper,
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
@@ -352,6 +354,10 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
 
   public onToggleEmojiPicker() {
     this.visibleEmojiPicker = !this.visibleEmojiPicker;
+  }
+
+  public onToggleConversations() {
+    this._fuseMatSidenavHelperService.getSidenav('chat-left-sidenav').toggle();
   }
 
   private readMessageFrom(date: Date): void {
