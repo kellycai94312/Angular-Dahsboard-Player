@@ -89,12 +89,14 @@ export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.unfoldSidebarTemporarily();
       this.selectedConversation = val;
+      this._chatPanelService.selectedConversation = this.selectedConversation;
     }
   }
 
   resetChat(): void {
     this.selectedConversation = null;
     this.chat = null;
+    this._chatPanelService.selectedConversation = null;
   }
 
 }

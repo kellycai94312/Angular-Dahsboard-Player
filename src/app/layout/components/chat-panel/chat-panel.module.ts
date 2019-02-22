@@ -4,7 +4,6 @@ import {MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatR
 import {FuseSharedModule} from '@fuse/shared.module';
 
 import {ChatPanelComponent} from 'app/layout/components/chat-panel/chat-panel.component';
-import {ChatPanelService} from 'app/layout/components/chat-panel/chat-panel.service';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {ConversationItemModule} from '../../../module/conversation/conversation-item/conversation-item.module';
 import {ConversationViewModule} from '../../../module/conversation/conversation-view/conversation-view.module';
@@ -14,9 +13,6 @@ import {ConversationsModule} from '../../../module/conversation/conversations/co
 @NgModule({
   declarations: [
     ChatPanelComponent
-  ],
-  providers: [
-    ChatPanelService
   ],
   imports: [
     MatButtonModule,

@@ -7,11 +7,14 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 import {ConversationWrapper} from '../../../data/local/conversation-wrapper';
 import {AppHelper} from '../../../utils/app-helper';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ChatPanelService {
   contacts: ConversationWrapper[];
   chats: any[];
   user: any;
+  public selectedConversation: ConversationWrapper;
 
   /**
    * Constructor

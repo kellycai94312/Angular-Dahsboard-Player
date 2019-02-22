@@ -20,6 +20,7 @@ import {navigation} from './navigation/navigation';
 import {LayoutService} from './shared/layout.service';
 import {FuseNavigation} from '../@fuse/types';
 import {Person} from './data/remote/model/person';
+import {ChatPanelService} from './layout/components/chat-panel/chat-panel.service';
 
 @Component({
   selector: 'app-root',
@@ -48,6 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private _messageToastrService: MessageToastrService,
               private _layoutService: LayoutService,
               private _router: Router,
+              private _chatPanelService: ChatPanelService,
               private _assetsService: AssetsService) {
     this._unsubscribeAll = new Subject();
 
@@ -87,6 +89,13 @@ export class AppComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(val => {
         if (this._messageToastrService.canShowMessageNotification(val.message)) {
+          const canShowNotificationInQuickConversation = this._chatPanelService.selectedConversation &&
+            (val.message.content.baseConversation.id != this._chatPanelService.selectedConversation.messageWrapper.message.content.baseConversation.id);
+          const showAndAddToast = () => {
+            if (canShowNotificationInQuickConversation == null || canShowNotificationInQuickConversation) {
+              this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+            }
+          };
           const urlTree = this._router.parseUrl(this._router.url);
           const segments = urlTree.root.children.primary.segments;
           const conversationIndex = segments.findIndex(x => x.path === 'conversation');
@@ -94,13 +103,13 @@ export class AppComponent implements OnInit, OnDestroy {
             if (conversationIndex + 1 < segments.length) {
               const conversationId = parseInt(segments[conversationIndex + 1].path, 10);
               if (val.message.content.baseConversation.id != conversationId) {
-                this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+                showAndAddToast();
               }
             } else {
-              this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+              showAndAddToast();
             }
           } else {
-            this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+            showAndAddToast();
           }
         }
       });
