@@ -10,8 +10,6 @@ import {ConversationService} from './shared/conversation.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {MessageToastrService} from './components/message-toastr/message-toastr.service';
 import {NavigationEnd, Router} from '@angular/router';
-import {MessageToastrComponent} from './components/message-toastr/message-toastr.component';
-import {Message} from './data/remote/model/chat/message/message';
 import {AssetsService} from './data/remote/rest-api/assets.service';
 import {takeUntil} from 'rxjs/operators';
 import {FuseConfigService} from '../@fuse/services/config.service';
@@ -21,6 +19,7 @@ import {Platform} from '@angular/cdk/platform';
 import {navigation} from './navigation/navigation';
 import {LayoutService} from './shared/layout.service';
 import {FuseNavigation} from '../@fuse/types';
+import {Person} from './data/remote/model/person';
 
 @Component({
   selector: 'app-root',
@@ -33,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _navigation: FuseNavigation[];
 
   private _fuseConfig: any;
+  private _person: Person;
 
   constructor(@Inject(DOCUMENT) private document: any,
               private _fuseConfigService: FuseConfigService,
@@ -85,15 +85,22 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this._conversationService.messageCreateHandle
       .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(x => {
-        if (x.message.receiver.enabled) {
-          if (this._router.url.indexOf('/conversation/') == 0) {
-            const conversationId = +this._router.url.substring('/conversation/'.length);
-            if (x.message.content.baseConversation.id != conversationId) {
-              this.buildToast(x.message);
+      .subscribe(val => {
+        if (this._messageToastrService.canShowMessageNotification(val.message)) {
+          const urlTree = this._router.parseUrl(this._router.url);
+          const segments = urlTree.root.children.primary.segments;
+          const conversationIndex = segments.findIndex(x => x.path === 'conversation');
+          if (conversationIndex > -1) {
+            if (conversationIndex + 1 < segments.length) {
+              const conversationId = parseInt(segments[conversationIndex + 1].path, 10);
+              if (val.message.content.baseConversation.id != conversationId) {
+                this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+              }
+            } else {
+              this._messageToastrService.showAndAddToast(this._toastrService, val.message);
             }
-          } else if (this._router.url.indexOf('/conversation') < 0) {
-            this.buildToast(x.message);
+          } else {
+            this._messageToastrService.showAndAddToast(this._toastrService, val.message);
           }
         }
       });
@@ -101,17 +108,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this._conversationService.messageUpdateHandle
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(async x => {
-        if (x.message.receiver.enabled) {
-          await this._messageToastrService.updateToast(x.message);
-        }
+        await this._messageToastrService.updateToast(x.message);
       });
 
     this._conversationService.messageDeleteHandle
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(x => {
-        if (x.message.receiver.enabled) {
-          this._messageToastrService.deleteToast(x.message);
-        }
+        this._messageToastrService.deleteToast(x.message);
       });
 
     this._conversationService.unreadTotalHandle
@@ -130,6 +133,12 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(x => {
         this.unsubscribe();
       });
+    this._authorizationService.personSubject
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+          this._person = x;
+        }
+      );
   }
 
   private updateBadge(id: string, val: number) {
@@ -144,20 +153,6 @@ export class AppComponent implements OnInit, OnDestroy {
       };
     }
     this._fuseNavigationService.updateNavigationItem(id, badge);
-  }
-
-  private buildToast(message: Message): void {
-    const toast = this._toastrService.show(null, null,
-      {
-        toastComponent: MessageToastrComponent,
-        disableTimeOut: true,
-        tapToDismiss: false,
-        toastClass: 'toast p-1'
-      }
-    );
-    const instance = toast.toastRef.componentInstance as MessageToastrComponent;
-    instance.message = message;
-    this._messageToastrService.addToast(message, toast);
   }
 
   private subscribe(): void {
