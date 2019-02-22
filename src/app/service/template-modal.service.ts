@@ -414,6 +414,11 @@ export class TemplateModalService {
     if (!config.title) {
       config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('persons.section')}`;
     }
+    if (!config.compare) {
+      config.compare = (first, second) => {
+        return first.person.id == second.person.id;
+      };
+    }
 
     return (await this._modalBuilderService.showSelectionItemsModal(selectedItems,
       async (query: TrainingPersonQuery) => {

@@ -30,7 +30,8 @@
       </ng-template>
     </ngx-virtual-scroll>
   </div>
-  <div class="col overflow-content">
+  <div class="col overflow-content"
+       [ngClass]="{'selected-items': canSelect()}">
     <div *ngFor="let item of selectedItems"
          class="p-2"
          (dblclick)="onUnselected(item)">

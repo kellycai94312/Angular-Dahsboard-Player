@@ -87,7 +87,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   public getItems = async (direction: Direction, query: TQuery): Promise<PageContainer<TModel>> => {
     const pageContainer = await this.fetchItems(query);
-    pageContainer.list = this._appHelper.except(pageContainer.list, this.selectedItems, this.compare);
+    pageContainer.list = this._appHelper.except(pageContainer.list, this.selectedItems, this.compare, true);
     return pageContainer;
   };
 
