@@ -142,7 +142,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public async initialize(personId: number) {
     this.personViewModel = await this.personService.initialize(personId);
     this.allowEdit = await this.personService.allowEdit();
-    const authPerson = await this._authorizationService.getPerson();
+    const authPerson = await this._appHelper.toPromise(this._authorizationService.personSubject);
     this._myProfile = this.personService.personViewModel.data.id == authPerson.id;
 
     if (this.allowEdit) {

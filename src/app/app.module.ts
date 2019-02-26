@@ -17,7 +17,6 @@ import {LocalStorageService} from './shared/local-storage.service';
 import {AuthGuard} from './guard/auth.guard';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {ImageService} from './shared/image.service';
-import {ProfileService} from './shared/profile.service';
 import {RestApiInterceptor} from './guard/rest-api-interceptor';
 import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
@@ -41,6 +40,10 @@ import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
 import {LayoutModule} from './layout/layout.module';
 import {LayoutService} from './shared/layout.service';
+import {fuseConfig} from './fuse-config';
+import {FuseModule} from '../@fuse/fuse.module';
+import {NgxSelectionModule} from './components/ngx-selection/ngx-selection.module';
+import {GroupItemModule} from './module/group/group-item/group-item.module';
 
 registerLocaleData(localeRu);
 
@@ -80,11 +83,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     GroupModule,
     EditEventModule,
     EventPersonItemModule,
-    NamedObjectModule
+    NamedObjectModule,
+    FuseModule.forRoot(fuseConfig),
+
+    // TODO: Need for resolve entryComponent
+    NgxSelectionModule,
+    GroupItemModule
   ],
   providers: [
     LayoutService,
-    ProfileService,
     AuthGuard,
     AuthDenyGuard,
     RegistrationPersonPageGuard,

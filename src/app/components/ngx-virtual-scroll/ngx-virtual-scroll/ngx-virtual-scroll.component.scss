@@ -1,5 +1,6 @@
 .ngx-virtual-scroll-content {
   overflow: auto;
   overflow-x: hidden;
+  min-height: 100%;
   max-height: 100%;
 }

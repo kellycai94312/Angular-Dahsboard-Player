@@ -9,7 +9,6 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {Router} from '@angular/router';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
-import {ProfileService} from '../../../../shared/profile.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {Game} from '../../../../data/remote/model/training/game/game';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
@@ -20,6 +19,7 @@ import {TrainingState} from '../../../../data/remote/misc/training-state';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
+import {PermissionService} from '../../../../shared/permission.service';
 
 @Component({
   selector: 'app-events-list',
@@ -46,8 +46,8 @@ export class EventsListComponent implements OnInit, OnDestroy {
   constructor(private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
-              private _profileService: ProfileService,
               private _translateObjectService: TranslateObjectService,
+              private _permissionService: PermissionService,
               private _ngxModalService: NgxModalService) {
     this.baseTrainingQuery = new BaseTrainingQuery();
     this.baseTrainingQuery.count = PropertyConstant.pageSize;
@@ -55,7 +55,7 @@ export class EventsListComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.canCreateEvent = await this._profileService.hasUserRole(UserRoleEnum[UserRoleEnum.TRAINER]);
+    this.canCreateEvent = await this._permissionService.hasAnyRole([UserRoleEnum.TRAINER]);
     this.eventTypes = await this._translateObjectService.getTranslatedEnumCollection<TrainingDiscriminator>(TrainingDiscriminator, 'TrainingDiscriminator');
 
     this.searchDxTextBoxComponent.onValueChanged.pipe(debounceTime(PropertyConstant.searchDebounceTime))

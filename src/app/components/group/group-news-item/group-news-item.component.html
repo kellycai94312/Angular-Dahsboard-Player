@@ -1,29 +1,40 @@
-<div *ngIf="!data.deleted"
-     class="d-flex flex-row">
-  <div class="w-100">
-    <strong *ngIf="data.discriminator === groupNewsDiscriminatorClass.GROUP_NEWS"
-            [innerHTML]="data.title | urlParser | async">
-    </strong>
-    <pre class="m-0 width-inherit"
-         [innerHTML]="content | urlParser | async"></pre>
-    <p class="date"><a routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' + data.person.firstName}}</a> / {{data.created | date: propertyConstantClass.dateTimeFormat}}</p>
-  </div>
-  <div *ngIf="canEdit"
-       class="flex-shrink-1">
-    <div [ngSwitch]="data.discriminator">
-      <div *ngSwitchCase="groupNewsDiscriminatorClass.GROUP_NEWS"
-           class="ml-2">
-        <ngx-button [icon]="iconEnumClass.EDIT"
-                    [click]="onEdit"
-                    [data]="data">
-        </ngx-button>
-      </div>
-      <div *ngSwitchCase="groupNewsDiscriminatorClass.EVENT_GROUP_NEWS">
-        <ngx-button [icon]="iconEnumClass.REMOVE"
-                    [click]="onRemove"
-                    [data]="data">
-        </ngx-button>
-      </div>
+<mat-card *ngIf="data && !data.deleted">
+  <div class="d-flex flex-row">
+    <div class="w-100">
+      <mat-card-title *ngIf="data.discriminator === groupNewsDiscriminatorClass.GROUP_NEWS"
+                      [innerHTML]="data.title | urlParser | async"></mat-card-title>
+      <mat-card-subtitle><a routerLink="/group/{{data.group.id}}">{{data.group.name}}</a></mat-card-subtitle>
     </div>
+    <button *ngIf="canEdit"
+            mat-icon-button
+            [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu"
+              [ngSwitch]="data.discriminator">
+      <button *ngSwitchCase="groupNewsDiscriminatorClass.GROUP_NEWS"
+              mat-menu-item
+              (click)="onEdit(data)">
+        <mat-icon>edit</mat-icon>
+        <span>{{'edit' | translate}}</span>
+      </button>
+      <button *ngSwitchCase="groupNewsDiscriminatorClass.EVENT_GROUP_NEWS"
+              mat-menu-item
+              (click)="onRemove(data)">
+        <mat-icon>remove</mat-icon>
+        <span>{{'remove' | translate}}</span>
+      </button>
+    </mat-menu>
   </div>
-</div>
+
+  <mat-card-content>
+    <pre class="width-inherit"
+         [innerHTML]="content | urlParser | async"></pre>
+    <p class="date mt-2">
+      <a
+        routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' + data.person.firstName}}</a>
+      / {{data.created | date: propertyConstantClass.dateTimeFormat}}
+    </p>
+  </mat-card-content>
+</mat-card>
+

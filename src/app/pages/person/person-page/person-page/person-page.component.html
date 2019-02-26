@@ -1,36 +1,38 @@
 <div *ngIf="personViewModel">
-  <div class="d-flex flex-row">
-    <ngx-image [canEdit]="allowEdit"
-               [objectId]="personViewModel.data.id"
-               [width]="130"
-               [height]="130"
-               [allowFullScreen]="false"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.PERSON"
-               [format]="imageFormatClass.CIRCLE"
-               (imageChange)="onLogoChanged()"></ngx-image>
-    <div class="ml-4 full-name text-uppercase">
-      <h4>{{personViewModel.data?.lastName}}</h4>
-      <h4>{{personViewModel.data?.firstName}}</h4>
-      <h4>{{personViewModel.data?.patronymic}}</h4>
+  <div class="header">
+    <div class="d-flex flex-row">
+      <ngx-image [canEdit]="allowEdit"
+                 [objectId]="personViewModel.data.id"
+                 [width]="130"
+                 [height]="130"
+                 [allowFullScreen]="false"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="fileClassClass.PERSON"
+                 [format]="imageFormatClass.CIRCLE"
+                 (imageChange)="onLogoChanged()"></ngx-image>
+      <div class="d-flex flex-column align-self-center name ml-4">
+        <h4>{{personViewModel.data?.lastName}}</h4>
+        <h4>{{personViewModel.data?.firstName}}</h4>
+        <h4>{{personViewModel.data?.patronymic}}</h4>
+      </div>
     </div>
-  </div>
 
-  <ngx-split-button class="mt-2"
-                    [items]="splitButtonItems"></ngx-split-button>
+    <ngx-split-button class="mt-2"
+                      [items]="splitButtonItems"></ngx-split-button>
 
-  <div class="d-flex flex-row mt-2">
-    <div class="align-self-center text-uppercase">
-      <p>{{'persons.person.roles.section' | translate}}</p>
+    <div class="d-flex flex-row mt-2">
+      <div class="align-self-center text-uppercase">
+        <p>{{'persons.person.roles.section' | translate}}</p>
+      </div>
+      <div class="ml-2 align-self-center">
+        <ngx-button-group [items]="userRoleButtonGroupItems"
+                          [selectedItem]="selectedUserRoleButtonGroupItem"></ngx-button-group>
+      </div>
+      <ngx-button *ngIf="allowEdit"
+                  class="ml-2"
+                  [icon]="iconEnumClass.EDIT"
+                  [click]="onEditUserRoles"></ngx-button>
     </div>
-    <div class="ml-2 align-self-center">
-      <ngx-button-group [items]="userRoleButtonGroupItems"
-                        [selectedItem]="selectedUserRoleButtonGroupItem"></ngx-button-group>
-    </div>
-    <ngx-button *ngIf="allowEdit"
-                class="ml-2"
-                [icon]="iconEnumClass.EDIT"
-                [click]="onEditUserRoles"></ngx-button>
   </div>
 
   <ngx-tab class="mt-2"

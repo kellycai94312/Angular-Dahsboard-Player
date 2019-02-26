@@ -32,8 +32,8 @@ export class ConfirmationRemovingMessageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    const person = await this._authorizationService.getPerson();
-    for (let message of this.messages) {
+    const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
+    for (const message of this.messages) {
       if (message.sender.person.id != person.id || message.read || message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT) {
         return;
       }

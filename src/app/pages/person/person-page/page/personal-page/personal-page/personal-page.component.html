@@ -64,18 +64,6 @@
       </dx-select-box>
     </div>
   </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label>{{'baseUserRole' | translate}}</label>
-      <dx-select-box [items]="personService.userRoles"
-                     [(value)]="baseUserRole"
-                     displayExpr="name"
-                     acceptCustomValue="true"
-                     showClearButton="true"
-                     [readOnly]="!allowEdit">
-      </dx-select-box>
-    </div>
-  </div>
 </div>
 <div *ngIf="personService.selectedUserRole && personService.selectedUserRole.userRoleEnum === userRoleEnum.ATHLETE"
      class="row cols-padding">

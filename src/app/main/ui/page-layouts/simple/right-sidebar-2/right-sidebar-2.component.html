@@ -1,0 +1,26 @@
+<div class="page-layout simple right-sidebar inner-scroll">
+
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar" name="simple-right-sidebar-2" position="left" lockedOpen="gt-md">
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <!-- CENTER -->
+    <div class="center" fusePerfectScrollbar>
+
+        <!-- HEADER -->
+        <div class="header accent p-24" fxLayout="row" fxLayoutAlign="start center">
+
+            <button mat-icon-button class="sidebar-toggle mr-8" fxHide.gt-md
+                    (click)="toggleSidebar('simple-right-sidebar-2')">
+                <mat-icon>menu</mat-icon>
+            </button>
+
+            <h2 class="m-0">Right sidebar with inner scroll</h2>
+
+        </div>
+        <!-- / HEADER -->
+    </div>
+    <!-- / CENTER -->
+
+</div>

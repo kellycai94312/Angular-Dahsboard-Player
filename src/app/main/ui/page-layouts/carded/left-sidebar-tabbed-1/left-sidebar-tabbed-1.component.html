@@ -1,0 +1,42 @@
+<div class="page-layout carded left-sidebar tabbed">
+
+    <!-- TOP BACKGROUND -->
+    <div class="top-bg accent"></div>
+    <!-- / TOP BACKGROUND -->
+
+    <!-- SIDEBAR -->
+    <fuse-sidebar class="sidebar" name="carded-left-sidebar-tabbed-1" position="left" lockedOpen="gt-md">
+
+        <!-- SIDEBAR HEADER -->
+        <div class="header p-24 accent">
+            <h2 class="m-0">Sidebar header</h2>
+        </div>
+        <!-- / SIDEBAR HEADER -->
+
+    </fuse-sidebar>
+    <!-- / SIDEBAR -->
+
+    <!-- CENTER -->
+    <div class="center">
+
+        <!-- CONTENT HEADER -->
+        <div class="header accent p-24">
+
+            <div fxLayout="row" fxLayoutAlign="start start">
+
+                <button mat-icon-button class="sidebar-toggle mr-8" fxHide.gt-md
+                        (click)="toggleSidebar('carded-left-sidebar-tabbed-1')">
+                    <mat-icon>menu</mat-icon>
+                </button>
+
+                <h2 class="m-0">Left sidebar with tabs and content scroll</h2>
+
+            </div>
+
+        </div>
+        <!-- / CONTENT HEADER -->
+
+    </div>
+    <!-- / CENTER -->
+
+</div>

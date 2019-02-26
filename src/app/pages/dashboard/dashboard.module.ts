@@ -5,7 +5,8 @@ import {DashboardRoutingModule} from './dashboard-routing.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {GroupModule} from '../../components/group/group.module';
-import {ImageModule} from '../../components/image/image.module';
+import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
+import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   imports: [
@@ -13,8 +14,9 @@ import {ImageModule} from '../../components/image/image.module';
     DashboardRoutingModule,
     TranslateModule.forChild(),
     NgxVirtualScrollModule,
-    GroupModule,
-    ImageModule
+    NgxTabModule,
+    NgxImageModule,
+    GroupModule
   ],
   declarations: [DashboardPageComponent]
 })

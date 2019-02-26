@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {BasePersonPageComponent} from './base-person-page/base-person-page.component';
 
 const routes: Routes = [
+  {path: 'settings', loadChildren: './page/person-settings-page/person-settings-page.module#PersonSettingsPageModule'},
   {
     path: '', component: BasePersonPageComponent,
     children: [

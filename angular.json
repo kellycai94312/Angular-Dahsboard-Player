@@ -33,7 +33,8 @@
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/icons/material-icons/outline/style.css"
             ],
             "scripts": []
           },
@@ -106,7 +107,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "7mb"
+                  "maximumError": "9mb"
                 }
               ]
             }
@@ -145,7 +146,8 @@
             "styles": [
               "node_modules/devextreme/dist/css/dx.common.css",
               "node_modules/devextreme/dist/css/dx.light.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/assets/icons/material-icons/outline/style.css"
             ],
             "scripts": [],
             "assets": [

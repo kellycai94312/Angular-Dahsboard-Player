@@ -27,6 +27,8 @@ $max-width-content: 400px;
 $max-height-content: 400px;
 
 $navbar-height: 40px;
+$header-color: #1c1f29;
+
 
 @function max-width-sm() {
   @return map-get($container-max-widths, 'sm');

@@ -14,6 +14,7 @@ import {RouterModule} from '@angular/router';
 import {ImageModule} from '../image/image.module';
 import {EditGroupModule} from '../../module/group/edit-group/edit-group.module';
 import {EditGroupComponent} from '../../module/group/edit-group/edit-group/edit-group.component';
+import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -33,7 +34,11 @@ import {EditGroupComponent} from '../../module/group/edit-group/edit-group/edit-
     UrlParserModule,
     RouterModule.forChild([]),
     ImageModule,
-    EditGroupModule
+    EditGroupModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule
   ],
   declarations: [
     GroupTransitionComponent,

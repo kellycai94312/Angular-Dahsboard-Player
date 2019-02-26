@@ -9,7 +9,6 @@ const cleanCss = require('gulp-clean-css');
 const jsonminify = require('gulp-jsonminify');
 const imagemin = require('gulp-imagemin');
 const replace = require('replace-in-file');
-const package = require('./package.json');
 
 const plotlyTaskName = 'plotly';
 const htmlMinifyTaskName = 'html-minify';
@@ -75,6 +74,7 @@ gulp.task(imageMinifyTaskName, function () {
 });
 
 gulp.task(replaceVersionTaskName, function (done) {
+  const package = require('./package.json');
   const buildVersion = package.version;
   let changedFiles = replace.sync({
       files: 'src/environments/environment.*',
@@ -90,10 +90,10 @@ gulp.task(replaceVersionTaskName, function (done) {
 
 gulp.task(incrementVersionTaskName, function () {
   return gulp.src('./package.json')
-    .pipe(bump())
+    .pipe(bump({type: 'prerelease'}))
     .pipe(gulp.dest('./'));
 });
 
-gulp.task('default', gulp.series([plotlyTaskName, replaceVersionTaskName]));
+gulp.task('default', gulp.series([plotlyTaskName, incrementVersionTaskName, replaceVersionTaskName]));
 
-gulp.task('after-build', gulp.parallel(htmlMinifyTaskName, cssMinifyTaskName, jsonMinifyTaskName, imageMinifyTaskName, incrementVersionTaskName));
+gulp.task('after-build', gulp.parallel(htmlMinifyTaskName, cssMinifyTaskName, jsonMinifyTaskName, imageMinifyTaskName));

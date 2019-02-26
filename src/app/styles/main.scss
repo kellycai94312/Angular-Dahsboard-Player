@@ -11,12 +11,20 @@ html, body {
   h5, label, pre, p {
     margin: 0;
     padding: 0;
+    font-family: inherit !important;
   }
 
   a, p, label {
     font-size: $font-size;
   }
 
+}
+
+pre {
+  overflow: visible;
+  overflow-wrap: break-word;
+  word-break: keep-all;
+  white-space: normal;
 }
 
 h5, h6, .fa-pencil-square-o {
@@ -212,4 +220,8 @@ select:-webkit-autofill:focus {
 
 .toast-info {
   background-color: #b1b1b1 !important;
+}
+
+.selected {
+  background-color: #{$light-blue}10;
 }

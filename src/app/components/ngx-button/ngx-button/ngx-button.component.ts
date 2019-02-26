@@ -14,8 +14,8 @@ export class NgxButtonComponent<TData extends any> {
   public readonly enterKeyCode: number;
   public readonly delayDisplayBusy: number;
 
-  @Input('class')
-  public classes: string;
+  @Input()
+  public class: string;
 
   @Input()
   public nameKey: string;

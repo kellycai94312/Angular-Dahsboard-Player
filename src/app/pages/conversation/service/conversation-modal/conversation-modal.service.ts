@@ -6,6 +6,7 @@ import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-moda
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
+import {ChatService} from '../../chat/chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class ConversationModalService {
   constructor(private _ngxModalService: NgxModalService,
               private _modalBuilderService: ModalBuilderService,
               private _appHelper: AppHelper,
+              private _chatService: ChatService,
               private _translateObjectService: TranslateObjectService) {
   }
 
@@ -33,12 +35,12 @@ export class ConversationModalService {
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
           if (await this._ngxModalService.save(modal, component)) {
-            await component.navigateToChat();
+            this._chatService.onChatSelected.next(chat);
           }
         }),
         this._ngxModalService.removeSplitItemButton(async () => {
             if (await this._ngxModalService.remove(modal, component)) {
-              await component.navigateToBase();
+              this._chatService.onChatSelected.next(undefined);
             }
           },
           () => {

@@ -1,29 +1,27 @@
 <div *ngIf="person"
-     class="d-flex flex-row">
-  <div class="d-flex flex-column">
-    <app-image [type]="'LOGO'"
-               [clazz]="'PERSON'"
-               [id]="person.id"
-               [dimension]="'W130xH130'"
-               [format]="'CIRCLE'"></app-image>
-  </div>
-  <div class="d-flex flex-column ml-4">
-    <div class="d-flex flex-row h-100">
-      <div class="align-self-center full-name">
-        <h4>{{person.lastName | uppercase}}</h4>
-        <h4>{{person.firstName | uppercase}}</h4>
-      </div>
+     class="header">
+  <div class="d-flex flex-row">
+    <ngx-image [objectId]="person.id"
+               [width]="130"
+               [height]="130"
+               [allowFullScreen]="false"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.PERSON"
+               [format]="imageFormatClass.CIRCLE"></ngx-image>
+    <div class="d-flex flex-column align-self-center name ml-4">
+      <h4>{{person?.lastName}}</h4>
+      <h4>{{person?.firstName}}</h4>
+      <h4>{{person?.patronymic}}</h4>
     </div>
   </div>
 </div>
-<h3 class="mt-2">{{'news' | translate}}</h3>
+<ngx-tab class="mt-2"
+         [tabs]="tabs"></ngx-tab>
 <ngx-virtual-scroll [getItems]="fetchItems"
-                    [windowScroll]="true"
-                    class="list-group-flush">
+                    [windowScroll]="true">
   <ng-template let-item>
     <div *ngIf="!item.deleted"
-         class="list-group-item pb-2 px-2">
-      <h5>{{item.group.name}}</h5>
+         class="mb-2">
       <app-group-news-item [data]="item"></app-group-news-item>
     </div>
   </ng-template>

@@ -4,7 +4,6 @@ import {EnvironmentType} from '../../../../environments/environment-type';
 import {Auth} from '../../../data/remote/model/auth';
 import {IEnvironment} from '../../../../environments/ienvironment';
 import {AuthorizationService} from '../../../shared/authorization.service';
-import {ProfileService} from '../../../shared/profile.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {LayoutService} from '../../../shared/layout.service';
@@ -32,7 +31,6 @@ export class SignInComponent implements OnDestroy {
   private readonly _queryParamsSubscription: ISubscription;
 
   constructor(private _authorizationService: AuthorizationService,
-              private _profileService: ProfileService,
               private _appHelper: AppHelper,
               private _router: Router,
               private _activatedRoute: ActivatedRoute,
@@ -64,7 +62,6 @@ export class SignInComponent implements OnDestroy {
         const session = await this._authorizationService.logIn(this.auth);
         if (session) {
           if (session.person) {
-            this._profileService.init();
             await this._router.navigate(['/dashboard']);
           } else {
             await this._router.navigate(['/sign-up/person']);

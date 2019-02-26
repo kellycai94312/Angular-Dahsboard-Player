@@ -1,5 +1,5 @@
 import {Injectable, Injector} from '@angular/core';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {ReplaySubject, Subject} from 'rxjs';
 import {Session} from '../data/remote/model/session';
 import {Auth} from '../data/remote/model/auth';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
@@ -15,12 +15,9 @@ export class AuthorizationService {
 
   public readonly handleLogIn: Subject<Session>;
   public readonly handleLogOut: Subject<boolean>;
-  public readonly personSubject: BehaviorSubject<Person>;
+  public readonly personSubject: ReplaySubject<Person>;
 
   public session: Session;
-
-  // @deprecated Use personSubject
-  private _person: Person;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _layoutService: LayoutService,
@@ -28,7 +25,7 @@ export class AuthorizationService {
               private _injector: Injector) {
     this.handleLogIn = new Subject<Session>();
     this.handleLogOut = new Subject<boolean>();
-    this.personSubject = new BehaviorSubject<Person>(null);
+    this.personSubject = new ReplaySubject<Person>(1);
   }
 
   public async initialize() {
@@ -50,7 +47,6 @@ export class AuthorizationService {
 
   public async logOut(withNavigate: boolean = true): Promise<void> {
     this.session = null;
-    this._person = null;
     this.personSubject.next(null);
     this.handleLogOut.next(true);
     try {
@@ -69,20 +65,10 @@ export class AuthorizationService {
   public async updateSession(): Promise<Session> {
     try {
       this.session = await this._participantRestApiService.getSession();
+      this.personSubject.next(this.session.person);
     } catch (e) {
     }
     return this.session;
-  }
-
-  // @deprecated Use personSubject
-  public async getPerson(): Promise<Person> {
-    if (!this._person && this.session) {
-      try {
-        this._person = await this._participantRestApiService.getPerson({id: this.session.person.id});
-      } catch (e) {
-      }
-    }
-    return this._person;
   }
 
   public async getUserRoles(): Promise<UserRole[]> {

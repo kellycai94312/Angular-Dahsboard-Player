@@ -1,37 +1,27 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {NavBarComponent} from './nav-bar/nav-bar.component';
-import {RightSideBarComponent} from './right-side-bar/right-side-bar.component';
-import {LeftSideBarComponent} from './left-side-bar/left-side-bar.component';
-import {LayoutComponent} from './layout.component';
-import {ImageModule} from '../components/image/image.module';
-import {TranslateModule} from '@ngx-translate/core';
-import {RouterModule} from '@angular/router';
-import {EventModule} from '../pages/event/event.module';
-import {NgxBreadcrumbModule} from '../components/ngx-breadcrumb/ngx-breadcrumb.module';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {ConversationsModule} from '../module/conversation/conversations/conversations.module';
+import { NgModule } from '@angular/core';
+
+import { VerticalLayout1Module } from 'app/layout/vertical/layout-1/layout-1.module';
+import { VerticalLayout2Module } from 'app/layout/vertical/layout-2/layout-2.module';
+import { VerticalLayout3Module } from 'app/layout/vertical/layout-3/layout-3.module';
+
+import { HorizontalLayout1Module } from 'app/layout/horizontal/layout-1/layout-1.module';
 
 @NgModule({
-  declarations: [
-    NavBarComponent,
-    RightSideBarComponent,
-    LeftSideBarComponent,
-    LayoutComponent
-  ],
-  imports: [
-    CommonModule,
-    ImageModule,
-    RouterModule.forChild([]),
-    TranslateModule.forChild(),
-    NgxBreadcrumbModule,
-    NgbModule,
-    ConversationsModule,
-    EventModule
-  ],
-  exports: [
-    LayoutComponent
-  ]
+    imports: [
+        VerticalLayout1Module,
+        VerticalLayout2Module,
+        VerticalLayout3Module,
+
+        HorizontalLayout1Module
+    ],
+    exports: [
+        VerticalLayout1Module,
+        VerticalLayout2Module,
+        VerticalLayout3Module,
+
+        HorizontalLayout1Module
+    ]
 })
-export class LayoutModule {
+export class LayoutModule
+{
 }

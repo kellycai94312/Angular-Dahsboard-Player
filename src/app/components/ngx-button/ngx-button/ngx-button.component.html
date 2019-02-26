@@ -1,10 +1,9 @@
-<button class="btn btn-{{type.toString().toLowerCase()}} input-height-sm text-truncate {{classes}}"
+<button class="btn btn-{{type.toString().toLowerCase()}} input-height-sm text-truncate {{class}}"
         [style.max-width.px]="widthBeforeBusy"
         [disabled]="isDisabled()"
         (click)="onClick($event); $event.stopPropagation()"
         (keyup.enter)="onKeyUp($event)">
-  <i *ngIf="icon && !busyDisplay"
-     [class]="icon"></i>
+  <mat-icon *ngIf="icon && !busyDisplay">{{icon}}</mat-icon>
   <span *ngIf="!busyDisplay; else elseTemplate">
     {{nameKey | translate}}</span>
   <ng-template #elseTemplate>

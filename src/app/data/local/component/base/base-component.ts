@@ -2,11 +2,20 @@ import {Input, OnInit} from '@angular/core';
 
 export abstract class BaseComponent<T> implements OnInit {
 
+  get data(): T {
+    return this._data;
+  }
+
+  @Input()
+  set data(val: T) {
+    this._data = val;
+    this.onSetData(val);
+  }
+
   @Input()
   public class: string;
 
-  @Input()
-  public data: T;
+  private _data: T;
 
   private _manualInit: boolean;
 
@@ -30,8 +39,11 @@ export abstract class BaseComponent<T> implements OnInit {
   }
 
   protected async initializeComponent(data: T): Promise<boolean> {
-    this.data = data;
+    this._data = data;
     return true;
+  }
+
+  protected onSetData(val: T): void {
   }
 
 }

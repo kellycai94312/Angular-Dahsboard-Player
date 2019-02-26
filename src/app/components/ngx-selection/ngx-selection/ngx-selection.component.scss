@@ -1,3 +1,11 @@
 .content {
   height: 60vh !important;
+
+  .col {
+    height: inherit;
+  }
+
+  .selected-items {
+    border-left: #d6d6d6 solid;
+  }
 }

@@ -8,6 +8,7 @@ import {AuthorizationService} from './authorization.service';
 import {BaseFile} from '../data/remote/model/file/base/base-file';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {UserRole} from '../data/remote/model/user-role';
+import {AppHelper} from '../utils/app-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ import {UserRole} from '../data/remote/model/user-role';
 export class PermissionService {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
+              private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
   }
 
@@ -86,7 +88,7 @@ export class PermissionService {
   }
 
   private async getDefaultPerson(person: Person): Promise<Person> {
-    return person || await this._authorizationService.getPerson();
+    return person || await this._appHelper.toPromise(this._authorizationService.personSubject);
   }
 
 }

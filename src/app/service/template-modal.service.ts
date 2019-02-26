@@ -147,7 +147,7 @@ export class TemplateModalService {
 
     if (differenceUserRoles.length) {
       if (await this.showConfirmModal('addMissingUserRoles')) {
-        const person = await this._authorizationService.getPerson();
+        const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
         await this._participantRestApiService.updateUserUserRoles({list: differenceUserRoles.concat(userRoles)}, {}, {userId: person.user.id});
       } else {
         return false;
@@ -413,6 +413,11 @@ export class TemplateModalService {
     config = config || new NgxSelectionConfig<TModel>();
     if (!config.title) {
       config.title = `${event.name} | ${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('persons.section')}`;
+    }
+    if (!config.compare) {
+      config.compare = (first, second) => {
+        return first.person.id == second.person.id;
+      };
     }
 
     return (await this._modalBuilderService.showSelectionItemsModal(selectedItems,

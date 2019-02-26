@@ -1,46 +1,44 @@
-<div class="d-flex align-items-center flex-column h-100">
-  <div class="m-auto max-width-content form">
-    <div *ngIf="!isRegistrationComplete; else content">
-      <h3 class="text-center text-white">{{'registration.newUserSignUp' | translate | uppercase}}</h3>
-      <img src="/assets/img/athlete-readiness-logo.png">
-      <ngx-form>
-        <ngx-input [type]="ngxInputTypeClass.EMAIL"
-                   placeholderKey="registration.enterEmail"
-                   [(value)]="user.email"
-                   [checkValidation]="onEmailValidation"></ngx-input>
-        <ngx-input class="mt-2"
-                   [type]="ngxInputTypeClass.PASSWORD"
-                   placeholderKey="registration.createPassword"
-                   [(value)]="user.password"
-                   [checkValidation]="onPasswordValidation"></ngx-input>
-        <ngx-input class="mt-2"
-                   [type]="ngxInputTypeClass.PASSWORD"
-                   placeholderKey="registration.retypePassword"
-                   [(value)]="repeatPassword"
-                   [checkValidation]="onCompareValidation"></ngx-input>
-      </ngx-form>
-      <ngx-button class="mt-3 w-100"
-                  nameKey="registration.signUp"
-                  [click]="onSave"></ngx-button>
+<div class="m-auto max-width-content form">
+  <div *ngIf="!isRegistrationComplete; else content">
+    <h3 class="text-center text-white">{{'registration.newUserSignUp' | translate | uppercase}}</h3>
+    <img src="/assets/img/athlete-readiness-logo.png">
+    <ngx-form>
+      <ngx-input [type]="ngxInputTypeClass.EMAIL"
+                 placeholderKey="registration.enterEmail"
+                 [(value)]="user.email"
+                 [checkValidation]="onEmailValidation"></ngx-input>
+      <ngx-input class="mt-2"
+                 [type]="ngxInputTypeClass.PASSWORD"
+                 placeholderKey="registration.createPassword"
+                 [(value)]="user.password"
+                 [checkValidation]="onPasswordValidation"></ngx-input>
+      <ngx-input class="mt-2"
+                 [type]="ngxInputTypeClass.PASSWORD"
+                 placeholderKey="registration.retypePassword"
+                 [(value)]="repeatPassword"
+                 [checkValidation]="onCompareValidation"></ngx-input>
+    </ngx-form>
+    <ngx-button class="mt-3 w-100"
+                nameKey="registration.signUp"
+                [click]="onSave"></ngx-button>
 
-      <div class="mt-2 text-center">
-        <p>{{'clickOnButtonYouAgreeWith' | translate}}</p>
-        <a (click)="onShowUserAgreement()">{{'userAgreement' | translate}}</a>
-        <p>{{'alreadyRegistered'| translate}}
-          <u><a routerLink="/sign-in"
-                routerLinkActive="active">{{'signIn' | translate}}</a></u>
-        </p>
-      </div>
+    <div class="mt-2 text-center">
+      <p>{{'clickOnButtonYouAgreeWith' | translate}}</p>
+      <a (click)="onShowUserAgreement()">{{'userAgreement' | translate}}</a>
+      <p>{{'alreadyRegistered'| translate}}
+        <u><a routerLink="/sign-in"
+              routerLinkActive="active">{{'signIn' | translate}}</a></u>
+      </p>
     </div>
-    <ng-template #content>
-      <div class="m-2 text-center text-white">
-        <img src="/assets/img/athlete-readiness-logo.png">
-        <h3>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate | uppercase}}</h3>
-        <p>{{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
-          {{'registration.followTheInstructionsInIt' | translate }}<br>
-          {{'checkEmailInSpamFolder' | translate }}</p>
-        <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
-      </div>
-    </ng-template>
   </div>
+  <ng-template #content>
+    <div class="m-2 text-center text-white">
+      <img src="/assets/img/athlete-readiness-logo.png">
+      <h3>{{'registration.yourAccountHasBeenCreatedNowYouNeedToActivateIt' | translate | uppercase}}</h3>
+      <p>{{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
+        {{'registration.followTheInstructionsInIt' | translate }}<br>
+        {{'checkEmailInSpamFolder' | translate }}</p>
+      <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
+    </div>
+  </ng-template>
 </div>

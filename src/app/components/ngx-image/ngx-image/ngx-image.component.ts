@@ -2,12 +2,12 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, S
 import {ImageFormat} from '../../../data/local/image-format';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
-import {environment} from '../../../../environments/environment';
 import {AppHelper} from '../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {Image} from '../../../data/remote/model/file/image/image';
 import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
+import {ImageQuery} from '../../../data/remote/rest-api/query/file/image-query';
 
 @Component({
   selector: 'ngx-image',
@@ -69,7 +69,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<File>();
     this.class = '';
-    this.allowFullScreen = true;
     this.autoSave = true;
     this.innerWidth = 0;
     this.innerHeight = 0;
@@ -131,15 +130,19 @@ export class NgxImageComponent implements OnInit, OnChanges {
     if (this._tempFile) {
       url = URL.createObjectURL(this._tempFile);
     } else {
-      url = `${environment.restUrl}/file/download/image?clazz=${this.fileClass}&objectId=${this.objectId || 0}&type=${this.type}`;
+      const imageQuery: ImageQuery = {
+        clazz: this.fileClass,
+        type: this.type,
+        objectId: this.objectId || this.object.id || 0,
+      };
 
       if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
-        url += `&width=${this.innerWidth}`;
+        imageQuery.width = this.innerWidth;
       }
       if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
-        url += `&height=${this.innerHeight}`;
+        imageQuery.height = this.innerHeight;
       }
-      url += `&date=${Date.now()}`;
+      url += `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
     }
 
     this.url = url;

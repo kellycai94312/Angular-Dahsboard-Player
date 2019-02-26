@@ -1,5 +1,5 @@
 import {animate, state, style, transition, trigger} from '@angular/animations';
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, NgZone, OnInit} from '@angular/core';
 import {Toast, ToastPackage, ToastrService} from 'ngx-toastr';
 import {Message} from '../../data/remote/model/chat/message/message';
 import {MessageViewModel} from '../../data/local/view-model/conversation/message-view-model';
@@ -28,10 +28,11 @@ export class MessageToastrComponent extends Toast implements OnInit {
 
   public messageViewModel: MessageViewModel;
 
-  constructor(protected toastrService: ToastrService,
-              public toastPackage: ToastPackage,
-              private _router: Router) {
-    super(toastrService, toastPackage);
+  constructor(private _router: Router,
+              toastrService: ToastrService,
+              toastPackage: ToastPackage,
+              ngZone: NgZone) {
+    super(toastrService, toastPackage, ngZone);
   }
 
   async ngOnInit() {
@@ -48,7 +49,7 @@ export class MessageToastrComponent extends Toast implements OnInit {
       const link = event.target.getAttribute('link');
       await this._router.navigate([link]);
     } else {
-      //reload children when on the same state /conversation/:id
+      // Reload children when on the same state /conversation/:id
       if (this._router.url.indexOf('/conversation/') == 0) {
         await this._router.navigate(['/conversation']);
       }

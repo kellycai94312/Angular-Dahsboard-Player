@@ -6,7 +6,6 @@ import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
 import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
 import {Participant} from '../data/remote/model/chat/participant';
 import {Message} from '../data/remote/model/chat/message/message';
-import {HashSet} from '../data/local/hash-set';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 
 @Injectable()
@@ -21,8 +20,6 @@ export class ConversationService implements OnDestroy {
   public readonly typingHandle: Subject<Participant>;
 
   public readonly errorHandle: Subject<any>;
-
-  public readonly selectedMessages: HashSet<Message> = new HashSet<Message>();
 
   private _messageCreateSubscription: ISubscription;
   private _messageUpdateSubscription: ISubscription;
@@ -59,9 +56,7 @@ export class ConversationService implements OnDestroy {
     try {
       this._messageCreateSubscription = this._participantStompService.subscribeConversationCreate().pipe(
         map(message => this._participantStompService.messageToObject<MessageWrapper>(message)))
-        .subscribe(async message => {
-          this.messageCreateHandle.next(message);
-        });
+        .subscribe(async message => this.messageCreateHandle.next(message));
     } catch (e) {
     }
   }

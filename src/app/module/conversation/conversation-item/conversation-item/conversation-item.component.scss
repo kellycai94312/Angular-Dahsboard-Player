@@ -1,19 +1,44 @@
-.name {
-  color: #222;
-  font-weight: bold;
-}
+$color-muted-text: rgba(0, 0, 0, .5);
 
-.date {
-  font-size: 12px;
-  text-align: right;
-  color: #656565;
-  min-width: 90px;
-}
+:host {
 
-.message {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  width: 100%;
-  color: #656565;
+  .preview {
+    display: block;
+    width: max-content;
+    margin: auto;
+  }
+
+  .logo {
+    position: relative;
+
+    .unread-message-count {
+      position: absolute;
+      top: -5px;
+    }
+  }
+
+  .content {
+
+    .conversation-name {
+    }
+
+    .message {
+      color: $color-muted-text;
+    }
+  }
+
+  .message-date {
+    font-size: 12px;
+    color: $color-muted-text;
+  }
+
+  .unread-message-count {
+    font-size: 12px;
+    border-radius: 50%;
+    text-align: center;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+  }
+
 }

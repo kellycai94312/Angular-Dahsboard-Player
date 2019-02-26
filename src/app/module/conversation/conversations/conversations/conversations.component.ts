@@ -1,8 +1,7 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ConversationService} from '../../../../shared/conversation.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -11,6 +10,8 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-conversations',
@@ -24,92 +25,106 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  @Input()
+  public preview: boolean;
+
+  @Input()
+  public visibleHeader: boolean;
+
+  @Output()
+  public selectItemChange: EventEmitter<ConversationWrapper>;
+
   public query: PageQuery;
 
-  private readonly _messageCreateSubscription: ISubscription;
-  private readonly _messageUpdateSubscription: ISubscription;
-  private readonly _messageReadSubscription: ISubscription;
-  private readonly _messageDeleteSubscription: ISubscription;
-  private readonly _typingSubscription: ISubscription;
+  private readonly _unsubscribeAll: Subject<void>;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
               private _conversationModalService: ConversationModalService,
               private _appHelper: AppHelper) {
     this.query = new PageQuery();
+    this._unsubscribeAll = new Subject<void>();
 
-    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-      this.updateItem(x);
-    });
+    this.selectItemChange = new EventEmitter<ConversationWrapper>();
 
-    this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-      const messageWrapper = this.findMessageWrapper(x);
-      if (messageWrapper) {
-        x.unread = messageWrapper.unread;
+    this._conversationService.messageCreateHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        if (!this.ngxVirtualScrollComponent) {
+          return;
+        }
         this.updateItem(x);
-      }
-    });
-
-    this._messageReadSubscription = this._conversationService.messageReadHandle.subscribe(x => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-
-      const items: Array<ConversationWrapper> = this.ngxVirtualScrollComponent.items;
-      for (let i = 0; i < items.length; i++) {
-        if (items[i].messageWrapper.message.content.baseConversation.id == x.content.baseConversation.id) {
-          items[i].messageWrapper.message = x;
-          break;
+      });
+    this._conversationService.messageUpdateHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        if (!this.ngxVirtualScrollComponent) {
+          return;
         }
-      }
-    });
-
-    this._messageDeleteSubscription = this._conversationService.messageDeleteHandle.subscribe(async x => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-      const messageWrapper = this.findMessageWrapper(x);
-      if (messageWrapper) {
-        if (x.previousMessage) {
-          const updatedMessageWrapper = Object.assign({}, x);
-          updatedMessageWrapper.message = updatedMessageWrapper.previousMessage;
-          this.replaceItem(x, updatedMessageWrapper);
-        } else {
-          this.removeItem(x);
+        const messageWrapper = this.findMessageWrapper(x);
+        if (messageWrapper) {
+          x.unread = messageWrapper.unread;
+          this.updateItem(x);
         }
-      }
-    });
-
-    this._typingSubscription = this._conversationService.typingHandle.subscribe(async participant => {
-      if (!this.ngxVirtualScrollComponent) {
-        return;
-      }
-
-      const conversationWrappers: ConversationWrapper[] = this.ngxVirtualScrollComponent.items
-        .filter(conversationWrapper =>
-          (conversationWrapper.messageWrapper.empty ? conversationWrapper.messageWrapper.participant.baseConversation.id :
-            conversationWrapper.messageWrapper.message.content.baseConversation.id) == participant.baseConversation.id);
-
-      if (conversationWrappers.length) {
-        const conversationWrapper = conversationWrappers[0];
-        const participants = conversationWrapper.typingParticipants;
-        const index = participants.findIndex(x => x.id == participant.id);
-        if (0 <= index) {
-          clearTimeout(conversationWrapper.receiveTypingTimeout);
-        } else {
-          participants.push(participant);
+      });
+    this._conversationService.messageReadHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(x => {
+        if (!this.ngxVirtualScrollComponent) {
+          return;
         }
-        conversationWrapper.receiveTypingTimeout = setTimeout(() => {
-          participants.splice(participants.indexOf(participant), 1);
-        }, 1500);
-      }
-    });
+
+        const items: Array<ConversationWrapper> = this.ngxVirtualScrollComponent.items;
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].messageWrapper.message.content.baseConversation.id == x.content.baseConversation.id) {
+            items[i].messageWrapper.message = x;
+            break;
+          }
+        }
+      });
+    this._conversationService.messageDeleteHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async x => {
+        if (!this.ngxVirtualScrollComponent) {
+          return;
+        }
+        const messageWrapper = this.findMessageWrapper(x);
+        if (messageWrapper) {
+          if (x.previousMessage) {
+            const updatedMessageWrapper = Object.assign({}, x);
+            updatedMessageWrapper.message = updatedMessageWrapper.previousMessage;
+            this.replaceItem(x, updatedMessageWrapper);
+          } else {
+            this.removeItem(x);
+          }
+        }
+      });
+    this._conversationService.typingHandle
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(async participant => {
+        if (!this.ngxVirtualScrollComponent) {
+          return;
+        }
+
+        const conversationWrappers: ConversationWrapper[] = this.ngxVirtualScrollComponent.items
+          .filter(conversationWrapper =>
+            (conversationWrapper.messageWrapper.empty ? conversationWrapper.messageWrapper.participant.baseConversation.id :
+              conversationWrapper.messageWrapper.message.content.baseConversation.id) == participant.baseConversation.id);
+
+        if (conversationWrappers.length) {
+          const conversationWrapper = conversationWrappers[0];
+          const participants = conversationWrapper.typingParticipants;
+          const index = participants.findIndex(x => x.id == participant.id);
+          if (0 <= index) {
+            clearTimeout(conversationWrapper.receiveTypingTimeout);
+          } else {
+            participants.push(participant);
+          }
+          conversationWrapper.receiveTypingTimeout = setTimeout(() => {
+            participants.splice(participants.indexOf(participant), 1);
+          }, 1500);
+        }
+      });
   }
 
   async ngOnInit() {
@@ -117,11 +132,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._appHelper.unsubscribe(this._messageCreateSubscription);
-    this._appHelper.unsubscribe(this._messageUpdateSubscription);
-    this._appHelper.unsubscribe(this._messageReadSubscription);
-    this._appHelper.unsubscribe(this._messageDeleteSubscription);
-    this._appHelper.unsubscribe(this._typingSubscription);
+    this._unsubscribeAll.next();
+    this._unsubscribeAll.complete();
   }
 
   public async onSearchTextChanged(val: string) {
@@ -143,6 +155,10 @@ export class ConversationsComponent implements OnInit, OnDestroy {
       await this.resetItems();
     }
   };
+
+  public onSelectedItem(val: ConversationWrapper) {
+    this.selectItemChange.emit(val);
+  }
 
   private async resetItems(): Promise<void> {
     setTimeout(async () => {

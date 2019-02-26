@@ -114,7 +114,8 @@ export class NgxModalService {
           await this.showModalEditTag(editComponent.data, component.ngxVirtualScrollComponent.items, component.selectedItems);
         };
         componentItem.afterInitialize = async (component1) => {
-          componentItem.canEdit = await this._permissionService.canEditTag(componentItem.ngxComponentFactoryComponent.component.data, await this._authorizationService.getPerson());
+          const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
+          componentItem.canEdit = await this._permissionService.canEditTag(componentItem.ngxComponentFactoryComponent.component.data, person);
         };
         await componentItem.initialize(PreviewNamedObjectComponent, data, initializeComponent);
       };

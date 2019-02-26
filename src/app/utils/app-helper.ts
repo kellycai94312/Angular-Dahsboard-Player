@@ -21,6 +21,7 @@ import {Testing} from '../data/remote/model/training/testing/testing';
 import {PropertyConstant} from '../data/local/property-constant';
 import {Observable} from 'rxjs';
 import {PageQuery} from '../data/remote/rest-api/page-query';
+import {Person} from '../data/remote/model/person';
 
 // TODO: Rename to AppHelperService. Add tests
 @Injectable()
@@ -90,10 +91,13 @@ export class AppHelper {
   }
 
   // TODO: Use optimized algorithm
-  public except<T>(first: T[], second: T[], compare: (first: T, second: T) => boolean = (f: T, s: T) => this.defaultCompare(f, s)): T[] {
+  public except<T>(first: T[],
+                   second: T[],
+                   compare: (first: T, second: T) => boolean = (f: T, s: T) => this.defaultCompare(f, s),
+                   useOrder: boolean = false): T[] {
     let baseItems: T[] = [];
     let innerItems: T[] = [];
-    if (first.length > second.length) {
+    if (useOrder || first.length > second.length) {
       baseItems = first;
       innerItems = second;
     } else {
@@ -461,6 +465,10 @@ export class AppHelper {
   }
 
   //#endregion
+
+  public getPersonFullName(person: Person) {
+    return `${person.lastName} ${person.firstName}`;
+  }
 
 }
 
