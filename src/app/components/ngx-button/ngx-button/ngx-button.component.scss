@@ -1,26 +1,26 @@
-.is-busy {
-  cursor: wait;
-
-  &::before {
-    content: '';
-    width: 1em;
-    height: 1em;
-    display: inline-block;
-    border: solid 2px transparent;
-    border-top-color: white;
-    border-left-color: white;
-    border-radius: 50%;
-    margin-right: 0.5em;
-    animation: busy-spin 0.75s linear infinite;
-  }
-
-  @keyframes busy-spin {
-    to {
-      transform: rotate(360deg);
-    }
-  }
-}
-
 .btn {
   font-size: 10px !important;
+
+  .is-busy {
+    cursor: wait;
+
+    &::before {
+      content: '';
+      width: 1em;
+      height: 1em;
+      display: inline-block;
+      border: solid 2px transparent;
+      border-top-color: white;
+      border-left-color: white;
+      border-radius: 50%;
+      margin-right: 0.5em;
+      animation: busy-spin 0.75s linear infinite;
+    }
+
+    @keyframes busy-spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  }
 }

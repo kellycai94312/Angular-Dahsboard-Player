@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatButtonModule, MatIconModule, MatTabsModule } from '@angular/material';
 
 import { FuseSharedModule } from '@fuse/shared.module';
-import { FuseDemoModule } from '@fuse/components/demo/demo.module';
 
 import { ColorsComponent } from 'app/main/ui/colors/colors.component';
 
@@ -25,8 +24,7 @@ const routes: Routes = [
         MatIconModule,
         MatTabsModule,
 
-        FuseSharedModule,
-        FuseDemoModule
+        FuseSharedModule
     ]
 })
 export class UIColorsModule
