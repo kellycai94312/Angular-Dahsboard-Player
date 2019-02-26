@@ -7,11 +7,6 @@ import {UserRole} from '../../../../data/remote/model/user-role';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {City} from '../../../../data/remote/model/city';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {NamedObject} from '../../../../data/remote/base/named-object';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {Person} from '../../../../data/remote/model/person';
 import {Router} from '@angular/router';
@@ -56,105 +51,6 @@ export class PersonsListComponent implements OnInit {
   public onClickByItem = async (item: Person) => {
     await this._router.navigate(['/person', item.id]);
   };
-
-  //#region Filter
-
-  public async onSearchTextChanged(value: string) {
-    if (value) {
-      this.personQuery.name = value;
-    } else {
-      delete this.personQuery.name;
-    }
-    await this.updateItems();
-  }
-
-  public async onYearBirthChanged(value: Date) {
-    if (value) {
-      this.personQuery.yearBirth = value.getFullYear();
-    } else {
-      delete this.personQuery.yearBirth;
-    }
-    await this.updateItems();
-  }
-
-  public async onSexChanged(val: NameWrapper<SexEnum>) {
-    if (val) {
-      this.personQuery.sex = val.data;
-    } else {
-      delete this.personQuery.sex;
-    }
-    await this.updateItems();
-  }
-
-  public async onUserRoleChanged(value: UserRole) {
-    if (value) {
-      this.personQuery.userRoleEnum = value.userRoleEnum;
-    } else {
-      delete this.personQuery.userRoleEnum;
-    }
-    await this.updateItems();
-  }
-
-  public loadGroups = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getGroups({
-      from: from,
-      count: PropertyConstant.pageSize,
-      name: searchText
-    });
-  };
-
-  public loadCities = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCities({
-      from: from,
-      count: PropertyConstant.pageSize,
-      name: searchText
-    });
-  };
-
-  public loadSportTypes = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getSportTypes({
-      name: searchText,
-      from: from,
-      count: PropertyConstant.pageSize
-    });
-  };
-
-  public async onGroupChanged(value: Group) {
-    if (value) {
-      this.personQuery.groupId = value.id;
-    } else {
-      delete this.personQuery.groupId;
-    }
-    await this.updateItems();
-  }
-
-  public async onCityChanged(value: City) {
-    if (value) {
-      this.personQuery.cityId = value.id;
-    } else {
-      delete this.personQuery.cityId;
-    }
-    await this.updateItems();
-  }
-
-  public async onSportTypeChanged(value: SportType) {
-    if (value) {
-      this.personQuery.sportTypeId = value.id;
-    } else {
-      delete this.personQuery.sportTypeId;
-    }
-    await this.updateItems();
-  }
-
-  public getKey(item: IdentifiedObject) {
-    return item.id;
-  }
-
-  public getName(item: NamedObject) {
-    return item.name;
-  }
-
-  // #endregion
 
   public fetchItems = async (direction: Direction, query: PageQuery) => {
     return await this._participantRestApiService.getPersons(query);
