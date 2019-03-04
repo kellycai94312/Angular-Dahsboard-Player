@@ -68,6 +68,10 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         routerLink: 'subscriber'
       },
       {
+        nameKey: 'subgroups',
+        routerLink: 'subgroup'
+      },
+      {
         nameKey: 'requests',
         routerLink: 'request',
         visible: (item: Tab) => {

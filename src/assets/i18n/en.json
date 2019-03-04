@@ -622,5 +622,6 @@
   "localeEnum": {
     "en": "English",
     "ru": "Русский"
-  }
+  },
+  "structureSubgroups": "Structure subgroups"
 }
