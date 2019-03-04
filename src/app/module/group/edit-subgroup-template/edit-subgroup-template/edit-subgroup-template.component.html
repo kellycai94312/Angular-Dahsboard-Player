@@ -1,0 +1,31 @@
+<label>{{'name' | translate}}</label>
+<ngx-input></ngx-input>
+
+<label class="mt-2">{{'sportType' | translate}}</label>
+<app-input-select [loadData]="loadSportTypes"
+                  [(model)]="selectedSportType"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  (onChange)="onSportTypeChanged($event.current)">
+</app-input-select>
+
+<label class="mt-2">{{'headOfSubgroups' | translate}}</label>
+<ngx-input></ngx-input>
+
+<label class="mt-2">{{'secondaryHeadOfSubgroups' | translate}}</label>
+<ngx-input></ngx-input>
+
+<label class="mt-2">{{'tableConfigurator' | translate}}</label>
+<ngx-grid [fetchItems]="fetchItems">
+  <ngx-column nameKey="tableColumns">
+    <ng-template let-item>
+      {{item.translation | translate}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="visible">
+    <ng-template let-item>
+      <ngx-check-box *ngIf="item.canEdit"
+                     [(value)]="item.value"></ngx-check-box>
+    </ng-template>
+  </ngx-column>
+</ngx-grid>
