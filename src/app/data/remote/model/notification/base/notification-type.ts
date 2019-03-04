@@ -1,4 +1,5 @@
 export enum NotificationType {
   GROUP = 'GROUP',
-  TRAINING = 'TRAINING'
+  TRAINING = 'TRAINING',
+  SUBGROUP = 'SUBGROUP'
 }

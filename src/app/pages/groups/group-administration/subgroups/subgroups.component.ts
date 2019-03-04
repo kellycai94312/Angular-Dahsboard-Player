@@ -1,6 +1,5 @@
 import {AfterViewInit, OnInit, ViewChild} from '@angular/core';
 import {GroupService} from '../../../group/group-page/service/group.service';
-import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {DxTextBoxComponent} from 'devextreme-angular';
@@ -15,7 +14,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
   @ViewChild(DxTextBoxComponent)
   public nameDxTextBoxComponent: DxTextBoxComponent;
 
-  public subgroups: SubGroup[];
+  public subgroups: any[];
   public name: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -43,7 +42,7 @@ export class SubgroupsComponent implements OnInit, AfterViewInit {
     // this.name = '';
   };
 
-  onRemove = (subgroup: SubGroup) => {
+  onRemove = (subgroup: any) => {
     this._appHelper.removeItem(this.subgroups, subgroup);
   };
 

@@ -21,7 +21,6 @@ import {EmailRequest} from '../request/email-request';
 import {Group} from '../model/group/base/group';
 import {GroupQuery} from './query/group-query';
 import {GroupPerson} from '../model/group/group-person';
-import {SubGroup} from '../model/group/sub-group';
 import {TeamType} from '../model/group/team/team-type';
 import {League} from '../model/group/team/league';
 import {AgeGroup} from '../model/age-group';
@@ -838,34 +837,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/vacancy',
   })
   updateGroupVacancies: IRestMethodStrict<ListRequest<IdRequest>, GroupPersonPositionQuery, { groupId: number }, Position[]>;
-
-  //#endregion
-
-  //#region Subgroup
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!id}/subgroup',
-  })
-  getSubGroupsByGroup: IRestMethod<QueryParams, SubGroup[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/subgroup',
-  })
-  postSubgroup: IRestMethodStrict<SubGroup, any, { groupId: number }, SubGroup>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/subgroup/{!subgroupId}',
-  })
-  putSubgroup: IRestMethodStrict<SubGroup, any, { groupId: number, subgroupId: number }, SubGroup>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!groupId}/subgroup/{!subgroupId}',
-  })
-  deleteSubgroup: IRestMethodStrict<any, any, { groupId: number, subgroupId: number }, void>;
 
   //#endregion
 

@@ -1,0 +1,4 @@
+export enum SubgroupVersionDiscriminator {
+  SUBGROUP_VERSION = 'SUBGROUP_VERSION',
+  SUBGROUP_VERSION_GROUP = 'SUBGROUP_VERSION_GROUP'
+}

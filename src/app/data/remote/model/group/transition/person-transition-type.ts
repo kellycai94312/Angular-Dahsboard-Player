@@ -1,4 +1,4 @@
-export enum GroupTransitionType {
+export enum PersonTransitionType {
   ENROLL = 'ENROLL',
   EXPEL = 'EXPEL',
   TRANSFER = 'TRANSFER'

@@ -17,7 +17,5 @@ export class Person extends IdentifiedObject {
   user: User;
   athleteState: AthleteState;
   legalRepresentativesPhone: string;
-
-  // Transient
-  baseUserRole: UserRole;
+  athleteId: string;
 }

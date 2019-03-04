@@ -7,6 +7,7 @@ export class DocumentVersion extends BaseFileVersion {
   number: number;
   date: Date;
   issuedBy?: string;
+  validityInDays?: number;
 
   constructor() {
     super();

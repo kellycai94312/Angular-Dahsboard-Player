@@ -14,7 +14,7 @@ import {TemplateModalService} from '../../../../../../service/template-modal.ser
 import {NgxGridComponent} from '../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {BaseGroupComponent} from '../../../../../../data/local/component/group/base-group-component';
 import {SelectionType} from '../../../../../../components/ngx-grid/bean/selection-type';
-import {GroupTransitionType} from '../../../../../../data/remote/model/group/transition/group-transition-type';
+import {PersonTransitionType} from '../../../../../../data/remote/model/group/transition/person-transition-type';
 import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
 
 @Component({
@@ -46,8 +46,8 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     this.selectedGroupPersons = [];
 
     this.splitButtonsItems = [
-      this.groupTransitionModalSplitButtonItem(GroupTransitionType.EXPEL),
-      this.groupTransitionModalSplitButtonItem(GroupTransitionType.TRANSFER, () => {
+      this.groupTransitionModalSplitButtonItem(PersonTransitionType.EXPEL),
+      this.groupTransitionModalSplitButtonItem(PersonTransitionType.TRANSFER, () => {
         return this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
       })
     ];
@@ -104,7 +104,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     this.selectedGroupPersons = items;
   }
 
-  private groupTransitionModalSplitButtonItem(type: GroupTransitionType, visible?: () => boolean): SplitButtonItem {
+  private groupTransitionModalSplitButtonItem(type: PersonTransitionType, visible?: () => boolean): SplitButtonItem {
     return {
       nameKey: `groupTransitionTypeEnum.${type}`,
       callback: async () => {
