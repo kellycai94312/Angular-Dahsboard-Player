@@ -133,12 +133,12 @@ export class GroupPersonsComponent implements OnInit, OnDestroy {
   }
 
   private refreshSubGroupQuery(params: Params) {
-    const subGroupId: number = +params.id;
-    if (subGroupId) {
-      this.groupPersonQuery.subGroupId = subGroupId;
-    } else {
-      delete this.groupPersonQuery.subGroupId;
-    }
+    // const subGroupId: number = +params.id;
+    // if (subGroupId) {
+    //   this.groupPersonQuery.subGroupId = subGroupId;
+    // } else {
+    //   delete this.groupPersonQuery.subGroupId;
+    // }
   }
 
 }

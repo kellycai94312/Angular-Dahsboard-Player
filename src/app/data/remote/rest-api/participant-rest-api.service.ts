@@ -118,6 +118,16 @@ import {Activity} from '../model/activity/activity';
 import {GroupInviteRequest} from '../request/group-invite-request';
 import {GroupPersonPosition} from '../model/group/position/group-person-position';
 import {GroupPersonPositionQuery} from './query/group-person-position-query';
+import {SubgroupTemplate} from '../model/group/subgroup/template/subgroup-template';
+import {SubgroupBookmark} from '../model/group/subgroup/subgroup-bookmark';
+import {SubgroupBookmarkQuery} from './query/subgroup-bookmark-query';
+import {SubgroupPerson} from '../model/group/subgroup/person/subgroup-person';
+import {SubgroupPersonRequest} from '../request/subgroup-person-request';
+import {SubgroupTemplatePersonType} from '../model/group/subgroup/person/subgroup-template-person-type';
+import {SubgroupTemplateVersion} from '../model/group/subgroup/template/subgroup-template-version';
+import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
+import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
+import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
 
 @Injectable()
 @RestParams({
@@ -768,12 +778,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/subgroup',
-  })
-  postPersonSubgroup: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
     path: '/group/{!groupId}/person/{!personId}/mentor',
   })
   postPersonMentor: IRestMethodStrict<{ id?: number }, any, { groupId: number, personId: number }, GroupPerson>;
@@ -896,7 +900,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/connection/graph',
   })
-  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number }, { groupId: number }, GroupConnection[]>;
+  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant: boolean }, { groupId: number }, GroupConnection[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1001,6 +1005,22 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
   removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, BaseGroupNews>;
+
+  //#endregion
+
+  //#region Subgroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/subgroupTemplate',
+  })
+  getSubgroupTemplates: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/subgroupTemplateGroup',
+  })
+  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
 
   //#endregion
 
@@ -1993,6 +2013,236 @@ export class ParticipantRestApiService extends Rest {
     path: '/organizationType',
   })
   getOrganizationTypes: IRestMethod<void, OrganizationType[]>;
+
+  //#endregion
+
+  //#region SubgroupBookmark
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupBookmark'
+  })
+  getSubgroupBookmarks: IRestMethod<SubgroupBookmarkQuery, PageContainer<SubgroupBookmark>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupBookmark/{!subgroupBookmarkId}'
+  })
+  getSubgroupBookmark: IRestMethod<{ subgroupBookmarkId: number }, SubgroupBookmark>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupBookmark'
+  })
+  createSubgroupBookmark: IRestMethod<SubgroupBookmark, SubgroupBookmark>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupBookmark/{!subgroupBookmarkId}'
+  })
+  updateSubgroupBookmark: IRestMethodStrict<SubgroupBookmark, any, { subgroupBookmarkId: number }, SubgroupBookmark>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupBookmark/{!subgroupBookmarkId}'
+  })
+  removeSubgroupBookmark: IRestMethod<{ subgroupBookmarkId: number }, SubgroupBookmark>;
+
+  //#endregion
+
+  //#region SubgroupGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupGroup/{!subgroupGroupId}/person'
+  })
+  getSubgroupPersons: IRestMethodStrict<any, PersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupGroup/{!subgroupGroupId}/person'
+  })
+  createSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupGroup/{!subgroupGroupId}/person'
+  })
+  transferSubgroupPersons: IRestMethodStrict<SubgroupPersonRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupGroup/{!subgroupGroupId}/person'
+  })
+  removeSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+
+  //#endregion
+
+  //#region SubgroupTemplate
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}'
+  })
+  getSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate'
+  })
+  createSubgroupTemplate: IRestMethod<SubgroupTemplate, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplate/{!subgroupTemplateId}'
+  })
+  updateSubgroupTemplate: IRestMethodStrict<SubgroupTemplate, any, { subgroupTemplateId: number }, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}'
+  })
+  approveSubgroupTemplate: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number }, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}'
+  })
+  removeSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
+
+  //#region SubgroupTemplatePersonType
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/personType'
+  })
+  getSubgroupTemplatePersonTypes: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplatePersonType[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/personType/{!subgroupTemplatePersonTypeId}'
+  })
+  getSubgroupTemplatePersonType: IRestMethod<{ subgroupTemplateId: number, subgroupTemplatePersonTypeId: number }, SubgroupTemplatePersonType>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/personType/{!subgroupTemplatePersonTypeId}'
+  })
+  updateSubgroupTemplatePersonType: IRestMethodStrict<SubgroupTemplatePersonType, any, { subgroupTemplateId: number, subgroupTemplatePersonTypeId: number }, SubgroupTemplatePersonType>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+  })
+  getSubgroupTemplateVersions: IRestMethodStrict<any, PageQuery, { subgroupTemplateId: number }, PageContainer<SubgroupTemplateVersion>>;
+
+  //#endregion
+
+  //#region Subgroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup'
+  })
+  getSubgroupTemplateSubgroups: IRestMethodStrict<any, { subgroupTemplateVersionId?: boolean }, { subgroupTemplateId: number }, Subgroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+  })
+  getSubgroupTemplateSubgroup: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup'
+  })
+  createSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number }, Subgroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+  })
+  updateSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number, subgroupId: number }, Subgroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+  })
+  removeSubgroupTemplateSubgroup: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup>;
+
+  //#endregion
+
+  //#region SubgroupTemplateGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group'
+  })
+  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplateGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group'
+  })
+  createSubgroupTemplateGroup: IRestMethodStrict<SubgroupTemplateGroup, any, { subgroupTemplateId: number }, SubgroupTemplateGroup>;
+
+  //#endregion
+
+  //#endregion
+
+  //#region SubgroupTemplateGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+  })
+  getSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+  })
+  updateSubgroupTemplateGroup: IRestMethodStrict<SubgroupTemplateGroup, any, { subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+  })
+  removeSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
+
+  //#region SubgroupGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
+  })
+  getSubgroupTemplateGroupSubgroups: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
+  })
+  getSubgroupTemplateGroupSubgroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
+  })
+  createSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, any, { subgroupTemplateGroupId: number }, SubgroupGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
+  })
+  updateSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, any, { subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
+  })
+  removeSubgroupTemplateGroupSubgroupGroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
+
+  //#endregion
 
   //#endregion
 

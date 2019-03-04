@@ -15,6 +15,4 @@ export class SubgroupTemplateGroup extends SubgroupPersonInterface {
   public disabled: boolean;
   /*когда создатель шаблона удаляет его из примененной группы*/
   public deletedByTemplateOwner: boolean;
-  // Transient
-  public subgroupPersonAmount: number;
 }

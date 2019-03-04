@@ -11,6 +11,5 @@ export class GroupPersonQuery extends PageQuery {
   connected?: boolean;
   positionLevelEnum?: PositionLevelEnum;
 
-  subGroupId?: number;
   userRoleEnum?: UserRoleEnum;
 }
