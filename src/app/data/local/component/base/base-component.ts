@@ -30,7 +30,7 @@ export abstract class BaseComponent<T> implements OnInit {
   }
 
   public update(data: T): void {
-    this.data = Object.assign(this.data, data);
+    this._data = Object.assign(this._data, data);
   }
 
   public async initialize(data: T): Promise<boolean> {

@@ -1,31 +1,38 @@
-<label>{{'name' | translate}}</label>
-<ngx-input></ngx-input>
+<ng-container *ngIf="data">
+  <label>{{'name' | translate}}</label>
+  <ngx-input [(value)]="data.name"></ngx-input>
 
-<label class="mt-2">{{'sportType' | translate}}</label>
-<app-input-select [loadData]="loadSportTypes"
-                  [(model)]="selectedSportType"
-                  [getKey]="getKey"
-                  [getName]="getName"
-                  (onChange)="onSportTypeChanged($event.current)">
-</app-input-select>
+  <label class="mt-2">{{'sportType' | translate}}</label>
+  <app-input-select [loadData]="loadSportTypes"
+                    [(model)]="data.sportType"
+                    [getKey]="getKey"
+                    [getName]="getName"
+                    (onChange)="onSportTypeChanged($event.current)">
+  </app-input-select>
 
-<label class="mt-2">{{'headOfSubgroups' | translate}}</label>
-<ngx-input></ngx-input>
+  <ng-container *ngIf="leadPersonType">
+    <label class="mt-2">{{'headOfSubgroups' | translate}}</label>
+    <ngx-input [(value)]="leadPersonType.name"></ngx-input>
+  </ng-container>
 
-<label class="mt-2">{{'secondaryHeadOfSubgroups' | translate}}</label>
-<ngx-input></ngx-input>
+  <ng-container *ngIf="secondaryPersonType">
+    <label class="mt-2">{{'secondaryHeadOfSubgroups' | translate}}</label>
+    <ngx-input [(value)]="secondaryPersonType.name"></ngx-input>
+  </ng-container>
 
-<label class="mt-2">{{'tableConfigurator' | translate}}</label>
-<ngx-grid [fetchItems]="fetchItems">
-  <ngx-column nameKey="tableColumns">
-    <ng-template let-item>
-      {{item.translation | translate}}
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="visible">
-    <ng-template let-item>
-      <ngx-check-box *ngIf="item.canEdit"
-                     [(value)]="item.value"></ngx-check-box>
-    </ng-template>
-  </ngx-column>
-</ngx-grid>
+  <label class="mt-2">{{'tableConfigurator' | translate}}</label>
+  <ngx-grid [fetchItems]="fetchItems">
+    <ngx-column nameKey="tableColumns">
+      <ng-template let-item>
+        {{item.translation | translate}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="visible">
+      <ng-template let-item>
+        <ngx-check-box *ngIf="item.canEdit"
+                       [(value)]="item.value"></ngx-check-box>
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+</ng-container>
+

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
@@ -7,28 +7,50 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AppHelper} from '../../../../utils/app-helper';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
+import {SubgroupTemplate} from '../../../../data/remote/model/group/subgroup/template/subgroup-template';
+import {SubgroupTemplatePersonType} from '../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
+import {SubgroupPersonTypeEnum} from '../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import {SubgroupPersonType} from '../../../../data/remote/model/group/subgroup/person/subgroup-person-type';
+import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 
 @Component({
   selector: 'app-edit-subgroup-template',
   templateUrl: './edit-subgroup-template.component.html',
   styleUrls: ['./edit-subgroup-template.component.scss']
 })
-export class EditSubgroupTemplateComponent extends BaseEditComponent<any> {
+export class EditSubgroupTemplateComponent extends BaseEditComponent<SubgroupTemplate> {
 
-  public selectedSportType: SportType;
-  private readonly tableConfigurations: PageContainer<TableRow>;
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
+  private tableConfigurations: PageContainer<TableRow>;
+
+  public leadPersonType: SubgroupTemplatePersonType;
+  public secondaryPersonType: SubgroupTemplatePersonType;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
-    const items: TableRow[] = [
-      {translation: 'lastName'},
-      {translation: 'firstName'},
-      {translation: 'patronymic'},
-      {translation: 'yearBirth', fieldName: 'showBirthYear', canEdit: true, value: true},
-      {translation: 'rank', fieldName: 'showRank', canEdit: true, value: true},
-      {translation: 'stageType', fieldName: 'showStageType', canEdit: true, value: true}
-    ];
-    this.tableConfigurations = this.appHelper.arrayToPageContainer(items);
+  }
+
+  protected async initializeComponent(data: SubgroupTemplate): Promise<boolean> {
+    const result = await super.initializeComponent(data);
+    if (result) {
+      return await this.appHelper.tryLoad(async () => {
+        if (!this.appHelper.isNewObject(this.data)) {
+          const subgroupTemplatePersonTypes = await this.participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.data.id});
+          this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
+          this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
+        } else {
+          const subgroupPersonTypes = await this.participantRestApiService.getSubgroupPersonTypes();
+          this.leadPersonType = this.buildSubgroupTemplatePersonType(subgroupPersonTypes, SubgroupPersonTypeEnum.LEAD);
+          this.secondaryPersonType = this.buildSubgroupTemplatePersonType(subgroupPersonTypes, SubgroupPersonTypeEnum.SECONDARY);
+        }
+
+        this.tableConfigurations = this.getTable(data);
+        await this.ngxGridComponent.reset();
+      });
+    }
+    return result;
   }
 
   loadSportTypes = async (from: number, searchText: string) => {
@@ -44,7 +66,7 @@ export class EditSubgroupTemplateComponent extends BaseEditComponent<any> {
   }
 
   public onSportTypeChanged(sportType: SportType) {
-
+    this.data.sportType = sportType;
   }
 
   public fetchItems = async () => {
@@ -52,11 +74,59 @@ export class EditSubgroupTemplateComponent extends BaseEditComponent<any> {
   };
 
   public async onRemove(): Promise<boolean> {
-    return undefined;
+    return await this.appHelper.tryRemove(async () => {
+      if (!this.appHelper.isNewObject(this.data)) {
+        this.appHelper.updateObject(this.data, await this.participantRestApiService.removeSubgroupTemplate({subgroupTemplateId: this.data.id}));
+      }
+    });
   }
 
   public async onSave(): Promise<boolean> {
-    return undefined;
+    return await this.appHelper.trySave(async () => {
+      this.updateObjectFromTable(this.data);
+      let subgroupTemplate: SubgroupTemplate;
+      if (this.appHelper.isNewObject(this.data)) {
+        subgroupTemplate = await this.participantRestApiService.createSubgroupTemplate(this.data);
+
+        const subgroupTemplatePersonTypes = await this.participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: subgroupTemplate.id});
+        this.leadPersonType.id = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD).id;
+        this.secondaryPersonType.id = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY).id;
+      } else {
+        subgroupTemplate = await this.participantRestApiService.updateSubgroupTemplate(this.data, {}, {subgroupTemplateId: this.data.id});
+      }
+      this.appHelper.updateObject(this.data, subgroupTemplate);
+
+      await this.participantRestApiService.updateSubgroupTemplatePersonTypes({list: [this.leadPersonType, this.secondaryPersonType]}, {}, {subgroupTemplateId: this.data.id});
+    });
+  }
+
+  private getTable(data: SubgroupTemplate): PageContainer<TableRow> {
+    const items: TableRow[] = [
+      {translation: 'lastName'},
+      {translation: 'firstName'},
+      {translation: 'patronymic'},
+      {translation: 'yearBirth', fieldName: 'showBirthYear', canEdit: true},
+      {translation: 'rank', fieldName: 'showRank', canEdit: true},
+      {translation: 'stageType', fieldName: 'showStageType', canEdit: true}
+    ];
+
+    for (const item of items.filter(x => x.canEdit && x.fieldName)) {
+      item.value = data[item.fieldName];
+    }
+    return this.appHelper.arrayToPageContainer(items);
+  }
+
+  private updateObjectFromTable(data: SubgroupTemplate): void {
+    for (const item of this.tableConfigurations.list.filter(x => x.canEdit)) {
+      data[item.fieldName] = item.value;
+    }
+  }
+
+  private buildSubgroupTemplatePersonType(subgroupPersonTypes: SubgroupPersonType[],
+                                          subgroupPersonTypeEnum: SubgroupPersonTypeEnum): SubgroupTemplatePersonType {
+    const subgroupTemplatePersonType = new SubgroupTemplatePersonType();
+    subgroupTemplatePersonType.subgroupPersonType = subgroupPersonTypes.find(x => x.subgroupPersonTypeEnum === subgroupPersonTypeEnum);
+    return subgroupTemplatePersonType;
   }
 
 }

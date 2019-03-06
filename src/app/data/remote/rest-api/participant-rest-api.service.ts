@@ -128,6 +128,7 @@ import {SubgroupTemplateVersion} from '../model/group/subgroup/template/subgroup
 import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
 import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
 import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
 
 @Injectable()
 @RestParams({
@@ -2100,12 +2101,18 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve"'
   })
   approveSubgroupTemplate: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
-    method: RestRequestMethod.Post,
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve"'
+  })
+  disapproveSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
     path: '/subgroupTemplate/{!subgroupTemplateId}'
   })
   removeSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
@@ -2126,9 +2133,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/personType/{!subgroupTemplatePersonTypeId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/personType'
   })
-  updateSubgroupTemplatePersonType: IRestMethodStrict<SubgroupTemplatePersonType, any, { subgroupTemplateId: number, subgroupTemplatePersonTypeId: number }, SubgroupTemplatePersonType>;
+  updateSubgroupTemplatePersonTypes: IRestMethodStrict<ListRequest<SubgroupTemplatePersonType>, any, { subgroupTemplateId: number }, SubgroupTemplatePersonType[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -2151,6 +2158,13 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
   })
   getSubgroupTemplateSubgroup: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup>;
+
+  // Подгруппы, к которым можно привязать в дереве указанную подгруппу
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}/parentSubgroup'
+  })
+  getSubgroupTemplateSubgroupParentSubgroups: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -2178,7 +2192,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/group'
   })
-  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplateGroup[]>;
+  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number, disabled?: boolean }, SubgroupTemplateGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -2243,6 +2257,16 @@ export class ParticipantRestApiService extends Rest {
   removeSubgroupTemplateGroupSubgroupGroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
 
   //#endregion
+
+  //#endregion
+
+  //#region SubgroupPersonType
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupPersonType',
+  })
+  getSubgroupPersonTypes: IRestMethod<void, SubgroupPersonType[]>;
 
   //#endregion
 
