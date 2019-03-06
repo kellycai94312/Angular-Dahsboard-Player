@@ -625,9 +625,9 @@
     "en": "English",
     "ru": "Русский"
   },
-  "structureSubgroups": "Структура подгрупп",
+  "subgroupsStructure": "Структура подгрупп",
   "headOfSubgroups": "Руководитель подгруппы",
-  "secondaryHeadOfSubgroups": "заместитель руководителя подгруппы",
+  "secondaryHeadOfSubgroups": "Заместитель руководителя подгруппы",
   "tableConfigurator": "Конфигуратор таблицы",
   "tableColumns": "Столбцы таблицы"
 }

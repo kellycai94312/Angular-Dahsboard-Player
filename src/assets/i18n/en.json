@@ -623,7 +623,7 @@
     "en": "English",
     "ru": "Русский"
   },
-  "structureSubgroups": "Structure subgroups",
+  "subgroupsStructure": "Structure subgroups",
   "headOfSubgroups": "Head of subgroups",
   "secondaryHeadOfSubgroups": "Secondary head of subgroups",
   "tableConfigurator": "Table configurator",

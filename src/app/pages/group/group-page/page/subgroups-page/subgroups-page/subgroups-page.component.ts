@@ -22,7 +22,7 @@ export class SubgroupsPageComponent {
               private _participantRestApiService: ParticipantRestApiService,
               private _componentFactoryResolver: ComponentFactoryResolver) {
     this.tabs = [
-      {nameKey: 'structureSubgroups', routerLink: 'structure'},
+      {nameKey: 'subgroupsStructure', routerLink: 'structure'},
       {
         nameKey: 'templates', routerLink: 'template', splitButtonsItems: [
           {
