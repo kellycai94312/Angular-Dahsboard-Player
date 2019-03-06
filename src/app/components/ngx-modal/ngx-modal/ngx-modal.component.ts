@@ -58,6 +58,8 @@ export class NgxModalComponent {
 
     const componentRef = viewContainerRef.createComponent(componentFactory);
     (<any>componentRef.instance as INgxContent).modal = this.modal;
+    // TODO: Use interface for the call this field
+    componentRef.instance._manualInit = true;
     await initialize(componentRef.instance);
     componentRef.changeDetectorRef.detectChanges();
 

@@ -5,7 +5,6 @@ import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {SubGroup} from '../../../../data/remote/model/group/sub-group';
 import {SportRole} from '../../../../data/remote/model/sport-role';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
@@ -26,7 +25,7 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   public baseGroupPerson: GroupPerson;
   public userRoles: UserRole[];
-  public subgroups: SubGroup[];
+  public subgroups: any[];
   public sportRoles: SportRole[];
   public isOwner: boolean;
 
@@ -46,17 +45,17 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
     return await this.appHelper.tryLoad(async () => {
       this.userRoles = await this.participantRestApiService.getUserUserRoles({userId: this.data.person.user.id});
       // TODO: Subgroups have to stored in GroupService
-      this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
-
-      switch (this.data.group.discriminator) {
-        case GroupTypeEnum.TEAM:
-          this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as Team).sportType.id});
-          this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
-          break;
-        case GroupTypeEnum.AGENCY:
-          this._mentorUserRoleEnum = UserRoleEnum.SCOUT;
-          break;
-      }
+      // this.subgroups = await this.participantRestApiService.getSubGroupsByGroup({id: this.data.group.id});
+      //
+      // switch (this.data.group.discriminator) {
+      //   case GroupTypeEnum.TEAM:
+      //     this.sportRoles = await this.participantRestApiService.getSportRolesBySportType({id: (this.data.group as Team).sportType.id});
+      //     this._mentorUserRoleEnum = UserRoleEnum.TRAINER;
+      //     break;
+      //   case GroupTypeEnum.AGENCY:
+      //     this._mentorUserRoleEnum = UserRoleEnum.SCOUT;
+      //     break;
+      // }
     });
   }
 
@@ -87,11 +86,11 @@ export class EditGroupPersonComponent extends BaseEditComponent<GroupPerson> {
 
   public async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      const subGroupId = this.data.subGroup === undefined ? null : this.data.subGroup.id;
-      await this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
-        groupId: this.data.group.id,
-        personId: this.data.person.id
-      });
+      // const subGroupId = this.data.subGroup === undefined ? null : this.data.subGroup.id;
+      // await this.participantRestApiService.postPersonSubgroup({id: subGroupId}, {}, {
+      //   groupId: this.data.group.id,
+      //   personId: this.data.person.id
+      // });
 
       // TODO: Update user role
       // await this.participantRestApiService.updateGroupPersonUserRoles(new ListRequest(userRoles), {}, {

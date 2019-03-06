@@ -1,5 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {SubGroup} from '../../../../../data/remote/model/group/sub-group';
+import {AfterViewInit, Input, OnInit, ViewChild} from '@angular/core';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupService} from '../../../../group/group-page/service/group.service';
 import {DxTextBoxComponent} from 'devextreme-angular';
@@ -19,7 +18,7 @@ export class SubgroupComponent implements OnInit, AfterViewInit {
   public nameDxTextBoxComponent: DxTextBoxComponent;
 
   @Input()
-  public subgroup: SubGroup;
+  public subgroup: any;
 
   @Input()
   public remove: Function;

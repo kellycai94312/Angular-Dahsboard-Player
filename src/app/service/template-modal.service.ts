@@ -3,7 +3,7 @@ import {NgxModalService} from '../components/ngx-modal/service/ngx-modal.service
 import {Group} from '../data/remote/model/group/base/group';
 import {Person} from '../data/remote/model/person';
 import {AppHelper} from '../utils/app-helper';
-import {GroupTransitionType} from '../data/remote/model/group/transition/group-transition-type';
+import {PersonTransitionType} from '../data/remote/model/group/transition/person-transition-type';
 import {GroupTransitionComponent} from '../components/group/group-transition/group-transition.component';
 import {BaseTraining} from '../data/remote/model/training/base/base-training';
 import {DialogResult} from '../data/local/dialog-result';
@@ -96,7 +96,7 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
-  public async showGroupPersonTransferModal(groupTransitionType: GroupTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
+  public async showGroupPersonTransferModal(groupTransitionType: PersonTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = `groupTransitionTypeEnum.${groupTransitionType}`;
     await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
@@ -172,7 +172,7 @@ export class TemplateModalService {
         // {
         //   nameKey: 'transfer',
         //   callback: async () => {
-        //     if (await this.showGroupPersonTransferModal(GroupTransitionType.TRANSFER, group, [component.data])) {
+        //     if (await this.showGroupPersonTransferModal(PersonTransitionType.TRANSFER, group, [component.data])) {
         //       modal.close();
         //     }
         //   },
@@ -181,7 +181,7 @@ export class TemplateModalService {
         {
           nameKey: 'deduct',
           callback: async () => {
-            if (await this.showGroupPersonTransferModal(GroupTransitionType.EXPEL, group, [component.data])) {
+            if (await this.showGroupPersonTransferModal(PersonTransitionType.EXPEL, group, [component.data])) {
               modal.close();
             }
           },

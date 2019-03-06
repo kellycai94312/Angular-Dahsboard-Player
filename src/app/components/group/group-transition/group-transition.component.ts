@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../data/local/property-constant';
-import {GroupTransitionType} from '../../../data/remote/model/group/transition/group-transition-type';
+import {PersonTransitionType} from '../../../data/remote/model/group/transition/person-transition-type';
 import {NgxGridComponent} from '../../ngx-grid/ngx-grid/ngx-grid.component';
 import {AttachFileComponent} from '../../attach-file/attach-file/attach-file.component';
 import {Document} from '../../../data/remote/model/file/document/document';
@@ -21,7 +21,7 @@ import {ListRequest} from '../../../data/remote/request/list-request';
 export class GroupTransitionComponent {
 
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly groupTransitionTypeClass = GroupTransitionType;
+  public readonly groupTransitionTypeClass = PersonTransitionType;
 
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;
@@ -30,7 +30,7 @@ export class GroupTransitionComponent {
   public attachFileComponent: AttachFileComponent<Document>;
 
   @Input()
-  public groupTransitionType: GroupTransitionType;
+  public groupTransitionType: PersonTransitionType;
 
   @Input()
   public group: Group;
@@ -48,7 +48,7 @@ export class GroupTransitionComponent {
     this.document.clazz = FileClass.GROUP_TRANSITION;
   }
 
-  public async initialize(groupPersonTransitionType: GroupTransitionType, group: Group, persons: Person[]) {
+  public async initialize(groupPersonTransitionType: PersonTransitionType, group: Group, persons: Person[]) {
     this.groupTransitionType = groupPersonTransitionType;
     this.group = group;
     this.persons = persons;
@@ -75,7 +75,7 @@ export class GroupTransitionComponent {
       name: searchText,
       canEdit: true
     });
-    if (this.groupTransitionType !== GroupTransitionType.ENROLL) {
+    if (this.groupTransitionType !== PersonTransitionType.ENROLL) {
       pageContainer.list = pageContainer.list.filter(x => x.id != this.group.id);
     }
     return pageContainer;
@@ -85,13 +85,13 @@ export class GroupTransitionComponent {
     return await this._appHelper.trySave(async () => {
       let groupTransition: GroupTransition;
       switch (this.groupTransitionType) {
-        case GroupTransitionType.TRANSFER:
+        case PersonTransitionType.TRANSFER:
           groupTransition = (await this._participantRestApiService.transferPersonsToGroup({
             groupJoinId: this.transferToGroup.id,
             personIds: this.persons.map(x => x.id)
           }, {}, {groupId: this.group.id}))[0].groupTransition;
           break;
-        case GroupTransitionType.EXPEL:
+        case PersonTransitionType.EXPEL:
           groupTransition = (await this._participantRestApiService.expelPersonsFromGroup(new ListRequest(this.persons), {}, {groupId: this.group.id}))[0].groupTransition;
           break;
       }

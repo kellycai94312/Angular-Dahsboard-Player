@@ -8,7 +8,7 @@ import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-gri
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {GroupTransitionType} from '../../../../data/remote/model/group/transition/group-transition-type';
+import {PersonTransitionType} from '../../../../data/remote/model/group/transition/person-transition-type';
 import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
 import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
 import {StageType} from '../../../../data/remote/model/stage/stage-type';
@@ -59,8 +59,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public sexEnums: NameWrapper<SexEnum>[];
   public selectedSexEnum: NameWrapper<SexEnum>;
   public groupPersonPositions: GroupPersonPosition[];
-  public joinGroupPersonTransitionTypes: NameWrapper<GroupTransitionType>[];
-  public selectedJoinGroupPersonTransitionType: NameWrapper<GroupTransitionType>;
+  public joinGroupPersonTransitionTypes: NameWrapper<PersonTransitionType>[];
+  public selectedJoinGroupPersonTransitionType: NameWrapper<PersonTransitionType>;
   public document: Document;
   public documentQuery: DocumentQuery;
   public joinGroupTransition: GroupTransition;
@@ -107,8 +107,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         this.selectedSexEnum = this.sexEnums[0];
       }
-      this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<GroupTransitionType>(GroupTransitionType, 'GroupTransitionTypeEnum');
-      this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === GroupTransitionType.ENROLL);
+      this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<PersonTransitionType>(PersonTransitionType, 'GroupTransitionTypeEnum');
+      this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === PersonTransitionType.ENROLL);
 
       if (!this.appHelper.isNewObject(obj)) {
         if (this.group) {
