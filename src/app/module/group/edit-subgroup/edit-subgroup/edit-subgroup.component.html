@@ -1,0 +1,11 @@
+<ng-container *ngIf="data">
+  <label>{{'name' | translate}}</label>
+  <ngx-input [(value)]="data.subgroupVersion.name"></ngx-input>
+
+  <label class="mt-2">{{'subordination' | translate}}</label>
+  <app-input-select [loadData]="fetchParentSubgroups"
+                    [(model)]="data.subgroupVersion.parentSubgroupVersion"
+                    [getKey]="getKey"
+                    [getName]="getName">
+  </app-input-select>
+</ng-container>

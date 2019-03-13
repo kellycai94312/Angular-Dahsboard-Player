@@ -629,5 +629,9 @@
   "headOfSubgroups": "Руководитель подгруппы",
   "secondaryHeadOfSubgroups": "Заместитель руководителя подгруппы",
   "tableConfigurator": "Конфигуратор таблицы",
-  "tableColumns": "Столбцы таблицы"
+  "tableColumns": "Столбцы таблицы",
+  "subordination": "Подчиненность",
+  "reject": "Отклонить",
+  "templateHasApproved": "Шаблон подтвержден",
+  "templateHasReject": "Шаблон отклонен"
 }

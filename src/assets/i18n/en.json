@@ -627,5 +627,9 @@
   "headOfSubgroups": "Head of subgroups",
   "secondaryHeadOfSubgroups": "Secondary head of subgroups",
   "tableConfigurator": "Table configurator",
-  "tableColumns": "Table columns"
+  "tableColumns": "Table columns",
+  "subordination": "Subordination",
+  "reject": "Reject",
+  "templateHasApproved": "Template has approved",
+  "templateHasReject": "Template has rejected"
 }

@@ -5,4 +5,8 @@ export class SubgroupPersonInterface extends IdentifiedObject {
   public showBirthYear?: boolean;
   public showRank?: boolean;
   public showStageType?: boolean;
+
+  // Transient
+  // Применение интерфейса к вложенным подгруппам
+  public applyToNested?: boolean;
 }
