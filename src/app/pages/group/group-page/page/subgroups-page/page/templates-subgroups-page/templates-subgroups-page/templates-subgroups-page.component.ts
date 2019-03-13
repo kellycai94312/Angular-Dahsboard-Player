@@ -9,9 +9,10 @@ import {SubgroupTemplateVersion} from '../../../../../../../../data/remote/model
 import {Subgroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup';
 import {SubgroupTemplateTreeDataSource} from '../../../../../../../../module/group/subgroups-trees/model/subgroup-template-tree-data-source';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {takeWhile} from 'rxjs/operators';
+import {skipWhile, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
+import {SubgroupService} from '../../../service/subgroup.service';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -29,11 +30,37 @@ export class TemplatesSubgroupsPageComponent {
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
               private _groupService: GroupService,
+              private _subgroupService: SubgroupService,
               private _participantRestApiService: ParticipantRestApiService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(val => {
         this.treeDataSource = new SubgroupTemplateTreeDataSource(val, this._participantRestApiService);
+      });
+    this._subgroupService.subgroupTemplateChanged()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        skipWhile(() => !this.subgroupsTreesComponent)
+      )
+      .subscribe(val => {
+        const treeData = this.subgroupsTreesComponent.dataSource.data;
+        const subgroupTemplateNodeIndex = treeData.findIndex(x => x.level == 0 && (x.data as SubgroupTemplate).id == val.id);
+
+        if (!val.deleted) {
+          if (subgroupTemplateNodeIndex > -1) {
+            const subgroupTemplateNode = treeData[subgroupTemplateNodeIndex];
+            subgroupTemplateNode.data = val;
+            subgroupTemplateNode.name = val.name;
+          } else {
+            treeData.push(new DynamicFlatNode(val, val.name, 0, true));
+          }
+        } else {
+          if (subgroupTemplateNodeIndex > -1) {
+            treeData.splice(subgroupTemplateNodeIndex, 1);
+          }
+        }
+
+        this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
       });
   }
 
@@ -49,7 +76,10 @@ export class TemplatesSubgroupsPageComponent {
         {
           translation: 'edit', action: async item => {
             const group = await this._appHelper.toPromise(this._groupService.group$);
-            await this._subgroupModalService.showEditSubgroupTemplate(group, nodeData);
+            const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, nodeData);
+            if (dialogResult.result) {
+              this._subgroupService.updateSubgroupTemplate(dialogResult.data);
+            }
           }
         }
       ];
@@ -108,10 +138,11 @@ export class TemplatesSubgroupsPageComponent {
       const versionNodesLevel = 1;
       const treeData = this.subgroupsTreesComponent.dataSource.data;
       const subgroupTemplateVersion = dialogResult.data.subgroupTemplateVersion;
+      let fromIndex = 0;
       if (dialogResult.data.subgroupTemplateVersion) {
-        const subgroupTemplateVersionNode = treeData.find(x => x.data.id == subgroupTemplateVersion.id && x.level == versionNodesLevel);
-        if (!subgroupTemplateVersionNode && treeData.filter(x => x.level == versionNodesLevel).length) {
-          treeData.push(new DynamicFlatNode(subgroupTemplateVersion, `Version ${subgroupTemplateVersion.versionNumber}. Approved '${subgroupTemplateVersion.approved}'`, versionNodesLevel, true));
+        fromIndex = treeData.findIndex(x => x.data.id == subgroupTemplateVersion.id && x.level == versionNodesLevel);
+        if (fromIndex == -1 && treeData.filter(x => x.level == versionNodesLevel).length) {
+          fromIndex = treeData.push(new DynamicFlatNode(subgroupTemplateVersion, `Version ${subgroupTemplateVersion.versionNumber}. Approved '${subgroupTemplateVersion.approved}'`, versionNodesLevel, true));
         }
       }
 
@@ -143,7 +174,7 @@ export class TemplatesSubgroupsPageComponent {
       }
 
       let fromNodeIndex = -1;
-      for (let i = 0; i < treeData.length - 1; i++) {
+      for (let i = fromIndex; i < treeData.length - 1; i++) {
         const currentItem = treeData[i];
         const nextItem = treeData[i + 1];
         if (currentItem.level == newNode.level && nextItem.level != newNode.level) {
@@ -154,8 +185,8 @@ export class TemplatesSubgroupsPageComponent {
 
       if (fromNodeIndex > -1) {
         treeData.splice(fromNodeIndex, 0, newNode);
-        this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
       }
+      this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
     }
   }
 

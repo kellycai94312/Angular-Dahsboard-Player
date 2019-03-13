@@ -18,15 +18,17 @@ export class SubgroupModalService {
               private _componentFactoryResolver: ComponentFactoryResolver) {
   }
 
-  public async showEditSubgroupTemplate(group: Group, subgroupTemplate: SubgroupTemplate) {
+  public async showEditSubgroupTemplate(group: Group, subgroupTemplate: SubgroupTemplate): Promise<DialogResult<SubgroupTemplate>> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'template';
+    let editSubgroupTemplateComponent: EditSubgroupTemplateComponent;
     await modal.componentInstance.initializeBody(EditSubgroupTemplateComponent, async component => {
+      editSubgroupTemplateComponent = component;
       if (this._appHelper.isNewObject(subgroupTemplate)) {
         subgroupTemplate = new SubgroupTemplate();
         subgroupTemplate.group = group;
       }
-      await component.initialize(subgroupTemplate);
+      await component.initialize(this._appHelper.cloneObject(subgroupTemplate));
 
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
@@ -37,7 +39,10 @@ export class SubgroupModalService {
         })
       ];
     }, {componentFactoryResolver: this._componentFactoryResolver});
-    await this._ngxModalService.awaitModalResult(modal);
+    if (await this._ngxModalService.awaitModalResult(modal)) {
+      return {result: true, data: editSubgroupTemplateComponent.data};
+    }
+    return {result: false};
   }
 
   public async showEditSubgroup(subgroupTemplate: SubgroupTemplate, subgroup?: Subgroup): Promise<DialogResult<{ subgroup: Subgroup, subgroupTemplateVersion: SubgroupTemplateVersion }>> {
@@ -51,7 +56,7 @@ export class SubgroupModalService {
     await modal.componentInstance.initializeBody(EditSubgroupComponent, async component => {
       editSubgroupComponent = component;
       component.subgroupTemplate = subgroupTemplate;
-      await component.initialize(subgroup);
+      await component.initialize(this._appHelper.cloneObject(subgroup));
 
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
