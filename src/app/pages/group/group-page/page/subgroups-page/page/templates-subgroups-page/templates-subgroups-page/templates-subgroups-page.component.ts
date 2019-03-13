@@ -84,50 +84,78 @@ export class TemplatesSubgroupsPageComponent {
       const nodeData = node.data as Subgroup;
       const subgroupTemplate = new SubgroupTemplate();
       subgroupTemplate.id = nodeData.templateVersion.subgroupTemplateId;
-
-      return [
+      const contextMenuItems: ContextMenuItem[] = [
         {
           translation: 'add', action: async item => {
             await this.editSubgroup(subgroupTemplate);
           }
-        },
-        {
+        }
+      ];
+      if (!nodeData.templateVersion.approved) {
+        contextMenuItems.push({
           translation: 'edit', action: async item => {
             await this.editSubgroup(subgroupTemplate, nodeData);
           }
-        }
-      ];
+        });
+      }
+      return contextMenuItems;
     }
   };
 
   private async editSubgroup(subgroupTemplate: SubgroupTemplate, subgroup?: Subgroup) {
     const dialogResult = await this._subgroupModalService.showEditSubgroup(subgroupTemplate, subgroup);
-    // TODO: Fix updating data
     if (dialogResult.result) {
+      const versionNodesLevel = 1;
+      const treeData = this.subgroupsTreesComponent.dataSource.data;
       const subgroupTemplateVersion = dialogResult.data.subgroupTemplateVersion;
       if (dialogResult.data.subgroupTemplateVersion) {
-        const subgroupTemplateVersionNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.data === subgroupTemplateVersion);
-        console.log('data', this.subgroupsTreesComponent.dataSource.data);
-        console.log('subgroupTemplateVersionNode', subgroupTemplateVersionNode);
-        if (!subgroupTemplateVersionNode) {
-          this.subgroupsTreesComponent.dataSource.data.push(new DynamicFlatNode(subgroupTemplateVersion, '' + subgroupTemplateVersion.versionNumber, 1, true));
+        const subgroupTemplateVersionNode = treeData.find(x => x.data.id == subgroupTemplateVersion.id && x.level == versionNodesLevel);
+        if (!subgroupTemplateVersionNode && treeData.filter(x => x.level == versionNodesLevel).length) {
+          treeData.push(new DynamicFlatNode(subgroupTemplateVersion, `Version ${subgroupTemplateVersion.versionNumber}. Approved '${subgroupTemplateVersion.approved}'`, versionNodesLevel, true));
         }
       }
+
+      const isLevelSubgroups = (node: DynamicFlatNode): boolean => node.level && node.level != versionNodesLevel;
+
+      const subgroupRes = dialogResult.data.subgroup;
+      const subgroupNodeIndex = treeData.findIndex(x => isLevelSubgroups(x) && x.data.id == subgroupRes.id);
 
       const parentSubgroupVersion = dialogResult.data.subgroup.subgroupVersion.parentSubgroupVersion;
-      const subgroupRes = dialogResult.data.subgroup;
+      let parentSubgroupNode: DynamicFlatNode;
       if (parentSubgroupVersion) {
-        const parentSubgroupNode = this.subgroupsTreesComponent.dataSource
-          .data.find(x => (x.data as Subgroup).subgroupVersion && (x.data as Subgroup).subgroupVersion === parentSubgroupVersion);
-        console.log('parentSubgroupNode', parentSubgroupNode);
-
-        if (parentSubgroupNode) {
-          this.subgroupsTreesComponent.dataSource.data.push(new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, parentSubgroupNode.level + 1, true));
-        }
-      } else {
-        this.subgroupsTreesComponent.dataSource.data.push(new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, 2, true));
+        parentSubgroupNode = treeData.find(
+          x =>
+            isLevelSubgroups(x) &&
+            (x.data as Subgroup).subgroupVersion &&
+            (x.data as Subgroup).subgroupVersion.id == parentSubgroupVersion.id
+        );
       }
-      this.subgroupsTreesComponent.dataSource.dataChange.next(this.subgroupsTreesComponent.dataSource.data);
+
+      if (subgroupNodeIndex > -1) {
+        treeData.splice(subgroupNodeIndex, 1);
+      }
+
+      let newNode: DynamicFlatNode;
+      if (parentSubgroupNode) {
+        newNode = new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, parentSubgroupNode.level + 1, true);
+      } else {
+        newNode = new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, 2, true);
+      }
+
+      let fromNodeIndex = -1;
+      for (let i = 0; i < treeData.length - 1; i++) {
+        const currentItem = treeData[i];
+        const nextItem = treeData[i + 1];
+        if (currentItem.level == newNode.level && nextItem.level != newNode.level) {
+          fromNodeIndex = i;
+          break;
+        }
+      }
+
+      if (fromNodeIndex > -1) {
+        treeData.splice(fromNodeIndex, 0, newNode);
+        this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
+      }
     }
   }
 
