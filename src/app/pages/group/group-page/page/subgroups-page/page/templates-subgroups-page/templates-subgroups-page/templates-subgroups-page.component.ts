@@ -108,7 +108,7 @@ export class TemplatesSubgroupsPageComponent {
         },
         {
           translation: 'reject', action: async item => {
-            await this._appHelper.tryAction('templateHasReject', 'error', async () => {
+            await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
               await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: nodeData.subgroupTemplateId});
               await updateTemplate();
             });
