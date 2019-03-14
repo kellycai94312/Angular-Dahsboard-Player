@@ -14,4 +14,8 @@ export abstract class BaseEditComponent<T> extends BaseComponent<T> implements I
 
   public abstract async onRemove(): Promise<boolean>;
 
+  public get isNew(): boolean {
+    return this.appHelper.isNewObject(this.data as any);
+  }
+
 }

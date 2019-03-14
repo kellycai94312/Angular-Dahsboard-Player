@@ -7,4 +7,6 @@ export class SubgroupGroup extends SubgroupPersonInterface {
   /*версия подгруппы из шаблона подгрупп или созданная вне шаблона*/
   public subgroupVersion: BaseSubgroupVersion;
   public subgroupTemplateGroup: SubgroupTemplateGroup;
+  // Transient
+  public participantsAmount?: number;
 }

@@ -1013,7 +1013,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/subgroupTemplate',
+    path: '/group/{!groupId}/subgroupTemplate'
   })
   getSubgroupTemplates: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
 
@@ -2101,13 +2101,13 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve"'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
   })
   approveSubgroupTemplate: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve"'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
   })
   disapproveSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
@@ -2116,6 +2116,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplate/{!subgroupTemplateId}'
   })
   removeSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+  })
+  createUnapprovedSubgroupTemplateVersion: IRestMethodStrict<any, any, { subgroupTemplateId: number }, SubgroupTemplateVersion>;
 
   //#region SubgroupTemplatePersonType
 
@@ -2141,7 +2147,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/version'
   })
-  getSubgroupTemplateVersions: IRestMethodStrict<any, PageQuery, { subgroupTemplateId: number }, PageContainer<SubgroupTemplateVersion>>;
+  getSubgroupTemplateVersions: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplateVersion[]>;
 
   //#endregion
 
@@ -2151,7 +2157,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup'
   })
-  getSubgroupTemplateSubgroups: IRestMethodStrict<any, { subgroupTemplateVersionId?: boolean }, { subgroupTemplateId: number }, Subgroup[]>;
+  getSubgroupTemplateSubgroups: IRestMethodStrict<any, { subgroupTemplateVersionId?: number }, { subgroupTemplateId: number }, Subgroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -2161,7 +2167,7 @@ export class ParticipantRestApiService extends Rest {
 
   // Подгруппы, к которым можно привязать в дереве указанную подгруппу
   @RestAction({
-    method: RestRequestMethod.Post,
+    method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}/parentSubgroup'
   })
   getSubgroupTemplateSubgroupParentSubgroups: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup[]>;
@@ -2234,6 +2240,12 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/childrenSubgroup'
+  })
+  getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
     path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
   })
   getSubgroupTemplateGroupSubgroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
@@ -2267,6 +2279,16 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupPersonType',
   })
   getSubgroupPersonTypes: IRestMethod<void, SubgroupPersonType[]>;
+
+  //#endregion
+
+  //#region Subgroup template version
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateVersion/{!subgroupTemplateVersionId}/childrenSubgroup',
+  })
+  getSubgroupTemplateVersionChildrenSubgroups: IRestMethodStrict<{}, { subgroupId?: number }, { subgroupTemplateVersionId: number }, Subgroup[]>;
 
   //#endregion
 
