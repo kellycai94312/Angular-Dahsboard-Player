@@ -2240,9 +2240,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/nestedSubgroup'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/childrenSubgroup'
   })
-  getSubgroupTemplateGroupNestedSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupId: number }, SubgroupGroup[]>;
+  getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupId: number }, SubgroupGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -2286,9 +2286,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateVersion/{!subgroupTemplateVersionId}/nestedSubgroup',
+    path: '/subgroupTemplateVersion/{!subgroupTemplateVersionId}/childrenSubgroup',
   })
-  getSubgroupTemplateVersionNestedSubgroups: IRestMethodStrict<{}, { subgroupId?: number }, { subgroupTemplateVersionId: number }, Subgroup[]>;
+  getSubgroupTemplateVersionChildrenSubgroups: IRestMethodStrict<{}, { subgroupId?: number }, { subgroupTemplateVersionId: number }, Subgroup[]>;
 
   //#endregion
 

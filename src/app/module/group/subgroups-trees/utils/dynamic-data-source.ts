@@ -42,16 +42,25 @@ export class DynamicDataSource {
     }
   }
 
+  public async updateNode(node: DynamicFlatNode): Promise<void> {
+    await this.toggleNode(node, false);
+    this.data.splice(this.data.indexOf(node), 1, JSON.parse(JSON.stringify(node)));
+    this.dataChange.next(this.data);
+  }
+
   public async toggleNode(node: DynamicFlatNode, expand: boolean): Promise<void> {
     node.isLoading = true;
     try {
-      const children = await this._treeDataSource.getChildren(node);
       const index = this.data.indexOf(node);
-      if (!children || index < 0) {
+      if (index < 0) {
         return;
       }
 
       if (expand) {
+        const children = await this._treeDataSource.getChildren(node);
+        if (!children) {
+          return;
+        }
         this.data.splice(index + 1, 0, ...children);
       } else {
         let count = 0;
@@ -60,6 +69,7 @@ export class DynamicDataSource {
         this.data.splice(index + 1, count);
       }
 
+      node.expanded = expand;
       this.dataChange.next(this.data);
     } finally {
       node.isLoading = false;

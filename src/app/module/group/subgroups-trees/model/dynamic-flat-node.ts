@@ -4,6 +4,7 @@ export class DynamicFlatNode {
               public name: string,
               public level: number = 1,
               public expandable = false,
+              public expanded = false,
               public isLoading = false) {
   }
 

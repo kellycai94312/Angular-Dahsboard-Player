@@ -88,7 +88,10 @@ export class TemplatesSubgroupsPageComponent {
       if (nodeData.approved) {
         return;
       }
-
+      const updateTemplate = async (): Promise<void> => {
+        const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == nodeData.subgroupTemplateId);
+        await this.subgroupsTreesComponent.dataSource.updateNode(templateNode);
+      };
       return [
         {
           translation: 'approve', action: async item => {
@@ -99,6 +102,7 @@ export class TemplatesSubgroupsPageComponent {
               await this._participantRestApiService.approveSubgroupTemplate(
                 {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
                 {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
+              await updateTemplate();
             });
           }
         },
@@ -106,6 +110,7 @@ export class TemplatesSubgroupsPageComponent {
           translation: 'reject', action: async item => {
             await this._appHelper.tryAction('templateHasReject', 'error', async () => {
               await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: nodeData.subgroupTemplateId});
+              await updateTemplate();
             });
           }
         }

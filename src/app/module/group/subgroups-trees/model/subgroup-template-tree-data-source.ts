@@ -31,12 +31,12 @@ export class SubgroupTemplateTreeDataSource extends TreeDataSource {
     } else if (node.level == 1) {
       const nodeData = node.data as SubgroupTemplateVersion;
 
-      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionNestedSubgroups({}, {}, {subgroupTemplateVersionId: nodeData.id});
+      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {}, {subgroupTemplateVersionId: nodeData.id});
       return subgroupTemplateSubgroups.map(x => new DynamicFlatNode(x, x.subgroupVersion.name, nextLevel, true));
     } else {
       const nodeData = node.data as Subgroup;
 
-      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionNestedSubgroups({}, {subgroupId: nodeData.id}, {subgroupTemplateVersionId: nodeData.templateVersion.id});
+      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {subgroupId: nodeData.id}, {subgroupTemplateVersionId: nodeData.templateVersion.id});
       return subgroupTemplateSubgroups.map(x => new DynamicFlatNode(x, x.subgroupVersion.name, nextLevel, true));
     }
   }
