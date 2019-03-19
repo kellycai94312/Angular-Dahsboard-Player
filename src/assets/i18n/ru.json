@@ -633,5 +633,6 @@
   "subordination": "Подчиненность",
   "reject": "Отклонить",
   "templateHasApproved": "Шаблон подтвержден",
-  "templateHasRejected": "Шаблон отклонен"
+  "templateHasRejected": "Шаблон отклонен",
+  "templateHasApplied": "Шаблон применен"
 }

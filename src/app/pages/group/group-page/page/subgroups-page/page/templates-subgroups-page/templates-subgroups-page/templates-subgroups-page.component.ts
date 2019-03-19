@@ -14,6 +14,7 @@ import {PropertyConstant} from '../../../../../../../../data/local/property-cons
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {SubgroupService} from '../../../service/subgroup.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
+import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -91,7 +92,15 @@ export class TemplatesSubgroupsPageComponent {
     } else if (node.level == 1) {
       const nodeData = node.data as SubgroupTemplateVersion;
       if (nodeData.approved) {
-        return;
+        return [{
+          translation: 'apply', action: async item => {
+            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
+              const subgroupTemplateGroup = new SubgroupTemplateGroup();
+              subgroupTemplateGroup.group = this.group;
+              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
+            });
+          }
+        }];
       }
       const updateTemplate = async (): Promise<void> => {
         const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == nodeData.subgroupTemplateId);
@@ -101,7 +110,7 @@ export class TemplatesSubgroupsPageComponent {
         {
           translation: 'approve', action: async item => {
             const date = new Date();
-            date.setHours(24 * 14);
+            date.setHours(24 * 21);
 
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
               await this._participantRestApiService.approveSubgroupTemplate(
