@@ -6,6 +6,7 @@ import {SubgroupsTreesModule} from '../../../../../../../module/group/subgroups-
 import {SubgroupModalService} from '../../service/subgroup-modal.service';
 import {EditSubgroupTemplateModule} from '../../../../../../../module/group/edit-subgroup-template/edit-subgroup-template.module';
 import {EditSubgroupModule} from '../../../../../../../module/group/edit-subgroup/edit-subgroup.module';
+import {SubgroupTemplateGraphModule} from '../../../../../../../module/group/subgroup-template-graph/subgroup-template-graph.module';
 
 @NgModule({
   declarations: [TemplatesSubgroupsPageComponent],
@@ -15,7 +16,8 @@ import {EditSubgroupModule} from '../../../../../../../module/group/edit-subgrou
     TemplatesSubgroupsPageRoutingModule,
     SubgroupsTreesModule,
     EditSubgroupTemplateModule,
-    EditSubgroupModule
+    EditSubgroupModule,
+    SubgroupTemplateGraphModule
   ]
 })
 export class TemplatesSubgroupsPageModule {

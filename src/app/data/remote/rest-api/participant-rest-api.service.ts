@@ -901,7 +901,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/connection/graph',
   })
-  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant: boolean }, { groupId: number }, GroupConnection[]>;
+  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant?: boolean }, { groupId: number }, GroupConnection[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -2198,7 +2198,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/group'
   })
-  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number, disabled?: boolean }, SubgroupTemplateGroup[]>;
+  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number, apply?: boolean }, SubgroupTemplateGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,

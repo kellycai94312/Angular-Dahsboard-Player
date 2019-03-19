@@ -13,6 +13,7 @@ import {skipWhile, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {SubgroupService} from '../../../service/subgroup.service';
+import {Group} from '../../../../../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -25,6 +26,8 @@ export class TemplatesSubgroupsPageComponent {
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
   public treeDataSource: SubgroupTemplateTreeDataSource;
+  public group: Group;
+  public subgroupTemplate: SubgroupTemplate;
   private _notDestroyed = true;
 
   constructor(private _subgroupModalService: SubgroupModalService,
@@ -35,6 +38,7 @@ export class TemplatesSubgroupsPageComponent {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(val => {
+        this.group = val;
         this.treeDataSource = new SubgroupTemplateTreeDataSource(val, this._participantRestApiService);
       });
     this._subgroupService.subgroupTemplateChanged()
@@ -67,6 +71,7 @@ export class TemplatesSubgroupsPageComponent {
   public onGetNodeContextMenuItem = async (node: DynamicFlatNode): Promise<ContextMenuItem[]> => {
     if (!node.level) {
       const nodeData = node.data as SubgroupTemplate;
+      this.subgroupTemplate = nodeData;
       return [
         {
           translation: 'add', action: async item => {
