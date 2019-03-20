@@ -129,6 +129,8 @@ import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
 import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
 import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
+import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request';
+import {SubgroupPersonQuery} from './query/subgroup-person-query';
 
 @Injectable()
 @RestParams({
@@ -1021,7 +1023,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/subgroupTemplateGroup',
   })
-  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
+  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
 
   //#endregion
 
@@ -2057,13 +2059,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  getSubgroupPersons: IRestMethodStrict<any, PersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
+  getSubgroupPersons: IRestMethodStrict<any, SubgroupPersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  createSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+  createSubgroupPersons: IRestMethodStrict<SubgroupPersonListRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -2237,6 +2239,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
   })
   getSubgroupTemplateGroupSubgroups: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/unassignedSubgroupGroup'
+  })
+  getUnassignedSubgroupGroupsForPersons: IRestMethod<{ subgroupTemplateGroupId: number, personIds: string }, SubgroupGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,

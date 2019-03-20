@@ -108,9 +108,9 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     return {
       nameKey: `groupTransitionTypeEnum.${type}`,
       callback: async () => {
-        if (await this._templateModalService.showGroupPersonTransferModal(type, this.group, this.selectedGroupPersons.map(x => x.person))) {
-          await this.resetItems();
-        }
+        // if (await this._templateModalService.showGroupPersonTransferModal(type, this.group, this.selectedGroupPersons.map(x => x.person))) {
+        //   await this.resetItems();
+        // }
       },
       visible: visible
     };

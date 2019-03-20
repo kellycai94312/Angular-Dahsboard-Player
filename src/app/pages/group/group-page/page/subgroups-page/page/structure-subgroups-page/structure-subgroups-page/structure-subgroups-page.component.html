@@ -1,2 +1,36 @@
-<app-subgroups-trees [treeDataSource]="treeDataSource"
-                     [getNodeContextMenuItem]="onGetNodeContextMenuItem"></app-subgroups-trees>
+<div fxFlexFill
+     fxLayoutGap="10px">
+  <app-subgroups-trees fxFlex="30"
+                       [treeDataSource]="treeDataSource"
+                       [getNodeContextMenuItem]="onGetNodeContextMenuItem"
+                       [(selectedNode)]="selectedNode"
+                       (selectedNodeChange)="onSelectedNodeChange($event)"></app-subgroups-trees>
+  <div *ngIf="selectedNode"
+       fxFlex>
+    <ngx-grid [fetchItems]="fetchItems"
+              [edit]="onEdit"
+              [add]="onAdd"
+              [canEdit]="canEdit">
+      <ngx-column nameKey="lastName">
+        <ng-template let-item>
+          {{item.data.lastName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="firstName">
+        <ng-template let-item>
+          {{item.data.firstName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="patronymic">
+        <ng-template let-item>
+          {{item.data.patronymic}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="birthDate">
+        <ng-template let-item>
+          {{item.data.birthDate | date: propertyConstantClass.dateFormat}}
+        </ng-template>
+      </ngx-column>
+    </ngx-grid>
+  </div>
+</div>

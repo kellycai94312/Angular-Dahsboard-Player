@@ -1,10 +1,12 @@
 import {SubgroupPersonInterface} from '../person/subgroup-person-interface';
 import {SubgroupTemplateVersion} from './subgroup-template-version';
 import {Group} from '../../base/group';
+import {SubgroupTemplate} from './subgroup-template';
 
 /*шаблон подгрупп, применненный к группе*/
 export class SubgroupTemplateGroup extends SubgroupPersonInterface {
   public templateVersion: SubgroupTemplateVersion;
+  public template?: SubgroupTemplate;
   /*группа, к которой применен шаблон*/
   public group: Group;
   /*крайняя дата одобрения версии шаблона*/

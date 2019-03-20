@@ -1,4 +1,4 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, ViewChild} from '@angular/core';
 import {takeWhile} from 'rxjs/operators';
 import {GroupService} from '../../../../../service/group.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
@@ -9,6 +9,17 @@ import {SubgroupGroupTreeDataSource} from '../../../../../../../../module/group/
 import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {AppHelper} from '../../../../../../../../utils/app-helper';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
+import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
+import {ObjectWrapper} from '../../../../../../../../data/local/object-wrapper';
+import {SubgroupGroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import {GroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/group-person-query';
+import {NgxGridComponent} from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
+import {TemplateModalService} from '../../../../../../../../service/template-modal.service';
+import {Person} from '../../../../../../../../data/remote/model/person';
+import {PageQuery} from '../../../../../../../../data/remote/rest-api/page-query';
+import {SubgroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
+import {SubgroupPersonTypeEnum} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -17,15 +28,25 @@ import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subg
 })
 export class StructureSubgroupsPageComponent {
 
+  public readonly propertyConstantClass = PropertyConstant;
+
   @ViewChild(SubgroupsTreesComponent)
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
+  @ViewChild(NgxGridComponent)
+  public ngxGridComponent: NgxGridComponent;
+
   public treeDataSource: SubgroupGroupTreeDataSource;
+  public selectedNode: DynamicFlatNode;
   public group: Group;
+  public canEdit = true;
+
   private _notDestroyed = true;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
+              private _templateModalService: TemplateModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _groupService: GroupService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
@@ -49,6 +70,50 @@ export class StructureSubgroupsPageComponent {
       }];
     }
     return [];
+  };
+
+  public async onSelectedNodeChange(node: DynamicFlatNode) {
+    await this.ngxGridComponent.reset();
+  }
+
+  public fetchItems = async (query: PageQuery): Promise<PageContainer<ObjectWrapper>> => {
+    if (this.selectedNode && this.selectedNode.level > 0) {
+      const subgroupPersonQuery = query as SubgroupPersonQuery;
+      subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
+      const nodeData = this.selectedNode.data as SubgroupGroup;
+      const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: nodeData.id});
+
+      return await this._appHelper.pageContainerConverter(pageContainer, obj => {
+        return new ObjectWrapper(obj, obj.person);
+      });
+    } else {
+      const groupPersonQuery = query as GroupPersonQuery;
+      groupPersonQuery.id = this.group.id;
+      const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
+
+      return await this._appHelper.pageContainerConverter(pageContainer, obj => {
+        return new ObjectWrapper(obj, obj.person);
+      });
+    }
+  };
+
+  public onEdit = async (obj: ObjectWrapper) => {
+    let subgroupGroup: SubgroupGroup = this.selectedNode.data;
+    let subgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
+    if (!subgroupTemplateGroup) {
+      subgroupTemplateGroup = this.selectedNode.data;
+      subgroupGroup = null;
+    }
+
+    await this._templateModalService.showEditPersonModal(obj.data, this.group, {
+      componentFactoryResolver: this._componentFactoryResolver
+    }, subgroupTemplateGroup, subgroupGroup);
+  };
+
+  public onAdd = async (obj: ObjectWrapper) => {
+    await this._templateModalService.showEditPersonModal(new Person(), this.group, {
+      componentFactoryResolver: this._componentFactoryResolver
+    });
   };
 
 }

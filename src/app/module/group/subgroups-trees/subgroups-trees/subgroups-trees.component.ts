@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DynamicFlatNode} from '../model/dynamic-flat-node';
 import {DynamicDataSource} from '../utils/dynamic-data-source';
 import {FlatTreeControl} from '@angular/cdk/tree';
@@ -12,6 +12,16 @@ import {ContextMenuItem} from '../model/context-menu-item';
   styleUrls: ['./subgroups-trees.component.scss']
 })
 export class SubgroupsTreesComponent {
+
+  get selectedNode(): DynamicFlatNode {
+    return this._selectedNode;
+  }
+
+  @Input()
+  set selectedNode(value: DynamicFlatNode) {
+    this._selectedNode = value;
+    this.selectedNodeChange.emit(value);
+  }
 
   get treeDataSource(): TreeDataSource {
     return this._treeDataSource;
@@ -30,11 +40,15 @@ export class SubgroupsTreesComponent {
   @Input()
   public getNodeContextMenuItem: (node: DynamicFlatNode) => Promise<ContextMenuItem[]>;
 
+  @Output()
+  public readonly selectedNodeChange: EventEmitter<DynamicFlatNode> = new EventEmitter<DynamicFlatNode>();
+
   public treeControl: FlatTreeControl<DynamicFlatNode>;
   public dataSource: DynamicDataSource;
   public contextMenuItems: ContextMenuItem[];
 
   private _treeDataSource: TreeDataSource;
+  private _selectedNode: DynamicFlatNode;
 
   constructor() {
     this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
@@ -43,6 +57,7 @@ export class SubgroupsTreesComponent {
   private async initialize(treeDataSource: TreeDataSource): Promise<void> {
     this.dataSource = new DynamicDataSource(this.treeControl, this._treeDataSource);
     this.dataSource.data = await treeDataSource.initialize();
+    this.selectedNode = null;
   }
 
   getLevel = (node: DynamicFlatNode) => node.level;
@@ -56,6 +71,10 @@ export class SubgroupsTreesComponent {
     if (this.contextMenuItems && this.contextMenuItems.length) {
       matMenuTrigger.openMenu();
     }
+  }
+
+  public onClickNode(node: DynamicFlatNode) {
+    this.selectedNode = node;
   }
 
 }

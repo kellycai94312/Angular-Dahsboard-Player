@@ -12,6 +12,11 @@ import {DocumentType} from '../../../data/remote/model/file/document/document-ty
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {GroupTransition} from '../../../data/remote/model/group/transition/group-transition';
 import {ListRequest} from '../../../data/remote/request/list-request';
+import {SubgroupGroup} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupTransition} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-transition';
+import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
+import {SubgroupPerson} from '../../../data/remote/model/group/subgroup/person/subgroup-person';
+import {SubgroupPersonTypeEnum} from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 
 @Component({
   selector: 'app-group-transition',
@@ -36,16 +41,21 @@ export class GroupTransitionComponent {
   public group: Group;
 
   @Input()
+  public subgroupTemplateGroup: SubgroupTemplateGroup;
+
+  @Input()
+  public fromSubgroupGroup: SubgroupGroup;
+
+  @Input()
   public persons: Person[];
 
-  public transferToGroup: Group;
+  public selectedSubgroupGroup: SubgroupGroup;
   public document: Document;
 
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService) {
     this.document = new Document();
     this.document.type = DocumentType.ORDER;
-    this.document.clazz = FileClass.GROUP_TRANSITION;
   }
 
   public async initialize(groupPersonTransitionType: PersonTransitionType, group: Group, persons: Person[]) {
@@ -60,43 +70,56 @@ export class GroupTransitionComponent {
     return this._appHelper.arrayToPageContainer(this.persons);
   };
 
-  getKey(group: Group) {
-    return group.id;
+  getKey(subgroupGroup: SubgroupGroup) {
+    return subgroupGroup.id;
   }
 
-  getName(group: Group) {
-    return group.name;
+  getName(subgroupGroup: SubgroupGroup) {
+    return subgroupGroup.subgroupVersion.name;
   }
 
   public fetchGroups = async (from: number, searchText: string) => {
-    const pageContainer = await this._participantRestApiService.getGroups({
-      from: from,
-      count: PropertyConstant.pageSize,
-      name: searchText,
-      canEdit: true
-    });
-    if (this.groupTransitionType !== PersonTransitionType.ENROLL) {
-      pageContainer.list = pageContainer.list.filter(x => x.id != this.group.id);
-    }
-    return pageContainer;
+    const items = await this._participantRestApiService.getUnassignedSubgroupGroupsForPersons(
+      {
+        subgroupTemplateGroupId: this.subgroupTemplateGroup.id,
+        personIds: this.persons.map(x => x.id).join('_')
+      });
+    return this._appHelper.arrayToPageContainer(items);
   };
 
   public async onSave(): Promise<boolean> {
     return await this._appHelper.trySave(async () => {
-      let groupTransition: GroupTransition;
+      let transition: GroupTransition | SubgroupTransition;
       switch (this.groupTransitionType) {
         case PersonTransitionType.TRANSFER:
-          groupTransition = (await this._participantRestApiService.transferPersonsToGroup({
-            groupJoinId: this.transferToGroup.id,
-            personIds: this.persons.map(x => x.id)
-          }, {}, {groupId: this.group.id}))[0].groupTransition;
+          const personIds = this.persons.map(x => x.id);
+          let subgroupPersons: SubgroupPerson[];
+          if (this.fromSubgroupGroup) {
+            subgroupPersons = await this._participantRestApiService.transferSubgroupPersons(
+              {subgroupGroupId: this.selectedSubgroupGroup.id, personIds: personIds},
+              {}, {subgroupGroupId: this.fromSubgroupGroup.id});
+          } else {
+            subgroupPersons = await this._participantRestApiService.createSubgroupPersons({
+              personIds: personIds,
+              subgroupPersonTypeEnum: SubgroupPersonTypeEnum.PARTICIPANT
+            }, {}, {subgroupGroupId: this.selectedSubgroupGroup.id});
+          }
+
+          transition = subgroupPersons[0].subgroupTransition;
+          this.document.clazz = FileClass.SUBGROUP_TRANSITION;
+
+          // groupTransition = (await this._participantRestApiService.transferPersonsToGroup({
+          //   groupJoinId: this.transferToGroup.id,
+          //   personIds: this.persons.map(x => x.id)
+          // }, {}, {groupId: this.group.id}))[0].groupTransition;
           break;
         case PersonTransitionType.EXPEL:
-          groupTransition = (await this._participantRestApiService.expelPersonsFromGroup(new ListRequest(this.persons), {}, {groupId: this.group.id}))[0].groupTransition;
+          this.document.clazz = FileClass.GROUP_TRANSITION;
+          transition = (await this._participantRestApiService.expelPersonsFromGroup(new ListRequest(this.persons), {}, {groupId: this.group.id}))[0].groupTransition;
           break;
       }
 
-      this.document.objectId = groupTransition.id;
+      this.document.objectId = transition.id;
       await this.attachFileComponent.updateFile();
     });
   };
