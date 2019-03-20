@@ -106,6 +106,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
         this.selectedSexEnum = this.sexEnums.find(x => x.data === this.data.sex);
       } else {
         this.selectedSexEnum = this.sexEnums[0];
+        this.data.sex = this.selectedSexEnum.data;
       }
       this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<PersonTransitionType>(PersonTransitionType, 'GroupTransitionTypeEnum');
       this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === PersonTransitionType.ENROLL);
@@ -125,8 +126,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             this.selectedStageType = groupPerson.stageType;
             // this.joinGroupTransition = groupPerson.groupTransition;
             // this.documentQuery.objectId = this.joinGroupTransition.id;
-            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.groupTransitionType);
-            //
+            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.type);
+
             // await this.attachFileComponent.initialize();
           }
         }
@@ -135,8 +136,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
         await this.medicalExaminationNgxGridComponent.reset();
       }
 
-      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice(0);
-      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice(0);
+      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice();
+      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice();
     });
   }
 
@@ -148,7 +149,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      // let groupTransition = this.joinGroupTransition;
+      let groupTransition = this.joinGroupTransition;
       if (this.appHelper.isNewObject(this.data)) {
         let personFullName = `${this.data.firstName} ${this.data.lastName}`;
         if (this.data.patronymic) {
@@ -169,13 +170,13 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             }
           });
         }
-        // if (selectedPerson) {
-        //   groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
-        // } else {
-        //   const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-        //   groupTransition = groupPersonTransition.groupTransition;
-        //   this.appHelper.updateObject(this.data, groupPersonTransition.person);
-        // }
+        if (selectedPerson) {
+          groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+        } else {
+          const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
+          groupTransition = groupPersonTransition.groupTransition;
+          this.appHelper.updateObject(this.data, groupPersonTransition.person);
+        }
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }

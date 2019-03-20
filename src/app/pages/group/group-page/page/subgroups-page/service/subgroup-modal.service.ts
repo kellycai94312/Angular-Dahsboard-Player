@@ -9,6 +9,8 @@ import {EditSubgroupComponent} from '../../../../../../module/group/edit-subgrou
 import {SubgroupVersion} from '../../../../../../data/remote/model/group/subgroup/version/subgroup-version';
 import {DialogResult} from '../../../../../../data/local/dialog-result';
 import {SubgroupTemplateVersion} from '../../../../../../data/remote/model/group/subgroup/template/subgroup-template-version';
+import {SubgroupGroup} from '../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import {EditSubgroupGroupComponent} from '../../../../../../module/group/edit-subgroup-group/edit-subgroup-group/edit-subgroup-group.component';
 
 @Injectable()
 export class SubgroupModalService {
@@ -70,6 +72,27 @@ export class SubgroupModalService {
 
     if (await this._ngxModalService.awaitModalResult(modal)) {
       return {result: true, data: {subgroup: editSubgroupComponent.data, subgroupTemplateVersion: editSubgroupComponent.subgroupTemplateVersion}};
+    }
+    return {result: false};
+  }
+
+  public async showEditSubgroupGroup(subgroupGroup: SubgroupGroup): Promise<DialogResult<SubgroupGroup>> {
+    let editSubgroupGroupComponent: EditSubgroupGroupComponent = null;
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'subgroup';
+    await modal.componentInstance.initializeBody(EditSubgroupGroupComponent, async component => {
+      editSubgroupGroupComponent = component;
+      await component.initialize(this._appHelper.cloneObject(subgroupGroup));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        })
+      ];
+    }, {componentFactoryResolver: this._componentFactoryResolver});
+
+    if (await this._ngxModalService.awaitModalResult(modal)) {
+      return {result: true, data: editSubgroupGroupComponent.data};
     }
     return {result: false};
   }

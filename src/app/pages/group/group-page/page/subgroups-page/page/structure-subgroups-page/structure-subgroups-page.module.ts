@@ -6,6 +6,7 @@ import {SubgroupsTreesModule} from '../../../../../../../module/group/subgroups-
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxGridModule} from '../../../../../../../components/ngx-grid/ngx-grid.module';
 import {EditPersonModule} from '../../../../../../../module/person/edit-person/edit-person.module';
+import {NgxModalModule} from '../../../../../../../components/ngx-modal/ngx-modal.module';
 
 @NgModule({
   declarations: [StructureSubgroupsPageComponent],
@@ -15,7 +16,8 @@ import {EditPersonModule} from '../../../../../../../module/person/edit-person/e
     SubgroupsTreesModule,
     FlexLayoutModule,
     NgxGridModule,
-    EditPersonModule
+    EditPersonModule,
+    NgxModalModule
   ]
 })
 export class StructureSubgroupsPageModule {

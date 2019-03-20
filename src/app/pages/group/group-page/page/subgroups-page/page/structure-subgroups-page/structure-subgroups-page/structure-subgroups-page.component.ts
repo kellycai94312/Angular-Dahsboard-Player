@@ -15,11 +15,12 @@ import {SubgroupGroup} from '../../../../../../../../data/remote/model/group/sub
 import {GroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/group-person-query';
 import {NgxGridComponent} from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
-import {TemplateModalService} from '../../../../../../../../service/template-modal.service';
+import {PersonModalConfig, TemplateModalService} from '../../../../../../../../service/template-modal.service';
 import {Person} from '../../../../../../../../data/remote/model/person';
 import {PageQuery} from '../../../../../../../../data/remote/rest-api/page-query';
 import {SubgroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
 import {SubgroupPersonTypeEnum} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import {SubgroupModalService} from '../../../service/subgroup-modal.service';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -47,6 +48,7 @@ export class StructureSubgroupsPageComponent {
               private _appHelper: AppHelper,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _subgroupModalService: SubgroupModalService,
               private _groupService: GroupService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
@@ -68,8 +70,14 @@ export class StructureSubgroupsPageComponent {
           });
         }
       }];
+    } else {
+      const nodeData = node.data as SubgroupGroup;
+      return [{
+        translation: 'edit', action: async item => {
+          await this._subgroupModalService.showEditSubgroupGroup(nodeData);
+        }
+      }];
     }
-    return [];
   };
 
   public async onSelectedNodeChange(node: DynamicFlatNode) {
@@ -98,22 +106,22 @@ export class StructureSubgroupsPageComponent {
   };
 
   public onEdit = async (obj: ObjectWrapper) => {
+    // TODO: Using instanceof
     let subgroupGroup: SubgroupGroup = this.selectedNode.data;
     let subgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
     if (!subgroupTemplateGroup) {
-      subgroupTemplateGroup = this.selectedNode.data;
       subgroupGroup = null;
+      subgroupTemplateGroup = this.selectedNode.data;
     }
-
-    await this._templateModalService.showEditPersonModal(obj.data, this.group, {
-      componentFactoryResolver: this._componentFactoryResolver
-    }, subgroupTemplateGroup, subgroupGroup);
+    await this.showEditPersonModal(obj.data, {group: this.group, subgroupGroup, subgroupTemplateGroup});
   };
 
   public onAdd = async (obj: ObjectWrapper) => {
-    await this._templateModalService.showEditPersonModal(new Person(), this.group, {
-      componentFactoryResolver: this._componentFactoryResolver
-    });
+    await this.showEditPersonModal(new Person(), {group: this.group});
   };
+
+  private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
+    await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
+  }
 
 }

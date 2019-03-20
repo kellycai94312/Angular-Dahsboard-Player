@@ -2077,7 +2077,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Delete,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  removeSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+  removeSubgroupPersons: IRestMethodStrict<SubgroupPersonRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
 
   //#endregion
 
