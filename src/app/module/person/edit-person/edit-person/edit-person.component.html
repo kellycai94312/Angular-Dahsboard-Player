@@ -134,6 +134,40 @@
   </div>
 </div>
 
+<h6 class="mt-2">{{'passport' | translate}}</h6>
+<div class="row cols-padding">
+  <div class="col-3">
+    <dx-text-box mode="text"
+                 placeholder="{{'number' | translate}}"
+                 [(value)]="passportDocument.number"
+                 [showClearButton]="true">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div>
+  <div class="col-3">
+    <dx-date-box class="w-100"
+                 [(value)]="passportDocument.date"
+                 [displayFormat]="propertyConstantClass.dateFormat"
+                 type="date"
+                 placeholder="{{'date' | translate}}">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+  </div>
+  <div class="col-6">
+    <dx-text-area class="w-100"
+                  placeholder="{{'issuedBy' | translate}}"
+                   [(value)]="passportDocument.issuedBy">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-area>
+  </div>
+</div>
+
 <!--TODO: Group decrees-->
 <!--<h6 class="mt-2">{{'decrees' | translate}}</h6>-->
 <!--<hr/>-->

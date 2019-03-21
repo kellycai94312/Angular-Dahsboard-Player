@@ -67,6 +67,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public joinGroupTransition: GroupTransition;
   public stageTypes: StageType[];
   public selectedStageType: StageType;
+  public passportDocument: Document;
   public personalDataProcessingDocument: Document;
   public serviceAgreementDocument: Document;
 
@@ -97,6 +98,10 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     this.serviceAgreementDocument = new Document();
     this.serviceAgreementDocument.clazz = FileClass.GROUP_PERSON;
     this.serviceAgreementDocument.type = DocumentType.ORDER;
+
+    this.passportDocument = new Document();
+    this.passportDocument.clazz = FileClass.PERSON;
+    this.passportDocument.type = DocumentType.PASSPORT;
 
     this._personRankComponents = [];
     this._medicalExaminationComponents = [];
@@ -157,6 +162,14 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           const personalDataProcessingDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSONAL_DATA_PROCESSING, count: 1, objectId: this.data.id})).list;
           if (personalDataProcessingDocuments.length) {
             this.personalDataProcessingDocument = personalDataProcessingDocuments[0];
+          }
+        } catch (e) {
+        }
+
+        try {
+          const passportDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON, count: 1, objectId: this.data.id, type: DocumentType.PASSPORT})).list;
+          if (passportDocuments.length) {
+            this.passportDocument = passportDocuments[0];
           }
         } catch (e) {
         }
@@ -229,6 +242,10 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
       this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
       await this.uploadOrUpdateFile(this.serviceAgreementDocument);
+
+      this.passportDocument.objectId = this.data.id;
+      this.passportDocument.date = this.appHelper.dateByFormat(this.passportDocument.date, PropertyConstant.dateTimeServerFormat);
+      await this.uploadOrUpdateFile(this.passportDocument);
 
       await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
         async (obj: PersonRank) => {

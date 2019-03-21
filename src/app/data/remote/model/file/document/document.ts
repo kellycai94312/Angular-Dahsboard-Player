@@ -7,6 +7,7 @@ export class Document extends BaseFile {
   number: number;
   date: Date;
   issuedBy?: string;
+  validityInDays?: number;
 
   constructor() {
     super();

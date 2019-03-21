@@ -4,7 +4,7 @@ import {EditPersonComponent} from './edit-person/edit-person.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxGridModule} from '../../../components/ngx-grid/ngx-grid.module';
 import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module';
-import {DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
+import {DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {InputSelectModule} from '../../../components/input-select/input-select.module';
 import {AttachFileModule} from '../../../components/attach-file/attach-file.module';
 import {EditPersonRankModule} from '../edit-person-rank/edit-person-rank.module';
@@ -21,6 +21,7 @@ import {GroupPersonPositionItemModule} from '../../group/group-person-position-i
     DxDateBoxModule,
     DxSelectBoxModule,
     DxNumberBoxModule,
+    DxTextAreaModule,
     NgxGridModule,
     NgxButtonModule,
     InputSelectModule,
