@@ -125,7 +125,8 @@
   </dx-validator>
 </dx-select-box>
 
-<div class="d-flex flex-row mt-2">
+<div *ngIf="data.id"
+     class="d-flex flex-row mt-2">
   <ngx-button class="mr-2"
               nameKey="personPositions"
               [click]="onEditGroupPersonPositions"></ngx-button>

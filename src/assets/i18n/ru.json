@@ -514,7 +514,8 @@
   "groupTransitionTypeEnum": {
     "ENROLL": "Зачислить",
     "TRANSFER": "Перевести",
-    "EXPEL": "Отчислить"
+    "EXPEL": "Отчислить",
+    "EXPEL_FROM_SUBGROUP": "Удалить из подгруппы"
   },
   "firstName": "Имя",
   "lastName": "Фамилия",
@@ -634,5 +635,6 @@
   "reject": "Отклонить",
   "templateHasApproved": "Шаблон подтвержден",
   "templateHasRejected": "Шаблон отклонен",
-  "templateHasApplied": "Шаблон применен"
+  "templateHasApplied": "Шаблон применен",
+  "deductFromSubgroup": "Удаление из подгруппы"
 }

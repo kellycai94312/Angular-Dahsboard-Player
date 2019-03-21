@@ -513,7 +513,8 @@
   "groupTransitionTypeEnum": {
     "ENROLL": "Enroll",
     "TRANSFER": "Transfer",
-    "EXPEL": "Expel"
+    "EXPEL": "Expel",
+    "EXPEL_FROM_SUBGROUP": "Expel from subgroup"
   },
   "firstName": "First name",
   "lastName": "Last name",
@@ -632,5 +633,6 @@
   "reject": "Reject",
   "templateHasApproved": "Template has approved",
   "templateHasRejected": "Template has rejected",
-  "templateHasApplied": "Template has applied"
+  "templateHasApplied": "Template has applied",
+  "deductFromSubgroup": "Deduct from subgroup"
 }

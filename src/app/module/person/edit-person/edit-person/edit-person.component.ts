@@ -180,10 +180,15 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
-      await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
-        groupId: this.group.id,
-        personId: this.data.id
-      });
+
+      // TODO: Fix this expression because you can't empty array
+      if (this.groupPersonPositions.length) {
+        await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
+          groupId: this.group.id,
+          personId: this.data.id
+        });
+      }
+
       await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
         groupId: this.group.id,
         personId: this.data.id

@@ -66,7 +66,7 @@ export class StructureSubgroupsPageComponent {
         translation: 'remove', action: async item => {
           await this._appHelper.tryAction('removed', 'error', async () => {
             await this._participantRestApiService.removeSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.id});
-            // TODO: Remove item from UI
+            this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
           });
         }
       }];
@@ -81,7 +81,7 @@ export class StructureSubgroupsPageComponent {
   };
 
   public async onSelectedNodeChange(node: DynamicFlatNode) {
-    await this.ngxGridComponent.reset();
+    await this.resetItems();
   }
 
   public fetchItems = async (query: PageQuery): Promise<PageContainer<ObjectWrapper>> => {
@@ -122,6 +122,14 @@ export class StructureSubgroupsPageComponent {
 
   private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
     await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
+    // TODO: Update only edited item
+    await this.resetItems();
+  }
+
+  private async resetItems() {
+    if (this.ngxGridComponent) {
+      await this.ngxGridComponent.reset();
+    }
   }
 
 }

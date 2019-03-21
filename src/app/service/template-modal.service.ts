@@ -198,6 +198,15 @@ export class TemplateModalService {
             }
           },
           visible: isNewObject
+        },
+        {
+          nameKey: 'deductFromSubgroup',
+          callback: async () => {
+            if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
+              modal.close();
+            }
+          },
+          visible: isNewObject
         }
       ];
     }, config);

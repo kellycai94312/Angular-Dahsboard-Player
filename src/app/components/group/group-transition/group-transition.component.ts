@@ -117,6 +117,14 @@ export class GroupTransitionComponent {
           this.document.clazz = FileClass.GROUP_TRANSITION;
           transition = (await this._participantRestApiService.expelPersonsFromGroup(new ListRequest(this.persons), {}, {groupId: this.group.id}))[0].groupTransition;
           break;
+        case PersonTransitionType.EXPEL_FROM_SUBGROUP:
+          this.document.clazz = FileClass.SUBGROUP_TRANSITION;
+
+          transition = (await this._participantRestApiService.removeSubgroupPersons({
+            subgroupPersonTypeEnum: SubgroupPersonTypeEnum.PARTICIPANT,
+            personIds: this.persons.map(x => x.id)
+          }, {}, {subgroupGroupId: this.fromSubgroupGroup.id}))[0].subgroupTransition;
+          break;
       }
 
       this.document.objectId = transition.id;
