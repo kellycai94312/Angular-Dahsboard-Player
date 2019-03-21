@@ -16,7 +16,7 @@ export class SubgroupGroupTreeDataSource extends TreeDataSource {
   public async initialize(): Promise<DynamicFlatNode[]> {
     return (await this.participantRestApiService
       .getSubgroupTemplateGroupsByGroup({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
-      .list.map(x => new DynamicFlatNode(x, x.template.name, 0, true));
+      .list.map(x => new DynamicFlatNode(x, `${x.template.name} [${x.templateVersion.versionNumber}]`, 0, true));
   }
 
   public async getChildren(node: DynamicFlatNode): Promise<DynamicFlatNode[]> {

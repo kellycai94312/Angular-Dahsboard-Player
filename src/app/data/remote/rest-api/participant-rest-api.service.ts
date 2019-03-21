@@ -1069,7 +1069,9 @@ export class ParticipantRestApiService extends Rest {
 
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
-    if (files) {
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+
+    if (files && files.length) {
       for (let i = 0; i < files.length; i++) {
         const item = files[i];
         if (!item) {
@@ -1078,8 +1080,6 @@ export class ParticipantRestApiService extends Rest {
         formData.append('file', item, item.name);
       }
     }
-
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
     return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
   }
 
@@ -2219,6 +2219,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
   })
   getSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve'
+  })
+  approveSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Put,

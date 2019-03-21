@@ -32,6 +32,7 @@ import {ComponentWithAttach} from '../../../../data/local/component/base/compone
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {EditPersonService} from '../service/edit-person.service';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
+import {BaseFile} from '../../../../data/remote/model/file/base/base-file';
 
 @Component({
   selector: 'app-edit-person',
@@ -66,6 +67,8 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public joinGroupTransition: GroupTransition;
   public stageTypes: StageType[];
   public selectedStageType: StageType;
+  public personalDataProcessingDocument: Document;
+  public serviceAgreementDocument: Document;
 
   private readonly _personRankComponents: EditPersonRankComponent[];
   private readonly _medicalExaminationComponents: EditMedicalExaminationComponent[];
@@ -86,6 +89,14 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     this.documentQuery = new DocumentQuery();
     this.documentQuery.clazz = this.document.clazz;
     this.documentQuery.type = this.document.type;
+
+    this.personalDataProcessingDocument = new Document();
+    this.personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
+    this.personalDataProcessingDocument.type = DocumentType.ORDER;
+
+    this.serviceAgreementDocument = new Document();
+    this.serviceAgreementDocument.clazz = FileClass.GROUP_PERSON;
+    this.serviceAgreementDocument.type = DocumentType.ORDER;
 
     this._personRankComponents = [];
     this._medicalExaminationComponents = [];
@@ -129,11 +140,26 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.type);
 
             // await this.attachFileComponent.initialize();
+
+            try {
+              const serviceAgreementDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.GROUP_PERSON, count: 1, objectId: groupPerson.id})).list;
+              if (serviceAgreementDocuments.length) {
+                this.serviceAgreementDocument = serviceAgreementDocuments[0];
+              }
+            } catch (e) {
+            }
           }
         }
 
         await this.sportRankNgxGridComponent.reset();
         await this.medicalExaminationNgxGridComponent.reset();
+        try {
+          const personalDataProcessingDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSONAL_DATA_PROCESSING, count: 1, objectId: this.data.id})).list;
+          if (personalDataProcessingDocuments.length) {
+            this.personalDataProcessingDocument = personalDataProcessingDocuments[0];
+          }
+        } catch (e) {
+        }
       }
 
       this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice();
@@ -196,6 +222,13 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
       // this.document.objectId = groupTransition.id;
       // await this.attachFileComponent.updateFile();
+      this.personalDataProcessingDocument.objectId = this.data.id;
+      this.personalDataProcessingDocument.date = this.appHelper.dateByFormat(this.personalDataProcessingDocument.date, PropertyConstant.dateTimeServerFormat);
+      await this.uploadOrUpdateFile(this.personalDataProcessingDocument);
+
+      this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
+      this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
+      await this.uploadOrUpdateFile(this.serviceAgreementDocument);
 
       await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
         async (obj: PersonRank) => {
@@ -206,6 +239,15 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           return await this.participantRestApiService.removeMedicalExamination({personId: this.data.id, medicalExaminationId: obj.id});
         });
     });
+  }
+
+  private async uploadOrUpdateFile<T extends BaseFile>(obj: T, files: File[] = null): Promise<T> {
+    if (this.appHelper.isNewObject(obj)) {
+      return (await this.participantRestApiService.uploadFile(obj, files))[0];
+    } else {
+      const file = files && files.length ? files[0] : void 0;
+      return await this.participantRestApiService.updateFile(obj, file);
+    }
   }
 
   public async navigateToPage(): Promise<void> {
