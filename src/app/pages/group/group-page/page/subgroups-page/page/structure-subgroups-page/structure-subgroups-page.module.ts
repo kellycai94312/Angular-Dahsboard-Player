@@ -7,6 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxGridModule} from '../../../../../../../components/ngx-grid/ngx-grid.module';
 import {EditPersonModule} from '../../../../../../../module/person/edit-person/edit-person.module';
 import {NgxModalModule} from '../../../../../../../components/ngx-modal/ngx-modal.module';
+import {NgxSplitButtonModule} from '../../../../../../../components/ngx-split-button/ngx-split-button.module';
 
 @NgModule({
   declarations: [StructureSubgroupsPageComponent],
@@ -17,7 +18,8 @@ import {NgxModalModule} from '../../../../../../../components/ngx-modal/ngx-moda
     FlexLayoutModule,
     NgxGridModule,
     EditPersonModule,
-    NgxModalModule
+    NgxModalModule,
+    NgxSplitButtonModule
   ]
 })
 export class StructureSubgroupsPageModule {

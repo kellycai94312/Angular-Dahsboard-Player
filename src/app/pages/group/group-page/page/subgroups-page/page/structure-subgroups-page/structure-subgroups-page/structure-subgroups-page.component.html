@@ -7,10 +7,14 @@
                        (selectedNodeChange)="onSelectedNodeChange($event)"></app-subgroups-trees>
   <div *ngIf="selectedNode"
        fxFlex>
+    <ngx-split-button class="mb-2"
+                      [items]="splitButtonItems"></ngx-split-button>
     <ngx-grid [fetchItems]="fetchItems"
               [edit]="onEdit"
               [add]="onAdd"
-              [canEdit]="canEdit">
+              [selectionType]="selectionTypeClass.MULTIPLE"
+              [canEdit]="canEdit"
+              (selectedItemsChange)="onSelectedItemsChange($event)">
       <ngx-column nameKey="lastName">
         <ng-template let-item>
           {{item.data.lastName}}
@@ -29,6 +33,16 @@
       <ngx-column nameKey="birthDate">
         <ng-template let-item>
           {{item.data.birthDate | date: propertyConstantClass.dateFormat}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="rank">
+        <ng-template let-item>
+          {{item.original.personRank?.rank?.name}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="stageType">
+        <ng-template let-item>
+          {{item.original.stageType?.name}}
         </ng-template>
       </ngx-column>
     </ngx-grid>

@@ -21,6 +21,10 @@ import {PageQuery} from '../../../../../../../../data/remote/rest-api/page-query
 import {SubgroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
 import {SubgroupPersonTypeEnum} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 import {SubgroupModalService} from '../../../service/subgroup-modal.service';
+import {SelectionType} from '../../../../../../../../components/ngx-grid/bean/selection-type';
+import {SplitButtonItem} from '../../../../../../../../components/ngx-split-button/bean/split-button-item';
+import {PersonTransitionType} from '../../../../../../../../data/remote/model/group/transition/person-transition-type';
+import {NgxModalService} from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -30,6 +34,7 @@ import {SubgroupModalService} from '../../../service/subgroup-modal.service';
 export class StructureSubgroupsPageComponent {
 
   public readonly propertyConstantClass = PropertyConstant;
+  public readonly selectionTypeClass = SelectionType;
 
   @ViewChild(SubgroupsTreesComponent)
   public subgroupsTreesComponent: SubgroupsTreesComponent;
@@ -41,6 +46,8 @@ export class StructureSubgroupsPageComponent {
   public selectedNode: DynamicFlatNode;
   public group: Group;
   public canEdit = true;
+  public selectedItems: ObjectWrapper[] = [];
+  public splitButtonItems: SplitButtonItem[] = [];
 
   private _notDestroyed = true;
 
@@ -49,6 +56,7 @@ export class StructureSubgroupsPageComponent {
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupModalService: SubgroupModalService,
+              private _ngxModalService: NgxModalService,
               private _groupService: GroupService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
@@ -106,19 +114,42 @@ export class StructureSubgroupsPageComponent {
   };
 
   public onEdit = async (obj: ObjectWrapper) => {
-    // TODO: Using instanceof
-    let subgroupGroup: SubgroupGroup = this.selectedNode.data;
-    let subgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
-    if (!subgroupTemplateGroup) {
-      subgroupGroup = null;
-      subgroupTemplateGroup = this.selectedNode.data;
-    }
-    await this.showEditPersonModal(obj.data, {group: this.group, subgroupGroup, subgroupTemplateGroup});
+    await this.showEditPersonModal(obj.data, this.getPersonModalConfig());
   };
 
   public onAdd = async (obj: ObjectWrapper) => {
     await this.showEditPersonModal(new Person(), {group: this.group});
   };
+
+  public onSelectedItemsChange(selectedItems: ObjectWrapper[]) {
+    this.selectedItems = selectedItems;
+    if (this.selectedItems.length) {
+      const persons: Person[] = selectedItems.map(x => x.data);
+      const config = this.getPersonModalConfig();
+      this.splitButtonItems = [
+        {
+          nameKey: 'transfer',
+          callback: async () => {
+            await this._templateModalService.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, config.group, persons, config);
+          }
+        },
+        {
+          nameKey: 'deduct',
+          callback: async () => {
+            await this._templateModalService.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, config.group, persons);
+          }
+        },
+        {
+          nameKey: 'deductFromSubgroup',
+          callback: async () => {
+            await this._templateModalService.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, config.group, persons, config);
+          }
+        }
+      ];
+    } else {
+      this.splitButtonItems = [];
+    }
+  }
 
   private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
     await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
@@ -127,9 +158,22 @@ export class StructureSubgroupsPageComponent {
   }
 
   private async resetItems() {
+    this.onSelectedItemsChange([]);
     if (this.ngxGridComponent) {
       await this.ngxGridComponent.reset();
     }
+  }
+
+  private getPersonModalConfig(): PersonModalConfig {
+    // TODO: Using instanceof
+    let subgroupGroup: SubgroupGroup = this.selectedNode.data;
+    let subgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
+    if (!subgroupTemplateGroup) {
+      subgroupGroup = null;
+      subgroupTemplateGroup = this.selectedNode.data;
+    }
+
+    return {group: this.group, subgroupGroup, subgroupTemplateGroup};
   }
 
 }
