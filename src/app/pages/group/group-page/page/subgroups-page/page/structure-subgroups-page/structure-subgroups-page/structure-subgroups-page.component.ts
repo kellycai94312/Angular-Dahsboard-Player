@@ -25,6 +25,8 @@ import {SelectionType} from '../../../../../../../../components/ngx-grid/bean/se
 import {SplitButtonItem} from '../../../../../../../../components/ngx-split-button/bean/split-button-item';
 import {PersonTransitionType} from '../../../../../../../../data/remote/model/group/transition/person-transition-type';
 import {NgxModalService} from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
+import {SubgroupTemplatePersonType} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
+import {SubgroupPerson} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -48,6 +50,11 @@ export class StructureSubgroupsPageComponent {
   public canEdit = true;
   public selectedItems: ObjectWrapper[] = [];
   public splitButtonItems: SplitButtonItem[] = [];
+  public subgroupTemplateGroup: SubgroupTemplateGroup;
+  public leadPersonType: SubgroupTemplatePersonType;
+  public secondaryPersonType: SubgroupTemplatePersonType;
+  public leadSubgroupPerson: SubgroupPerson;
+  public secondarySubgroupPerson: SubgroupPerson;
 
   private _notDestroyed = true;
 
@@ -94,6 +101,7 @@ export class StructureSubgroupsPageComponent {
       return [{
         translation: 'edit', action: async item => {
           await this._subgroupModalService.showEditSubgroupGroup(nodeData);
+          await this.resetItems();
         }
       }];
     }
@@ -135,8 +143,8 @@ export class StructureSubgroupsPageComponent {
   public onSelectedItemsChange(selectedItems: ObjectWrapper[]) {
     this.selectedItems = selectedItems;
     if (this.selectedItems.length) {
-      const persons: Person[] = selectedItems.map(x => x.data);
       const config = this.getPersonModalConfig();
+      const persons: Person[] = selectedItems.map(x => x.data);
       this.splitButtonItems = [
         {
           nameKey: 'transfer',
@@ -169,6 +177,29 @@ export class StructureSubgroupsPageComponent {
   }
 
   private async resetItems() {
+    const config = this.getPersonModalConfig();
+    this.subgroupTemplateGroup = config.subgroupTemplateGroup;
+
+    if (this.selectedNode) {
+      const subgroupTemplatePersonTypes = await this._participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.subgroupTemplateGroup.template.id});
+      this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
+      this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
+    }
+
+    this.leadSubgroupPerson = null;
+    this.secondarySubgroupPerson = null;
+    const subgroupGroup = config.subgroupGroup;
+    if (subgroupGroup) {
+      const leadSubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.LEAD, count: 1, unassigned: false}, subgroupGroup);
+      if (leadSubgroupPersonPageContainer.list) {
+        this.leadSubgroupPerson = leadSubgroupPersonPageContainer.list[0];
+      }
+
+      const secondarySubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.SECONDARY, count: 1, unassigned: false}, subgroupGroup);
+      if (secondarySubgroupPersonPageContainer.list) {
+        this.secondarySubgroupPerson = secondarySubgroupPersonPageContainer.list[0];
+      }
+    }
     this.onSelectedItemsChange([]);
     if (this.ngxGridComponent) {
       await this.ngxGridComponent.reset();
@@ -177,14 +208,21 @@ export class StructureSubgroupsPageComponent {
 
   private getPersonModalConfig(): PersonModalConfig {
     // TODO: Using instanceof
+    if (!this.selectedNode) {
+      return {group: this.group};
+    }
+
     let subgroupGroup: SubgroupGroup = this.selectedNode.data;
-    let subgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
+    let subgroupTemplateGroup: SubgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
     if (!subgroupTemplateGroup) {
       subgroupGroup = null;
       subgroupTemplateGroup = this.selectedNode.data;
     }
-
     return {group: this.group, subgroupGroup, subgroupTemplateGroup};
+  }
+
+  private async getSubgroupPersons(query: SubgroupPersonQuery, subgroupGroup: SubgroupGroup): Promise<PageContainer<SubgroupPerson>> {
+    return await this._participantRestApiService.getSubgroupPersons({}, query, {subgroupGroupId: subgroupGroup.id});
   }
 
 }

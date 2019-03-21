@@ -11,6 +11,7 @@ import {DialogResult} from '../../../../../../data/local/dialog-result';
 import {SubgroupTemplateVersion} from '../../../../../../data/remote/model/group/subgroup/template/subgroup-template-version';
 import {SubgroupGroup} from '../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
 import {EditSubgroupGroupComponent} from '../../../../../../module/group/edit-subgroup-group/edit-subgroup-group/edit-subgroup-group.component';
+import {NgxModalRef} from '../../../../../../components/ngx-modal/bean/ngx-modal-ref';
 
 @Injectable()
 export class SubgroupModalService {
@@ -54,7 +55,7 @@ export class SubgroupModalService {
     }
     let editSubgroupComponent: EditSubgroupComponent = null;
     const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'subgroup';
+    this.updateTitle(subgroup, modal);
     await modal.componentInstance.initializeBody(EditSubgroupComponent, async component => {
       editSubgroupComponent = component;
       component.subgroupTemplate = subgroupTemplate;
@@ -79,7 +80,7 @@ export class SubgroupModalService {
   public async showEditSubgroupGroup(subgroupGroup: SubgroupGroup): Promise<DialogResult<SubgroupGroup>> {
     let editSubgroupGroupComponent: EditSubgroupGroupComponent = null;
     const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'subgroup';
+    this.updateTitle(subgroupGroup, modal);
     await modal.componentInstance.initializeBody(EditSubgroupGroupComponent, async component => {
       editSubgroupGroupComponent = component;
       await component.initialize(this._appHelper.cloneObject(subgroupGroup));
@@ -95,6 +96,16 @@ export class SubgroupModalService {
       return {result: true, data: editSubgroupGroupComponent.data};
     }
     return {result: false};
+  }
+
+  private updateTitle(obj: Subgroup | SubgroupGroup, modal: NgxModalRef) {
+    const isNew = this._appHelper.isNewObject(obj);
+    if (isNew) {
+      modal.componentInstance.titleKey = 'subgroup';
+    } else {
+      delete modal.componentInstance.titleKey;
+      modal.componentInstance.title = obj.subgroupVersion.name;
+    }
   }
 
 }

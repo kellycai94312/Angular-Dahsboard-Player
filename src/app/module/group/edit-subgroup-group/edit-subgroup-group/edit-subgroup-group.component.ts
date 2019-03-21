@@ -100,7 +100,7 @@ export class EditSubgroupGroupComponent extends BaseEditComponent<SubgroupGroup>
     if (lastSubgroupPerson) {
       await this.removeSubgroupPerson(lastSubgroupPerson, type);
     }
-    return await this.saveSubgroupPerson(subgroupPerson, type);
+    return subgroupPerson ? await this.saveSubgroupPerson(subgroupPerson, type) : null;
   }
 
 }
