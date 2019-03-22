@@ -172,7 +172,9 @@ export class TemplateModalService {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
     await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
-      component.group = personModalConfig.group;
+      if (personModalConfig) {
+        component.group = personModalConfig.group;
+      }
       await component.initialize(person);
       const isNewObject = (): boolean => {
         return !this._appHelper.isNewObject(component.data);
@@ -180,35 +182,40 @@ export class TemplateModalService {
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);
-        }),
-        {
-          nameKey: 'transfer',
-          callback: async () => {
-            if (await this.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, personModalConfig.group, [component.data], personModalConfig)) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        },
-        {
-          nameKey: 'deduct',
-          callback: async () => {
-            if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, personModalConfig.group, [component.data])) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        },
-        {
-          nameKey: 'deductFromSubgroup',
-          callback: async () => {
-            if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        }
+        })
       ];
+
+      if (personModalConfig) {
+        modal.componentInstance.splitButtonItems.push(...[
+          {
+            nameKey: 'transfer',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, personModalConfig.group, [component.data], personModalConfig)) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          },
+          {
+            nameKey: 'deduct',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, personModalConfig.group, [component.data])) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          },
+          {
+            nameKey: 'deductFromSubgroup',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          }
+        ]);
+      }
     }, config);
     return await this._ngxModalService.awaitModalResult(modal);
   }

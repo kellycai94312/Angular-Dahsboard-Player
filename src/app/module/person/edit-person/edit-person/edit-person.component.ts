@@ -209,39 +209,46 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             }
           });
         }
-        if (selectedPerson) {
-          groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+
+        if (this.group) {
+          if (selectedPerson) {
+            groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+          } else {
+            const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
+            groupTransition = groupPersonTransition.groupTransition;
+            this.appHelper.updateObject(this.data, groupPersonTransition.person);
+          }
         } else {
-          const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-          groupTransition = groupPersonTransition.groupTransition;
-          this.appHelper.updateObject(this.data, groupPersonTransition.person);
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.createPerson(this.data));
         }
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
 
-      // TODO: Fix this expression because you can't empty array
-      if (this.groupPersonPositions.length) {
-        await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
+      if (this.group) {
+        // TODO: Fix this expression because you can't empty array
+        if (this.groupPersonPositions.length) {
+          await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
+            groupId: this.group.id,
+            personId: this.data.id
+          });
+        }
+
+        await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
           groupId: this.group.id,
           personId: this.data.id
         });
+
+        this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
+        this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
+        await this.uploadOrUpdateFile(this.serviceAgreementDocument);
       }
-
-      await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
-        groupId: this.group.id,
-        personId: this.data.id
-      });
-
       // this.document.objectId = groupTransition.id;
       // await this.attachFileComponent.updateFile();
       this.personalDataProcessingDocument.objectId = this.data.id;
       this.personalDataProcessingDocument.date = this.appHelper.dateByFormat(this.personalDataProcessingDocument.date, PropertyConstant.dateTimeServerFormat);
       await this.uploadOrUpdateFile(this.personalDataProcessingDocument);
 
-      this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
-      this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
-      await this.uploadOrUpdateFile(this.serviceAgreementDocument);
 
       this.passportDocument.objectId = this.data.id;
       this.passportDocument.date = this.appHelper.dateByFormat(this.passportDocument.date, PropertyConstant.dateTimeServerFormat);
