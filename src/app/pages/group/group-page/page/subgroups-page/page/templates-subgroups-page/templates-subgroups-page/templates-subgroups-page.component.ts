@@ -30,6 +30,7 @@ export class TemplatesSubgroupsPageComponent {
   public group: Group;
   public subgroupTemplate: SubgroupTemplate;
   private _notDestroyed = true;
+  private _canEdit = false;
 
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
@@ -38,9 +39,10 @@ export class TemplatesSubgroupsPageComponent {
               private _participantRestApiService: ParticipantRestApiService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(val => {
+      .subscribe(async val => {
         this.group = val;
         this.treeDataSource = new SubgroupTemplateTreeDataSource(val, this._participantRestApiService);
+        this._canEdit = await this._groupService.canShowTemplatesSubgroups();
       });
     this._subgroupService.subgroupTemplateChanged()
       .pipe(
@@ -70,6 +72,9 @@ export class TemplatesSubgroupsPageComponent {
   }
 
   public onGetNodeContextMenuItem = async (node: DynamicFlatNode): Promise<ContextMenuItem[]> => {
+    if (!this._canEdit) {
+      return [];
+    }
     if (!node.level) {
       const nodeData = node.data as SubgroupTemplate;
       this.subgroupTemplate = nodeData;
