@@ -1,0 +1,15 @@
+<ng-container *ngIf="data">
+  <label>{{'headOfSubgroups' | translate}}</label>
+  <app-input-select [loadData]="fetchLeadSubgroupPersons"
+                    [(model)]="leadSubgroupPerson"
+                    [getKey]="getKey"
+                    [getName]="getName">
+  </app-input-select>
+
+  <label class="mt-2">{{'secondaryHeadOfSubgroups' | translate}}</label>
+  <app-input-select [loadData]="fetchSecondarySubgroupPersons"
+                    [(model)]="secondarySubgroupPerson"
+                    [getKey]="getKey"
+                    [getName]="getName">
+  </app-input-select>
+</ng-container>

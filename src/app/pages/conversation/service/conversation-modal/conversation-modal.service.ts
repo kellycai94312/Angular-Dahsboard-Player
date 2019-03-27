@@ -35,7 +35,7 @@ export class ConversationModalService {
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
           if (await this._ngxModalService.save(modal, component)) {
-            this._chatService.onChatSelected.next(chat);
+            this._chatService.onChatSelected.next(component.data);
           }
         }),
         this._ngxModalService.removeSplitItemButton(async () => {

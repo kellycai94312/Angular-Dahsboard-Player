@@ -513,7 +513,8 @@
   "groupTransitionTypeEnum": {
     "ENROLL": "Enroll",
     "TRANSFER": "Transfer",
-    "EXPEL": "Expel"
+    "EXPEL": "Expel",
+    "EXPEL_FROM_SUBGROUP": "Expel from subgroup"
   },
   "firstName": "First name",
   "lastName": "Last name",
@@ -631,5 +632,12 @@
   "subordination": "Subordination",
   "reject": "Reject",
   "templateHasApproved": "Template has approved",
-  "templateHasRejected": "Template has rejected"
+  "templateHasRejected": "Template has rejected",
+  "templateHasApplied": "Template has applied",
+  "deductFromSubgroup": "Deduct from subgroup",
+  "athleteId": "Athlete id",
+  "personalDataProcessingContract": "Personal data processing contract",
+  "signingDate": "Signing date",
+  "serviceAgreement": "Service agreement",
+  "validity": "Validity"
 }

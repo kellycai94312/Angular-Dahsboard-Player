@@ -514,7 +514,8 @@
   "groupTransitionTypeEnum": {
     "ENROLL": "Зачислить",
     "TRANSFER": "Перевести",
-    "EXPEL": "Отчислить"
+    "EXPEL": "Отчислить",
+    "EXPEL_FROM_SUBGROUP": "Удалить из подгруппы"
   },
   "firstName": "Имя",
   "lastName": "Фамилия",
@@ -633,5 +634,12 @@
   "subordination": "Подчиненность",
   "reject": "Отклонить",
   "templateHasApproved": "Шаблон подтвержден",
-  "templateHasRejected": "Шаблон отклонен"
+  "templateHasRejected": "Шаблон отклонен",
+  "templateHasApplied": "Шаблон применен",
+  "deductFromSubgroup": "Удаление из подгруппы",
+  "athleteId": "Id спортсмена",
+  "personalDataProcessingContract": "Договор обработки персональных данных",
+  "signingDate": "Дата подписания",
+  "serviceAgreement": "Договор оказания услуг",
+  "validity": "Срок действия"
 }

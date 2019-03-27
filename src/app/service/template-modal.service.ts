@@ -34,6 +34,8 @@ import {UserRole} from '../data/remote/model/user-role';
 import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
 import {Position} from '../data/remote/model/person-position/position';
 import {AuthorizationService} from '../shared/authorization.service';
+import {SubgroupTemplateGroup} from '../data/remote/model/group/subgroup/template/subgroup-template-group';
+import {SubgroupGroup} from '../data/remote/model/group/subgroup/subgroup/subgroup-group';
 
 @Injectable({
   providedIn: 'root'
@@ -96,10 +98,18 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
-  public async showGroupPersonTransferModal(groupTransitionType: PersonTransitionType, currentGroup: Group, persons: Person[]): Promise<boolean> {
+  public async showGroupPersonTransitionModal(groupTransitionType: PersonTransitionType,
+                                              currentGroup: Group,
+                                              persons: Person[],
+                                              personTransitionModalConfig?: PersonTransitionModalConfig): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = `groupTransitionTypeEnum.${groupTransitionType}`;
     await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
+      if (personTransitionModalConfig) {
+        component.fromSubgroupGroup = personTransitionModalConfig.subgroupGroup;
+        component.subgroupTemplateGroup = personTransitionModalConfig.subgroupTemplateGroup;
+      }
+
       await component.initialize(groupTransitionType, currentGroup, persons);
       modal.componentInstance.splitButtonItems = [
         {
@@ -156,11 +166,15 @@ export class TemplateModalService {
     return true;
   }
 
-  public async showEditPersonModal(person: Person, group?: Group, config?: NgxModalConfiguration): Promise<boolean> {
+  public async showEditPersonModal(person: Person,
+                                   personModalConfig: PersonModalConfig,
+                                   config?: NgxModalConfiguration): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
     await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
-      component.group = group;
+      if (personModalConfig) {
+        component.group = personModalConfig.group;
+      }
       await component.initialize(person);
       const isNewObject = (): boolean => {
         return !this._appHelper.isNewObject(component.data);
@@ -168,26 +182,40 @@ export class TemplateModalService {
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);
-        }),
-        // {
-        //   nameKey: 'transfer',
-        //   callback: async () => {
-        //     if (await this.showGroupPersonTransferModal(PersonTransitionType.TRANSFER, group, [component.data])) {
-        //       modal.close();
-        //     }
-        //   },
-        //   visible: isNewObject
-        // },
-        {
-          nameKey: 'deduct',
-          callback: async () => {
-            if (await this.showGroupPersonTransferModal(PersonTransitionType.EXPEL, group, [component.data])) {
-              modal.close();
-            }
-          },
-          visible: isNewObject
-        }
+        })
       ];
+
+      if (personModalConfig) {
+        modal.componentInstance.splitButtonItems.push(...[
+          {
+            nameKey: 'transfer',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, personModalConfig.group, [component.data], personModalConfig)) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          },
+          {
+            nameKey: 'deduct',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, personModalConfig.group, [component.data])) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          },
+          {
+            nameKey: 'deductFromSubgroup',
+            callback: async () => {
+              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
+                modal.close();
+              }
+            },
+            visible: isNewObject
+          }
+        ]);
+      }
     }, config);
     return await this._ngxModalService.awaitModalResult(modal);
   }
@@ -434,4 +462,13 @@ export class TemplateModalService {
 
   //#endregion
 
+}
+
+export class PersonTransitionModalConfig {
+  subgroupGroup?: SubgroupGroup;
+  subgroupTemplateGroup?: SubgroupTemplateGroup;
+}
+
+export class PersonModalConfig extends PersonTransitionModalConfig {
+  group?: Group;
 }

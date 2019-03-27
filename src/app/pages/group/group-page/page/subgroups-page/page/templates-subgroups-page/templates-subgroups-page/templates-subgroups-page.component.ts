@@ -13,6 +13,8 @@ import {skipWhile, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {SubgroupService} from '../../../service/subgroup.service';
+import {Group} from '../../../../../../../../data/remote/model/group/base/group';
+import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -25,7 +27,10 @@ export class TemplatesSubgroupsPageComponent {
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
   public treeDataSource: SubgroupTemplateTreeDataSource;
+  public group: Group;
+  public subgroupTemplate: SubgroupTemplate;
   private _notDestroyed = true;
+  private _canEdit = false;
 
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
@@ -34,8 +39,10 @@ export class TemplatesSubgroupsPageComponent {
               private _participantRestApiService: ParticipantRestApiService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(val => {
+      .subscribe(async val => {
+        this.group = val;
         this.treeDataSource = new SubgroupTemplateTreeDataSource(val, this._participantRestApiService);
+        this._canEdit = await this._groupService.canShowTemplatesSubgroups();
       });
     this._subgroupService.subgroupTemplateChanged()
       .pipe(
@@ -65,8 +72,12 @@ export class TemplatesSubgroupsPageComponent {
   }
 
   public onGetNodeContextMenuItem = async (node: DynamicFlatNode): Promise<ContextMenuItem[]> => {
+    if (!this._canEdit) {
+      return [];
+    }
     if (!node.level) {
       const nodeData = node.data as SubgroupTemplate;
+      this.subgroupTemplate = nodeData;
       return [
         {
           translation: 'add', action: async item => {
@@ -86,7 +97,15 @@ export class TemplatesSubgroupsPageComponent {
     } else if (node.level == 1) {
       const nodeData = node.data as SubgroupTemplateVersion;
       if (nodeData.approved) {
-        return;
+        return [{
+          translation: 'apply', action: async item => {
+            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
+              const subgroupTemplateGroup = new SubgroupTemplateGroup();
+              subgroupTemplateGroup.group = this.group;
+              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
+            });
+          }
+        }];
       }
       const updateTemplate = async (): Promise<void> => {
         const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == nodeData.subgroupTemplateId);
@@ -96,7 +115,7 @@ export class TemplatesSubgroupsPageComponent {
         {
           translation: 'approve', action: async item => {
             const date = new Date();
-            date.setHours(24 * 14);
+            date.setHours(24 * 21);
 
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
               await this._participantRestApiService.approveSubgroupTemplate(

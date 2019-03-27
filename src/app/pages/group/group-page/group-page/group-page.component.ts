@@ -64,12 +64,12 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         routerLink: 'employee'
       },
       {
-        nameKey: 'subscribers',
-        routerLink: 'subscriber'
-      },
-      {
         nameKey: 'subgroups',
         routerLink: 'subgroup'
+      },
+      {
+        nameKey: 'subscribers',
+        routerLink: 'subscriber'
       },
       {
         nameKey: 'requests',

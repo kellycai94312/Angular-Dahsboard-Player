@@ -65,6 +65,111 @@
   </dx-validator>
 </dx-text-box>
 
+<dx-text-box class="mt-2"
+             mode="text"
+             placeholder="{{'athleteId' | translate}}"
+             [(value)]="data.federationAthleteId"
+             [showClearButton]="true">
+  <dx-validator>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dx-validator>
+</dx-text-box>
+
+<h6 class="mt-2">{{'personalDataProcessingContract' | translate}}</h6>
+<div class="row cols-padding">
+  <div class="col-3">
+    <dx-text-box mode="text"
+                 placeholder="{{'number' | translate}}"
+                 [(value)]="personalDataProcessingDocument.number"
+                 [showClearButton]="true">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div>
+  <div class="col-3">
+    <dx-date-box class="w-100"
+                 [(value)]="personalDataProcessingDocument.date"
+                 [displayFormat]="propertyConstantClass.dateFormat"
+                 type="date"
+                 placeholder="{{'signingDate' | translate}}">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+  </div>
+</div>
+
+<ng-container *ngIf="group">
+  <h6 class="mt-2">{{'serviceAgreement' | translate}}</h6>
+  <div class="row cols-padding">
+    <div class="col-3">
+      <dx-text-box mode="text"
+                   placeholder="{{'number' | translate}}"
+                   [(value)]="serviceAgreementDocument.number"
+                   [showClearButton]="true">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-text-box>
+    </div>
+    <div class="col-3">
+      <dx-date-box class="w-100"
+                   [(value)]="serviceAgreementDocument.date"
+                   [displayFormat]="propertyConstantClass.dateFormat"
+                   type="date"
+                   placeholder="{{'signingDate' | translate}}">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-date-box>
+    </div>
+    <div class="col-auto">
+      <dx-number-box placeholder="{{'validity' | translate}}"
+                     [(value)]="serviceAgreementDocument.validityInDays"
+                     [showClearButton]="true">
+        <dx-validator>
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dx-validator>
+      </dx-number-box>
+    </div>
+  </div>
+</ng-container>
+
+<h6 class="mt-2">{{'passport' | translate}}</h6>
+<div class="row cols-padding">
+  <div class="col-3">
+    <dx-text-box mode="text"
+                 placeholder="{{'number' | translate}}"
+                 [(value)]="passportDocument.number"
+                 [showClearButton]="true">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-box>
+  </div>
+  <div class="col-3">
+    <dx-date-box class="w-100"
+                 [(value)]="passportDocument.date"
+                 [displayFormat]="propertyConstantClass.dateFormat"
+                 type="date"
+                 placeholder="{{'date' | translate}}">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-date-box>
+  </div>
+  <div class="col-6">
+    <dx-text-area class="w-100"
+                  placeholder="{{'issuedBy' | translate}}"
+                  [(value)]="passportDocument.issuedBy">
+      <dx-validator>
+        <dxi-validation-rule type="required"></dxi-validation-rule>
+      </dx-validator>
+    </dx-text-area>
+  </div>
+</div>
+
 <!--TODO: Group decrees-->
 <!--<h6 class="mt-2">{{'decrees' | translate}}</h6>-->
 <!--<hr/>-->
@@ -99,33 +204,35 @@
 <!--<app-attach-file class="mt-2"-->
 <!--[(baseFile)]="document"-->
 <!--[documentQuery]="documentQuery"></app-attach-file>-->
+<ng-container *ngIf="group">
+  <h6 class="mt-2">{{'group' | translate}}</h6>
+  <hr/>
 
-<h6 class="mt-2">{{'group' | translate}}</h6>
-<hr/>
+  <app-input-select *ngIf="!joinGroupTransition || !joinGroupTransition.id"
+                    class="mt-2 w-100"
+                    [loadData]="fetchGroups"
+                    [(model)]="group"
+                    [getKey]="getKey"
+                    [getName]="getName"
+                    placeholder="{{'group' | translate}}"
+                    ngDefaultControl>
+  </app-input-select>
 
-<app-input-select *ngIf="!joinGroupTransition || !joinGroupTransition.id"
-                  class="mt-2 w-100"
-                  [loadData]="fetchGroups"
-                  [(model)]="group"
-                  [getKey]="getKey"
-                  [getName]="getName"
-                  placeholder="{{'group' | translate}}"
-                  ngDefaultControl>
-</app-input-select>
+  <dx-select-box class="mt-2"
+                 [items]="stageTypes"
+                 [(value)]="selectedStageType"
+                 [showClearButton]="true"
+                 [acceptCustomValue]="true"
+                 displayExpr="name"
+                 placeholder="{{'stageType' | translate}}">
+    <dx-validator>
+      <dxi-validation-rule type="required"></dxi-validation-rule>
+    </dx-validator>
+  </dx-select-box>
+</ng-container>
 
-<dx-select-box class="mt-2"
-               [items]="stageTypes"
-               [(value)]="selectedStageType"
-               [showClearButton]="true"
-               [acceptCustomValue]="true"
-               displayExpr="name"
-               placeholder="{{'stageType' | translate}}">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
-</dx-select-box>
-
-<div class="d-flex flex-row mt-2">
+<div *ngIf="group && data.id"
+     class="d-flex flex-row mt-2">
   <ngx-button class="mr-2"
               nameKey="personPositions"
               [click]="onEditGroupPersonPositions"></ngx-button>

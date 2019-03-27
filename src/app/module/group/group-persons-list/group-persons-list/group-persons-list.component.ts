@@ -47,7 +47,7 @@ export class GroupPersonsListComponent {
     if (groupPerson) {
       person = groupPerson.person;
     }
-    if (await this._templateModalService.showEditPersonModal(person, groupPerson.group, {componentFactoryResolver: this._componentFactoryResolver})) {
+    if (await this._templateModalService.showEditPersonModal(person, {group: groupPerson.group}, {componentFactoryResolver: this._componentFactoryResolver})) {
       // TODO: Update only edited item!
       await this.updateItems();
     }

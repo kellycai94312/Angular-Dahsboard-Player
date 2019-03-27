@@ -6,6 +6,7 @@ import {NgxTabModule} from '../../../../../components/ngx-tab/ngx-tab.module';
 import {EditSubgroupTemplateModule} from '../../../../../module/group/edit-subgroup-template/edit-subgroup-template.module';
 import {SubgroupModalService} from './service/subgroup-modal.service';
 import {SubgroupService} from './service/subgroup.service';
+import {EditSubgroupGroupModule} from '../../../../../module/group/edit-subgroup-group/edit-subgroup-group.module';
 
 @NgModule({
   declarations: [SubgroupsPageComponent],
@@ -17,7 +18,8 @@ import {SubgroupService} from './service/subgroup.service';
     CommonModule,
     SubgroupsPageRoutingModule,
     NgxTabModule,
-    EditSubgroupTemplateModule
+    EditSubgroupTemplateModule,
+    EditSubgroupGroupModule
   ]
 })
 export class SubgroupsPageModule {

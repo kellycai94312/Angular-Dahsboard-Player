@@ -85,7 +85,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     if (groupPerson) {
       person = groupPerson.person;
     }
-    if (await this._templateModalService.showEditPersonModal(person, this.group, {componentFactoryResolver: this._componentFactoryResolver})) {
+    if (await this._templateModalService.showEditPersonModal(person, {group: this.group}, {componentFactoryResolver: this._componentFactoryResolver})) {
       // TODO: Update only edited item!
       await this.resetItems();
     }
@@ -108,9 +108,9 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     return {
       nameKey: `groupTransitionTypeEnum.${type}`,
       callback: async () => {
-        if (await this._templateModalService.showGroupPersonTransferModal(type, this.group, this.selectedGroupPersons.map(x => x.person))) {
-          await this.resetItems();
-        }
+        // if (await this._templateModalService.showGroupPersonTransitionModal(type, this.group, this.selectedGroupPersons.map(x => x.person))) {
+        //   await this.resetItems();
+        // }
       },
       visible: visible
     };

@@ -32,6 +32,7 @@ import {ComponentWithAttach} from '../../../../data/local/component/base/compone
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {EditPersonService} from '../service/edit-person.service';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
+import {BaseFile} from '../../../../data/remote/model/file/base/base-file';
 
 @Component({
   selector: 'app-edit-person',
@@ -66,6 +67,9 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   public joinGroupTransition: GroupTransition;
   public stageTypes: StageType[];
   public selectedStageType: StageType;
+  public passportDocument: Document;
+  public personalDataProcessingDocument: Document;
+  public serviceAgreementDocument: Document;
 
   private readonly _personRankComponents: EditPersonRankComponent[];
   private readonly _medicalExaminationComponents: EditMedicalExaminationComponent[];
@@ -87,6 +91,18 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     this.documentQuery.clazz = this.document.clazz;
     this.documentQuery.type = this.document.type;
 
+    this.personalDataProcessingDocument = new Document();
+    this.personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
+    this.personalDataProcessingDocument.type = DocumentType.ORDER;
+
+    this.serviceAgreementDocument = new Document();
+    this.serviceAgreementDocument.clazz = FileClass.GROUP_PERSON;
+    this.serviceAgreementDocument.type = DocumentType.ORDER;
+
+    this.passportDocument = new Document();
+    this.passportDocument.clazz = FileClass.PERSON;
+    this.passportDocument.type = DocumentType.PASSPORT;
+
     this._personRankComponents = [];
     this._medicalExaminationComponents = [];
     this.groupPersonPositions = [];
@@ -106,6 +122,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
         this.selectedSexEnum = this.sexEnums.find(x => x.data === this.data.sex);
       } else {
         this.selectedSexEnum = this.sexEnums[0];
+        this.data.sex = this.selectedSexEnum.data;
       }
       this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<PersonTransitionType>(PersonTransitionType, 'GroupTransitionTypeEnum');
       this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === PersonTransitionType.ENROLL);
@@ -125,18 +142,41 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             this.selectedStageType = groupPerson.stageType;
             // this.joinGroupTransition = groupPerson.groupTransition;
             // this.documentQuery.objectId = this.joinGroupTransition.id;
-            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.groupTransitionType);
-            //
+            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.type);
+
             // await this.attachFileComponent.initialize();
+
+            try {
+              const serviceAgreementDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.GROUP_PERSON, count: 1, objectId: groupPerson.id})).list;
+              if (serviceAgreementDocuments.length) {
+                this.serviceAgreementDocument = serviceAgreementDocuments[0];
+              }
+            } catch (e) {
+            }
           }
         }
 
         await this.sportRankNgxGridComponent.reset();
         await this.medicalExaminationNgxGridComponent.reset();
+        try {
+          const personalDataProcessingDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSONAL_DATA_PROCESSING, count: 1, objectId: this.data.id})).list;
+          if (personalDataProcessingDocuments.length) {
+            this.personalDataProcessingDocument = personalDataProcessingDocuments[0];
+          }
+        } catch (e) {
+        }
+
+        try {
+          const passportDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON, count: 1, objectId: this.data.id, type: DocumentType.PASSPORT})).list;
+          if (passportDocuments.length) {
+            this.passportDocument = passportDocuments[0];
+          }
+        } catch (e) {
+        }
       }
 
-      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice(0);
-      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice(0);
+      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice();
+      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice();
     });
   }
 
@@ -148,7 +188,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      // let groupTransition = this.joinGroupTransition;
+      let groupTransition = this.joinGroupTransition;
       if (this.appHelper.isNewObject(this.data)) {
         let personFullName = `${this.data.firstName} ${this.data.lastName}`;
         if (this.data.patronymic) {
@@ -169,27 +209,50 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
             }
           });
         }
-        // if (selectedPerson) {
-        //   groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
-        // } else {
-        //   const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-        //   groupTransition = groupPersonTransition.groupTransition;
-        //   this.appHelper.updateObject(this.data, groupPersonTransition.person);
-        // }
+
+        if (this.group) {
+          if (selectedPerson) {
+            groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+          } else {
+            const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
+            groupTransition = groupPersonTransition.groupTransition;
+            this.appHelper.updateObject(this.data, groupPersonTransition.person);
+          }
+        } else {
+          this.appHelper.updateObject(this.data, await this.participantRestApiService.createPerson(this.data));
+        }
       } else {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
       }
-      await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
-        groupId: this.group.id,
-        personId: this.data.id
-      });
-      await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
-        groupId: this.group.id,
-        personId: this.data.id
-      });
 
+      if (this.group) {
+        // TODO: Fix this expression because you can't empty array
+        if (this.groupPersonPositions.length) {
+          await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
+            groupId: this.group.id,
+            personId: this.data.id
+          });
+        }
+
+        await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
+          groupId: this.group.id,
+          personId: this.data.id
+        });
+
+        this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
+        this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
+        await this.uploadOrUpdateFile(this.serviceAgreementDocument);
+      }
       // this.document.objectId = groupTransition.id;
       // await this.attachFileComponent.updateFile();
+      this.personalDataProcessingDocument.objectId = this.data.id;
+      this.personalDataProcessingDocument.date = this.appHelper.dateByFormat(this.personalDataProcessingDocument.date, PropertyConstant.dateTimeServerFormat);
+      await this.uploadOrUpdateFile(this.personalDataProcessingDocument);
+
+
+      this.passportDocument.objectId = this.data.id;
+      this.passportDocument.date = this.appHelper.dateByFormat(this.passportDocument.date, PropertyConstant.dateTimeServerFormat);
+      await this.uploadOrUpdateFile(this.passportDocument);
 
       await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
         async (obj: PersonRank) => {
@@ -200,6 +263,15 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
           return await this.participantRestApiService.removeMedicalExamination({personId: this.data.id, medicalExaminationId: obj.id});
         });
     });
+  }
+
+  private async uploadOrUpdateFile<T extends BaseFile>(obj: T, files: File[] = null): Promise<T> {
+    if (this.appHelper.isNewObject(obj)) {
+      return (await this.participantRestApiService.uploadFile(obj, files))[0];
+    } else {
+      const file = files && files.length ? files[0] : void 0;
+      return await this.participantRestApiService.updateFile(obj, file);
+    }
   }
 
   public async navigateToPage(): Promise<void> {

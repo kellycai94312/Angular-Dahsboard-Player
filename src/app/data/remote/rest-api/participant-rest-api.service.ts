@@ -129,6 +129,8 @@ import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
 import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
 import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
+import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request';
+import {SubgroupPersonQuery} from './query/subgroup-person-query';
 
 @Injectable()
 @RestParams({
@@ -901,7 +903,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/connection/graph',
   })
-  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant: boolean }, { groupId: number }, GroupConnection[]>;
+  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant?: boolean }, { groupId: number }, GroupConnection[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1021,7 +1023,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/subgroupTemplateGroup',
   })
-  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
+  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
 
   //#endregion
 
@@ -1067,7 +1069,9 @@ export class ParticipantRestApiService extends Rest {
 
   uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
     const formData = new FormData();
-    if (files) {
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+
+    if (files && files.length) {
       for (let i = 0; i < files.length; i++) {
         const item = files[i];
         if (!item) {
@@ -1076,8 +1080,6 @@ export class ParticipantRestApiService extends Rest {
         formData.append('file', item, item.name);
       }
     }
-
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
     return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
   }
 
@@ -2057,13 +2059,13 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  getSubgroupPersons: IRestMethodStrict<any, PersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
+  getSubgroupPersons: IRestMethodStrict<any, SubgroupPersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  createSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+  createSubgroupPersons: IRestMethodStrict<SubgroupPersonListRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
 
   @RestAction({
     method: RestRequestMethod.Put,
@@ -2075,7 +2077,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Delete,
     path: '/subgroupGroup/{!subgroupGroupId}/person'
   })
-  removeSubgroupPersons: IRestMethodStrict<ListRequest<IdRequest>, any, { subgroupGroupId: number }, SubgroupPerson[]>;
+  removeSubgroupPersons: IRestMethodStrict<SubgroupPersonListRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
 
   //#endregion
 
@@ -2198,7 +2200,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/subgroupTemplate/{!subgroupTemplateId}/group'
   })
-  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number, disabled?: boolean }, SubgroupTemplateGroup[]>;
+  getSubgroupTemplateGroups: IRestMethod<{ subgroupTemplateId: number, apply?: boolean }, SubgroupTemplateGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -2219,6 +2221,12 @@ export class ParticipantRestApiService extends Rest {
   getSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve'
+  })
+  approveSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
+
+  @RestAction({
     method: RestRequestMethod.Put,
     path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
   })
@@ -2237,6 +2245,12 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
   })
   getSubgroupTemplateGroupSubgroups: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/unassignedSubgroupGroup'
+  })
+  getUnassignedSubgroupGroupsForPersons: IRestMethod<{ subgroupTemplateGroupId: number, personIds: string }, SubgroupGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Get,
