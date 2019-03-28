@@ -81,7 +81,7 @@ export class GroupTransitionComponent {
   public fetchGroups = async (from: number, searchText: string) => {
     const items = await this._participantRestApiService.getUnassignedSubgroupGroupsForPersons(
       {
-        subgroupTemplateGroupId: this.subgroupTemplateGroup.id,
+        subgroupTemplateGroupVersionId: this.subgroupTemplateGroup.subgroupTemplateGroupVersion.id,
         personIds: this.persons.map(x => x.id).join('_')
       });
     return this._appHelper.arrayToPageContainer(items);

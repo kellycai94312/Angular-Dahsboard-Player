@@ -27,6 +27,7 @@ import {PersonTransitionType} from '../../../../../../../../data/remote/model/gr
 import {NgxModalService} from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
 import {SubgroupTemplatePersonType} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
 import {SubgroupPerson} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person';
+import {SubgroupTemplateGroupVersion} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -82,24 +83,33 @@ export class StructureSubgroupsPageComponent {
     if (!node.level) {
       const nodeData = node.data as SubgroupTemplateGroup;
       const menuItems: ContextMenuItem[] = [];
+
+      menuItems.push({
+        translation: 'remove', action: async item => {
+          await this._appHelper.tryAction('removed', 'error', async () => {
+            await this._participantRestApiService.removeSubgroupTemplateGroupByTemplateOwner({
+              subgroupTemplateId: nodeData.subgroupTemplateGroupVersion.template.id,
+              subgroupTemplateGroupId: nodeData.id
+            });
+            this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
+          });
+        }
+      });
+      return menuItems;
+    } else if (node.level == 1) {
+      const nodeData = node.data as SubgroupTemplateGroupVersion;
+      const menuItems: ContextMenuItem[] = [];
+
       if (!nodeData.applied) {
         menuItems.push({
           translation: 'apply', action: async item => {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.id});
+              await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.subgroupTemplateGroupId});
               this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
             });
           }
         });
       }
-      menuItems.push({
-        translation: 'remove', action: async item => {
-          await this._appHelper.tryAction('removed', 'error', async () => {
-            await this._participantRestApiService.removeSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.id});
-            this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
-          });
-        }
-      });
       return menuItems;
     } else {
       const nodeData = node.data as SubgroupGroup;
@@ -186,7 +196,7 @@ export class StructureSubgroupsPageComponent {
     this.subgroupTemplateGroup = config.subgroupTemplateGroup;
 
     if (this.selectedNode) {
-      const subgroupTemplatePersonTypes = await this._participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.subgroupTemplateGroup.template.id});
+      const subgroupTemplatePersonTypes = await this._participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.id});
       this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
       this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
     }
