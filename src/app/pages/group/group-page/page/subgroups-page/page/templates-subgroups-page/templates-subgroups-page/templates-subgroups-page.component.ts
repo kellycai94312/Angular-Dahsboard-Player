@@ -28,7 +28,6 @@ export class TemplatesSubgroupsPageComponent {
 
   public treeDataSource: SubgroupTemplateTreeDataSource;
   public group: Group;
-  public subgroupTemplate: SubgroupTemplate;
   private _notDestroyed = true;
   private _canEdit = false;
 
@@ -75,40 +74,36 @@ export class TemplatesSubgroupsPageComponent {
     if (!this._canEdit) {
       return [];
     }
-    if (!node.level) {
-      const nodeData = node.data as SubgroupTemplate;
-      this.subgroupTemplate = nodeData;
+
+    if (node.data instanceof SubgroupTemplate) {
       return [
         {
+          translation: 'apply', action: async item => {
+            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
+              const subgroupTemplateGroup = new SubgroupTemplateGroup();
+              subgroupTemplateGroup.group = this.group;
+              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplateId});
+            });
+          }
+        },
+        {
           translation: 'add', action: async item => {
-            await this.editSubgroup(nodeData);
+            await this.editSubgroup(node.data);
           }
         },
         {
           translation: 'edit', action: async item => {
             const group = await this._appHelper.toPromise(this._groupService.group$);
-            const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, nodeData);
+            const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, node.data);
             if (dialogResult.result) {
               this._subgroupService.updateSubgroupTemplate(dialogResult.data);
             }
           }
         }
       ];
-    } else if (node.level == 1) {
-      const nodeData = node.data as SubgroupTemplateVersion;
-      if (nodeData.approved) {
-        return [{
-          translation: 'apply', action: async item => {
-            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
-              const subgroupTemplateGroup = new SubgroupTemplateGroup();
-              subgroupTemplateGroup.group = this.group;
-              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
-            });
-          }
-        }];
-      }
+    } else if (node.data instanceof SubgroupTemplateVersion) {
       const updateTemplate = async (): Promise<void> => {
-        const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == nodeData.subgroupTemplateId);
+        const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == node.data.subgroupTemplateId);
         await this.subgroupsTreesComponent.dataSource.updateNode(templateNode);
       };
       return [
@@ -120,7 +115,7 @@ export class TemplatesSubgroupsPageComponent {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
               await this._participantRestApiService.approveSubgroupTemplate(
                 {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
-                {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
+                {}, {subgroupTemplateId: node.data.subgroupTemplateId});
               await updateTemplate();
             });
           }
@@ -128,31 +123,27 @@ export class TemplatesSubgroupsPageComponent {
         {
           translation: 'reject', action: async item => {
             await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
-              await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: nodeData.subgroupTemplateId});
+              await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: node.data.subgroupTemplateId});
               await updateTemplate();
             });
           }
         }
       ];
-    } else {
-      const nodeData = node.data as Subgroup;
+    } else if (node.data instanceof Subgroup) {
       const subgroupTemplate = new SubgroupTemplate();
-      subgroupTemplate.id = nodeData.templateVersion.subgroupTemplateId;
-      const contextMenuItems: ContextMenuItem[] = [
+      subgroupTemplate.id = node.data.templateVersion.subgroupTemplateId;
+      return [
         {
           translation: 'add', action: async item => {
             await this.editSubgroup(subgroupTemplate);
           }
+        },
+        {
+          translation: 'edit', action: async item => {
+            await this.editSubgroup(subgroupTemplate, node.data);
+          }
         }
       ];
-      if (!nodeData.templateVersion.approved) {
-        contextMenuItems.push({
-          translation: 'edit', action: async item => {
-            await this.editSubgroup(subgroupTemplate, nodeData);
-          }
-        });
-      }
-      return contextMenuItems;
     }
   };
 

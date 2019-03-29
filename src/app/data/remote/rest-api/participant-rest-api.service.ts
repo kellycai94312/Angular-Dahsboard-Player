@@ -1008,7 +1008,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/subgroupTemplate'
+    path: '/group/{!groupId}/subgroupTemplate',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<SubgroupTemplate>(SubgroupTemplate), item);
+    }
   })
   getSubgroupTemplates: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
 
@@ -2114,7 +2117,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateVersion, item);
+    }
   })
   getSubgroupTemplateVersions: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplateVersion[]>;
 
@@ -2231,6 +2237,9 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/subgroupTemplateVersion/{!subgroupTemplateVersionId}/childrenSubgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   getSubgroupTemplateVersionChildrenSubgroups: IRestMethodStrict<{}, { subgroupId?: number }, { subgroupTemplateVersionId: number }, Subgroup[]>;
 

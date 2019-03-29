@@ -23,20 +23,14 @@ export class SubgroupTemplateTreeDataSource extends TreeDataSource {
   public async getChildren(node: DynamicFlatNode): Promise<DynamicFlatNode[]> {
     // TODO: Checking is expandable on the server
     const nextLevel = (node.level || 0) + 1;
-    if (!node.level) {
-      const nodeData = node.data as SubgroupTemplate;
-
-      const subgroupTemplateVersions = await this.participantRestApiService.getSubgroupTemplateVersions({subgroupTemplateId: nodeData.id});
+    if (node.data instanceof SubgroupTemplate) {
+      const subgroupTemplateVersions = await this.participantRestApiService.getSubgroupTemplateVersions({subgroupTemplateId: node.data.id});
       return subgroupTemplateVersions.map(x => new DynamicFlatNode(x, `Version ${x.versionNumber}. Approved '${x.approved}'`, nextLevel, true));
-    } else if (node.level == 1) {
-      const nodeData = node.data as SubgroupTemplateVersion;
-
-      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {}, {subgroupTemplateVersionId: nodeData.id});
+    } else if (node.data instanceof SubgroupTemplateVersion) {
+      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {}, {subgroupTemplateVersionId: node.data.id});
       return subgroupTemplateSubgroups.map(x => new DynamicFlatNode(x, x.subgroupVersion.name, nextLevel, true));
-    } else {
-      const nodeData = node.data as Subgroup;
-
-      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {subgroupId: nodeData.id}, {subgroupTemplateVersionId: nodeData.templateVersion.id});
+    } else if (node.data instanceof Subgroup) {
+      const subgroupTemplateSubgroups = await this.participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {subgroupId: node.data.id}, {subgroupTemplateVersionId: node.data.templateVersion.id});
       return subgroupTemplateSubgroups.map(x => new DynamicFlatNode(x, x.subgroupVersion.name, nextLevel, true));
     }
   }
