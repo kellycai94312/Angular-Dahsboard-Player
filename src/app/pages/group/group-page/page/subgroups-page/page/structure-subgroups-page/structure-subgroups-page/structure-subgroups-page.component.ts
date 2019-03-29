@@ -80,45 +80,42 @@ export class StructureSubgroupsPageComponent {
     if (!this.canEdit) {
       return [];
     }
-    if (!node.level) {
-      const nodeData = node.data as SubgroupTemplateGroup;
-      const menuItems: ContextMenuItem[] = [];
 
-      menuItems.push({
+    if (node.data instanceof SubgroupTemplateGroup) {
+      return [{
         translation: 'remove', action: async item => {
           await this._appHelper.tryAction('removed', 'error', async () => {
             await this._participantRestApiService.removeSubgroupTemplateGroupByTemplateOwner({
-              subgroupTemplateId: nodeData.subgroupTemplateGroupVersion.template.id,
-              subgroupTemplateGroupId: nodeData.id
+              subgroupTemplateId: node.data.subgroupTemplateGroupVersion.template.id,
+              subgroupTemplateGroupId: node.data.id
             });
             this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
           });
         }
-      });
-      return menuItems;
-    } else if (node.level == 1) {
-      const nodeData = node.data as SubgroupTemplateGroupVersion;
+      }];
+    } else if (node.data instanceof SubgroupTemplateGroupVersion) {
       const menuItems: ContextMenuItem[] = [];
 
-      if (!nodeData.applied) {
+      if (!node.data.applied) {
         menuItems.push({
           translation: 'apply', action: async item => {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.subgroupTemplateGroupId});
+              await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: node.data.subgroupTemplateGroupId});
               this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
             });
           }
         });
       }
       return menuItems;
-    } else {
-      const nodeData = node.data as SubgroupGroup;
+    } else if (node.data instanceof SubgroupGroup) {
       return [{
         translation: 'edit', action: async item => {
-          await this._subgroupModalService.showEditSubgroupGroup(nodeData);
+          await this._subgroupModalService.showEditSubgroupGroup(node.data);
           await this.resetItems();
         }
       }];
+    } else {
+      return [];
     }
   };
 

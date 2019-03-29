@@ -642,30 +642,45 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!id}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   getGroup: IRestMethod<QueryParams, Group>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
   })
   getGroups: IRestMethod<GroupQuery, PageContainer<Group>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   createGroup: IRestMethod<Group, Group>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!id}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   putGroup: IRestMethod<Group, Group>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   removeGroup: IRestMethod<{ groupId: number }, Group>;
 
@@ -1646,7 +1661,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group'
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   updateTrainingBlockGroups: IRestMethodStrict<ListRequest<Group>, any, { trainingReportId: number, trainingBlockId: number }, Group[]>;
 
