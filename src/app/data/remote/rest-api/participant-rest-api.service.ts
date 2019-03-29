@@ -132,6 +132,7 @@ import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person
 import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request';
 import {SubgroupPersonQuery} from './query/subgroup-person-query';
 import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
+import {plainToClass, plainToClassFromExist} from 'class-transformer';
 
 @Injectable()
 @RestParams({
@@ -145,7 +146,7 @@ export class ParticipantRestApiService extends Rest {
     super(restHandler);
   }
 
-  //#region Auth
+//#region Auth
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -718,30 +719,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
 
-  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
-  // @RestAction({
-  //   method: RestRequestMethod.Get,
-  //   path: '/group/{!id}/person',
-  // })
-  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
-
-  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
-    let queryStr = '';
-    const keys = Object.keys(query).filter(x => x !== 'id');
-    if (keys.length) {
-      queryStr = '?';
-      for (let i = 0; i < keys.length; i++) {
-        const item = keys[i];
-        queryStr += `${item}=${query[item]}`;
-        if (i < keys.length - 1) {
-          queryStr += '&';
-        }
-      }
-    }
-
-    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
-  }
-
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/join',
@@ -1023,6 +1000,9 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/subgroupTemplateGroup',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<SubgroupTemplateGroup>(SubgroupTemplateGroup), item);
+    }
   })
   getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
 
@@ -1067,50 +1047,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/file/{!fileId}/resource'
   })
   removeFileResource: IRestMethod<{ fileId: number }, BaseFile>;
-
-  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
-    const formData = new FormData();
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-
-    if (files && files.length) {
-      for (let i = 0; i < files.length; i++) {
-        const item = files[i];
-        if (!item) {
-          continue;
-        }
-        formData.append('file', item, item.name);
-      }
-    }
-    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
-  }
-
-  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
-    const formData = new FormData();
-    if (file) {
-      formData.append('file', file, file.name);
-    }
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
-  }
-
-  getFileUrl(documentQuery: DocumentQuery): string {
-    if (!documentQuery) {
-      return '';
-    }
-    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
-    if (documentQuery.type) {
-      url += `&type=${documentQuery.type}`;
-    }
-    return url;
-  }
-
-  getDocument(documentId: number): string {
-    if (!documentId) {
-      return null;
-    }
-
-    return `${environment.restUrl}/file/download/document/${documentId}`;
-  }
 
   //#endregion
 
@@ -2253,7 +2189,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/version'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
   })
   getSubgroupTemplateGroupVersions: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion[]>;
 
@@ -2295,7 +2234,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/childrenSubgroup'
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/childrenSubgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupGroup, item);
+    }
   })
   getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupVersionId: number }, SubgroupGroup[]>;
 
@@ -2366,6 +2308,74 @@ export class ParticipantRestApiService extends Rest {
     path: '/location/filter',
   })
   getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
+
+  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
+  // @RestAction({
+  //   method: RestRequestMethod.Get,
+  //   path: '/group/{!id}/person',
+  // })
+  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+
+  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
+    let queryStr = '';
+    const keys = Object.keys(query).filter(x => x !== 'id');
+    if (keys.length) {
+      queryStr = '?';
+      for (let i = 0; i < keys.length; i++) {
+        const item = keys[i];
+        queryStr += `${item}=${query[item]}`;
+        if (i < keys.length - 1) {
+          queryStr += '&';
+        }
+      }
+    }
+
+    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
+  }
+
+  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
+    const formData = new FormData();
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+
+    if (files && files.length) {
+      for (let i = 0; i < files.length; i++) {
+        const item = files[i];
+        if (!item) {
+          continue;
+        }
+        formData.append('file', item, item.name);
+      }
+    }
+    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
+  }
+
+  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
+    const formData = new FormData();
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
+  }
+
+  getFileUrl(documentQuery: DocumentQuery): string {
+    if (!documentQuery) {
+      return '';
+    }
+    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
+    if (documentQuery.type) {
+      url += `&type=${documentQuery.type}`;
+    }
+    return url;
+  }
+
+  getDocument(documentId: number): string {
+    if (!documentId) {
+      return null;
+    }
+
+    return `${environment.restUrl}/file/download/document/${documentId}`;
+  }
 
   getUrlImage(query: ImageQuery): string {
     let url = `${environment.restUrl}/file/download/image?clazz=${query.clazz}&objectId=${query.objectId}&type=${query.type}`;
