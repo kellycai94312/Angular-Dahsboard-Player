@@ -82,7 +82,7 @@ export class TemplatesSubgroupsPageComponent {
             await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
               const subgroupTemplateGroup = new SubgroupTemplateGroup();
               subgroupTemplateGroup.group = this.group;
-              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplateId});
+              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.id});
             });
           }
         },
@@ -106,29 +106,32 @@ export class TemplatesSubgroupsPageComponent {
         const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == node.data.subgroupTemplateId);
         await this.subgroupsTreesComponent.dataSource.updateNode(templateNode);
       };
-      return [
-        {
-          translation: 'approve', action: async item => {
-            const date = new Date();
-            date.setHours(24 * 21);
 
-            await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              await this._participantRestApiService.approveSubgroupTemplate(
-                {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
-                {}, {subgroupTemplateId: node.data.subgroupTemplateId});
-              await updateTemplate();
-            });
+      if (!node.data.approved) {
+        return [
+          {
+            translation: 'approve', action: async item => {
+              const date = new Date();
+              date.setHours(24 * 21);
+
+              await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
+                await this._participantRestApiService.approveSubgroupTemplate(
+                  {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
+                  {}, {subgroupTemplateId: node.data.subgroupTemplateId});
+                await updateTemplate();
+              });
+            }
+          },
+          {
+            translation: 'reject', action: async item => {
+              await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
+                await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: node.data.subgroupTemplateId});
+                await updateTemplate();
+              });
+            }
           }
-        },
-        {
-          translation: 'reject', action: async item => {
-            await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
-              await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: node.data.subgroupTemplateId});
-              await updateTemplate();
-            });
-          }
-        }
-      ];
+        ];
+      }
     } else if (node.data instanceof Subgroup) {
       const subgroupTemplate = new SubgroupTemplate();
       subgroupTemplate.id = node.data.templateVersion.subgroupTemplateId;

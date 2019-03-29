@@ -14,9 +14,9 @@ import {GroupTransition} from '../../../data/remote/model/group/transition/group
 import {ListRequest} from '../../../data/remote/request/list-request';
 import {SubgroupGroup} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupTransition} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-transition';
-import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {SubgroupPerson} from '../../../data/remote/model/group/subgroup/person/subgroup-person';
 import {SubgroupPersonTypeEnum} from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import {SubgroupTemplateGroupVersion} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
 
 @Component({
   selector: 'app-group-transition',
@@ -41,7 +41,7 @@ export class GroupTransitionComponent {
   public group: Group;
 
   @Input()
-  public subgroupTemplateGroup: SubgroupTemplateGroup;
+  public subgroupTemplateGroupVersion: SubgroupTemplateGroupVersion;
 
   @Input()
   public fromSubgroupGroup: SubgroupGroup;
@@ -81,7 +81,7 @@ export class GroupTransitionComponent {
   public fetchGroups = async (from: number, searchText: string) => {
     const items = await this._participantRestApiService.getUnassignedSubgroupGroupsForPersons(
       {
-        subgroupTemplateGroupVersionId: this.subgroupTemplateGroup.subgroupTemplateGroupVersion.id,
+        subgroupTemplateGroupVersionId: this.subgroupTemplateGroupVersion.id,
         personIds: this.persons.map(x => x.id).join('_')
       });
     return this._appHelper.arrayToPageContainer(items);
