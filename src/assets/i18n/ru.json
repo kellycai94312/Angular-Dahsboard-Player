@@ -641,5 +641,6 @@
   "personalDataProcessingContract": "Договор обработки персональных данных",
   "signingDate": "Дата подписания",
   "serviceAgreement": "Договор оказания услуг",
-  "validity": "Срок действия"
+  "validity": "Срок действия",
+  "rootSubgroup": "Корневая подгруппа"
 }

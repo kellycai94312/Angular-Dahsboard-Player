@@ -7,6 +7,7 @@ import {SubgroupTemplate} from '../../../../data/remote/model/group/subgroup/tem
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {SubgroupTemplateVersion} from '../../../../data/remote/model/group/subgroup/template/subgroup-template-version';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
 
 @Component({
   selector: 'app-edit-subgroup',
@@ -18,7 +19,8 @@ export class EditSubgroupComponent extends BaseEditComponent<Subgroup> {
   public subgroupTemplate: SubgroupTemplate;
   public subgroupTemplateVersion: SubgroupTemplateVersion;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
+              private translateObjectService: TranslateObjectService) {
     super(participantRestApiService, appHelper);
   }
 
@@ -27,6 +29,10 @@ export class EditSubgroupComponent extends BaseEditComponent<Subgroup> {
     if (result) {
       return await this.appHelper.tryLoad(async () => {
         this.subgroupTemplateVersion = await this.participantRestApiService.createUnapprovedSubgroupTemplateVersion({}, {}, {subgroupTemplateId: this.subgroupTemplate.id});
+
+        if (this.isNew) {
+          this.data.subgroupVersion.parentSubgroupVersion = this.data.subgroupVersion.parentSubgroupVersion || (await this.fetchParentSubgroups()).list.find(x => x.defaultSubgroup);
+        }
       });
     }
     return result;
@@ -64,6 +70,11 @@ export class EditSubgroupComponent extends BaseEditComponent<Subgroup> {
       items = await this.participantRestApiService.getSubgroupTemplateSubgroups({}, {subgroupTemplateVersionId: this.subgroupTemplateVersion.id}, {subgroupTemplateId: this.subgroupTemplate.id});
     } else {
       items = await this.participantRestApiService.getSubgroupTemplateSubgroupParentSubgroups({subgroupTemplateId: this.subgroupTemplate.id, subgroupId: this.data.id});
+    }
+    // TODO: Getting name for default subgroup from the server
+    const defaultSubgroup = items.find(x => x.subgroupVersion.defaultSubgroup);
+    if (defaultSubgroup && !defaultSubgroup.subgroupVersion.name) {
+      defaultSubgroup.subgroupVersion.name = await this.translateObjectService.getTranslation('rootSubgroup');
     }
     return this.appHelper.arrayToPageContainer(items.map(x => x.subgroupVersion));
   };

@@ -639,5 +639,6 @@
   "personalDataProcessingContract": "Personal data processing contract",
   "signingDate": "Signing date",
   "serviceAgreement": "Service agreement",
-  "validity": "Validity"
+  "validity": "Validity",
+  "rootSubgroup": "Root subgroup"
 }
