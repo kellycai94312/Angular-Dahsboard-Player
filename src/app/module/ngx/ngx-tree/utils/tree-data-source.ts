@@ -124,7 +124,6 @@ export abstract class TreeDataSource<T extends FlatNode> extends DataSource<T> {
     }
     this.data.splice(index + 1, count);
     this.data = this.data;
-    this.treeControl.collapse(node);
   }
 
   //#region Selection

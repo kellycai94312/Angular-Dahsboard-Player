@@ -26,36 +26,40 @@ export class DynamicDataSource<T extends FlatNode> extends TreeDataSource<T> {
       if (node) {
         node.isLoading = true;
       }
+      const stopLoading = () => {
+        if (node) {
+          node.isLoading = false;
+        }
+      };
 
-      (this.getChildren(node) as Observable<T[]>)
-        .pipe(takeWhile(() => this._notDestroyed))
-        .subscribe((children) => {
-          let nextNodeLevel = 0;
-          let index = -1;
-          if (node) {
-            nextNodeLevel = node.level + 1;
+      const getChildrenObservable = this.getChildren(node) as Observable<T[]>;
+      if (getChildrenObservable) {
+        getChildrenObservable.pipe(takeWhile(() => this._notDestroyed))
+          .subscribe((children: T[]) => {
+            let nextNodeLevel = 0;
+            let index = -1;
+            if (node) {
+              nextNodeLevel = node.level + 1;
 
-            index = this.data.indexOf(node);
-            if (!children || index < 0) {
-              return;
+              index = this.data.indexOf(node);
+              if (!children || !children.length || index < 0) {
+                this.treeControl.collapse(node);
+                return;
+              }
             }
-          }
 
-          const nodes = children.map((x) => {
-            x.level = nextNodeLevel;
-            return x;
+            const nodes = children.map((x) => {
+              x.level = nextNodeLevel;
+              return x;
+            });
+            this.data.splice(index + 1, 0, ...nodes);
+            this.data = this.data;
+          }, (error) => {
+            stopLoading();
+          }, () => {
+            stopLoading();
           });
-          this.data.splice(index + 1, 0, ...nodes);
-          this.data = this.data;
-        }, (error) => {
-          if (node) {
-            node.isLoading = false;
-          }
-        }, () => {
-          if (node) {
-            node.isLoading = false;
-          }
-        });
+      }
     } else {
       this.collapse(node);
     }
