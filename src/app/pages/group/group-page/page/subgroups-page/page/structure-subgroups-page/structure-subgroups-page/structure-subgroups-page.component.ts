@@ -1,5 +1,5 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {map, takeWhile} from 'rxjs/operators';
+import {flatMap, map, takeWhile} from 'rxjs/operators';
 import {GroupService} from '../../../../../service/group.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
@@ -31,7 +31,7 @@ import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-n
 import {from, Observable, of} from 'rxjs';
 import 'rxjs-compat/add/observable/of';
 import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
-import {SubgroupVersion} from '../../../../../../../../data/remote/model/group/subgroup/version/subgroup-version';
+import {RootSubgroupGroup} from '../model/root-subgroup-group';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -205,23 +205,29 @@ export class StructureSubgroupsPageComponent implements OnInit {
       const nextLevel = (node.level || 0) + 1;
       if (node.data instanceof Group) {
         return from(this._participantRestApiService.getSubgroupTemplateGroupsByGroup({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
-          .pipe(map(value => {
-            return value.list.map(x => new FlatNode(x, 0, true));
-          }));
-      } else if (node.data instanceof SubgroupTemplateGroup) {
-        return from(this._participantRestApiService.getSubgroupTemplateGroupVersions({subgroupTemplateGroupId: node.data.id}))
-          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
-      } else if (node.data instanceof SubgroupTemplateGroupVersion) {
-        return from(this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {}, {subgroupTemplateGroupVersionId: node.data.id}))
+          .pipe(
+            map(val => val.list),
+            flatMap(async subgroupTemplateGroups => {
+              const nodes: FlatNode[] = [];
+              for (const subgroupTemplateGroup of subgroupTemplateGroups) {
+                const subgroupTemplateGroupVersions = await this._participantRestApiService.getSubgroupTemplateGroupVersions({subgroupTemplateGroupId: subgroupTemplateGroup.id});
+                for (const subgroupTemplateGroupVersion of subgroupTemplateGroupVersions) {
+                  const subgroupGroups = await this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {}, {subgroupTemplateGroupVersionId: subgroupTemplateGroupVersion.id});
+                  for (const subgroupGroup of subgroupGroups) {
+                    const rootSubgroup = new RootSubgroupGroup(subgroupTemplateGroup, subgroupTemplateGroupVersion, subgroupGroup);
+                    nodes.push(new FlatNode(rootSubgroup, nextLevel, true));
+                  }
+                }
+              }
+              return nodes;
+            })
+          );
+      } else if (node.data instanceof RootSubgroupGroup) {
+        return from(this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {subgroupGroupId: node.data.defaultSubgroupGroup.id}, {subgroupTemplateGroupVersionId: node.data.defaultSubgroupGroup.subgroupTemplateGroupVersion.id}))
           .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
       } else if (node.data instanceof SubgroupGroup) {
         return from(this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {subgroupGroupId: node.data.id}, {subgroupTemplateGroupVersionId: node.data.subgroupTemplateGroupVersion.id}))
-          .pipe(map(val => val.map(x => {
-            if ((x.subgroupVersion as SubgroupVersion).defaultSubgroup) {
-              x.subgroupVersion.name = this._rootSubgroupName;
-            }
-            return new FlatNode(x, nextLevel, true);
-          })));
+          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
       }
     } else {
       return of([new FlatNode(this.group, 0, true)]);
@@ -231,14 +237,16 @@ export class StructureSubgroupsPageComponent implements OnInit {
   public getNodeName = (node: FlatNode): string => {
     if (node.data instanceof Group) {
       return node.data.name;
-    } else if (node.data instanceof SubgroupTemplateGroup) {
-      return node.data.subgroupTemplateGroupVersion.template.name;
-    } else if (node.data instanceof SubgroupTemplateGroupVersion) {
-      return node.data.applied ? `Подтвержденная версия ${node.data.templateVersion.versionNumber}` : `Неподтвержденная версия ${node.data.templateVersion.versionNumber}`;
-    } else if (node.data instanceof SubgroupGroup) {
-      if ((node.data.subgroupVersion as SubgroupVersion).defaultSubgroup) {
-        return this._rootSubgroupName;
+    } else if (node.data instanceof RootSubgroupGroup) {
+      let name = node.data.subgroupTemplateGroupVersion.template.name;
+      name += '\r\n';
+      if (node.data.subgroupTemplateGroupVersion.applied) {
+        name += `Подтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber}`;
+      } else {
+        name += `Неподтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber}`;
       }
+      return name;
+    } else if (node.data instanceof SubgroupGroup) {
       return node.data.subgroupVersion.name;
     }
   };
