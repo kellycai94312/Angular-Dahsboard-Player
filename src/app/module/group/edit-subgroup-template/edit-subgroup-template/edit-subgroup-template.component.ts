@@ -76,7 +76,7 @@ export class EditSubgroupTemplateComponent extends BaseEditComponent<SubgroupTem
   public async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
       if (!this.appHelper.isNewObject(this.data)) {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.removeSubgroupTemplate({subgroupTemplateId: this.data.id}));
+        this.data = await this.participantRestApiService.removeSubgroupTemplate({subgroupTemplateId: this.data.id});
       }
     });
   }
@@ -84,17 +84,15 @@ export class EditSubgroupTemplateComponent extends BaseEditComponent<SubgroupTem
   public async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       this.updateObjectFromTable(this.data);
-      let subgroupTemplate: SubgroupTemplate;
       if (this.appHelper.isNewObject(this.data)) {
-        subgroupTemplate = await this.participantRestApiService.createSubgroupTemplate(this.data);
+        this.data = await this.participantRestApiService.createSubgroupTemplate(this.data);
 
-        const subgroupTemplatePersonTypes = await this.participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: subgroupTemplate.id});
+        const subgroupTemplatePersonTypes = await this.participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.data.id});
         this.leadPersonType.id = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD).id;
         this.secondaryPersonType.id = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY).id;
       } else {
-        subgroupTemplate = await this.participantRestApiService.updateSubgroupTemplate(this.data, {}, {subgroupTemplateId: this.data.id});
+        this.data = await this.participantRestApiService.updateSubgroupTemplate(this.data, {}, {subgroupTemplateId: this.data.id});
       }
-      this.appHelper.updateObject(this.data, subgroupTemplate);
 
       await this.participantRestApiService.updateSubgroupTemplatePersonTypes({list: [this.leadPersonType, this.secondaryPersonType]}, {}, {subgroupTemplateId: this.data.id});
     });

@@ -40,19 +40,17 @@ export class EditSubgroupComponent extends BaseEditComponent<Subgroup> {
 
   async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
-      this.appHelper.updateObject(this.data, await this.participantRestApiService.removeSubgroupTemplateSubgroup({subgroupTemplateId: this.subgroupTemplate.id, subgroupId: this.data.id}));
+      this.data = await this.participantRestApiService.removeSubgroupTemplateSubgroup({subgroupTemplateId: this.subgroupTemplate.id, subgroupId: this.data.id});
     });
   }
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
-      let subgroup: Subgroup;
       if (this.appHelper.isNewObject(this.data)) {
-        subgroup = await this.participantRestApiService.createSubgroupTemplateSubgroup(this.data, {}, {subgroupTemplateId: this.subgroupTemplate.id});
+        this.data = await this.participantRestApiService.createSubgroupTemplateSubgroup(this.data, {}, {subgroupTemplateId: this.subgroupTemplate.id});
       } else {
-        subgroup = await this.participantRestApiService.updateSubgroupTemplateSubgroup(this.data, {}, {subgroupTemplateId: this.subgroupTemplate.id, subgroupId: this.data.id});
+        this.data = await this.participantRestApiService.updateSubgroupTemplateSubgroup(this.data, {}, {subgroupTemplateId: this.subgroupTemplate.id, subgroupId: this.data.id});
       }
-      this.appHelper.updateObject(this.data, subgroup);
     });
   }
 

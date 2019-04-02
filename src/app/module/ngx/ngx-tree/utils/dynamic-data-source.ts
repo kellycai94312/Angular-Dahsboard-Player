@@ -22,46 +22,43 @@ export class DynamicDataSource<T extends FlatNode> extends TreeDataSource<T> {
   }
 
   private toggleNode(node: T | null | undefined, expand: boolean): void {
-    if (node) {
-      node.isLoading = true;
-    }
+    if (expand) {
+      if (node) {
+        node.isLoading = true;
+      }
 
-    (this.getChildren(node) as Observable<T[]>)
-      .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe((children) => {
-        let nextNodeLevel = 0;
-        let index = -1;
-        if (node) {
-          nextNodeLevel = node.level + 1;
+      (this.getChildren(node) as Observable<T[]>)
+        .pipe(takeWhile(() => this._notDestroyed))
+        .subscribe((children) => {
+          let nextNodeLevel = 0;
+          let index = -1;
+          if (node) {
+            nextNodeLevel = node.level + 1;
 
-          index = this.data.indexOf(node);
-          if (!children || index < 0) {
-            return;
+            index = this.data.indexOf(node);
+            if (!children || index < 0) {
+              return;
+            }
           }
-        }
 
-        if (expand) {
           const nodes = children.map((x) => {
             x.level = nextNodeLevel;
             return x;
           });
           this.data.splice(index + 1, 0, ...nodes);
-        } else {
-          let count = 0;
-          for (let i = index + 1; i < this.data.length && this.data[i].level > node.level; i++, count++) {
+          this.data = this.data;
+        }, (error) => {
+          if (node) {
+            node.isLoading = false;
           }
-          this.data.splice(index + 1, count);
-        }
-
-        this.dataChange.next(this.data);
-        if (node) {
-          node.isLoading = false;
-        }
-      }, (error) => {
-        if (node) {
-          node.isLoading = false;
-        }
-      });
+        }, () => {
+          if (node) {
+            node.isLoading = false;
+          }
+        });
+    } else {
+      this.collapse(node);
+    }
   }
 
   private handleTreeControl(change: SelectionChange<T>) {

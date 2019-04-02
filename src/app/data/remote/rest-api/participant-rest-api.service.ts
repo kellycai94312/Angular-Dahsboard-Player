@@ -2043,55 +2043,82 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   getSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate'
+    path: '/subgroupTemplate',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   createSubgroupTemplate: IRestMethod<SubgroupTemplate, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   updateSubgroupTemplate: IRestMethodStrict<SubgroupTemplate, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   approveSubgroupTemplate: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   disapproveSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   removeSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateVersion, item);
+    }
   })
   createUnapprovedSubgroupTemplateVersion: IRestMethodStrict<any, any, { subgroupTemplateId: number }, SubgroupTemplateVersion>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
   })
   updateSubgroupTemplateGroupVersion: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number, subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
   })
   removeSubgroupTemplateGroupByTemplateOwner: IRestMethod<{ subgroupTemplateId: number, subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion>;
 
@@ -2149,19 +2176,28 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   createSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number }, Subgroup>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   updateSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number, subgroupId: number }, Subgroup>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   removeSubgroupTemplateSubgroup: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup>;
 
@@ -2189,25 +2225,37 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   getSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   approveSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   updateSubgroupTemplateGroup: IRestMethodStrict<SubgroupTemplateGroup, any, { subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   removeSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 

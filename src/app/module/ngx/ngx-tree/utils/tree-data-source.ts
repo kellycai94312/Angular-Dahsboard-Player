@@ -51,16 +51,80 @@ export abstract class TreeDataSource<T extends FlatNode> extends DataSource<T> {
       return null;
     }
 
-    const startIndex = this.treeControl.dataNodes.indexOf(node) - 1;
+    const startIndex = this.data.indexOf(node) - 1;
 
     for (let i = startIndex; i >= 0; i--) {
-      const currentNode = this.treeControl.dataNodes[i];
+      const currentNode = this.data[i];
 
       if (this.getLevel(currentNode) < currentLevel) {
         return currentNode;
       }
     }
     return null;
+  }
+
+  public addOrUpdateNodeIfCan<TNodeData, TParentData>(data: TNodeData,
+                                                      compare: (source: TNodeData, target: TNodeData) => boolean,
+                                                      parentData?: TParentData,
+                                                      parentCompare?: (source: TParentData, target: TParentData) => boolean): T {
+    const node: T = this.data.find(x => compare(x.data, data));
+    if (node) {
+      Object.assign(node.data, data);
+    } else {
+      let parentNode: T;
+      const newNode = new FlatNode(data, 0, true);
+      if (parentData) {
+        parentNode = this.data.find(x => parentCompare(x.data, parentData));
+        if (parentNode) {
+          newNode.level = parentNode.level + 1;
+          const descendants = this.treeControl.getDescendants(parentNode);
+          if (descendants.length) {
+            const lastDescendantNodeInLevel = descendants[descendants.length - 1];
+            const indexLastDescendantNodeInLevel = this.data.indexOf(lastDescendantNodeInLevel);
+            this.data.splice(indexLastDescendantNodeInLevel + 1, 0, newNode as T);
+          } else {
+            const indexParentNode = this.data.indexOf(parentNode);
+            this.data.splice(indexParentNode + 1, 0, newNode as T);
+          }
+        } else {
+          this.data.push(newNode as T);
+        }
+      } else {
+        this.data.push(newNode as T);
+      }
+    }
+    this.data = this.data;
+    return node;
+  }
+
+  public removeNodeByData<TNodeData>(data: TNodeData, compare: (source: TNodeData, target: TNodeData) => boolean): void {
+    const node = this.data.find(x => compare(x.data, data));
+    if (node) {
+      this.removeNode(node);
+    }
+  }
+
+  public removeNode(node: T): void {
+    this.collapse(node);
+    const nodeIndex = this.data.indexOf(node);
+    if (nodeIndex > -1) {
+      this.data.splice(nodeIndex, 1);
+      this.data = this.data;
+    }
+  }
+
+  public collapse(node: T): boolean {
+    const index = this.data.indexOf(node);
+    if (index < 0) {
+      return;
+    }
+
+    let count = 0;
+    for (let i = index + 1; i < this.data.length && this.data[i].level > node.level; i++, count++) {
+    }
+    this.data.splice(index + 1, count);
+    this.data = this.data;
+    this.treeControl.collapse(node);
   }
 
   //#region Selection

@@ -1,9 +1,9 @@
 <div fxFlexFill
      fxLayoutGap="10px">
   <app-subgroups-trees fxFlex="30"
-                       [treeDataSource]="treeDataSource"
+                       [getChildren]="getChildren"
+                       [getNodeName]="getNodeName"
                        [getNodeContextMenuItem]="onGetNodeContextMenuItem"
-                       [(selectedNode)]="selectedNode"
                        (selectedNodeChange)="onSelectedNodeChange($event)"></app-subgroups-trees>
   <div *ngIf="selectedNode"
        [hidden]="!visiblePersons"
