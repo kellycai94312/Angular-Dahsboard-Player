@@ -4,7 +4,7 @@
           (selectedNodeChange)="onSelectedNodeChanged($event)">
   <ng-template #nodeTemplate
                let-item>
-    {{getNodeName(item)}}
+    <pre>{{getNodeName(item)}}</pre>
     <button mat-icon-button
             #menuTrigger="matMenuTrigger"
             [matMenuTriggerFor]="contextMenu"
