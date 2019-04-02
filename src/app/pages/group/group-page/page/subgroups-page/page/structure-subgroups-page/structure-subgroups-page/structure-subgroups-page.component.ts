@@ -4,7 +4,6 @@ import {GroupService} from '../../../../../service/group.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {ContextMenuItem} from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
-import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {AppHelper} from '../../../../../../../../utils/app-helper';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
@@ -90,33 +89,37 @@ export class StructureSubgroupsPageComponent implements OnInit {
       return [];
     }
 
-    if (node.data instanceof SubgroupTemplateGroup) {
-      return [{
-        translation: 'remove', action: async item => {
-          await this._appHelper.tryAction('removed', 'error', async () => {
-            const subgroupTemplateGroupVersion = await this._participantRestApiService.removeSubgroupTemplateGroupByTemplateOwner({
-              subgroupTemplateId: node.data.subgroupTemplateGroupVersion.template.id,
-              subgroupTemplateGroupId: node.data.id
-            });
-
-            this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroupVersion, (source, target) => source instanceof SubgroupTemplateGroupVersion && source.id == target.id);
-          });
+    if (node.data instanceof RootSubgroupGroup) {
+      const contextMenuItems: ContextMenuItem[] = [{
+        translation: 'edit', action: async item => {
+          await this._subgroupModalService.showEditSubgroupGroup(node.data.defaultSubgroupGroup);
+          await this.resetItems();
         }
       }];
-    } else if (node.data instanceof SubgroupTemplateGroupVersion) {
-      const menuItems: ContextMenuItem[] = [];
 
-      if (!node.data.applied) {
-        menuItems.push({
+      if (!node.data.subgroupTemplateGroupVersion.applied) {
+        contextMenuItems.push({
           translation: 'apply', action: async item => {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              const subgroupTemplateGroup = await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: node.data.subgroupTemplateGroupId});
-              this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroup, (source, target) => source instanceof SubgroupTemplateGroup && source.id == target.id);
+              const subgroupTemplateGroup = await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: node.data.subgroupTemplateGroupVersion.subgroupTemplateGroupId});
+              this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroup, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroupVersion.id == target.id);
             });
           }
         });
       }
-      return menuItems;
+      contextMenuItems.push({
+        translation: 'remove', action: async item => {
+          await this._appHelper.tryAction('removed', 'error', async () => {
+            const subgroupTemplateGroupVersion = await this._participantRestApiService.removeSubgroupTemplateGroupByTemplateOwner({
+              subgroupTemplateId: node.data.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.id,
+              subgroupTemplateGroupId: node.data.subgroupTemplateGroup.id
+            });
+
+            this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroupVersion, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroup.id == target.id);
+          });
+        }
+      });
+      return contextMenuItems;
     } else if (node.data instanceof SubgroupGroup) {
       return [{
         translation: 'edit', action: async item => {
@@ -124,9 +127,8 @@ export class StructureSubgroupsPageComponent implements OnInit {
           await this.resetItems();
         }
       }];
-    } else {
-      return [];
     }
+    return [];
   };
 
   public async onSelectedNodeChange(node: FlatNode) {
@@ -136,12 +138,13 @@ export class StructureSubgroupsPageComponent implements OnInit {
 
   public fetchItems = async (query: PageQuery): Promise<PageContainer<ObjectWrapper>> => {
     if (this.selectedNode) {
-      if (this.selectedNode.data instanceof SubgroupGroup) {
+      const config = this.getPersonModalConfig();
+      if (config.subgroupGroup) {
         this.visiblePersons = true;
 
         const subgroupPersonQuery = query as SubgroupPersonQuery;
         subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
-        const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: this.selectedNode.data.id});
+        const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: config.subgroupGroup.id});
 
         return await this._appHelper.pageContainerConverter(pageContainer, obj => {
           return new ObjectWrapper(obj, obj.person);
@@ -300,8 +303,9 @@ export class StructureSubgroupsPageComponent implements OnInit {
     let subgroupGroup: SubgroupGroup;
     let subgroupTemplateGroupVersion: SubgroupTemplateGroupVersion;
 
-    if (this.selectedNode.data instanceof SubgroupTemplateGroupVersion) {
-      subgroupTemplateGroupVersion = this.selectedNode.data;
+    if (this.selectedNode.data instanceof RootSubgroupGroup) {
+      subgroupGroup = this.selectedNode.data.defaultSubgroupGroup;
+      subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
     } else if (this.selectedNode.data instanceof SubgroupGroup) {
       subgroupGroup = this.selectedNode.data;
       subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
