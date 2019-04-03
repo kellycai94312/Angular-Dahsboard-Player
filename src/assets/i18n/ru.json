@@ -144,7 +144,7 @@
   "basicInformation": "Основная информация",
   "additionalInformation": "Дополнительная информация",
   "settings": "Настройки",
-  "subgroups": "Подгруппа",
+  "subgroups": "Подгруппы",
   "add": "Добавить",
   "remove": "Удалить",
   "member": "Участник",
@@ -642,5 +642,6 @@
   "signingDate": "Дата подписания",
   "serviceAgreement": "Договор оказания услуг",
   "validity": "Срок действия",
-  "rootSubgroup": "Корневая подгруппа"
+  "rootSubgroup": "Корневая подгруппа",
+  "createTheTemplateVersion": "Создать версию шаблона"
 }

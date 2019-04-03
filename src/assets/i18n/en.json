@@ -640,5 +640,6 @@
   "signingDate": "Signing date",
   "serviceAgreement": "Service agreement",
   "validity": "Validity",
-  "rootSubgroup": "Root subgroup"
+  "rootSubgroup": "Root subgroup",
+  "createTheTemplateVersion": "Create the template version"
 }

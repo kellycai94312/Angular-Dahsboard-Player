@@ -96,7 +96,14 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
 
   public getNodeName = (node: FlatNode): string => {
     if (node.data instanceof RootSubgroup) {
-      return `${node.data.subgroupTemplate.name}\r\n${node.data.subgroupTemplateVersion.approved ? `Подтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber}` : `Неподтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber}`}`;
+      let name = node.data.subgroupTemplate.name;
+      name += '\r\n';
+      if (node.data.subgroupTemplateVersion.approved) {
+        name += `(Подтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber})`;
+      } else {
+        name += `(Неподтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber})`;
+      }
+      return name;
     } else if (node.data instanceof Subgroup) {
       return node.data.subgroupVersion.name;
     }
@@ -108,34 +115,25 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
     }
 
     if (node.data instanceof RootSubgroup) {
-      const contextMenuItems: ContextMenuItem[] = [
-        {
-          translation: 'add', action: async item => {
-            const subgroupTemplate = new SubgroupTemplate();
-            subgroupTemplate.id = node.data.defaultSubgroup.templateVersion.subgroupTemplateId;
-            await this.editSubgroup(subgroupTemplate);
-          }
-        },
-        {
-          translation: 'edit', action: async item => {
-            const group = await this._appHelper.toPromise(this._groupService.group$);
-            const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, node.data.subgroupTemplate);
-            if (dialogResult.result) {
-              this._subgroupService.updateSubgroupTemplate(dialogResult.data);
-            }
+      const contextMenuItems: ContextMenuItem[] = [{
+        translation: 'edit', action: async item => {
+          const group = await this._appHelper.toPromise(this._groupService.group$);
+          const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, node.data.subgroupTemplate);
+          if (dialogResult.result) {
+            this._subgroupService.updateSubgroupTemplate(dialogResult.data);
           }
         }
-      ];
+      }];
 
       if (!node.data.subgroupTemplateVersion.approved) {
-        const updateTemplate = async (): Promise<void> => {
-          const parentNode = this.subgroupsTreesComponent.dataSource.getParentNode(node);
-          if (parentNode) {
-            this.subgroupsTreesComponent.dataSource.treeControl.collapse(parentNode);
-            this.subgroupsTreesComponent.dataSource.treeControl.expand(parentNode);
-          }
-        };
         contextMenuItems.push(...[
+          {
+            translation: 'add', action: async item => {
+              const subgroupTemplate = new SubgroupTemplate();
+              subgroupTemplate.id = node.data.defaultSubgroup.templateVersion.subgroupTemplateId;
+              await this.editSubgroup(subgroupTemplate);
+            }
+          },
           {
             translation: 'approve', action: async item => {
               const date = new Date();
@@ -145,7 +143,7 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
                 await this._participantRestApiService.approveSubgroupTemplate(
                   {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
                   {}, {subgroupTemplateId: node.data.subgroupTemplateVersion.subgroupTemplateId});
-                await updateTemplate();
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(node);
               });
             }
           },
@@ -153,38 +151,49 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
             translation: 'reject', action: async item => {
               await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
                 await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: node.data.subgroupTemplateVersion.subgroupTemplateId});
-                await updateTemplate();
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(node);
               });
             }
           }
         ]);
       } else {
-        contextMenuItems.push({
-          translation: 'apply', action: async item => {
-            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
-              const subgroupTemplateGroup = new SubgroupTemplateGroup();
-              subgroupTemplateGroup.group = this.group;
-              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
-            });
-          }
-        });
+        contextMenuItems.push(...[
+          {
+            translation: 'createTheTemplateVersion', action: async item => {
+              await this._appHelper.tryAction('saved', 'error', async () => {
+                const subgroupTemplateVersion = await this._participantRestApiService.createUnapprovedSubgroupTemplateVersion({}, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(null);
+              });
+            }
+          },
+          {
+            translation: 'apply', action: async item => {
+              await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
+                const subgroupTemplateGroup = new SubgroupTemplateGroup();
+                subgroupTemplateGroup.group = this.group;
+                await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
+              });
+            }
+          }]);
       }
       return contextMenuItems;
     } else if (node.data instanceof Subgroup) {
-      const subgroupTemplate = new SubgroupTemplate();
-      subgroupTemplate.id = node.data.templateVersion.subgroupTemplateId;
-      return [
-        {
-          translation: 'add', action: async item => {
-            await this.editSubgroup(subgroupTemplate);
+      if (!node.data.templateVersion.approved) {
+        const subgroupTemplate = new SubgroupTemplate();
+        subgroupTemplate.id = node.data.templateVersion.subgroupTemplateId;
+        return [
+          {
+            translation: 'add', action: async item => {
+              await this.editSubgroup(subgroupTemplate);
+            }
+          },
+          {
+            translation: 'edit', action: async item => {
+              await this.editSubgroup(subgroupTemplate, node.data);
+            }
           }
-        },
-        {
-          translation: 'edit', action: async item => {
-            await this.editSubgroup(subgroupTemplate, node.data);
-          }
-        }
-      ];
+        ];
+      }
     }
   };
 

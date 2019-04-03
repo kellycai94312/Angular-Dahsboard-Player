@@ -65,6 +65,22 @@ export class DynamicDataSource<T extends FlatNode> extends TreeDataSource<T> {
     }
   }
 
+  public refreshNodesOnLevel(node: T): void {
+    if (node) {
+      const parentNode = this.getParentNode(node);
+      if (parentNode) {
+        this.treeControl.collapse(parentNode);
+        this.treeControl.expand(parentNode);
+      } else {
+        this.data = [];
+        this.toggleNode(null, true);
+      }
+    } else {
+      this.data = [];
+      this.toggleNode(null, true);
+    }
+  }
+
   private handleTreeControl(change: SelectionChange<T>) {
     if (change.added) {
       change.added.forEach((node) => this.toggleNode(node, true));

@@ -17,6 +17,7 @@ import {SubgroupTransition} from '../../../data/remote/model/group/subgroup/subg
 import {SubgroupPerson} from '../../../data/remote/model/group/subgroup/person/subgroup-person';
 import {SubgroupPersonTypeEnum} from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 import {SubgroupTemplateGroupVersion} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 
 @Component({
   selector: 'app-group-transition',
@@ -51,6 +52,7 @@ export class GroupTransitionComponent {
 
   public selectedSubgroupGroup: SubgroupGroup;
   public document: Document;
+  public selectedSubgroupTemplateGroup: SubgroupTemplateGroup;
 
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService) {
@@ -62,6 +64,10 @@ export class GroupTransitionComponent {
     this.groupTransitionType = groupPersonTransitionType;
     this.group = group;
     this.persons = persons;
+    if (!this.subgroupTemplateGroupVersion) {
+      this.selectedSubgroupTemplateGroup = (await this.fetchSubgroupTemplateGroups(0, '')).list[0];
+      this.subgroupTemplateGroupVersion = this.selectedSubgroupTemplateGroup.subgroupTemplateGroupVersion;
+    }
 
     await this.resetItems();
   }
@@ -77,6 +83,18 @@ export class GroupTransitionComponent {
   getName(subgroupGroup: SubgroupGroup) {
     return subgroupGroup.subgroupVersion.name;
   }
+
+  getSubgroupTemplateGroupKey(subgroupTemplateGroup: SubgroupTemplateGroup) {
+    return subgroupTemplateGroup.id;
+  }
+
+  getSubgroupTemplateGroupName(subgroupTemplateGroup: SubgroupTemplateGroup) {
+    return subgroupTemplateGroup.subgroupTemplateGroupVersion.template.name;
+  }
+
+  public fetchSubgroupTemplateGroups = async (from: number, searchText: string) => {
+    return await this._participantRestApiService.getSubgroupTemplateGroupsByGroup({}, {from: from, count: PropertyConstant.pageSize, name: searchText}, {groupId: this.group.id});
+  };
 
   public fetchGroups = async (from: number, searchText: string) => {
     const items = await this._participantRestApiService.getUnassignedSubgroupGroupsForPersons(
@@ -134,6 +152,10 @@ export class GroupTransitionComponent {
 
   public onDateChanged(val: Date) {
     this.document.date = this._appHelper.getGmtDate(val);
+  }
+
+  public onSelectedSubgroupTemplateGroup(subgroupTemplateGroup: SubgroupTemplateGroup) {
+    this.subgroupTemplateGroupVersion = subgroupTemplateGroup.subgroupTemplateGroupVersion;
   }
 
   private async resetItems() {

@@ -40,14 +40,30 @@
   </div>
   <div *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER"
        class="col">
-    <app-input-select class="w-100"
-                      [loadData]="fetchGroups"
-                      [(model)]="selectedSubgroupGroup"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="{{'subgroup' | translate}}"
-                      ngDefaultControl>
-    </app-input-select>
+    <div class="row cols-padding">
+      <div class="col">
+        <app-input-select class="w-auto"
+                          [(model)]="selectedSubgroupTemplateGroup"
+                          [loadData]="fetchSubgroupTemplateGroups"
+                          [getKey]="getSubgroupTemplateGroupKey"
+                          [getName]="getSubgroupTemplateGroupName"
+                          placeholder="{{'templates' | translate}}"
+                          ngDefaultControl
+                          (modelChange)="onSelectedSubgroupTemplateGroup($event)">
+        </app-input-select>
+      </div>
+      <div class="col">
+        <app-input-select class="w-100"
+                          [loadData]="fetchGroups"
+                          [(model)]="selectedSubgroupGroup"
+                          [getKey]="getKey"
+                          [getName]="getName"
+                          placeholder="{{'subgroup' | translate}}"
+                          [disabled]="!subgroupTemplateGroupVersion"
+                          ngDefaultControl>
+        </app-input-select>
+      </div>
+    </div>
   </div>
 </div>
 <app-attach-file class="mt-2"

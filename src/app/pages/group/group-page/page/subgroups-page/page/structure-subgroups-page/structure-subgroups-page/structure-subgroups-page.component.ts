@@ -244,9 +244,9 @@ export class StructureSubgroupsPageComponent implements OnInit {
       let name = node.data.subgroupTemplateGroupVersion.template.name;
       name += '\r\n';
       if (node.data.subgroupTemplateGroupVersion.applied) {
-        name += `Подтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber}`;
+        name += `(Подтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber})`;
       } else {
-        name += `Неподтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber}`;
+        name += `(Неподтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber})`;
       }
       return name;
     } else if (node.data instanceof SubgroupGroup) {
