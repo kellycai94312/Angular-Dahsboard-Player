@@ -97,8 +97,12 @@ export abstract class TreeDataSource<T extends FlatNode> extends DataSource<T> {
     return node;
   }
 
+  public getNodeByData<TNodeData>(data: TNodeData, compare: (source: TNodeData, target: TNodeData) => boolean): T | undefined {
+    return this.data.find(x => compare(x.data, data));
+  }
+
   public removeNodeByData<TNodeData>(data: TNodeData, compare: (source: TNodeData, target: TNodeData) => boolean): void {
-    const node = this.data.find(x => compare(x.data, data));
+    const node = this.getNodeByData(data, compare);
     if (node) {
       this.removeNode(node);
     }
