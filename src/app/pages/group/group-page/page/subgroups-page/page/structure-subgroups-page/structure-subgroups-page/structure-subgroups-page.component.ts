@@ -102,7 +102,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
           translation: 'apply', action: async item => {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
               const subgroupTemplateGroup = await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: node.data.subgroupTemplateGroupVersion.subgroupTemplateGroupId});
-              this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroup, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroupVersion.id == target.id);
+              this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroup.subgroupTemplateGroupVersion, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroupVersion.id == target.id);
             });
           }
         });
