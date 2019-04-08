@@ -8,7 +8,6 @@ import {Subgroup} from '../../../../../../data/remote/model/group/subgroup/subgr
 import {EditSubgroupComponent} from '../../../../../../module/group/edit-subgroup/edit-subgroup/edit-subgroup.component';
 import {SubgroupVersion} from '../../../../../../data/remote/model/group/subgroup/version/subgroup-version';
 import {DialogResult} from '../../../../../../data/local/dialog-result';
-import {SubgroupTemplateVersion} from '../../../../../../data/remote/model/group/subgroup/template/subgroup-template-version';
 import {SubgroupGroup} from '../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
 import {EditSubgroupGroupComponent} from '../../../../../../module/group/edit-subgroup-group/edit-subgroup-group/edit-subgroup-group.component';
 import {NgxModalRef} from '../../../../../../components/ngx-modal/bean/ngx-modal-ref';
@@ -48,7 +47,7 @@ export class SubgroupModalService {
     return {result: false};
   }
 
-  public async showEditSubgroup(subgroupTemplate: SubgroupTemplate, subgroup?: Subgroup): Promise<DialogResult<{ subgroup: Subgroup, subgroupTemplateVersion: SubgroupTemplateVersion }>> {
+  public async showEditSubgroup(subgroupTemplate: SubgroupTemplate, subgroup?: Subgroup): Promise<DialogResult<Subgroup>> {
     if (!subgroup) {
       subgroup = new Subgroup();
       subgroup.subgroupVersion = new SubgroupVersion();
@@ -72,7 +71,7 @@ export class SubgroupModalService {
     }, {componentFactoryResolver: this._componentFactoryResolver});
 
     if (await this._ngxModalService.awaitModalResult(modal)) {
-      return {result: true, data: {subgroup: editSubgroupComponent.data, subgroupTemplateVersion: editSubgroupComponent.subgroupTemplateVersion}};
+      return {result: true, data: editSubgroupComponent.data};
     }
     return {result: false};
   }

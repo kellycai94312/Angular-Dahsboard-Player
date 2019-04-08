@@ -1,28 +1,18 @@
-<mat-tree [dataSource]="dataSource"
-          [treeControl]="treeControl">
-  <mat-tree-node *matTreeNodeDef="let node; when: hasChild"
-                 [ngClass]="{'selected': selectedNode === node}"
-                 (click)="onClickNode(node)"
-                 matTreeNodePadding>
+<ngx-tree *ngIf="dataSource"
+          [nodeConfigurations]="nodeConfigurations"
+          [dataSource]="dataSource"
+          (selectedNodeChange)="onSelectedNodeChanged($event)">
+  <ng-template #nodeTemplate
+               let-item>
+    <pre>{{getNodeName(item)}}</pre>
     <button mat-icon-button
-            [attr.aria-label]="'toggle ' + node.filename" matTreeNodeToggle>
-      <mat-icon class="mat-icon-rtl-mirror">
-        {{node.expanded ? 'expand_more' : 'chevron_right'}}
-      </mat-icon>
-    </button>
-    {{node.name}}
-    <button *ngIf="!node.isLoading"
-            mat-icon-button
             #menuTrigger="matMenuTrigger"
             [matMenuTriggerFor]="contextMenu"
-            (click)="onShowContextMenu(node,menuTrigger)">
+            (click)="onShowContextMenu(item,menuTrigger)">
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-progress-bar *ngIf="node.isLoading"
-                      mode="indeterminate"
-                      class="ml-2"></mat-progress-bar>
-  </mat-tree-node>
-</mat-tree>
+  </ng-template>
+</ngx-tree>
 
 <mat-menu #contextMenu="matMenu">
   <button *ngFor="let item of contextMenuItems"

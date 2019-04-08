@@ -1,10 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {DynamicFlatNode} from '../model/dynamic-flat-node';
-import {DynamicDataSource} from '../utils/dynamic-data-source';
-import {FlatTreeControl} from '@angular/cdk/tree';
-import {TreeDataSource} from '../model/base/tree-data-source';
 import {MatMenuTrigger} from '@angular/material';
 import {ContextMenuItem} from '../model/context-menu-item';
+import {NodeConfiguration} from '../../../ngx/ngx-tree/model/node-configuration';
+import {FlatNode} from '../../../ngx/ngx-tree/model/flat-node';
+import {DynamicDataSource} from '../../../ngx/ngx-tree/utils/dynamic-data-source';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-subgroups-trees',
@@ -13,68 +13,52 @@ import {ContextMenuItem} from '../model/context-menu-item';
 })
 export class SubgroupsTreesComponent {
 
-  get selectedNode(): DynamicFlatNode {
-    return this._selectedNode;
+  get getChildren(): (node: (FlatNode | any)) => (Observable<FlatNode[]> | FlatNode[] | undefined | null) {
+    return this._getChildren;
   }
 
   @Input()
-  set selectedNode(value: DynamicFlatNode) {
-    this._selectedNode = value;
-    this.selectedNodeChange.emit(value);
-  }
-
-  get treeDataSource(): TreeDataSource {
-    return this._treeDataSource;
+  set getChildren(value: (node: (FlatNode | any)) => (Observable<FlatNode[]> | FlatNode[] | undefined | null)) {
+    this._getChildren = value;
+    this.initialize();
   }
 
   @Input()
-  set treeDataSource(val: TreeDataSource) {
-    this._treeDataSource = val;
-    if (val) {
-      setTimeout(async () => {
-        await this.initialize(val);
-      });
-    }
-  }
+  public getNodeContextMenuItem: (node: FlatNode) => Promise<ContextMenuItem[]>;
 
   @Input()
-  public getNodeContextMenuItem: (node: DynamicFlatNode) => Promise<ContextMenuItem[]>;
+  public getNodeName: (node: FlatNode) => string;
 
   @Output()
-  public readonly selectedNodeChange: EventEmitter<DynamicFlatNode> = new EventEmitter<DynamicFlatNode>();
+  public readonly selectedNodeChange = new EventEmitter<FlatNode>();
 
-  public treeControl: FlatTreeControl<DynamicFlatNode>;
-  public dataSource: DynamicDataSource;
+  public readonly nodeConfigurations: NodeConfiguration<FlatNode>[];
+  public dataSource: DynamicDataSource<FlatNode>;
   public contextMenuItems: ContextMenuItem[];
-
-  private _treeDataSource: TreeDataSource;
-  private _selectedNode: DynamicFlatNode;
+  private _getChildren: (node: FlatNode | any) => Observable<FlatNode[]> | FlatNode[] | undefined | null;
 
   constructor() {
-    this.treeControl = new FlatTreeControl<DynamicFlatNode>(this.getLevel, this.isExpandable);
+    this.nodeConfigurations = [
+      new NodeConfiguration('leaf'),
+      new NodeConfiguration('nested', (index, nodeData: FlatNode) => {
+        return nodeData.expandable;
+      })
+    ];
   }
 
-  private async initialize(treeDataSource: TreeDataSource): Promise<void> {
-    this.dataSource = new DynamicDataSource(this.treeControl, this._treeDataSource);
-    this.dataSource.data = await treeDataSource.initialize();
-    this.selectedNode = null;
+  private initialize(): void {
+    this.dataSource = new DynamicDataSource(this._getChildren);
   }
 
-  getLevel = (node: DynamicFlatNode) => node.level;
-
-  isExpandable = (node: DynamicFlatNode) => node.expandable;
-
-  hasChild = (_: number, _nodeData: DynamicFlatNode) => _nodeData.expandable;
-
-  public async onShowContextMenu(node: DynamicFlatNode, matMenuTrigger: MatMenuTrigger): Promise<void> {
+  public async onShowContextMenu(node: FlatNode, matMenuTrigger: MatMenuTrigger): Promise<void> {
     this.contextMenuItems = await this.getNodeContextMenuItem(node);
     if (this.contextMenuItems && this.contextMenuItems.length) {
       matMenuTrigger.openMenu();
     }
   }
 
-  public onClickNode(node: DynamicFlatNode) {
-    this.selectedNode = node;
+  public onSelectedNodeChanged(node: FlatNode) {
+    this.selectedNodeChange.emit(node);
   }
 
 }

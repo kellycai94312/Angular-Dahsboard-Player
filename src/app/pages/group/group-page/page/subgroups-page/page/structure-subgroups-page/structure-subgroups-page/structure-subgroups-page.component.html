@@ -1,11 +1,12 @@
 <div fxFlexFill
      fxLayoutGap="10px">
   <app-subgroups-trees fxFlex="30"
-                       [treeDataSource]="treeDataSource"
+                       [getChildren]="getChildren"
+                       [getNodeName]="getNodeName"
                        [getNodeContextMenuItem]="onGetNodeContextMenuItem"
-                       [(selectedNode)]="selectedNode"
                        (selectedNodeChange)="onSelectedNodeChange($event)"></app-subgroups-trees>
   <div *ngIf="selectedNode"
+       [hidden]="!visiblePersons"
        fxFlex>
     <p *ngIf="leadSubgroupPerson"> {{leadPersonType?.name}}
       : {{leadSubgroupPerson.person.lastName + ' ' + leadSubgroupPerson.person.firstName}}</p>
@@ -34,19 +35,19 @@
           {{item.data.patronymic}}
         </ng-template>
       </ngx-column>
-      <ngx-column *ngIf="subgroupTemplateGroup?.template?.showBirthYear"
+      <ngx-column *ngIf="subgroupPersonInterface?.showBirthYear"
                   nameKey="birthDate">
         <ng-template let-item>
           {{item.data.birthDate | date: propertyConstantClass.dateFormat}}
         </ng-template>
       </ngx-column>
-      <ngx-column *ngIf="subgroupTemplateGroup?.template?.showRank"
+      <ngx-column *ngIf="subgroupPersonInterface?.showRank"
                   nameKey="rank">
         <ng-template let-item>
           {{item.original.personRank?.rank?.name}}
         </ng-template>
       </ngx-column>
-      <ngx-column *ngIf="subgroupTemplateGroup?.template?.showStageType"
+      <ngx-column *ngIf="subgroupPersonInterface?.showStageType"
                   nameKey="stageType">
         <ng-template let-item>
           {{item.original.stageType?.name}}

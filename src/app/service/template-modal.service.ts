@@ -34,8 +34,8 @@ import {UserRole} from '../data/remote/model/user-role';
 import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
 import {Position} from '../data/remote/model/person-position/position';
 import {AuthorizationService} from '../shared/authorization.service';
-import {SubgroupTemplateGroup} from '../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {SubgroupGroup} from '../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupTemplateGroupVersion} from '../data/remote/model/group/subgroup/template/subgroup-template-group-version';
 
 @Injectable({
   providedIn: 'root'
@@ -107,7 +107,7 @@ export class TemplateModalService {
     await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
       if (personTransitionModalConfig) {
         component.fromSubgroupGroup = personTransitionModalConfig.subgroupGroup;
-        component.subgroupTemplateGroup = personTransitionModalConfig.subgroupTemplateGroup;
+        component.subgroupTemplateGroupVersion = personTransitionModalConfig.subgroupTemplateGroupVersion;
       }
 
       await component.initialize(groupTransitionType, currentGroup, persons);
@@ -466,7 +466,7 @@ export class TemplateModalService {
 
 export class PersonTransitionModalConfig {
   subgroupGroup?: SubgroupGroup;
-  subgroupTemplateGroup?: SubgroupTemplateGroup;
+  subgroupTemplateGroupVersion?: SubgroupTemplateGroupVersion;
 }
 
 export class PersonModalConfig extends PersonTransitionModalConfig {

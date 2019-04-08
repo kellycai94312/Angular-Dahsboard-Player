@@ -1,12 +1,9 @@
-import {Component, ComponentFactoryResolver, ViewChild} from '@angular/core';
-import {takeWhile} from 'rxjs/operators';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {flatMap, map, takeWhile} from 'rxjs/operators';
 import {GroupService} from '../../../../../service/group.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {DynamicFlatNode} from '../../../../../../../../module/group/subgroups-trees/model/dynamic-flat-node';
 import {ContextMenuItem} from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
-import {SubgroupGroupTreeDataSource} from '../../../../../../../../module/group/subgroups-trees/model/subgroup-group-tree-data-source';
-import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {AppHelper} from '../../../../../../../../utils/app-helper';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
@@ -27,13 +24,20 @@ import {PersonTransitionType} from '../../../../../../../../data/remote/model/gr
 import {NgxModalService} from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
 import {SubgroupTemplatePersonType} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
 import {SubgroupPerson} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person';
+import {SubgroupTemplateGroupVersion} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import {SubgroupPersonInterface} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-interface';
+import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-node';
+import {from, Observable, of} from 'rxjs';
+import 'rxjs-compat/add/observable/of';
+import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
+import {RootSubgroupGroup} from '../model/root-subgroup-group';
 
 @Component({
   selector: 'app-structure-subgroups-page',
   templateUrl: './structure-subgroups-page.component.html',
   styleUrls: ['./structure-subgroups-page.component.scss']
 })
-export class StructureSubgroupsPageComponent {
+export class StructureSubgroupsPageComponent implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly selectionTypeClass = SelectionType;
@@ -44,97 +48,122 @@ export class StructureSubgroupsPageComponent {
   @ViewChild(NgxGridComponent)
   public ngxGridComponent: NgxGridComponent;
 
-  public treeDataSource: SubgroupGroupTreeDataSource;
-  public selectedNode: DynamicFlatNode;
+  public selectedNode: FlatNode;
   public group: Group;
   public canEdit = true;
   public selectedItems: ObjectWrapper[] = [];
   public splitButtonItems: SplitButtonItem[] = [];
-  public subgroupTemplateGroup: SubgroupTemplateGroup;
+  public subgroupPersonInterface: SubgroupPersonInterface;
   public leadPersonType: SubgroupTemplatePersonType;
   public secondaryPersonType: SubgroupTemplatePersonType;
   public leadSubgroupPerson: SubgroupPerson;
   public secondarySubgroupPerson: SubgroupPerson;
+  public visiblePersons: boolean;
 
   private _notDestroyed = true;
   private _canEdit = false;
+  private _rootSubgroupName: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupModalService: SubgroupModalService,
+              private _translateObjectService: TranslateObjectService,
               private _ngxModalService: NgxModalService,
               private _groupService: GroupService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async val => {
         this.group = val;
-        this.treeDataSource = new SubgroupGroupTreeDataSource(val, this._participantRestApiService);
         this._canEdit = await this._groupService.canShowTemplatesSubgroups();
       });
   }
 
-  public onGetNodeContextMenuItem = async (node: DynamicFlatNode): Promise<ContextMenuItem[]> => {
+  async ngOnInit(): Promise<void> {
+    this._rootSubgroupName = await this._translateObjectService.getTranslation('rootSubgroup');
+  }
+
+  public onGetNodeContextMenuItem = async (node: FlatNode): Promise<ContextMenuItem[]> => {
     if (!this.canEdit) {
       return [];
     }
-    if (!node.level) {
-      const nodeData = node.data as SubgroupTemplateGroup;
-      const menuItems: ContextMenuItem[] = [];
-      if (!nodeData.applied) {
-        menuItems.push({
+
+    if (node.data instanceof RootSubgroupGroup) {
+      const contextMenuItems: ContextMenuItem[] = [{
+        translation: 'edit', action: async item => {
+          await this._subgroupModalService.showEditSubgroupGroup(node.data.defaultSubgroupGroup);
+          await this.resetItems();
+        }
+      }];
+
+      if (!node.data.subgroupTemplateGroupVersion.applied) {
+        contextMenuItems.push({
           translation: 'apply', action: async item => {
             await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.id});
-              this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
+              const subgroupTemplateGroup = await this._participantRestApiService.approveSubgroupTemplateGroup({subgroupTemplateGroupId: node.data.subgroupTemplateGroupVersion.subgroupTemplateGroupId});
+              const subgroupTemplateGroupVersionNode = this.subgroupsTreesComponent.dataSource.getNodeByData(subgroupTemplateGroup.subgroupTemplateGroupVersion, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroupVersion.id == target.id);
+              this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(subgroupTemplateGroupVersionNode);
             });
           }
         });
       }
-      menuItems.push({
+      contextMenuItems.push({
         translation: 'remove', action: async item => {
           await this._appHelper.tryAction('removed', 'error', async () => {
-            await this._participantRestApiService.removeSubgroupTemplateGroup({subgroupTemplateGroupId: nodeData.id});
-            this.treeDataSource = new SubgroupGroupTreeDataSource(this.group, this._participantRestApiService);
+            const subgroupTemplateGroupVersion = await this._participantRestApiService.removeSubgroupTemplateGroupByTemplateOwner({
+              subgroupTemplateId: node.data.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.id,
+              subgroupTemplateGroupId: node.data.subgroupTemplateGroup.id
+            });
+
+            this.subgroupsTreesComponent.dataSource.removeNodeByData(subgroupTemplateGroupVersion, (source, target) => source instanceof RootSubgroupGroup && source.subgroupTemplateGroup.id == target.id);
           });
         }
       });
-      return menuItems;
-    } else {
-      const nodeData = node.data as SubgroupGroup;
+      return contextMenuItems;
+    } else if (node.data instanceof SubgroupGroup) {
       return [{
         translation: 'edit', action: async item => {
-          await this._subgroupModalService.showEditSubgroupGroup(nodeData);
+          await this._subgroupModalService.showEditSubgroupGroup(node.data);
           await this.resetItems();
         }
       }];
     }
+    return [];
   };
 
-  public async onSelectedNodeChange(node: DynamicFlatNode) {
+  public async onSelectedNodeChange(node: FlatNode) {
+    this.selectedNode = node;
     await this.resetItems();
   }
 
   public fetchItems = async (query: PageQuery): Promise<PageContainer<ObjectWrapper>> => {
-    if (this.selectedNode && this.selectedNode.level > 0) {
-      const subgroupPersonQuery = query as SubgroupPersonQuery;
-      subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
-      const nodeData = this.selectedNode.data as SubgroupGroup;
-      const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: nodeData.id});
+    if (this.selectedNode) {
+      const config = this.getPersonModalConfig();
+      if (config.subgroupGroup) {
+        this.visiblePersons = true;
 
-      return await this._appHelper.pageContainerConverter(pageContainer, obj => {
-        return new ObjectWrapper(obj, obj.person);
-      });
-    } else {
-      const groupPersonQuery = query as GroupPersonQuery;
-      groupPersonQuery.id = this.group.id;
-      const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
+        const subgroupPersonQuery = query as SubgroupPersonQuery;
+        subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
+        const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: config.subgroupGroup.id});
 
-      return await this._appHelper.pageContainerConverter(pageContainer, obj => {
-        return new ObjectWrapper(obj, obj.person);
-      });
+        return await this._appHelper.pageContainerConverter(pageContainer, obj => {
+          return new ObjectWrapper(obj, obj.person);
+        });
+      } else if (this.selectedNode.data instanceof Group) {
+        this.visiblePersons = true;
+
+        const groupPersonQuery = query as GroupPersonQuery;
+        groupPersonQuery.id = this.group.id;
+        const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
+
+        return await this._appHelper.pageContainerConverter(pageContainer, obj => {
+          return new ObjectWrapper(obj, obj.person);
+        });
+      }
     }
+    this.visiblePersons = false;
+    return;
   };
 
   public onEdit = async (obj: ObjectWrapper) => {
@@ -175,6 +204,57 @@ export class StructureSubgroupsPageComponent {
     }
   }
 
+  public getChildren = (node: FlatNode | any): Observable<FlatNode[]> => {
+    if (node) {
+      const nextLevel = (node.level || 0) + 1;
+      if (node.data instanceof Group) {
+        return from(this._participantRestApiService.getSubgroupTemplateGroupsByGroup({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
+          .pipe(
+            map(val => val.list),
+            flatMap(async subgroupTemplateGroups => {
+              const nodes: FlatNode[] = [];
+              for (const subgroupTemplateGroup of subgroupTemplateGroups) {
+                const subgroupTemplateGroupVersions = await this._participantRestApiService.getSubgroupTemplateGroupVersions({subgroupTemplateGroupId: subgroupTemplateGroup.id});
+                for (const subgroupTemplateGroupVersion of subgroupTemplateGroupVersions) {
+                  const subgroupGroups = await this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {}, {subgroupTemplateGroupVersionId: subgroupTemplateGroupVersion.id});
+                  for (const subgroupGroup of subgroupGroups) {
+                    const rootSubgroup = new RootSubgroupGroup(subgroupTemplateGroup, subgroupTemplateGroupVersion, subgroupGroup);
+                    nodes.push(new FlatNode(rootSubgroup, nextLevel, true));
+                  }
+                }
+              }
+              return nodes;
+            })
+          );
+      } else if (node.data instanceof RootSubgroupGroup) {
+        return from(this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {subgroupGroupId: node.data.defaultSubgroupGroup.id}, {subgroupTemplateGroupVersionId: node.data.defaultSubgroupGroup.subgroupTemplateGroupVersion.id}))
+          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
+      } else if (node.data instanceof SubgroupGroup) {
+        return from(this._participantRestApiService.getSubgroupTemplateGroupChildrenSubgroupGroups({}, {subgroupGroupId: node.data.id}, {subgroupTemplateGroupVersionId: node.data.subgroupTemplateGroupVersion.id}))
+          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
+      }
+    } else {
+      return of([new FlatNode(this.group, 0, true)]);
+    }
+  };
+
+  public getNodeName = (node: FlatNode): string => {
+    if (node.data instanceof Group) {
+      return node.data.name;
+    } else if (node.data instanceof RootSubgroupGroup) {
+      let name = node.data.subgroupTemplateGroupVersion.template.name;
+      name += '\r\n';
+      if (node.data.subgroupTemplateGroupVersion.applied) {
+        name += `(Подтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber})`;
+      } else {
+        name += `(Неподтвержденная версия ${node.data.subgroupTemplateGroupVersion.templateVersion.versionNumber})`;
+      }
+      return name;
+    } else if (node.data instanceof SubgroupGroup) {
+      return node.data.subgroupVersion.name;
+    }
+  };
+
   private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
     await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
     // TODO: Update only edited item
@@ -182,29 +262,34 @@ export class StructureSubgroupsPageComponent {
   }
 
   private async resetItems() {
-    const config = this.getPersonModalConfig();
-    this.subgroupTemplateGroup = config.subgroupTemplateGroup;
+    delete this.leadPersonType;
+    delete this.secondaryPersonType;
+    delete this.leadSubgroupPerson;
+    delete this.secondarySubgroupPerson;
 
     if (this.selectedNode) {
-      const subgroupTemplatePersonTypes = await this._participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: this.subgroupTemplateGroup.template.id});
-      this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
-      this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
+      this.subgroupPersonInterface = this.selectedNode.data;
+
+      const config = this.getPersonModalConfig();
+      if (config.subgroupGroup) {
+        const subgroupTemplatePersonTypes = await this._participantRestApiService.getSubgroupTemplatePersonTypes({subgroupTemplateId: config.subgroupGroup.subgroupTemplateGroupVersion.template.id});
+        this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
+        this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
+
+        const leadSubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.LEAD, count: 1, unassigned: false}, config.subgroupGroup);
+        if (leadSubgroupPersonPageContainer.list) {
+          this.leadSubgroupPerson = leadSubgroupPersonPageContainer.list[0];
+        }
+
+        const secondarySubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.SECONDARY, count: 1, unassigned: false}, config.subgroupGroup);
+        if (secondarySubgroupPersonPageContainer.list) {
+          this.secondarySubgroupPerson = secondarySubgroupPersonPageContainer.list[0];
+        }
+      }
+    } else {
+      delete this.subgroupPersonInterface;
     }
 
-    this.leadSubgroupPerson = null;
-    this.secondarySubgroupPerson = null;
-    const subgroupGroup = config.subgroupGroup;
-    if (subgroupGroup) {
-      const leadSubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.LEAD, count: 1, unassigned: false}, subgroupGroup);
-      if (leadSubgroupPersonPageContainer.list) {
-        this.leadSubgroupPerson = leadSubgroupPersonPageContainer.list[0];
-      }
-
-      const secondarySubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.SECONDARY, count: 1, unassigned: false}, subgroupGroup);
-      if (secondarySubgroupPersonPageContainer.list) {
-        this.secondarySubgroupPerson = secondarySubgroupPersonPageContainer.list[0];
-      }
-    }
     this.onSelectedItemsChange([]);
     if (this.ngxGridComponent) {
       await this.ngxGridComponent.reset();
@@ -212,18 +297,21 @@ export class StructureSubgroupsPageComponent {
   }
 
   private getPersonModalConfig(): PersonModalConfig {
-    // TODO: Using instanceof
     if (!this.selectedNode) {
       return {group: this.group};
     }
 
-    let subgroupGroup: SubgroupGroup = this.selectedNode.data;
-    let subgroupTemplateGroup: SubgroupTemplateGroup = this.selectedNode.data.subgroupTemplateGroup;
-    if (!subgroupTemplateGroup) {
-      subgroupGroup = null;
-      subgroupTemplateGroup = this.selectedNode.data;
+    let subgroupGroup: SubgroupGroup;
+    let subgroupTemplateGroupVersion: SubgroupTemplateGroupVersion;
+
+    if (this.selectedNode.data instanceof RootSubgroupGroup) {
+      subgroupGroup = this.selectedNode.data.defaultSubgroupGroup;
+      subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
+    } else if (this.selectedNode.data instanceof SubgroupGroup) {
+      subgroupGroup = this.selectedNode.data;
+      subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
     }
-    return {group: this.group, subgroupGroup, subgroupTemplateGroup};
+    return {group: this.group, subgroupGroup, subgroupTemplateGroupVersion};
   }
 
   private async getSubgroupPersons(query: SubgroupPersonQuery, subgroupGroup: SubgroupGroup): Promise<PageContainer<SubgroupPerson>> {

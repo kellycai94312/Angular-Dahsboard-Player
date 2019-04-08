@@ -1,47 +1,47 @@
-import {Component, ViewChild} from '@angular/core';
-import {DynamicFlatNode} from '../../../../../../../../module/group/subgroups-trees/model/dynamic-flat-node';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ContextMenuItem} from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
 import {SubgroupModalService} from '../../../service/subgroup-modal.service';
 import {AppHelper} from '../../../../../../../../utils/app-helper';
 import {GroupService} from '../../../../../service/group.service';
 import {SubgroupTemplate} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template';
-import {SubgroupTemplateVersion} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-version';
 import {Subgroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup';
-import {SubgroupTemplateTreeDataSource} from '../../../../../../../../module/group/subgroups-trees/model/subgroup-template-tree-data-source';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {skipWhile, takeWhile} from 'rxjs/operators';
+import {flatMap, map, skipWhile, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {SubgroupService} from '../../../service/subgroup.service';
 import {Group} from '../../../../../../../../data/remote/model/group/base/group';
 import {SubgroupTemplateGroup} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
+import {from, Observable} from 'rxjs';
+import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-node';
+import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
+import {RootSubgroup} from '../model/root-subgroup';
 
 @Component({
   selector: 'app-templates-subgroups-page',
   templateUrl: './templates-subgroups-page.component.html',
   styleUrls: ['./templates-subgroups-page.component.scss']
 })
-export class TemplatesSubgroupsPageComponent {
+export class TemplatesSubgroupsPageComponent implements OnInit {
 
   @ViewChild(SubgroupsTreesComponent)
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
-  public treeDataSource: SubgroupTemplateTreeDataSource;
   public group: Group;
-  public subgroupTemplate: SubgroupTemplate;
   private _notDestroyed = true;
   private _canEdit = false;
+  private _rootSubgroupName: string;
 
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
               private _groupService: GroupService,
               private _subgroupService: SubgroupService,
+              private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
     this._groupService.group$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async val => {
         this.group = val;
-        this.treeDataSource = new SubgroupTemplateTreeDataSource(val, this._participantRestApiService);
         this._canEdit = await this._groupService.canShowTemplatesSubgroups();
       });
     this._subgroupService.subgroupTemplateChanged()
@@ -49,168 +49,166 @@ export class TemplatesSubgroupsPageComponent {
         takeWhile(() => this._notDestroyed),
         skipWhile(() => !this.subgroupsTreesComponent)
       )
-      .subscribe(val => {
-        const treeData = this.subgroupsTreesComponent.dataSource.data;
-        const subgroupTemplateNodeIndex = treeData.findIndex(x => x.level == 0 && (x.data as SubgroupTemplate).id == val.id);
-
+      .subscribe((val: SubgroupTemplate) => {
         if (!val.deleted) {
-          if (subgroupTemplateNodeIndex > -1) {
-            const subgroupTemplateNode = treeData[subgroupTemplateNodeIndex];
-            subgroupTemplateNode.data = val;
-            subgroupTemplateNode.name = val.name;
-          } else {
-            treeData.push(new DynamicFlatNode(val, val.name, 0, true));
-          }
+          this.subgroupsTreesComponent.dataSource.addOrUpdateNodeIfCan({subgroupTemplate: val}, (source, target) => source instanceof RootSubgroup && source.subgroupTemplate.id == target.subgroupTemplate.id);
         } else {
-          if (subgroupTemplateNodeIndex > -1) {
-            treeData.splice(subgroupTemplateNodeIndex, 1);
-          }
+          this.subgroupsTreesComponent.dataSource.removeNodeByData(val, (source, target) => source instanceof RootSubgroup && source.subgroupTemplate.id == target.id);
         }
-
-        this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
       });
   }
 
-  public onGetNodeContextMenuItem = async (node: DynamicFlatNode): Promise<ContextMenuItem[]> => {
+  async ngOnInit(): Promise<void> {
+    this._rootSubgroupName = await this._translateObjectService.getTranslation('rootSubgroup');
+  }
+
+  public getChildren = (node: FlatNode | any): Observable<FlatNode[]> => {
+    if (node) {
+      const nextLevel = (node.level || 0) + 1;
+      if (node.data instanceof RootSubgroup) {
+        return from(this._participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {subgroupId: node.data.defaultSubgroup.id}, {subgroupTemplateVersionId: node.data.defaultSubgroup.templateVersion.id}))
+          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
+      } else if (node.data instanceof Subgroup) {
+        return from(this._participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {subgroupId: node.data.id}, {subgroupTemplateVersionId: node.data.templateVersion.id}))
+          .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
+      }
+    } else {
+      return from(this._participantRestApiService.getSubgroupTemplates({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
+        .pipe(
+          map(val => val.list),
+          flatMap(async subgroupTemplates => {
+            const nodes: FlatNode[] = [];
+            for (const subgroupTemplate of subgroupTemplates) {
+              const subgroupTemplateVersions = await this._participantRestApiService.getSubgroupTemplateVersions({subgroupTemplateId: subgroupTemplate.id});
+              for (const subgroupTemplateVersion of subgroupTemplateVersions) {
+                const subgroups = await this._participantRestApiService.getSubgroupTemplateVersionChildrenSubgroups({}, {}, {subgroupTemplateVersionId: subgroupTemplateVersion.id});
+                for (const subgroup of subgroups) {
+                  const rootSubgroup = new RootSubgroup(subgroupTemplate, subgroupTemplateVersion, subgroup);
+                  nodes.push(new FlatNode(rootSubgroup, 0, true));
+                }
+              }
+            }
+            return nodes;
+          })
+        );
+    }
+  };
+
+  public getNodeName = (node: FlatNode): string => {
+    if (node.data instanceof RootSubgroup) {
+      let name = node.data.subgroupTemplate.name;
+      name += '\r\n';
+      if (node.data.subgroupTemplateVersion.approved) {
+        name += `(Подтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber})`;
+      } else {
+        name += `(Неподтвержденная версия ${node.data.subgroupTemplateVersion.versionNumber})`;
+      }
+      return name;
+    } else if (node.data instanceof Subgroup) {
+      return node.data.subgroupVersion.name;
+    }
+  };
+
+  public onGetNodeContextMenuItem = async (node: FlatNode): Promise<ContextMenuItem[]> => {
     if (!this._canEdit) {
       return [];
     }
-    if (!node.level) {
-      const nodeData = node.data as SubgroupTemplate;
-      this.subgroupTemplate = nodeData;
-      return [
-        {
-          translation: 'add', action: async item => {
-            await this.editSubgroup(nodeData);
+
+    if (node.data instanceof RootSubgroup) {
+      const contextMenuItems: ContextMenuItem[] = [{
+        translation: 'edit', action: async item => {
+          const group = await this._appHelper.toPromise(this._groupService.group$);
+          const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, node.data.subgroupTemplate);
+          if (dialogResult.result) {
+            this._subgroupService.updateSubgroupTemplate(dialogResult.data);
           }
-        },
-        {
-          translation: 'edit', action: async item => {
-            const group = await this._appHelper.toPromise(this._groupService.group$);
-            const dialogResult = await this._subgroupModalService.showEditSubgroupTemplate(group, nodeData);
-            if (dialogResult.result) {
-              this._subgroupService.updateSubgroupTemplate(dialogResult.data);
+        }
+      }];
+
+      if (!node.data.subgroupTemplateVersion.approved) {
+        contextMenuItems.push(...[
+          {
+            translation: 'add', action: async item => {
+              const subgroupTemplate = new SubgroupTemplate();
+              subgroupTemplate.id = node.data.defaultSubgroup.templateVersion.subgroupTemplateId;
+              await this.editSubgroup(subgroupTemplate);
+            }
+          },
+          {
+            translation: 'approve', action: async item => {
+              const date = new Date();
+              date.setHours(24 * 21);
+
+              await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
+                await this._participantRestApiService.approveSubgroupTemplate(
+                  {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
+                  {}, {subgroupTemplateId: node.data.subgroupTemplateVersion.subgroupTemplateId});
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(node);
+              });
+            }
+          },
+          {
+            translation: 'reject', action: async item => {
+              await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
+                await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: node.data.subgroupTemplateVersion.subgroupTemplateId});
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(node);
+              });
             }
           }
-        }
-      ];
-    } else if (node.level == 1) {
-      const nodeData = node.data as SubgroupTemplateVersion;
-      if (nodeData.approved) {
-        return [{
-          translation: 'apply', action: async item => {
-            await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
-              const subgroupTemplateGroup = new SubgroupTemplateGroup();
-              subgroupTemplateGroup.group = this.group;
-              await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
-            });
-          }
-        }];
-      }
-      const updateTemplate = async (): Promise<void> => {
-        const templateNode = this.subgroupsTreesComponent.dataSource.data.find(x => x.level == 0 && (x.data as SubgroupTemplateVersion).id == nodeData.subgroupTemplateId);
-        await this.subgroupsTreesComponent.dataSource.updateNode(templateNode);
-      };
-      return [
-        {
-          translation: 'approve', action: async item => {
-            const date = new Date();
-            date.setHours(24 * 21);
-
-            await this._appHelper.tryAction('templateHasApproved', 'error', async () => {
-              await this._participantRestApiService.approveSubgroupTemplate(
-                {date: this._appHelper.dateByFormat(date, PropertyConstant.dateTimeServerFormat)},
-                {}, {subgroupTemplateId: nodeData.subgroupTemplateId});
-              await updateTemplate();
-            });
-          }
-        },
-        {
-          translation: 'reject', action: async item => {
-            await this._appHelper.tryAction('templateHasRejected', 'error', async () => {
-              await this._participantRestApiService.disapproveSubgroupTemplate({subgroupTemplateId: nodeData.subgroupTemplateId});
-              await updateTemplate();
-            });
-          }
-        }
-      ];
-    } else {
-      const nodeData = node.data as Subgroup;
-      const subgroupTemplate = new SubgroupTemplate();
-      subgroupTemplate.id = nodeData.templateVersion.subgroupTemplateId;
-      const contextMenuItems: ContextMenuItem[] = [
-        {
-          translation: 'add', action: async item => {
-            await this.editSubgroup(subgroupTemplate);
-          }
-        }
-      ];
-      if (!nodeData.templateVersion.approved) {
-        contextMenuItems.push({
-          translation: 'edit', action: async item => {
-            await this.editSubgroup(subgroupTemplate, nodeData);
-          }
-        });
+        ]);
+      } else {
+        contextMenuItems.push(...[
+          {
+            translation: 'createTheTemplateVersion', action: async item => {
+              await this._appHelper.tryAction('saved', 'error', async () => {
+                const subgroupTemplateVersion = await this._participantRestApiService.createUnapprovedSubgroupTemplateVersion({}, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
+                this.subgroupsTreesComponent.dataSource.refreshNodesOnLevel(null);
+              });
+            }
+          },
+          {
+            translation: 'apply', action: async item => {
+              await this._appHelper.tryAction('templateHasApplied', 'error', async () => {
+                const subgroupTemplateGroup = new SubgroupTemplateGroup();
+                subgroupTemplateGroup.group = this.group;
+                await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
+              });
+            }
+          }]);
       }
       return contextMenuItems;
+    } else if (node.data instanceof Subgroup) {
+      if (!node.data.templateVersion.approved) {
+        const subgroupTemplate = new SubgroupTemplate();
+        subgroupTemplate.id = node.data.templateVersion.subgroupTemplateId;
+        return [
+          {
+            translation: 'add', action: async item => {
+              await this.editSubgroup(subgroupTemplate);
+            }
+          },
+          {
+            translation: 'edit', action: async item => {
+              await this.editSubgroup(subgroupTemplate, node.data);
+            }
+          }
+        ];
+      }
     }
   };
 
   private async editSubgroup(subgroupTemplate: SubgroupTemplate, subgroup?: Subgroup) {
+    const previousSubgroup = this._appHelper.cloneObject(subgroup);
     const dialogResult = await this._subgroupModalService.showEditSubgroup(subgroupTemplate, subgroup);
     if (dialogResult.result) {
-      const versionNodesLevel = 1;
-      const treeData = this.subgroupsTreesComponent.dataSource.data;
-      const subgroupTemplateVersion = dialogResult.data.subgroupTemplateVersion;
-      let fromIndex = 0;
-      if (dialogResult.data.subgroupTemplateVersion) {
-        fromIndex = treeData.findIndex(x => x.data.id == subgroupTemplateVersion.id && x.level == versionNodesLevel);
-        if (fromIndex == -1 && treeData.filter(x => x.level == versionNodesLevel).length) {
-          fromIndex = treeData.push(new DynamicFlatNode(subgroupTemplateVersion, `Version ${subgroupTemplateVersion.versionNumber}. Approved '${subgroupTemplateVersion.approved}'`, versionNodesLevel, true));
-        }
+      if (!this._appHelper.isNewObject(previousSubgroup)) {
+        this.subgroupsTreesComponent.dataSource.removeNodeByData(previousSubgroup, (source, target) => source instanceof Subgroup && source.id == target.id);
       }
 
-      const isLevelSubgroups = (node: DynamicFlatNode): boolean => node.level && node.level != versionNodesLevel;
-
-      const subgroupRes = dialogResult.data.subgroup;
-      const subgroupNodeIndex = treeData.findIndex(x => isLevelSubgroups(x) && x.data.id == subgroupRes.id);
-
-      const parentSubgroupVersion = dialogResult.data.subgroup.subgroupVersion.parentSubgroupVersion;
-      let parentSubgroupNode: DynamicFlatNode;
-      if (parentSubgroupVersion) {
-        parentSubgroupNode = treeData.find(
-          x =>
-            isLevelSubgroups(x) &&
-            (x.data as Subgroup).subgroupVersion &&
-            (x.data as Subgroup).subgroupVersion.id == parentSubgroupVersion.id
-        );
-      }
-
-      if (subgroupNodeIndex > -1) {
-        treeData.splice(subgroupNodeIndex, 1);
-      }
-
-      let newNode: DynamicFlatNode;
-      if (parentSubgroupNode) {
-        newNode = new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, parentSubgroupNode.level + 1, true);
-      } else {
-        newNode = new DynamicFlatNode(subgroupRes, subgroupRes.subgroupVersion.name, 2, true);
-      }
-
-      let fromNodeIndex = -1;
-      for (let i = fromIndex; i < treeData.length - 1; i++) {
-        const currentItem = treeData[i];
-        const nextItem = treeData[i + 1];
-        if (currentItem.level == newNode.level && nextItem.level != newNode.level) {
-          fromNodeIndex = i;
-          break;
-        }
-      }
-
-      if (fromNodeIndex > -1) {
-        treeData.splice(fromNodeIndex, 0, newNode);
-      }
-      this.subgroupsTreesComponent.dataSource.dataChange.next(treeData);
+      const currentSubgroup = dialogResult.data;
+      this.subgroupsTreesComponent.dataSource.addOrUpdateNodeIfCan(
+        currentSubgroup, (source, target) => source instanceof Subgroup && source.id == target.id, currentSubgroup.subgroupVersion.parentSubgroupVersion,
+        (source, target) => source instanceof Subgroup && source.subgroupVersion.id == target.id || source instanceof RootSubgroup && source.defaultSubgroup.subgroupVersion.id == target.id);
     }
   }
 

@@ -131,6 +131,8 @@ import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
 import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request';
 import {SubgroupPersonQuery} from './query/subgroup-person-query';
+import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
+import {plainToClass, plainToClassFromExist} from 'class-transformer';
 
 @Injectable()
 @RestParams({
@@ -144,7 +146,7 @@ export class ParticipantRestApiService extends Rest {
     super(restHandler);
   }
 
-  //#region Auth
+//#region Auth
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -640,30 +642,45 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!id}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   getGroup: IRestMethod<QueryParams, Group>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
   })
   getGroups: IRestMethod<GroupQuery, PageContainer<Group>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   createGroup: IRestMethod<Group, Group>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!id}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   putGroup: IRestMethod<Group, Group>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   removeGroup: IRestMethod<{ groupId: number }, Group>;
 
@@ -716,30 +733,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}',
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
-
-  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
-  // @RestAction({
-  //   method: RestRequestMethod.Get,
-  //   path: '/group/{!id}/person',
-  // })
-  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
-
-  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
-    let queryStr = '';
-    const keys = Object.keys(query).filter(x => x !== 'id');
-    if (keys.length) {
-      queryStr = '?';
-      for (let i = 0; i < keys.length; i++) {
-        const item = keys[i];
-        queryStr += `${item}=${query[item]}`;
-        if (i < keys.length - 1) {
-          queryStr += '&';
-        }
-      }
-    }
-
-    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
-  }
 
   @RestAction({
     method: RestRequestMethod.Post,
@@ -1015,13 +1008,19 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/subgroupTemplate'
+    path: '/group/{!groupId}/subgroupTemplate',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<SubgroupTemplate>(SubgroupTemplate), item);
+    }
   })
   getSubgroupTemplates: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/subgroupTemplateGroup',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<SubgroupTemplateGroup>(SubgroupTemplateGroup), item);
+    }
   })
   getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
 
@@ -1066,50 +1065,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/file/{!fileId}/resource'
   })
   removeFileResource: IRestMethod<{ fileId: number }, BaseFile>;
-
-  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
-    const formData = new FormData();
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-
-    if (files && files.length) {
-      for (let i = 0; i < files.length; i++) {
-        const item = files[i];
-        if (!item) {
-          continue;
-        }
-        formData.append('file', item, item.name);
-      }
-    }
-    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
-  }
-
-  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
-    const formData = new FormData();
-    if (file) {
-      formData.append('file', file, file.name);
-    }
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
-  }
-
-  getFileUrl(documentQuery: DocumentQuery): string {
-    if (!documentQuery) {
-      return '';
-    }
-    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
-    if (documentQuery.type) {
-      url += `&type=${documentQuery.type}`;
-    }
-    return url;
-  }
-
-  getDocument(documentId: number): string {
-    if (!documentId) {
-      return null;
-    }
-
-    return `${environment.restUrl}/file/download/document/${documentId}`;
-  }
 
   //#endregion
 
@@ -1709,7 +1664,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group'
+    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
   })
   updateTrainingBlockGroups: IRestMethodStrict<ListRequest<Group>, any, { trainingReportId: number, trainingBlockId: number }, Group[]>;
 
@@ -2085,45 +2043,84 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   getSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate'
+    path: '/subgroupTemplate',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   createSubgroupTemplate: IRestMethod<SubgroupTemplate, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   updateSubgroupTemplate: IRestMethodStrict<SubgroupTemplate, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   approveSubgroupTemplate: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/approve'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   disapproveSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplate, item);
+    }
   })
   removeSubgroupTemplate: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplate>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateVersion, item);
+    }
   })
   createUnapprovedSubgroupTemplateVersion: IRestMethodStrict<any, any, { subgroupTemplateId: number }, SubgroupTemplateVersion>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
+  })
+  updateSubgroupTemplateGroupVersion: IRestMethodStrict<DateWrapper, any, { subgroupTemplateId: number, subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplate/{!subgroupTemplateId}/group/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
+  })
+  removeSubgroupTemplateGroupByTemplateOwner: IRestMethod<{ subgroupTemplateId: number, subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion>;
 
   //#region SubgroupTemplatePersonType
 
@@ -2147,7 +2144,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/version'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateVersion, item);
+    }
   })
   getSubgroupTemplateVersions: IRestMethod<{ subgroupTemplateId: number }, SubgroupTemplateVersion[]>;
 
@@ -2176,19 +2176,28 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   createSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number }, Subgroup>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   updateSubgroupTemplateSubgroup: IRestMethodStrict<Subgroup, any, { subgroupTemplateId: number, subgroupId: number }, Subgroup>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}'
+    path: '/subgroupTemplate/{!subgroupTemplateId}/subgroup/{!subgroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   removeSubgroupTemplateSubgroup: IRestMethod<{ subgroupTemplateId: number, subgroupId: number }, Subgroup>;
 
@@ -2216,73 +2225,48 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   getSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   approveSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   updateSubgroupTemplateGroup: IRestMethodStrict<SubgroupTemplateGroup, any, { subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroup, item);
+    }
   })
   removeSubgroupTemplateGroup: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroup>;
 
-  //#region SubgroupGroup
-
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
+    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/version',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupTemplateGroupVersion, item);
+    }
   })
-  getSubgroupTemplateGroupSubgroups: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupGroup[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/unassignedSubgroupGroup'
-  })
-  getUnassignedSubgroupGroupsForPersons: IRestMethod<{ subgroupTemplateGroupId: number, personIds: string }, SubgroupGroup[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/childrenSubgroup'
-  })
-  getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupId: number }, SubgroupGroup[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
-  })
-  getSubgroupTemplateGroupSubgroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup'
-  })
-  createSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, any, { subgroupTemplateGroupId: number }, SubgroupGroup>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
-  })
-  updateSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, any, { subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/subgroupTemplateGroup/{!subgroupTemplateGroupId}/subgroup/{!subgroupGroupId}'
-  })
-  removeSubgroupTemplateGroupSubgroupGroup: IRestMethod<{ subgroupTemplateGroupId: number, subgroupGroupId: number }, SubgroupGroup>;
-
-  //#endregion
+  getSubgroupTemplateGroupVersions: IRestMethod<{ subgroupTemplateGroupId: number }, SubgroupTemplateGroupVersion[]>;
 
   //#endregion
 
@@ -2301,8 +2285,60 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/subgroupTemplateVersion/{!subgroupTemplateVersionId}/childrenSubgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(Subgroup, item);
+    }
   })
   getSubgroupTemplateVersionChildrenSubgroups: IRestMethodStrict<{}, { subgroupId?: number }, { subgroupTemplateVersionId: number }, Subgroup[]>;
+
+  //#endregion
+
+  //#region SubgroupGroup
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup'
+  })
+  getSubgroupTemplateGroupSubgroups: IRestMethod<{ subgroupTemplateGroupVersionId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup/{!subgroupGroupId}/parentSubgroup'
+  })
+  getSubgroupTemplateGroupSubgroupGroupParentSubgroupGroups: IRestMethod<{ subgroupTemplateGroupVersionId: number, subgroupGroupId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/childrenSubgroup',
+    resultFactory: (item, options) => {
+      return plainToClass(SubgroupGroup, item);
+    }
+  })
+  getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupVersionId: number }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/unassignedSubgroupGroup'
+  })
+  getUnassignedSubgroupGroupsForPersons: IRestMethod<{ subgroupTemplateGroupVersionId: number, personIds: string }, SubgroupGroup[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup'
+  })
+  createSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, {}, { subgroupTemplateGroupVersionId: number }, SubgroupGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup/{!subgroupGroupId}'
+  })
+  updateSubgroupTemplateGroupSubgroupGroup: IRestMethodStrict<SubgroupGroup, any, { subgroupTemplateGroupVersionId: number, subgroupGroupId: number }, SubgroupGroup>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup/{!subgroupGroupId}'
+  })
+  removeSubgroupTemplateGroupSubgroupGroup: IRestMethod<{ subgroupTemplateGroupVersionId: number, subgroupGroupId: number }, SubgroupGroup>;
 
   //#endregion
 
@@ -2347,6 +2383,74 @@ export class ParticipantRestApiService extends Rest {
     path: '/location/filter',
   })
   getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
+
+  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
+  // @RestAction({
+  //   method: RestRequestMethod.Get,
+  //   path: '/group/{!id}/person',
+  // })
+  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
+
+  public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
+    let queryStr = '';
+    const keys = Object.keys(query).filter(x => x !== 'id');
+    if (keys.length) {
+      queryStr = '?';
+      for (let i = 0; i < keys.length; i++) {
+        const item = keys[i];
+        queryStr += `${item}=${query[item]}`;
+        if (i < keys.length - 1) {
+          queryStr += '&';
+        }
+      }
+    }
+
+    return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
+  }
+
+  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
+    const formData = new FormData();
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+
+    if (files && files.length) {
+      for (let i = 0; i < files.length; i++) {
+        const item = files[i];
+        if (!item) {
+          continue;
+        }
+        formData.append('file', item, item.name);
+      }
+    }
+    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
+  }
+
+  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
+    const formData = new FormData();
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
+    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
+  }
+
+  getFileUrl(documentQuery: DocumentQuery): string {
+    if (!documentQuery) {
+      return '';
+    }
+    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
+    if (documentQuery.type) {
+      url += `&type=${documentQuery.type}`;
+    }
+    return url;
+  }
+
+  getDocument(documentId: number): string {
+    if (!documentId) {
+      return null;
+    }
+
+    return `${environment.restUrl}/file/download/document/${documentId}`;
+  }
 
   getUrlImage(query: ImageQuery): string {
     let url = `${environment.restUrl}/file/download/image?clazz=${query.clazz}&objectId=${query.objectId}&type=${query.type}`;
