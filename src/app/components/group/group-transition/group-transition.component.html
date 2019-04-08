@@ -49,17 +49,19 @@
                           [getName]="getSubgroupTemplateGroupName"
                           placeholder="{{'templates' | translate}}"
                           ngDefaultControl
+                          [showClearButton]="false"
                           (modelChange)="onSelectedSubgroupTemplateGroup($event)">
         </app-input-select>
       </div>
       <div class="col">
         <app-input-select class="w-100"
-                          [loadData]="fetchGroups"
+                          [loadData]="fetchSubgroups"
                           [(model)]="selectedSubgroupGroup"
                           [getKey]="getKey"
                           [getName]="getName"
                           placeholder="{{'subgroup' | translate}}"
                           [disabled]="!subgroupTemplateGroupVersion"
+                          [showClearButton]="false"
                           ngDefaultControl>
         </app-input-select>
       </div>
