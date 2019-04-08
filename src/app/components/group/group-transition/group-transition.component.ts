@@ -18,6 +18,8 @@ import {SubgroupPerson} from '../../../data/remote/model/group/subgroup/person/s
 import {SubgroupPersonTypeEnum} from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 import {SubgroupTemplateGroupVersion} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
 import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
+import {TranslateObjectService} from '../../../shared/translate-object.service';
+import {SubgroupVersion} from '../../../data/remote/model/group/subgroup/version/subgroup-version';
 
 @Component({
   selector: 'app-group-transition',
@@ -53,9 +55,11 @@ export class GroupTransitionComponent {
   public selectedSubgroupGroup: SubgroupGroup;
   public document: Document;
   public selectedSubgroupTemplateGroup: SubgroupTemplateGroup;
+  public _rootSubgroupName: string;
 
   constructor(private _appHelper: AppHelper,
-              private _participantRestApiService: ParticipantRestApiService) {
+              private _participantRestApiService: ParticipantRestApiService,
+              private _translateObjectService: TranslateObjectService) {
     this.document = new Document();
     this.document.type = DocumentType.ORDER;
   }
@@ -68,6 +72,7 @@ export class GroupTransitionComponent {
       this.selectedSubgroupTemplateGroup = (await this.fetchSubgroupTemplateGroups(0, '')).list[0];
       this.subgroupTemplateGroupVersion = this.selectedSubgroupTemplateGroup.subgroupTemplateGroupVersion;
     }
+    this._rootSubgroupName = await this._translateObjectService.getTranslation('rootSubgroup');
 
     await this.resetItems();
   }
@@ -96,12 +101,16 @@ export class GroupTransitionComponent {
     return await this._participantRestApiService.getSubgroupTemplateGroupsByGroup({}, {from: from, count: PropertyConstant.pageSize, name: searchText}, {groupId: this.group.id});
   };
 
-  public fetchGroups = async (from: number, searchText: string) => {
+  public fetchSubgroups = async (from: number, searchText: string) => {
     const items = await this._participantRestApiService.getUnassignedSubgroupGroupsForPersons(
       {
         subgroupTemplateGroupVersionId: this.subgroupTemplateGroupVersion.id,
         personIds: this.persons.map(x => x.id).join('_')
       });
+    const defaultSubgroup = items.find(x => (x.subgroupVersion as SubgroupVersion).defaultSubgroup);
+    if (defaultSubgroup) {
+      defaultSubgroup.subgroupVersion.name = this._rootSubgroupName;
+    }
     return this._appHelper.arrayToPageContainer(items);
   };
 

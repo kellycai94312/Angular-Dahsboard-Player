@@ -6,7 +6,7 @@ import {GroupService} from '../../../../../service/group.service';
 import {SubgroupTemplate} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template';
 import {Subgroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup';
 import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {flatMap, map, skipWhile, takeWhile} from 'rxjs/operators';
+import {distinctUntilChanged, flatMap, map, skipWhile, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
 import {SubgroupService} from '../../../service/subgroup.service';
@@ -47,13 +47,26 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
     this._subgroupService.subgroupTemplateChanged()
       .pipe(
         takeWhile(() => this._notDestroyed),
-        skipWhile(() => !this.subgroupsTreesComponent)
+        skipWhile(() => !this.subgroupsTreesComponent),
+        distinctUntilChanged()
       )
       .subscribe((val: SubgroupTemplate) => {
-        if (!val.deleted) {
-          this.subgroupsTreesComponent.dataSource.addOrUpdateNodeIfCan({subgroupTemplate: val}, (source, target) => source instanceof RootSubgroup && source.subgroupTemplate.id == target.subgroupTemplate.id);
+        const dataSource = this.subgroupsTreesComponent.dataSource;
+        const rootSubgroupCompare: <T extends RootSubgroup>(source: T, target: T) => boolean = (source, target) => {
+          return source instanceof RootSubgroup && source.subgroupTemplate.id == target.subgroupTemplate.id;
+        };
+
+        const rootSubgroup = new RootSubgroup(val, void 0, void 0);
+        if (val.deleted) {
+          dataSource.removeNodeByData(rootSubgroup, rootSubgroupCompare);
         } else {
-          this.subgroupsTreesComponent.dataSource.removeNodeByData(val, (source, target) => source instanceof RootSubgroup && source.subgroupTemplate.id == target.id);
+          const node = dataSource.getNodeByData(rootSubgroup, rootSubgroupCompare);
+          if (node) {
+            dataSource.addOrUpdateNodeIfCan(rootSubgroup, rootSubgroupCompare);
+          } else {
+            // TODO: Updating only edited item without refresh all items!
+            dataSource.refreshNodesOnLevel(void 0);
+          }
         }
       });
   }
