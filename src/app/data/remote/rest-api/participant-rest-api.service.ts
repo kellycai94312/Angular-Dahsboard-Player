@@ -75,7 +75,6 @@ import {TrainingPersonMeasure} from '../bean/training-person-measure';
 import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
-import {GroupConnection} from '../model/group/group-connection';
 import {MedicalExamination} from '../model/person/medical-examination';
 import {StageQuery} from './query/stage-query';
 import {StageStandard} from '../model/stage/stage-standard';
@@ -133,6 +132,9 @@ import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request
 import {SubgroupPersonQuery} from './query/subgroup-person-query';
 import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
 import {plainToClass, plainToClassFromExist} from 'class-transformer';
+import {GroupCluster} from '../model/group/connection/group-cluster';
+import {GroupClusterQuery} from './query/group/group-cluster-query';
+import {GroupConnection} from '../model/group/connection/group-connection';
 
 @Injectable()
 @RestParams({
@@ -884,58 +886,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region GroupConnection
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/connection',
-  })
-  getGroupConnections: IRestMethodStrict<any, GroupQuery, { groupId: number }, PageContainer<GroupConnection>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/connection/graph',
-  })
-  getGraphGroupConnections: IRestMethodStrict<any, { depth?: number, dependant?: boolean }, { groupId: number }, GroupConnection[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/connection',
-  })
-  createGroupConnection: IRestMethodStrict<GroupConnection, any, { groupId: number }, GroupConnection>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!groupId}/connection/{!groupConnectionId}',
-  })
-  removeGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, GroupConnection>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
-  })
-  approveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!groupId}/connection/{!groupConnectionId}/approve',
-  })
-  disapproveGroupConnection: IRestMethod<{ groupId: number, groupConnectionId: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
-  })
-  visibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!groupId}/connection/{!groupConnectionId}/visible',
-  })
-  invisibleGroupConnection: IRestMethodStrict<any, any, { groupId: number, groupConnectionId: number }, void>;
-
-  //#endregion
-
   //#region GroupTransition
 
   @RestAction({
@@ -1023,6 +973,28 @@ export class ParticipantRestApiService extends Rest {
     }
   })
   getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
+
+  //#endregion
+
+  //#region Group cluster
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/cluster',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<GroupCluster>(GroupCluster), item);
+    }
+  })
+  getGroupClusters: IRestMethodStrict<any, { groupId: number }, GroupClusterQuery, PageContainer<GroupCluster>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/cluster/!{clusterId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupCluster, item);
+    }
+  })
+  getGroupCluster: IRestMethod<{ groupId: number, clusterId: number }, GroupCluster>;
 
   //#endregion
 
@@ -2339,6 +2311,19 @@ export class ParticipantRestApiService extends Rest {
     path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/subgroup/{!subgroupGroupId}'
   })
   removeSubgroupTemplateGroupSubgroupGroup: IRestMethod<{ subgroupTemplateGroupVersionId: number, subgroupGroupId: number }, SubgroupGroup>;
+
+  //#endregion
+
+  //#region Group connection
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/groupConnection',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnection, item);
+    }
+  })
+  createGroupConnection: IRestMethod<GroupConnection, GroupConnection>;
 
   //#endregion
 
