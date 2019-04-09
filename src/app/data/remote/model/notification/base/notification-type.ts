@@ -1,5 +1,6 @@
 export enum NotificationType {
   GROUP = 'GROUP',
   TRAINING = 'TRAINING',
-  SUBGROUP = 'SUBGROUP'
+  SUBGROUP = 'SUBGROUP',
+  GROUP_CONNECTION = 'GROUP_CONNECTION'
 }

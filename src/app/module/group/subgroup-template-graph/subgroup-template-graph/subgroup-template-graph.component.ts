@@ -4,8 +4,6 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {GroupService} from '../../../../pages/group/group-page/service/group.service';
 import {TranslateService} from '@ngx-translate/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupConnection} from '../../../../data/remote/model/group/group-connection';
-import {GroupConnectionType} from '../../../../data/remote/model/group/group-connection-type';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import * as shape from 'd3-shape';
 import {SubgroupTemplate} from '../../../../data/remote/model/group/subgroup/template/subgroup-template';
@@ -53,48 +51,49 @@ export class SubgroupTemplateGraphComponent implements OnInit {
     this.nodes = [];
     this.links = [];
     const subgroupTemplateGroups = await this._participantRestApiService.getSubgroupTemplateGroups({subgroupTemplateId: this.subgroupTemplate.id});
-
-    const groupConnections = await this._participantRestApiService.getGraphGroupConnections({}, {depth: depth}, {groupId: this.subgroupTemplate.group.id});
-    for (const groupConnection of groupConnections) {
-      const filteredSubgroupTemplateGroups = subgroupTemplateGroups.filter(x => x.group.id == groupConnection.source.id || x.group.id == groupConnection.target.id);
-      const sourceGroupDataNode: GroupDataNode = {group: groupConnection.source};
-      const targetGroupDataNode: GroupDataNode = {group: groupConnection.target};
-      if (filteredSubgroupTemplateGroups.length) {
-        sourceGroupDataNode.subgroupTemplateGroup = filteredSubgroupTemplateGroups.find(x => x.id == groupConnection.source.id);
-        targetGroupDataNode.subgroupTemplateGroup = filteredSubgroupTemplateGroups.find(x => x.id == groupConnection.target.id);
-      }
-      const sourceNode = this.pushToNodes(sourceGroupDataNode);
-      const targetNode = this.pushToNodes(targetGroupDataNode);
-      const label = await this.getGroupConnectionLabel(groupConnection);
-      const color = this.getGroupConnectionColor(groupConnection);
-      const link = new Link(sourceNode, targetNode, label, color);
-
-      this.links.push(link);
-    }
-    this.updateSubject.next(true);
+    // TODO: Use or remove
+    // const groupConnections = await this._participantRestApiService.getGraphGroupConnections({}, {depth: depth}, {groupId: this.subgroupTemplate.group.id});
+    // for (const groupConnection of groupConnections) {
+    //   const filteredSubgroupTemplateGroups = subgroupTemplateGroups.filter(x => x.group.id == groupConnection.source.id || x.group.id == groupConnection.target.id);
+    //   const sourceGroupDataNode: GroupDataNode = {group: groupConnection.source};
+    //   const targetGroupDataNode: GroupDataNode = {group: groupConnection.target};
+    //   if (filteredSubgroupTemplateGroups.length) {
+    //     sourceGroupDataNode.subgroupTemplateGroup = filteredSubgroupTemplateGroups.find(x => x.id == groupConnection.source.id);
+    //     targetGroupDataNode.subgroupTemplateGroup = filteredSubgroupTemplateGroups.find(x => x.id == groupConnection.target.id);
+    //   }
+    //   const sourceNode = this.pushToNodes(sourceGroupDataNode);
+    //   const targetNode = this.pushToNodes(targetGroupDataNode);
+    //   // const label = await this.getGroupConnectionLabel(groupConnection);
+    //   // const color = this.getGroupConnectionColor(groupConnection);
+    //   const link = new Link(sourceNode, targetNode, label, color);
+    //
+    //   this.links.push(link);
+    // }
+    // this.updateSubject.next(true);
   }
 
-  private async getGroupConnectionLabel(groupConnection: GroupConnection) {
-    switch (groupConnection.type) {
-      case GroupConnectionType.TOP:
-        return await this._translateService.get('topLevelShort').toPromise();
-      case GroupConnectionType.SAME:
-        return await this._translateService.get('sameLevelShort').toPromise();
-      case GroupConnectionType.BOTTOM:
-        return await this._translateService.get('bottomLevelShort').toPromise();
-    }
-  }
-
-  private getGroupConnectionColor(groupConnection: GroupConnection) {
-    switch (groupConnection.type) {
-      case GroupConnectionType.TOP:
-        return '#3D9970';
-      case GroupConnectionType.SAME:
-        return '#111111';
-      case GroupConnectionType.BOTTOM:
-        return '#0074D9';
-    }
-  }
+  // TODO: Use or remove
+  // private async getGroupConnectionLabel(groupConnection: GroupConnection) {
+  //   switch (groupConnection.type) {
+  //     case GroupConnectionType.TOP:
+  //       return await this._translateService.get('topLevelShort').toPromise();
+  //     case GroupConnectionType.SAME:
+  //       return await this._translateService.get('sameLevelShort').toPromise();
+  //     case GroupConnectionType.BOTTOM:
+  //       return await this._translateService.get('bottomLevelShort').toPromise();
+  //   }
+  // }
+  //
+  // private getGroupConnectionColor(groupConnection: GroupConnection) {
+  //   switch (groupConnection.type) {
+  //     case GroupConnectionType.TOP:
+  //       return '#3D9970';
+  //     case GroupConnectionType.SAME:
+  //       return '#111111';
+  //     case GroupConnectionType.BOTTOM:
+  //       return '#0074D9';
+  //   }
+  // }
 
   private pushToNodes(data: GroupDataNode): Node {
     const groupId = data.group.id.toString();
