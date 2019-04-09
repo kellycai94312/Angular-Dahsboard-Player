@@ -1,0 +1,11 @@
+<ngx-grid class="mt-2"
+          [fetchItems]="fetchItems"
+          [edit]="onClickRow"
+          [enabledAdd]="false"
+          [windowScroll]="true">
+  <ngx-column nameKey="name">
+    <ng-template let-item>
+      {{item.name}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

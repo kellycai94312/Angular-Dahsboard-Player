@@ -77,6 +77,10 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         visible: (item: Tab) => {
           return this.canEdit;
         }
+      },
+      {
+        nameKey: 'connections',
+        routerLink: 'connection'
       }
     ];
 
