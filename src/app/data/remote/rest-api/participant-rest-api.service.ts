@@ -135,6 +135,8 @@ import {plainToClass, plainToClassFromExist} from 'class-transformer';
 import {GroupCluster} from '../model/group/connection/group-cluster';
 import {GroupClusterQuery} from './query/group/group-cluster-query';
 import {GroupConnection} from '../model/group/connection/group-connection';
+import {GroupConnectionRequest} from '../model/group/connection/group-connection-request';
+import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
 
 @Injectable()
 @RestParams({
@@ -995,6 +997,33 @@ export class ParticipantRestApiService extends Rest {
     }
   })
   getGroupCluster: IRestMethod<{ groupId: number, clusterId: number }, GroupCluster>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/cluster/!{clusterId}/connection',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnection, item);
+    }
+  })
+  getGroupConnections: IRestMethod<{ groupId: number, clusterId: number }, GroupConnection[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/unassignedClusterGroup',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<GroupCluster>(GroupCluster), item);
+    }
+  })
+  getUnassignedGroupClusters: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupCluster>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/connectionRequest',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<GroupConnectionRequest>(GroupConnectionRequest), item);
+    }
+  })
+  getGroupConnectionRequests: IRestMethodStrict<any, GroupConnectionRequestQuery, { groupId: number }, PageContainer<GroupConnectionRequest>>;
 
   //#endregion
 
@@ -2314,16 +2343,114 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Group connection
+  //#region Group cluster
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/groupCluster/{!groupClusterId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupCluster, item);
+    }
+  })
+  updateGroupCluster: IRestMethodStrict<GroupCluster, any, { groupClusterId: number }, GroupCluster>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupCluster/{!groupClusterId}/group',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
+  })
+  getClusterGroups: IRestMethodStrict<any, PageQuery, { groupClusterId: number }, PageContainer<Group>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupCluster/{!groupClusterId}/group/!{groupId}/unassignedParentGroup',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
+  })
+  getUnassignedParentGroups: IRestMethodStrict<any, PageQuery, { groupClusterId: number, groupId: number }, PageContainer<Group>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupCluster/{!groupClusterId}/group/!{groupId}',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
+  })
+  removeGroupFromGroupCluster: IRestMethodStrict<any, any, { groupClusterId: number, groupId: number }, PageContainer<Group>>;
+
+  //#endregion
+
+  //#region Group connection request
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/groupConnection',
+    path: '/groupConnectionRequest',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnectionRequest, item);
+    }
+  })
+  createGroupConnectionRequest: IRestMethod<GroupConnectionRequest, GroupConnectionRequest>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/groupConnectionRequest/!{groupConnectionRequestId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnectionRequest, item);
+    }
+  })
+  updateGroupConnectionRequest: IRestMethodStrict<GroupConnectionRequest, any, { groupConnectionRequestId: number }, GroupConnectionRequest>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/groupConnectionRequest/!{groupConnectionRequestId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnectionRequest, item);
+    }
+  })
+  removeGroupConnectionRequest: IRestMethod<{ groupConnectionRequestId: number }, GroupConnectionRequest>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/groupConnectionRequest/!{groupConnectionRequestId}/approve',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnection, item);
     }
   })
-  createGroupConnection: IRestMethod<GroupConnection, GroupConnection>;
+  approveGroupConnectionRequest: IRestMethodStrict<any, any, { groupConnectionRequestId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/groupConnectionRequest/!{groupConnectionRequestId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnectionRequest, item);
+    }
+  })
+  rejectGroupConnectionRequest: IRestMethodStrict<any, any, { groupConnectionRequestId: number }, GroupConnectionRequest>;
+
+  //#endregion
+
+  //#region Group connection
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/groupConnection/!{groupConnectionId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnection, item);
+    }
+  })
+  updateGroupConnection: IRestMethodStrict<GroupConnection, any, { groupConnectionId: number }, GroupConnection>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/groupConnection/!{groupConnectionId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupConnection, item);
+    }
+  })
+  removeGroupConnection: IRestMethod<{ groupConnectionId: number }, GroupConnection>;
 
   //#endregion
 
