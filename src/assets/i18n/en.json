@@ -641,5 +641,11 @@
   "serviceAgreement": "Service agreement",
   "validity": "Validity",
   "rootSubgroup": "Root subgroup",
-  "createTheTemplateVersion": "Create the template version"
+  "createTheTemplateVersion": "Create the template version",
+  "sent": "Sent",
+  "incoming": "Incoming",
+  "outcoming": "Outcoming",
+  "clusters": "Clusters",
+  "hierarchies": "Hierarchies",
+  "structure": "Structure"
 }
