@@ -648,6 +648,16 @@
   "incoming": "Входящие",
   "outcoming": "Исходящие",
   "clusters": "Кластеры",
+  "cluster": "Кластер",
   "hierarchies": "Иерархии",
-  "structure": "Струткура"
+  "structure": "Струткура",
+  "groupConnectionTypeEnum": {
+    "REQUEST": "Заявка",
+    "INVITE": "Приглашение"
+  },
+  "connectionType": "Тип соединения",
+  "requestType": "Тип заявки",
+  "dependentGroup": "Подчиненная группа",
+  "dependentCluster": "Подчиненный кластер",
+  "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?"
 }

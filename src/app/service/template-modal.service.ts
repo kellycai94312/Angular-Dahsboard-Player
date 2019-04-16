@@ -36,6 +36,8 @@ import {Position} from '../data/remote/model/person-position/position';
 import {AuthorizationService} from '../shared/authorization.service';
 import {SubgroupGroup} from '../data/remote/model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupTemplateGroupVersion} from '../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import {GroupConnectionRequest} from '../data/remote/model/group/connection/group-connection-request';
+import {EditGroupConnectionRequestComponent} from '../module/group/edit-group-connection-request/edit-group-connection-request/edit-group-connection-request.component';
 
 @Injectable({
   providedIn: 'root'
@@ -72,6 +74,29 @@ export class TemplateModalService {
     )) as DialogResult<TModel[]>;
   }
 
+  public async showEditGroupConnectionRequest(obj: GroupConnectionRequest, config?: NgxModalConfiguration) {
+    const modal = this._ngxModalService.open();
+    this._modalBuilderService.updateTitleKeyModal(modal, obj);
+    let editGroupConnectionRequestComponent: EditGroupConnectionRequestComponent = null;
+    await modal.componentInstance.initializeBody(EditGroupConnectionRequestComponent, async component => {
+      editGroupConnectionRequestComponent = component;
+      await component.initialize(this._appHelper.cloneObject(obj));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+        })
+      ];
+    }, config);
+    if (await this._ngxModalService.awaitModalResult(modal)) {
+      return {result: true, data: editGroupConnectionRequestComponent.data};
+    }
+    return {result: false};
+  }
+
   //#endregion
 
   public async showConfirmModal(contentKey: string): Promise<boolean> {
@@ -96,6 +121,17 @@ export class TemplateModalService {
       ];
     });
     return await this._ngxModalService.awaitModalResult(modal);
+  }
+
+  public async showQuestionModal(translation: string, getActions: (modal: NgxModalRef) => SplitButtonItem[]): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'attention';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.html = await this._translateObjectService.getTranslation(translation);
+
+      modal.componentInstance.splitButtonItems = getActions(modal);
+    });
+    await this._ngxModalService.awaitModalResult(modal);
   }
 
   public async showGroupPersonTransitionModal(groupTransitionType: PersonTransitionType,

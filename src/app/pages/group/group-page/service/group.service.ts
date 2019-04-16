@@ -28,9 +28,14 @@ export class GroupService implements OnDestroy {
   public readonly groupPerson$: Observable<GroupPerson>;
   public refreshMembers: Subject<void>;
 
+  get updateData$(): Observable<any> {
+    return this._updateDataSubject.asObservable();
+  }
+
   private readonly _groupSubject: Subject<Group>;
   private readonly _groupSubscription: ISubscription;
   private readonly _groupPersonSubject: Subject<GroupPerson>;
+  private readonly _updateDataSubject = new Subject<any>();
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
@@ -119,6 +124,10 @@ export class GroupService implements OnDestroy {
         compare: (first, second) => first.person.id == second.person.id
       }
     );
+  }
+
+  public updateData(item: any): void {
+    this._updateDataSubject.next(item);
   }
 
   //#region Permission

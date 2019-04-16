@@ -987,11 +987,11 @@ export class ParticipantRestApiService extends Rest {
       return plainToClassFromExist(new PageContainer<GroupCluster>(GroupCluster), item);
     }
   })
-  getGroupClusters: IRestMethodStrict<any, { groupId: number }, GroupClusterQuery, PageContainer<GroupCluster>>;
+  getGroupClusters: IRestMethodStrict<any, GroupClusterQuery, { groupId: number }, PageContainer<GroupCluster>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/cluster/!{clusterId}',
+    path: '/group/{!groupId}/cluster/{!clusterId}',
     resultFactory: (item, options) => {
       return plainToClass(GroupCluster, item);
     }
@@ -1000,7 +1000,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/cluster/!{clusterId}/connection',
+    path: '/group/{!groupId}/cluster/{!clusterId}/connection',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnection, item);
     }
@@ -1009,12 +1009,21 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/unassignedClusterGroup',
+    path: '/group/{!groupId}/unassignedGroupCluster',
     resultFactory: (item, options) => {
       return plainToClassFromExist(new PageContainer<GroupCluster>(GroupCluster), item);
     }
   })
   getUnassignedGroupClusters: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupCluster>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/group/{!groupId}/unassignedGroup',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<Group>(Group), item);
+    }
+  })
+  getUnassignedClusterGroups: IRestMethodStrict<any, GroupClusterQuery, { groupId: number }, PageContainer<Group>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -2365,7 +2374,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/groupCluster/{!groupClusterId}/group/!{groupId}/unassignedParentGroup',
+    path: '/groupCluster/{!groupClusterId}/group/{!groupId}/unassignedParentGroup',
     resultFactory: (item, options) => {
       return plainToClassFromExist(new PageContainer<Group>(Group), item);
     }
@@ -2374,7 +2383,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/groupCluster/{!groupClusterId}/group/!{groupId}',
+    path: '/groupCluster/{!groupClusterId}/group/{!groupId}',
     resultFactory: (item, options) => {
       return plainToClassFromExist(new PageContainer<Group>(Group), item);
     }
@@ -2396,7 +2405,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/groupConnectionRequest/!{groupConnectionRequestId}',
+    path: '/groupConnectionRequest/{!groupConnectionRequestId}',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnectionRequest, item);
     }
@@ -2405,7 +2414,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/groupConnectionRequest/!{groupConnectionRequestId}',
+    path: '/groupConnectionRequest/{!groupConnectionRequestId}',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnectionRequest, item);
     }
@@ -2414,7 +2423,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/groupConnectionRequest/!{groupConnectionRequestId}/approve',
+    path: '/groupConnectionRequest/{!groupConnectionRequestId}/approve',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnection, item);
     }
@@ -2423,7 +2432,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/groupConnectionRequest/!{groupConnectionRequestId}/approve',
+    path: '/groupConnectionRequest/{!groupConnectionRequestId}/approve',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnectionRequest, item);
     }
@@ -2436,7 +2445,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Put,
-    path: '/groupConnection/!{groupConnectionId}',
+    path: '/groupConnection/{!groupConnectionId}',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnection, item);
     }
@@ -2445,7 +2454,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Delete,
-    path: '/groupConnection/!{groupConnectionId}',
+    path: '/groupConnection/{!groupConnectionId}',
     resultFactory: (item, options) => {
       return plainToClass(GroupConnection, item);
     }
