@@ -137,6 +137,7 @@ import {GroupClusterQuery} from './query/group/group-cluster-query';
 import {GroupConnection} from '../model/group/connection/group-connection';
 import {GroupConnectionRequest} from '../model/group/connection/group-connection-request';
 import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
+import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
 
 @Injectable()
 @RestParams({
@@ -2382,13 +2383,53 @@ export class ParticipantRestApiService extends Rest {
   getUnassignedParentGroups: IRestMethodStrict<any, PageQuery, { groupClusterId: number, groupId: number }, PageContainer<Group>>;
 
   @RestAction({
-    method: RestRequestMethod.Get,
+    method: RestRequestMethod.Delete,
     path: '/groupCluster/{!groupClusterId}/group/{!groupId}',
     resultFactory: (item, options) => {
       return plainToClassFromExist(new PageContainer<Group>(Group), item);
     }
   })
   removeGroupFromGroupCluster: IRestMethodStrict<any, any, { groupClusterId: number, groupId: number }, PageContainer<Group>>;
+
+  //#endregion
+
+  //#region Group cluster rank
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupCluster/{!groupClusterId}/rank',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<GroupClusterRank>(GroupClusterRank), item);
+    }
+  })
+  getGroupClusterRanks: IRestMethodStrict<any, PageQuery, { groupClusterId: number }, PageContainer<GroupClusterRank>>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupCluster/{!groupClusterId}/rank/{!groupClusterRankId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupClusterRank, item);
+    }
+  })
+  getGroupClusterRank: IRestMethod<{ groupClusterId: number, groupClusterRankId: number }, GroupClusterRank>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/groupCluster/{!groupClusterId}/rank',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupClusterRank, item);
+    }
+  })
+  createGroupClusterRank: IRestMethodStrict<GroupClusterRank, any, { groupClusterId: number }, GroupClusterRank>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/groupCluster/{!groupClusterId}/rank/{!groupClusterRankId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupClusterRank, item);
+    }
+  })
+  removeGroupClusterRank: IRestMethod<{ groupClusterId: number, groupClusterRankId: number }, GroupClusterRank>;
 
   //#endregion
 
@@ -2460,6 +2501,28 @@ export class ParticipantRestApiService extends Rest {
     }
   })
   removeGroupConnection: IRestMethod<{ groupConnectionId: number }, GroupConnection>;
+
+  //#endregion
+
+  //#region Group cluster rank
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/groupClusterRank/{!groupClusterRankId}/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
+  })
+  getRankConnections: IRestMethodStrict<any, { unassigned: boolean }, { groupClusterRankId: number }, Group[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/groupClusterRank/{!groupClusterRankId}/group',
+    resultFactory: (item, options) => {
+      return plainToClass(Group, item);
+    }
+  })
+  updateRankConnections: IRestMethodStrict<ListRequest<IdRequest>, any, { groupClusterRankId: number }, Group[]>;
 
   //#endregion
 

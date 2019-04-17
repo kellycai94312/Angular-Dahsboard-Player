@@ -3,7 +3,7 @@ import {IEnvironment} from './ienvironment';
 
 export const environment: IEnvironment = {
   production: false,
-  version: '0.3.1-21',
+  version: '0.3.1-22',
   type: EnvironmentType.LOCAL,
   host: 'localhost:8082',
   restUrl: 'http://localhost:8082',

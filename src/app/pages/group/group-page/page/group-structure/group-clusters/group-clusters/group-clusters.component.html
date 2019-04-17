@@ -1,3 +1,67 @@
-<p>
-  group-clusters works!
-</p>
+<mat-accordion *ngIf="groupClusterMap"
+               [multi]="true">
+  <mat-expansion-panel *ngFor="let groupCluster of getGroupClusters()"
+                       (opened)="onOpenedGroupCluster(groupCluster)"
+                       (closed)="onClosedGroupCluster(groupCluster)">
+    <mat-expansion-panel-header>
+      <mat-panel-title fxLayout
+                       fxLayoutAlign="space-between center">
+        <div>
+          {{groupCluster.name}}
+        </div>
+        <div *ngIf="groupCluster.canEdit"
+             fxLayout>
+          <button mat-icon-button
+                  (click)="onEditGroupCluster(groupCluster); $event.stopPropagation()">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onAddGroupClusterRank(groupCluster); $event.stopPropagation()">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <mat-accordion *ngIf="getGroupClusterRanks(groupCluster).length; else noDataTemplate"
+                     [multi]="true">
+        <mat-expansion-panel *ngFor="let groupClusterRank of getGroupClusterRanks(groupCluster); let index = index"
+                             (opened)="onOpenedGroupClusterRank(groupCluster,groupClusterRank)"
+                             (closed)="onClosedGroupClusterRank(groupCluster,groupClusterRank)">
+          <mat-expansion-panel-header>
+            <mat-panel-title fxLayout
+                             fxLayoutAlign="space-between center">
+              <div>
+                {{'rank' | translate}} {{index + 1}}
+              </div>
+              <div *ngIf="groupCluster.canEdit"
+                   fxLayout>
+                <button mat-icon-button
+                        (click)="onEditGroupClusterRank(groupCluster, groupClusterRank); $event.stopPropagation()">
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button
+                        (click)="onRemoveGroupClusterRank(groupCluster, groupClusterRank); $event.stopPropagation()">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <ng-template matExpansionPanelContent>
+            <mat-chip-list *ngIf=" this.groupClusterMap.get(groupCluster).get(groupClusterRank).length; else noDataTemplate">
+              <mat-chip *ngFor="let group of this.groupClusterMap.get(groupCluster).get(groupClusterRank)">
+                {{group.name}}
+              </mat-chip>
+            </mat-chip-list>
+          </ng-template>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>
+
+<ng-template #noDataTemplate>
+  <p class="text-center text-muted">{{'noData' | translate}}</p>
+</ng-template>

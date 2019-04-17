@@ -650,7 +650,7 @@
   "clusters": "Кластеры",
   "cluster": "Кластер",
   "hierarchies": "Иерархии",
-  "structure": "Струткура",
+  "structure": "Структура",
   "groupConnectionTypeEnum": {
     "REQUEST": "Заявка",
     "INVITE": "Приглашение"
@@ -659,5 +659,6 @@
   "requestType": "Тип заявки",
   "dependentGroup": "Подчиненная группа",
   "dependentCluster": "Подчиненный кластер",
-  "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?"
+  "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?",
+  "addedNewRank": "Добавлен новый ранг"
 }

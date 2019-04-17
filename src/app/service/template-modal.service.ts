@@ -38,6 +38,7 @@ import {SubgroupGroup} from '../data/remote/model/group/subgroup/subgroup/subgro
 import {SubgroupTemplateGroupVersion} from '../data/remote/model/group/subgroup/template/subgroup-template-group-version';
 import {GroupConnectionRequest} from '../data/remote/model/group/connection/group-connection-request';
 import {EditGroupConnectionRequestComponent} from '../module/group/edit-group-connection-request/edit-group-connection-request/edit-group-connection-request.component';
+import {GroupClusterRank} from '../data/remote/model/group/connection/group-cluster-rank';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,27 @@ export class TemplateModalService {
     return (await this._modalBuilderService.showSelectionItemsModal(selectedItems,
       async (query: GroupQuery) => {
         return await this._participantRestApiService.getGroups(this._appHelper.updatePageQuery(query, groupQuery));
+      },
+      GroupItemComponent,
+      async (component, data) => {
+        await component.initialize(data);
+      },
+      config
+    )) as DialogResult<TModel[]>;
+  }
+
+  public async showSelectionUnassignedGroupsForGroupClusterRankModal<TModel extends Group>(groupClusterRank: GroupClusterRank,
+                                                                                           selectedItems: TModel[],
+                                                                                           config: NgxSelectionConfig<TModel> = null): Promise<DialogResult<TModel[]>> {
+    config = config || new NgxSelectionConfig<TModel>();
+    if (!config.title) {
+      config.title = `${await this._translateObjectService.getTranslation('selection')} ${await this._translateObjectService.getTranslation('groups')}`;
+    }
+
+    return (await this._modalBuilderService.showSelectionItemsModal(selectedItems,
+      async (query: GroupQuery) => {
+        const items = await this._participantRestApiService.getRankConnections({}, {unassigned: true}, {groupClusterRankId: groupClusterRank.id});
+        return this._appHelper.arrayToPageContainer(items);
       },
       GroupItemComponent,
       async (component, data) => {
