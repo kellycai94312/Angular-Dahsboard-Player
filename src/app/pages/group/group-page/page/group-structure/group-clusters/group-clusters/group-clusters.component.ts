@@ -32,8 +32,11 @@ export class GroupClustersComponent extends BaseGroupComponent<Group> implements
     }
   }
 
-  public onEditGroupCluster(groupCluster: GroupCluster) {
-
+  public async onEditGroupCluster(groupCluster: GroupCluster): Promise<void> {
+    const dialogResult = await this._templateModalService.showEditGroupClusterModal(groupCluster);
+    if (dialogResult.result) {
+      Object.assign(groupCluster, dialogResult.data);
+    }
   }
 
   public async onAddGroupClusterRank(groupCluster: GroupCluster) {
@@ -63,7 +66,7 @@ export class GroupClustersComponent extends BaseGroupComponent<Group> implements
   }
 
   public async onClosedGroupCluster(groupCluster: GroupCluster): Promise<void> {
-    this.groupClusterMap.delete(groupCluster);
+    this.groupClusterMap.set(groupCluster, new Map<GroupClusterRank, Group[]>());
   }
 
   public async onEditGroupClusterRank(groupCluster: GroupCluster, groupClusterRank: GroupClusterRank) {

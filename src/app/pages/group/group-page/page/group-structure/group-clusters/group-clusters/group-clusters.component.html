@@ -9,6 +9,9 @@
         <div>
           {{groupCluster.name}}
         </div>
+        <div class="text-muted">
+          {{groupCluster.description}}
+        </div>
         <div *ngIf="groupCluster.canEdit"
              fxLayout>
           <button mat-icon-button

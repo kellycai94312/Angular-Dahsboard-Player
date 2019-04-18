@@ -39,6 +39,8 @@ import {SubgroupTemplateGroupVersion} from '../data/remote/model/group/subgroup/
 import {GroupConnectionRequest} from '../data/remote/model/group/connection/group-connection-request';
 import {EditGroupConnectionRequestComponent} from '../module/group/edit-group-connection-request/edit-group-connection-request/edit-group-connection-request.component';
 import {GroupClusterRank} from '../data/remote/model/group/connection/group-cluster-rank';
+import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
+import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
 
 @Injectable({
   providedIn: 'root'
@@ -329,6 +331,26 @@ export class TemplateModalService {
     });
     if (await this._ngxModalService.awaitModalResult(modal)) {
       return {result: true, data: editGroupNewsComponent.data as T};
+    }
+    return {result: false};
+  }
+
+  public async showEditGroupClusterModal<T extends GroupCluster>(obj: T): Promise<DialogResult<T>> {
+    const modal = this._ngxModalService.open();
+    this._modalBuilderService.updateTitleKeyModal(modal, obj);
+    let namedObjectComponent: NamedObjectComponent<T> = null;
+    await modal.componentInstance.initializeBody(NamedObjectComponent, async component => {
+      namedObjectComponent = component as NamedObjectComponent<T>;
+      component.data = this._appHelper.cloneObject(obj);
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          component.data = await this._participantRestApiService.updateGroupCluster(component.data as T, {}, {groupClusterId: component.data.id});
+          modal.close();
+        })
+      ];
+    });
+    if (await this._ngxModalService.awaitModalResult(modal)) {
+      return {result: true, data: namedObjectComponent.data as T};
     }
     return {result: false};
   }
