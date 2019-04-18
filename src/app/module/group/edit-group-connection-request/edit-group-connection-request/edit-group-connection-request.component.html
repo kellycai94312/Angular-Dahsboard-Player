@@ -1,0 +1,47 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <label>{{'connectionType' | translate}}</label>
+  <dx-select-box class="input-height-sm"
+                 [items]="groupConnectionTypes"
+                 [(value)]="selectedGroupConnectionType"
+                 displayExpr="name"
+                 placeholder="{{'connectionType' | translate}}"
+                 [disabled]="data.id"
+                 (onValueChanged)="onSelectedGroupConnectionType($event.value)">
+  </dx-select-box>
+  <div>
+    <label>{{'groupForConnection' | translate}}</label>
+    <app-input-select [loadData]="fetchGroups"
+                      [(model)]="group"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      [disabled]="data.id">
+    </app-input-select>
+  </div>
+  <div>
+    <label>{{'clusterForConnection' | translate}}</label>
+    <app-input-select [loadData]="fetchGroupClusters"
+                      [(model)]="groupCluster"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      [disabled]="data.id">
+    </app-input-select>
+  </div>
+  <div>
+    <label>{{'dependentGroup' | translate}}</label>
+    <app-input-select [loadData]="fetchLinkGroups"
+                      [(model)]="groupLink"
+                      [getKey]="getKey"
+                      [getName]="getName"
+                      [disabled]="data.id">
+    </app-input-select>
+  </div>
+  <div>
+    <label>{{'dependentCluster' | translate}}</label>
+    <app-input-select [loadData]="fetchLinkGroupClusters"
+                      [(model)]="groupClusterLink"
+                      [getKey]="getKey"
+                      [getName]="getName">
+    </app-input-select>
+  </div>
+</div>

@@ -79,8 +79,8 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         }
       },
       {
-        nameKey: 'connections',
-        routerLink: 'connection'
+        nameKey: 'structure',
+        routerLink: 'structure'
       }
     ];
 

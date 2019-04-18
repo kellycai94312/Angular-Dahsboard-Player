@@ -641,5 +641,24 @@
   "serviceAgreement": "Service agreement",
   "validity": "Validity",
   "rootSubgroup": "Root subgroup",
-  "createTheTemplateVersion": "Create the template version"
+  "createTheTemplateVersion": "Create the template version",
+  "sent": "Sent",
+  "incoming": "Incoming",
+  "outcoming": "Outcoming",
+  "clusters": "Clusters",
+  "cluster": "Cluster",
+  "hierarchies": "Hierarchies",
+  "structure": "Structure",
+  "groupConnectionTypeEnum": {
+    "REQUEST": "Request",
+    "INVITE": "Invite"
+  },
+  "connectionType": "Connection type",
+  "requestType": "Request type",
+  "dependentGroup": "Dependent group",
+  "dependentCluster": "Dependent cluster",
+  "groupForConnection": "Group for connection",
+  "clusterForConnection": "Cluster for connection",
+  "approveConnectionWithTheGroupQuestion": "Approve connection with the group?",
+  "addedNewRank": "Added new rank"
 }

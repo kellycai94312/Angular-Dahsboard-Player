@@ -1,0 +1,29 @@
+<ngx-grid [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [canEdit]="true"
+          [enabledAdd]="false"
+          [windowScroll]="true">
+  <ngx-column nameKey="data">
+    <ng-template let-item>
+      {{item.created | date: propertyConstantClass.dateFormat}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="requestType">
+    <ng-template let-item>
+      {{('groupConnectionTypeEnum.' + item.groupConnectionTypeEnum) | translate}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="group">
+    <ng-template let-item>
+      {{item.parentGroup.name}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="cluster">
+    <ng-template let-item>
+      {{item?.cluster?.name}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

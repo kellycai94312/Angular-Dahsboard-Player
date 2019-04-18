@@ -643,5 +643,22 @@
   "serviceAgreement": "Договор оказания услуг",
   "validity": "Срок действия",
   "rootSubgroup": "Корневая подгруппа",
-  "createTheTemplateVersion": "Создать версию шаблона"
+  "createTheTemplateVersion": "Создать версию шаблона",
+  "sent": "Отправленные",
+  "incoming": "Входящие",
+  "outcoming": "Исходящие",
+  "clusters": "Кластеры",
+  "cluster": "Кластер",
+  "hierarchies": "Иерархии",
+  "structure": "Структура",
+  "groupConnectionTypeEnum": {
+    "REQUEST": "Заявка",
+    "INVITE": "Приглашение"
+  },
+  "connectionType": "Тип соединения",
+  "requestType": "Тип заявки",
+  "dependentGroup": "Подчиненная группа",
+  "dependentCluster": "Подчиненный кластер",
+  "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?",
+  "addedNewRank": "Добавлен новый ранг"
 }
