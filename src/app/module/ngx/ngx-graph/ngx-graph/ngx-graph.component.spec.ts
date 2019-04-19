@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {GroupsHierarchiesComponent} from './groups-hierarchies.component';
+import {NgxGraphComponent} from './ngx-graph.component';
 
-describe('GroupsHierarchiesComponent', () => {
-  let component: GroupsHierarchiesComponent;
-  let fixture: ComponentFixture<GroupsHierarchiesComponent>;
+describe('NgxGraphComponent', () => {
+  let component: NgxGraphComponent;
+  let fixture: ComponentFixture<NgxGraphComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GroupsHierarchiesComponent]
+      declarations: [NgxGraphComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupsHierarchiesComponent);
+    fixture = TestBed.createComponent(NgxGraphComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
