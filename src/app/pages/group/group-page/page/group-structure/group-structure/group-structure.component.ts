@@ -17,6 +17,10 @@ export class GroupStructureComponent {
         routerLink: 'cluster'
       },
       {
+        nameKey: 'hierarchies',
+        routerLink: 'hierarchy'
+      },
+      {
         nameKey: 'requests',
         routerLink: 'request'
       }
