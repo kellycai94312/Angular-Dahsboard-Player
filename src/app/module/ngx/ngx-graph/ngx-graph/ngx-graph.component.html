@@ -31,7 +31,8 @@
 
   <ng-template #linkTemplate
                let-link>
-    <svg:g class="edge">
+    <svg:g class="edge"
+           (dblclick)="onDoubleClickLink(link)">
       <svg:path class="line"
                 [attr.stroke]="link.color"
                 [attr.label]="link.label"

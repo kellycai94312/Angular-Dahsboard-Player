@@ -660,5 +660,6 @@
   "dependentGroup": "Подчиненная группа",
   "dependentCluster": "Подчиненный кластер",
   "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?",
-  "addedNewRank": "Добавлен новый ранг"
+  "addedNewRank": "Добавлен новый ранг",
+  "removeThisConnection": "Удалить это соединение"
 }

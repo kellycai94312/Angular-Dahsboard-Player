@@ -660,5 +660,6 @@
   "groupForConnection": "Group for connection",
   "clusterForConnection": "Cluster for connection",
   "approveConnectionWithTheGroupQuestion": "Approve connection with the group?",
-  "addedNewRank": "Added new rank"
+  "addedNewRank": "Added new rank",
+  "removeThisConnection": "Remove this connection"
 }
