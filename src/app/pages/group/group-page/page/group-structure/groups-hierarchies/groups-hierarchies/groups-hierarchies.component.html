@@ -1,3 +1,8 @@
-<p>
-  groups-hierarchies works!
-</p>
+<app-input-select class="mb-2"
+                  [loadData]="fetchClusters"
+                  [(model)]="selectedGroupCluster"
+                  [getKey]="getKey"
+                  [getName]="getName"
+                  placeholder="{{'cluster' | translate}}">
+</app-input-select>
+<app-group-connections-graph [groupCluster]="selectedGroupCluster"></app-group-connections-graph>
