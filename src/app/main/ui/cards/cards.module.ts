@@ -6,7 +6,6 @@ import { FuseSharedModule } from '@fuse/shared.module';
 import { FuseHighlightModule } from '@fuse/components';
 
 import { CardsComponent } from 'app/main/ui/cards/cards.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 const routes: Routes = [
     {
@@ -30,8 +29,6 @@ const routes: Routes = [
         MatSelectModule,
         MatSlideToggleModule,
         MatTabsModule,
-
-        NgxChartsModule,
 
         FuseSharedModule,
         FuseHighlightModule,

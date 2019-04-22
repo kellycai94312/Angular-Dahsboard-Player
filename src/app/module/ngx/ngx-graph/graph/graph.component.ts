@@ -4,11 +4,11 @@ import {Link} from '../model/link';
 import * as shape from 'd3-shape';
 
 @Component({
-  selector: 'app-ngx-graph',
-  templateUrl: './ngx-graph.component.html',
-  styleUrls: ['./ngx-graph.component.scss']
+  selector: 'app-graph',
+  templateUrl: './graph.component.html',
+  styleUrls: ['./graph.component.scss']
 })
-export class NgxGraphComponent {
+export class GraphComponent {
 
   @Input()
   public links: Link[] = [];
