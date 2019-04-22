@@ -92,6 +92,21 @@ export class EditGroupConnectionRequestComponent extends BaseEditComponent<Group
     this.data.groupConnectionTypeEnum = value.data;
   }
 
+  public onSelectedGroup(value: Group) {
+    this.groupCluster = null;
+    this.groupLink = null;
+    this.groupClusterLink = null;
+  }
+
+  public onSelectedGroupCluster(value: GroupCluster) {
+    this.groupLink = null;
+    this.groupClusterLink = null;
+  }
+
+  public onSelectedGroupLink(value: Group) {
+    this.groupClusterLink = null;
+  }
+
   public fetchGroups = async (from: number, searchText: string) => {
     return await this.participantRestApiService.getGroups({from: from, count: PropertyConstant.pageSize, name: searchText});
   };
@@ -106,6 +121,9 @@ export class EditGroupConnectionRequestComponent extends BaseEditComponent<Group
     const query: GroupClusterQuery = {from: from, count: PropertyConstant.pageSize, name: searchText};
     if (this.groupCluster) {
       query.clusterId = this.groupCluster.id;
+    }
+    if (this.selectedGroupConnectionType.data === GroupConnectionTypeEnum.REQUEST) {
+      query.canEdit = true;
     }
     return await this.participantRestApiService.getUnassignedClusterGroups({}, query, {groupId: this.group.id});
   };
