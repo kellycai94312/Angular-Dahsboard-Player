@@ -15,7 +15,8 @@
                       [(model)]="group"
                       [getKey]="getKey"
                       [getName]="getName"
-                      [disabled]="data.id">
+                      [disabled]="data.id"
+                      (onChange)="onSelectedGroup($event)">
     </app-input-select>
   </div>
   <div>
@@ -24,7 +25,8 @@
                       [(model)]="groupCluster"
                       [getKey]="getKey"
                       [getName]="getName"
-                      [disabled]="data.id">
+                      [disabled]="data.id"
+                      (onChange)="onSelectedGroupCluster($event)">
     </app-input-select>
   </div>
   <div>
@@ -33,7 +35,8 @@
                       [(model)]="groupLink"
                       [getKey]="getKey"
                       [getName]="getName"
-                      [disabled]="data.id">
+                      [disabled]="data.id"
+                      (onChange)="onSelectedGroupLink($event)">
     </app-input-select>
   </div>
   <div>

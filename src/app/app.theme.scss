@@ -85,14 +85,9 @@ $typography: mat-typography-config(
 @import "src/app/main/apps/calendar/calendar.theme";
 @import "src/app/pages/conversation/chat/chat.theme";
 @import "src/app/main/apps/contacts/contacts.theme";
-@import "src/app/main/apps/dashboards/project/project.theme";
-@import "src/app/main/apps/e-commerce/orders/orders.theme";
-@import "src/app/main/apps/e-commerce/products/products.theme";
 @import "src/app/main/apps/file-manager/file-manager.theme";
 @import "src/app/main/apps/mail/mail.theme";
 @import "src/app/main/apps/mail-ngrx/mail.theme";
-@import "src/app/main/apps/scrumboard/scrumboard.theme";
-@import "src/app/main/apps/todo/todo.theme";
 
 @import "src/app/main/pages/authentication/login/login.theme";
 @import "src/app/main/pages/authentication/login-2/login-2.theme";
@@ -119,7 +114,6 @@ $typography: mat-typography-config(
 @import "src/app/main/pages/faq/faq.theme";
 @import "src/app/main/pages/knowledge-base/knowledge-base.theme";
 
-@import "src/app/main/ui/cards/cards.theme";
 
 @import "src/app/main/angular-material-elements/example-viewer/example-viewer.theme";
 
@@ -135,14 +129,9 @@ $typography: mat-typography-config(
     @include calendar-theme($theme);
     @include chat-theme($theme);
     @include contacts-theme($theme);
-    @include dashboards-project-theme($theme);
-    @include e-commerce-orders-theme($theme);
-    @include e-commerce-products-theme($theme);
     @include file-manager-theme($theme);
     @include mail-theme($theme);
     @include mail-ngrx-theme($theme);
-    @include scrumboard-theme($theme);
-    @include todo-theme($theme);
 
     // Pages
     @include login-theme($theme);
@@ -169,9 +158,6 @@ $typography: mat-typography-config(
     @include search-modern-theme($theme);
     @include faq-theme($theme);
     @include knowledge-base-theme($theme);
-
-    // UI
-    @include ui-cards-theme($theme);
 
     // Example Viewer
     @include example-viewer-theme($theme);

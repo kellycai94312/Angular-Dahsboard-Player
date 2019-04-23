@@ -1,6 +1,6 @@
 {
   "name": "sport-monitoring-web",
-  "version": "0.3.1-25",
+  "version": "0.3.1-27",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -40,10 +40,6 @@
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "@stomp/ng2-stompjs": "^7.2.0",
-    "@swimlane/dragula": "^3.7.3",
-    "@swimlane/ngx-charts": "^10.1.0",
-    "@swimlane/ngx-datatable": "^14.0.0",
-    "@swimlane/ngx-dnd": "^6.0.0",
     "@swimlane/ngx-graph": "^5.5.0",
     "@types/plotly.js": "^1.44.3",
     "@types/prismjs": "^1.16.0",
