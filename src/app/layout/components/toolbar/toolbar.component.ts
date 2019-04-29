@@ -92,7 +92,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         if (val) {
           this.personLogoUrl = this._participantRestApiService.getUrlImage({
             clazz: FileClass.PERSON,
-            type: ImageType.LOGO,
+            type: ImageType.CROPPED_LOGO,
             objectId: val.id,
             width: 40,
             height: 40

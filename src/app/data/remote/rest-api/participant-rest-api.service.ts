@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod, RestResponseBodyType} from 'rest-core';
 import {Session} from '../model/session';
 import {Auth} from '../model/auth';
 import {PageContainer} from '../bean/page-container';
@@ -138,6 +138,7 @@ import {GroupConnection} from '../model/group/connection/group-connection';
 import {GroupConnectionRequest} from '../model/group/connection/group-connection-request';
 import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
 import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
+import {ImageCropRequest} from '../request/image-crop-request';
 
 @Injectable()
 @RestParams({
@@ -1043,9 +1044,10 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/image'
+    path: '/file/download/image',
+    responseBodyType: RestResponseBodyType.Blob
   })
-  downloadImage: IRestMethod<ImageQuery, void>;
+  downloadImage: IRestMethod<ImageQuery, any>;
 
   @RestAction({
     method: RestRequestMethod.Get,
@@ -1064,6 +1066,15 @@ export class ParticipantRestApiService extends Rest {
     path: '/file/document'
   })
   getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/file/{!imageId}/crop',
+    resultFactory: (item, options) => {
+      return plainToClass(Image, item);
+    }
+  })
+  cropImage: IRestMethodStrict<ImageCropRequest, any, { imageId: number }, Image>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
@@ -2646,6 +2657,17 @@ export class ParticipantRestApiService extends Rest {
       url += `&height=${query.height}`;
     }
     return url;
+  }
+
+  async getDataUrl(url: string): Promise<any> {
+    return await fetch(url, {credentials: 'include'})
+      .then(response => response.blob())
+      .then(blob => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+      }));
   }
 
 }

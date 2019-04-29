@@ -7,5 +7,6 @@ export class BaseFile extends VersionObject {
   public discriminator: FileType;
   public clazz: FileClass;
   public objectId: number;
+  public orderId: number;
   public resource: Resource;
 }

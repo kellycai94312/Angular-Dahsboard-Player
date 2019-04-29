@@ -1,16 +1,10 @@
-import {BaseFileVersion} from '../base/base-file-version';
 import {DocumentType} from './document-type';
-import {FileType} from '../base/file-type';
+import {VersionObject} from '../../../base/version/version-object';
 
-export class DocumentVersion extends BaseFileVersion {
+export class DocumentVersion extends VersionObject {
   type: DocumentType;
   number: number;
   date: Date;
   issuedBy?: string;
   validityInDays?: number;
-
-  constructor() {
-    super();
-    this.discriminator = FileType.DOCUMENT;
-  }
 }

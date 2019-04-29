@@ -1,0 +1,18 @@
+<image-cropper [imageChangedEvent]="imageChangedEvent"
+               [maintainAspectRatio]="true"
+               [aspectRatio]="1"
+               [resizeToWidth]="128"
+               [imageBase64]="imageBase64"
+               [cropper]="cropperPosition"
+               (imageCropped)="imageCropped($event)"
+               (imageLoaded)="imageLoaded()"
+               (cropperReady)="cropperReady()"
+               (loadImageFailed)="loadImageFailed()"></image-cropper>
+
+<img [src]="croppedImage"/>
+<input #fileInputElement
+       id="file-upload"
+       type="file"
+       title=" "
+       (change)="fileChangeEvent($event)"
+       accept="image/*">

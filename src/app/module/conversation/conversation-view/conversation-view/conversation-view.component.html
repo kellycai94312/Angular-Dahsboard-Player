@@ -29,7 +29,7 @@
             <ngx-image #conversationLogo
                        class="avatar"
                        [object]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person : data"
-                       [type]="imageTypeClass.LOGO"
+                       [type]="imageTypeClass.CROPPED_LOGO"
                        [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
                        [format]="imageFormatClass.CIRCLE"
                        [width]="40"

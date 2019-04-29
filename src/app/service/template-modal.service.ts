@@ -41,6 +41,10 @@ import {EditGroupConnectionRequestComponent} from '../module/group/edit-group-co
 import {GroupClusterRank} from '../data/remote/model/group/connection/group-cluster-rank';
 import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
 import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
+import {NgxCropImageComponent} from '../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
+import {IdentifiedObject} from '../data/remote/base/identified-object';
+import {ImageType} from '../data/remote/model/file/image/image-type';
+import {FileClass} from '../data/remote/model/file/base/file-class';
 
 @Injectable({
   providedIn: 'root'
@@ -383,6 +387,33 @@ export class TemplateModalService {
       eventGroupNews = (await this._participantRestApiService.createGroupNews(eventGroupNews, {}, {groupId: group.id})) as EventGroupNews;
     });
     return eventGroupNews;
+  }
+
+  public async showCropImageModal(obj: IdentifiedObject,
+                                  type: ImageType,
+                                  fileClass: FileClass,
+                                  config: NgxModalConfiguration): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+
+    await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
+      await component.initialize(obj, type, fileClass);
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'uploadFile',
+          callback: async data => {
+            component.onUploadImage();
+          }
+        },
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await component.onSave()) {
+            modal.close();
+          }
+        })
+      ];
+    }, config);
+    await this._ngxModalService.awaitModalResult(modal);
   }
 
   //#region Event
