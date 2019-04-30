@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Subject} from 'rxjs';
-import {distinctUntilChanged, takeUntil} from 'rxjs/operators';
+import {takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 
 import {FuseConfigService} from '@fuse/services/config.service';
@@ -84,8 +84,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     this._unsubscribeAll = new Subject();
 
     this._authorizationService.personSubject.pipe(
-      takeUntil(this._unsubscribeAll),
-      distinctUntilChanged()
+      takeUntil(this._unsubscribeAll)
     )
       .subscribe(val => {
         this.person = val;
@@ -96,7 +95,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             objectId: val.id,
             width: 40,
             height: 40
-          });
+          }, true);
         } else {
           delete this.personLogoUrl;
         }

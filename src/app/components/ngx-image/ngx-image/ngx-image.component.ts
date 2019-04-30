@@ -163,6 +163,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public async onEditImage(elem: HTMLInputElement): Promise<void> {
     if (this.cropImage) {
       await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, {componentFactoryResolver: this._componentFactoryResolver});
+      this.imageChange.emit();
       this.refresh();
     } else {
       elem.click();

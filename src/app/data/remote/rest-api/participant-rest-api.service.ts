@@ -2647,7 +2647,7 @@ export class ParticipantRestApiService extends Rest {
     return `${environment.restUrl}/file/download/document/${documentId}`;
   }
 
-  getUrlImage(query: ImageQuery): string {
+  getUrlImage(query: ImageQuery, noCache: boolean = false): string {
     let url = `${environment.restUrl}/file/download/image?clazz=${query.clazz}&objectId=${query.objectId}&type=${query.type}`;
     if (query.width) {
       url += `&width=${query.width}`;
@@ -2656,6 +2656,11 @@ export class ParticipantRestApiService extends Rest {
     if (query.height) {
       url += `&height=${query.height}`;
     }
+
+    if (noCache) {
+      url += `&date=${Date.now()}`;
+    }
+
     return url;
   }
 
