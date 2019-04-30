@@ -2660,7 +2660,7 @@ export class ParticipantRestApiService extends Rest {
   }
 
   async getDataUrl(url: string): Promise<any> {
-    return await fetch(url, {credentials: 'include'})
+    return await fetch(url, {credentials: 'include', cache: 'no-cache'})
       .then(response => response.blob())
       .then(blob => new Promise((resolve, reject) => {
         const reader = new FileReader();

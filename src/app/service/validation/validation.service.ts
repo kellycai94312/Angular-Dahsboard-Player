@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TranslateObjectService} from '../../shared/translate-object.service';
+import {Observable} from 'rxjs';
+import {FormControl} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +12,13 @@ export class ValidationService {
   public readonly maxPasswordLength = 255;
 
   constructor(private _translateObjectService: TranslateObjectService) {
+  }
+
+  public getError(formControl: FormControl): Observable<string> {
+    if (formControl.hasError('required')) {
+      return this._translateObjectService.getTranslation$('requiredField');
+    }
+    return null;
   }
 
   public async requiredValidation(val: string): Promise<string> {

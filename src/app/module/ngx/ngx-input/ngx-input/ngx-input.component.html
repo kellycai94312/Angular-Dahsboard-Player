@@ -1,0 +1,8 @@
+<mat-form-field *ngIf="ngxInput"
+                [appearance]="ngxInput.appearance">
+  <mat-label>{{ngxInput.label ? ngxInput.label : (ngxInput.labelTranslation | translate)}}</mat-label>
+  <input matInput
+         [type]="ngxInput"
+         [formControl]="ngxInput">
+  <mat-error *ngIf="ngxInput.invalid && ngxInput.getErrorMessage">{{ngxInput.getErrorMessage(ngxInput) | async}}</mat-error>
+</mat-form-field>

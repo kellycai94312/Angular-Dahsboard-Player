@@ -3,8 +3,9 @@
     <ngx-image [canEdit]="canEdit"
                [width]="130"
                [height]="130"
-               [objectId]="group.id"
-               [type]="imageTypeClass.LOGO"
+               [object]="group"
+               [type]="imageTypeClass.CROPPED_LOGO"
+               [cropImage]="true"
                [fileClass]="fileClassClass.GROUP"
                [allowFullScreen]="false"></ngx-image>
     <div class="p-2">

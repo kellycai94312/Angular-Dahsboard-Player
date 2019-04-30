@@ -3,7 +3,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {NameWrapper} from '../data/local/name-wrapper';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../utils/app-helper';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Locale} from '../data/remote/misc/locale';
 
 @Injectable()
@@ -49,6 +49,10 @@ export class TranslateObjectService implements OnDestroy {
 
   public async getTranslation(key: string, interpolateParams?: Object): Promise<string> {
     return await this._translateService.get(key, interpolateParams).toPromise();
+  }
+
+  public getTranslation$(key: string, interpolateParams?: Object): Observable<string | any> {
+    return this._translateService.get(key, interpolateParams);
   }
 
   ngOnDestroy(): void {

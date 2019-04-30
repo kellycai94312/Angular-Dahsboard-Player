@@ -6,7 +6,6 @@ import {AttachFileModule} from '../attach-file/attach-file.module';
 import {NgxGridModule} from '../ngx-grid/ngx-grid.module';
 import {DxCheckBoxModule, DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {InputSelectModule} from '../input-select/input-select.module';
-import {EditGroupNewsComponent} from './edit-group-news/edit-group-news.component';
 import {GroupNewsItemComponent} from './group-news-item/group-news-item.component';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {UrlParserModule} from '../../pipes/url-parser/url-parser.module';
@@ -15,6 +14,7 @@ import {ImageModule} from '../image/image.module';
 import {EditGroupModule} from '../../module/group/edit-group/edit-group.module';
 import {EditGroupComponent} from '../../module/group/edit-group/edit-group/edit-group.component';
 import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule} from '@angular/material';
+import {EditGroupNewsModule} from '../../module/group/edit/edit-group-news/edit-group-news.module';
 
 @NgModule({
   imports: [
@@ -38,20 +38,20 @@ import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule} from '@ang
     MatCardModule,
     MatMenuModule,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+
+    // TODO: Remove this import
+    EditGroupNewsModule
   ],
   declarations: [
     GroupTransitionComponent,
-    EditGroupNewsComponent,
     GroupNewsItemComponent
   ],
   entryComponents: [
-    GroupTransitionComponent,
-    EditGroupNewsComponent
+    GroupTransitionComponent
   ],
   exports: [
     GroupTransitionComponent,
-    EditGroupNewsComponent,
     GroupNewsItemComponent,
     EditGroupComponent
   ]
