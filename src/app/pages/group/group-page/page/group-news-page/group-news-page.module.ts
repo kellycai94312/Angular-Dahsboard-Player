@@ -5,6 +5,7 @@ import {NgxVirtualScrollModule} from '../../../../../components/ngx-virtual-scro
 import {GroupModule} from '../../../../../components/group/group.module';
 import {GroupNewsPageRoutingModule} from './group-news-page-routing.module';
 import {GroupNewsPageComponent} from './group-news-page/group-news-page.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {GroupNewsPageComponent} from './group-news-page/group-news-page.componen
     GroupNewsPageRoutingModule,
     NgxButtonModule,
     NgxVirtualScrollModule,
-    GroupModule
+    GroupModule,
+    FlexLayoutModule
   ],
   declarations: [GroupNewsPageComponent]
 })

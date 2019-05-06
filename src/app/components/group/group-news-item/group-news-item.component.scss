@@ -1,3 +1,9 @@
+$margin-size: 10px;
+$padding-size: $margin-size;
+
 mat-card {
-  max-width: 900px !important;
+  padding: $padding-size;
+  margin: calc(#{$margin-size} / 2);
+  width: inherit;
+  overflow: auto;
 }

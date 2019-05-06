@@ -57,3 +57,7 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "app/app.theme";
 
 @import "~@ctrl/ngx-emoji-mart/picker.css";
+
+.ck-balloon-panel {
+  z-index: 1060 !important;
+}

@@ -1,0 +1,7 @@
+:host {
+  ::ng-deep {
+    .ngx-virtual-scroll-content {
+      max-width: 80% !important;
+    }
+  }
+}

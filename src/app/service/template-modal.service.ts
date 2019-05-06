@@ -12,7 +12,6 @@ import {NgxModalRef} from '../components/ngx-modal/bean/ngx-modal-ref';
 import {BaseConversation} from '../data/remote/model/chat/conversation/base/base-conversation';
 import {BaseGroupNews} from '../data/remote/model/group/news/base-group-news';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {EditGroupNewsComponent} from '../components/group/edit-group-news/edit-group-news.component';
 import {EventGroupNews} from '../data/remote/model/group/news/event-group-news';
 import {GeneralStepEditEventComponent} from '../module/event/edit-event/general-step-edit-event/general-step-edit-event.component';
 import {PersonsStepEditEventComponent} from '../module/event/edit-event/persons-step-edit-event/persons-step-edit-event.component';
@@ -41,6 +40,11 @@ import {EditGroupConnectionRequestComponent} from '../module/group/edit-group-co
 import {GroupClusterRank} from '../data/remote/model/group/connection/group-cluster-rank';
 import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
 import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
+import {NgxCropImageComponent} from '../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
+import {IdentifiedObject} from '../data/remote/base/identified-object';
+import {ImageType} from '../data/remote/model/file/image/image-type';
+import {FileClass} from '../data/remote/model/file/base/file-class';
+import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-group-news/edit-group-news.component';
 
 @Injectable({
   providedIn: 'root'
@@ -383,6 +387,33 @@ export class TemplateModalService {
       eventGroupNews = (await this._participantRestApiService.createGroupNews(eventGroupNews, {}, {groupId: group.id})) as EventGroupNews;
     });
     return eventGroupNews;
+  }
+
+  public async showCropImageModal(obj: IdentifiedObject,
+                                  type: ImageType,
+                                  fileClass: FileClass,
+                                  config: NgxModalConfiguration): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'edit';
+
+    await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
+      await component.initialize(obj, type, fileClass);
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'uploadFile',
+          callback: async data => {
+            component.onUploadImage();
+          }
+        },
+        this._ngxModalService.saveSplitItemButton(async () => {
+          if (await component.onSave()) {
+            modal.close();
+          }
+        })
+      ];
+    }, config);
+    await this._ngxModalService.awaitModalResult(modal);
   }
 
   //#region Event

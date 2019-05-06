@@ -1,0 +1,6 @@
+<div *ngIf="data"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <new-ngx-input [ngxInput]="titleNgxInput"></new-ngx-input>
+  <ngx-html-editor [(data)]="data.content"></ngx-html-editor>
+</div>

@@ -224,8 +224,10 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   }
 
   public async onLogoChanged() {
-    const image = (await this._participantRestApiService.getImages({clazz: FileClass.PERSON, objectId: this.personService.personViewModel.data.id, type: ImageType.LOGO})).list[0];
+    const image = (await this._participantRestApiService.getImages({clazz: FileClass.PERSON, objectId: this.personService.personViewModel.data.id, type: ImageType.CROPPED_LOGO})).list[0];
     this.personService.logoHandler.next(image);
+    // TODO: Need to refresh image
+    this._authorizationService.personSubject.next(this.personViewModel.data);
   }
 
   //#region UserRole

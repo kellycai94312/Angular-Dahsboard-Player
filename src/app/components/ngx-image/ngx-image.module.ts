@@ -4,13 +4,15 @@ import {NgxImageComponent} from './ngx-image/ngx-image.component';
 import {NgxModalModule} from '../ngx-modal/ngx-modal.module';
 import {HtmlContentModule} from '../html-content/html-content.module';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
+import {NgxCropImageModule} from '../../module/ngx/ngx-crop-image/ngx-crop-image.module';
 
 @NgModule({
   imports: [
     CommonModule,
     NgxModalModule,
     HtmlContentModule,
-    SafeHtmlModule
+    SafeHtmlModule,
+    NgxCropImageModule
   ],
   declarations: [NgxImageComponent],
   exports: [NgxImageComponent]

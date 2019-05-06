@@ -2,11 +2,12 @@
   <div class="header">
     <div class="d-flex flex-row">
       <ngx-image [canEdit]="allowEdit"
-                 [objectId]="personViewModel.data.id"
+                 [object]="personViewModel.data"
                  [width]="130"
                  [height]="130"
                  [allowFullScreen]="false"
-                 [type]="imageTypeClass.LOGO"
+                 [cropImage]="true"
+                 [type]="imageTypeClass.CROPPED_LOGO"
                  [fileClass]="fileClassClass.PERSON"
                  [format]="imageFormatClass.CIRCLE"
                  (imageChange)="onLogoChanged()"></ngx-image>

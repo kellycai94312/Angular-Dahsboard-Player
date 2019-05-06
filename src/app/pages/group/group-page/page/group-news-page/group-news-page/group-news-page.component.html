@@ -1,13 +1,14 @@
 <ngx-button *ngIf="canEdit"
-            class="mb-2"
             [icon]="iconEnumClass.ADD"
             [click]="onAdd">
 </ngx-button>
-<ngx-virtual-scroll [getItems]="fetchItems"
+<ngx-virtual-scroll fxLayout="column"
+                    fxLayoutAlign="center center"
+                    [getItems]="fetchItems"
                     [windowScroll]="true">
   <ng-template let-item>
     <div *ngIf="!item.deleted"
-         class="mb-2">
+         class="mt-2">
       <app-group-news-item [data]="item"
                            [canEdit]="canEdit"></app-group-news-item>
     </div>

@@ -12,13 +12,15 @@
        [style.width.px]="innerWidth"
        [style.height.px]="innerHeight"
        [style.border-radius]="format === imageFormatClass.CIRCLE ? '100%' : '0px'">
-    <div class="img-content">
-      <input id="file-upload"
-             type="file"
-             title=" "
-             (change)="onImageChange($event.target.files)"
-             accept="image/*">
+    <div class="img-content"
+         (click)="onEditImage(fileInput);">
       <i class="fa fa-pencil-square-o"></i>
     </div>
   </div>
 </div>
+<input #fileInput
+       id="file-upload"
+       type="file"
+       title=" "
+       (change)="onImageChange($event.target.files)"
+       accept="image/*">

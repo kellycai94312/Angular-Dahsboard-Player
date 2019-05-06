@@ -1,0 +1,15 @@
+<image-cropper [cropper]="cropper"
+               [maintainAspectRatio]="true"
+               [resizeToWidth]="128"
+               [imageBase64]="imageBase64"
+               (imageCropped)="imageCropped($event)"
+               (imageLoaded)="imageLoaded()"></image-cropper>
+
+<img *ngIf="croppedImage"
+     [src]="croppedImage"/>
+<input #fileInputElement
+       id="file-upload"
+       type="file"
+       title=" "
+       (change)="fileChangeEvent($event)"
+       accept="image/*">

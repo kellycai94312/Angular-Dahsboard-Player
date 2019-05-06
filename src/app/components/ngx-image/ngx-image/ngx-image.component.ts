@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ImageFormat} from '../../../data/local/image-format';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
@@ -8,6 +8,7 @@ import {Image} from '../../../data/remote/model/file/image/image';
 import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {ImageQuery} from '../../../data/remote/rest-api/query/file/image-query';
+import {TemplateModalService} from '../../../service/template-modal.service';
 
 @Component({
   selector: 'ngx-image',
@@ -55,6 +56,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public autoSave: boolean;
 
+  @Input()
+  public cropImage: boolean;
+
   public url: string;
   public innerWidth: number;
   public innerHeight: number;
@@ -66,6 +70,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
               private _elementRef: ElementRef,
+              private _templateModalService: TemplateModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<File>();
     this.class = '';
@@ -154,4 +160,13 @@ export class NgxImageComponent implements OnInit, OnChanges {
     }
   }
 
+  public async onEditImage(elem: HTMLInputElement): Promise<void> {
+    if (this.cropImage) {
+      await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, {componentFactoryResolver: this._componentFactoryResolver});
+      this.imageChange.emit();
+      this.refresh();
+    } else {
+      elem.click();
+    }
+  }
 }
