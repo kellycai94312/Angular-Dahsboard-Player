@@ -1,8 +1,24 @@
-<mat-form-field *ngIf="ngxInput"
-                [appearance]="ngxInput.appearance">
-  <mat-label>{{ngxInput.label ? ngxInput.label : (ngxInput.labelTranslation | translate)}}</mat-label>
-  <input matInput
-         [type]="ngxInput"
-         [formControl]="ngxInput">
-  <mat-error *ngIf="ngxInput.invalid && ngxInput.getErrorMessage">{{ngxInput.getErrorMessage(ngxInput) | async}}</mat-error>
+<mat-form-field *ngIf="data"
+                [appearance]="data.appearance">
+  <mat-label *ngIf="data.label || data.labelTranslation">{{data.label ? data.label : (data.labelTranslation | translate)}}</mat-label>
+  <input *ngIf="data.type !== ngxInputTypeClass.TEXTAREA; else textareaTemplate"
+         matInput
+         [required]="data.required"
+         [type]="data.type"
+         [formControl]="data.control"
+         [placeholder]="data.placeholder">
+  <ng-template #textareaTemplate>
+    <textarea matInput
+              [required]="data.required"
+              [rows]="data.rows"
+              [formControl]="data.control"
+              [placeholder]="data.placeholder"></textarea>
+  </ng-template>
+  <button *ngIf="data.showClearButton && data.control.value"
+          matSuffix
+          mat-icon-button
+          (click)="onClearValue()">
+    <mat-icon class="suffix-icon">close</mat-icon>
+  </button>
+  <mat-error *ngIf="data.control.invalid && data.getErrorMessage">{{data.getErrorMessage(data) | async}}</mat-error>
 </mat-form-field>
