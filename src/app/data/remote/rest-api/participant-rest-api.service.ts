@@ -1299,6 +1299,15 @@ export class ParticipantRestApiService extends Rest {
   getPollQuestions: IRestMethodStrict<any, { name?: string, answerTypeEnum?: AnswerTypeEnum }, { eventPollId: number }, PollQuestion[]>;
 
   @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPoll/{!eventPollId}/question',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestion, item);
+    }
+  })
+  createPollQuestion: IRestMethodStrict<PollQuestion, any, { eventPollId: number }, PollQuestion>;
+
+  @RestAction({
     method: RestRequestMethod.Put,
     path: '/eventPoll/{!eventPollId}/question/{!pollQuestionId}',
     resultFactory: (item, options) => {
@@ -1371,7 +1380,7 @@ export class ParticipantRestApiService extends Rest {
       return plainToClass(PollQuestionAnswer, item);
     }
   })
-  createPollQuestionAnswers: IRestMethodStrict<PollQuestionAnswer, any, { pollQuestionId: number }, PollQuestionAnswer>;
+  createPollQuestionAnswer: IRestMethodStrict<PollQuestionAnswer, any, { pollQuestionId: number }, PollQuestionAnswer>;
 
   @RestAction({
     method: RestRequestMethod.Put,

@@ -661,5 +661,19 @@
   "clusterForConnection": "Cluster for connection",
   "approveConnectionWithTheGroupQuestion": "Approve connection with the group?",
   "addedNewRank": "Added new rank",
-  "removeThisConnection": "Remove this connection"
+  "removeThisConnection": "Remove this connection",
+  "editPoll": "Edit poll",
+  "answerTypeEnum": {
+    "ONE_ANSWER": "One answer",
+    "MULTIPLE_ANSWERS": "Multiple answers",
+    "PARAMETERIZED_ANSWER": "Parameterized answer",
+    "FREE_ANSWER": "Free answer"
+  },
+  "answerType": "Answer type",
+  "question": "Question",
+  "requiredQuestion": "Required question",
+  "addQuestion": "Add question",
+  "addAnswer": "Add answer",
+  "answer": "Answer",
+  "points": "Points"
 }
