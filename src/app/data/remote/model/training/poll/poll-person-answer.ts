@@ -8,7 +8,7 @@ export class PollPersonAnswer extends IdentifiedObject {
   @Type(type => PollQuestion)
   public pollQuestion: PollQuestion;
 
-  // Nullable when FREE_ANSWER
+  // Nullable when FREE_ANSWER or PARAMETERIZED_ANSWER
   @Type(type => PollQuestionAnswer)
   public pollQuestionAnswer?: PollQuestionAnswer;
 

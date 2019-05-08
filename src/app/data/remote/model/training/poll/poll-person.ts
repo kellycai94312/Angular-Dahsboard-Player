@@ -13,4 +13,7 @@ export class PollPerson extends IdentifiedObject {
 
   public approved?: boolean;
 
+  // Transient
+  // Итоговый счет участника
+  public totalScore?: number;
 }
