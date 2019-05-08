@@ -675,5 +675,6 @@
   "addQuestion": "Add question",
   "addAnswer": "Add answer",
   "answer": "Answer",
-  "points": "Points"
+  "points": "Points",
+  "finishPoll": "Finish poll"
 }

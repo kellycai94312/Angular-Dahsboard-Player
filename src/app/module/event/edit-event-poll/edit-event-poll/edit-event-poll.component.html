@@ -1,0 +1,11 @@
+<div fxLayout="column"
+     fxLayoutGap="5px">
+  <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
+  <app-poll-question-item *ngFor="let item of pollQuestions"
+                          fxLayout="column"
+                          fxLayoutGap="5px"
+                          [data]="item"
+                          (editPollQuestion)="onEditPollQuestion($event)"
+                          [canEdit]="canEdit"
+                          [canExecutePoll]="canExecutePoll"></app-poll-question-item>
+</div>

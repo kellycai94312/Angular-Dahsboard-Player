@@ -45,6 +45,8 @@ import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {ImageType} from '../data/remote/model/file/image/image-type';
 import {FileClass} from '../data/remote/model/file/base/file-class';
 import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-group-news/edit-group-news.component';
+import {EventPoll} from '../data/remote/model/training/poll/event-poll';
+import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
 
 @Injectable({
   providedIn: 'root'
@@ -490,12 +492,66 @@ export class TemplateModalService {
           () => {
             return !this._appHelper.isNewObject(component.data);
           }
-        )
+        ), {
+          nameKey: 'editPoll',
+          callback: async () => {
+            await this.showEditEventPollModal(component.data);
+          }
+        }
       ];
     });
 
     const result = await this._ngxModalService.awaitModalResult(modal);
     return {result: result, data: eventResult || generalStepEditEventComponent.data};
+  }
+
+  private async showEditEventPollModal(obj: BaseTraining): Promise<DialogResult<EventPoll>> {
+    const eventPolls = await this._participantRestApiService.getEventPolls({}, {}, {eventId: obj.id});
+    let eventPoll = new EventPoll();
+    if (eventPolls.length) {
+      eventPoll = eventPolls[0];
+    }
+
+    const modal = this._ngxModalService.open();
+    await this._modalBuilderService.updateModalTitle(modal, eventPoll);
+    let editEventPollComponent: EditEventPollComponent = null;
+    await modal.componentInstance.initializeBody(EditEventPollComponent, async component => {
+      editEventPollComponent = component;
+      component.event = obj;
+      await component.initialize(this._appHelper.cloneObject(eventPoll));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+        }),
+        {
+          nameKey: 'approve',
+          callback: async data => {
+            if (await component.onApprove()) {
+              modal.close();
+            }
+          }
+        },
+        {
+          nameKey: 'addQuestion',
+          callback: async data => {
+            await component.onAddPollQuestion();
+          }
+        },
+        {
+          nameKey: 'finishPoll',
+          callback: async data => {
+          }
+        }
+      ];
+    });
+    return {
+      result: await this._ngxModalService.awaitModalResult(modal),
+      data: editEventPollComponent.data
+    };
   }
 
   private async showPersonsStepEditEvent<T extends BaseTraining>(event: T,

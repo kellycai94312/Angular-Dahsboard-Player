@@ -675,5 +675,6 @@
   "addQuestion": "Добавить вопрос",
   "addAnswer": "Добавить ответ",
   "answer": "Ответ",
-  "points": "Очки"
+  "points": "Очки",
+  "finishPoll": "Завершить опрос"
 }
