@@ -544,6 +544,9 @@ export class TemplateModalService {
         {
           nameKey: 'finishPoll',
           callback: async data => {
+            if (await component.onFinishPoll()) {
+              modal.close();
+            }
           }
         }
       ];

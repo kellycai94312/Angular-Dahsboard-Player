@@ -12,6 +12,7 @@ import {PollQuestion} from '../../../../data/remote/model/training/poll/poll-que
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {Person} from '../../../../data/remote/model/person';
 import {takeWhile} from 'rxjs/operators';
+import {PollPerson} from '../../../../data/remote/model/training/poll/poll-person';
 
 @Component({
   selector: 'app-edit-event-poll',
@@ -25,6 +26,7 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
 
   public nameNgxInput: NgxInput;
   public pollQuestions: PollQuestion[] = [];
+  public pollPerson: PollPerson;
   private _person: Person;
   private _notDestroyed = true;
 
@@ -57,6 +59,7 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
         if (!this.isNew) {
           if (data.approved) {
             this.nameNgxInput.control.disable();
+            this.pollPerson = await this.participantRestApiService.getCurrentPollPerson({eventPollId: data.id});
           }
           this.pollQuestions = await this.participantRestApiService.getPollQuestions({}, {}, {eventPollId: this.data.id});
         }
@@ -84,17 +87,22 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
   }
 
   public get canEdit(): boolean {
-    return !this.canExecutePoll && ((this.data && !this.data.id) || (this._person && this.data.owner.id == this._person.user.id));
+    return !this.canExecutePoll && (this.data && !this.data.id && !this.data.approved && this._person && this.data.owner.id == this._person.user.id);
   }
 
   public get canExecutePoll(): boolean {
-    return !!(this.data && this.data.approved);
+    return !!(this.data && this.data.approved && this.pollPerson && !this.pollPerson.approved);
   }
 
   public async onApprove(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       this.data = await this.participantRestApiService.approveEventPoll({}, {}, {eventPollId: this.data.id});
+    });
+  }
 
+  public async onFinishPoll(): Promise<boolean> {
+    return await this.appHelper.trySave(async () => {
+      this.pollPerson = await this.participantRestApiService.approvePollPerson({eventPollId: this.data.id});
     });
   }
 

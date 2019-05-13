@@ -18,7 +18,10 @@
                          fxLayoutGap="5px">
           <mat-card *ngFor="let item of pollQuestionAnswers"
                     class="mat-elevation-z3">
-            <mat-radio-button [value]="item">
+            <mat-radio-button [checked]="isSelected(item)"
+                              [value]="item"
+                              [disabled]="!canExecutePoll"
+                              (change)="onSelectionChanged(item, $event)">
               <div fxLayout
                    fxLayoutAlign="space-between start">
                 <pre fxFlexAlign="center">{{item.name}}</pre>
@@ -38,7 +41,9 @@
            fxLayoutGap="5px">
         <mat-card *ngFor="let item of pollQuestionAnswers"
                   class="mat-elevation-z3">
-          <mat-checkbox>
+          <mat-checkbox [checked]="isSelected(item)"
+                        [disabled]="!canExecutePoll"
+                        (change)="onSelectionChanged(item, $event)">
             <div fxLayout
                  fxLayoutAlign="space-between start">
               <pre fxFlexAlign="center">{{item.name}}</pre>
