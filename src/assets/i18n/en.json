@@ -677,5 +677,6 @@
   "answer": "Answer",
   "points": "Points",
   "finishPoll": "Finish poll",
-  "poll": "Poll"
+  "poll": "Poll",
+  "youCantExecutePoll": "You aren't a participant in the event, therefore you cannot take a survey"
 }

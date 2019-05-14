@@ -32,6 +32,7 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
 
   constructor(private _ngxModalService: NgxModalService,
               private _authorizationService: AuthorizationService,
+              private _appHelper: AppHelper,
               private _componentFactoryResolver: ComponentFactoryResolver,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -59,10 +60,10 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
         if (!this.isNew) {
           if (data.approved) {
             this.nameNgxInput.control.disable();
-            try {
+
+            await this._appHelper.tryAction('', 'youCantExecutePoll', async () => {
               this.pollPerson = await this.participantRestApiService.getCurrentPollPerson({eventPollId: data.id});
-            } catch (e) {
-            }
+            });
           }
           this.pollQuestions = await this.participantRestApiService.getPollQuestions({}, {}, {eventPollId: this.data.id});
         }
