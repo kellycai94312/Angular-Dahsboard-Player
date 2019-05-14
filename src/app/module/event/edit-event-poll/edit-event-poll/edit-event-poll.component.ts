@@ -59,7 +59,10 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
         if (!this.isNew) {
           if (data.approved) {
             this.nameNgxInput.control.disable();
-            this.pollPerson = await this.participantRestApiService.getCurrentPollPerson({eventPollId: data.id});
+            try {
+              this.pollPerson = await this.participantRestApiService.getCurrentPollPerson({eventPollId: data.id});
+            } catch (e) {
+            }
           }
           this.pollQuestions = await this.participantRestApiService.getPollQuestions({}, {}, {eventPollId: this.data.id});
         }
@@ -87,7 +90,7 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
   }
 
   public get canEdit(): boolean {
-    return !this.canExecutePoll && (this.data && !this.data.id && !this.data.approved && this._person && this.data.owner.id == this._person.user.id);
+    return !this.canExecutePoll && this.data && !this.data.approved && this._person && this.data.owner.id == this._person.user.id;
   }
 
   public get canExecutePoll(): boolean {
