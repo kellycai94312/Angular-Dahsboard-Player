@@ -1,8 +1,9 @@
 <mat-card *ngIf="data && !data.deleted"
           class="mat-elevation-z4">
-  <div class="d-flex flex-row">
-    <div class="w-100">
-      <mat-card-title *ngIf="data.discriminator === groupNewsDiscriminatorClass.GROUP_NEWS"
+  <div fxLayout
+       fxLayoutAlign="space-between start">
+    <div>
+      <mat-card-title *ngIf="data.title"
                       [innerHTML]="data.title | urlParser | async"></mat-card-title>
       <mat-card-subtitle><a routerLink="/group/{{data.group.id}}">{{data.group.name}}</a></mat-card-subtitle>
     </div>
@@ -11,31 +12,38 @@
             [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
-    <mat-menu #menu="matMenu"
-              [ngSwitch]="data.discriminator">
-      <button *ngSwitchCase="groupNewsDiscriminatorClass.GROUP_NEWS"
-              mat-menu-item
-              (click)="onEdit(data)">
-        <mat-icon>edit</mat-icon>
-        <span>{{'edit' | translate}}</span>
-      </button>
-      <button *ngSwitchCase="groupNewsDiscriminatorClass.EVENT_GROUP_NEWS"
-              mat-menu-item
-              (click)="onRemove(data)">
-        <mat-icon>remove</mat-icon>
-        <span>{{'remove' | translate}}</span>
-      </button>
-    </mat-menu>
   </div>
 
-  <mat-card-content>
-    <pre class="width-inherit"
-         [innerHTML]="content | urlParser | async"></pre>
-    <p class="date mt-2">
-      <a
-        routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' + data.person.firstName}}</a>
-      / {{data.created | date: propertyConstantClass.dateTimeFormat}}
-    </p>
+  <mat-card-content fxLayout="column"
+                    fxLayoutGap="10px">
+    <pre *ngIf="data.content"
+         class="width-inherit"
+         [innerHTML]="data.content | urlParser | async"></pre>
+
+    <div *ngIf="data.training"
+         fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="start center">
+      <p>{{'event' | translate}}</p>
+      <mat-chip-list>
+        <mat-chip>{{data.training.name}}</mat-chip>
+      </mat-chip-list>
+      <button *ngIf="eventPoll"
+              mat-raised-button
+              color="primary"
+              (click)="onShowEventPoll()">
+        {{'poll' |translate}}
+      </button>
+    </div>
+
+    <p class="date mt-2"><a routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' + data.person.firstName}}</a> / {{data.created | date: propertyConstantClass.dateTimeFormat}}</p>
   </mat-card-content>
 </mat-card>
 
+<mat-menu #menu="matMenu">
+  <button mat-menu-item
+          (click)="onEdit(data)">
+    <mat-icon>edit</mat-icon>
+    <span>{{'edit' | translate}}</span>
+  </button>
+</mat-menu>

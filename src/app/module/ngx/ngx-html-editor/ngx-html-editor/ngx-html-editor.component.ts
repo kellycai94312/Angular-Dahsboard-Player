@@ -28,4 +28,7 @@ export class NgxHtmlEditorComponent {
     this.dataChange.emit(data);
   }
 
+  public onReady(event: any): void {
+  }
+
 }

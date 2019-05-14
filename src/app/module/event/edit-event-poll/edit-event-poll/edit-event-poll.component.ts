@@ -90,7 +90,11 @@ export class EditEventPollComponent extends BaseEditComponent<EventPoll> impleme
   }
 
   public get canEdit(): boolean {
-    return !this.canExecutePoll && this.data && !this.data.approved && this._person && this.data.owner.id == this._person.user.id;
+    return !this.canExecutePoll && this.isCreatorPoll && !this.data.approved;
+  }
+
+  public get isCreatorPoll(): boolean {
+    return !!this.data && this._person && (!this.data.owner && !this.data.id || this.data.owner.id == this._person.user.id);
   }
 
   public get canExecutePoll(): boolean {

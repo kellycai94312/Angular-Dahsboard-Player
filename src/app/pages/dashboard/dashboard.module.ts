@@ -7,6 +7,7 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
 import {GroupModule} from '../../components/group/group.module';
 import {NgxTabModule} from '../../components/ngx-tab/ngx-tab.module';
 import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -16,7 +17,8 @@ import {NgxImageModule} from '../../components/ngx-image/ngx-image.module';
     NgxVirtualScrollModule,
     NgxTabModule,
     NgxImageModule,
-    GroupModule
+    GroupModule,
+    FlexLayoutModule
   ],
   declarations: [DashboardPageComponent]
 })

@@ -111,7 +111,6 @@ import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
-import {BaseGroupNews} from '../model/group/news/base-group-news';
 import {BaseMessageContent} from '../model/chat/message/base/base-message-content';
 import {Activity} from '../model/activity/activity';
 import {GroupInviteRequest} from '../request/group-invite-request';
@@ -145,6 +144,7 @@ import {PollQuestion} from '../model/training/poll/poll-question';
 import {PollPerson} from '../model/training/poll/poll-person';
 import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
 import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
+import {GroupNews} from '../model/group/news/group-news';
 
 @Injectable()
 @RestParams({
@@ -621,7 +621,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/news'
   })
-  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<BaseGroupNews>>;
+  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<GroupNews>>;
 
   //#endregion
 
@@ -936,31 +936,31 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news',
   })
-  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<BaseGroupNews>>;
+  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, BaseGroupNews>;
+  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/news',
   })
-  createGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number }, BaseGroupNews>;
+  createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  updateGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number, groupNewsId: number }, BaseGroupNews>;
+  updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, BaseGroupNews>;
+  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
 
   //#endregion
 

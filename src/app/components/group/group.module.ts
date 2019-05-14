@@ -13,8 +13,9 @@ import {RouterModule} from '@angular/router';
 import {ImageModule} from '../image/image.module';
 import {EditGroupModule} from '../../module/group/edit-group/edit-group.module';
 import {EditGroupComponent} from '../../module/group/edit-group/edit-group/edit-group.component';
-import {MatButtonModule, MatCardModule, MatIconModule, MatMenuModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatChipsModule, MatIconModule, MatMenuModule} from '@angular/material';
 import {EditGroupNewsModule} from '../../module/group/edit/edit-group-news/edit-group-news.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -39,7 +40,8 @@ import {EditGroupNewsModule} from '../../module/group/edit/edit-group-news/edit-
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
-
+    MatChipsModule,
+    FlexLayoutModule,
     // TODO: Remove this import
     EditGroupNewsModule
   ],

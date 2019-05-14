@@ -10,9 +10,7 @@ import {DialogResult} from '../data/local/dialog-result';
 import {EventPlan} from '../data/remote/model/training/plan/event-plan';
 import {NgxModalRef} from '../components/ngx-modal/bean/ngx-modal-ref';
 import {BaseConversation} from '../data/remote/model/chat/conversation/base/base-conversation';
-import {BaseGroupNews} from '../data/remote/model/group/news/base-group-news';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {EventGroupNews} from '../data/remote/model/group/news/event-group-news';
 import {GeneralStepEditEventComponent} from '../module/event/edit-event/general-step-edit-event/general-step-edit-event.component';
 import {PersonsStepEditEventComponent} from '../module/event/edit-event/persons-step-edit-event/persons-step-edit-event.component';
 import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-item';
@@ -47,6 +45,7 @@ import {FileClass} from '../data/remote/model/file/base/file-class';
 import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-group-news/edit-group-news.component';
 import {EventPoll} from '../data/remote/model/training/poll/event-poll';
 import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
+import {GroupNews} from '../data/remote/model/group/news/group-news';
 
 @Injectable({
   providedIn: 'root'
@@ -286,7 +285,7 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
-  public async showEditGroupNewsModal<T extends BaseGroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
+  public async showEditGroupNewsModal<T extends GroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
     const modal = this._ngxModalService.open();
     this._modalBuilderService.updateTitleKeyModal(modal, obj);
     let editGroupNewsComponent: EditGroupNewsComponent = null;
@@ -294,38 +293,16 @@ export class TemplateModalService {
       editGroupNewsComponent = component;
       component.group = group;
       await component.initialize(this._appHelper.cloneObject(obj));
-      const visibleItemForNew = (): boolean => {
-        return this._appHelper.isNewObject(component.data);
-      };
       modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'addEvent',
-          callback: async () => {
-            const dialogResult = await this.showEditEventModal();
-            if (dialogResult.result) {
-              const eventGroupNews = await this.createEventGroupNews(dialogResult.data, group);
-              if (eventGroupNews) {
-                this._appHelper.updateObject(component.data, eventGroupNews);
-                modal.close();
-              }
-            }
-          },
-          visible: visibleItemForNew
-        },
         {
           nameKey: 'addExistingEvent',
           callback: async () => {
             await this._ngxModalService.showSelectionEventModal(async selectedItems => {
-              if (selectedItems.length > 0) {
-                const eventGroupNews = await this.createEventGroupNews(selectedItems[0], group);
-                if (eventGroupNews) {
-                  this._appHelper.updateObject(component.data, eventGroupNews);
-                  modal.close();
-                }
+              if (selectedItems.length) {
+                component.data.training = selectedItems[0];
               }
             });
-          },
-          visible: visibleItemForNew
+          }
         },
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);
@@ -379,16 +356,6 @@ export class TemplateModalService {
     }, PreviewNamedObjectComponent, async (component, data) => {
       component.data = data;
     });
-  }
-
-  private async createEventGroupNews<T extends BaseTraining>(event: T, group: Group): Promise<EventGroupNews> {
-    let eventGroupNews: EventGroupNews = null;
-    await this._appHelper.trySave(async () => {
-      eventGroupNews = new EventGroupNews();
-      eventGroupNews.training = event;
-      eventGroupNews = (await this._participantRestApiService.createGroupNews(eventGroupNews, {}, {groupId: group.id})) as EventGroupNews;
-    });
-    return eventGroupNews;
   }
 
   public async showCropImageModal(obj: IdentifiedObject,
@@ -505,7 +472,7 @@ export class TemplateModalService {
     return {result: result, data: eventResult || generalStepEditEventComponent.data};
   }
 
-  private async showEditEventPollModal(obj: BaseTraining): Promise<DialogResult<EventPoll>> {
+  public async showEditEventPollModal(obj: BaseTraining): Promise<DialogResult<EventPoll>> {
     const eventPolls = await this._participantRestApiService.getEventPolls({}, {}, {eventId: obj.id});
     let eventPoll = new EventPoll();
     if (eventPolls.length) {
@@ -519,27 +486,37 @@ export class TemplateModalService {
       editEventPollComponent = component;
       component.event = obj;
       await component.initialize(this._appHelper.cloneObject(eventPoll));
-
+      const canEdit = (): boolean => component.canEdit;
       modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        }),
+        {
+          nameKey: 'save',
+          callback: async data => {
+            await this._ngxModalService.save(modal, component);
+          },
+          visible: canEdit
+        },
+        {
+          nameKey: 'remove',
+          callback: async data => {
+            await this._ngxModalService.remove(modal, component);
+          },
+          visible: () => component.isCreatorPoll
+        },
         {
           nameKey: 'approve',
           callback: async data => {
             if (await component.onApprove()) {
               modal.close();
             }
-          }
+          },
+          visible: canEdit
         },
         {
           nameKey: 'addQuestion',
           callback: async data => {
             await component.onAddPollQuestion();
-          }
+          },
+          visible: canEdit
         },
         {
           nameKey: 'finishPoll',
@@ -547,7 +524,8 @@ export class TemplateModalService {
             if (await component.onFinishPoll()) {
               modal.close();
             }
-          }
+          },
+          visible: () => component.canExecutePoll
         }
       ];
     });

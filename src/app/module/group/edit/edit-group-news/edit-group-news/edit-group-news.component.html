@@ -3,4 +3,13 @@
      fxLayoutGap="10px">
   <new-ngx-input [data]="titleNgxInput"></new-ngx-input>
   <ngx-html-editor [(data)]="data.content"></ngx-html-editor>
+  <div *ngIf="data.training">
+    <p>{{'event' | translate}}</p>
+    <mat-chip-list>
+      <mat-chip [removable]="true"
+                (removed)="onRemoveEvent()">{{data.training.name}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+    </mat-chip-list>
+  </div>
 </div>
