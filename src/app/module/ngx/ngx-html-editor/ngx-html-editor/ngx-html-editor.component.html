@@ -1,4 +1,3 @@
-<ckeditor [editor]="editor"
-          [(ngModel)]="data"
-          (ngModelChange)="onNgModelChanged($event)"
-          (ready)="onReady($event)"></ckeditor>
+<ck-editor [(ngModel)]="data"
+           (ngModelChange)="onNgModelChanged($event)"
+           [language]="translateService.currentLang"></ck-editor>
