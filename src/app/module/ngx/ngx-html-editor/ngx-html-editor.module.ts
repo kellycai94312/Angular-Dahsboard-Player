@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgxHtmlEditorComponent} from './ngx-html-editor/ngx-html-editor.component';
-import {CKEditorModule} from '@ckeditor/ckeditor5-angular';
 import {FormsModule} from '@angular/forms';
+import {CKEditorModule} from 'ngx-ckeditor';
 
 @NgModule({
   declarations: [NgxHtmlEditorComponent],

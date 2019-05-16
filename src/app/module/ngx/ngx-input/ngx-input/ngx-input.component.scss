@@ -1,3 +1,15 @@
+:host {
+  width: 100%;
+}
+
 mat-form-field {
   width: 100%;
+}
+
+textarea {
+  max-height: 200px;
+}
+
+.suffix-icon {
+  font-size: 18px;
 }

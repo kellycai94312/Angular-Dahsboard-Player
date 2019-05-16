@@ -17,11 +17,13 @@
 </div>
 <ngx-tab class="mt-2"
          [tabs]="tabs"></ngx-tab>
-<ngx-virtual-scroll [getItems]="fetchItems"
+<ngx-virtual-scroll fxLayout="column"
+                    fxLayoutAlign="center center"
+                    [getItems]="fetchItems"
                     [windowScroll]="true">
   <ng-template let-item>
     <div *ngIf="!item.deleted"
-         class="mb-2">
+         class="mt-2">
       <app-group-news-item [data]="item"></app-group-news-item>
     </div>
   </ng-template>

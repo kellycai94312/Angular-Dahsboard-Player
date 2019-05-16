@@ -1,6 +1,6 @@
 {
   "name": "sport-monitoring-web",
-  "version": "0.3.1-30",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -30,8 +30,6 @@
     "@angular/platform-browser": "^7.2.13",
     "@angular/platform-browser-dynamic": "^7.2.13",
     "@angular/router": "^7.2.13",
-    "@ckeditor/ckeditor5-angular": "^1.1.0",
-    "@ckeditor/ckeditor5-build-classic": "^12.1.0",
     "@ctrl/ngx-emoji-mart": "^0.12.0",
     "@ng-bootstrap/ng-bootstrap": "^4.1.1",
     "@ngrx/effects": "^7.4.0",
@@ -57,6 +55,7 @@
     "moment": "^2.24.0",
     "ng2-charts": "^1.6.0",
     "ngrx-store-freeze": "^0.2.4",
+    "ngx-ckeditor": "^0.4.0",
     "ngx-color-picker": "^7.5.0",
     "ngx-cookie": "^4.1.2",
     "ngx-cookie-service": "^2.1.0",
@@ -64,7 +63,7 @@
     "ngx-resource": "^3.6.3",
     "ngx-toastr": "^9.2.0",
     "perfect-scrollbar": "^1.4.0",
-    "plotly.js": "^1.47.2",
+    "plotly.js": "^1.47.4",
     "prismjs": "^1.16.0",
     "reflect-metadata": "^0.1.13",
     "rest-core": "^0.2.2",

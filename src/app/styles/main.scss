@@ -225,3 +225,7 @@ select:-webkit-autofill:focus {
 .selected {
   background-color: #{$light-blue}10;
 }
+
+.cdk-overlay-container {
+  z-index: 2000 !important;
+}

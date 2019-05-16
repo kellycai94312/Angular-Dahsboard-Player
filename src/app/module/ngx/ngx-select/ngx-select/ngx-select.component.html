@@ -1,0 +1,15 @@
+<mat-form-field *ngIf="data"
+                [appearance]="data.appearance">
+  <mat-label *ngIf="data.label || data.labelTranslation">{{data.label ? data.label : (data.labelTranslation | translate)}}</mat-label>
+  <mat-select [required]="data.required"
+              [formControl]="data.control"
+              [multiple]="data.multiple"
+              [compareWith]="data.compare"
+              [placeholder]="data.placeholder">
+    <mat-option *ngFor="let item of data.items"
+                [value]="item">
+      {{getDisplay(item)}}
+    </mat-option>
+  </mat-select>
+  <mat-error *ngIf="data.control?.invalid && data.getErrorMessage">{{data.getErrorMessage(data) | async}}</mat-error>
+</mat-form-field>

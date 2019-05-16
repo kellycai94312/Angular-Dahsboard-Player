@@ -1,37 +1,50 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {NgxInput} from '../model/ngx-input';
 import {ValidationService} from '../../../../service/validation/validation.service';
+import {NgxInputType} from '../model/ngx-input-type';
 
 @Component({
   selector: 'new-ngx-input',
   templateUrl: './ngx-input.component.html',
-  styleUrls: ['./ngx-input.component.scss']
+  styleUrls: ['./ngx-input.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxInputComponent {
 
-  get ngxInput(): NgxInput {
-    return this._ngxInput;
+  get data(): NgxInput {
+    return this._data;
   }
 
   @Input()
-  set ngxInput(value: NgxInput) {
-    this._ngxInput = value;
+  set data(value: NgxInput) {
+    this._data = value;
     this.initialize(value);
   }
 
-  private _ngxInput: NgxInput;
+  @Output()
+  public readonly clearValue = new EventEmitter<void>();
+
+  public readonly ngxInputTypeClass = NgxInputType;
+  private _data: NgxInput;
 
   constructor(private _validationService: ValidationService) {
   }
 
-  public initialize(ngxInput: NgxInput) {
+  public initialize(ngxInput: NgxInput): void {
     if (!ngxInput) {
       return;
     }
 
-    ngxInput.getErrorMessage = () => {
-      return this._validationService.getError(ngxInput);
-    };
+    if (!ngxInput.getErrorMessage) {
+      ngxInput.getErrorMessage = () => {
+        return this._validationService.getError(ngxInput.control);
+      };
+    }
+  }
+
+  public onClearValue(): void {
+    this.data.control.setValue('');
+    this.clearValue.emit();
   }
 
 }

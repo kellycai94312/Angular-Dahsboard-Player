@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'ngx-html-editor',
@@ -21,10 +21,12 @@ export class NgxHtmlEditorComponent {
   @Output()
   public readonly dataChange = new EventEmitter<string>();
 
-  public readonly editor = ClassicEditor;
   private _data: any;
 
-  public onNgModelChanged(data: any): void {
+  constructor(public translateService: TranslateService) {
+  }
+
+  public async onNgModelChanged(data: any): Promise<void> {
     this.dataChange.emit(data);
   }
 

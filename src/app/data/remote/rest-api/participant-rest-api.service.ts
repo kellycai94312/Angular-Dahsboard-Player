@@ -111,7 +111,6 @@ import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
-import {BaseGroupNews} from '../model/group/news/base-group-news';
 import {BaseMessageContent} from '../model/chat/message/base/base-message-content';
 import {Activity} from '../model/activity/activity';
 import {GroupInviteRequest} from '../request/group-invite-request';
@@ -139,6 +138,13 @@ import {GroupConnectionRequest} from '../model/group/connection/group-connection
 import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
 import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
 import {ImageCropRequest} from '../request/image-crop-request';
+import {EventPoll} from '../model/training/poll/event-poll';
+import {AnswerTypeEnum} from '../model/training/poll/answer-type-enum';
+import {PollQuestion} from '../model/training/poll/poll-question';
+import {PollPerson} from '../model/training/poll/poll-person';
+import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
+import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
+import {GroupNews} from '../model/group/news/group-news';
 
 @Injectable()
 @RestParams({
@@ -615,7 +621,7 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/person/news'
   })
-  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<BaseGroupNews>>;
+  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<GroupNews>>;
 
   //#endregion
 
@@ -930,31 +936,31 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news',
   })
-  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<BaseGroupNews>>;
+  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, BaseGroupNews>;
+  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/news',
   })
-  createGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number }, BaseGroupNews>;
+  createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  updateGroupNews: IRestMethodStrict<BaseGroupNews, any, { groupId: number, groupNewsId: number }, BaseGroupNews>;
+  updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/news/{!groupNewsId}',
   })
-  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, BaseGroupNews>;
+  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
 
   //#endregion
 
@@ -1227,6 +1233,223 @@ export class ParticipantRestApiService extends Rest {
     path: '/baseTraining/{!baseTrainingId}/exerciseExecMeasureValue/{!exerciseExecMeasureValueId}'
   })
   updateExerciseExecMeasureValue: IRestMethodStrict<ExerciseExecMeasureValue, any, { baseTrainingId: number, exerciseExecMeasureValueId: number }, ExerciseExecMeasureValue>;
+
+  //#endregion
+
+  //#region Event event poll
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/baseTraining/{!eventId}/poll',
+    resultFactory: (item, options) => {
+      return plainToClass(EventPoll, item);
+    }
+  })
+  createEventPoll: IRestMethodStrict<EventPoll, any, { eventId: number }, EventPoll>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/baseTraining/{!eventId}/poll',
+    resultFactory: (item, options) => {
+      return plainToClass(EventPoll, item);
+    }
+  })
+  getEventPolls: IRestMethodStrict<any, { name?: string }, { eventId: number }, EventPoll[]>;
+
+  //#endregion
+
+  //#region Event poll
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPoll/{!eventPollId}',
+    resultFactory: (item, options) => {
+      return plainToClass(EventPoll, item);
+    }
+  })
+  updateEventPoll: IRestMethodStrict<EventPoll, any, { eventPollId: number }, EventPoll>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPoll/{!eventPollId}/approve',
+    resultFactory: (item, options) => {
+      return plainToClass(EventPoll, item);
+    }
+  })
+  approveEventPoll: IRestMethodStrict<any, any, { eventPollId: number }, EventPoll>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPoll/{!eventPollId}',
+    resultFactory: (item, options) => {
+      return plainToClass(EventPoll, item);
+    }
+  })
+  removeEventPoll: IRestMethod<{ eventPollId: number }, EventPoll>;
+
+  //#region Poll question
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPoll/{!eventPollId}/question',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestion, item);
+    }
+  })
+  getPollQuestions: IRestMethodStrict<any, { name?: string, answerTypeEnum?: AnswerTypeEnum }, { eventPollId: number }, PollQuestion[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPoll/{!eventPollId}/question',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestion, item);
+    }
+  })
+  createPollQuestion: IRestMethodStrict<PollQuestion, any, { eventPollId: number }, PollQuestion>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/eventPoll/{!eventPollId}/question/{!pollQuestionId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestion, item);
+    }
+  })
+  updatePollQuestion: IRestMethodStrict<PollQuestion, any, { eventPollId: number, pollQuestionId: number }, PollQuestion>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/eventPoll/{!eventPollId}/question/{!pollQuestionId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestion, item);
+    }
+  })
+  removePollQuestion: IRestMethod<{ eventPollId: number, pollQuestionId: number }, PollQuestion>;
+
+  //#endregion
+
+  //#region Event person poll
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPoll/{!eventPollId}/person',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPerson, item);
+    }
+  })
+  getPollPersonPolls: IRestMethodStrict<any, { approved?: boolean }, { eventPollId: number }, PollPerson[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/eventPoll/{!eventPollId}/currentPollPerson',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPerson, item);
+    }
+  })
+  getCurrentPollPerson: IRestMethod<{ eventPollId: number }, PollPerson>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/eventPoll/{!eventPollId}/approvePollPerson',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPerson, item);
+    }
+  })
+  approvePollPerson: IRestMethod<{ eventPollId: number }, PollPerson>;
+
+  //#endregion
+
+  //#endregion
+
+  //#region Poll question
+
+  //#region poll question answer
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/pollQuestion/{!pollQuestionId}/answer',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestionAnswer, item);
+    }
+  })
+  getPollQuestionAnswers: IRestMethod<{ pollQuestionId: number }, PollQuestionAnswer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/pollQuestion/{!pollQuestionId}/answer',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestionAnswer, item);
+    }
+  })
+  createPollQuestionAnswer: IRestMethodStrict<PollQuestionAnswer, any, { pollQuestionId: number }, PollQuestionAnswer>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/pollQuestion/{!pollQuestionId}/answer/{!pollQuestionAnswerId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestionAnswer, item);
+    }
+  })
+  updatePollQuestionAnswer: IRestMethodStrict<PollQuestionAnswer, any, { pollQuestionId: number, pollQuestionAnswerId: number }, PollQuestionAnswer>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/pollQuestion/{!pollQuestionId}/answer/{!pollQuestionAnswerId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollQuestionAnswer, item);
+    }
+  })
+  removePollQuestionAnswer: IRestMethod<{ pollQuestionId: number, pollQuestionAnswerId: number }, PollQuestionAnswer>;
+
+  //#endregion
+
+  //#region Poll person answer
+
+  @RestAction({
+    method: RestRequestMethod.Get,
+    path: '/pollQuestion/{!pollQuestionId}/person/{!personId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPersonAnswer, item);
+    }
+  })
+  getPollPersonAnswers: IRestMethod<{ pollQuestionId: number, personId: number }, PollPersonAnswer[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/pollQuestion/{!pollQuestionId}/personAnswer',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPersonAnswer, item);
+    }
+  })
+  createPollPersonAnswer: IRestMethodStrict<PollPersonAnswer, any, { pollQuestionId: number }, PollPersonAnswer>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/pollQuestion/{!pollQuestionId}/personAnswer/{!pollPersonAnswerId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPersonAnswer, item);
+    }
+  })
+  updatePollPersonAnswer: IRestMethodStrict<PollPersonAnswer, any, { pollQuestionId: number, pollPersonAnswerId: number }, PollPersonAnswer>;
+
+  @RestAction({
+    method: RestRequestMethod.Put,
+    path: '/pollQuestion/{!pollQuestionId}/personAnswer/{!pollPersonAnswerId}/score',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPersonAnswer, item);
+    }
+  })
+  updatePollPersonAnswerScore: IRestMethodStrict<IntegerWrapper, any, { pollQuestionId: number, pollPersonAnswerId: number }, PollPersonAnswer>;
+
+  @RestAction({
+    method: RestRequestMethod.Delete,
+    path: '/pollQuestion/{!pollQuestionId}/personAnswer/{!pollPersonAnswerId}',
+    resultFactory: (item, options) => {
+      return plainToClass(PollPersonAnswer, item);
+    }
+  })
+  removePollPersonAnswer: IRestMethod<{ pollQuestionId: number, pollPersonAnswerId: number }, PollPersonAnswer>;
+
+  //#endregion
 
   //#endregion
 

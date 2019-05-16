@@ -661,5 +661,22 @@
   "dependentCluster": "Подчиненный кластер",
   "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?",
   "addedNewRank": "Добавлен новый ранг",
-  "removeThisConnection": "Удалить это соединение"
+  "removeThisConnection": "Удалить это соединение",
+  "editPoll": "Редактировать опрос",
+  "answerTypeEnum": {
+    "ONE_ANSWER": "Один ответ",
+    "MULTIPLE_ANSWERS": "Множество ответов",
+    "PARAMETERIZED_ANSWER": "Параметризованный ответ",
+    "FREE_ANSWER": "Свободный ответ"
+  },
+  "answerType": "Тип ответа",
+  "question": "Вопрос",
+  "requiredQuestion": "Обязательный вопрос",
+  "addQuestion": "Добавить вопрос",
+  "addAnswer": "Добавить ответ",
+  "answer": "Ответ",
+  "points": "Очки",
+  "finishPoll": "Завершить опрос",
+  "poll": "Опрос",
+  "youCantExecutePoll": "Вы не являетесь участником события, поэтому Вы не можете пройти опрос"
 }

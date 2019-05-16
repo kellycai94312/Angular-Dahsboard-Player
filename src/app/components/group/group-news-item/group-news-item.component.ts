@@ -1,14 +1,12 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {GroupNewsDiscriminator} from '../../../data/remote/model/group/news/group-news-discriminator';
-import {BaseGroupNews} from '../../../data/remote/model/group/news/base-group-news';
 import {GroupNews} from '../../../data/remote/model/group/news/group-news';
 import {HtmlService} from '../../../service/html/html.service';
-import {EventGroupNews} from '../../../data/remote/model/group/news/event-group-news';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {TemplateModalService} from '../../../service/template-modal.service';
 import {IconEnum} from '../../ngx-button/model/icon-enum';
 import {PropertyConstant} from '../../../data/local/property-constant';
+import {EventPoll} from '../../../data/remote/model/training/poll/event-poll';
 
 @Component({
   selector: 'app-group-news-item',
@@ -19,15 +17,14 @@ export class GroupNewsItemComponent implements OnInit {
 
   public readonly iconEnumClass = IconEnum;
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly groupNewsDiscriminatorClass = GroupNewsDiscriminator;
 
   @Input()
-  public data: BaseGroupNews;
+  public data: GroupNews;
 
   @Input()
   public canEdit: boolean;
 
-  public content: string;
+  public eventPoll: EventPoll;
 
   constructor(private _htmlService: HtmlService,
               private _participantRestApiService: ParticipantRestApiService,
@@ -35,36 +32,40 @@ export class GroupNewsItemComponent implements OnInit {
               private _templateModalService: TemplateModalService) {
   }
 
-  async ngOnInit() {
-    await this.refreshContent();
+  public async ngOnInit(): Promise<void> {
+    await this.initialize();
+  }
+
+  public async initialize(): Promise<void> {
+    this.eventPoll = null;
+    if (this.data.training) {
+      const eventPolls = await this._participantRestApiService.getEventPolls({}, {}, {eventId: this.data.training.id});
+      if (eventPolls.length && eventPolls[0].approved) {
+        this.eventPoll = eventPolls[0];
+      }
+    }
   }
 
   public onEdit = async (obj: GroupNews) => {
     await this.showModal(obj);
   };
 
-  public onRemove = async (obj: BaseGroupNews) => {
+  public onRemove = async (obj: GroupNews) => {
     await this._appHelper.tryRemove(async () => {
       this._appHelper.updateObject(this.data, await this._participantRestApiService.removeGroupNews({groupId: obj.group.id, groupNewsId: obj.id}));
     });
   };
 
+  public async onShowEventPoll(): Promise<void> {
+    await this._templateModalService.showEditEventPollModal(this.data.training);
+  }
+
   private async showModal(obj: GroupNews) {
     const dialogResult = await this._templateModalService.showEditGroupNewsModal(obj, obj.group);
     if (dialogResult.result) {
       this._appHelper.updateObject(this.data, dialogResult.data);
-      await this.refreshContent();
-    }
-  }
 
-  private async refreshContent() {
-    switch (this.data.discriminator) {
-      case GroupNewsDiscriminator.EVENT_GROUP_NEWS:
-        this.content = await this._htmlService.getEventPreview((this.data as EventGroupNews).training);
-        break;
-      case GroupNewsDiscriminator.GROUP_NEWS:
-        this.content = (this.data as GroupNews).content;
-        break;
+      await this.initialize();
     }
   }
 

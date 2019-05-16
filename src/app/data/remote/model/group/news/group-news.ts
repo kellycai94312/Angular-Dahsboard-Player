@@ -1,12 +1,12 @@
-import {BaseGroupNews} from './base-group-news';
-import {GroupNewsDiscriminator} from './group-news-discriminator';
+import {Group} from '../base/group';
+import {Person} from '../../person';
+import {IdentifiedObject} from '../../../base/identified-object';
+import {BaseTraining} from '../../training/base/base-training';
 
-export class GroupNews extends BaseGroupNews {
+export class GroupNews extends IdentifiedObject {
   title: string;
   content: string;
-
-  constructor() {
-    super();
-    this.discriminator = GroupNewsDiscriminator.GROUP_NEWS;
-  }
+  group: Group;
+  person: Person;
+  training: BaseTraining;
 }
