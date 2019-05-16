@@ -1,7 +1,7 @@
 <div class="shadow">
   <div class="modal-header">
     <h4 *ngIf="title || titleKey"
-        class="modal-title">{{title ? (title):(titleKey | translate)}}</h4>
+        class="modal-title">{{title ? (title) : (titleKey | translate)}}</h4>
     <button type="button"
             class="close"
             aria-label="Close"
@@ -10,7 +10,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <ng-template appRef></ng-template>
+    <ng-template #contentTemplate></ng-template>
   </div>
   <div class="modal-footer">
     <ngx-split-button [items]="splitButtonItems"></ngx-split-button>

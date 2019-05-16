@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {HtmlContentComponent} from './html-content.component';
+import {NgxBusyIndicatorComponent} from './ngx-busy-indicator.component';
 
-describe('HtmlContentComponent', () => {
-  let component: HtmlContentComponent;
-  let fixture: ComponentFixture<HtmlContentComponent>;
+describe('NgxBusyIndicatorComponent', () => {
+  let component: NgxBusyIndicatorComponent;
+  let fixture: ComponentFixture<NgxBusyIndicatorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HtmlContentComponent]
+      declarations: [NgxBusyIndicatorComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HtmlContentComponent);
+    fixture = TestBed.createComponent(NgxBusyIndicatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
