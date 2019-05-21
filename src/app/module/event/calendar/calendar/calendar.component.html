@@ -36,7 +36,7 @@
                   mwlCalendarPreviousView
                   [view]="view"
                   [(viewDate)]="viewDate"
-                  (viewDateChange)="updateEvents()">
+                  (viewDateChange)="onViewDateChange($event)">
             <mat-icon>keyboard_arrow_left</mat-icon>
           </button>
           <h4>{{ viewDate | calendarDate: (view + 'ViewTitle'): translateService.currentLang}}</h4>
@@ -44,7 +44,7 @@
                   mwlCalendarNextView
                   [view]="view"
                   [(viewDate)]="viewDate"
-                  (viewDateChange)="updateEvents()">
+                  (viewDateChange)="onViewDateChange($event)">
             <mat-icon>keyboard_arrow_right</mat-icon>
           </button>
         </div>
@@ -77,13 +77,18 @@
                                  [viewDate]="viewDate"
                                  [events]="events"
                                  [refresh]="refreshSubject"
-                                 (eventTimesChanged)="onEventTimesChanged($event)">
+                                 [activeDayIsOpen]="activeDayIsOpen"
+                                 (eventClicked)="onEventClicked($event.event)"
+                                 (eventTimesChanged)="onEventTimesChanged($event)"
+                                 (dayClicked)="onDayClicked($event.day)">
         </mwl-calendar-month-view>
         <mwl-calendar-week-view *ngSwitchCase="calendarViewClass.Week"
                                 [viewDate]="viewDate"
                                 [events]="events"
                                 [refresh]="refreshSubject"
                                 [snapDraggedEvents]="false"
+                                (eventClicked)="onEventClicked($event.event)"
+                                (hourSegmentClicked)="onHourSegmentClicked($event.date)"
                                 (eventTimesChanged)="onEventTimesChanged($event)">
         </mwl-calendar-week-view>
         <mwl-calendar-day-view *ngSwitchCase="calendarViewClass.Day"
@@ -91,6 +96,8 @@
                                [events]="events"
                                [refresh]="refreshSubject"
                                [snapDraggedEvents]="false"
+                               (eventClicked)="onEventClicked($event.event)"
+                               (hourSegmentClicked)="onHourSegmentClicked($event.date)"
                                (eventTimesChanged)="onEventTimesChanged($event)">
         </mwl-calendar-day-view>
       </div>

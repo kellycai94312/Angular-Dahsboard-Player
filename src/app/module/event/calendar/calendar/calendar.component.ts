@@ -1,10 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarEventTimesChangedEventType, CalendarView} from 'angular-calendar';
+import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
 import {TranslateService} from '@ngx-translate/core';
 import {UtilService} from '../../../../services/util/util.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
 import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
-import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
+import {endOfDay, endOfMonth, endOfWeek, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {AppHelper} from '../../../../utils/app-helper';
 import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
@@ -15,6 +15,7 @@ import {Observable, Subject} from 'rxjs';
 import {EventApiService} from '../../../../data/remote/rest-api/api/event/event-api.service';
 import {Testing} from '../../../../data/remote/model/training/testing/testing';
 import {Game} from '../../../../data/remote/model/training/game/game';
+import {TemplateModalService} from '../../../../service/template-modal.service';
 
 @Component({
   selector: 'app-calendar',
@@ -30,28 +31,21 @@ export class CalendarComponent implements OnInit {
   public events: CalendarEvent[] = [];
   public viewDate = new Date();
   public isBusy: boolean;
+  public activeDayIsOpen: boolean;
+
   private readonly _eventQuery = new BaseTrainingQuery();
   private readonly _defaultDurationMs = 30 * 60 * 1000;
 
   constructor(public translateService: TranslateService,
               private _appHelper: AppHelper,
               private _eventApiService: EventApiService,
+              private _templateModalService: TemplateModalService,
               private _utilService: UtilService) {
     this.externalEvents = [];
+    const date = new Date();
     for (const item in TrainingDiscriminator) {
       const eventType = TrainingDiscriminator[item] as TrainingDiscriminator;
-
-      const event = this.getEventInstance(eventType);
-      event.name = this.getDefaultEventName(eventType);
-      event.startTime = new Date();
-      event.template = false;
-      event.manualMode = true;
-      event.durationMs = this._defaultDurationMs;
-      event.trainingState = TrainingState.DRAFT;
-      if (event instanceof Training) {
-        event.trainingType = TrainingType.BASE;
-      }
-      this.externalEvents.push(this.getCalendarEvent(event));
+      this.externalEvents.push(this.getCalendarEvent(this.getDefaultEvent(date, eventType)));
     }
   }
 
@@ -82,7 +76,7 @@ export class CalendarComponent implements OnInit {
 
   public onEventTimesChanged<T extends BaseTraining>(calendarEventTimesChangedEvent: CalendarEventTimesChangedEvent<T>): void {
     let calendarEvent = calendarEventTimesChangedEvent.event;
-    const isNewEvent: boolean = calendarEventTimesChangedEvent.type === CalendarEventTimesChangedEventType.Drop;
+    const isNewEvent: boolean = calendarEventTimesChangedEvent.event.meta.isNew;
     if (isNewEvent) {
       calendarEvent = this._utilService.clone(calendarEvent);
     }
@@ -116,6 +110,50 @@ export class CalendarComponent implements OnInit {
     return this._eventApiService.saveEvent(event);
   }
 
+  public onDayClicked({date, events}: { date: Date; events: CalendarEvent[] }): void {
+    if (isSameMonth(date, this.viewDate)) {
+      if ((isSameDay(this.viewDate, date) && this.activeDayIsOpen) || !events.length) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+        this.viewDate = date;
+      }
+    }
+  }
+
+  public async onViewDateChange(date: Date): Promise<void> {
+    this.activeDayIsOpen = false;
+    await this.updateEvents();
+  }
+
+  public async onEventClicked<T extends BaseTraining>(calendarEvent: CalendarEvent<T>): Promise<void> {
+    if (await this.showEditEventWindow(calendarEvent)) {
+      this.refreshSubject.next();
+    }
+  }
+
+  public async onHourSegmentClicked<T extends BaseTraining>(date: Date): Promise<void> {
+    const event = this.getDefaultEvent(date, TrainingDiscriminator.TRAINING);
+    const calendarEvent = await this.showEditEventWindow(this.getCalendarEvent(event));
+    if (calendarEvent) {
+      this.events.push(calendarEvent);
+      this.refreshSubject.next();
+    }
+  }
+
+  private async showEditEventWindow<T extends BaseTraining>(calendarEvent: CalendarEvent<T>): Promise<CalendarEvent<T>> {
+    const dialogResult = await this._templateModalService.showEditEventModal(calendarEvent.meta);
+    if (dialogResult.result) {
+      const event = dialogResult.data;
+      calendarEvent.meta = event;
+      calendarEvent.title = event.name;
+      calendarEvent.start = new Date(event.startTime);
+      calendarEvent.end = event.finishTime ? new Date(event.finishTime) : void 0;
+      return calendarEvent;
+    }
+    return void 0;
+  }
+
   private getDefaultEventName(trainingDiscriminator: TrainingDiscriminator): string {
     return this.translateService.instant(`trainingDiscriminator.${trainingDiscriminator}`);
   }
@@ -133,18 +171,19 @@ export class CalendarComponent implements OnInit {
   }
 
   private getCalendarEvent<T extends BaseTraining>(event: T): CalendarEvent {
+    const canChangeDate: boolean = event.trainingState === TrainingState.DRAFT;
     return {
       id: event.id,
       title: event.name,
       start: new Date(event.startTime),
       end: event.finishTime ? new Date(event.finishTime) : void 0,
-      draggable: true,
       color: this.getEventColor(event.discriminator),
       cssClass: `${event.discriminator.toString().toLowerCase()}-event-container`,
       resizable: {
-        beforeStart: true,
-        afterEnd: true
+        beforeStart: canChangeDate,
+        afterEnd: canChangeDate
       },
+      draggable: canChangeDate,
       meta: event
     };
   }
@@ -165,6 +204,21 @@ export class CalendarComponent implements OnInit {
       day: endOfDay
     }[this.view];
     return getDate(this.viewDate);
+  }
+
+  private getDefaultEvent<T extends BaseTraining>(startDate: Date, eventType: TrainingDiscriminator): T {
+    const event = this.getEventInstance(eventType);
+    event.name = this.getDefaultEventName(eventType);
+    event.startTime = startDate;
+    event.durationMs = this._defaultDurationMs;
+    event.finishTime = new Date(startDate.getTime() + event.durationMs);
+    event.template = false;
+    event.manualMode = true;
+    event.trainingState = TrainingState.DRAFT;
+    if (event instanceof Training) {
+      event.trainingType = TrainingType.BASE;
+    }
+    return event as T;
   }
 
   private getEventInstance(trainingDiscriminator: TrainingDiscriminator): BaseTraining {
