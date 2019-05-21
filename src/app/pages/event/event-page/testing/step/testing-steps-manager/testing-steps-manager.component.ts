@@ -6,12 +6,12 @@ import {Tab} from '../../../../../../data/local/tab';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {BaseEventStepComponent} from '../../../../../../data/local/component/base/base-event-step-component';
 
-
-@Component({
-  selector: 'app-testing-steps-manager',
-  templateUrl: './testing-steps-manager.component.html',
-  styleUrls: ['./testing-steps-manager.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-testing-steps-manager',
+//   templateUrl: './testing-steps-manager.component.html',
+//   styleUrls: ['./testing-steps-manager.component.scss']
+// })
 export class TestingStepsManagerComponent extends BaseEventStepComponent<Testing> {
 
   public tabs: Tab[];

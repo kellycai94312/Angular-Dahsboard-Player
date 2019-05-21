@@ -7,8 +7,9 @@
     </div>
   </div>
   <div class="content" *ngIf="currentCondition != condition.HIDDEN">
-    <app-events-calendar *ngIf="currentCondition == condition.CALENDAR" [sideBarView]="true"
-                         [@smoothView]></app-events-calendar>
+    <!-- TODO: Add calendar -->
+    <!--<app-events-calendar *ngIf="currentCondition == condition.CALENDAR" [sideBarView]="true"-->
+    <!--[@smoothView]></app-events-calendar>-->
     <app-conversations *ngIf="currentCondition == condition.MESSAGES" [@smoothView]></app-conversations>
   </div>
 </aside>

@@ -21,11 +21,12 @@ import {NgxButtonType} from '../../../../../../components/ngx-button/model/ngx-b
 import {flatMap, timeInterval} from 'rxjs/operators';
 import {TemplateModalService} from '../../../../../../service/template-modal.service';
 
-@Component({
-  selector: 'app-game-step-base-page',
-  templateUrl: './game-step-base-page.component.html',
-  styleUrls: ['./game-step-base-page.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-game-step-base-page',
+//   templateUrl: './game-step-base-page.component.html',
+//   styleUrls: ['./game-step-base-page.component.scss']
+// })
 export class GameStepBasePageComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstantClass = PropertyConstant;

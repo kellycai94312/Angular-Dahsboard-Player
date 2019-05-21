@@ -4,14 +4,10 @@ import {TrainingDiscriminator} from '../model/training/base/training-discriminat
 import {Training} from '../model/training/training/training';
 import {Game} from '../model/training/game/game';
 
-export class PageContainer<T> {
-
-  public from: number;
-  public size: number;
-  public total: number;
+export class DiscriminatorObject {
 
   // TODO: Parsing by discriminator
-  @Type(options => (options.newObject as PageContainer<T>)._type, {
+  @Type(options => (options.newObject as DiscriminatorObject)._type, {
     discriminator: {
       property: 'discriminator',
       subTypes: [
@@ -22,12 +18,12 @@ export class PageContainer<T> {
     },
     keepDiscriminatorProperty: true
   })
-  public list: T[];
+  public obj: any;
 
   @Exclude()
   private readonly _type: Function;
 
-  constructor(type?: Function) {
+  constructor(type: Function) {
     this._type = type;
   }
 

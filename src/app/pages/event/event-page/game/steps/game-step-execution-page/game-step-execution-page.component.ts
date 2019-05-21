@@ -11,11 +11,12 @@ import {TrainingPersonMeasure} from '../../../../../../data/remote/bean/training
 import {MeasureParameterEnum} from '../../../../../../data/remote/misc/measure-parameter-enum';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 
-@Component({
-  selector: 'app-game-step-execution-page',
-  templateUrl: './game-step-execution-page.component.html',
-  styleUrls: ['./game-step-execution-page.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-game-step-execution-page',
+//   templateUrl: './game-step-execution-page.component.html',
+//   styleUrls: ['./game-step-execution-page.component.scss']
+// })
 export class GameStepExecutionPageComponent implements OnInit, OnDestroy {
 
   private _queryParamsSubscription: any;

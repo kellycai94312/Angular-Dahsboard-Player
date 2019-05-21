@@ -8,11 +8,12 @@ import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
 import {TrainingDiscriminator} from '../../../../../data/remote/model/training/base/training-discriminator';
 import {TemplateModalService} from '../../../../../service/template-modal.service';
 
-@Component({
-  selector: 'app-event-calendar-item',
-  templateUrl: './event-calendar-item.component.html',
-  styleUrls: ['./event-calendar-item.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-event-calendar-item',
+//   templateUrl: './event-calendar-item.component.html',
+//   styleUrls: ['./event-calendar-item.component.scss']
+// })
 export class EventCalendarItemComponent implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;

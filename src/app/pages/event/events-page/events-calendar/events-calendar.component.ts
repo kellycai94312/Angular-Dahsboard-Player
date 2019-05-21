@@ -7,9 +7,7 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Router} from '@angular/router';
 import {Sort} from '../../../../data/remote/rest-api/sort';
 import {LocalStorageService} from '../../../../shared/local-storage.service';
-import {CustomDateFormatter} from '../../../../components/calendar-utils/custom-date-formatter.prodiver';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {EventCalendarMonthModalComponent} from './event-calendar-month-modal/event-calendar-month-modal.component';
 import {EventsCalendarService} from './events-calendar.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {AppHelper} from '../../../../utils/app-helper';
@@ -17,17 +15,18 @@ import {EventPlan} from '../../../../data/remote/model/training/plan/event-plan'
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {endOfDay, endOfMonth, endOfWeek, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 
-@Component({
-  selector: 'app-events-calendar',
-  templateUrl: './events-calendar.component.html',
-  styleUrls: ['./events-calendar.component.scss'],
-  providers: [
-    {
-      provide: CalendarDateFormatter,
-      useClass: CustomDateFormatter
-    }
-  ]
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-events-calendar',
+//   templateUrl: './events-calendar.component.html',
+//   styleUrls: ['./events-calendar.component.scss'],
+//   providers: [
+//     {
+//       provide: CalendarDateFormatter,
+//       useClass: CustomDateFormatter
+//     }
+//   ]
+// })
 export class EventsCalendarComponent implements OnInit {
 
   @Input()
@@ -51,7 +50,6 @@ export class EventsCalendarComponent implements OnInit {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _eventsCalendarService: EventsCalendarService,
               private _localStorageService: LocalStorageService,
-              private _dateFormatter: CustomDateFormatter,
               private _modalService: NgbModal,
               private _router: Router,
               private _ngxModalService: NgxModalService,
@@ -100,9 +98,6 @@ export class EventsCalendarComponent implements OnInit {
   }
 
   async onDaySelected({date, events}: { date: Date; events: Array<CalendarEvent<{ film: BaseTraining }>>; }) {
-    const ref = this._modalService.open(EventCalendarMonthModalComponent);
-    ref.componentInstance.date = this._dateFormatter.dayViewTitle({date: date});
-    ref.componentInstance.events = events;
   }
 
   public async onDayClick(date: Date) {

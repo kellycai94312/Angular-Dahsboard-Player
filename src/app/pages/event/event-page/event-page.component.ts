@@ -5,12 +5,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
 
-@Component({
-  selector: 'app-event-page',
-  templateUrl: './event-page.component.html',
-  styleUrls: ['./event-page.component.scss'],
-  providers: [EventService]
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-event-page',
+//   templateUrl: './event-page.component.html',
+//   styleUrls: ['./event-page.component.scss'],
+//   providers: [EventService]
+// })
 export class EventPageComponent<T extends BaseTraining> implements OnInit, OnDestroy {
 
   private _activatedRouteParamsSubscription: ISubscription;

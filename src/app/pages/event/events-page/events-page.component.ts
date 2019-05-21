@@ -1,13 +1,13 @@
-import {Component} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
 import {SplitButtonItem} from '../../../components/ngx-split-button/bean/split-button-item';
 import {TemplateModalService} from '../../../service/template-modal.service';
 
-@Component({
-  selector: 'app-events-page',
-  templateUrl: './events-page.component.html',
-  styleUrls: ['./events-page.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-events-page',
+//   templateUrl: './events-page.component.html',
+//   styleUrls: ['./events-page.component.scss']
+// })
 export class EventsPageComponent {
 
   public readonly tabs: Tab[];
