@@ -1,0 +1,106 @@
+<div fxLayout
+     fxLayout.lt-sm="column"
+     fxLayoutAlign="start start"
+     fxLayoutAlign.lt-sm="start stretch"
+     fxLayoutGap="10px">
+  <mat-card fxFlex="30"
+            class="mat-elevation-z2"
+            mwlDroppable>
+    <mat-card-title>{{'eventType' | translate}}</mat-card-title>
+    <mat-card-content fxLayout="column"
+                      fxLayoutGap="5px">
+      <div *ngFor="let item of externalEvents"
+           class="draggable"
+           mwlDraggable
+           [ngClass]="item.cssClass"
+           [dropData]="{event: item}"
+           [ngStyle]="{'background-color': item.color.primary}"
+           dragActiveClass="drag-active">
+        <p class="p cal-event-title">{{item.title}}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card fxFlex
+            class="mat-elevation-z2">
+    <mat-card-content fxLayout="column"
+                      fxLayoutGap="10px">
+      <div fxLayout
+           fxLayout.lt-sm="column"
+           fxLayoutAlign="space-around center">
+        <div fxFlex></div>
+        <div fxFlex
+             fxLayout
+             fxLayoutAlign="center center">
+          <button mat-icon-button
+                  mwlCalendarPreviousView
+                  [view]="view"
+                  [(viewDate)]="viewDate"
+                  (viewDateChange)="onViewDateChange($event)">
+            <mat-icon>keyboard_arrow_left</mat-icon>
+          </button>
+          <h4>{{ viewDate | calendarDate: (view + 'ViewTitle'): translateService.currentLang}}</h4>
+          <button mat-icon-button
+                  mwlCalendarNextView
+                  [view]="view"
+                  [(viewDate)]="viewDate"
+                  (viewDateChange)="onViewDateChange($event)">
+            <mat-icon>keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+        <div fxFlex
+             fxLayout
+             fxLayoutAlign="end center">
+          <button mat-icon-button
+                  mwlCalendarToday
+                  [(viewDate)]="viewDate">
+            <mat-icon>today</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onSetView(calendarViewClass.Day)">
+            <mat-icon>view_day</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onSetView(calendarViewClass.Week)">
+            <mat-icon>view_week</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onSetView(calendarViewClass.Month)">
+            <mat-icon>view_module</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <div *ngxBusy="isBusy"
+           [ngSwitch]="view">
+        <mwl-calendar-month-view *ngSwitchCase="calendarViewClass.Month"
+                                 [viewDate]="viewDate"
+                                 [events]="events"
+                                 [refresh]="refreshSubject"
+                                 [activeDayIsOpen]="activeDayIsOpen"
+                                 (eventClicked)="onEventClicked($event.event)"
+                                 (eventTimesChanged)="onEventTimesChanged($event)"
+                                 (dayClicked)="onDayClicked($event.day)">
+        </mwl-calendar-month-view>
+        <mwl-calendar-week-view *ngSwitchCase="calendarViewClass.Week"
+                                [viewDate]="viewDate"
+                                [events]="events"
+                                [refresh]="refreshSubject"
+                                [snapDraggedEvents]="false"
+                                (eventClicked)="onEventClicked($event.event)"
+                                (hourSegmentClicked)="onHourSegmentClicked($event.date)"
+                                (eventTimesChanged)="onEventTimesChanged($event)">
+        </mwl-calendar-week-view>
+        <mwl-calendar-day-view *ngSwitchCase="calendarViewClass.Day"
+                               [viewDate]="viewDate"
+                               [events]="events"
+                               [refresh]="refreshSubject"
+                               [snapDraggedEvents]="false"
+                               (eventClicked)="onEventClicked($event.event)"
+                               (hourSegmentClicked)="onHourSegmentClicked($event.date)"
+                               (eventTimesChanged)="onEventTimesChanged($event)">
+        </mwl-calendar-day-view>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

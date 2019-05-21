@@ -21,11 +21,12 @@ import {PreviewNamedObjectComponent} from '../../../../../../components/named-ob
 import {BaseTraining} from '../../../../../../data/remote/model/training/base/base-training';
 import {BaseTrainingQuery} from '../../../../../../data/remote/rest-api/query/base-training-query';
 
-@Component({
-  selector: 'app-general-testing-step',
-  templateUrl: './general-testing-step.component.html',
-  styleUrls: ['./general-testing-step.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-general-testing-step',
+//   templateUrl: './general-testing-step.component.html',
+//   styleUrls: ['./general-testing-step.component.scss']
+// })
 export class GeneralTestingStepComponent extends BaseEventStepComponent<Testing> implements ICanDeactivate {
 
   public readonly propertyConstantClass = PropertyConstant;

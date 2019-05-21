@@ -1,11 +1,12 @@
 import {Component} from '@angular/core';
 import {Tab} from '../../../../../../data/local/tab';
 
-@Component({
-  selector: 'app-game-steps-manager-page',
-  templateUrl: './game-steps-manager-page.component.html',
-  styleUrls: ['./game-steps-manager-page.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-game-steps-manager-page',
+//   templateUrl: './game-steps-manager-page.component.html',
+//   styleUrls: ['./game-steps-manager-page.component.scss']
+// })
 export class GameStepsManagerPageComponent {
 
   public readonly tabs: Tab[];

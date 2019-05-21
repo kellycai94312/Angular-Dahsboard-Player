@@ -4,7 +4,6 @@ import {NgxModalComponent} from './ngx-modal/ngx-modal.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {NgxSplitButtonModule} from '../ngx-split-button/ngx-split-button.module';
-import {RefModule} from '../../directives/ref/ref.module';
 import {NgxModalService} from './service/ngx-modal.service';
 
 @NgModule({
@@ -12,8 +11,7 @@ import {NgxModalService} from './service/ngx-modal.service';
     CommonModule,
     TranslateModule.forChild(),
     NgbModule,
-    NgxSplitButtonModule,
-    RefModule
+    NgxSplitButtonModule
   ],
   declarations: [NgxModalComponent],
   exports: [NgxModalComponent],

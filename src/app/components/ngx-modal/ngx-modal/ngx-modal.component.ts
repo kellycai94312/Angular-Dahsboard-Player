@@ -1,7 +1,6 @@
-import {Component, ComponentFactory, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
+import {Component, ComponentFactory, ComponentFactoryResolver, Input, Type, ViewChild, ViewContainerRef} from '@angular/core';
 import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
-import {RefDirective} from '../../../directives/ref/ref.directive';
 import {INgxContent} from '../bean/ingx-content';
 import {NgxModalConfiguration} from '../bean/ngx-modal-configuration';
 
@@ -12,6 +11,9 @@ import {NgxModalConfiguration} from '../bean/ngx-modal-configuration';
 })
 export class NgxModalComponent {
 
+  @ViewChild('contentTemplate', {read: ViewContainerRef})
+  public contentViewContainerRef: ViewContainerRef;
+
   @Input()
   public title: string;
 
@@ -20,9 +22,6 @@ export class NgxModalComponent {
 
   @Input()
   public splitButtonItems: SplitButtonItem[];
-
-  @ViewChild(RefDirective)
-  public bodyTemplate: RefDirective;
 
   public bodyComponentType: Type<any>;
 
@@ -53,10 +52,9 @@ export class NgxModalComponent {
       }
     }
 
-    const viewContainerRef = this.bodyTemplate.viewContainerRef;
-    viewContainerRef.clear();
+    this.contentViewContainerRef.clear();
 
-    const componentRef = viewContainerRef.createComponent(componentFactory);
+    const componentRef = this.contentViewContainerRef.createComponent(componentFactory);
     (<any>componentRef.instance as INgxContent).modal = this.modal;
     // TODO: Use interface for the call this field
     componentRef.instance._manualInit = true;

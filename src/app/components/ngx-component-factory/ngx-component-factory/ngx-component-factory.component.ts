@@ -1,5 +1,4 @@
-import {Component, ComponentFactory, ComponentFactoryResolver, Input, OnInit, Type, ViewChild} from '@angular/core';
-import {RefDirective} from '../../../directives/ref/ref.directive';
+import {Component, ComponentFactory, ComponentFactoryResolver, Input, OnInit, Type, ViewChild, ViewContainerRef} from '@angular/core';
 import {INgxComponentFactory} from '../model/ingx-component-factory';
 
 @Component({
@@ -9,8 +8,8 @@ import {INgxComponentFactory} from '../model/ingx-component-factory';
 })
 export class NgxComponentFactoryComponent<TComponent extends any, TModel extends any> implements INgxComponentFactory<TComponent, TModel>, OnInit {
 
-  @ViewChild(RefDirective)
-  public refDirective: RefDirective;
+  @ViewChild('contentTemplate', {read: ViewContainerRef})
+  public contentViewContainerRef: ViewContainerRef;
 
   @Input()
   public manualInitialization: boolean;
@@ -18,6 +17,7 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
   @Input()
   public componentFactoryResolver: ComponentFactoryResolver;
 
+  // TODO: Remove this field
   @Input()
   public class: string;
 
@@ -44,7 +44,9 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
     }
   }
 
-  public async initialize(componentType: Type<TComponent>, data: TModel, initialize?: (component: TComponent, data: TModel) => Promise<void>): Promise<TComponent> {
+  public async initialize(componentType: Type<TComponent>,
+                          data: TModel,
+                          initialize?: (component: TComponent, data: TModel) => Promise<void>): Promise<TComponent> {
     this.componentType = componentType;
     this.data = data;
 
@@ -66,10 +68,8 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
       }
     }
 
-    const viewContainerRef = this.refDirective.viewContainerRef;
-    viewContainerRef.clear();
-
-    const componentRef = viewContainerRef.createComponent(componentFactory);
+    this.contentViewContainerRef.clear();
+    const componentRef = this.contentViewContainerRef.createComponent(componentFactory);
     componentRef.changeDetectorRef.detectChanges();
     if (initialize) {
       await initialize(componentRef.instance, data);

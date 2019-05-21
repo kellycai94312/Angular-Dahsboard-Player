@@ -7,11 +7,12 @@ import {TrainingGroup} from '../../../../../../data/remote/model/training-group'
 import {TrainingPersonsSelectionComponent} from '../../../../../../components/training-persons-selection/training-persons-selection.component';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 
-@Component({
-  selector: 'app-game-step-persons-page',
-  templateUrl: './game-step-persons-page.component.html',
-  styleUrls: ['./game-step-persons-page.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-game-step-persons-page',
+//   templateUrl: './game-step-persons-page.component.html',
+//   styleUrls: ['./game-step-persons-page.component.scss']
+// })
 export class GameStepPersonsPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _groupId: number;

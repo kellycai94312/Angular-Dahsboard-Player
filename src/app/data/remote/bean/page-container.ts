@@ -1,19 +1,34 @@
 import {Exclude, Type} from 'class-transformer';
+import {Testing} from '../model/training/testing/testing';
+import {TrainingDiscriminator} from '../model/training/base/training-discriminator';
+import {Training} from '../model/training/training/training';
+import {Game} from '../model/training/game/game';
 
 export class PageContainer<T> {
-  from: number;
-  size: number;
-  total: number;
 
-  @Type(options => {
-    return (options.newObject as PageContainer<T>).type;
+  public from: number;
+  public size: number;
+  public total: number;
+
+  // TODO: Parsing by discriminator
+  @Type(options => (options.newObject as PageContainer<T>)._type, {
+    discriminator: {
+      property: 'discriminator',
+      subTypes: [
+        {value: Testing, name: TrainingDiscriminator.TESTING},
+        {value: Training, name: TrainingDiscriminator.TRAINING},
+        {value: Game, name: TrainingDiscriminator.GAME}
+      ],
+    },
+    keepDiscriminatorProperty: true
   })
-  list: T[];
+  public list: T[];
 
   @Exclude()
-  private type: Function;
+  private readonly _type: Function;
 
   constructor(type?: Function) {
-    this.type = type;
+    this._type = type;
   }
+
 }

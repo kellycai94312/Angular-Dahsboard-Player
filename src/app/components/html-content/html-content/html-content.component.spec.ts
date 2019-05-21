@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { HtmlContentComponent } from './html-content.component';
+import {HtmlContentComponent} from './html-content.component';
 
 describe('HtmlContentComponent', () => {
   let component: HtmlContentComponent;
@@ -8,9 +8,9 @@ describe('HtmlContentComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HtmlContentComponent ]
+      declarations: [HtmlContentComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

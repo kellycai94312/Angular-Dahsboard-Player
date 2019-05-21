@@ -21,11 +21,12 @@ import {TranslateObjectService} from '../../../../shared/translate-object.servic
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 import {PermissionService} from '../../../../shared/permission.service';
 
-@Component({
-  selector: 'app-events-list',
-  templateUrl: './events-list.component.html',
-  styleUrls: ['./events-list.component.scss']
-})
+// TODO: Remove this
+// @Component({
+//   selector: 'app-events-list',
+//   templateUrl: './events-list.component.html',
+//   styleUrls: ['./events-list.component.scss']
+// })
 export class EventsListComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstant = PropertyConstant;

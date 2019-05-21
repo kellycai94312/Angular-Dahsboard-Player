@@ -27,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: 'event',
-    loadChildren: './pages/event/event.module#EventModule',
+    loadChildren: './pages/events/events.module#EventsModule',
     canActivate: [AuthGuard]
   },
   {
