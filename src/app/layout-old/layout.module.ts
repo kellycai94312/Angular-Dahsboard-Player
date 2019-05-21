@@ -7,7 +7,6 @@ import {LayoutComponent} from './layout.component';
 import {ImageModule} from '../components/image/image.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {RouterModule} from '@angular/router';
-import {EventModule} from '../pages/event/event.module';
 import {NgxBreadcrumbModule} from '../components/ngx-breadcrumb/ngx-breadcrumb.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {ConversationsModule} from '../module/conversation/conversations/conversations.module';
@@ -26,8 +25,7 @@ import {ConversationsModule} from '../module/conversation/conversations/conversa
     TranslateModule.forChild(),
     NgxBreadcrumbModule,
     NgbModule,
-    ConversationsModule,
-    EventModule
+    ConversationsModule
   ],
   exports: [
     LayoutComponent
