@@ -20,13 +20,15 @@
          fxFlex="1 1 auto"
          fxLayout
          fxLayoutAlign="end none">
-      <button *ngFor="let item of selectedTab.actions"
-              class="text-uppercase"
-              mat-button
-              (click)="onClickByTabAction(item)"
-              color="primary">
-        <ng-container *ngTemplateOutlet="tabContentTemplate; context:{$implicit: item}"></ng-container>
-      </button>
+      <ng-container *ngFor="let item of selectedTab.actions">
+        <button *ngIf="!item.hidden$ || !(item.hidden$ | async)"
+                class="text-uppercase"
+                mat-button
+                (click)="onClickByTabAction(item)"
+                color="primary">
+          <ng-container *ngTemplateOutlet="tabContentTemplate; context:{$implicit: item}"></ng-container>
+        </button>
+      </ng-container>
     </div>
   </nav>
 

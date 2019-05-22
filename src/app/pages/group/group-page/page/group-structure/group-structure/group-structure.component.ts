@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Tab} from '../../../../../../data/local/tab';
+import {NgxTab} from '../../../../../../module/ngx/ngx-tabs/model/ngx-tab';
 
 @Component({
   selector: 'app-group-structure',
@@ -8,22 +8,13 @@ import {Tab} from '../../../../../../data/local/tab';
 })
 export class GroupStructureComponent {
 
-  public readonly tabs: Tab[];
+  public readonly tabs: NgxTab[];
 
   constructor() {
     this.tabs = [
-      {
-        nameKey: 'clusters',
-        routerLink: 'cluster'
-      },
-      {
-        nameKey: 'hierarchies',
-        routerLink: 'hierarchy'
-      },
-      {
-        nameKey: 'requests',
-        routerLink: 'request'
-      }
+      {translation: 'clusters', link: 'cluster'},
+      {translation: 'hierarchies', link: 'hierarchy'},
+      {translation: 'requests', link: 'request'}
     ];
   }
 

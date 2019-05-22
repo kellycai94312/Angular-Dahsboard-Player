@@ -935,30 +935,45 @@ export class ParticipantRestApiService extends Rest {
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news',
+    resultFactory: (item, options) => {
+      return plainToClassFromExist(new PageContainer<GroupNews>(GroupNews), item);
+    }
   })
   getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
 
   @RestAction({
     method: RestRequestMethod.Get,
     path: '/group/{!groupId}/news/{!groupNewsId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupNews, item);
+    }
   })
   getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/news',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupNews, item);
+    }
   })
   createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Put,
     path: '/group/{!groupId}/news/{!groupNewsId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupNews, item);
+    }
   })
   updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/group/{!groupId}/news/{!groupNewsId}',
+    resultFactory: (item, options) => {
+      return plainToClass(GroupNews, item);
+    }
   })
   removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
 
