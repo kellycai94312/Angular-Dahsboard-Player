@@ -78,6 +78,7 @@
                                  [events]="events"
                                  [refresh]="refreshSubject"
                                  [activeDayIsOpen]="activeDayIsOpen"
+                                 [locale]="translateService.currentLang"
                                  (eventClicked)="onEventClicked($event.event)"
                                  (eventTimesChanged)="onEventTimesChanged($event)"
                                  (dayClicked)="onDayClicked($event.day)">
@@ -87,6 +88,7 @@
                                 [events]="events"
                                 [refresh]="refreshSubject"
                                 [snapDraggedEvents]="false"
+                                [locale]="translateService.currentLang"
                                 (eventClicked)="onEventClicked($event.event)"
                                 (hourSegmentClicked)="onHourSegmentClicked($event.date)"
                                 (eventTimesChanged)="onEventTimesChanged($event)">
@@ -96,6 +98,7 @@
                                [events]="events"
                                [refresh]="refreshSubject"
                                [snapDraggedEvents]="false"
+                               [locale]="translateService.currentLang"
                                (eventClicked)="onEventClicked($event.event)"
                                (hourSegmentClicked)="onHourSegmentClicked($event.date)"
                                (eventTimesChanged)="onEventTimesChanged($event)">
