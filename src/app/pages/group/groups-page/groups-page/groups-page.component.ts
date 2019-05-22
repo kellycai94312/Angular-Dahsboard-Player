@@ -1,46 +1,41 @@
-import {Component, OnInit} from '@angular/core';
-import {Tab} from '../../../../data/local/tab';
+import {Component} from '@angular/core';
 import {AuthorizationService} from '../../../../shared/authorization.service';
-import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {PermissionService} from '../../../../shared/permission.service';
+import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
+import {NgxTabAction} from '../../../../module/ngx/ngx-tabs/model/ngx-tab-action';
 
 @Component({
   selector: 'app-groups-page',
   templateUrl: './groups-page.component.html',
   styleUrls: ['./groups-page.component.scss']
 })
-export class GroupsPageComponent implements OnInit {
+export class GroupsPageComponent {
 
-  public readonly tabs: Tab[];
-  private readonly _actions: SplitButtonItem[];
+  public readonly tabs: NgxTab[];
 
   constructor(private _authorizationService: AuthorizationService,
               private _permissionService: PermissionService,
               private _templateModalService: TemplateModalService) {
-    this._actions = [];
-    this.tabs = [
-      {
-        nameKey: 'my',
-        routerLink: 'my',
-        splitButtonsItems: this._actions
-      },
-      {
-        nameKey: 'all',
-        routerLink: 'all',
-        splitButtonsItems: this._actions
-      }
-    ];
-  }
-
-  async ngOnInit() {
-    this._actions.push({
-      nameKey: 'add',
-      callback: async () => {
+    const actions: NgxTabAction[] = [{
+      iconName: 'add',
+      action: async () => {
         await this._templateModalService.showEditGroupModal(new Group());
       }
-    });
+    }];
+    this.tabs = [
+      {
+        translation: 'my',
+        link: 'my',
+        actions: actions
+      },
+      {
+        translation: 'all',
+        link: 'all',
+        actions: actions
+      }
+    ];
   }
 
 }
