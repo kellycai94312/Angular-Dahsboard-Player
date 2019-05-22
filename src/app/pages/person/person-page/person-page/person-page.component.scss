@@ -1,3 +1,9 @@
+@import "../../../../styles/variables";
+
+ngx-tabs {
+  height: $tabs-height;
+}
+
 .header {
   background-color: #1c1f29;
   padding: 1rem !important;
