@@ -2,7 +2,6 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Tab} from '../../../../data/local/tab';
 import {GroupService} from '../service/group.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
@@ -22,6 +21,8 @@ import {BaseGroupComponent} from '../../../../data/local/component/group/base-gr
 import {GroupSettingsComponent} from '../../../../module/group/group-settings/group-settings/group-settings.component';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 import {AuthorizationService} from '../../../../shared/authorization.service';
+import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-page',
@@ -37,7 +38,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
 
-  public readonly tabs: Tab[];
+  public readonly tabs: NgxTab[];
   public readonly splitButtonsItems: SplitButtonItem[];
 
   private _paramRouteSubscription: ISubscription;
@@ -56,31 +57,29 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
 
     this.tabs = [
       {
-        nameKey: 'news',
-        routerLink: 'news'
+        translation: 'news',
+        link: 'news'
       },
       {
-        nameKey: 'employees',
-        routerLink: 'employee'
+        translation: 'employees',
+        link: 'employee'
       },
       {
-        nameKey: 'subgroups',
-        routerLink: 'subgroup'
+        translation: 'subgroups',
+        link: 'subgroup'
       },
       {
-        nameKey: 'subscribers',
-        routerLink: 'subscriber'
+        translation: 'subscribers',
+        link: 'subscriber'
       },
       {
-        nameKey: 'requests',
-        routerLink: 'request',
-        visible: (item: Tab) => {
-          return this.canEdit;
-        }
+        translation: 'requests',
+        link: 'request',
+        hidden$: this.canEditSubject.pipe(map(value => !value))
       },
       {
-        nameKey: 'structure',
-        routerLink: 'structure'
+        translation: 'structure',
+        link: 'structure'
       }
     ];
 

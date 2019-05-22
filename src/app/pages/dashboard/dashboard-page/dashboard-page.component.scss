@@ -1,9 +1,15 @@
+@import "../../../styles/variables";
+
 :host {
   ::ng-deep {
     .ngx-virtual-scroll-content {
       max-width: 60% !important;
     }
   }
+}
+
+ngx-tabs {
+  height: $tabs-height;
 }
 
 .header {

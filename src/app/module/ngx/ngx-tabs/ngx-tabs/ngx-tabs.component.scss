@@ -1,0 +1,43 @@
+$font-weight: 600;
+
+:host {
+  height: 100%;
+
+  nav {
+    height: inherit;
+
+    a {
+      text-decoration: none;
+    }
+
+    ::ng-deep .mat-tab-links {
+      height: inherit !important;
+
+      .mat-tab-link {
+        font-weight: $font-weight;
+        height: inherit;
+        min-width: auto;
+        padding: 0 12px;
+      }
+
+      ::ng-deep .mat-ink-bar {
+        height: 4px !important;
+        bottom: 2px !important;
+      }
+    }
+
+    button {
+      font-weight: $font-weight;
+
+      mat-icon {
+        color: rgba(0, 0, 0, .54);
+      }
+    }
+  }
+
+  .text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

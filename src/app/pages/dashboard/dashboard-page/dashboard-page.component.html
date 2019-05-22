@@ -1,30 +1,38 @@
-<div *ngIf="person"
-     class="header">
-  <div class="d-flex flex-row">
-    <ngx-image [objectId]="person.id"
-               [width]="130"
-               [height]="130"
-               [allowFullScreen]="false"
-               [type]="imageTypeClass.CROPPED_LOGO"
-               [fileClass]="fileClassClass.PERSON"
-               [format]="imageFormatClass.CIRCLE"></ngx-image>
-    <div class="d-flex flex-column align-self-center name ml-4">
-      <h4>{{person?.lastName}}</h4>
-      <h4>{{person?.firstName}}</h4>
-      <h4>{{person?.patronymic}}</h4>
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div *ngIf="person"
+       class="header">
+    <div fxLayout
+         fxLayoutGap="10px">
+      <ngx-image [object]="person"
+                 [width]="130"
+                 [height]="130"
+                 [allowFullScreen]="false"
+                 [type]="imageTypeClass.CROPPED_LOGO"
+                 [fileClass]="fileClassClass.PERSON"
+                 [format]="imageFormatClass.CIRCLE"></ngx-image>
+      <div fxLayout="column"
+           fxLayoutAlign="center start">
+        <h4>{{person.lastName}}</h4>
+        <h4>{{person.firstName}}</h4>
+        <h4>{{person?.patronymic}}</h4>
+      </div>
     </div>
   </div>
+
+  <ngx-tabs [tabs]="tabs"
+            [withoutRouting]="true"
+            [(selectedTab)]="selectedTab"></ngx-tabs>
+
+  <ngx-virtual-scroll fxLayout="column"
+                      fxLayoutAlign="center center"
+                      [getItems]="fetchItems"
+                      [windowScroll]="true">
+    <ng-template let-item>
+      <div *ngIf="!item.deleted"
+           class="mt-2">
+        <app-group-news-item [data]="item"></app-group-news-item>
+      </div>
+    </ng-template>
+  </ngx-virtual-scroll>
 </div>
-<ngx-tab class="mt-2"
-         [tabs]="tabs"></ngx-tab>
-<ngx-virtual-scroll fxLayout="column"
-                    fxLayoutAlign="center center"
-                    [getItems]="fetchItems"
-                    [windowScroll]="true">
-  <ng-template let-item>
-    <div *ngIf="!item.deleted"
-         class="mt-2">
-      <app-group-news-item [data]="item"></app-group-news-item>
-    </div>
-  </ng-template>
-</ngx-virtual-scroll>
