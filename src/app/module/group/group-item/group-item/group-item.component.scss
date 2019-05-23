@@ -1,3 +1,15 @@
-.text-muted {
-  font-size: 12px !important;
+:host {
+  ::ng-deep {
+    .mat-card-header-text {
+      margin: 0 !important;
+    }
+
+    .mat-card-title {
+      font-size: 14px;
+    }
+
+    .mat-card-subtitle:not(:first-child) {
+      margin-top: -14px !important;
+    }
+  }
 }
