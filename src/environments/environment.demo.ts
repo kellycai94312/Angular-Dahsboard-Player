@@ -3,7 +3,7 @@ import {EnvironmentType} from './environment-type';
 
 export const environment: IEnvironment = {
   production: true,
-  version: '1.0.1-0',
+  version: '1.0.1-2',
   type: EnvironmentType.DEMO,
   host: 'demo.api.ar.zone',
   restUrl: 'https://demo.api.ar.zone/sp/v2',

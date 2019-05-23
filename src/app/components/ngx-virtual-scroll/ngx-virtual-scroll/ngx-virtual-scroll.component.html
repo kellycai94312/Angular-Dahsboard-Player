@@ -4,10 +4,10 @@
      [windowScroll]="windowScroll"
      (scrollUp)="onScrollUp()"
      (scrollDown)="onScrollDown()">
-  <app-busy-indicator *ngIf="upBusy"></app-busy-indicator>
+  <div *ngxBusy="upBusy"></div>
   <ng-template ngFor
                [ngForOf]="items"
                [ngForTemplate]="templateRef">
   </ng-template>
-  <app-busy-indicator *ngIf="downBusy"></app-busy-indicator>
+  <div *ngxBusy="downBusy"></div>
 </div>

@@ -3,13 +3,13 @@ import {CommonModule} from '@angular/common';
 import {NgxVirtualScrollComponent} from './ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {NgxScrollModule} from './ngx-scroll/ngx-scroll.module';
 import {NgxScrollDirective} from './ngx-scroll/ngx-scroll.directive';
-import {BusyIndicatorModule} from '../busy-indicator/busy-indicator.module';
+import {NgxBusyModule} from '../../directives/ngx-busy/ngx-busy.module';
 
 @NgModule({
   imports: [
     CommonModule,
     NgxScrollModule,
-    BusyIndicatorModule
+    NgxBusyModule
   ],
   declarations: [NgxVirtualScrollComponent],
   exports: [NgxVirtualScrollComponent, NgxScrollDirective]

@@ -1,12 +1,19 @@
-<ngx-virtual-scroll fxLayout="column"
-                    fxLayoutAlign="center center"
-                    [getItems]="fetchItems"
-                    [windowScroll]="true">
-  <ng-template let-item>
-    <div *ngIf="!item.deleted"
-         class="mt-2">
-      <app-group-news-item [data]="item"
-                           [canEdit]="canEdit"></app-group-news-item>
-    </div>
-  </ng-template>
-</ngx-virtual-scroll>
+<div fxLayout="row"
+     fxLayoutAlign="center stretch">
+  <div fxLayout="column"
+       fxFlex="grow"
+       fxFlex.md="80"
+       fxFlex.gt-md="60"
+       fxLayoutAlign="start stretch">
+    <ngx-virtual-scroll [getItems]="fetchItems"
+                        [windowScroll]="true">
+      <ng-template let-item>
+        <div *ngIf="!item.deleted"
+             class="mt-2">
+          <app-group-news-item [data]="item"
+                               [canEdit]="canEdit"></app-group-news-item>
+        </div>
+      </ng-template>
+    </ngx-virtual-scroll>
+  </div>
+</div>
