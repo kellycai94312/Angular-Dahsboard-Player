@@ -55,6 +55,14 @@ export const navigation: FuseNavigation[] = [
         type: 'item',
         icon: 'notifications',
         url: '/notification'
+      },
+      {
+        id: 'dictionaries',
+        title: 'Dictionaries',
+        translate: 'dictionaries',
+        type: 'item',
+        icon: 'library_books',
+        url: '/dictionary'
       }
     ]
   }

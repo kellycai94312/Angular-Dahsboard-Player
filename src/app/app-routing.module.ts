@@ -68,7 +68,7 @@ const routes: Routes = [
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
-    canActivate: [AuthGuard, DeactivateGuard],
+    canActivate: [AuthGuard],
     data: {
       breadcrumb: {nameKey: 'dictionaries'} as BreadcrumbItem
     }
