@@ -1,4 +1,12 @@
 :host {
-  display: block;
-  max-width: inherit !important;
+  ::ng-deep {
+    .mat-card-header-text,
+    .mat-card-title  {
+      margin: 0 !important;
+    }
+
+    .mat-card-title {
+      font-size: 14px;
+    }
+  }
 }

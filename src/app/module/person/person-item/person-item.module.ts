@@ -5,6 +5,7 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module';
+import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
 
 @NgModule({
   imports: [
@@ -12,7 +13,10 @@ import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module'
     NgxImageModule,
     NgxButtonModule,
     TranslateModule.forChild(),
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule
   ],
   declarations: [PersonItemComponent],
   entryComponents: [PersonItemComponent],
