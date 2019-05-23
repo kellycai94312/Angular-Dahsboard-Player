@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Tab} from '../../../data/local/tab';
+import {NgxTab} from '../../../module/ngx/ngx-tabs/model/ngx-tab';
 
 @Component({
   selector: 'app-notifications',
@@ -8,18 +8,12 @@ import {Tab} from '../../../data/local/tab';
 })
 export class NotificationsComponent {
 
-  public readonly tabs: Tab[];
+  public readonly tabs: NgxTab[];
 
   constructor() {
     this.tabs = [
-      {
-        nameKey: 'all',
-        routerLink: 'all'
-      },
-      {
-        nameKey: 'changes',
-        routerLink: 'change'
-      }
+      {translation: 'all', link: 'all'},
+      {translation: 'changes', link: 'change'}
     ];
   }
 
