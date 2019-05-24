@@ -678,5 +678,16 @@
   "points": "Points",
   "finishPoll": "Finish poll",
   "poll": "Poll",
-  "youCantExecutePoll": "You aren't a participant in the event, therefore you cannot take a survey"
+  "youCantExecutePoll": "You aren't a participant in the event, therefore you cannot take a survey",
+  "eventTypeEnum": {
+    "EVENT": "Event",
+    "TRAINING": "Training",
+    "TESTING": "Testing",
+    "GAME": "Game",
+    "COMPETITION": "Competition",
+    "RELAXATION": "Relaxation",
+    "DIET": "Diet",
+    "MEET_UP": "Meet up",
+    "TUITION": "Tuition"
+  }
 }
