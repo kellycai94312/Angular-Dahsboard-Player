@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CalendarEvent, CalendarEventTimesChangedEvent, CalendarView} from 'angular-calendar';
+import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
 import {TranslateService} from '@ngx-translate/core';
 import {UtilService} from '../../../../services/util/util.service';
 import {TrainingDiscriminator} from '../../../../data/remote/model/training/base/training-discriminator';
@@ -16,11 +16,18 @@ import {EventApiService} from '../../../../data/remote/rest-api/api/event/event-
 import {Testing} from '../../../../data/remote/model/training/testing/testing';
 import {Game} from '../../../../data/remote/model/training/game/game';
 import {TemplateModalService} from '../../../../service/template-modal.service';
+import {CustomDateFormatter} from '../model/custom-date-formatter';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
-  styleUrls: ['./calendar.component.scss']
+  styleUrls: ['./calendar.component.scss'],
+  providers: [
+    {
+      provide: CalendarDateFormatter,
+      useClass: CustomDateFormatter
+    }
+  ]
 })
 export class CalendarComponent implements OnInit {
 
@@ -32,6 +39,7 @@ export class CalendarComponent implements OnInit {
   public viewDate = new Date();
   public isBusy: boolean;
   public activeDayIsOpen: boolean;
+  public weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
 
   private readonly _eventQuery = new BaseTrainingQuery();
   private readonly _defaultDurationMs = 30 * 60 * 1000;
