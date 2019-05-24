@@ -1,12 +1,38 @@
+@import "../../../../styles/main";
+
 :host {
   ::ng-deep {
-    .mat-card-header-text,
-    .mat-card-title  {
-      margin: 0 !important;
-    }
+    .mat-card {
+      padding: 0;
 
-    .mat-card-title {
-      font-size: 14px;
+      .mat-card-header {
+        background-color: #2a3235;
+        color: #fff;
+        padding: 6px;
+
+        button {
+          @include mat-button-size(30px);
+
+          mat-icon {
+            @include mat-icon-size(18px);
+          }
+        }
+
+        .mat-card-header-text {
+          margin: 0;
+        }
+
+        .mat-card-title {
+          font-size: 14px;
+          font-weight: normal;
+          margin: 0;
+        }
+      }
+
+      .mat-card-content {
+        background-color: #2d3c43;
+        padding: 6px;
+      }
     }
   }
 }

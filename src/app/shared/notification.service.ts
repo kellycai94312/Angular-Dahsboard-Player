@@ -1,4 +1,4 @@
-import {map} from 'rxjs/operators';
+import {map, takeWhile} from 'rxjs/operators';
 import {Injectable, OnDestroy} from '@angular/core';
 import {BaseNotification} from '../data/remote/model/notification/base/base-notification';
 import {GroupNotification} from '../data/remote/model/notification/group/group-notification';
@@ -8,15 +8,14 @@ import {INotificationViewModel} from '../data/local/view-model/notification/i-no
 import {GroupNotificationViewModel} from '../data/local/view-model/notification/group-notification-view-model';
 import {TrainingNotificationViewModel} from '../data/local/view-model/notification/training-notification-view-model';
 import {NotificationWrapper} from '../data/remote/bean/wrapper/notification-wrapper';
-import {Subject, SubscriptionLike as ISubscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {ParticipantStompService} from '../data/remote/web-socket/participant-stomp.service';
 
 @Injectable()
 export class NotificationService implements OnDestroy {
 
   public readonly handleNotification: Subject<INotificationViewModel>;
-
-  private _notificationSubscription: ISubscription;
+  private _notDestroyed = true;
 
   constructor(private _participantStompService: ParticipantStompService) {
     this.handleNotification = new Subject<INotificationViewModel>();
@@ -36,29 +35,22 @@ export class NotificationService implements OnDestroy {
   }
 
   public subscribe() {
-    if (this._notificationSubscription) {
-      return;
-    }
+    this._notDestroyed = true;
 
-    try {
-      this._notificationSubscription = this._participantStompService.subscribeNotification()
-        .pipe(
-          map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
-        )
-        .subscribe(async notification => {
-          const viewModel = this.createNotificationViewModel(notification.notification);
-          await viewModel.build();
-          this.handleNotification.next(viewModel);
-        });
-    } catch (e) {
-    }
+    this._participantStompService.subscribeNotification()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
+      )
+      .subscribe(async notification => {
+        const viewModel = this.createNotificationViewModel(notification.notification);
+        await viewModel.build();
+        this.handleNotification.next(viewModel);
+      });
   }
 
   public unsubscribe() {
-    if (this._notificationSubscription) {
-      this._notificationSubscription.unsubscribe();
-      delete this._notificationSubscription;
-    }
+    this._notDestroyed = false;
   }
 
 }

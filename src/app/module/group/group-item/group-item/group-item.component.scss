@@ -1,15 +1,33 @@
 :host {
   ::ng-deep {
-    .mat-card-header-text {
-      margin: 0 !important;
-    }
+    .mat-card {
+      padding: 0;
 
-    .mat-card-title {
-      font-size: 14px;
-    }
+      .mat-card-header {
+        background-color: #2a3235;
+        color: #fff;
+        padding: 6px;
 
-    .mat-card-subtitle:not(:first-child) {
-      margin-top: -14px !important;
+        .mat-card-header-text {
+          margin: 0;
+        }
+
+        .mat-card-title {
+          margin: 0;
+          font-size: 14px;
+          font-weight: normal;
+        }
+
+        .mat-card-subtitle {
+          margin: 0;
+          color: rgba(255, 255, 255, .54);
+        }
+      }
+
+      .mat-card-content {
+        background-color: #2d3c43;
+        padding: 6px;
+      }
     }
   }
 }
