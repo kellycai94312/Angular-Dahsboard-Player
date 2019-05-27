@@ -23,8 +23,8 @@
   <mat-list *ngIf="events?.length; else elseContainer">
     <mat-list-item *ngFor="let item of events">
       <h4 matLine><strong>{{item.name}}</strong></h4>
-      <h3 matLine>{{'startDate' | translate}}: {{item.startTime | date: propertyConstantClass.dateTimeFormat}}</h3>
-      <h3 matLine>{{'finishDate' | translate}}: {{item.finishTime | date: propertyConstantClass.dateTimeFormat}}</h3>
+      <h3 matLine>{{'startDate' | translate}}: {{item.startDate | date: propertyConstantClass.dateTimeFormat}}</h3>
+      <h3 matLine>{{'finishDate' | translate}}: {{item.finishDate | date: propertyConstantClass.dateTimeFormat}}</h3>
       <p *ngIf="item.description"
          matLine
          class="secondary-text">{{item.description}}</p>

@@ -1,28 +1,25 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subject} from 'rxjs';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {AppHelper} from '../../../utils/app-helper';
+import {BaseEventApiService} from '../../../data/remote/rest-api/api/event/base-event-api/base-event-api.service';
+import {BaseEvent} from '../../../data/remote/model/event/base/base-event';
 
 @Component({
   selector: 'quick-panel',
   templateUrl: './quick-panel.component.html',
   styleUrls: ['./quick-panel.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [BaseEventApiService]
 })
 export class QuickPanelComponent implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;
-  date: Date;
-  events: BaseTraining[];
+  public date: Date;
+  public events: BaseEvent[];
 
-  private _unsubscribeAll: Subject<any>;
-
-  constructor(private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _baseEventApiService: BaseEventApiService,
               private _appHelper: AppHelper) {
     this.date = new Date();
-    this._unsubscribeAll = new Subject();
   }
 
   async ngOnInit() {
@@ -30,7 +27,10 @@ export class QuickPanelComponent implements OnInit {
     const dateTo = new Date(dateFrom);
     dateTo.setHours(24);
     const dateToStr = this._appHelper.dateByFormat(dateTo, PropertyConstant.dateFormat);
-    this.events = (await this._participantRestApiService.getBaseTrainings({count: PropertyConstant.pageSizeMax, dateFrom: dateFrom, dateTo: dateToStr})).list;
+
+    this._baseEventApiService.getEvents({count: PropertyConstant.pageSizeMax, startDate: dateFrom, finishDate: dateToStr}).subscribe(value => {
+      this.events = value.list;
+    });
   }
 
 }
