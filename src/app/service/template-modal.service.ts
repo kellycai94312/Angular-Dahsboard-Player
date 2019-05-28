@@ -46,6 +46,8 @@ import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-
 import {EventPoll} from '../data/remote/model/training/poll/event-poll';
 import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
 import {GroupNews} from '../data/remote/model/group/news/group-news';
+import {BaseEvent} from '../data/remote/model/event/base/base-event';
+import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
 
 @Injectable({
   providedIn: 'root'
@@ -386,6 +388,28 @@ export class TemplateModalService {
   }
 
   //#region Event
+
+  public async showEditBaseEvent<T extends BaseEvent>(event: T): Promise<DialogResult<T>> {
+    const modal = this._ngxModalService.open();
+    await this._modalBuilderService.updateModalTitle(modal, event, event.name || await this._translateObjectService.getTranslation('newEvent'));
+    let editBaseEventComponent: EditBaseEventComponent<T>;
+    await modal.componentInstance.initializeBody(EditBaseEventComponent, async component => {
+      editBaseEventComponent = component as EditBaseEventComponent<T>;
+      await component.initialize(this._appHelper.cloneObject(event));
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+        })
+      ];
+    });
+
+    const result = await this._ngxModalService.awaitModalResult(modal);
+    return {result: result, data: editBaseEventComponent.data};
+  }
 
   public async showEditEventModal<T extends BaseTraining>(event: T = null,
                                                           date: Date = null,

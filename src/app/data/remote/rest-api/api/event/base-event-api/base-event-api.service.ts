@@ -43,10 +43,16 @@ export class BaseEventApiService {
   }
 
   public saveEvent<T extends BaseEvent>(event: T): Observable<T> {
-    if (event.isNew) {
+    if (!event.id) {
       return this.createEvent(event);
     }
     return this.updateEvent(event);
+  }
+
+  public removeEvent<T extends BaseEvent>(event: T): Observable<T> {
+    return this._apiService.delete<T>(`${this._basePath}/${event.id}`).pipe(
+      map(x => this._utilService.plainDiscriminatorObjectToClass(BaseEvent, x))
+    );
   }
 
 }

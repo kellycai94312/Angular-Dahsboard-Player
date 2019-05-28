@@ -45,6 +45,7 @@ import {FuseModule} from '../@fuse/fuse.module';
 import {NgxSelectionModule} from './components/ngx-selection/ngx-selection.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
 import {EditEventPollModule} from './module/event/edit-event-poll/edit-event-poll.module';
+import {EditBaseEventModule} from './module/event/edit-base-event/edit-base-event.module';
 
 registerLocaleData(localeRu);
 
@@ -90,7 +91,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     // TODO: Need for resolve entryComponent
     NgxSelectionModule,
     GroupItemModule,
-    EditEventPollModule
+    EditEventPollModule,
+    EditBaseEventModule
   ],
   providers: [
     LayoutService,

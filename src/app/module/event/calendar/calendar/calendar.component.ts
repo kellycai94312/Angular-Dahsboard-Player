@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
+import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarEventTitleFormatter, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
 import {TranslateService} from '@ngx-translate/core';
 import {UtilService} from '../../../../services/util/util.service';
 import {endOfDay, endOfMonth, endOfWeek, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
@@ -21,6 +21,7 @@ import {MeetUp} from '../../../../data/remote/model/event/meet-up';
 import {Tuition} from '../../../../data/remote/model/event/tuition';
 import {Event} from '../../../../data/remote/model/event/event';
 import {Training} from '../../../../data/remote/model/event/training';
+import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
 
 @Component({
   selector: 'app-calendar',
@@ -30,6 +31,10 @@ import {Training} from '../../../../data/remote/model/event/training';
     {
       provide: CalendarDateFormatter,
       useClass: CustomDateFormatter
+    },
+    {
+      provide: CalendarEventTitleFormatter,
+      useClass: CustomEventTitleFormatter
     },
     BaseEventApiService
   ]
@@ -56,7 +61,7 @@ export class CalendarComponent implements OnInit {
               private _utilService: UtilService) {
     this.externalEvents = [];
     const date = new Date();
-    for (const item in EventType) {
+    for (const item of Object.keys(EventType).reverse()) {
       this.externalEvents.push(this.getCalendarEvent(this.getDefaultEvent(date, EventType[item] as EventType)));
     }
   }
@@ -147,16 +152,20 @@ export class CalendarComponent implements OnInit {
   }
 
   private async showEditEventWindow<T extends BaseEvent>(calendarEvent: CalendarEvent<T>): Promise<CalendarEvent<T>> {
-    // TODO: Add edit event
-    // const dialogResult = await this._templateModalService.showEditEventModal(calendarEvent.meta);
-    // if (dialogResult.result) {
-    //   const event = dialogResult.data;
-    //   calendarEvent.meta = event;
-    //   calendarEvent.title = event.name;
-    //   calendarEvent.start = new Date(event.startTime);
-    //   calendarEvent.end = event.finishTime ? new Date(event.finishTime) : void 0;
-    //   return calendarEvent;
-    // }
+    const dialogResult = await this._templateModalService.showEditBaseEvent(calendarEvent.meta);
+    if (dialogResult.result) {
+      const event = dialogResult.data;
+      if (event.deleted) {
+        this.events.splice(this.events.indexOf(calendarEvent), 1);
+        this.refreshSubject.next();
+        return void 0;
+      }
+      calendarEvent.meta = event;
+      calendarEvent.title = event.name;
+      calendarEvent.start = new Date(event.startDate);
+      calendarEvent.end = new Date(event.finishDate);
+      return calendarEvent;
+    }
     return void 0;
   }
 
@@ -196,7 +205,7 @@ export class CalendarComponent implements OnInit {
       id: event.id,
       title: event.name,
       start: new Date(event.startDate),
-      end: event.startDate ? new Date(event.startDate) : void 0,
+      end: new Date(event.finishDate),
       color: this.getEventColor(event.discriminator),
       // TODO: cssClass: `${event.discriminator.toString().toLowerCase().replace('_', '-')}-container`,
       resizable: {

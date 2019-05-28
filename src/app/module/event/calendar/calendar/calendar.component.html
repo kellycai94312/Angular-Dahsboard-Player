@@ -3,7 +3,7 @@
      fxLayoutAlign="start start"
      fxLayoutAlign.lt-sm="start stretch"
      fxLayoutGap="10px">
-  <mat-card fxFlex="30"
+  <mat-card fxFlex="25"
             class="mat-elevation-z2"
             mwlDroppable>
     <mat-card-title>{{'eventType' | translate}}</mat-card-title>
@@ -21,14 +21,20 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card fxFlex
+  <mat-card fxFlex="75"
             class="mat-elevation-z2">
     <mat-card-content fxLayout="column"
                       fxLayoutGap="10px">
       <div fxLayout
            fxLayout.lt-sm="column"
            fxLayoutAlign="space-around center">
-        <div fxFlex></div>
+        <div fxFlex>
+          <button mat-icon-button
+                  mwlCalendarToday
+                  [(viewDate)]="viewDate">
+            <mat-icon>today</mat-icon>
+          </button>
+        </div>
         <div fxFlex
              fxLayout
              fxLayoutAlign="center center">
@@ -51,11 +57,6 @@
         <div fxFlex
              fxLayout
              fxLayoutAlign="end center">
-          <button mat-icon-button
-                  mwlCalendarToday
-                  [(viewDate)]="viewDate">
-            <mat-icon>today</mat-icon>
-          </button>
           <button mat-icon-button
                   (click)="onSetView(calendarViewClass.Day)">
             <mat-icon>view_day</mat-icon>
