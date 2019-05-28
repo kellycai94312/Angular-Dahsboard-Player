@@ -1,14 +1,19 @@
 @import "../../../../styles/main";
 
+$border-radius: 4px;
+
 :host {
   ::ng-deep {
     .mat-card {
       padding: 0;
+      border-radius: $border-radius;
 
       .mat-card-header {
         background-color: #2a3235;
         color: #fff;
         padding: 6px;
+        border-top-left-radius: $border-radius;
+        border-top-right-radius: $border-radius;
 
         button {
           @include mat-button-size(30px);
@@ -32,6 +37,8 @@
       .mat-card-content {
         background-color: #2d3c43;
         padding: 6px;
+        border-bottom-left-radius: $border-radius;
+        border-bottom-right-radius: $border-radius;
       }
     }
   }
