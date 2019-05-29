@@ -74,7 +74,8 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       },
       {
         translation: 'subgroups',
-        link: 'subgroup'
+        link: 'subgroup',
+        hidden$: this.canEditSubject.pipe(map(value => !value))
       },
       {
         translation: 'subscribers',

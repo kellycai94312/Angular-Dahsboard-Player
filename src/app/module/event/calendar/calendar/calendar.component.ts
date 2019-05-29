@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarEventTitleFormatter, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
 import {TranslateService} from '@ngx-translate/core';
 import {UtilService} from '../../../../services/util/util.service';
@@ -22,6 +22,7 @@ import {Tuition} from '../../../../data/remote/model/event/tuition';
 import {Event} from '../../../../data/remote/model/event/event';
 import {Training} from '../../../../data/remote/model/event/training';
 import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
+import {takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'app-calendar',
@@ -39,7 +40,7 @@ import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
     BaseEventApiService
   ]
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy {
 
   public readonly calendarViewClass = CalendarView;
   public readonly externalEvents: CalendarEvent[];
@@ -53,6 +54,7 @@ export class CalendarComponent implements OnInit {
 
   private readonly _eventQuery = new BaseTrainingQuery();
   private readonly _defaultDurationMs = 30 * 60 * 1000;
+  private _notDestroyed = true;
 
   constructor(public translateService: TranslateService,
               private _appHelper: AppHelper,
@@ -68,6 +70,15 @@ export class CalendarComponent implements OnInit {
 
   public async ngOnInit(): Promise<void> {
     await this.updateEvents();
+    this.refreshSubject
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(() => {
+        this.updateSortEvents();
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this._notDestroyed = false;
   }
 
   public async updateEvents(): Promise<void> {
@@ -82,6 +93,7 @@ export class CalendarComponent implements OnInit {
     this._baseEventApiService.getEvents(this._eventQuery)
       .subscribe(value => {
         this.events = value.list.map(x => this.getCalendarEvent(x));
+        this.refreshSubject.next();
         this.isBusy = false;
       });
   }
@@ -98,17 +110,12 @@ export class CalendarComponent implements OnInit {
       calendarEvent = this._utilService.clone(calendarEvent);
     }
 
-    let event = calendarEvent.meta;
+    const event = calendarEvent.meta;
     event.startDate = this._appHelper.getGmtDate(this._utilService.clone(calendarEventTimesChangedEvent.newStart));
     event.finishDate = this._appHelper.getGmtDate(this._utilService.clone(calendarEventTimesChangedEvent.newEnd || new Date(calendarEventTimesChangedEvent.newStart.getTime() + this._defaultDurationMs)));
 
     this.onSave(event).subscribe(value => {
-      event = value;
-
-      calendarEvent.start = new Date(event.startDate);
-      calendarEvent.end = new Date(event.finishDate);
-      calendarEvent.meta = event;
-
+      Object.assign(calendarEvent, this.getCalendarEvent(value));
       if (isNewEvent) {
         this.events.push(calendarEvent);
       }
@@ -148,6 +155,17 @@ export class CalendarComponent implements OnInit {
 
   public async onAddEvent(): Promise<void> {
     await this.addEvent(new Date());
+  }
+
+  private updateSortEvents(): void {
+    this.events.sort((a, b) => {
+      if (a.start > b.start) {
+        return 1;
+      } else if (a.start < b.start) {
+        return -1;
+      }
+      return 0;
+    });
   }
 
   private async addEvent(date: Date): Promise<void> {

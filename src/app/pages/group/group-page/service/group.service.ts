@@ -136,6 +136,10 @@ export class GroupService implements OnDestroy {
     return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
 
+  public async canEditSubgroup(): Promise<boolean> {
+    return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.TRAINER]);
+  }
+
   public async canShowTemplatesSubgroups(): Promise<boolean> {
     return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
