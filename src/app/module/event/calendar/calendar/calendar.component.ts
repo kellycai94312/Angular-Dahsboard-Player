@@ -143,6 +143,14 @@ export class CalendarComponent implements OnInit {
   }
 
   public async onHourSegmentClicked<T extends BaseEvent>(date: Date): Promise<void> {
+    await this.addEvent(date);
+  }
+
+  public async onAddEvent(): Promise<void> {
+    await this.addEvent(new Date());
+  }
+
+  private async addEvent(date: Date): Promise<void> {
     const event = this.getDefaultEvent(date, EventType.TRAINING);
     const calendarEvent = await this.showEditEventWindow(this.getCalendarEvent(event));
     if (calendarEvent) {
@@ -160,11 +168,7 @@ export class CalendarComponent implements OnInit {
         this.refreshSubject.next();
         return void 0;
       }
-      calendarEvent.meta = event;
-      calendarEvent.title = event.name;
-      calendarEvent.start = new Date(event.startDate);
-      calendarEvent.end = new Date(event.finishDate);
-      return calendarEvent;
+      return Object.assign(calendarEvent, this.getCalendarEvent(event));
     }
     return void 0;
   }

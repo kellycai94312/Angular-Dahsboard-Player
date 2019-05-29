@@ -1,3 +1,11 @@
+:host {
+  ::ng-deep {
+    .cal-open-day-events {
+      padding: 6px;
+    }
+  }
+}
+
 h4 {
   margin: 0;
 }

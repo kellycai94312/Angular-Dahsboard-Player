@@ -3,6 +3,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 import {AppHelper} from '../../../utils/app-helper';
 import {BaseEventApiService} from '../../../data/remote/rest-api/api/event/base-event-api/base-event-api.service';
 import {BaseEvent} from '../../../data/remote/model/event/base/base-event';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'quick-panel',
@@ -17,7 +18,8 @@ export class QuickPanelComponent implements OnInit {
   public date: Date;
   public events: BaseEvent[];
 
-  constructor(private _baseEventApiService: BaseEventApiService,
+  constructor(public translateService: TranslateService,
+              private _baseEventApiService: BaseEventApiService,
               private _appHelper: AppHelper) {
     this.date = new Date();
   }

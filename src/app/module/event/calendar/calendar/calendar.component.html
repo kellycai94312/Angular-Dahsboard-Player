@@ -4,6 +4,7 @@
      fxLayoutAlign.lt-sm="start stretch"
      fxLayoutGap="10px">
   <mat-card fxFlex="25"
+            fxHide.lt-sm
             class="mat-elevation-z2"
             mwlDroppable>
     <mat-card-title>{{'eventType' | translate}}</mat-card-title>
@@ -33,6 +34,10 @@
                   mwlCalendarToday
                   [(viewDate)]="viewDate">
             <mat-icon>today</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onAddEvent()">
+            <mat-icon>add</mat-icon>
           </button>
         </div>
         <div fxFlex
