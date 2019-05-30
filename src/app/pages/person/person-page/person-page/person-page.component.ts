@@ -8,7 +8,6 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ActivatedRoute, Router} from '@angular/router';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -19,6 +18,7 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {ImageFormat} from '../../../../data/local/image-format';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
+import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
 
 @Component({
   selector: 'app-person-page',
@@ -31,7 +31,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   public readonly fileClassClass = FileClass;
   public readonly imageFormatClass = ImageFormat;
   public readonly iconEnumClass = IconEnum;
-  public readonly tabs: PersonTab[];
+  public readonly tabs: NgxTab[]; //PersonTab[];
   public allowEdit: boolean;
   public hasConnection: boolean;
   public personViewModel: PersonViewModel;
@@ -54,10 +54,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
               private _activatedRoute: ActivatedRoute,
               private _router: Router) {
     this.tabs = [
-      {
-        nameKey: 'persons.person.personal.section', routerLink: 'personal',
-        restrictedRoles: []
-      },
+      {translation: 'persons.person.personal.section', link: 'personal'},
       // {
       //   nameKey: 'persons.person.anthropometry.section', routerLink: 'anthropometry',
       //   restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
@@ -80,10 +77,7 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       //   hasAnyRole: true,
       //   personal: true
       // },
-      {
-        nameKey: 'persons.person.contact.section', routerLink: 'contact',
-        restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.ATHLETE]
-      },
+      {translation: 'persons.person.contact.section', link: 'contact'},
       // {
       //   nameKey: 'persons.person.testsResults.section', routerLink: 'tests_results',
       //   restrictedRoles: [UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.REFEREE, UserRoleEnum.TRAINER, UserRoleEnum.SCOUT],
@@ -119,9 +113,9 @@ export class PersonPageComponent implements OnInit, OnDestroy {
       // }
     ];
 
-    for (const tab of this.tabs) {
-      tab.visible = this.tabVisible;
-    }
+    // for (const tab of this.tabs) {
+    //   tab.visible = this.tabVisible;
+    // }
   }
 
   public async ngOnInit() {
@@ -340,11 +334,13 @@ export class PersonPageComponent implements OnInit, OnDestroy {
   };
 
   private async tabAvailableInUserRole(userRole: UserRole): Promise<boolean> {
-    const currentTab = this.tabs.filter(t => this._router.url.includes(t.routerLink))[0];
-    if (userRole && currentTab && !currentTab.restrictedRoles.find(x => x === userRole.userRoleEnum)) {
-      return true;
-    }
-    return false;
+    // TODO:
+    // const currentTab = this.tabs.filter(t => this._router.url.includes(t.routerLink))[0];
+    // if (userRole && currentTab && !currentTab.restrictedRoles.find(x => x === userRole.userRoleEnum)) {
+    //   return true;
+    // }
+    // return false;
+    return true;
   }
 
   private async setToggle<T extends IdentifiedObject>(queryParamKey: string, items: T[], selectedObject: T, selected: (selectedItem: T) => void) {

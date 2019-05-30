@@ -10,8 +10,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'app-conversations',
@@ -32,35 +31,26 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   public visibleHeader: boolean;
 
   @Output()
-  public selectItemChange: EventEmitter<ConversationWrapper>;
+  public readonly selectItemChange = new EventEmitter<ConversationWrapper>();
 
-  public query: PageQuery;
-
-  private readonly _unsubscribeAll: Subject<void>;
+  public query = new PageQuery();
+  private _notDestroyed = true;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _conversationService: ConversationService,
               private _conversationModalService: ConversationModalService,
               private _appHelper: AppHelper) {
-    this.query = new PageQuery();
-    this._unsubscribeAll = new Subject<void>();
+  }
 
-    this.selectItemChange = new EventEmitter<ConversationWrapper>();
-
+  async ngOnInit() {
     this._conversationService.messageCreateHandle
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        if (!this.ngxVirtualScrollComponent) {
-          return;
-        }
         this.updateItem(x);
       });
     this._conversationService.messageUpdateHandle
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        if (!this.ngxVirtualScrollComponent) {
-          return;
-        }
         const messageWrapper = this.findMessageWrapper(x);
         if (messageWrapper) {
           x.unread = messageWrapper.unread;
@@ -68,12 +58,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
       });
     this._conversationService.messageReadHandle
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        if (!this.ngxVirtualScrollComponent) {
-          return;
-        }
-
         const items: Array<ConversationWrapper> = this.ngxVirtualScrollComponent.items;
         for (let i = 0; i < items.length; i++) {
           if (items[i].messageWrapper.message.content.baseConversation.id == x.content.baseConversation.id) {
@@ -83,11 +69,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
       });
     this._conversationService.messageDeleteHandle
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async x => {
-        if (!this.ngxVirtualScrollComponent) {
-          return;
-        }
         const messageWrapper = this.findMessageWrapper(x);
         if (messageWrapper) {
           if (x.previousMessage) {
@@ -100,12 +83,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         }
       });
     this._conversationService.typingHandle
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async participant => {
-        if (!this.ngxVirtualScrollComponent) {
-          return;
-        }
-
         const conversationWrappers: ConversationWrapper[] = this.ngxVirtualScrollComponent.items
           .filter(conversationWrapper =>
             (conversationWrapper.messageWrapper.empty ? conversationWrapper.messageWrapper.participant.baseConversation.id :
@@ -125,15 +104,17 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           }, 1500);
         }
       });
-  }
+    this._conversationService.unreadTotalHandle
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(async () => {
+        await this.resetItems();
+      });
 
-  async ngOnInit() {
     await this.resetItems();
   }
 
   ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
+    this._notDestroyed = false;
   }
 
   public async onSearchTextChanged(val: string) {

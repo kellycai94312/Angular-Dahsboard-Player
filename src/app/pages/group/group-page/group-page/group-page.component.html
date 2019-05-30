@@ -1,5 +1,9 @@
-<div *ngIf="group">
-  <div class="d-flex flex-row mb-2 header">
+<div *ngIf="group"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutGap="10px"
+       class="header">
     <ngx-image [canEdit]="canEdit"
                [width]="130"
                [height]="130"
@@ -8,7 +12,8 @@
                [cropImage]="true"
                [fileClass]="fileClassClass.GROUP"
                [allowFullScreen]="false"></ngx-image>
-    <div class="p-2">
+
+    <div>
       <h4>{{group.name}}</h4>
       <p>{{'groupType' | translate }} - {{('groupTypeEnum.' + group.discriminator) | translate}}</p>
       <p
@@ -21,7 +26,10 @@
       </div>
     </div>
 
-    <div class="ml-auto d-flex flex-row">
+    <div fxFlex
+         fxLayout
+         fxLayoutAlign="end start"
+         fxLayoutGap="10px">
       <ngx-split-button title="{{ groupPerson ?(('groupPersonStateEnum.' + groupPerson.state) | translate) : ' '}}"
                         [placementRight]="true"
                         [items]="splitButtonsItems"></ngx-split-button>
@@ -33,6 +41,5 @@
     </div>
   </div>
 
-  <ngx-tab class="mt-2"
-           [tabs]="tabs"></ngx-tab>
+  <ngx-tabs [tabs]="tabs"></ngx-tabs>
 </div>

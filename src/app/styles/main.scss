@@ -233,3 +233,23 @@ select:-webkit-autofill:focus {
 .draggable {
   cursor: move;
 }
+
+button:active, button:focus {
+  outline: none !important;
+}
+
+button::-moz-focus-inner {
+  border: 0 !important;
+}
+
+@mixin mat-icon-size($size: 24px) {
+  font-size: $size;
+  height: $size;
+  width: $size;
+}
+
+@mixin mat-button-size($size: 40px) {
+  width: $size;
+  height: $size;
+  line-height: $size;
+}

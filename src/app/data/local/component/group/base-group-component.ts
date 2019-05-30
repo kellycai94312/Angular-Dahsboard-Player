@@ -4,9 +4,11 @@ import {GroupService} from '../../../../pages/group/group-page/service/group.ser
 import {AppHelper} from '../../../../utils/app-helper';
 import {GroupPerson} from '../../../remote/model/group/group-person';
 import {takeWhile} from 'rxjs/operators';
+import {BehaviorSubject} from 'rxjs';
 
 export abstract class BaseGroupComponent<T extends Group> implements OnDestroy {
 
+  public readonly canEditSubject = new BehaviorSubject(false);
   public group: T;
   public groupPerson: GroupPerson;
   public canEdit: boolean;
@@ -39,6 +41,7 @@ export abstract class BaseGroupComponent<T extends Group> implements OnDestroy {
   async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     this.groupPerson = groupPerson;
     this.canEdit = await this.groupService.canEditGroup();
+    this.canEditSubject.next(this.canEdit);
     this.isOwner = await this.groupService.areYouGroupCreator();
   }
 

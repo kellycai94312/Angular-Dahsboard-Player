@@ -50,9 +50,9 @@ export class EditGroupNewsComponent extends BaseEditComponent<GroupNews> impleme
     (this.data as GroupNews).title = this.titleNgxInput.control.value;
     return await this.appHelper.trySave(async () => {
       if (this.appHelper.isNewObject(this.data)) {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.createGroupNews(this.data, {}, {groupId: this.group.id}));
+        this.data = await this.participantRestApiService.createGroupNews(this.data, {}, {groupId: this.group.id});
       } else {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.updateGroupNews(this.data, {}, {groupId: this.group.id, groupNewsId: this.data.id}));
+        this.data = await this.participantRestApiService.updateGroupNews(this.data, {}, {groupId: this.group.id, groupNewsId: this.data.id});
       }
     });
   }

@@ -1,8 +1,8 @@
 import {Component, ComponentFactoryResolver} from '@angular/core';
-import {Tab} from '../../../../../../../data/local/tab';
 import {TemplateModalService} from '../../../../../../../service/template-modal.service';
 import {GroupConnectionRequest} from '../../../../../../../data/remote/model/group/connection/group-connection-request';
 import {GroupService} from '../../../../service/group.service';
+import {NgxTab} from '../../../../../../../module/ngx/ngx-tabs/model/ngx-tab';
 
 @Component({
   selector: 'app-group-requests',
@@ -11,19 +11,19 @@ import {GroupService} from '../../../../service/group.service';
 })
 export class GroupRequestsComponent {
 
-  public readonly tabs: Tab[];
+  public readonly tabs: NgxTab[];
 
   constructor(private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _groupService: GroupService) {
     this.tabs = [
       {
-        nameKey: 'outcoming',
-        routerLink: 'outcoming',
-        splitButtonsItems: [
+        translation: 'outcoming',
+        link: 'outcoming',
+        actions: [
           {
-            nameKey: 'add',
-            callback: async data => {
+            iconName: 'add',
+            action: async () => {
               const dialogResult = await this._templateModalService.showEditGroupConnectionRequest(new GroupConnectionRequest(), {componentFactoryResolver: this._componentFactoryResolver});
               if (dialogResult.result) {
                 this._groupService.updateData(dialogResult.data);
@@ -32,10 +32,7 @@ export class GroupRequestsComponent {
           }
         ]
       },
-      {
-        nameKey: 'incoming',
-        routerLink: 'incoming'
-      }
+      {translation: 'incoming', link: 'incoming'}
     ];
   }
 

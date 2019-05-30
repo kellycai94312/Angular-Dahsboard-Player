@@ -1,21 +1,7 @@
 :host {
   ::ng-deep {
-    .training-event-container {
-      .cal-event-title {
-        color: #000;
-      }
-    }
-
-    .game-event-container {
-      .cal-event-title {
-        color: #fff;
-      }
-    }
-
-    .testing-event-container {
-      .cal-event-title {
-        color: #000;
-      }
+    .cal-open-day-events {
+      padding: 6px;
     }
   }
 }
@@ -31,5 +17,3 @@ h4 {
 .p {
   padding: 5px;
 }
-
-

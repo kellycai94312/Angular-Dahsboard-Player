@@ -1,8 +1,7 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Tab} from '../../../../data/local/tab';
 import {GroupService} from '../service/group.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
@@ -14,7 +13,6 @@ import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {PermissionService} from '../../../../shared/permission.service';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/split-button-item';
@@ -22,6 +20,9 @@ import {BaseGroupComponent} from '../../../../data/local/component/group/base-gr
 import {GroupSettingsComponent} from '../../../../module/group/group-settings/group-settings/group-settings.component';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 import {AuthorizationService} from '../../../../shared/authorization.service';
+import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
+import {map, takeWhile} from 'rxjs/operators';
+import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 
 @Component({
   selector: 'app-group-page',
@@ -29,18 +30,15 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
   styleUrls: ['./group-page.component.scss'],
   providers: [GroupService]
 })
-export class GroupPageComponent extends BaseGroupComponent<Group> implements OnInit, OnDestroy {
+export class GroupPageComponent extends BaseGroupComponent<Group> implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
   public readonly iconEnumClass = IconEnum;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-
-  public readonly tabs: Tab[];
+  public readonly tabs: NgxTab[];
   public readonly splitButtonsItems: SplitButtonItem[];
-
-  private _paramRouteSubscription: ISubscription;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -56,31 +54,41 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
 
     this.tabs = [
       {
-        nameKey: 'news',
-        routerLink: 'news'
+        translation: 'news',
+        link: 'news',
+        actions: [
+          {
+            iconName: 'add', action: async () => {
+              const dialogResult = await this._templateModalService.showEditGroupNewsModal(new GroupNews(), this.group);
+              if (dialogResult.result) {
+                this.groupService.updateData(dialogResult.data);
+              }
+            },
+            hidden$: this.canEditSubject.pipe(map(value => !value))
+          }
+        ]
       },
       {
-        nameKey: 'employees',
-        routerLink: 'employee'
+        translation: 'employees',
+        link: 'employee'
       },
       {
-        nameKey: 'subgroups',
-        routerLink: 'subgroup'
+        translation: 'subgroups',
+        link: 'subgroup',
+        hidden$: this.canEditSubject.pipe(map(value => !value))
       },
       {
-        nameKey: 'subscribers',
-        routerLink: 'subscriber'
+        translation: 'subscribers',
+        link: 'subscriber'
       },
       {
-        nameKey: 'requests',
-        routerLink: 'request',
-        visible: (item: Tab) => {
-          return this.canEdit;
-        }
+        translation: 'requests',
+        link: 'request',
+        hidden$: this.canEditSubject.pipe(map(value => !value))
       },
       {
-        nameKey: 'structure',
-        routerLink: 'structure'
+        translation: 'structure',
+        link: 'structure'
       }
     ];
 
@@ -155,17 +163,14 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   }
 
   async ngOnInit() {
-    this._paramRouteSubscription = this._activatedRoute.params.subscribe(async val => {
-      const groupId = val.id;
-      if (!groupId || !(await this.groupService.initialize(groupId))) {
-        await this._router.navigate(['/group']);
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
-    this.appHelper.unsubscribe(this._paramRouteSubscription);
+    this._activatedRoute.params
+      .pipe(takeWhile(() => this.notDestroyed))
+      .subscribe(async val => {
+        const groupId = val.id;
+        if (!groupId || !(await this.groupService.initialize(groupId))) {
+          await this._router.navigate(['/group']);
+        }
+      });
   }
 
   async initializeGroup(group: Group): Promise<void> {

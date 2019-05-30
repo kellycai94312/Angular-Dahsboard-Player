@@ -31,7 +31,7 @@ export class LocalStorageService {
   public getCurrentLocale(): string {
     const localeKey = localStorage.getItem(this.localeName);
     if (!this.existLocaleKey(localeKey)) {
-      let locale = Locale.en;
+      let locale = Locale.ru;
       const browserLocaleKey = this._translateService.getBrowserLang();
       if (!this.existLocaleKey(browserLocaleKey)) {
         locale = Locale[browserLocaleKey];

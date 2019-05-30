@@ -36,6 +36,8 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   @Input()
   public height: number;
 
+  public hasConnection: boolean;
+
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
               private _router: Router) {
@@ -49,14 +51,14 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
     });
   }
 
-  public onSendMessage = async () => {
+  public async onSendMessage() {
     await this._appHelper.tryLoad(async () => {
       const dialogue: Dialogue = await this._participantRestApiService.getDialogue({personId: this.data.id});
       await this._router.navigate(['/conversation', dialogue.id]);
     });
   };
 
-  public onEditConnection = async () => {
+  public async onEditConnection() {
     await this._appHelper.trySave(async () => {
       const hasConnection = await this.refreshConnection();
       if (hasConnection) {
@@ -69,9 +71,9 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   };
 
   private async refreshConnection(): Promise<boolean> {
-    const hasConnection = (await this._participantRestApiService.hasConnection({id: this.data.id})).value;
-    this.translateConnection = hasConnection ? 'removeContact' : 'addContact';
-    return hasConnection;
+    this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.data.id})).value;
+    this.translateConnection = this.hasConnection ? 'removeContact' : 'addContact';
+    return this.hasConnection;
   }
 
 }

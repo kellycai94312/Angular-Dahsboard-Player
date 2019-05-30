@@ -20,11 +20,11 @@ import {NgxVirtualScrollComponent} from '../../../components/ngx-virtual-scroll/
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 
-@Component({
-  selector: 'app-connections-page',
-  templateUrl: './connections-page.component.html',
-  styleUrls: ['./connections-page.component.scss']
-})
+// @Component({
+//   selector: 'app-connections-page',
+//   templateUrl: './connections-page.component.html',
+//   styleUrls: ['./connections-page.component.scss']
+// })
 export class ConnectionsPageComponent implements OnInit, OnDestroy {
 
   public readonly pageSize: number;

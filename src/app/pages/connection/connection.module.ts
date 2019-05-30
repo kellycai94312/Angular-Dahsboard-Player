@@ -6,29 +6,28 @@ import {DxDateBoxModule, DxSelectBoxModule, DxTextBoxModule} from 'devextreme-an
 import {ConnectionsPageComponent} from './connections-page/connections-page.component';
 import {ConnectionRoutingModule} from './connection-routing.module';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
-import {BusyWrapperModule} from '../../components/busy-wrapper/busy-wrapper.module';
 import {ImageModule} from '../../components/image/image.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {GroupModule} from '../../components/group/group.module';
 import {GroupItemModule} from '../../module/group/group-item/group-item.module';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    ConnectionRoutingModule,
-    DxSelectBoxModule,
-    DxTextBoxModule,
-    DxDateBoxModule,
-    InputSelectModule,
-    NgxVirtualScrollModule,
-    TranslateModule.forChild(),
-    NgbDropdownModule,
-    BusyWrapperModule,
-    ImageModule,
-    GroupModule,
-    GroupItemModule
-  ],
-  declarations: [ConnectionsPageComponent]
-})
+// @NgModule({
+//   imports: [
+//     CommonModule,
+//     ConnectionRoutingModule,
+//     DxSelectBoxModule,
+//     DxTextBoxModule,
+//     DxDateBoxModule,
+//     InputSelectModule,
+//     NgxVirtualScrollModule,
+//     TranslateModule.forChild(),
+//     NgbDropdownModule,
+//     BusyWrapperModule,
+//     ImageModule,
+//     GroupModule,
+//     GroupItemModule
+//   ],
+//   declarations: [ConnectionsPageComponent]
+// })
 export class ConnectionModule {
 }

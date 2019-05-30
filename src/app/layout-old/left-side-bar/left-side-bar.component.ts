@@ -34,7 +34,7 @@ export class LeftSideBarComponent implements OnInit, OnDestroy {
       // {iconClassName:'fa fa-exchange', nameKey:'eventPlans', routerLink:'event-plan'},
       {iconClassName: 'fa fa-file', nameKey: 'reports', routerLink: 'report'},
       {iconClassName: 'fa fa-book', nameKey: 'statistics', routerLink: 'statistics'},
-      {iconClassName: 'fa fa-list-ul', nameKey: 'dictionaries', routerLink: 'dictionary'},
+      {iconClassName: 'fa fa-list-ul', nameKey: 'dictionaries', routerLink: 'dictionary', enabled: true},
       {iconClassName: 'fa fa-graduation-cap', nameKey: 'education', routerLink: 'education'},
       // {iconClassName:'fa fa-address-book', nameKey:'contacts', routerLink:'connection'}
     ];
