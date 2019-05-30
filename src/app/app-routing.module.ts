@@ -50,11 +50,11 @@ const routes: Routes = [
     loadChildren: './pages/group/base-group-page.module#BaseGroupPageModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'connection',
-    loadChildren: './pages/connection/connection.module#ConnectionModule',
-    canActivate: [AuthGuard]
-  },
+  // {
+  //   path: 'connection',
+  //   loadChildren: './pages/connection/connection.module#ConnectionModule',
+  //   canActivate: [AuthGuard]
+  // },
   {
     path: 'conversation',
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
