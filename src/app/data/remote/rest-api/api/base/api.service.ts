@@ -35,4 +35,12 @@ export class ApiService {
     return this._httpClient.delete<T>(url, this._restApiOptions);
   }
 
+  public getHttpParamsFromObject<T extends object>(obj: T): HttpParams {
+    let httpParams = new HttpParams();
+    for (const item of Object.keys(obj)) {
+      httpParams = httpParams.set(item, obj[item]);
+    }
+    return httpParams;
+  }
+
 }

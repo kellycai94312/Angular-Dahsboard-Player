@@ -23,6 +23,7 @@ import {Event} from '../../../../data/remote/model/event/event';
 import {Training} from '../../../../data/remote/model/event/training';
 import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
 import {takeWhile} from 'rxjs/operators';
+import {EventStateEnum} from '../../../../data/remote/model/event/base/event-state-enum';
 
 @Component({
   selector: 'app-calendar',
@@ -262,6 +263,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     event.name = this.getDefaultEventName(eventType);
     event.startDate = startDate;
     event.finishDate = new Date(startDate.getTime() + this._defaultDurationMs);
+    event.eventStateEnum = EventStateEnum.DRAFT;
     return event as T;
   }
 
