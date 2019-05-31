@@ -403,7 +403,13 @@ export class TemplateModalService {
         }),
         this._ngxModalService.removeSplitItemButton(async () => {
           await this._ngxModalService.remove(modal, component);
-        })
+        }),
+        {
+          nameKey: 'advancedMode',
+          callback: async data => {
+            await component.showAdvancedMode();
+          }
+        }
       ];
     });
 

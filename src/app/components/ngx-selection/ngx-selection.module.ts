@@ -6,6 +6,8 @@ import {NgxVirtualScrollModule} from '../ngx-virtual-scroll/ngx-virtual-scroll.m
 import {NgxComponentFactoryModule} from '../ngx-component-factory/ngx-component-factory.module';
 import {NgxInputModule} from '../ngx-input/ngx-input.module';
 import {NgxButtonModule} from '../ngx-button/ngx-button.module';
+import {NgxSelectModule} from '../../module/ngx/ngx-select/ngx-select.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -14,7 +16,9 @@ import {NgxButtonModule} from '../ngx-button/ngx-button.module';
     NgxInputModule,
     NgxVirtualScrollModule,
     NgxComponentFactoryModule,
-    NgxButtonModule
+    NgxButtonModule,
+    NgxSelectModule,
+    FlexLayoutModule
   ],
   declarations: [NgxSelectionComponent],
   exports: [NgxSelectionComponent],

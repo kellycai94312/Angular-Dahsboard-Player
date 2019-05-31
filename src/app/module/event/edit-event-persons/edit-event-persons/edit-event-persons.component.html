@@ -1,0 +1,90 @@
+<mat-accordion [multi]="true">
+  <mat-expansion-panel (opened)="onOpenedGroups()">
+    <mat-expansion-panel-header>
+      <div fxFlex
+           fxLayout
+           fxLayoutAlign="space-between center">
+        <div fxFlex>{{'groups' | translate}}</div>
+        <button *ngIf="canEdit"
+                mat-icon-button
+                [disabled]="isBusyGroups"
+                (click)="onEditGroups(); $event.stopPropagation()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <ng-container *ngxBusy="isBusyGroups">
+        <div fxFlexFill
+             fxLayout="row wrap"
+             fxLayoutGap="10px grid">
+          <app-group-item *ngFor="let item of groups"
+                          fxFlex="30"
+                          [data]="item"></app-group-item>
+        </div>
+      </ng-container>
+    </ng-template>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [disabled]="!canEditPersons"
+                       (opened)="onOpenEventPersonParticipants()">
+    <mat-expansion-panel-header>
+      <div fxFlex
+           fxLayout
+           fxLayoutAlign="space-between center">
+        <div fxFlex>{{'participants' | translate}}</div>
+        <button *ngIf="canEdit"
+                mat-icon-button
+                [disabled]="isBusyPersonParticipants || !canEditPersons"
+                (click)=" onEditEventPersonParticipants(); $event.stopPropagation()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <ng-container *ngxBusy="isBusyPersonParticipants">
+        <div fxFlexFill
+             fxLayout="row wrap"
+             fxLayoutGap="10px grid">
+          <app-event-person-item *ngFor="let item of eventPersonParticipants"
+                                 fxFlex="30"
+                                 [data]="item"></app-event-person-item>
+        </div>
+      </ng-container>
+    </ng-template>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [disabled]="!canEditPersons"
+                       (opened)="onOpenEventPersonHeads()">
+    <mat-expansion-panel-header>
+      <div fxFlex
+           fxLayout
+           fxLayoutAlign="space-between center">
+        <div fxFlex>{{'heads' | translate}}</div>
+        <button *ngIf="canEdit"
+                mat-icon-button
+                [disabled]="isBusyPersonHeads || !canEditPersons"
+                (click)="onEditEventPersonHeads(); $event.stopPropagation()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent>
+      <ng-container *ngxBusy="isBusyPersonHeads">
+        <div fxFlexFill
+             fxLayout="row wrap"
+             fxLayoutGap="10px grid">
+          <app-event-person-item *ngFor="let item of eventPersonHeads"
+                                 fxFlex="30"
+                                 [data]="item"></app-event-person-item>
+        </div>
+      </ng-container>
+    </ng-template>
+  </mat-expansion-panel>
+</mat-accordion>

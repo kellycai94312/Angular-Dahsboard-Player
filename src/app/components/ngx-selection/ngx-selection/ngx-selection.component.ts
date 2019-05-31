@@ -5,6 +5,8 @@ import {Direction} from '../../ngx-virtual-scroll/model/direction';
 import {NgxVirtualScrollComponent} from '../../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../utils/app-helper';
 import {PropertyConstant} from '../../../data/local/property-constant';
+import {Observable} from 'rxjs';
+import {NgxSelect} from '../../../module/ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'ngx-selection',
@@ -54,8 +56,15 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   @Input()
   public maxCount: number;
 
+  @Input()
+  public selected: (value: TModel, component: NgxSelectionComponent<any, any, TModel>) => Observable<boolean>;
+
+  @Input()
+  public deselected: (value: TModel, component: NgxSelectionComponent<any, any, TModel>) => Observable<boolean>;
+
   public minCountParam: { count: number };
   public maxCountParam: { count: number };
+  public itemsNgxSelect: NgxSelect;
 
   constructor(private _appHelper: AppHelper) {
     this.class = '';
@@ -100,16 +109,14 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
     if (!this.canSelect()) {
       return;
     }
-    this._appHelper.removeItem(this.ngxVirtualScrollComponent.items, item);
-    this.selectedItems.push(item);
+    this._selection(item, this.ngxVirtualScrollComponent.items, this.selectedItems, this.selected);
   }
 
   public onUnselected(item: TModel) {
     if (!this.canUnselect()) {
       return;
     }
-    this._appHelper.removeItem(this.selectedItems, item);
-    this.ngxVirtualScrollComponent.items.push(item);
+    this._selection(item, this.selectedItems, this.ngxVirtualScrollComponent.items, this.deselected);
   }
 
   public onAdd = async () => {
@@ -136,6 +143,24 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   private includeMaxValue(): boolean {
     return !this.maxCount || this.selectedItems.length < this.maxCount;
+  }
+
+  private _selection(value: TModel, values: TModel[],
+                     selectedValues: TModel[],
+                     action?: (value: TModel, component: NgxSelectionComponent<TComponent, TQuery, TModel>) => Observable<boolean>): void {
+    const itemIndex = values.findIndex(x => this.compare(x, value));
+    values.splice(itemIndex, 1);
+    if (action) {
+      action(value, this).subscribe((result) => {
+        if (result) {
+          selectedValues.push(value);
+        } else {
+          values.splice(itemIndex, 0, value);
+        }
+      });
+    } else {
+      selectedValues.push(value);
+    }
   }
 
 }

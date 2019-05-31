@@ -1,7 +1,7 @@
 import {IdentifiedObject} from '../../../base/identified-object';
 import {Person} from '../../person';
+import {Position} from '../../person-position/position';
 import {Type} from 'class-transformer';
-import {EventPersonPosition} from './event-person-position';
 
 export class EventPerson extends IdentifiedObject {
 
@@ -9,7 +9,7 @@ export class EventPerson extends IdentifiedObject {
   public person: Person;
 
   //#region Transient
-  public eventPersonPositions?: EventPersonPosition[];
+  public positions?: Position[];
   //#endregion
 
 }

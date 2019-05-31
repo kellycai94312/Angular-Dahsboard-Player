@@ -14,7 +14,7 @@ export class NgxSelect {
   public required?: boolean;
   public getErrorMessage?: (ngxSelect: NgxSelect) => Observable<string>;
   public display?: ((item: any) => string) | string;
-  public compare: <T>(first: T, second: T) => boolean = <T>(first: T, second: T) => {
+  public compare: <T extends any>(first: T, second: T) => boolean = <T>(first: T, second: T) => {
     return first === second;
   };
 }

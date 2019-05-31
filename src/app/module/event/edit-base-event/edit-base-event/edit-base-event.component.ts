@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {EventType} from '../../../../data/remote/model/event/base/event-type';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
@@ -11,6 +11,9 @@ import {BaseEventApiService} from '../../../../data/remote/rest-api/api/event/ba
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditEventPersonsComponent} from '../../edit-event-persons/edit-event-persons/edit-event-persons.component';
+import {UtilService} from '../../../../services/util/util.service';
 
 @Component({
   selector: 'app-edit-base-event',
@@ -26,6 +29,9 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
   public descriptionNgxInput: NgxInput;
 
   constructor(private _baseEventApiService: BaseEventApiService,
+              private _ngxModalService: NgxModalService,
+              private _utilService: UtilService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -78,6 +84,14 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
     return await this.appHelper.trySave(async () => {
       this.data = await this._baseEventApiService.saveEvent(this.data).toPromise();
     });
+  }
+
+  public async showAdvancedMode(): Promise<boolean> {
+    const modal = this._ngxModalService.open();
+    await modal.componentInstance.initializeBody(EditEventPersonsComponent, async component => {
+      component.initialize(this._utilService.clone(this.data)).subscribe();
+    }, {componentFactoryResolver: this._componentFactoryResolver});
+    return await this._ngxModalService.awaitModalResult(modal);
   }
 
 }

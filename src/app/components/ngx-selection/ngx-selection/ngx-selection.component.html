@@ -1,8 +1,14 @@
-<div class="d-flex {{class}}">
-  <ngx-input class="w-100"
+<div [ngClass]="class"
+     fxLayout
+     fxLayoutAlign="start center"
+     fxLayoutGap="10px">
+  <ngx-input fxFlex
              placeholderKey="search"
              [debounceTime]="propertyConstant.searchDebounceTime"
              (valueChange)="onSearchTextChanged($event)"></ngx-input>
+  <ngx-select *ngIf="itemsNgxSelect"
+              fxFlex="30"
+              [data]="itemsNgxSelect"></ngx-select>
   <ngx-button *ngIf="add"
               class="ml-2"
               nameKey="add"

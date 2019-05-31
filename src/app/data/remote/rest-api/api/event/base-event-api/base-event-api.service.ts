@@ -10,13 +10,15 @@ import {BaseEvent} from '../../../../model/event/base/base-event';
 import {BaseEventQuery} from '../../../query/event/base-event-query';
 import {EventGroup} from '../../../../model/event/event-group';
 import {ListRequest} from '../../../../request/list-request';
-import {Group} from '../../../../model/group/base/group';
 import {PageQuery} from '../../../page-query';
 import {Position} from '../../../../model/person-position/position';
 import {EventPersonQuery} from '../../../query/event/event-person-query';
 import {EventPerson} from '../../../../model/event/person/event-person';
 import {EventPersonRequest} from '../../../../request/event-person-request';
 import {EventPersonType} from '../../../../model/event/person/event-person-type';
+import {IdRequest} from '../../../../request/id-request';
+import {Person} from '../../../../model/person';
+import {EventPersonTypeEnum} from '../../../../model/event/person/event-person-type-enum';
 
 @Injectable()
 export class BaseEventApiService {
@@ -68,9 +70,9 @@ export class BaseEventApiService {
   }
 
   public updateEventGroups(event: BaseEvent,
-                           groups: ListRequest<Group>): Observable<PageContainer<EventGroup>> {
-    return this._apiService.post(`${this._basePath}/${event.id}/group`, groups.list.map(x => x.id)).pipe(
-      map(x => plainToClassFromExist(new PageContainer<EventGroup>(EventGroup), x) as any)
+                           groupListRequest: ListRequest<IdRequest>): Observable<EventGroup[]> {
+    return this._apiService.post(`${this._basePath}/${event.id}/group`, groupListRequest).pipe(
+      map(x => plainToClass(EventGroup, x) as any)
     );
   }
 
@@ -89,8 +91,8 @@ export class BaseEventApiService {
 
   //#region
 
-  public getEventPersonTypes(event: BaseEvent,
-                             query: EventPersonQuery): Observable<PageContainer<EventPerson>> {
+  public getEventPersons(event: BaseEvent,
+                         query: EventPersonQuery): Observable<PageContainer<EventPerson>> {
     return this._apiService.get(`${this._basePath}/${event.id}/person`, this._apiService.getHttpParamsFromObject(query)).pipe(
       map(x => plainToClassFromExist(new PageContainer<EventPerson>(EventPerson), x) as any)
     );
@@ -111,9 +113,9 @@ export class BaseEventApiService {
   }
 
   public removeEventPersonType(event: BaseEvent,
-                               eventPersonType: EventPersonType): Observable<EventPersonType> {
-    return this._apiService.delete(`${this._basePath}/${event.id}/person/${eventPersonType.eventPerson.person.id}`,
-      this._apiService.getHttpParamsFromObject({eventPersonTypeEnum: eventPersonType.eventPersonTypeEnum})).pipe(
+                               query: { person: Person, eventPersonTypeEnum: EventPersonTypeEnum }): Observable<EventPersonType> {
+    return this._apiService.delete(`${this._basePath}/${event.id}/person/${query.person.id}`,
+      this._apiService.getHttpParamsFromObject({eventPersonTypeEnum: query.eventPersonTypeEnum})).pipe(
       map(x => plainToClass(EventPersonType, x) as any)
     );
   }
