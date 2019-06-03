@@ -17,6 +17,7 @@ import {EventPersonItemComponent} from '../../event-person-item/event-person-ite
 import {catchError, map, takeWhile} from 'rxjs/operators';
 import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
 import {NgxSelectionComponent} from '../../../../components/ngx-selection/ngx-selection/ngx-selection.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-event-persons',
@@ -41,6 +42,7 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
   constructor(private _baseEventApiService: BaseEventApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _appHelper: AppHelper,
+              private _translateService: TranslateService,
               private _modalBuilderService: ModalBuilderService) {
   }
 
@@ -75,7 +77,11 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
       },
       GroupItemComponent, async (component, data) => {
         component.data = data;
-      }, {componentFactoryResolver: this._componentFactoryResolver});
+      }, {
+        componentFactoryResolver: this._componentFactoryResolver,
+        title: this._getTitle(['groups'])
+      }
+    );
     if (dialogResult.result) {
       this.isBusyGroups = true;
       this._baseEventApiService.updateEventGroups(this.event, new ListRequest<IdRequest>(dialogResult.data.map(x => new IdRequest(x.id)))).subscribe(value => {
@@ -124,20 +130,33 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
   }
 
   private async _editEventPersons(eventPersonTypeEnum: EventPersonTypeEnum, values: EventPerson[]): Promise<EventPerson[]> {
+    const position = new Position();
+    position.name = 'Выберити должность';
+
+    const positions = this._positions.slice();
+    positions.unshift(position);
     const itemsNgxSelect = new NgxSelect();
-    itemsNgxSelect.items = this._positions;
+    itemsNgxSelect.labelTranslation = 'personPosition';
+    itemsNgxSelect.items = positions;
     itemsNgxSelect.display = (item: Position) => {
-      return `${item.name} ${item.activity.name}`;
+      let name = item.name;
+      if (item.activity) {
+        name += ` ${item.activity.name}`;
+      }
+      return name;
     };
     itemsNgxSelect.compare = (first, second) => first.id == second.id;
-    if (this._positions.length) {
-      itemsNgxSelect.control.setValue(this._positions[0]);
+    if (positions.length) {
+      itemsNgxSelect.control.setValue(positions[0]);
     }
     let ngxSelectionComponent: NgxSelectionComponent<any, any, any>;
     await this._modalBuilderService.showSelectionItemsModal(values, async (query: any) => {
         query.unassigned = true;
         query.positionId = itemsNgxSelect.control.value.id;
         query.eventPersonTypeEnum = eventPersonTypeEnum;
+        if (!itemsNgxSelect.control.value.id) {
+          return this._appHelper.arrayToPageContainer(new Array<EventPerson>());
+        }
         return await this._baseEventApiService.getEventPersons(this.event, query).toPromise();
       },
       EventPersonItemComponent, async (component, data) => {
@@ -148,6 +167,7 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
       },
       {
         componentFactoryResolver: this._componentFactoryResolver,
+        title: this._getTitle([`${eventPersonTypeEnum.toLowerCase()}s`]),
         compare: (first, second) => first.person.id == second.person.id,
         selected: value => {
           return this._baseEventApiService.createEventPersonType(this.event, {
@@ -180,7 +200,15 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
             catchError(() => of(false)),
           );
         },
-        itemsNgxSelect: itemsNgxSelect
+        itemsNgxSelect: itemsNgxSelect,
+        actions: modal => {
+          return [{
+            nameKey: 'close',
+            callback: async data => {
+              modal.close();
+            }
+          }];
+        }
       },
       component => {
         ngxSelectionComponent = component;
@@ -200,6 +228,11 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
         this._positions = value.list;
         return true;
       }));
+  }
+
+  private _getTitle(key: string[]): string {
+    const translationObj = this._translateService.instant(key);
+    return Object.keys(translationObj).map(x => translationObj[x]).join(' ');
   }
 
 }

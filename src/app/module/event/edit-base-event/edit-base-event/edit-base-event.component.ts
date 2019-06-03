@@ -87,11 +87,14 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
   }
 
   public async showAdvancedMode(): Promise<boolean> {
-    const modal = this._ngxModalService.open();
-    await modal.componentInstance.initializeBody(EditEventPersonsComponent, async component => {
-      component.initialize(this._utilService.clone(this.data)).subscribe();
-    }, {componentFactoryResolver: this._componentFactoryResolver});
-    return await this._ngxModalService.awaitModalResult(modal);
+    if (!this.isNew || await this.onSave()) {
+      const modal = this._ngxModalService.open();
+      modal.componentInstance.titleKey = 'participants';
+      await modal.componentInstance.initializeBody(EditEventPersonsComponent, async component => {
+        component.initialize(this._utilService.clone(this.data)).subscribe();
+      }, {componentFactoryResolver: this._componentFactoryResolver});
+      return await this._ngxModalService.awaitModalResult(modal);
+    }
   }
 
 }

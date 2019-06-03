@@ -52,17 +52,21 @@ export class ModalBuilderService {
       if (initializeNgxSelectionComponent) {
         initializeNgxSelectionComponent(component);
       }
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            modal.close();
-          },
-          visible: () => {
-            return component.isValid();
+      if (config && config.actions) {
+        modal.componentInstance.splitButtonItems = config.actions(modal);
+      } else {
+        modal.componentInstance.splitButtonItems = [
+          {
+            nameKey: 'apply',
+            callback: async () => {
+              modal.close();
+            },
+            visible: () => {
+              return component.isValid();
+            }
           }
-        }
-      ];
+        ];
+      }
     }, config);
 
     const dialogResult: DialogResult<TModel[]> = {result: await this._ngxModalService.awaitModalResult(modal)};
