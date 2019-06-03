@@ -692,5 +692,6 @@
   },
   "advancedMode": "Advanced mode",
   "heads": "Heads",
-  "close": "Close"
+  "close": "Close",
+  "createEvent": "Create event"
 }

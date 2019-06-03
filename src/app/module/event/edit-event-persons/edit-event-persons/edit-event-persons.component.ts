@@ -131,7 +131,7 @@ export class EditEventPersonsComponent<T extends BaseEvent> implements OnInit, O
 
   private async _editEventPersons(eventPersonTypeEnum: EventPersonTypeEnum, values: EventPerson[]): Promise<EventPerson[]> {
     const position = new Position();
-    position.name = 'Выберити должность';
+    position.name = 'Выберите должность';
 
     const positions = this._positions.slice();
     positions.unshift(position);

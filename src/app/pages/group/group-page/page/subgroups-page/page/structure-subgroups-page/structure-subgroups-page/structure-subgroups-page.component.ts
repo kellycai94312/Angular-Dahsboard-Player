@@ -31,11 +31,15 @@ import {from, Observable, of} from 'rxjs';
 import 'rxjs-compat/add/observable/of';
 import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
 import {RootSubgroupGroup} from '../model/root-subgroup-group';
+import {EventUtilService} from '../../../../../../../../services/event-util/event-util.service';
+import {EventType} from '../../../../../../../../data/remote/model/event/base/event-type';
+import {EventData} from '../../../../../../../../module/event/edit-base-event/model/event-data';
 
 @Component({
   selector: 'app-structure-subgroups-page',
   templateUrl: './structure-subgroups-page.component.html',
-  styleUrls: ['./structure-subgroups-page.component.scss']
+  styleUrls: ['./structure-subgroups-page.component.scss'],
+  providers: [EventUtilService]
 })
 export class StructureSubgroupsPageComponent implements OnInit {
 
@@ -69,6 +73,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupModalService: SubgroupModalService,
+              private _eventUtilService: EventUtilService,
               private _translateObjectService: TranslateObjectService,
               private _ngxModalService: NgxModalService,
               private _groupService: GroupService) {
@@ -89,13 +94,31 @@ export class StructureSubgroupsPageComponent implements OnInit {
       return [];
     }
 
-    if (node.data instanceof RootSubgroupGroup) {
-      const contextMenuItems: ContextMenuItem[] = [{
-        translation: 'edit', action: async item => {
-          await this._subgroupModalService.showEditSubgroupGroup(node.data.defaultSubgroupGroup);
-          await this.resetItems();
+    const createEventContextMenuItem: ContextMenuItem = {
+      translation: 'createEvent', action: async item => {
+        const eventData = new EventData();
+        eventData.group = this.group;
+        eventData.participants = (await this.fetchItems({count: PropertyConstant.pageSizeMax})).list.map((x: ObjectWrapper) => x.data);
+        eventData.heads = [];
+        if (this.leadSubgroupPerson) {
+          eventData.heads.push(this.leadSubgroupPerson.person);
         }
-      }];
+        if (this.secondarySubgroupPerson) {
+          eventData.heads.push(this.secondarySubgroupPerson.person);
+        }
+        await this._templateModalService.showEditBaseEvent(this._eventUtilService.getDefaultEvent(new Date(), EventType.EVENT), eventData);
+      }
+    };
+
+    if (node.data instanceof RootSubgroupGroup) {
+      const contextMenuItems: ContextMenuItem[] = [
+        {
+          translation: 'edit', action: async item => {
+            await this._subgroupModalService.showEditSubgroupGroup(node.data.defaultSubgroupGroup);
+            await this.resetItems();
+          }
+        }, createEventContextMenuItem
+      ];
 
       if (!node.data.subgroupTemplateGroupVersion.applied) {
         contextMenuItems.push({
@@ -127,7 +150,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
           await this._subgroupModalService.showEditSubgroupGroup(node.data);
           await this.resetItems();
         }
-      }];
+      }, createEventContextMenuItem];
     }
     return [];
   };

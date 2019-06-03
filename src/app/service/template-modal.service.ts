@@ -48,6 +48,7 @@ import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event
 import {GroupNews} from '../data/remote/model/group/news/group-news';
 import {BaseEvent} from '../data/remote/model/event/base/base-event';
 import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
+import {EventData} from '../module/event/edit-base-event/model/event-data';
 
 @Injectable({
   providedIn: 'root'
@@ -389,12 +390,13 @@ export class TemplateModalService {
 
   //#region Event
 
-  public async showEditBaseEvent<T extends BaseEvent>(event: T): Promise<DialogResult<T>> {
+  public async showEditBaseEvent<T extends BaseEvent>(event: T, eventData?: EventData): Promise<DialogResult<T>> {
     const modal = this._ngxModalService.open();
     await this._modalBuilderService.updateModalTitle(modal, event, event.name || await this._translateObjectService.getTranslation('newEvent'));
     let editBaseEventComponent: EditBaseEventComponent<T>;
     await modal.componentInstance.initializeBody(EditBaseEventComponent, async component => {
       editBaseEventComponent = component as EditBaseEventComponent<T>;
+      editBaseEventComponent.eventData = eventData;
       await component.initialize(this._appHelper.cloneObject(event));
 
       modal.componentInstance.splitButtonItems = [
