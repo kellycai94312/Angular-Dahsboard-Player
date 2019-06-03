@@ -3,13 +3,11 @@ import {catchError, map} from 'rxjs/operators';
 import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
 import {AuthorizationService} from '../shared/authorization.service';
-import {AppHelper} from '../utils/app-helper';
 
 @Injectable()
 export class RestApiInterceptor implements HttpInterceptor {
 
-  constructor(private _authorizationService: AuthorizationService,
-              private _appHelper: AppHelper) {
+  constructor(private _authorizationService: AuthorizationService) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -22,7 +20,7 @@ export class RestApiInterceptor implements HttpInterceptor {
               this._authorizationService.logOut();
               break;
           }
-          this._appHelper.showErrorMessage(err.message);
+          // TODO: Notify about errors this._appHelper.showErrorMessage(err.message);
           return throwError(err);
         }
       })
