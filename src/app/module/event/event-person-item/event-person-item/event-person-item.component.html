@@ -1,3 +1,18 @@
 <app-person-item *ngIf="data"
                  [class]="class"
-                 [data]="data.person"></app-person-item>
+                 [data]="data.person">
+  <div *ngIf="data.id"
+       fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between start"
+       class="p-2">
+    <div fxFlex>
+      <div *ngFor="let item of data.positions">{{item.name + ' (' + item.activity.name + ')'}}</div>
+    </div>
+    <button *ngIf="canEdit"
+            mat-icon-button
+            (click)="onEditPositions()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+</app-person-item>

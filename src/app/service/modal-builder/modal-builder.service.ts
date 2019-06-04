@@ -24,36 +24,49 @@ export class ModalBuilderService {
                                                            fetchItems: <Q extends PageQuery>(query: Q) => Promise<PageContainer<TModel>>,
                                                            componentType: Type<TComponent>,
                                                            initializeComponent: (component: TComponent, data: TModel) => Promise<void>,
-                                                           config?: NgxSelectionConfig<TModel>): Promise<DialogResult<TModel[]>> {
+                                                           config?: NgxSelectionConfig<TModel>,
+                                                           initializeNgxSelectionComponent?: (component: NgxSelectionComponent<TComponent, PageQuery, TModel>) => void): Promise<DialogResult<TModel[]>> {
     const modal = this._ngxModalService.open();
     if (config) {
       modal.componentInstance.title = config.title;
     } else {
       modal.componentInstance.titleKey = 'selection';
     }
-    let ngxSelectionComponent: NgxSelectionComponent<any, PageQuery, TModel> = null;
+    let ngxSelectionComponent: NgxSelectionComponent<TComponent, any, TModel> = null;
     await modal.componentInstance.initializeBody(NgxSelectionComponent, async component => {
       ngxSelectionComponent = component;
       if (config) {
         component.canEdit = config.canEdit;
         component.minCount = config.minCount;
         component.maxCount = config.maxCount;
-        component.compare = config.compare;
+        if (config.compare) {
+          component.compare = config.compare;
+        }
+        component.selected = config.selected;
+        component.deselected = config.deselected;
+        component.itemsNgxSelect = config.itemsNgxSelect;
         component.componentFactoryResolver = config.componentFactoryResolver;
       }
 
       await component.initialize(componentType, initializeComponent, fetchItems, this._appHelper.cloneObject(selectedItems));
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            modal.close();
-          },
-          visible: () => {
-            return component.isValid();
+      if (initializeNgxSelectionComponent) {
+        initializeNgxSelectionComponent(component);
+      }
+      if (config && config.actions) {
+        modal.componentInstance.splitButtonItems = config.actions(modal);
+      } else {
+        modal.componentInstance.splitButtonItems = [
+          {
+            nameKey: 'apply',
+            callback: async () => {
+              modal.close();
+            },
+            visible: () => {
+              return component.isValid();
+            }
           }
-        }
-      ];
+        ];
+      }
     }, config);
 
     const dialogResult: DialogResult<TModel[]> = {result: await this._ngxModalService.awaitModalResult(modal)};

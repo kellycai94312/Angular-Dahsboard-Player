@@ -1,12 +1,24 @@
-<div class="d-flex {{class}}">
-  <ngx-input class="w-100"
-             placeholderKey="search"
-             [debounceTime]="propertyConstant.searchDebounceTime"
-             (valueChange)="onSearchTextChanged($event)"></ngx-input>
-  <ngx-button *ngIf="add"
-              class="ml-2"
-              nameKey="add"
-              [click]="onAdd"></ngx-button>
+<div [ngClass]="class"
+     fxLayout="column"
+     fxLayoutAlign="start stretch"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutAlign="start center"
+       fxLayoutGap="10px">
+    <ngx-input fxFlex
+               placeholderKey="search"
+               [debounceTime]="propertyConstant.searchDebounceTime"
+               (valueChange)="onSearchTextChanged($event)"></ngx-input>
+    <ngx-button *ngIf="add"
+                class="ml-2"
+                nameKey="add"
+                [click]="onAdd"></ngx-button>
+  </div>
+  <div fxLayout>
+    <ngx-select *ngIf="itemsNgxSelect"
+                fxFlex="50"
+                [data]="itemsNgxSelect"></ngx-select>
+  </div>
 </div>
 <p class="text-muted text-center">
   <span *ngIf="minCount">{{'minimumCountParam' | translate: minCountParam}} </span>

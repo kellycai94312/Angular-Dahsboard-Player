@@ -6,6 +6,7 @@ import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {DxDateBoxModule} from 'devextreme-angular';
 import {TranslateModule} from '@ngx-translate/core';
+import {EditEventPersonsModule} from '../edit-event-persons/edit-event-persons.module';
 
 @NgModule({
   declarations: [EditBaseEventComponent],
@@ -17,7 +18,8 @@ import {TranslateModule} from '@ngx-translate/core';
     NgxSelectModule,
     FlexLayoutModule,
     DxDateBoxModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    EditEventPersonsModule
   ]
 })
 export class EditBaseEventModule {

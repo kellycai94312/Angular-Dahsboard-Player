@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, OnInit} from '@angular/core';
 import {EventType} from '../../../../data/remote/model/event/base/event-type';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
@@ -11,6 +11,17 @@ import {BaseEventApiService} from '../../../../data/remote/rest-api/api/event/ba
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {EditEventPersonsComponent} from '../../edit-event-persons/edit-event-persons/edit-event-persons.component';
+import {UtilService} from '../../../../services/util/util.service';
+import {EventData} from '../model/event-data';
+import {IdRequest} from '../../../../data/remote/request/id-request';
+import {EventPersonRequest} from '../../../../data/remote/request/event-person-request';
+import {EventPersonTypeEnum} from '../../../../data/remote/model/event/person/event-person-type-enum';
+import {PositionLevelEnum} from '../../../../data/remote/model/person-position/position-level-enum';
+import {Person} from '../../../../data/remote/model/person';
+import {from} from 'rxjs';
+import {flatMap, last} from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-base-event',
@@ -20,12 +31,18 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 })
 export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditComponent<T> implements OnInit {
 
+  @Input()
+  public eventData: EventData;
+
   public readonly propertyConstantClass = PropertyConstant;
   public eventTypeNgxSelect: NgxSelect;
   public nameNgxInput: NgxInput;
   public descriptionNgxInput: NgxInput;
 
   constructor(private _baseEventApiService: BaseEventApiService,
+              private _ngxModalService: NgxModalService,
+              private _utilService: UtilService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -77,7 +94,50 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
 
     return await this.appHelper.trySave(async () => {
       this.data = await this._baseEventApiService.saveEvent(this.data).toPromise();
+      await this.preSave();
     });
+  }
+
+  public async showAdvancedMode(): Promise<boolean> {
+    if (!this.isNew || await this.onSave()) {
+      await this.preSave();
+
+      const modal = this._ngxModalService.open();
+      modal.componentInstance.titleKey = 'participants';
+      await modal.componentInstance.initializeBody(EditEventPersonsComponent, async component => {
+        component.initialize(this._utilService.clone(this.data)).subscribe();
+      }, {componentFactoryResolver: this._componentFactoryResolver});
+      return await this._ngxModalService.awaitModalResult(modal);
+    }
+  }
+
+  private async preSave(): Promise<void> {
+    if (this.eventData) {
+      await this._baseEventApiService.updateEventGroups(this.data, {list: [new IdRequest(this.eventData.group.id)]}).toPromise();
+      const eventPersonRequests: EventPersonRequest[] = [];
+      const getPositions = async (positionLevelEnum: PositionLevelEnum, person: Person): Promise<IdRequest[]> => {
+        const positions = (await this.participantRestApiService.getGroupPersonPositions({},
+          {count: PropertyConstant.pageSizeMax, positionLevelEnum: positionLevelEnum},
+          {personId: person.id, groupId: this.eventData.group.id})).list;
+        return positions.map(x => new IdRequest(x.position.id));
+      };
+      for (const item of this.eventData.heads) {
+        eventPersonRequests.push({eventPersonTypeEnum: EventPersonTypeEnum.HEAD, personId: item.id, positionIds: await getPositions(PositionLevelEnum.HEAD, item)});
+      }
+
+      for (const item of this.eventData.participants) {
+        const specialists = await getPositions(PositionLevelEnum.SPECIALIST, item);
+        const techStaffs = await getPositions(PositionLevelEnum.TECH_STAFF, item);
+        eventPersonRequests.push({eventPersonTypeEnum: EventPersonTypeEnum.PARTICIPANT, personId: item.id, positionIds: specialists.concat(techStaffs)});
+      }
+      delete this.eventData;
+      await from(eventPersonRequests).pipe(
+        flatMap(value => {
+          return this._baseEventApiService.createEventPersonType(this.data, value);
+        }),
+        last()
+      ).toPromise();
+    }
   }
 
 }

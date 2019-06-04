@@ -689,5 +689,9 @@
     "DIET": "Diet",
     "MEET_UP": "Meet up",
     "TUITION": "Tuition"
-  }
+  },
+  "advancedMode": "Advanced mode",
+  "heads": "Heads",
+  "close": "Close",
+  "createEvent": "Create event"
 }

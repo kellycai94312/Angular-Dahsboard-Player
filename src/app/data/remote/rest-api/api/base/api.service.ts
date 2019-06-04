@@ -20,7 +20,7 @@ export class ApiService {
   public get<T = any>(url: string, params?: HttpParams): Observable<T> {
     const options = this._utilService.clone(this._restApiOptions);
     (options as any).params = params;
-    return this._httpClient.get<T>(url, this._restApiOptions);
+    return this._httpClient.get<T>(url, options);
   }
 
   public put<T = any>(url: string, body: any): Observable<T> {
@@ -31,8 +31,18 @@ export class ApiService {
     return this._httpClient.post<T>(url, body, this._restApiOptions);
   }
 
-  public delete<T = any>(url: string): Observable<T> {
-    return this._httpClient.delete<T>(url, this._restApiOptions);
+  public delete<T = any>(url: string, params?: HttpParams): Observable<T> {
+    const options = this._utilService.clone(this._restApiOptions);
+    (options as any).params = params;
+    return this._httpClient.delete<T>(url, options);
+  }
+
+  public getHttpParamsFromObject<T extends object>(obj: T): HttpParams {
+    let httpParams = new HttpParams();
+    for (const item of Object.keys(obj)) {
+      httpParams = httpParams.set(item, obj[item]);
+    }
+    return httpParams;
   }
 
 }

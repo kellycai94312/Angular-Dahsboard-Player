@@ -12,17 +12,9 @@ import {CustomDateFormatter} from '../model/custom-date-formatter';
 import {BaseEventApiService} from '../../../../data/remote/rest-api/api/event/base-event-api/base-event-api.service';
 import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
 import {EventType} from '../../../../data/remote/model/event/base/event-type';
-import {Testing} from '../../../../data/remote/model/event/testing';
-import {Game} from '../../../../data/remote/model/event/game';
-import {Competition} from '../../../../data/remote/model/event/competition';
-import {Relaxation} from '../../../../data/remote/model/event/relaxation';
-import {Diet} from '../../../../data/remote/model/event/diet';
-import {MeetUp} from '../../../../data/remote/model/event/meet-up';
-import {Tuition} from '../../../../data/remote/model/event/tuition';
-import {Event} from '../../../../data/remote/model/event/event';
-import {Training} from '../../../../data/remote/model/event/training';
 import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
 import {takeWhile} from 'rxjs/operators';
+import {EventUtilService} from '../../../../services/event-util/event-util.service';
 
 @Component({
   selector: 'app-calendar',
@@ -37,7 +29,8 @@ import {takeWhile} from 'rxjs/operators';
       provide: CalendarEventTitleFormatter,
       useClass: CustomEventTitleFormatter
     },
-    BaseEventApiService
+    BaseEventApiService,
+    EventUtilService
   ]
 })
 export class CalendarComponent implements OnInit, OnDestroy {
@@ -53,18 +46,18 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
 
   private readonly _eventQuery = new BaseTrainingQuery();
-  private readonly _defaultDurationMs = 30 * 60 * 1000;
   private _notDestroyed = true;
 
   constructor(public translateService: TranslateService,
               private _appHelper: AppHelper,
               private _baseEventApiService: BaseEventApiService,
+              private _eventUtilService: EventUtilService,
               private _templateModalService: TemplateModalService,
               private _utilService: UtilService) {
     this.externalEvents = [];
     const date = new Date();
     for (const item of Object.keys(EventType).reverse()) {
-      this.externalEvents.push(this.getCalendarEvent(this.getDefaultEvent(date, EventType[item] as EventType)));
+      this.externalEvents.push(this.getCalendarEvent(this._eventUtilService.getDefaultEvent(date, EventType[item] as EventType)));
     }
   }
 
@@ -112,7 +105,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     const event = calendarEvent.meta;
     event.startDate = this._appHelper.getGmtDate(this._utilService.clone(calendarEventTimesChangedEvent.newStart));
-    event.finishDate = this._appHelper.getGmtDate(this._utilService.clone(calendarEventTimesChangedEvent.newEnd || new Date(calendarEventTimesChangedEvent.newStart.getTime() + this._defaultDurationMs)));
+    event.finishDate = this._appHelper.getGmtDate(this._utilService.clone(calendarEventTimesChangedEvent.newEnd || new Date(calendarEventTimesChangedEvent.newStart.getTime() + this._eventUtilService.defaultDurationMs)));
 
     this.onSave(event).subscribe(value => {
       Object.assign(calendarEvent, this.getCalendarEvent(value));
@@ -169,7 +162,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   private async addEvent(date: Date): Promise<void> {
-    const event = this.getDefaultEvent(date, EventType.TRAINING);
+    const event = this._eventUtilService.getDefaultEvent(date, EventType.TRAINING);
     const calendarEvent = await this.showEditEventWindow(this.getCalendarEvent(event));
     if (calendarEvent) {
       this.events.push(calendarEvent);
@@ -191,34 +184,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return void 0;
   }
 
-  private getDefaultEventName(eventType: EventType): string {
-    return this.translateService.instant(`eventTypeEnum.${eventType}`);
-  }
-
-  private getEventColor(eventType: EventType): any {
-    switch (eventType) {
-      case EventType.EVENT:
-        return {primary: '#cccccc', secondary: '#cccccc', font: '#eee'};
-      case EventType.TRAINING:
-        return {primary: '#04ffeb', secondary: '#04ffeb', font: '#eee'};
-      case EventType.TESTING:
-        return {primary: '#ffdc00', secondary: '#ffdc00', font: '#eee'};
-      case EventType.GAME:
-        return {primary: '#b7a631', secondary: '#b7a631', font: '#eee'};
-      case EventType.COMPETITION:
-        return {primary: '#ff0000', secondary: '#ff0000', font: '#eee'};
-      case EventType.RELAXATION:
-        return {primary: '#0000ff', secondary: '#0000ff', font: '#eee'};
-      case EventType.DIET:
-        return {primary: '#2ab73a', secondary: '#2ab73a', font: '#eee'};
-      case EventType.MEET_UP:
-        return {primary: '#b700b5', secondary: '#b700b5', font: '#eee'};
-      case EventType.TUITION:
-        return {primary: '#b77422', secondary: '#b77422', font: '#eee'};
-    }
-    return void 0;
-  }
-
   private getCalendarEvent<T extends BaseEvent>(event: T): CalendarEvent {
     // TODO: Checking permissions
     // const canChangeDate: boolean = event.trainingState === TrainingState.DRAFT;
@@ -228,7 +193,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
       title: event.name,
       start: new Date(event.startDate),
       end: new Date(event.finishDate),
-      color: this.getEventColor(event.discriminator),
+      color: this._eventUtilService.getEventColor(event.discriminator),
       // TODO: cssClass: `${event.discriminator.toString().toLowerCase().replace('_', '-')}-container`,
       resizable: {
         beforeStart: canChangeDate,
@@ -255,38 +220,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
       day: endOfDay
     }[this.view];
     return getDate(this.viewDate);
-  }
-
-  private getDefaultEvent<T extends BaseEvent>(startDate: Date, eventType: EventType): T {
-    const event = this.getEventInstance(eventType);
-    event.name = this.getDefaultEventName(eventType);
-    event.startDate = startDate;
-    event.finishDate = new Date(startDate.getTime() + this._defaultDurationMs);
-    return event as T;
-  }
-
-  private getEventInstance(eventType: EventType): BaseEvent {
-    switch (eventType) {
-      case EventType.EVENT:
-        return new Event;
-      case EventType.TRAINING:
-        return new Training();
-      case EventType.TESTING:
-        return new Testing();
-      case EventType.GAME:
-        return new Game();
-      case EventType.COMPETITION:
-        return new Competition();
-      case EventType.RELAXATION:
-        return new Relaxation();
-      case EventType.DIET:
-        return new Diet();
-      case EventType.MEET_UP:
-        return new MeetUp();
-      case EventType.TUITION:
-        return new Tuition();
-    }
-    return void 0;
   }
 
 }
