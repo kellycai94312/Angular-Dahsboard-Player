@@ -1,0 +1,14 @@
+<div fxFlexFill
+     [fxLayout]="fxLayout">
+  <div #container
+       [ngStyle]="getStyle">
+    <ng-content></ng-content>
+  </div>
+  <div #splitter
+       fxFlex
+       fxLayout
+       fxLayoutAlign="center center"
+       class="splitter">
+    <mat-icon>drag_indicator</mat-icon>
+  </div>
+</div>
