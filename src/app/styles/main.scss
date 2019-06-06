@@ -246,6 +246,8 @@ button::-moz-focus-inner {
   font-size: $size;
   height: $size;
   width: $size;
+  min-height: $size;
+  min-width: $size;
 }
 
 @mixin mat-button-size($size: 40px) {
