@@ -15,7 +15,7 @@ import {VerticalLayout1Component} from 'app/layout/vertical/layout-1/layout-1.co
 import {NgxContainerModule} from '../../../module/ngx/ngx-container/ngx-container.module';
 import {ConversationsModule} from '../../../module/conversation/conversations/conversations.module';
 import {ConversationViewModule} from '../../../module/conversation/conversation-view/conversation-view.module';
-import {MatIconModule} from '@angular/material';
+import {MatButtonModule, MatIconModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
@@ -38,6 +38,7 @@ import {TranslateModule} from '@ngx-translate/core';
     ConversationsModule,
     ConversationViewModule,
     MatIconModule,
+    MatButtonModule,
     TranslateModule.forChild()
   ],
   exports: [

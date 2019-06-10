@@ -16,6 +16,7 @@ export class VerticalLayout1Component implements OnInit, OnDestroy {
   fuseConfig: any;
   navigation: any;
   public selectedConversation: ConversationWrapper;
+  public sizeNgxContainer = '60px';
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -62,6 +63,15 @@ export class VerticalLayout1Component implements OnInit, OnDestroy {
 
   public onSelectConversation(val: ConversationWrapper) {
     this.selectedConversation = val;
+  }
+
+  public onClickChat(): void {
+    const number = parseInt(this.sizeNgxContainer);
+    if (number <= 60) {
+      this.sizeNgxContainer = '460px';
+    } else {
+      this.sizeNgxContainer = '60px';
+    }
   }
 
 }
