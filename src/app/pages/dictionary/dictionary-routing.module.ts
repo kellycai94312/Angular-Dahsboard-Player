@@ -39,6 +39,18 @@ const routes: Routes = [
     }
   },
   {
+    path: 'parameter', loadChildren: './parameters/parameters.module#ParametersModule',
+    data: {
+      breadcrumb: {nameKey: 'parameter'} as BreadcrumbItem
+    }
+  },
+  {
+    path: 'unit', loadChildren: './units/units.module#UnitsModule',
+    data: {
+      breadcrumb: {nameKey: 'unit'} as BreadcrumbItem
+    }
+  },
+  {
     path: 'exercise',
     data: {
       breadcrumb: {nameKey: 'exercises'} as BreadcrumbItem
