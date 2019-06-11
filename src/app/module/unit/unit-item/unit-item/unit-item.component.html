@@ -1,0 +1,19 @@
+<mat-card *ngIf="data">
+  <mat-card-header fxLayout
+                   fxLayoutGap="10px"
+                   fxLayoutAlign="space-between start">
+    <div>
+      <mat-card-title>
+        {{data.name}}
+      </mat-card-title>
+      <mat-card-subtitle>
+        {{('unitTypeEnum.' + data.unitTypeEnum) | translate}}
+      </mat-card-subtitle>
+    </div>
+    <button *ngIf="canEdit"
+            mat-icon-button
+            (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </mat-card-header>
+</mat-card>

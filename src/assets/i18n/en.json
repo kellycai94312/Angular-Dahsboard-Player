@@ -166,6 +166,7 @@
   "image": "Image",
   "person": "Person",
   "date": "Date",
+  "unit": "Unit",
   "units": "Units",
   "value": "Value",
   "test": "Test",
@@ -693,5 +694,11 @@
   "advancedMode": "Advanced mode",
   "heads": "Heads",
   "close": "Close",
-  "createEvent": "Create event"
+  "createEvent": "Create event",
+  "unitTypeEnum": {
+    "NUMBER": "Number",
+    "TEXT": "Text"
+  },
+  "unitType": "Unit type",
+  "openAdj": "Open"
 }
