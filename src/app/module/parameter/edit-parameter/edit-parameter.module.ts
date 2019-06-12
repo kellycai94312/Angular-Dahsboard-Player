@@ -9,6 +9,7 @@ import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
 import {UnitItemModule} from '../../unit/unit-item/unit-item.module';
 import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
+import {EditFormulaModule} from '../edit-formula/edit-formula.module';
 
 @NgModule({
   declarations: [EditParameterComponent],
@@ -26,6 +27,7 @@ import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
     NgxInputModule,
     NgxSelectModule,
     UnitItemModule,
+    EditFormulaModule,
     NgxModalModule
   ]
 })

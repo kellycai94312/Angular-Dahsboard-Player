@@ -82,7 +82,10 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
   }
 
   public async onEditFormula(): Promise<void> {
-
+    const dialogResult = await this._parameterWindowService.openEditParameterFormula(this.data);
+    if (dialogResult.result) {
+      this.data = dialogResult.data;
+    }
   }
 
   public onRemoveUnit(item: BaseUnit): void {

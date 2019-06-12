@@ -9,10 +9,15 @@ import {MatButtonModule, MatIconModule} from '@angular/material';
 import {ParameterWindowService} from '../../../services/windows/parameter-window/parameter-window.service';
 import {EditParameterModule} from '../edit-parameter/edit-parameter.module';
 import {UnitApiService} from '../../../data/remote/rest-api/api/unit/unit-api.service';
+import {ParameterApiService} from '../../../data/remote/rest-api/api/parameter/parameter-api.service';
 
 @NgModule({
   declarations: [ParameterListComponent],
-  providers: [UnitApiService, ParameterWindowService],
+  providers: [
+    UnitApiService,
+    ParameterApiService,
+    ParameterWindowService
+  ],
   exports: [ParameterListComponent],
   imports: [
     CommonModule,
