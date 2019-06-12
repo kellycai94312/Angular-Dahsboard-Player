@@ -7,6 +7,7 @@ import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [UnitItemComponent],
+  entryComponents: [UnitItemComponent],
   exports: [UnitItemComponent],
   imports: [
     CommonModule,

@@ -9,6 +9,7 @@ import {BaseParameter} from '../../../model/parameter/base-parameter';
 import {ParameterQuery} from '../../query/parameter/parameter-query';
 import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
+import {BaseUnit} from '../../../model/unit/base-unit';
 
 @Injectable()
 export class ParameterApiService {
@@ -70,5 +71,21 @@ export class ParameterApiService {
   }
 
   //#endregion
+
+  //#region Unit
+
+  public getParameterUnits<T extends BaseUnit>(value: BaseParameter): Observable<T[]> {
+    return this._apiService.get(`${this._basePath}/${value.id}/unit`).pipe(
+      map(x => plainToClass(BaseUnit, x) as any)
+    );
+  }
+
+  public updateParameterUnits<T extends BaseUnit>(value: BaseParameter, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+    return this._apiService.post(`${this._basePath}/${value.id}/unit`, listRequest).pipe(
+      map(x => plainToClass(BaseUnit, x) as any)
+    );
+  }
+
+  //#region
 
 }

@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {BaseUnit} from '../../../../data/remote/model/unit/base-unit';
 import {UnitWindowService} from '../../../../services/windows/unit-window/unit-window.service';
@@ -7,7 +7,7 @@ import {UnitWindowService} from '../../../../services/windows/unit-window/unit-w
   selector: 'app-unit-item',
   templateUrl: './unit-item.component.html',
   styleUrls: ['./unit-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  providers: [UnitWindowService]
 })
 export class UnitItemComponent extends BaseComponent<BaseUnit> {
 

@@ -8,10 +8,11 @@ import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {MatButtonModule, MatIconModule} from '@angular/material';
 import {ParameterWindowService} from '../../../services/windows/parameter-window/parameter-window.service';
 import {EditParameterModule} from '../edit-parameter/edit-parameter.module';
+import {UnitApiService} from '../../../data/remote/rest-api/api/unit/unit-api.service';
 
 @NgModule({
   declarations: [ParameterListComponent],
-  providers: [ParameterWindowService],
+  providers: [UnitApiService, ParameterWindowService],
   exports: [ParameterListComponent],
   imports: [
     CommonModule,

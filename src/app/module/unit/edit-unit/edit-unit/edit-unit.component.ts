@@ -44,6 +44,9 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
         this.dictionaryTypeNgxSelect.control.setValidators(Validators.required);
         this.dictionaryTypeNgxSelect.display = 'name';
         this.dictionaryTypeNgxSelect.required = true;
+        if (!this.isNew) {
+          this.dictionaryTypeNgxSelect.control.disable();
+        }
 
         this.nameNgxInput.labelTranslation = 'name';
         this.nameNgxInput.required = true;

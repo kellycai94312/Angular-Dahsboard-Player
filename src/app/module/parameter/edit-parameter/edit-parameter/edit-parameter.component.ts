@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {DictionaryType} from '../../../../data/remote/model/base/dictionary-type';
 import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
@@ -12,6 +12,10 @@ import {ParameterApiService} from '../../../../data/remote/rest-api/api/paramete
 import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
 import {UserParameter} from '../../../../data/remote/model/parameter/user-parameter';
 import {ParameterTypeEnum} from '../../../../data/remote/model/parameter/parameter-type-enum';
+import {BaseUnit} from '../../../../data/remote/model/unit/base-unit';
+import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
+import {IdRequest} from '../../../../data/remote/request/id-request';
+import {ListRequest} from '../../../../data/remote/request/list-request';
 
 @Component({
   selector: 'app-edit-parameter',
@@ -27,8 +31,13 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
   public readonly nameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly parameterTypeNgxSelect = new NgxSelect();
+  public units: BaseUnit[] = [];
 
   constructor(private _parameterApiService: ParameterApiService,
+              // TODO: ParameterWindowService can't inject without forwardRef()
+              @Inject(forwardRef(() => ParameterWindowService))
+              private _parameterWindowService: ParameterWindowService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -44,6 +53,9 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
         this.dictionaryTypeNgxSelect.control.setValidators(Validators.required);
         this.dictionaryTypeNgxSelect.display = 'name';
         this.dictionaryTypeNgxSelect.required = true;
+        if (!this.isNew) {
+          this.dictionaryTypeNgxSelect.control.disable();
+        }
 
         this.nameNgxInput.labelTranslation = 'name';
         this.nameNgxInput.required = true;
@@ -60,6 +72,10 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
         this.parameterTypeNgxSelect.control.setValidators(Validators.required);
         this.parameterTypeNgxSelect.display = 'name';
         this.parameterTypeNgxSelect.required = true;
+
+        if (!this.isNew) {
+          this.units = await this._parameterApiService.getParameterUnits(this.data).toPromise();
+        }
       });
     }
     return result;
@@ -67,6 +83,20 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
 
   public async onEditFormula(): Promise<void> {
 
+  }
+
+  public onRemoveUnit(item: BaseUnit): void {
+    this.units.splice(this.units.indexOf(item), 1);
+  }
+
+  public async onEditUnits(): Promise<void> {
+    const dialogResult = await this._parameterWindowService.openEditParameterUnits(this.data, this.units, {
+      componentFactoryResolver: this._componentFactoryResolver,
+      compare: (first, second) => first.id == second.id
+    });
+    if (dialogResult.result) {
+      this.units = dialogResult.data;
+    }
   }
 
   async onRemove(): Promise<boolean> {
@@ -85,6 +115,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
 
     return await this.appHelper.trySave(async () => {
       this.data = await this._parameterApiService.saveParameter(this.data).toPromise();
+      this.units = await this._parameterApiService.updateParameterUnits(this.data, new ListRequest<IdRequest>(this.units.map(x => new IdRequest(x.id)))).toPromise();
     });
   }
 
