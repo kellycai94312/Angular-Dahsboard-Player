@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {debounceTime, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -21,8 +21,10 @@ export class UnitListComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  @Input()
+  public canEdit: boolean;
+
   public readonly searchNgxInput = new NgxInput();
-  public canEdit = true;
   public query: UnitQuery;
   private _notDestroyed = true;
 

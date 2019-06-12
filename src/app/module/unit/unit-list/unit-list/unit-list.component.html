@@ -2,7 +2,8 @@
      fxLayoutGap="10px"
      fxLayoutAlign="start center">
   <new-ngx-input [data]="searchNgxInput"></new-ngx-input>
-  <button mat-icon-button
+  <button *ngIf="canEdit"
+          mat-icon-button
           (click)="onAddItem()">
     <mat-icon>add</mat-icon>
   </button>

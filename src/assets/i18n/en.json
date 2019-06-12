@@ -700,5 +700,6 @@
     "TEXT": "Text"
   },
   "unitType": "Unit type",
-  "openAdj": "Open"
+  "openAdj": "Open",
+  "parameters": "Parameters"
 }
