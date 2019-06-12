@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {BaseUnit} from '../../../../data/remote/model/unit/base-unit';
 import {UnitWindowService} from '../../../../services/windows/unit-window/unit-window.service';
@@ -6,9 +6,10 @@ import {UnitWindowService} from '../../../../services/windows/unit-window/unit-w
 @Component({
   selector: 'app-unit-item',
   templateUrl: './unit-item.component.html',
-  styleUrls: ['./unit-item.component.scss']
+  styleUrls: ['./unit-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UnitItemComponent extends BaseComponent<BaseUnit> implements OnInit {
+export class UnitItemComponent extends BaseComponent<BaseUnit> {
 
   @Input()
   public canEdit: boolean;

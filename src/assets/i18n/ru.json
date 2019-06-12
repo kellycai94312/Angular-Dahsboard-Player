@@ -701,5 +701,12 @@
   },
   "unitType": "Тип единицы измерения",
   "openAdj": "Открытый",
-  "parameters": "Параметры"
+  "parameters": "Параметры",
+  "parameterTypeEnum": {
+    "MEASURABLE": "Измеряемый",
+    "CALCULATED": "Вычисляемый"
+  },
+  "parameterType": "Тип параметра",
+  "free": "Свободный",
+  "formula": "Формула"
 }

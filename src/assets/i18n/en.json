@@ -701,5 +701,12 @@
   },
   "unitType": "Unit type",
   "openAdj": "Open",
-  "parameters": "Parameters"
+  "parameters": "Parameters",
+  "parameterTypeEnum": {
+    "MEASURABLE": "Measurable",
+    "CALCULATED": "Calculated"
+  },
+  "parameterType": "Parameter type",
+  "free": "Free",
+  "formula": "Formula"
 }

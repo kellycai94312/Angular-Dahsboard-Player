@@ -3,6 +3,7 @@ import {DictionaryType} from '../base/dictionary-type';
 
 export class UserParameter extends BaseParameter {
   public open: boolean;
+  public free: boolean;
 
   constructor() {
     super();
