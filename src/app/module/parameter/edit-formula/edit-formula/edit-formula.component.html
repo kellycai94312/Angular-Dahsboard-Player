@@ -9,7 +9,7 @@
         <mat-chip *ngFor="let item of parameters"
                   [removable]="true"
                   (click)="onClickParameter(item)"
-                  (removed)="onRemoveParameter(item)">{{item.name + ' [$' + item.id + ']'}}
+                  (removed)="onRemoveParameter(item)">{{item.name}}
           <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
       </mat-chip-list>
@@ -20,11 +20,20 @@
     </button>
   </div>
 
-  <div fxFlex="auto"
-       fxLayout
+  <div fxLayout
        fxLayoutGap="10px">
-    <new-ngx-input fxFlex="grow"
-                   [data]="formulaNgxInput"></new-ngx-input>
+    <div fxFlex="grow"
+         fxLayoutAlign="start start"
+         fxLayout="column">
+      <label>{{('formula' | translate) + " " + ('for' | translate | lowercase) + " " + data.name}}</label>
+      <mat-chip-list>
+        <mat-chip *ngFor="let item of formulaParameters"
+                  [removable]="true"
+                  (removed)="onRemoveFormulaParameter(item)">{{item.name}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
     <div fxLayout="column"
          fxLayoutGap="5px">
       <button *ngFor="let item of mathOperations"

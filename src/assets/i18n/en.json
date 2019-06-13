@@ -708,5 +708,8 @@
   },
   "parameterType": "Parameter type",
   "free": "Free",
-  "formula": "Formula"
+  "formula": "Formula",
+  "specialName": "Special name",
+  "notMatchWithThePatternParam": "Not match with the pattern '{{pattern}}'",
+  "for": "For"
 }

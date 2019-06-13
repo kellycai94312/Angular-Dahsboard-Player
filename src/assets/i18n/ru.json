@@ -708,5 +708,8 @@
   },
   "parameterType": "Тип параметра",
   "free": "Свободный",
-  "formula": "Формула"
+  "formula": "Формула",
+  "specialName": "Специальное имя",
+  "notMatchWithThePatternParam": "Не соответствует шаблону '{{pattern}}'",
+  "for": "Для"
 }

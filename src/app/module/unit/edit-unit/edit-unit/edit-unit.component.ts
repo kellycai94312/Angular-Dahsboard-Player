@@ -24,6 +24,7 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
   public readonly dictionaryTypeClass = DictionaryType;
   public readonly dictionaryTypeNgxSelect = new NgxSelect();
   public readonly nameNgxInput = new NgxInput();
+  public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly unitTypeNgxSelect = new NgxSelect();
 
@@ -53,6 +54,11 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
         this.nameNgxInput.control.setValue(data.name);
         this.nameNgxInput.control.setValidators(Validators.required);
 
+        this.shortNameNgxInput.labelTranslation = 'shortName';
+        this.shortNameNgxInput.required = true;
+        this.shortNameNgxInput.control.setValue(data.shortName);
+        this.shortNameNgxInput.control.setValidators(Validators.required);
+
         this.descriptionNgxInput.labelTranslation = 'description';
         this.descriptionNgxInput.type = NgxInputType.TEXTAREA;
         this.descriptionNgxInput.control.setValue(data.description);
@@ -77,6 +83,7 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
   async onSave(): Promise<boolean> {
     this.data.discriminator = this.dictionaryTypeNgxSelect.control.value.data;
     this.data.name = this.nameNgxInput.control.value;
+    this.data.shortName = this.shortNameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
     this.data.unitTypeEnum = this.unitTypeNgxSelect.control.value.data;
     (this.data as UserUnit).open = (this.data as UserUnit).open || false;

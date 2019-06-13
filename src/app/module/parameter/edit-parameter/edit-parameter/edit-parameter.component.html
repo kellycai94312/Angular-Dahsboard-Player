@@ -1,6 +1,8 @@
 <div fxLayout="column">
   <ngx-select [data]="dictionaryTypeNgxSelect"></ngx-select>
   <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="shortNameNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="specialNameNgxInput"></new-ngx-input>
   <new-ngx-input [data]="descriptionNgxInput"></new-ngx-input>
   <ngx-select [data]="parameterTypeNgxSelect"></ngx-select>
   <div *ngIf="parameterTypeNgxSelect.control.value.data === parameterTypeEnumClass.CALCULATED"
@@ -9,7 +11,9 @@
        fxLayoutAlign="space-between start">
     <div>
       <label>{{'formula' | translate}}</label>
-      <p class="break-word">{{data.formula}}</p>
+      <mat-chip-list>
+        <mat-chip *ngFor="let item of formulaParameters">{{item.name}}</mat-chip>
+      </mat-chip-list>
     </div>
     <button mat-icon-button
             (click)="onEditFormula()">
@@ -22,7 +26,7 @@
     <div>
       <label>{{'units' | translate}}</label>
       <mat-chip-list>
-        <mat-chip *ngFor="let item of units"
+        <mat-chip *ngFor="let item of data.units"
                   [removable]="true"
                   (removed)="onRemoveUnit(item)">{{item.name}}
           <mat-icon matChipRemove>cancel</mat-icon>
