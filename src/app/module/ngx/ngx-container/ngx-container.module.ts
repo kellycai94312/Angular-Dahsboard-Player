@@ -9,7 +9,6 @@ import {FlexLayoutModule} from '@angular/flex-layout';
   exports: [NgxContainerComponent],
   imports: [
     CommonModule,
-    MatIconModule,
     FlexLayoutModule
   ]
 })

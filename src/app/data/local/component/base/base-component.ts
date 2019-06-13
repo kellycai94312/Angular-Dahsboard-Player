@@ -1,4 +1,4 @@
-import {Input, OnInit} from '@angular/core';
+import {EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 export abstract class BaseComponent<T> implements OnInit {
 
@@ -9,11 +9,15 @@ export abstract class BaseComponent<T> implements OnInit {
   @Input()
   set data(val: T) {
     this._data = val;
+    this.dataChange.emit(val);
     this.onSetData(val);
   }
 
   @Input()
   public class: string;
+
+  @Output()
+  public readonly dataChange = new EventEmitter();
 
   private _data: T;
 

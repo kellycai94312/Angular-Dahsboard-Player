@@ -167,7 +167,8 @@
   "image": "Изображение",
   "person": "Пользователь",
   "date": "Дата",
-  "units": "Ед. изм.",
+  "unit": "Единица измерения",
+  "units": "Единицы измерения",
   "value": "Значение",
   "test": "Тест",
   "parameter": "Параметр",
@@ -693,5 +694,19 @@
   "advancedMode": "Расширенный режим",
   "heads": "Руководители",
   "close": "Закрыть",
-  "createEvent": "Создать событие"
+  "createEvent": "Создать событие",
+  "unitTypeEnum": {
+    "NUMBER": "Число",
+    "TEXT": "Текст"
+  },
+  "unitType": "Тип единицы измерения",
+  "openAdj": "Открытый",
+  "parameters": "Параметры",
+  "parameterTypeEnum": {
+    "MEASURABLE": "Измеряемый",
+    "CALCULATED": "Вычисляемый"
+  },
+  "parameterType": "Тип параметра",
+  "free": "Свободный",
+  "formula": "Формула"
 }

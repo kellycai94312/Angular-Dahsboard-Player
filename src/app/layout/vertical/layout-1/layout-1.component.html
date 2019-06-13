@@ -84,7 +84,7 @@
 <!-- SIDE PANEL -->
 <ngx-container *ngIf="!fuseConfig.layout.sidepanel.hidden && fuseConfig.layout.sidepanel.position === 'right'"
   [reverse]="true"
-  [size]="'60px'"
+  [(size)]="sizeNgxContainer"
   [minSize]="'60px'"
   [maxSize]="'60vw'">
   <div fxFlexFill
@@ -94,7 +94,10 @@
 
       <ng-container>
         <div class="title ml-16" fxLayout="row" fxLayoutAlign="start center">
-          <mat-icon class="s-32 fuse-white-fg">chat</mat-icon>
+          <button mat-icon-button
+            (click)="onClickChat()">
+            <mat-icon class="s-32 fuse-white-fg">chat</mat-icon>
+          </button>
           <h3 class="ml-12">{{'conversations' | translate}}</h3>
         </div>
       </ng-container>

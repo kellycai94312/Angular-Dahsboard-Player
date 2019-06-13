@@ -17,7 +17,7 @@ export class EnvironmentGuard implements CanActivate {
   constructor(private _router: Router) {
     this._environmentDeactivationComponents = [
       {
-        environmentTypes: [EnvironmentType.PRODUCTION],
+        environmentTypes: [EnvironmentType.DEMO],
         deactivationComponents: [GeneralSignUpComponent, PersonSignUpComponent]
       }
     ];

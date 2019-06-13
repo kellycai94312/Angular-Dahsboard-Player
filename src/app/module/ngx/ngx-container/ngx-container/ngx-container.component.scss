@@ -2,10 +2,8 @@
 
 .splitter {
   background-color: rgba(0, 0, 0, .2);
-
-  mat-icon {
-    @include mat-icon-size(10px);
-  }
+  cursor: col-resize;
+  width: 2px;
 }
 
 .h-100 {

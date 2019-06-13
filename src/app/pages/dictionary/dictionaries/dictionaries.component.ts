@@ -8,7 +8,7 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 })
 export class DictionariesComponent {
 
-  public dictionaries: NameWrapper<string>[];
+  public readonly dictionaries: NameWrapper<string>[];
 
   constructor() {
     this.dictionaries = [
@@ -18,7 +18,9 @@ export class DictionariesComponent {
       {name: 'sportType', data: 'sport-type'},
       {name: 'organizations', data: 'organization'},
       {name: 'exercises', data: 'exercise'},
-      {name: 'tests', data: 'test'}
+      {name: 'tests', data: 'test'},
+      {name: 'parameters', data: 'parameter'},
+      {name: 'units', data: 'unit'}
     ];
   }
 

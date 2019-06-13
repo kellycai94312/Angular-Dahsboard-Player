@@ -1,0 +1,38 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between start">
+    <div>
+      <label>{{'parameters' | translate}}</label>
+      <mat-chip-list>
+        <mat-chip *ngFor="let item of parameters"
+                  [removable]="true"
+                  (click)="onClickParameter(item)"
+                  (removed)="onRemoveParameter(item)">{{item.name + ' [$' + item.id + ']'}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <button mat-icon-button
+            (click)="onEditParameters()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+
+  <div fxFlex="auto"
+       fxLayout
+       fxLayoutGap="10px">
+    <new-ngx-input fxFlex="grow"
+                   [data]="formulaNgxInput"></new-ngx-input>
+    <div fxLayout="column"
+         fxLayoutGap="5px">
+      <button *ngFor="let item of mathOperations"
+              mat-raised-button
+              color="primary"
+              (click)="onAddMathOperation(item)">
+        {{item.name}}
+      </button>
+    </div>
+  </div>
+</div>
