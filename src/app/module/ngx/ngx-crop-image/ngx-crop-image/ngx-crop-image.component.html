@@ -1,9 +1,18 @@
-<image-cropper [cropper]="cropper"
-               [maintainAspectRatio]="true"
-               [resizeToWidth]="128"
-               [imageBase64]="imageBase64"
-               (imageCropped)="imageCropped($event)"
-               (imageLoaded)="imageLoaded()"></image-cropper>
+<div fxLayout
+     fxLayoutAlign="center center">
+  <image-cropper *ngIf="imageBase64; else elseTemplate"
+                 [cropper]="cropper"
+                 [maintainAspectRatio]="true"
+                 [resizeToWidth]="128"
+                 [imageBase64]="imageBase64"
+                 (imageCropped)="imageCropped($event)"
+                 (imageLoaded)="imageLoaded()"></image-cropper>
+  <ng-template #elseTemplate>
+    <button mat-raised-button
+            color="accent"
+            (click)="onUploadImage()">{{'uploadFile' | translate}}</button>
+  </ng-template>
+</div>
 
 <img *ngIf="croppedImage"
      [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
