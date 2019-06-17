@@ -399,19 +399,21 @@ export class TemplateModalService {
       editBaseEventComponent.eventData = eventData;
       await component.initialize(this._appHelper.cloneObject(event));
 
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        }),
+      modal.componentInstance.removeSplitButtonItem = this._ngxModalService.removeSplitItemButton(async () => {
+        await this._ngxModalService.remove(modal, component);
+      });
+      modal.componentInstance.tempSplitButtonItems = [
         {
           nameKey: 'advancedMode',
           callback: async data => {
             await component.showAdvancedMode();
           }
         }
+      ];
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        })
       ];
     });
 

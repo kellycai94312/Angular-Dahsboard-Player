@@ -21,13 +21,18 @@ export class NgxModalComponent {
   public titleKey: string;
 
   @Input()
-  public splitButtonItems: SplitButtonItem[];
+  public removeSplitButtonItem: SplitButtonItem;
+
+  @Input()
+  public tempSplitButtonItems: SplitButtonItem[] = [];
+
+  @Input()
+  public splitButtonItems: SplitButtonItem[] = [];
 
   public bodyComponentType: Type<any>;
 
   constructor(public modal: NgbActiveModal,
               private _componentFactoryResolver: ComponentFactoryResolver) {
-    this.splitButtonItems = [];
   }
 
   public async initializeBody<T>(bodyComponentType: Type<T>,
