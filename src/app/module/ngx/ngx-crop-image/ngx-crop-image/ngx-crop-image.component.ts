@@ -1,4 +1,4 @@
-import {Component, ElementRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {CropperPosition, ImageCroppedEvent, ImageCropperComponent} from 'ngx-image-cropper';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -9,6 +9,7 @@ import {Image} from '../../../../data/remote/model/file/image/image';
 import {ImageCropRequest} from '../../../../data/remote/request/image-crop-request';
 import {Observable, Observer} from 'rxjs';
 import {ImageQuery} from '../../../../data/remote/rest-api/query/file/image-query';
+import {ImageFormat} from '../../../../data/local/image-format';
 
 @Component({
   selector: 'app-ngx-edit-image',
@@ -23,6 +24,10 @@ export class NgxCropImageComponent {
   @ViewChild('fileInputElement')
   public fileInput: ElementRef;
 
+  @Input()
+  public format: ImageFormat;
+
+  public readonly imageFormatClass = ImageFormat;
   public croppedImage: any;
   public imageChangedEvent: any;
   public imageBase64: any;
@@ -41,12 +46,14 @@ export class NgxCropImageComponent {
 
   public async initialize(obj: IdentifiedObject,
                           type: ImageType,
-                          fileClass: FileClass): Promise<boolean> {
+                          fileClass: FileClass,
+                          format: ImageFormat): Promise<boolean> {
     return await this._appHelper.tryLoad(async () => {
       this._objectId = obj.id;
       this._type = type.toString().replace('CROPPED_', '') as ImageType;
       this._croppedImageType = type;
       this._fileClass = fileClass;
+      this.format = format;
 
       const query: ImageQuery = {
         objectId: this._objectId,

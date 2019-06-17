@@ -6,6 +6,7 @@
                (imageLoaded)="imageLoaded()"></image-cropper>
 
 <img *ngIf="croppedImage"
+     [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
      [src]="croppedImage"/>
 <input #fileInputElement
        id="file-upload"
