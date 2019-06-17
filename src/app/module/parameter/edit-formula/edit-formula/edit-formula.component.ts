@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, forwardRef, Inject} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, ViewChild} from '@angular/core';
 import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {ParameterApiService} from '../../../../data/remote/rest-api/api/parameter/parameter-api.service';
@@ -8,6 +8,7 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {ParameterListComponent} from '../../parameter-list/parameter-list/parameter-list.component';
 
 @Component({
   selector: 'app-edit-formula',
@@ -17,6 +18,9 @@ import {NameWrapper} from '../../../../data/local/name-wrapper';
 })
 export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
 
+  @ViewChild(ParameterListComponent)
+  public parameterListComponent: ParameterListComponent;
+
   public readonly mathOperations: NameWrapper<string>[];
   public parameters: BaseParameter[] = [];
   public formulaParameters: NameWrapper<string>[] = [];
@@ -25,6 +29,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
               // TODO: ParameterWindowService can't inject without forwardRef()
               @Inject(forwardRef(() => ParameterWindowService))
               private _parameterWindowService: ParameterWindowService,
+              private _appHelper: AppHelper,
               private _componentFactoryResolver: ComponentFactoryResolver,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -53,6 +58,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
             });
           this.formulaParameters = formulaParameters;
         }
+        await this.parameterListComponent.ngxVirtualScrollComponent.reset();
       });
     }
     return result;
@@ -67,25 +73,29 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
 
   public onRemoveParameter(item: BaseParameter): void {
     this.parameters.splice(this.parameters.indexOf(item), 1);
+    this.parameterListComponent.ngxVirtualScrollComponent.items.push(item);
   }
 
   public onRemoveFormulaParameter(item: NameWrapper<string>): void {
     this.formulaParameters.splice(this.formulaParameters.indexOf(item), 1);
   }
 
-  public async onEditParameters(): Promise<void> {
-    const dialogResult = await this._parameterWindowService.openEditParameters(this.data, this.parameters, {
-      componentFactoryResolver: this._componentFactoryResolver,
-      compare: (first, second) => first.id == second.id
-    });
-    if (dialogResult.result) {
-      this.parameters = dialogResult.data;
-    }
-  }
-
   public onAddMathOperation(item: NameWrapper<string>): void {
     this.formulaParameters.push(item);
   }
+
+  public onClickItem(item: BaseParameter): void {
+    this.parameters.push(item);
+    const itemIndex = this.parameterListComponent.ngxVirtualScrollComponent.items.indexOf(item);
+    this.parameterListComponent.ngxVirtualScrollComponent.items.splice(itemIndex, 1);
+  }
+
+  public filter = (values: BaseParameter[]) => {
+    if (values.length) {
+      return this._appHelper.except(values, this.parameters, (first, second) => first.id == second.id, true);
+    }
+    return values;
+  };
 
   async onRemove(): Promise<boolean> {
     return false;

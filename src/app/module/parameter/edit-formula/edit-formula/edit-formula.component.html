@@ -1,8 +1,13 @@
-<div fxLayout="column"
+<div fxLayout
      fxLayoutGap="10px">
-  <div fxLayout
-       fxLayoutGap="10px"
-       fxLayoutAlign="space-between start">
+  <div fxFlex="40">
+    <app-parameter-list [canEdit]="false"
+                        [filter]="filter"
+                        (clickItem)="onClickItem($event)"></app-parameter-list>
+  </div>
+  <div fxFlex
+       fxLayout="column"
+       fxLayoutGap="10px">
     <div>
       <label>{{'parameters' | translate}}</label>
       <mat-chip-list>
@@ -14,34 +19,30 @@
         </mat-chip>
       </mat-chip-list>
     </div>
-    <button mat-icon-button
-            (click)="onEditParameters()">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </div>
 
-  <div fxLayout
-       fxLayoutGap="10px">
-    <div fxFlex="grow"
-         fxLayoutAlign="start start"
-         fxLayout="column">
-      <label>{{('formula' | translate) + " " + ('for' | translate | lowercase) + " " + data.name}}</label>
-      <mat-chip-list>
-        <mat-chip *ngFor="let item of formulaParameters"
-                  [removable]="true"
-                  (removed)="onRemoveFormulaParameter(item)">{{item.name}}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
-    </div>
-    <div fxLayout="column"
-         fxLayoutGap="5px">
-      <button *ngFor="let item of mathOperations"
-              mat-raised-button
-              color="primary"
-              (click)="onAddMathOperation(item)">
-        {{item.name}}
-      </button>
+    <div fxLayout
+         fxLayoutGap="10px">
+      <div fxFlex="grow"
+           fxLayoutAlign="start start"
+           fxLayout="column">
+        <label>{{('formula' | translate) + " " + ('for' | translate | lowercase) + " " + data.name}}</label>
+        <mat-chip-list>
+          <mat-chip *ngFor="let item of formulaParameters"
+                    [removable]="true"
+                    (removed)="onRemoveFormulaParameter(item)">{{item.name}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+      <div fxLayout="column"
+           fxLayoutGap="5px">
+        <button *ngFor="let item of mathOperations"
+                mat-raised-button
+                color="primary"
+                (click)="onAddMathOperation(item)">
+          {{item.name}}
+        </button>
+      </div>
     </div>
   </div>
 </div>

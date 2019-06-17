@@ -15,7 +15,8 @@
                     [windowScroll]="true">
   <ng-template let-item>
     <div *ngIf="!item.deleted"
-         class="mr-3 mb-3">
+         class="mr-3 mb-3"
+         (click)="onClickItem(item)">
       <app-parameter-item [(data)]="item"
                           [canEdit]="canEdit"></app-parameter-item>
     </div>
