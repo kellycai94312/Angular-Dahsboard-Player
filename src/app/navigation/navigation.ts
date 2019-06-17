@@ -35,7 +35,7 @@ export const navigation: FuseNavigation[] = [
       {
         id: 'calendar',
         title: 'Calendar',
-        translate: 'calendar',
+        translate: 'organizer',
         type: 'item',
         icon: 'today',
         url: '/event'
@@ -59,7 +59,7 @@ export const navigation: FuseNavigation[] = [
       {
         id: 'dictionaries',
         title: 'Dictionaries',
-        translate: 'dictionaries',
+        translate: 'libraries',
         type: 'item',
         icon: 'library_books',
         url: '/dictionary'

@@ -711,5 +711,12 @@
   "formula": "Формула",
   "specialName": "Специальное имя",
   "notMatchWithThePatternParam": "Не соответствует шаблону '{{pattern}}'",
-  "for": "Для"
+  "for": "Для",
+  "organizer": "Органайзер",
+  "libraries": "Библиотеки",
+  "libraryType": "Тип библиотеки",
+  "libraryTypeEnum": {
+    "SYSTEM": "Системная",
+    "USER": "Пользовательская"
+  }
 }

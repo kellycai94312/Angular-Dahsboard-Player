@@ -711,5 +711,12 @@
   "formula": "Formula",
   "specialName": "Special name",
   "notMatchWithThePatternParam": "Not match with the pattern '{{pattern}}'",
-  "for": "For"
+  "for": "For",
+  "organizer": "Organizer",
+  "libraries": "Libraries",
+  "libraryType": "Library type",
+  "libraryTypeEnum": {
+    "SYSTEM": "System",
+    "USER": "User"
+  }
 }

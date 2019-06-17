@@ -39,8 +39,8 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
     const result = await super.initializeComponent(data);
     if (result) {
       return await this.appHelper.tryLoad(async () => {
-        this.dictionaryTypeNgxSelect.labelTranslation = 'dictionaryType';
-        this.dictionaryTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<DictionaryType>(DictionaryType, 'DictionaryTypeEnum');
+        this.dictionaryTypeNgxSelect.labelTranslation = 'libraryType';
+        this.dictionaryTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<DictionaryType>(DictionaryType, 'LibraryTypeEnum');
         this.dictionaryTypeNgxSelect.control.setValue(this.isNew ? this.dictionaryTypeNgxSelect.items[0] : this.dictionaryTypeNgxSelect.items.find(x => x.data === data.discriminator));
         this.dictionaryTypeNgxSelect.control.setValidators(Validators.required);
         this.dictionaryTypeNgxSelect.display = 'name';
