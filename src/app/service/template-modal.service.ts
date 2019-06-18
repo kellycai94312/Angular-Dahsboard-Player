@@ -402,7 +402,9 @@ export class TemplateModalService {
       await component.initialize(this._appHelper.cloneObject(event));
 
       modal.componentInstance.removeSplitButtonItem = this._ngxModalService.removeSplitItemButton(async () => {
-        await this._ngxModalService.remove(modal, component);
+        if (await this.showConfirmModal('areYouSure')) {
+          await this._ngxModalService.remove(modal, component);
+        }
       });
       modal.componentInstance.tempSplitButtonItems = [
         {
