@@ -92,7 +92,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
 
   public filter = (values: BaseParameter[]) => {
     if (values.length) {
-      return this._appHelper.except(values, this.parameters, (first, second) => first.id == second.id, true);
+      return this._appHelper.except(values, [this.data, ...this.parameters], (first, second) => first.id == second.id, true);
     }
     return values;
   };

@@ -719,5 +719,6 @@
     "SYSTEM": "System",
     "USER": "User"
   },
-  "notImplementedOnTheClient": "Not implemented on client"
+  "notImplementedOnTheClient": "Not implemented on client",
+  "selectedParameters": "Selected parameters"
 }

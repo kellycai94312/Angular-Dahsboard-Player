@@ -1,15 +1,21 @@
 <div fxLayout
-     fxLayoutGap="10px">
+     fxLayoutGap="20px">
   <div fxFlex="40">
     <app-parameter-list [canEdit]="false"
                         [filter]="filter"
                         (clickItem)="onClickItem($event)"></app-parameter-list>
   </div>
+
+  <div fxFlex="none">
+    <mat-divider class="h-100"
+                 [vertical]="true"></mat-divider>
+  </div>
+
   <div fxFlex
        fxLayout="column"
        fxLayoutGap="10px">
     <div>
-      <label>{{'parameters' | translate}}</label>
+      <label>{{'selectedParameters' | translate}}</label>
       <mat-chip-list>
         <mat-chip *ngFor="let item of parameters"
                   [removable]="true"
@@ -25,8 +31,12 @@
       <div fxFlex="grow"
            fxLayoutAlign="start start"
            fxLayout="column">
-        <label>{{('formula' | translate) + " " + ('for' | translate | lowercase) + " " + data.name}}</label>
+        <label>{{'formula' | translate}}</label>
+        <div fxLayout>
+
+        </div>
         <mat-chip-list>
+          <mat-chip>{{data.name + " ="}}</mat-chip>
           <mat-chip *ngFor="let item of formulaParameters"
                     [removable]="true"
                     (removed)="onRemoveFormulaParameter(item)">{{item.name}}
