@@ -47,7 +47,9 @@ export class NotificationComponent implements AfterContentInit, AfterViewInit {
 
   async ngAfterContentInit() {
     this.viewModel = this._notificationService.createNotificationViewModel(this.data);
-    await this.viewModel.build();
+    if (this.viewModel) {
+      await this.viewModel.build();
+    }
   }
 
   ngAfterViewInit() {

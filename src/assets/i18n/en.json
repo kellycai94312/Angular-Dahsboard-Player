@@ -718,5 +718,6 @@
   "libraryTypeEnum": {
     "SYSTEM": "System",
     "USER": "User"
-  }
+  },
+  "notImplementedOnTheClient": "Not implemented on client"
 }

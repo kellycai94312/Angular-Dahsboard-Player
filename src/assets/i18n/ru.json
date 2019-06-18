@@ -718,5 +718,6 @@
   "libraryTypeEnum": {
     "SYSTEM": "Системная",
     "USER": "Пользовательская"
-  }
+  },
+  "notImplementedOnTheClient": "Не реализовано на клиенте"
 }
