@@ -17,6 +17,8 @@ export class ValidationService {
   public getError(formControl: FormControl): Observable<string> {
     if (formControl.hasError('required')) {
       return this._translateObjectService.getTranslation$('requiredField');
+    } else if (formControl.hasError('pattern')) {
+      return this._translateObjectService.getTranslation$('notMatchWithThePatternParam', {pattern: formControl.getError('pattern').requiredPattern});
     }
     return null;
   }

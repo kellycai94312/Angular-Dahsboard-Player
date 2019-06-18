@@ -14,6 +14,7 @@ import {EditFormulaComponent} from '../../../module/parameter/edit-formula/edit-
 import {ParameterApiService} from '../../../data/remote/rest-api/api/parameter/parameter-api.service';
 import {ParameterQuery} from '../../../data/remote/rest-api/query/parameter/parameter-query';
 import {ParameterItemComponent} from '../../../module/parameter/parameter-item/parameter-item/parameter-item.component';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class ParameterWindowService {
@@ -22,6 +23,7 @@ export class ParameterWindowService {
               private _modalBuilderService: ModalBuilderService,
               private _unitApiService: UnitApiService,
               private _parameterApiService: ParameterApiService,
+              private _translateService: TranslateService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _utilService: UtilService) {
   }
@@ -53,7 +55,8 @@ export class ParameterWindowService {
 
   public async openEditParameterFormula<T extends BaseParameter>(parameter: T): Promise<DialogResult<T>> {
     const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'formula';
+    const translationObj = this._translateService.instant(['formula', 'for']);
+    modal.componentInstance.title = `${translationObj['formula']} ${(translationObj['for'] as string).toLowerCase()} ${parameter.name}`;
     let editFormulaComponent: EditFormulaComponent;
     await modal.componentInstance.initializeBody(EditFormulaComponent, async component => {
       editFormulaComponent = component;

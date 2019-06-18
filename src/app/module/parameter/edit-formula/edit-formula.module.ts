@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {EditFormulaComponent} from './edit-formula/edit-formula.component';
-import {MatButtonModule, MatChipsModule, MatIconModule} from '@angular/material';
-import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
+import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
 import {ParameterItemModule} from '../parameter-item/parameter-item.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {ParameterWindowService} from '../../../services/windows/parameter-window/parameter-window.service';
+import {ParameterListModule} from '../parameter-list/parameter-list.module';
 
 @NgModule({
   declarations: [EditFormulaComponent],
@@ -19,11 +19,12 @@ import {ParameterWindowService} from '../../../services/windows/parameter-window
     MatChipsModule,
     MatIconModule,
     MatButtonModule,
+    MatDividerModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
-    NgxInputModule,
     NgxModalModule,
-    ParameterItemModule
+    ParameterItemModule,
+    ParameterListModule
   ]
 })
 export class EditFormulaModule {

@@ -1,4 +1,5 @@
-<mat-card *ngIf="data">
+<mat-card *ngIf="data"
+          fxFlex>
   <mat-card-header fxLayout
                    fxLayoutGap="10px"
                    fxLayoutAlign="space-between start">
@@ -16,4 +17,9 @@
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-header>
+  <mat-card-content *ngIf="data.units?.length">
+    <mat-chip-list>
+      <mat-chip *ngFor="let item of data.units">{{item.shortName}}</mat-chip>
+    </mat-chip-list>
+  </mat-card-content>
 </mat-card>

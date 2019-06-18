@@ -1,3 +1,18 @@
+:host {
+  ::ng-deep {
+    app-parameter-list {
+      > div {
+        // TODO: Fix constant
+        max-height: 500px;
+
+        .item {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
 label {
   color: rgba(0, 0, 0, 0.54);
 }

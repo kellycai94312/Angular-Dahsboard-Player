@@ -1,4 +1,4 @@
-<div *ngIf="viewModel">
+<div *ngIf="viewModel; else elseTemplate">
   <p class="date">{{viewModel.data.created | date: propertyConstantClass.dateTimeFormat}}</p>
   <div [innerHTML]="viewModel.body | safeHtml"
        (click)="onDataClick($event)"></div>
@@ -12,3 +12,6 @@
     </ng-template>
   </div>
 </div>
+<ng-template #elseTemplate>
+  {{'notImplementedOnTheClient' | translate}}
+</ng-template>

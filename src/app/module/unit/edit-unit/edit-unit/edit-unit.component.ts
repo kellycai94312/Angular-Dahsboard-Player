@@ -24,6 +24,7 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
   public readonly dictionaryTypeClass = DictionaryType;
   public readonly dictionaryTypeNgxSelect = new NgxSelect();
   public readonly nameNgxInput = new NgxInput();
+  public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly unitTypeNgxSelect = new NgxSelect();
 
@@ -38,8 +39,8 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
     const result = await super.initializeComponent(data);
     if (result) {
       return await this.appHelper.tryLoad(async () => {
-        this.dictionaryTypeNgxSelect.labelTranslation = 'dictionaryType';
-        this.dictionaryTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<DictionaryType>(DictionaryType, 'DictionaryTypeEnum');
+        this.dictionaryTypeNgxSelect.labelTranslation = 'libraryType';
+        this.dictionaryTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<DictionaryType>(DictionaryType, 'LibraryTypeEnum');
         this.dictionaryTypeNgxSelect.control.setValue(this.isNew ? this.dictionaryTypeNgxSelect.items[0] : this.dictionaryTypeNgxSelect.items.find(x => x.data === data.discriminator));
         this.dictionaryTypeNgxSelect.control.setValidators(Validators.required);
         this.dictionaryTypeNgxSelect.display = 'name';
@@ -52,6 +53,11 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
         this.nameNgxInput.required = true;
         this.nameNgxInput.control.setValue(data.name);
         this.nameNgxInput.control.setValidators(Validators.required);
+
+        this.shortNameNgxInput.labelTranslation = 'shortName';
+        this.shortNameNgxInput.required = true;
+        this.shortNameNgxInput.control.setValue(data.shortName);
+        this.shortNameNgxInput.control.setValidators(Validators.required);
 
         this.descriptionNgxInput.labelTranslation = 'description';
         this.descriptionNgxInput.type = NgxInputType.TEXTAREA;
@@ -77,6 +83,7 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
   async onSave(): Promise<boolean> {
     this.data.discriminator = this.dictionaryTypeNgxSelect.control.value.data;
     this.data.name = this.nameNgxInput.control.value;
+    this.data.shortName = this.shortNameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
     this.data.unitTypeEnum = this.unitTypeNgxSelect.control.value.data;
     (this.data as UserUnit).open = (this.data as UserUnit).open || false;

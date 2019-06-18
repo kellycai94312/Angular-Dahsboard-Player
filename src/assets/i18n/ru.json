@@ -708,5 +708,17 @@
   },
   "parameterType": "Тип параметра",
   "free": "Свободный",
-  "formula": "Формула"
+  "formula": "Формула",
+  "specialName": "Специальное имя",
+  "notMatchWithThePatternParam": "Не соответствует шаблону '{{pattern}}'",
+  "for": "Для",
+  "organizer": "Органайзер",
+  "libraries": "Библиотеки",
+  "libraryType": "Тип библиотеки",
+  "libraryTypeEnum": {
+    "SYSTEM": "Системная",
+    "USER": "Пользовательская"
+  },
+  "notImplementedOnTheClient": "Не реализовано на клиенте",
+  "selectedParameters": "Выбранные параметры"
 }

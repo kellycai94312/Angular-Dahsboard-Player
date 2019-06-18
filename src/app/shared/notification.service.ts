@@ -25,7 +25,7 @@ export class NotificationService implements OnDestroy {
     this.unsubscribe();
   }
 
-  public createNotificationViewModel(notification: BaseNotification): INotificationViewModel {
+  public createNotificationViewModel(notification: BaseNotification): INotificationViewModel | null {
     switch (notification.discriminator) {
       case NotificationType.GROUP:
         return new GroupNotificationViewModel(notification as GroupNotification);

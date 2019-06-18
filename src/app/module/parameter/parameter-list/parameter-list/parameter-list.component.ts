@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
 import {ParameterApiService} from '../../../../data/remote/rest-api/api/parameter/parameter-api.service';
@@ -24,6 +24,12 @@ export class ParameterListComponent implements OnInit, OnDestroy {
 
   @Input()
   public canEdit: boolean;
+
+  @Input()
+  public filter: (values: BaseParameter[]) => BaseParameter[];
+
+  @Output()
+  public readonly clickItem = new EventEmitter<BaseParameter>();
 
   public readonly searchNgxInput = new NgxInput();
   public query: ParameterQuery;
@@ -70,8 +76,16 @@ export class ParameterListComponent implements OnInit, OnDestroy {
   }
 
   public fetchItems = async (direction: Direction, query: ParameterQuery) => {
-    return await this._parameterApiService.getParameters(query).toPromise();
+    const pageContainer = await this._parameterApiService.getParameters(query).toPromise();
+    if (this.filter) {
+      pageContainer.list = this.filter(pageContainer.list);
+    }
+    return pageContainer;
   };
+
+  public onClickItem(item: BaseParameter): void {
+    this.clickItem.emit(item);
+  }
 
   private async _updateItems(): Promise<void> {
     await this._appHelper.delay();

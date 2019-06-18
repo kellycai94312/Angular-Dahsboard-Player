@@ -49,6 +49,7 @@ import {GroupNews} from '../data/remote/model/group/news/group-news';
 import {BaseEvent} from '../data/remote/model/event/base/base-event';
 import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
 import {EventData} from '../module/event/edit-base-event/model/event-data';
+import {ImageFormat} from '../data/local/image-format';
 
 @Injectable({
   providedIn: 'root'
@@ -364,12 +365,13 @@ export class TemplateModalService {
   public async showCropImageModal(obj: IdentifiedObject,
                                   type: ImageType,
                                   fileClass: FileClass,
+                                  format: ImageFormat,
                                   config: NgxModalConfiguration): Promise<void> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
 
     await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
-      await component.initialize(obj, type, fileClass);
+      await component.initialize(obj, type, fileClass, format);
 
       modal.componentInstance.splitButtonItems = [
         {
@@ -399,19 +401,23 @@ export class TemplateModalService {
       editBaseEventComponent.eventData = eventData;
       await component.initialize(this._appHelper.cloneObject(event));
 
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
+      modal.componentInstance.removeSplitButtonItem = this._ngxModalService.removeSplitItemButton(async () => {
+        if (await this.showConfirmModal('areYouSure')) {
           await this._ngxModalService.remove(modal, component);
-        }),
+        }
+      });
+      modal.componentInstance.tempSplitButtonItems = [
         {
           nameKey: 'advancedMode',
           callback: async data => {
             await component.showAdvancedMode();
           }
         }
+      ];
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        })
       ];
     });
 

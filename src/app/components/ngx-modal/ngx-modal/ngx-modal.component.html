@@ -12,7 +12,21 @@
   <div class="modal-body">
     <ng-template #contentTemplate></ng-template>
   </div>
-  <div class="modal-footer">
-    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+  <div class="modal-footer"
+       fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between center">
+    <ngx-split-button [items]="tempSplitButtonItems"></ngx-split-button>
+
+    <div fxLayout
+         fxLayoutAlign="start center"
+         fxLayoutGap="10px">
+      <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+      <button *ngIf="removeSplitButtonItem"
+              mat-icon-button
+              (click)="removeSplitButtonItem.callback(removeSplitButtonItem)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

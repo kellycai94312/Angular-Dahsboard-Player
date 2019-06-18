@@ -1,0 +1,7 @@
+<ng-container *ngIf="data">
+  <ng-template *ngIf="isTemplateRef; else elseContentTemplate"
+               [ngTemplateOutlet]="data"></ng-template>
+  <ng-template #elseContentTemplate>
+    <pre [innerHTML]="data | safeHtml"></pre>
+  </ng-template>
+</ng-container>
