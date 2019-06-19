@@ -26,7 +26,7 @@
     <div>
       <label>{{'units' | translate}}</label>
       <mat-chip-list>
-        <mat-chip *ngFor="let item of data.units"
+        <mat-chip *ngFor="let item of data.unitVersions"
                   [removable]="true"
                   (removed)="onRemoveUnit(item)">{{item.name}}
           <mat-icon matChipRemove>cancel</mat-icon>

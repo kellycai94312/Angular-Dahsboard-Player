@@ -37,7 +37,10 @@ export class ApiService {
     return this._httpClient.delete<T>(url, options);
   }
 
-  public getHttpParamsFromObject<T extends object>(obj: T): HttpParams {
+  public getHttpParamsFromObject<T extends object>(obj: T): HttpParams | null {
+    if (!obj) {
+      return null;
+    }
     let httpParams = new HttpParams();
     for (const item of Object.keys(obj)) {
       httpParams = httpParams.set(item, obj[item]);
