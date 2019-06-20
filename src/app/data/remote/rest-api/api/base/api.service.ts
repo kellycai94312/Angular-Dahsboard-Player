@@ -1,7 +1,11 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Type} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {UtilService} from '../../../../../services/util/util.service';
+import {map} from 'rxjs/operators';
+import {plainToClass, plainToClassFromExist} from 'class-transformer';
+import {PageContainer} from '../../../bean/page-container';
+import {IdentifiedObject} from '../../../base/identified-object';
 
 @Injectable({
   providedIn: 'root'
@@ -47,5 +51,50 @@ export class ApiService {
     }
     return httpParams;
   }
+
+  //#region CRUD
+
+  public getValue<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<T> {
+    return this.get(url, this.getHttpParamsFromObject(query)).pipe(
+      map(x => plainToClass(classObj, x) as any)
+    );
+  }
+
+  public getValues<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<T[]> {
+    return this.getValue(classObj, url, query) as any;
+  }
+
+  public getPageContainer<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<PageContainer<T>> {
+    return this.get(url, this.getHttpParamsFromObject(query)).pipe(
+      map(x => plainToClassFromExist(new PageContainer<T>(classObj), x) as any)
+    );
+  }
+
+  public createValue<T>(classObj: Type<T>, url: string, value: T | any): Observable<T | T[]> {
+    return this.post(url, value).pipe(
+      map(x => plainToClass(classObj, x) as any)
+    );
+  }
+
+  public updateValue<T>(classObj: Type<T>, url: string, value: T | any): Observable<T | T[]> {
+    return this.put(url, value).pipe(
+      map(x => plainToClass(classObj, x) as any)
+    );
+  }
+
+  public saveValue<T extends IdentifiedObject>(classObj: Type<T>, url: string, value: T): Observable<T> {
+    if (value.id) {
+      return this.updateValue(classObj, `${url}/${value.id}`, value) as Observable<T>;
+    }
+    return this.createValue(classObj, url, value) as Observable<T>;
+  }
+
+  public removeValue<T>(classObj: Type<T>, url: string): Observable<T> {
+    return this.delete(url).pipe(
+      map(x => plainToClass(classObj, x) as any)
+    );
+  }
+
+  //#endregion
 
 }

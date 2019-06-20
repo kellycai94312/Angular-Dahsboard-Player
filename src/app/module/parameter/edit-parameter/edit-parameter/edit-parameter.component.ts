@@ -118,7 +118,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
   }
 
   public async onEditUnits(): Promise<void> {
-    const dialogResult = await this._parameterWindowService.openEditParameterUnits(this.data, this.data.unitVersions.map(x => x.baseUnit), {
+    const dialogResult = await this._parameterWindowService.openEditParameterUnits(this.data.unitVersions.map(x => x.baseUnit), {
       componentFactoryResolver: this._componentFactoryResolver,
       compare: (first, second) => first.id == second.id
     });
@@ -150,7 +150,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
 
     return await this.appHelper.trySave(async () => {
       const data = await this._parameterApiService.saveParameter(this.data).toPromise();
-      const unitVersions = await this._parameterApiService.updateParameterUnits(this.data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.baseUnit.id)))).toPromise();
+      const unitVersions = await this._parameterApiService.updateParameterUnits(data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.baseUnit.id)))).toPromise();
       this.data = data;
       this.data.unitVersions = unitVersions;
     });
