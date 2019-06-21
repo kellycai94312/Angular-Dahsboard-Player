@@ -6,7 +6,8 @@
                  [resizeToWidth]="128"
                  [imageBase64]="imageBase64"
                  (imageCropped)="imageCropped($event)"
-                 (imageLoaded)="imageLoaded()"></image-cropper>
+                 (imageLoaded)="imageLoaded()"
+                 (cropperReady)="onCropperReady()"></image-cropper>
   <ng-template #elseTemplate>
     <button mat-raised-button
             color="accent"

@@ -2,6 +2,9 @@ import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {DeviceWindowService} from '../../../../services/windows/device-window/device-window.service';
 import {Device} from '../../../../data/remote/model/device/device';
+import {ImageType} from '../../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {ImageFormat} from '../../../../data/local/image-format';
 
 @Component({
   selector: 'app-device-item',
@@ -13,6 +16,10 @@ export class DeviceItemComponent extends BaseComponent<Device> {
 
   @Input()
   public canEdit: boolean;
+
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+  public readonly imageFormatClass = ImageFormat;
 
   constructor(private _deviceWindowService: DeviceWindowService) {
     super();

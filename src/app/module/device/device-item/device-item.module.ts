@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {DeviceItemComponent} from './device-item/device-item.component';
 import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   declarations: [DeviceItemComponent],
@@ -13,7 +14,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    NgxImageModule
   ]
 })
 export class DeviceItemModule {

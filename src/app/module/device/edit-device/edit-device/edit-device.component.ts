@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -11,6 +11,10 @@ import {ParameterVersion} from '../../../../data/remote/model/parameter/paramete
 import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
+import {ImageType} from '../../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {ImageFormat} from '../../../../data/local/image-format';
+import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 
 @Component({
   selector: 'app-edit-device',
@@ -20,6 +24,12 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 })
 export class EditDeviceComponent extends BaseEditComponent<Device> implements OnInit {
 
+  @ViewChild(NgxImageComponent)
+  public ngxImageComponent: NgxImageComponent;
+
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+  public readonly imageFormatClass = ImageFormat;
   public readonly nameNgxInput = new NgxInput();
   public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
@@ -82,6 +92,8 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
       const parameterVersions = await this._deviceApiService.updateDeviceParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.parameter.id)))).toPromise();
       this.data = data;
       this.data.parameterVersions = parameterVersions;
+      this.ngxImageComponent.object = this.data;
+      await this.ngxImageComponent.save(null, false);
     });
   }
 

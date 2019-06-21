@@ -9,6 +9,8 @@ import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 import {ImageQuery} from '../../../data/remote/rest-api/query/file/image-query';
 import {TemplateModalService} from '../../../service/template-modal.service';
+import {NgxCropImageComponent} from '../../../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
+import {CropperPosition} from 'ngx-image-cropper';
 
 @Component({
   selector: 'ngx-image',
@@ -54,7 +56,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public height: number;
 
   @Input()
-  public autoSave: boolean;
+  public autoSave = true;
 
   @Input()
   public cropImage: boolean;
@@ -66,6 +68,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
   private _tempFile: File;
+  private _tempNgxCropImageComponent: NgxCropImageComponent;
 
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
@@ -75,7 +78,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<File>();
     this.class = '';
-    this.autoSave = true;
     this.innerWidth = 0;
     this.innerHeight = 0;
   }
@@ -106,19 +108,28 @@ export class NgxImageComponent implements OnInit, OnChanges {
   }
 
   public async save(file: File = null, notify: boolean = true): Promise<boolean> {
-    file = file || this._tempFile;
-    if (!file) {
-      return;
-    }
-    return await this._appHelper.trySave(async () => {
-      const image = new Image();
-      image.clazz = this.fileClass;
-      image.objectId = this.objectId || this.object.id;
-      image.type = this.type;
-      await this._participantRestApiService.uploadFile(image, [file]);
+    if (this.cropImage) {
+      if (!this.autoSave && this._tempNgxCropImageComponent) {
+        this._tempNgxCropImageComponent.objectId = this.objectId || this.object.id;
+        await this._tempNgxCropImageComponent.onSave();
+        this.imageChange.emit();
+        this.refresh();
+      }
+    } else {
+      file = file || this._tempFile;
+      if (!file) {
+        return;
+      }
+      return await this._appHelper.trySave(async () => {
+        const image = new Image();
+        image.clazz = this.fileClass;
+        image.objectId = this.objectId || this.object.id;
+        image.type = this.type;
+        await this._participantRestApiService.uploadFile(image, [file]);
 
-      this._tempFile = null;
-    }, notify);
+        this._tempFile = null;
+      }, notify);
+    }
   }
 
   public refresh() {
@@ -162,9 +173,25 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public async onEditImage(elem: HTMLInputElement): Promise<void> {
     if (this.cropImage) {
-      await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, this.format, {componentFactoryResolver: this._componentFactoryResolver});
-      this.imageChange.emit();
-      this.refresh();
+      let imageBase64;
+      let imagePosition: CropperPosition;
+      let file: File;
+      if (this._tempNgxCropImageComponent) {
+        imageBase64 = this._tempNgxCropImageComponent.imageBase64;
+        imagePosition = this._tempNgxCropImageComponent.imagePosition;
+        file = this._tempNgxCropImageComponent.file;
+      }
+      const dialogResult = await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave);
+      if (dialogResult.result) {
+        if (!this.autoSave) {
+          this._tempNgxCropImageComponent = dialogResult.data;
+          delete this.url;
+          this.url = this._tempNgxCropImageComponent.croppedImage;
+        } else {
+          this.imageChange.emit();
+          this.refresh();
+        }
+      }
     } else {
       elem.click();
     }

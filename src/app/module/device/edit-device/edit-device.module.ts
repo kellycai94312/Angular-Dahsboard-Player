@@ -7,6 +7,7 @@ import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {DeviceWindowService} from '../../../services/windows/device-window/device-window.service';
+import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 
 @NgModule({
   declarations: [EditDeviceComponent],
@@ -22,7 +23,8 @@ import {DeviceWindowService} from '../../../services/windows/device-window/devic
     FlexLayoutModule,
     FormsModule,
     TranslateModule.forChild(),
-    NgxInputModule
+    NgxInputModule,
+    NgxImageModule
   ]
 })
 export class EditDeviceModule {

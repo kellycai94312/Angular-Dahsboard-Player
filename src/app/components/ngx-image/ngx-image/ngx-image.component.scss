@@ -1,3 +1,5 @@
+@import "../../../styles/main";
+
 $img-border-width: 2px;
 $img-change-transition: .5s;
 $img-change-content-background-hover: rgba(0, 0, 0, .3);
@@ -25,8 +27,8 @@ $img-content-height: $img-size / 4;
       display: block;
     }
 
-    > i {
-      font-size: 14px;
+    > mat-icon {
+      @include mat-icon-size(14px);
     }
   }
 }

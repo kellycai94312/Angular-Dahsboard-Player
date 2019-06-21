@@ -32,9 +32,11 @@ export class NgxCropImageComponent {
   public imageChangedEvent: any;
   public imageBase64: any;
   public cropper: CropperPosition = {x1: 0, y1: 0, x2: 0, y2: 0};
+  public imagePosition: CropperPosition;
+  public file: File;
+  public objectId: number;
 
   private _image: Image;
-  private _objectId: number;
   private _type: ImageType;
   private _croppedImageType: ImageType;
   private _fileClass: FileClass;
@@ -47,53 +49,77 @@ export class NgxCropImageComponent {
   public async initialize(obj: IdentifiedObject,
                           type: ImageType,
                           fileClass: FileClass,
-                          format: ImageFormat): Promise<boolean> {
+                          format: ImageFormat,
+                          imageBase64?: any,
+                          imagePosition?: CropperPosition,
+                          file?: File): Promise<boolean> {
     return await this._appHelper.tryLoad(async () => {
-      this._objectId = obj.id;
+      if (obj) {
+        this.objectId = obj.id;
+      }
       this._type = type.toString().replace('CROPPED_', '') as ImageType;
       this._croppedImageType = type;
       this._fileClass = fileClass;
       this.format = format;
+      this.imageBase64 = imageBase64;
+      this.imagePosition = imagePosition;
+      this.file = file;
 
-      const query: ImageQuery = {
-        objectId: this._objectId,
-        type: this._type,
-        clazz: this._fileClass,
-        count: 1
-      };
+      if (!imageBase64 && this.objectId) {
+        const query: ImageQuery = {
+          objectId: this.objectId,
+          type: this._type,
+          clazz: this._fileClass,
+          count: 1
+        };
 
-      const originalImages = (await this._participantRestApiService.getImages(query)).list;
-      if (originalImages.length) {
-        this._image = originalImages[0];
+        const originalImages = (await this._participantRestApiService.getImages(query)).list;
+        if (originalImages.length) {
+          this._image = originalImages[0];
 
-        const urlImage = this._participantRestApiService.getUrlImage(query);
-        this.imageBase64 = await this._participantRestApiService.getDataUrl(urlImage);
+          const urlImage = this._participantRestApiService.getUrlImage(query);
+          this.imageBase64 = await this._participantRestApiService.getDataUrl(urlImage);
+        }
       }
     });
   }
 
   public async imageLoaded() {
-    const query: ImageQuery = {
-      objectId: this._objectId,
-      type: this._croppedImageType,
-      clazz: this._fileClass,
-      count: 1
-    };
+  }
 
-    const croppedImages = (await this._participantRestApiService.getImages(query)).list;
-    if (croppedImages.length) {
-      const croppedImage = croppedImages[0];
-      if (croppedImage.x1 != null && croppedImage.x2 != null) {
+  public async onCropperReady(): Promise<void> {
+    let croppedImagePosition = this.imagePosition;
+    if (!croppedImagePosition && this.objectId) {
+      const query: ImageQuery = {
+        objectId: this.objectId,
+        type: this._croppedImageType,
+        clazz: this._fileClass,
+        count: 1
+      };
+      const croppedImages = (await this._participantRestApiService.getImages(query)).list;
+      if (croppedImages.length) {
+        const croppedImage = croppedImages[0];
+        croppedImagePosition = {
+          x1: croppedImage.x1,
+          y1: croppedImage.y1,
+          x2: croppedImage.x2,
+          y2: croppedImage.y2
+        };
+      }
+    }
+
+    if (croppedImagePosition) {
+      if (croppedImagePosition.x1 != null && croppedImagePosition.x2 != null) {
         const maxSize = (this.imageCropperComponent as any).maxSize;
         const originalSize = (this.imageCropperComponent as any).originalSize;
         const offsetWidth = maxSize.width / originalSize.width;
         const offsetHeight = maxSize.height / originalSize.height;
 
         this.cropper = {
-          x1: croppedImage.x1 * offsetWidth,
-          y1: croppedImage.y1 * offsetHeight,
-          x2: croppedImage.x2 * offsetWidth,
-          y2: croppedImage.y2 * offsetHeight
+          x1: croppedImagePosition.x1 * offsetWidth,
+          y1: croppedImagePosition.y1 * offsetHeight,
+          x2: croppedImagePosition.x2 * offsetWidth,
+          y2: croppedImagePosition.y2 * offsetHeight
         };
       }
     }
@@ -101,6 +127,7 @@ export class NgxCropImageComponent {
 
   public imageCropped(event: ImageCroppedEvent) {
     this._imageCroppedEvent = event;
+    this.imagePosition = event.imagePosition;
     this.croppedImage = event.base64;
   }
 
@@ -108,8 +135,8 @@ export class NgxCropImageComponent {
     this.imageChangedEvent = event;
     delete this._image;
 
-    const file = event.target.files[0];
-    this.getBase64(file)
+    this.file = event.target.files[0];
+    this.getBase64(this.file)
       .subscribe(value => {
         this.imageBase64 = value;
       });
@@ -123,18 +150,18 @@ export class NgxCropImageComponent {
     return await this._appHelper.trySave(async () => {
       if (!this._image) {
         this._image = new Image();
-        this._image.objectId = this._objectId;
+        this._image.objectId = this.objectId;
         this._image.type = this._type;
         this._image.clazz = this._fileClass;
 
-        this._image = (await this._participantRestApiService.uploadFile(this._image, [this.imageChangedEvent.target.files[0]]))[0];
+        this._image = (await this._participantRestApiService.uploadFile(this._image, [this.file]))[0];
       }
 
       this._image = await this._participantRestApiService.cropImage({
-        x1: this._imageCroppedEvent.imagePosition.x1,
-        y1: this._imageCroppedEvent.imagePosition.y1,
-        x2: this._imageCroppedEvent.imagePosition.x2,
-        y2: this._imageCroppedEvent.imagePosition.y2
+        x1: this.imagePosition.x1,
+        y1: this.imagePosition.y1,
+        x2: this.imagePosition.x2,
+        y2: this.imagePosition.y2
       } as ImageCropRequest, {}, {imageId: this._image.id});
     });
   }
