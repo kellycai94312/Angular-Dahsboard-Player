@@ -127,6 +127,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
         const unitVersion = new UnitVersion();
         Object.assign(unitVersion, x);
         unitVersion.baseUnit = x;
+        unitVersion.id = x.unitVersionId;
         return unitVersion;
       });
     }
@@ -150,7 +151,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
 
     return await this.appHelper.trySave(async () => {
       const data = await this._parameterApiService.saveParameter(this.data).toPromise();
-      const unitVersions = await this._parameterApiService.updateParameterUnits(data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.baseUnit.id)))).toPromise();
+      const unitVersions = await this._parameterApiService.updateParameterUnits(data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
       this.data.unitVersions = unitVersions;
     });

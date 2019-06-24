@@ -92,6 +92,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
     const parameterVersion = new ParameterVersion();
     Object.assign(parameterVersion, item);
     parameterVersion.parameter = item;
+    parameterVersion.id = item.parameterVersionId;
 
     const itemIndex = this.parameterListComponent.ngxVirtualScrollComponent.items.findIndex(x => x.id == parameterVersion.parameter.id);
     if (itemIndex > -1) {
@@ -114,7 +115,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
   async onSave(): Promise<boolean> {
     this.data.formula = this.formulaParameters.map(x => x.data).join('');
     return await this.appHelper.trySave(async () => {
-      this.parameterVersions = await this._parameterApiService.updateFormulaParameters(this.data, new ListRequest<IdRequest>(this.parameterVersions.map(x => new IdRequest(x.parameter.id)))).toPromise();
+      this.parameterVersions = await this._parameterApiService.updateFormulaParameters(this.data, new ListRequest<IdRequest>(this.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
     });
   }
 
