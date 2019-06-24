@@ -1,4 +1,5 @@
-<mat-card *ngIf="data">
+<mat-card *ngIf="data"
+          matRipple>
   <mat-card-header fxLayout
                    fxLayoutGap="10px"
                    fxLayoutAlign="space-between start">
@@ -9,7 +10,7 @@
     </div>
     <button *ngIf="canEdit"
             mat-icon-button
-            (click)="onEdit()">
+            (click)="onEdit(); $event.stopPropagation()">
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-header>
@@ -19,7 +20,6 @@
                [width]="100"
                [height]="100"
                [autoSave]="false"
-               [format]="imageFormatClass.CIRCLE"
                [type]="imageTypeClass.CROPPED_LOGO"
                [fileClass]="fileClassClass.DEVICE"></ngx-image>
   </mat-card-content>

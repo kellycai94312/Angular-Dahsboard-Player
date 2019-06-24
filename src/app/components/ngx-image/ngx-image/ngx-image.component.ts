@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ImageFormat} from '../../../data/local/image-format';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
@@ -15,7 +15,8 @@ import {CropperPosition} from 'ngx-image-cropper';
 @Component({
   selector: 'ngx-image',
   templateUrl: './ngx-image.component.html',
-  styleUrls: ['./ngx-image.component.scss']
+  styleUrls: ['./ngx-image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxImageComponent implements OnInit, OnChanges {
 
@@ -75,6 +76,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _elementRef: ElementRef,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _changeDetectorRef: ChangeDetectorRef,
+              private _ngZone: NgZone,
               private _ngxModalService: NgxModalService) {
     this.imageChange = new EventEmitter<File>();
     this.class = '';
@@ -133,36 +136,40 @@ export class NgxImageComponent implements OnInit, OnChanges {
   }
 
   public refresh() {
-    let minSide = 0;
-    if (this.width || this.height) {
-      minSide = Math.min(this.width, this.height);
-    } else {
-      minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
-    }
-    this.innerWidth = minSide;
-    this.innerHeight = minSide;
-
-    let url = '';
-
-    if (this._tempFile) {
-      url = URL.createObjectURL(this._tempFile);
-    } else {
-      const imageQuery: ImageQuery = {
-        clazz: this.fileClass,
-        type: this.type,
-        objectId: this.objectId || this.object.id || 0,
-      };
-
-      if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
-        imageQuery.width = this.innerWidth;
+    this._ngZone.runOutsideAngular(() => {
+      let minSide = 0;
+      if (this.width || this.height) {
+        minSide = Math.min(this.width, this.height);
+      } else {
+        minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
       }
-      if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
-        imageQuery.height = this.innerHeight;
-      }
-      url += `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
-    }
+      this.innerWidth = minSide;
+      this.innerHeight = minSide;
 
-    this.url = url;
+      let url = '';
+
+      if (this._tempFile) {
+        url = URL.createObjectURL(this._tempFile);
+      } else {
+        const imageQuery: ImageQuery = {
+          clazz: this.fileClass,
+          type: this.type,
+          objectId: this.objectId || this.object.id || 0,
+        };
+
+        if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
+          imageQuery.width = this.innerWidth;
+        }
+        if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
+          imageQuery.height = this.innerHeight;
+        }
+        url += `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
+      }
+
+      this.url = url;
+
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
   public async onShowImage() {

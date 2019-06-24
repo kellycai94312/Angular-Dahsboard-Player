@@ -4,7 +4,6 @@ import {DeviceWindowService} from '../../../../services/windows/device-window/de
 import {Device} from '../../../../data/remote/model/device/device';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {ImageFormat} from '../../../../data/local/image-format';
 
 @Component({
   selector: 'app-device-item',
@@ -19,7 +18,6 @@ export class DeviceItemComponent extends BaseComponent<Device> {
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
 
   constructor(private _deviceWindowService: DeviceWindowService) {
     super();

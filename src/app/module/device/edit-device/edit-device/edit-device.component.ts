@@ -13,7 +13,6 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 
 @Component({
@@ -29,7 +28,6 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
   public readonly nameNgxInput = new NgxInput();
   public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
