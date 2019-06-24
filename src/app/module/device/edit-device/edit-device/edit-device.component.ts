@@ -85,11 +85,10 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
     this.data.description = this.descriptionNgxInput.control.value;
     this.data.videoResource = this.videoUrlNgxInput.control.value;
     this.data.manufacturerResource = this.manufacturerUrlNgxInput.control.value;
-    this.data.free = this.data.free || false;
 
     return await this.appHelper.trySave(async () => {
       const data = await this._deviceApiService.saveDevice(this.data).toPromise();
-      const parameterVersions = await this._deviceApiService.updateDeviceParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.parameter.id)))).toPromise();
+      const parameterVersions = await this._deviceApiService.updateDeviceParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
       this.data.parameterVersions = parameterVersions;
       this.ngxImageComponent.object = this.data;
@@ -107,6 +106,7 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         const parameterVersion = new ParameterVersion();
         Object.assign(parameterVersion, x);
         parameterVersion.parameter = x;
+        parameterVersion.id = x.parameterVersionId;
         return parameterVersion;
       });
     }

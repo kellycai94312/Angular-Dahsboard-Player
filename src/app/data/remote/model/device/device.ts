@@ -4,7 +4,6 @@ import {ParameterVersion} from '../parameter/parameter-version';
 export class Device extends ShortNameObject {
   public videoResource: string;
   public manufacturerResource: string;
-  public free: boolean;
 
   //#region Transient
   public parameterVersions: ParameterVersion[];
