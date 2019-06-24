@@ -76,7 +76,7 @@ export class ParameterWindowService {
     return dialogResult;
   }
 
-  public async openEditParameterUnits<T extends BaseUnit>(parameter: BaseParameter, units: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
+  public async openEditParameterUnits<T extends BaseUnit>(units: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
     return await this._modalBuilderService.showSelectionItemsModal(units, async (query: UnitQuery) => {
       return await this._unitApiService.getUnits(query).toPromise();
     }, UnitItemComponent, async (component, data) => {
@@ -84,7 +84,7 @@ export class ParameterWindowService {
     }, config) as DialogResult<T[]>;
   }
 
-  public async openEditParameters<T extends BaseParameter>(parameter: BaseParameter, parameters: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
+  public async openEditParameters<T extends BaseParameter>(parameters: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
     return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: ParameterQuery) => {
       return await this._parameterApiService.getParameters(query).toPromise();
     }, ParameterItemComponent, async (component, data) => {

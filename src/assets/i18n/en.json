@@ -720,5 +720,8 @@
     "USER": "User"
   },
   "notImplementedOnTheClient": "Not implemented on client",
-  "selectedParameters": "Selected parameters"
+  "selectedParameters": "Selected parameters",
+  "devices": "Devices",
+  "device": "Device",
+  "manufacturerUrl": "Manufacturer url"
 }

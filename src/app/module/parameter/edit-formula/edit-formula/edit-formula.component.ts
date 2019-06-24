@@ -9,6 +9,7 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {ParameterListComponent} from '../../parameter-list/parameter-list/parameter-list.component';
+import {ParameterVersion} from '../../../../data/remote/model/parameter/parameter-version';
 
 @Component({
   selector: 'app-edit-formula',
@@ -22,7 +23,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
   public parameterListComponent: ParameterListComponent;
 
   public readonly mathOperations: NameWrapper<string>[];
-  public parameters: BaseParameter[] = [];
+  public parameterVersions: ParameterVersion[] = [];
   public formulaParameters: NameWrapper<string>[] = [];
 
   constructor(private _parameterApiService: ParameterApiService,
@@ -46,7 +47,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
     if (result) {
       return await this.appHelper.tryLoad(async () => {
         if (!this.isNew) {
-          this.parameters = await this._parameterApiService.getFormulaParameters(data).toPromise();
+          this.parameterVersions = await this._parameterApiService.getFormulaParameters(data).toPromise();
           const formulaParameters = this._getFormulaParameters(this.data.formula);
           formulaParameters
             .filter(x => x.data.indexOf('$') > -1)
@@ -64,16 +65,19 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
     return result;
   }
 
-  public onClickParameter(item: BaseParameter): void {
-    const nameWrapper = this._getNameWrapperParameter(`$${item.id}`);
+  public onClickParameter(item: ParameterVersion): void {
+    const nameWrapper = this._getNameWrapperParameter(`$${item.parameter.id}`);
     if (nameWrapper) {
       this.formulaParameters.push(nameWrapper);
     }
   }
 
-  public onRemoveParameter(item: BaseParameter): void {
-    this.parameters.splice(this.parameters.indexOf(item), 1);
-    this.parameterListComponent.ngxVirtualScrollComponent.items.push(item);
+  public onRemoveParameter(item: ParameterVersion): void {
+    const itemIndex = this.parameterVersions.findIndex(x => x.parameter.id == item.parameter.id);
+    if (itemIndex > -1) {
+      this.parameterVersions.splice(itemIndex, 1);
+      this.parameterListComponent.ngxVirtualScrollComponent.items.push(item.parameter);
+    }
   }
 
   public onRemoveFormulaParameter(item: NameWrapper<string>): void {
@@ -85,14 +89,21 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
   }
 
   public onClickItem(item: BaseParameter): void {
-    this.parameters.push(item);
-    const itemIndex = this.parameterListComponent.ngxVirtualScrollComponent.items.indexOf(item);
-    this.parameterListComponent.ngxVirtualScrollComponent.items.splice(itemIndex, 1);
+    const parameterVersion = new ParameterVersion();
+    Object.assign(parameterVersion, item);
+    parameterVersion.parameter = item;
+    parameterVersion.id = item.parameterVersionId;
+
+    const itemIndex = this.parameterListComponent.ngxVirtualScrollComponent.items.findIndex(x => x.id == parameterVersion.parameter.id);
+    if (itemIndex > -1) {
+      this.parameterVersions.push(parameterVersion);
+      this.parameterListComponent.ngxVirtualScrollComponent.items.splice(itemIndex, 1);
+    }
   }
 
   public filter = (values: BaseParameter[]) => {
     if (values.length) {
-      return this._appHelper.except(values, [this.data, ...this.parameters], (first, second) => first.id == second.id, true);
+      return this._appHelper.except(values, [this.data, ...this.parameterVersions.map(x => x.parameter)], (first, second) => first.id == second.id, true);
     }
     return values;
   };
@@ -104,7 +115,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
   async onSave(): Promise<boolean> {
     this.data.formula = this.formulaParameters.map(x => x.data).join('');
     return await this.appHelper.trySave(async () => {
-      this.parameters = await this._parameterApiService.updateFormulaParameters(this.data, new ListRequest<IdRequest>(this.parameters.map(x => new IdRequest(x.id)))).toPromise();
+      this.parameterVersions = await this._parameterApiService.updateFormulaParameters(this.data, new ListRequest<IdRequest>(this.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
     });
   }
 
@@ -126,8 +137,8 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
   }
 
   private _getNameWrapperParameter(id: string): NameWrapper<string> {
-    const parameter = this.parameters.find(x => `$${x.id}` === id);
-    return parameter ? {name: parameter.name, data: id} : void 0;
+    const parameterVersion = this.parameterVersions.find(x => `$${x.parameter.id}` === id);
+    return parameterVersion ? {name: parameterVersion.name, data: id} : void 0;
   }
 
 }

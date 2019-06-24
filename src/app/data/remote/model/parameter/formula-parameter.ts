@@ -1,7 +1,7 @@
 import {IdentifiedObject} from '../../base/identified-object';
-import {BaseParameter} from './base-parameter';
+import {ParameterVersion} from './parameter-version';
 
 export class FormulaParameter extends IdentifiedObject {
-  public formula: BaseParameter;
-  public parameter: BaseParameter;
+  public formula: ParameterVersion;
+  public parameter: ParameterVersion;
 }

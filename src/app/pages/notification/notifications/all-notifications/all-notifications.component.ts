@@ -6,6 +6,7 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {NotificationService} from '../../../../shared/notification.service';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
+import {NotificationType} from '../../../../data/remote/model/notification/base/notification-type';
 
 @Component({
   selector: 'app-all-notifications',
@@ -17,6 +18,7 @@ export class AllNotificationsComponent implements OnInit, OnDestroy {
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
+  public readonly notificationTypeClass = NotificationType;
   private readBefore: Date;
   private readonly _notificationSubscription: ISubscription;
 

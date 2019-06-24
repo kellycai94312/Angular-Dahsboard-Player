@@ -50,6 +50,7 @@ import {BaseEvent} from '../data/remote/model/event/base/base-event';
 import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
 import {EventData} from '../module/event/edit-base-event/model/event-data';
 import {ImageFormat} from '../data/local/image-format';
+import {CropperPosition} from 'ngx-image-cropper';
 
 @Injectable({
   providedIn: 'root'
@@ -366,12 +367,18 @@ export class TemplateModalService {
                                   type: ImageType,
                                   fileClass: FileClass,
                                   format: ImageFormat,
-                                  config: NgxModalConfiguration): Promise<void> {
+                                  imageBase64?: any,
+                                  imagePosition?: CropperPosition,
+                                  file?: File,
+                                  config?: NgxModalConfiguration,
+                                  autoSave: boolean = true): Promise<DialogResult<NgxCropImageComponent>> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
 
+    let ngxCropImageComponent: NgxCropImageComponent;
     await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
-      await component.initialize(obj, type, fileClass, format);
+      ngxCropImageComponent = component;
+      await component.initialize(obj, type, fileClass, format, imageBase64, imagePosition, file);
 
       modal.componentInstance.splitButtonItems = [
         {
@@ -381,13 +388,17 @@ export class TemplateModalService {
           }
         },
         this._ngxModalService.saveSplitItemButton(async () => {
-          if (await component.onSave()) {
+          if (!autoSave || await component.onSave()) {
             modal.close();
           }
         })
       ];
     }, config);
-    await this._ngxModalService.awaitModalResult(modal);
+
+    const dialogResult = new DialogResult<NgxCropImageComponent>();
+    dialogResult.result = await this._ngxModalService.awaitModalResult(modal);
+    dialogResult.data = autoSave ? null : ngxCropImageComponent;
+    return dialogResult;
   }
 
   //#region Event

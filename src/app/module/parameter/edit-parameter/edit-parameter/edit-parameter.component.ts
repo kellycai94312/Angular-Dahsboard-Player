@@ -12,11 +12,12 @@ import {ParameterApiService} from '../../../../data/remote/rest-api/api/paramete
 import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
 import {UserParameter} from '../../../../data/remote/model/parameter/user-parameter';
 import {ParameterTypeEnum} from '../../../../data/remote/model/parameter/parameter-type-enum';
-import {BaseUnit} from '../../../../data/remote/model/unit/base-unit';
 import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {UnitVersion} from '../../../../data/remote/model/unit/unit-version';
+import {ParameterVersion} from '../../../../data/remote/model/parameter/parameter-version';
 
 @Component({
   selector: 'app-edit-parameter',
@@ -36,7 +37,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
   public readonly parameterTypeNgxSelect = new NgxSelect();
   public readonly mathOperations: NameWrapper<string>[];
   public formulaParameters: NameWrapper<string>[] = [];
-  public parameters: BaseParameter[] = [];
+  public parameterVersions: ParameterVersion[] = [];
 
   constructor(private _parameterApiService: ParameterApiService,
               // TODO: ParameterWindowService can't inject without forwardRef()
@@ -94,7 +95,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
         this.parameterTypeNgxSelect.display = 'name';
         this.parameterTypeNgxSelect.required = true;
 
-        this.data.units = this.data.units || [];
+        this.data.unitVersions = this.data.unitVersions || [];
         await this._updateFormulaParameters();
       });
     }
@@ -112,17 +113,23 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
     }
   }
 
-  public onRemoveUnit(item: BaseUnit): void {
-    this.data.units.splice(this.data.units.indexOf(item), 1);
+  public onRemoveUnit(item: UnitVersion): void {
+    this.data.unitVersions.splice(this.data.unitVersions.indexOf(item), 1);
   }
 
   public async onEditUnits(): Promise<void> {
-    const dialogResult = await this._parameterWindowService.openEditParameterUnits(this.data, this.data.units, {
+    const dialogResult = await this._parameterWindowService.openEditParameterUnits(this.data.unitVersions.map(x => x.baseUnit), {
       componentFactoryResolver: this._componentFactoryResolver,
       compare: (first, second) => first.id == second.id
     });
     if (dialogResult.result) {
-      this.data.units = dialogResult.data;
+      this.data.unitVersions = dialogResult.data.map(x => {
+        const unitVersion = new UnitVersion();
+        Object.assign(unitVersion, x);
+        unitVersion.baseUnit = x;
+        unitVersion.id = x.unitVersionId;
+        return unitVersion;
+      });
     }
   }
 
@@ -143,8 +150,10 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
     (this.data as UserParameter).free = (this.data as UserParameter).free || false;
 
     return await this.appHelper.trySave(async () => {
-      this.data = await this._parameterApiService.saveParameter(this.data).toPromise();
-      this.data.units = await this._parameterApiService.updateParameterUnits(this.data, new ListRequest<IdRequest>(this.data.units.map(x => new IdRequest(x.id)))).toPromise();
+      const data = await this._parameterApiService.saveParameter(this.data).toPromise();
+      const unitVersions = await this._parameterApiService.updateParameterUnits(data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.id)))).toPromise();
+      this.data = data;
+      this.data.unitVersions = unitVersions;
     });
   }
 
@@ -167,7 +176,7 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
 
   private async _updateFormulaParameters(): Promise<void> {
     if (!this.isNew) {
-      this.parameters = await this._parameterApiService.getFormulaParameters(this.data).toPromise();
+      this.parameterVersions = await this._parameterApiService.getFormulaParameters(this.data).toPromise();
       const formulaParameters = this._getFormulaParameters(this.data.formula);
       formulaParameters
         .filter(x => x.data.indexOf('$') > -1)
@@ -182,8 +191,8 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
   }
 
   private _getNameWrapperParameter(id: string): NameWrapper<string> {
-    const parameter = this.parameters.find(x => `$${x.id}` === id);
-    return parameter ? {name: parameter.name, data: id} : void 0;
+    const parameterVersion = this.parameterVersions.find(x => `$${x.parameter.id}` === id);
+    return parameterVersion ? {name: parameterVersion.name, data: id} : void 0;
   }
 
 }

@@ -17,7 +17,7 @@
     <div>
       <label>{{'selectedParameters' | translate}}</label>
       <mat-chip-list>
-        <mat-chip *ngFor="let item of parameters"
+        <mat-chip *ngFor="let item of parameterVersions"
                   [removable]="true"
                   (click)="onClickParameter(item)"
                   (removed)="onRemoveParameter(item)">{{item.name}}

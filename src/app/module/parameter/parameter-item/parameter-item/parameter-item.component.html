@@ -17,9 +17,9 @@
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-header>
-  <mat-card-content *ngIf="data.units?.length">
+  <mat-card-content *ngIf="data.unitVersions?.length">
     <mat-chip-list>
-      <mat-chip *ngFor="let item of data.units">{{item.shortName}}</mat-chip>
+      <mat-chip *ngFor="let item of data.unitVersions">{{item.shortName}}</mat-chip>
     </mat-chip-list>
   </mat-card-content>
 </mat-card>

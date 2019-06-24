@@ -10,6 +10,8 @@ import {ParameterQuery} from '../../query/parameter/parameter-query';
 import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
 import {BaseUnit} from '../../../model/unit/base-unit';
+import {ParameterVersion} from '../../../model/parameter/parameter-version';
+import {UnitVersion} from '../../../model/unit/unit-version';
 
 @Injectable()
 export class ParameterApiService {
@@ -58,15 +60,15 @@ export class ParameterApiService {
 
   //#region Formula
 
-  public getFormulaParameters<T extends BaseParameter>(value: T): Observable<T[]> {
-    return this._apiService.get(`${this._basePath}/${value.id}/formula/parameter`).pipe(
-      map(x => plainToClass(BaseParameter, x) as any)
+  public getFormulaParameters<T extends ParameterVersion>(value: BaseParameter, query?: { parameterVersionId: number }): Observable<T[]> {
+    return this._apiService.get(`${this._basePath}/${value.id}/formula/parameter`, this._apiService.getHttpParamsFromObject(query)).pipe(
+      map(x => plainToClass(ParameterVersion, x) as any)
     );
   }
 
-  public updateFormulaParameters<T extends BaseParameter>(value: T, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+  public updateFormulaParameters<T extends ParameterVersion>(value: BaseParameter, listRequest: ListRequest<IdRequest>): Observable<T[]> {
     return this._apiService.post(`${this._basePath}/${value.id}/formula/parameter`, listRequest).pipe(
-      map(x => plainToClass(BaseParameter, x) as any)
+      map(x => plainToClass(ParameterVersion, x) as any)
     );
   }
 
@@ -74,15 +76,15 @@ export class ParameterApiService {
 
   //#region Unit
 
-  public getParameterUnits<T extends BaseUnit>(value: BaseParameter): Observable<T[]> {
-    return this._apiService.get(`${this._basePath}/${value.id}/unit`).pipe(
+  public getParameterUnits<T extends UnitVersion>(value: BaseParameter, query?: { parameterVersionId: number }): Observable<T[]> {
+    return this._apiService.get(`${this._basePath}/${value.id}/unit`, this._apiService.getHttpParamsFromObject(query)).pipe(
       map(x => plainToClass(BaseUnit, x) as any)
     );
   }
 
-  public updateParameterUnits<T extends BaseUnit>(value: BaseParameter, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+  public updateParameterUnits<T extends UnitVersion>(value: BaseParameter, listRequest: ListRequest<IdRequest>): Observable<T[]> {
     return this._apiService.post(`${this._basePath}/${value.id}/unit`, listRequest).pipe(
-      map(x => plainToClass(BaseUnit, x) as any)
+      map(x => plainToClass(UnitVersion, x) as any)
     );
   }
 

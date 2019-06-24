@@ -720,5 +720,8 @@
     "USER": "Пользовательская"
   },
   "notImplementedOnTheClient": "Не реализовано на клиенте",
-  "selectedParameters": "Выбранные параметры"
+  "selectedParameters": "Выбранные параметры",
+  "devices": "Устройства",
+  "device": "Устройство",
+  "manufacturerUrl": "Url производителя"
 }

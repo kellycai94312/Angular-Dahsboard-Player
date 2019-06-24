@@ -20,7 +20,8 @@ export class DictionariesComponent {
       // {name: 'exercises', data: 'exercise'},
       // {name: 'tests', data: 'test'},
       {name: 'parameters', data: 'parameter'},
-      {name: 'units', data: 'unit'}
+      {name: 'units', data: 'unit'},
+      {name: 'devices', data: 'device'}
     ];
   }
 
