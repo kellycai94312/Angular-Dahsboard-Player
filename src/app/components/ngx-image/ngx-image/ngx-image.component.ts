@@ -191,9 +191,12 @@ export class NgxImageComponent implements OnInit, OnChanges {
       const dialogResult = await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave);
       if (dialogResult.result) {
         if (!this.autoSave) {
-          this._tempNgxCropImageComponent = dialogResult.data;
-          delete this.url;
-          this.url = this._tempNgxCropImageComponent.croppedImage;
+          this._ngZone.runOutsideAngular(() => {
+            this._tempNgxCropImageComponent = dialogResult.data;
+            this.url = this._tempNgxCropImageComponent.croppedImage;
+
+            this._changeDetectorRef.markForCheck();
+          });
         } else {
           this.imageChange.emit();
           this.refresh();
