@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {UnitItemComponent} from './unit-item/unit-item.component';
-import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
+import {MatButtonModule, MatCardModule, MatIconModule, MatRippleModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 
@@ -13,6 +13,7 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     MatCardModule,
     MatButtonModule,
+    MatRippleModule,
     MatIconModule,
     FlexLayoutModule,
     TranslateModule.forChild()

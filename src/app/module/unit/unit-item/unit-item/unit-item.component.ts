@@ -25,4 +25,8 @@ export class UnitItemComponent extends BaseComponent<BaseUnit> {
     }
   }
 
+  public async onClick(): Promise<void> {
+    await this._unitWindowService.openUnitDetail(this.data);
+  }
+
 }

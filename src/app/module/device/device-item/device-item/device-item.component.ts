@@ -30,4 +30,8 @@ export class DeviceItemComponent extends BaseComponent<Device> {
     }
   }
 
+  public async onClick(): Promise<void> {
+    await this._deviceWindowService.openDeviceDetail(this.data);
+  }
+
 }

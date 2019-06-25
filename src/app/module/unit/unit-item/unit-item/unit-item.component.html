@@ -1,4 +1,6 @@
-<mat-card *ngIf="data">
+<mat-card *ngIf="data"
+          matRipple
+          (click)="onClick()">
   <mat-card-header fxLayout
                    fxLayoutGap="10px"
                    fxLayoutAlign="space-between start">
@@ -12,7 +14,7 @@
     </div>
     <button *ngIf="canEdit"
             mat-icon-button
-            (click)="onEdit()">
+            (click)="onEdit(); $event.stopPropagation()">
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-header>

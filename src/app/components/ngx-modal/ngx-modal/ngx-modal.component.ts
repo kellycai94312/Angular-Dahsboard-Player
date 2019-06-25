@@ -67,7 +67,9 @@ export class NgxModalComponent {
     // TODO: Use interface for the call this field
     componentRef.instance._manualInit = true;
     await initialize(componentRef.instance);
-    componentRef.changeDetectorRef.detectChanges();
+    if (!componentRef.changeDetectorRef['destroyed']) {
+      componentRef.changeDetectorRef.detectChanges();
+    }
 
     return componentRef.instance;
   }
