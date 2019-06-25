@@ -1,18 +1,18 @@
-<div class="shadow">
+<div class="shadow ngx-modal">
   <div class="modal-header">
     <h4 *ngIf="title || titleKey"
         class="modal-title">{{title ? (title) : (titleKey | translate)}}</h4>
-    <button type="button"
-            class="close"
-            aria-label="Close"
+    <button mat-icon-button
             (click)="onClose()">
-      <span aria-hidden="true">&times;</span>
+      <mat-icon>clear</mat-icon>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body"
+       [ngClass]="{'p-0': !useContentPadding}">
     <ng-template #contentTemplate></ng-template>
   </div>
-  <div class="modal-footer"
+  <div *ngIf="tempSplitButtonItems.length || splitButtonItems.length || removeSplitButtonItem"
+       class="modal-footer"
        fxLayout
        fxLayoutGap="10px"
        fxLayoutAlign="space-between center">

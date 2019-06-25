@@ -48,6 +48,7 @@ import {EditEventPollModule} from './module/event/edit-event-poll/edit-event-pol
 import {EditBaseEventModule} from './module/event/edit-base-event/edit-base-event.module';
 import {EditFormulaModule} from './module/parameter/edit-formula/edit-formula.module';
 import {NgxContentModule} from './module/ngx/ngx-content/ngx-content.module';
+import {ItemDetailModule} from './module/common/item-detail/item-detail.module';
 
 registerLocaleData(localeRu);
 
@@ -96,7 +97,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditEventPollModule,
     EditBaseEventModule,
     EditFormulaModule,
-    NgxContentModule
+    NgxContentModule,
+    ItemDetailModule
   ],
   providers: [
     LayoutService,

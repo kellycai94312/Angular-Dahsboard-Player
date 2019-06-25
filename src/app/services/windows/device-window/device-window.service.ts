@@ -11,6 +11,14 @@ import {ModalBuilderService} from '../../../service/modal-builder/modal-builder.
 import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
 import {AppHelper} from '../../../utils/app-helper';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
+import {TextField} from '../../../module/common/item-detail/model/text-field';
+import {ChipsField} from '../../../module/common/item-detail/model/chips-field';
+import {ImageField} from '../../../module/common/item-detail/model/image-field';
+import {ImageType} from '../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../data/remote/model/file/base/file-class';
+import {ImageFormat} from '../../../data/local/image-format';
+import {VideoField} from '../../../module/common/item-detail/model/video-field';
 
 @Injectable()
 export class DeviceWindowService {
@@ -55,6 +63,28 @@ export class DeviceWindowService {
     }, ParameterItemComponent, async (component, data) => {
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
+  }
+
+  public async openDeviceDetail(device: Device): Promise<void> {
+    const model = this._ngxModalService.open();
+    model.componentInstance.title = `${device.name}`;
+    model.componentInstance.useContentPadding = false;
+    await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
+      component.leftFields = [
+        new TextField('name', device.name),
+        new TextField('shortName', device.shortName),
+        new TextField('description', device.description),
+        new TextField('manufacturerUrl', device.manufacturerResource),
+        new ChipsField('parameters', device.parameterVersions.map(x => x.parameter.name))
+      ];
+      component.rightFields = [
+        new ImageField('', device, ImageType.LOGO, FileClass.DEVICE, ImageFormat.SQUARE)
+      ];
+      if (device.videoResource) {
+        component.rightFields.push(new VideoField('', device.videoResource));
+      }
+    });
+    await this._ngxModalService.awaitModalResult(model);
   }
 
 }

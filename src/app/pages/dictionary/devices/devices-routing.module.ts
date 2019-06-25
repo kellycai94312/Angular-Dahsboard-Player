@@ -3,8 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {DevicesComponent} from './devices/devices.component';
 
 const routes: Routes = [
-  {path: '', component: DevicesComponent},
-  {path: ':id', loadChildren: './device/device.module#DeviceModule'}
+  {path: '', component: DevicesComponent}
 ];
 
 @NgModule({

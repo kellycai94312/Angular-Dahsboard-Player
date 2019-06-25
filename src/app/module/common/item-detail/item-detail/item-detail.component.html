@@ -1,53 +1,46 @@
 <div fxLayout
-     fxLayout.lt-sm="column"
-     fxLayoutGap="10px">
-  <div fxFlex="60">
+     fxLayout.lt-sm="column">
+  <div fxFlex="50"
+       class="left-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
-                  [ngTemplateOutletContext]="{$implicit:leftFieldsGroups}"></ng-container>
+                  [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>
   </div>
-  <div fxFlex>
+  <div fxFlex
+       class="right-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
-                  [ngTemplateOutletContext]="{$implicit:rightFieldsGroups}"></ng-container>
+                  [ngTemplateOutletContext]="{$implicit:rightFields}"></ng-container>
   </div>
 </div>
 
 <ng-template #fieldsTemplate
-             let-groups>
+             let-fields>
   <div fxLayout="column"
        fxLayoutGap="10px">
-    <mat-card *ngFor="let group of groups">
-      <mat-card-header *ngIf="group.translationLabel">
-        <mat-card-title>{{group.translationLabel | translate}}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content fxLayout="column"
-                        fxLayoutGap="10px">
-        <div *ngFor="let item of group.fields">
-          <label *ngIf="item.translationLabel">{{item.translationLabel | translate}}</label>
-          <pre *ngIf="item.value">{{item.value}}</pre>
-          <mat-chip-list *ngIf="item.values">
-            <mat-chip *ngFor="let chip of item.values">{{chip}}</mat-chip>
-          </mat-chip-list>
-          <div fxLayoutAlign="center center">
-            <ngx-image *ngIf="item.object"
-                       [canEdit]="false"
-                       [object]="item.object"
-                       [width]="160"
-                       [height]="160"
-                       [allowFullScreen]="false"
-                       [type]="item.type"
-                       [fileClass]="item.fileClass"
-                       [format]="item.format"></ngx-image>
-          </div>
-          <iframe *ngIf="item.videoUrl"
-                  [src]="item.videoUrl | safeUrl"
-                  [height]="300"
-                  class="w-100"
-                  frameborder="0"
-                  scrolling="no"
-                  allow="autoplay; encrypted-media"
-                  allowfullscreen></iframe>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <div *ngFor="let item of fields">
+      <label *ngIf="item.translationLabel">{{item.translationLabel | translate}}</label>
+      <pre *ngIf="item.value">{{item.value}}</pre>
+      <mat-chip-list *ngIf="item.values">
+        <mat-chip *ngFor="let chip of item.values">{{chip}}</mat-chip>
+      </mat-chip-list>
+      <div fxLayoutAlign="center center">
+        <ngx-image *ngIf="item.object"
+                   [canEdit]="false"
+                   [object]="item.object"
+                   [width]="160"
+                   [height]="160"
+                   [allowFullScreen]="false"
+                   [type]="item.type"
+                   [fileClass]="item.fileClass"
+                   [format]="item.format"></ngx-image>
+      </div>
+      <iframe *ngIf="item.videoUrl"
+              [src]="item.videoUrl | safeUrl"
+              [height]="300"
+              class="w-100"
+              frameborder="0"
+              scrolling="no"
+              allow="autoplay; encrypted-media"
+              allowfullscreen></iframe>
+    </div>
   </div>
 </ng-template>

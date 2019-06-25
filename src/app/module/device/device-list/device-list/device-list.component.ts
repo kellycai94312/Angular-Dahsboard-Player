@@ -31,4 +31,9 @@ export class DeviceListComponent extends BaseItemList<Device, PageQuery> {
     };
   }
 
+  public async onClickItem(item: Device): Promise<void> {
+    this.clickItem.emit(item);
+    await this._deviceWindowService.openDeviceDetail(item);
+  }
+
 }

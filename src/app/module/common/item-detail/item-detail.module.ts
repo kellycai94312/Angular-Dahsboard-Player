@@ -9,6 +9,7 @@ import {SafeHtmlModule} from '../../../pipes/safe-html/safe-html.module';
 
 @NgModule({
   declarations: [ItemDetailComponent],
+  entryComponents: [ItemDetailComponent],
   exports: [ItemDetailComponent],
   imports: [
     CommonModule,

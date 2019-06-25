@@ -6,7 +6,7 @@
   <ng-template #itemTemplate
                let-item
                let-canEditItem="canEdit">
-    <div (click)="clickItem.emit(item)">
+    <div (click)="onClickItem(item)">
       <app-device-item [(data)]="item"
                        [canEdit]="canEditItem"></app-device-item>
     </div>

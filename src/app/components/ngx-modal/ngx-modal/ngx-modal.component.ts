@@ -21,6 +21,9 @@ export class NgxModalComponent {
   public titleKey: string;
 
   @Input()
+  public useContentPadding = true;
+
+  @Input()
   public removeSplitButtonItem: SplitButtonItem;
 
   @Input()

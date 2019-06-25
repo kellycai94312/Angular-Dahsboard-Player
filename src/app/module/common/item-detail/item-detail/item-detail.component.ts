@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {FieldsGroup} from '../model/fields-group';
+import {BaseField} from '../model/base-field';
 
 @Component({
   selector: 'app-item-detail',
@@ -10,10 +10,10 @@ import {FieldsGroup} from '../model/fields-group';
 export class ItemDetailComponent {
 
   @Input()
-  public leftFieldsGroups: FieldsGroup[] = [];
+  public leftFields: BaseField[] = [];
 
   @Input()
-  public rightFieldsGroups: FieldsGroup[] = [];
+  public rightFields: BaseField[] = [];
 
 }
 
