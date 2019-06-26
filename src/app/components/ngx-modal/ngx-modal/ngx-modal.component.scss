@@ -1,3 +1,10 @@
+::ng-deep {
+  .modal-content {
+    border: unset;
+    border-radius: unset;
+  }
+}
+
 .ngx-modal {
   background-color: #363d42;
 

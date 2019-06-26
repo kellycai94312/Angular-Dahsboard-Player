@@ -15,13 +15,13 @@
       <mat-icon>edit</mat-icon>
     </button>
   </mat-card-header>
-  <mat-card-content fxLayout
-                    fxLayoutAlign="center center">
+  <div fxLayout
+       fxLayoutAlign="center center">
     <ngx-image [object]="data"
                [width]="100"
                [height]="100"
                [autoSave]="false"
                [type]="imageTypeClass.CROPPED_LOGO"
                [fileClass]="fileClassClass.DEVICE"></ngx-image>
-  </mat-card-content>
+  </div>
 </mat-card>

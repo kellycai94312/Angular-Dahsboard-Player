@@ -59,7 +59,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
             });
           this.formulaParameters = formulaParameters;
         }
-        await this.parameterListComponent.ngxVirtualScrollComponent.reset();
+        await this.parameterListComponent.itemListComponent.ngxVirtualScrollComponent.reset();
       });
     }
     return result;
@@ -76,7 +76,7 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
     const itemIndex = this.parameterVersions.findIndex(x => x.parameter.id == item.parameter.id);
     if (itemIndex > -1) {
       this.parameterVersions.splice(itemIndex, 1);
-      this.parameterListComponent.ngxVirtualScrollComponent.items.push(item.parameter);
+      this.parameterListComponent.itemListComponent.ngxVirtualScrollComponent.items.push(item.parameter);
     }
   }
 
@@ -94,10 +94,10 @@ export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
     parameterVersion.parameter = item;
     parameterVersion.id = item.parameterVersionId;
 
-    const itemIndex = this.parameterListComponent.ngxVirtualScrollComponent.items.findIndex(x => x.id == parameterVersion.parameter.id);
+    const itemIndex = this.parameterListComponent.itemListComponent.ngxVirtualScrollComponent.items.findIndex(x => x.id == parameterVersion.parameter.id);
     if (itemIndex > -1) {
       this.parameterVersions.push(parameterVersion);
-      this.parameterListComponent.ngxVirtualScrollComponent.items.splice(itemIndex, 1);
+      this.parameterListComponent.itemListComponent.ngxVirtualScrollComponent.items.splice(itemIndex, 1);
     }
   }
 

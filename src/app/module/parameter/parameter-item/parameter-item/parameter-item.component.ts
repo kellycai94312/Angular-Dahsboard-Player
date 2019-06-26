@@ -26,4 +26,8 @@ export class ParameterItemComponent extends BaseComponent<BaseParameter> {
     }
   }
 
+  public async onClick(): Promise<void> {
+    await this._parameterWindowService.openParameterDetail(this.data);
+  }
+
 }
