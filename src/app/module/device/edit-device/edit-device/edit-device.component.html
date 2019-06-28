@@ -11,7 +11,8 @@
                [type]="imageTypeClass.CROPPED_LOGO"
                [fileClass]="fileClassClass.DEVICE"
                [autoSave]="false"></ngx-image>
-    <ngx-carousel [canEdit]="true"
+    <ngx-carousel *ngIf="data.id"
+                  [canEdit]="true"
                   [object]="data"
                   [fileClass]="fileClassClass.DEVICE"></ngx-carousel>
   </div>
@@ -19,7 +20,6 @@
     <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
     <new-ngx-input [data]="shortNameNgxInput"></new-ngx-input>
     <new-ngx-input [data]="descriptionNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="videoUrlNgxInput"></new-ngx-input>
     <new-ngx-input [data]="manufacturerUrlNgxInput"></new-ngx-input>
     <div fxLayout
          fxLayoutGap="10px"

@@ -81,9 +81,6 @@ export class DeviceWindowService {
       component.rightFields = [
         new CarouselField(device, FileClass.DEVICE, '')
       ];
-      if (device.videoResource) {
-        component.rightFields.push(new VideoField('', device.videoResource));
-      }
     });
     await this._ngxModalService.awaitModalResult(model);
   }

@@ -688,8 +688,8 @@
     "COMPETITION": "Соревнование",
     "RELAXATION": "Отдых",
     "DIET": "Питание",
-    "MEET_UP": "Собрание",
-    "TUITION": "Обучение"
+    "MEETING": "Собрание",
+    "EDUCATION": "Обучение"
   },
   "advancedMode": "Расширенный режим",
   "heads": "Руководители",

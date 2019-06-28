@@ -7,8 +7,8 @@ import {Game} from '../model/event/game';
 import {Competition} from '../model/event/competition';
 import {Relaxation} from '../model/event/relaxation';
 import {Diet} from '../model/event/diet';
-import {MeetUp} from '../model/event/meet-up';
-import {Tuition} from '../model/event/tuition';
+import {Meeting} from '../model/event/meeting';
+import {Education} from '../model/event/education';
 
 export class PageContainer<T> {
 
@@ -28,8 +28,8 @@ export class PageContainer<T> {
         {value: Competition, name: EventType.COMPETITION},
         {value: Relaxation, name: EventType.RELAXATION},
         {value: Diet, name: EventType.DIET},
-        {value: MeetUp, name: EventType.MEET_UP},
-        {value: Tuition, name: EventType.TUITION}
+        {value: Meeting, name: EventType.MEETING},
+        {value: Education, name: EventType.EDUCATION}
       ],
     },
     keepDiscriminatorProperty: true

@@ -32,7 +32,6 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
   public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly manufacturerUrlNgxInput = new NgxInput();
-  public readonly videoUrlNgxInput = new NgxInput();
 
   constructor(private _deviceApiService: DeviceApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
@@ -59,9 +58,6 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         this.descriptionNgxInput.type = NgxInputType.TEXTAREA;
         this.descriptionNgxInput.control.setValue(data.description);
 
-        this.videoUrlNgxInput.labelTranslation = 'videoUrl';
-        this.videoUrlNgxInput.control.setValue(data.videoResource);
-
         this.manufacturerUrlNgxInput.labelTranslation = 'manufacturerUrl';
         this.manufacturerUrlNgxInput.control.setValue(data.manufacturerResource);
 
@@ -81,7 +77,6 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
     this.data.name = this.nameNgxInput.control.value;
     this.data.shortName = this.shortNameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
-    this.data.videoResource = this.videoUrlNgxInput.control.value;
     this.data.manufacturerResource = this.manufacturerUrlNgxInput.control.value;
 
     return await this.appHelper.trySave(async () => {
