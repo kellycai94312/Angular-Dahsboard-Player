@@ -2,6 +2,7 @@
      fxLayout.lt-sm="column">
   <div *ngIf="leftFields.length"
        fxFlex="{{rightFields.length ? 50 : ''}}"
+       fxFlex.lt-sm
        class="left-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
                   [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>

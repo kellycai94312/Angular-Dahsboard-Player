@@ -1,22 +1,28 @@
 <div *ngIf="innerWidth && innerHeight"
      class="d-flex flex-column">
-  <div class="img-fluid {{class}} "
-       [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
-       (dblclick)="onShowImage()"
-       [style.width.px]="innerWidth"
-       [style.height.px]="innerHeight"
-       [style.background-size]="'cover'"
-       [style.background-image]="'url('+ url +')' | safeStyle"></div>
-  <div *ngIf="canEdit"
-       class="img-circle-change"
-       [style.width.px]="innerWidth"
-       [style.height.px]="innerHeight"
-       [style.border-radius]="format === imageFormatClass.CIRCLE ? '100%' : '0px'">
-    <div class="img-content"
-         (click)="onEditImage(fileInput)">
-      <mat-icon>edit</mat-icon>
+  <img *ngIf="fixForCarousel; else elseTemplate"
+       [src]="url"
+       [width]="innerWidth"
+       [height]="innerHeight"/>
+  <ng-template #elseTemplate>
+    <div class="img-fluid {{class}} "
+         [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
+         (dblclick)="onShowImage()"
+         [style.width.px]="innerWidth"
+         [style.height.px]="innerHeight"
+         [style.background-size]="'cover'"
+         [style.background-image]="'url('+ url +')' | safeStyle"></div>
+    <div *ngIf="canEdit"
+         class="img-circle-change"
+         [style.width.px]="innerWidth"
+         [style.height.px]="innerHeight"
+         [style.border-radius]="format === imageFormatClass.CIRCLE ? '100%' : '0px'">
+      <div class="img-content"
+           (click)="onEditImage(fileInput)">
+        <mat-icon>edit</mat-icon>
+      </div>
     </div>
-  </div>
+  </ng-template>
 </div>
 <input #fileInput
        id="file-upload"

@@ -1,7 +1,7 @@
 <div *ngIf="data"
      class="d-flex flex-row align-items-center item {{classes}}"
      (dblclick)="onDblClick($event)">
-  <ngx-image [objectId]="data.person.id"
+  <ngx-image [object]="data.person"
              [type]="imageTypeClass.CROPPED_LOGO"
              [format]="imageFormatClass.CIRCLE"
              [fileClass]="fileClassClass.PERSON"

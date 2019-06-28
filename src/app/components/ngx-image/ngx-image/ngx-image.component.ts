@@ -22,9 +22,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public readonly imageFormatClass = ImageFormat;
 
-  // @deprecated Use object
+  // TODO: Fix it
   @Input()
-  public objectId: number;
+  public fixForCarousel: boolean;
 
   @Input()
   public object: IdentifiedObject;
@@ -115,7 +115,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public async save(file: File = null, notify: boolean = true): Promise<boolean> {
     if (this.cropImage) {
       if (!this.autoSave && this._tempNgxCropImageComponent) {
-        this._tempNgxCropImageComponent.objectId = this.objectId || this.object.id;
+        this._tempNgxCropImageComponent.objectId = this.object.id;
         await this._tempNgxCropImageComponent.onSave();
         this.imageChange.emit();
         this.refresh();
@@ -128,7 +128,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
       return await this._appHelper.trySave(async () => {
         const image = new Image();
         image.clazz = this.fileClass;
-        image.objectId = this.objectId || this.object.id;
+        image.objectId = this.object.id;
         image.type = this.type;
         await this._participantRestApiService.uploadFile(image, [file]);
 
@@ -140,13 +140,18 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public refresh() {
     this._ngZone.runOutsideAngular(() => {
       let minSide = 0;
-      if (this.width || this.height) {
-        minSide = Math.min(this.width, this.height);
+      if (this.fixForCarousel) {
+        this.innerWidth = this.width;
+        this.innerHeight = this.height;
       } else {
-        minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
+        if (this.width || this.height) {
+          minSide = Math.min(this.width, this.height);
+        } else {
+          minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
+        }
+        this.innerWidth = minSide;
+        this.innerHeight = minSide;
       }
-      this.innerWidth = minSide;
-      this.innerHeight = minSide;
 
       let url = '';
 
@@ -156,7 +161,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
         const imageQuery: ImageQuery = {
           clazz: this.fileClass,
           type: this.type,
-          objectId: this.objectId || this.object.id || 0,
+          objectId: this.object.id || 0,
         };
 
         if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
@@ -166,7 +171,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
           imageQuery.height = this.innerHeight;
         }
         if (this.image) {
-          delete imageQuery.width;
           url = `${this._participantRestApiService.getUrlByImage(this.image, imageQuery)}&date=${Date.now()}`;
         } else {
           url = `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
@@ -180,7 +184,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public async onShowImage() {
     if (this.allowFullScreen) {
-      await this._ngxModalService.showFullImage(this.objectId, this.type, this.fileClass);
+      await this._ngxModalService.showFullImage(this.object.id || 0, this.type, this.fileClass);
     }
   }
 

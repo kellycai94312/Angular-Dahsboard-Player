@@ -12,16 +12,23 @@
   </ol>
   <div *ngIf="currentImage"
        class="carousel-inner">
-    <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
-      <ngx-image *ngIf="currentImage"
-                 [image]="currentImage.data"
-                 [object]="object"
-                 [allowFullScreen]="false"
-                 [width]="200"
-                 [height]="200"
-                 [type]="currentImage.data.type"
-                 [fileClass]="currentImage.data.clazz"
-                 [autoSave]="false"></ngx-image>
+    <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center"
+         [style.width.px]="width"
+         [style.height.px]="height">
+      <div fxFlexFill
+           fxLayout
+           fxLayoutAlign="center center">
+        <ngx-image *ngIf="currentImage"
+                   [fixForCarousel]="true"
+                   [image]="currentImage.data"
+                   [object]="object"
+                   [allowFullScreen]="false"
+                   [width]="width"
+                   [height]="height"
+                   [type]="currentImage.data.type"
+                   [fileClass]="currentImage.data.clazz"
+                   [autoSave]="false"></ngx-image>
+      </div>
       <div class="carousel-caption d-none d-md-block"
            fxLayout
            fxLayoutGap="10px">

@@ -14,6 +14,7 @@ import {MessageContent} from '../../../../data/remote/model/chat/message/message
 import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 
 @Component({
   selector: 'app-conversation-item',
@@ -31,7 +32,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
 
   public conversation: BaseConversation;
   public conversationImageClazz: FileClass;
-  public conversationImageId: number;
+  public conversationImage: IdentifiedObject;
   public conversationName: string;
   public senderPerson: Person;
   public updated: Date;
@@ -53,7 +54,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
           switch (this.conversation.discriminator) {
             case BaseConversationType.CHAT:
               this.conversationImageClazz = FileClass.CHAT;
-              this.conversationImageId = this.conversation.id;
+              this.conversationImage = this.conversation;
               this.conversationName = (<Chat>this.conversation).name;
           }
         } else {
@@ -66,16 +67,16 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
             case BaseConversationType.DIALOGUE:
               this.conversationImageClazz = FileClass.PERSON;
               if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
-                this.conversationImageId = messageWrapper.message.receiver.person.id;
+                this.conversationImage = messageWrapper.message.receiver.person;
                 this.conversationName = this._appHelper.getPersonFullName(messageWrapper.message.receiver.person);
               } else {
-                this.conversationImageId = messageWrapper.message.sender.person.id;
+                this.conversationImage = messageWrapper.message.sender.person;
                 this.conversationName = this._appHelper.getPersonFullName(messageWrapper.message.sender.person);
               }
               break;
             case BaseConversationType.CHAT:
               this.conversationImageClazz = FileClass.CHAT;
-              this.conversationImageId = this.conversation.id;
+              this.conversationImage = this.conversation;
               this.conversationName = (<Chat>this.conversation).name;
               if (!this.senderPerson) {
                 this.senderPerson = messageWrapper.message.sender.person;

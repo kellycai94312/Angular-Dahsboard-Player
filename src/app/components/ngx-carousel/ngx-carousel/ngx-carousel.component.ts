@@ -34,6 +34,12 @@ export class NgxCarouselComponent implements OnInit {
   @Input()
   public canEdit: boolean;
 
+  @Input()
+  public width = 360;
+
+  @Input()
+  public height = 200;
+
   public readonly iconEnumClass = IconEnum;
   public images: NameWrapper<Image>[] = [];
   public currentImage: NameWrapper<Image>;
