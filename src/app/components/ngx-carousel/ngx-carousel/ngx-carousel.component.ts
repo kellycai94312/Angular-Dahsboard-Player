@@ -43,6 +43,7 @@ export class NgxCarouselComponent implements OnInit {
   public readonly iconEnumClass = IconEnum;
   public images: NameWrapper<Image>[] = [];
   public currentImage: NameWrapper<Image>;
+  public defaultImageUrl = 'assets/img/default.png';
   private _fileDialogParameter: Image;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,

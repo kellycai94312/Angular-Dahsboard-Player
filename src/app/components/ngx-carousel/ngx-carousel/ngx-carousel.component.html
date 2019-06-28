@@ -71,6 +71,13 @@
   {{'addImage' | translate}}
 </button>
 
+<div *ngIf="!images.length && !canEdit"
+     [style.width.px]="width"
+     [style.height.px]="height">
+  <img [src]="defaultImageUrl"/>
+</div>
+
+
 <input #fileInput
        type="file"
        title=" "
