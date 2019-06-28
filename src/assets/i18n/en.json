@@ -723,5 +723,6 @@
   "selectedParameters": "Selected parameters",
   "devices": "Devices",
   "device": "Device",
-  "manufacturerUrl": "Manufacturer url"
+  "manufacturerUrl": "Manufacturer url",
+  "manufacturer": "Manufacturer"
 }

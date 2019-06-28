@@ -3,9 +3,25 @@
   <div *ngIf="leftFields.length"
        fxFlex="{{rightFields.length ? 50 : ''}}"
        fxFlex.lt-sm
+       fxLayout="column"
+       fxLayoutGap="10px"
        class="left-side">
-    <ng-container [ngTemplateOutlet]="fieldsTemplate"
-                  [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>
+    <div *ngIf="leftTopLeftFields.length && leftTopRightFields.length"
+         fxLayout
+         fxLayoutGap="10px">
+      <div>
+        <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                      [ngTemplateOutletContext]="{$implicit:leftTopLeftFields}"></ng-container>
+      </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                      [ngTemplateOutletContext]="{$implicit:leftTopRightFields}"></ng-container>
+      </div>
+    </div>
+    <div>
+      <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                    [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>
+    </div>
   </div>
   <div *ngIf="rightFields.length"
        fxFlex
@@ -47,6 +63,11 @@
       <ngx-carousel *ngIf="isField(item, carouselFieldClass)"
                     [object]="item.data"
                     [fileClass]="item.fileClass"></ngx-carousel>
+      <a *ngIf="isField(item, urlFieldClass)"
+         target="_blank"
+         [href]="item.url">
+        {{item.url}}
+      </a>
     </div>
   </div>
 </ng-template>

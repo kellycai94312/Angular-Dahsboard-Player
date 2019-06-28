@@ -5,6 +5,7 @@ import {ChipsField} from '../model/chips-field';
 import {ImageField} from '../model/image-field';
 import {TextField} from '../model/text-field';
 import {VideoField} from '../model/video-field';
+import {UrlField} from '../model/url-field';
 
 @Component({
   selector: 'app-item-detail',
@@ -18,6 +19,12 @@ export class ItemDetailComponent {
   public leftFields: BaseField[] = [];
 
   @Input()
+  public leftTopLeftFields: BaseField[] = [];
+
+  @Input()
+  public leftTopRightFields: BaseField[] = [];
+
+  @Input()
   public rightFields: BaseField[] = [];
 
   public readonly carouselFieldClass = CarouselField;
@@ -25,6 +32,7 @@ export class ItemDetailComponent {
   public readonly imageFieldClass = ImageField;
   public readonly textFieldClass = TextField;
   public readonly videoFieldClass = VideoField;
+  public readonly urlFieldClass = UrlField;
 
   private isField<T extends BaseField>(data: T, type: Type<T>): boolean {
     return data instanceof type;

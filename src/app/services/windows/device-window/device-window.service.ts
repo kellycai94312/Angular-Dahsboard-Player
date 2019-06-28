@@ -18,8 +18,8 @@ import {ImageField} from '../../../module/common/item-detail/model/image-field';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageFormat} from '../../../data/local/image-format';
-import {VideoField} from '../../../module/common/item-detail/model/video-field';
 import {CarouselField} from '../../../module/common/item-detail/model/carousel-field';
+import {UrlField} from '../../../module/common/item-detail/model/url-field';
 
 @Injectable()
 export class DeviceWindowService {
@@ -71,11 +71,15 @@ export class DeviceWindowService {
     model.componentInstance.title = `${device.name}`;
     model.componentInstance.useContentPadding = false;
     await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
-      component.leftFields = [
-        new ImageField('', device, ImageType.CROPPED_LOGO, FileClass.DEVICE, ImageFormat.SQUARE),
+      component.leftTopLeftFields = [
+        new ImageField('', device, ImageType.CROPPED_LOGO, FileClass.DEVICE, ImageFormat.SQUARE)
+      ];
+      component.leftTopRightFields = [
         new TextField('shortName', device.shortName),
+        new UrlField('manufacturer', device.manufacturerResource)
+      ];
+      component.leftFields = [
         new TextField('description', device.description),
-        new TextField('manufacturerUrl', device.manufacturerResource),
         new ChipsField('parameters', device.parameterVersions.map(x => x.parameter.name))
       ];
       component.rightFields = [

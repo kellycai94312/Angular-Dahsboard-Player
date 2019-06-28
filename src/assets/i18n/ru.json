@@ -723,5 +723,6 @@
   "selectedParameters": "Выбранные параметры",
   "devices": "Устройства",
   "device": "Устройство",
-  "manufacturerUrl": "Url производителя"
+  "manufacturerUrl": "Url производителя",
+  "manufacturer": "Производитель"
 }
