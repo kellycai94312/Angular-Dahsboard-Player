@@ -62,10 +62,12 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public cropImage: boolean;
 
+  @Input()
+  public image: Image;
+
   public url: string;
   public innerWidth: number;
   public innerHeight: number;
-
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
   private _tempFile: File;
@@ -163,11 +165,15 @@ export class NgxImageComponent implements OnInit, OnChanges {
         if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
           imageQuery.height = this.innerHeight;
         }
-        url += `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
+        if (this.image) {
+          delete imageQuery.width;
+          url = `${this._participantRestApiService.getUrlByImage(this.image, imageQuery)}&date=${Date.now()}`;
+        } else {
+          url = `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
+        }
       }
 
       this.url = url;
-
       this._changeDetectorRef.markForCheck();
     });
   }
@@ -206,4 +212,5 @@ export class NgxImageComponent implements OnInit, OnChanges {
       elem.click();
     }
   }
+
 }

@@ -32,8 +32,8 @@
   </div>
 
   <div class="col-4 d-flex flex-column">
-    <ngx-carousel [canAdd]="canEdit"
-                  [objectId]="activity.id"
+    <ngx-carousel [canEdit]="canEdit"
+                  [object]="activity"
                   [fileClass]="fileClass"></ngx-carousel>
     <iframe *ngIf="youTubeUrl"
             [src]="youTubeUrl | safeUrl"

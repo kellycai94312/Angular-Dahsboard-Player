@@ -19,6 +19,7 @@ import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageFormat} from '../../../data/local/image-format';
 import {VideoField} from '../../../module/common/item-detail/model/video-field';
+import {CarouselField} from '../../../module/common/item-detail/model/carousel-field';
 
 @Injectable()
 export class DeviceWindowService {
@@ -71,14 +72,14 @@ export class DeviceWindowService {
     model.componentInstance.useContentPadding = false;
     await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
       component.leftFields = [
-        new TextField('name', device.name),
+        new ImageField('', device, ImageType.CROPPED_LOGO, FileClass.DEVICE, ImageFormat.SQUARE),
         new TextField('shortName', device.shortName),
         new TextField('description', device.description),
         new TextField('manufacturerUrl', device.manufacturerResource),
         new ChipsField('parameters', device.parameterVersions.map(x => x.parameter.name))
       ];
       component.rightFields = [
-        new ImageField('', device, ImageType.LOGO, FileClass.DEVICE, ImageFormat.SQUARE)
+        new CarouselField(device, FileClass.DEVICE, '')
       ];
       if (device.videoResource) {
         component.rightFields.push(new VideoField('', device.videoResource));

@@ -1,11 +1,13 @@
 <div fxLayout
      fxLayout.lt-sm="column">
-  <div fxFlex="50"
+  <div *ngIf="leftFields.length"
+       fxFlex="{{rightFields.length ? 50 : ''}}"
        class="left-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
                   [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>
   </div>
-  <div fxFlex
+  <div *ngIf="rightFields.length"
+       fxFlex
        class="right-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
                   [ngTemplateOutletContext]="{$implicit:rightFields}"></ng-container>
@@ -18,22 +20,22 @@
        fxLayoutGap="10px">
     <div *ngFor="let item of fields">
       <label *ngIf="item.translationLabel">{{item.translationLabel | translate}}</label>
-      <pre *ngIf="item.value">{{item.value}}</pre>
-      <mat-chip-list *ngIf="item.values">
+      <pre *ngIf="isField(item, textFieldClass)">{{item.value}}</pre>
+      <mat-chip-list *ngIf="isField(item, chipsFieldClass)">
         <mat-chip *ngFor="let chip of item.values">{{chip}}</mat-chip>
       </mat-chip-list>
-      <div fxLayoutAlign="center center">
-        <ngx-image *ngIf="item.object"
-                   [canEdit]="false"
+      <div *ngIf="isField(item, imageFieldClass)"
+           fxLayoutAlign="center center">
+        <ngx-image [canEdit]="false"
                    [object]="item.object"
-                   [width]="160"
-                   [height]="160"
+                   [width]="130"
+                   [height]="130"
                    [allowFullScreen]="false"
                    [type]="item.type"
                    [fileClass]="item.fileClass"
                    [format]="item.format"></ngx-image>
       </div>
-      <iframe *ngIf="item.videoUrl"
+      <iframe *ngIf="isField(item, videoFieldClass)"
               [src]="item.videoUrl | safeUrl"
               [height]="300"
               class="w-100"
@@ -41,6 +43,9 @@
               scrolling="no"
               allow="autoplay; encrypted-media"
               allowfullscreen></iframe>
+      <ngx-carousel *ngIf="isField(item, carouselFieldClass)"
+                    [object]="item.data"
+                    [fileClass]="item.fileClass"></ngx-carousel>
     </div>
   </div>
 </ng-template>

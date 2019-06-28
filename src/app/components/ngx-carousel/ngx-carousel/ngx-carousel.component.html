@@ -1,4 +1,4 @@
-<div *ngIf="images && images.length"
+<div *ngIf="images.length"
      id="carouselExampleIndicators"
      (keyup.arrowleft)="onPrevious()"
      (keyup.arrowright)="onNext()"
@@ -13,22 +13,28 @@
   <div *ngIf="currentImage"
        class="carousel-inner">
     <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
-      <img (dblclick)="onShowImage(currentImage.data)"
-           [src]="currentImage.name">
-      <div class="carousel-caption d-none d-md-block">
-        <ngx-button *ngIf="canEdit"
-                    [icon]="iconEnumClass.ADD"
-                    [click]="onAddImage"></ngx-button>
-        <ngx-button *ngIf="canEdit && currentImage.data.type !== imageType.LOGO"
-                    class="ml-2"
-                    [icon]="iconEnumClass.IMAGE"
-                    [click]="onEditLogoImage"
-                    [data]="currentImage.data"></ngx-button>
-        <ngx-button *ngIf="canEdit"
-                    class="ml-2"
-                    [icon]="iconEnumClass.REMOVE"
-                    [click]="onRemoveImage"
-                    [data]="currentImage"></ngx-button>
+      <ngx-image *ngIf="currentImage"
+                 [image]="currentImage.data"
+                 [object]="object"
+                 [allowFullScreen]="false"
+                 [width]="200"
+                 [height]="200"
+                 [type]="currentImage.data.type"
+                 [fileClass]="currentImage.data.clazz"
+                 [autoSave]="false"></ngx-image>
+      <div class="carousel-caption d-none d-md-block"
+           fxLayout
+           fxLayoutGap="10px">
+        <button *ngIf="canEdit"
+                mat-icon-button
+                (click)="onAddImage()">
+          <mat-icon>add</mat-icon>
+        </button>
+        <button *ngIf="canEdit"
+                mat-icon-button
+                (click)="onRemoveImage(currentImage)">
+          <mat-icon>delete</mat-icon>
+        </button>
       </div>
     </div>
   </div>
@@ -52,12 +58,11 @@
   </div>
 </div>
 
-<div *ngIf="!images || !images.length"
-     [ngClass]="{'bg-light' : !images || !images.length}">
-  <ngx-button *ngIf="canAdd"
-              nameKey="addImage"
-              [click]="onAddImage"></ngx-button>
-</div>
+<button *ngIf="!images.length && canEdit"
+        mat-raised-button
+        (click)="onAddImage()">
+  {{'addImage' | translate}}
+</button>
 
 <input #fileInput
        type="file"

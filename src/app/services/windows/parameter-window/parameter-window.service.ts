@@ -101,7 +101,6 @@ export class ParameterWindowService {
 
     await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
       component.leftFields = [
-        new TextField('name', parameter.name),
         new TextField('shortName', parameter.shortName),
         new TextField('specialName', parameter.specialName),
         new TextField('description', parameter.description),

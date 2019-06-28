@@ -1,7 +1,7 @@
 <div fxLayout="column"
      fxLayoutGap="10px">
   <div fxLayout
-       fxLayoutAlign="center center">
+       fxLayoutAlign="space-between center">
     <ngx-image [canEdit]="true"
                [object]="data"
                [width]="130"
@@ -11,6 +11,9 @@
                [type]="imageTypeClass.CROPPED_LOGO"
                [fileClass]="fileClassClass.DEVICE"
                [autoSave]="false"></ngx-image>
+    <ngx-carousel [canEdit]="true"
+                  [object]="data"
+                  [fileClass]="fileClassClass.DEVICE"></ngx-carousel>
   </div>
   <div>
     <new-ngx-input [data]="nameNgxInput"></new-ngx-input>

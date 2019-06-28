@@ -49,7 +49,6 @@ export class UnitWindowService {
 
     await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
       component.leftFields = [
-        new TextField('name', unit.name),
         new TextField('shortName', unit.shortName),
         new TextField('description', unit.description),
         new TextField('libraryType', this._translateService.instant(`libraryTypeEnum.${unit.discriminator}`)),

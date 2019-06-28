@@ -6,6 +6,7 @@ import {MatCardModule, MatChipsModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {SafeHtmlModule} from '../../../pipes/safe-html/safe-html.module';
+import {NgxCarouselModule} from '../../../components/ngx-carousel/ngx-carousel.module';
 
 @NgModule({
   declarations: [ItemDetailComponent],
@@ -18,7 +19,8 @@ import {SafeHtmlModule} from '../../../pipes/safe-html/safe-html.module';
     FlexLayoutModule,
     TranslateModule.forChild(),
     NgxImageModule,
-    SafeHtmlModule
+    SafeHtmlModule,
+    NgxCarouselModule
   ]
 })
 export class ItemDetailModule {
