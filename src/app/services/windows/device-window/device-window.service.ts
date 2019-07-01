@@ -20,6 +20,8 @@ import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageFormat} from '../../../data/local/image-format';
 import {CarouselField} from '../../../module/common/item-detail/model/carousel-field';
 import {UrlField} from '../../../module/common/item-detail/model/url-field';
+import {ExternalResourceApiService} from '../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
+import {VideoField} from '../../../module/common/item-detail/model/video-field';
 
 @Injectable()
 export class DeviceWindowService {
@@ -27,6 +29,7 @@ export class DeviceWindowService {
   constructor(private _ngxModalService: NgxModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _modalBuilderService: ModalBuilderService,
+              private _externalResourceApiService: ExternalResourceApiService,
               private _deviceApiService: DeviceApiService,
               private _appHelper: AppHelper,
               private _utilService: UtilService) {
@@ -82,9 +85,15 @@ export class DeviceWindowService {
         new TextField('description', device.description),
         new ChipsField('parameters', device.parameterVersions.map(x => x.parameter.name))
       ];
+
       component.rightFields = [
         new CarouselField(device, FileClass.DEVICE, '')
       ];
+
+      const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.DEVICE, objectId: device.id}).toPromise();
+      if (externalResources.length && externalResources[0].url) {
+        component.rightFields.push(new VideoField('', externalResources[0].url));
+      }
     });
     await this._ngxModalService.awaitModalResult(model);
   }

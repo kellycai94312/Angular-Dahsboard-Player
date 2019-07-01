@@ -14,6 +14,8 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
+import {ExternalResourceApiService} from '../../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
+import {ExternalResource} from '../../../../data/remote/model/external-resource';
 
 @Component({
   selector: 'app-edit-device',
@@ -32,9 +34,12 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
   public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly manufacturerUrlNgxInput = new NgxInput();
+  public readonly videoUrlNgxInput = new NgxInput();
+  private _urlExternalResource: ExternalResource;
 
   constructor(private _deviceApiService: DeviceApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _externalResourceApiService: ExternalResourceApiService,
               private _parameterWindowService: ParameterWindowService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -61,6 +66,16 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         this.manufacturerUrlNgxInput.labelTranslation = 'manufacturerUrl';
         this.manufacturerUrlNgxInput.control.setValue(data.manufacturerResource);
 
+        this.videoUrlNgxInput.labelTranslation = 'videoUrl';
+
+        if (!this.isNew) {
+          const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.DEVICE, objectId: data.id}).toPromise();
+          if (externalResources.length) {
+            this._urlExternalResource = externalResources[0];
+            this.videoUrlNgxInput.control.setValue(this._urlExternalResource.url);
+          }
+        }
+
         this.data.parameterVersions = this.data.parameterVersions || [];
       });
     }
@@ -84,6 +99,16 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
       const parameterVersions = await this._deviceApiService.updateDeviceParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
       this.data.parameterVersions = parameterVersions;
+
+      if (!this._urlExternalResource) {
+        this._urlExternalResource = new ExternalResource();
+        this._urlExternalResource.objectId = this.data.id;
+        this._urlExternalResource.clazz = FileClass.DEVICE;
+      }
+      this._urlExternalResource.url = this.videoUrlNgxInput.control.value;
+
+      await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
+
       this.ngxImageComponent.object = this.data;
       await this.ngxImageComponent.save(null, false);
     });

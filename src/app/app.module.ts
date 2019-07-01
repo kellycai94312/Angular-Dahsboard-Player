@@ -49,6 +49,7 @@ import {EditBaseEventModule} from './module/event/edit-base-event/edit-base-even
 import {EditFormulaModule} from './module/parameter/edit-formula/edit-formula.module';
 import {NgxContentModule} from './module/ngx/ngx-content/ngx-content.module';
 import {ItemDetailModule} from './module/common/item-detail/item-detail.module';
+import {ExternalResourceApiService} from './data/remote/rest-api/api/external-resource/external-resource-api.service';
 
 registerLocaleData(localeRu);
 
@@ -101,6 +102,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemDetailModule
   ],
   providers: [
+    ExternalResourceApiService,
     LayoutService,
     AuthGuard,
     AuthDenyGuard,
