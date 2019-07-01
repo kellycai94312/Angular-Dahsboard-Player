@@ -36,7 +36,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public fileClass: FileClass;
 
   @Input()
-  public class: string;
+  public class = '';
 
   @Input()
   public canEdit: boolean;
@@ -45,10 +45,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public allowFullScreen: boolean;
 
   @Input()
-  public format: ImageFormat;
+  public format = ImageFormat.CIRCLE;
 
   @Output()
-  public readonly imageChange: EventEmitter<File>;
+  public readonly imageChange = new EventEmitter<File>();
 
   @Input()
   public width: number;
@@ -66,8 +66,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public image: Image;
 
   public url: string;
-  public innerWidth: number;
-  public innerHeight: number;
+  public innerWidth = 0;
+  public innerHeight = 0;
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
   private _tempFile: File;
@@ -81,10 +81,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _changeDetectorRef: ChangeDetectorRef,
               private _ngZone: NgZone,
               private _ngxModalService: NgxModalService) {
-    this.imageChange = new EventEmitter<File>();
-    this.class = '';
-    this.innerWidth = 0;
-    this.innerHeight = 0;
   }
 
   async ngOnInit() {

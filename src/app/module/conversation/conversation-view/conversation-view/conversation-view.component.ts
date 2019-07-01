@@ -29,7 +29,6 @@ import {ConfirmationRemovingMessageComponent} from '../../confirmation-removing-
 import {EventMessageContent} from '../../../../data/remote/model/chat/message/event-message-content';
 import {BaseMessageContent} from '../../../../data/remote/model/chat/message/base/base-message-content';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
@@ -52,7 +51,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public readonly baseConversationTypeClass = BaseConversationType;
   public readonly fileClass = FileClass;
   public readonly imageTypeClass = ImageType;
-  public readonly imageFormatClass = ImageFormat;
 
   @ViewChild('conversationLogo')
   public ngxImageComponent: NgxImageComponent;

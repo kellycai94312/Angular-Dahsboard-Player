@@ -4,7 +4,6 @@ import {Person} from '../../../../data/remote/model/person';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -20,7 +19,6 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly imageFormatClass = ImageFormat;
 
   public translateConnection: string;
 

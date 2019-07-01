@@ -4,7 +4,6 @@ import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {NgxSelectionComponent} from '../../../../components/ngx-selection/ngx-selection/ngx-selection.component';
 import {PersonItemComponent} from '../../../person/person-item/person-item/person-item.component';
 import {ConversationQuery} from '../../../../data/remote/rest-api/query/conversation-query';
@@ -27,7 +26,6 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly imageFormatClass = ImageFormat;
 
   @ViewChild(NgxImageComponent)
   public _ngxImageComponent: NgxImageComponent;

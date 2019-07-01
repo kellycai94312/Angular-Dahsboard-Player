@@ -7,7 +7,6 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AppHelper} from '../../../../utils/app-helper';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
@@ -24,7 +23,6 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 export class ConversationItemComponent extends BaseComponent<ConversationWrapper> {
 
   public readonly imageTypeClass = ImageType;
-  public readonly imageFormatClass = ImageFormat;
   public readonly propertyConstantClass = PropertyConstant;
 
   @Input()
