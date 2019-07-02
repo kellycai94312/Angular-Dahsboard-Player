@@ -1,8 +1,9 @@
 <div fxFlexFill
      fxLayout="row wrap"
-     fxLayoutGap="10px grid"
-     fxLayoutAlign="start start">
-  <div *ngFor="let item of dictionaries">
+     fxLayoutGap="20px grid"
+     fxLayoutAlign="center start">
+  <div *ngFor="let item of dictionaries"
+       class="item">
     <mat-card routerLink="{{item.data}}"
               matRipple>
       <div fxLayout
