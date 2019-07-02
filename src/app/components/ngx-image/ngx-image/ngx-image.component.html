@@ -1,7 +1,7 @@
 <div *ngIf="innerWidth && innerHeight"
      class="d-flex flex-column">
   <img *ngIf="fixForCarousel; else elseTemplate"
-       [src]="url"
+       [src]="innerUrl"
        [width]="innerWidth"
        [height]="innerHeight"/>
   <ng-template #elseTemplate>
@@ -11,7 +11,7 @@
          [style.width.px]="innerWidth"
          [style.height.px]="innerHeight"
          [style.background-size]="'cover'"
-         [style.background-image]="'url('+ url +')' | safeStyle"></div>
+         [style.background-image]="'url('+ innerUrl +')' | safeStyle"></div>
     <div *ngIf="canEdit"
          class="img-circle-change"
          [style.width.px]="innerWidth"

@@ -1,6 +1,19 @@
-<div class="list-group-flush">
-  <div *ngFor="let item of dictionaries"
-       class="list-group-item py-2 px-2">
-    <p routerLink="{{item.data}}">{{item.name | translate}}</p>
+<div fxFlexFill
+     fxLayout="row wrap"
+     fxLayoutGap="10px grid"
+     fxLayoutAlign="start start">
+  <div *ngFor="let item of dictionaries">
+    <mat-card routerLink="{{item.data}}"
+              matRipple>
+      <div fxLayout
+           fxLayoutGap="10px"
+           fxLayoutAlign="start start">
+        <ngx-image [object]="{id:0}"
+                   url="assets/img/default.png"
+                   [width]="100"
+                   [height]="100"></ngx-image>
+        <h4>{{item.name | translate}}</h4>
+      </div>
+    </mat-card>
   </div>
 </div>

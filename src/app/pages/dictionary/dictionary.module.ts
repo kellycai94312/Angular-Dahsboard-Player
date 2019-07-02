@@ -35,6 +35,8 @@ import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {NgxCarouselModule} from '../../components/ngx-carousel/ngx-carousel.module';
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {MatCardModule, MatRippleModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
@@ -61,7 +63,10 @@ import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-vi
     SafeHtmlModule,
     NgxCarouselModule,
     DxTextAreaModule,
-    NgxVirtualScrollModule
+    NgxVirtualScrollModule,
+    MatCardModule,
+    MatRippleModule,
+    FlexLayoutModule
   ],
   declarations: [
     DictionariesComponent,

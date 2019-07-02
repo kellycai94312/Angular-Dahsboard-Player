@@ -65,7 +65,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public image: Image;
 
+  @Input()
   public url: string;
+
+  public innerUrl: string;
   public innerWidth = 0;
   public innerHeight = 0;
   private _parentElementRef: HTMLElement;
@@ -173,7 +176,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
         }
       }
 
-      this.url = url;
+      this.innerUrl = this.url || url;
       this._changeDetectorRef.markForCheck();
     });
   }
@@ -199,7 +202,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
         if (!this.autoSave) {
           this._ngZone.runOutsideAngular(() => {
             this._tempNgxCropImageComponent = dialogResult.data;
-            this.url = this._tempNgxCropImageComponent.croppedImage;
+            this.innerUrl = this._tempNgxCropImageComponent.croppedImage;
 
             this._changeDetectorRef.markForCheck();
           });
