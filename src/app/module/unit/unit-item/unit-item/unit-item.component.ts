@@ -18,9 +18,15 @@ export class UnitItemComponent extends BaseComponent<BaseUnit> {
 
   public readonly fileClassClass = FileClass;
   public readonly actions: MenuItem[];
+  public readonly infoAction: MenuItem;
 
   constructor(private _unitWindowService: UnitWindowService) {
     super();
+    this.infoAction = {
+      iconName: 'info', action: async (item: MenuItem) => {
+        await this._unitWindowService.openUnitDetail(this.data);
+      }
+    };
     this.actions = [
       {
         iconName: 'edit', action: async (item: MenuItem) => {
@@ -35,10 +41,6 @@ export class UnitItemComponent extends BaseComponent<BaseUnit> {
     if (dialogResult) {
       this.data = dialogResult.data;
     }
-  }
-
-  public async onClick(): Promise<void> {
-    await this._unitWindowService.openUnitDetail(this.data);
   }
 
 }

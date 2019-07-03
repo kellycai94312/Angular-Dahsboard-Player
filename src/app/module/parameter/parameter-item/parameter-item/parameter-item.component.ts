@@ -17,12 +17,17 @@ export class ParameterItemComponent extends BaseComponent<BaseParameter> {
 
   public readonly fileClassClass = FileClass;
   public readonly actions: MenuItem[];
+  public readonly infoAction: MenuItem;
 
   constructor(// TODO: ParameterWindowService can't inject without forwardRef()
     @Inject(forwardRef(() => ParameterWindowService))
     private _parameterWindowService: ParameterWindowService) {
     super();
-
+    this.infoAction = {
+      iconName: 'info', action: async (item: MenuItem) => {
+        await this._parameterWindowService.openParameterDetail(this.data);
+      }
+    };
     this.actions = [
       {
         iconName: 'edit', action: async (item: MenuItem) => {
@@ -37,10 +42,6 @@ export class ParameterItemComponent extends BaseComponent<BaseParameter> {
     if (dialogResult) {
       this.data = dialogResult.data;
     }
-  }
-
-  public async onClick(): Promise<void> {
-    await this._parameterWindowService.openParameterDetail(this.data);
   }
 
 }

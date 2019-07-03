@@ -18,9 +18,15 @@ export class SportTypeItemComponent extends BaseComponent<SportType> {
 
   public readonly fileClassClass = FileClass;
   public readonly actions: MenuItem[] = [];
+  public readonly infoAction: MenuItem;
 
   constructor(private _sportTypeWindowService: SportTypeWindowService) {
     super();
+    this.infoAction = {
+      iconName: 'info', action: async (item: MenuItem) => {
+        await this._sportTypeWindowService.openSportTypeDetail(this.data);
+      }
+    };
     // TODO:
     // this.actions = [
     //   {
@@ -32,10 +38,6 @@ export class SportTypeItemComponent extends BaseComponent<SportType> {
   }
 
   public async onEdit(): Promise<void> {
-  }
-
-  public async onClick(): Promise<void> {
-    await this._sportTypeWindowService.openSportTypeDetail(this.data);
   }
 
 }

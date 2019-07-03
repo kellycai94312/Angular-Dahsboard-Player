@@ -18,9 +18,15 @@ export class DeviceItemComponent extends BaseComponent<Device> {
 
   public readonly fileClassClass = FileClass;
   public readonly actions: MenuItem[];
+  public readonly infoAction: MenuItem;
 
   constructor(private _deviceWindowService: DeviceWindowService) {
     super();
+    this.infoAction = {
+      iconName: 'info', action: async (item: MenuItem) => {
+        await this._deviceWindowService.openDeviceDetail(this.data);
+      }
+    };
     this.actions = [
       {
         iconName: 'edit', action: async (item: MenuItem) => {
@@ -35,10 +41,6 @@ export class DeviceItemComponent extends BaseComponent<Device> {
     if (dialogResult) {
       this.data = dialogResult.data;
     }
-  }
-
-  public async onClick(): Promise<void> {
-    await this._deviceWindowService.openDeviceDetail(this.data);
   }
 
 }
