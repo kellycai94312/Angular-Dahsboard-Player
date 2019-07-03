@@ -42,3 +42,10 @@
     }
   }
 }
+
+.absolute-button {
+  position: relative;
+  right: 10px;
+  bottom: -58px;
+  z-index: 1;
+}
