@@ -183,7 +183,11 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public async onShowImage() {
     if (this.allowFullScreen) {
-      await this._ngxModalService.showFullImage(this.object.id || 0, this.type, this.fileClass);
+      if (this.image) {
+        await this._ngxModalService.showFullImage(this.image);
+      } else {
+        await this._ngxModalService.showFullImage(this.object.id || 0, this.type, this.fileClass);
+      }
     }
   }
 

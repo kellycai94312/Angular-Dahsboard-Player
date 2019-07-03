@@ -3,7 +3,8 @@
   <img *ngIf="fixForCarousel; else elseTemplate"
        [src]="innerUrl"
        [width]="innerWidth"
-       [height]="innerHeight"/>
+       [height]="innerHeight"
+       (dblclick)="onShowImage()"/>
   <ng-template #elseTemplate>
     <div class="img-fluid {{class}} "
          [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
