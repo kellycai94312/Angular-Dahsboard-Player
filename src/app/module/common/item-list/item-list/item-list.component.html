@@ -1,7 +1,20 @@
-<div fxLayout
-     fxLayoutGap="10px"
-     fxLayoutAlign="start center">
-  <new-ngx-input [data]="searchNgxInput"></new-ngx-input>
+<div class="header accent p-24"
+     fxLayout
+     fxLayoutAlign="space-between center">
+  <h3>{{translationTitle | translate}}</h3>
+  <div class="search-wrapper"
+       fxFlex
+       fxLayout
+       fxLayoutAlign="start center">
+    <div class="search"
+         fxLayout
+         fxLayoutAlign="start center">
+      <mat-icon>search</mat-icon>
+      <input fxFlex
+             [formControl]="searchControl"
+             placeholder="{{'search' | translate}}">
+    </div>
+  </div>
   <button *ngIf="canEdit"
           mat-icon-button
           (click)="onAddItem()">

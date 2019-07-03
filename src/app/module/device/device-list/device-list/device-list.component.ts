@@ -22,6 +22,7 @@ export class DeviceListComponent extends BaseItemList<Device, PageQuery> {
   constructor(private _deviceApiService: DeviceApiService,
               private _deviceWindowService: DeviceWindowService) {
     super();
+    this.translationTitle = 'devices';
     this.query = new PageQuery();
     this.addItem = async (): Promise<DialogResult<Device>> => {
       return await this._deviceWindowService.openEditDevice(new Device());

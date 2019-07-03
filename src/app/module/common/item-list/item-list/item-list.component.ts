@@ -1,12 +1,12 @@
 import {Component, ContentChild, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {AppHelper} from '../../../../utils/app-helper';
 import {debounceTime, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {BaseItemList} from '../model/base-item-list';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-item-list',
@@ -21,13 +21,12 @@ export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQu
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public readonly searchNgxInput = new NgxInput();
+  public readonly searchControl = new FormControl();
   private _notDestroyed = true;
 
   constructor(private _appHelper: AppHelper) {
     super();
-    this.searchNgxInput.labelTranslation = 'search';
-    this.searchNgxInput.control.valueChanges
+    this.searchControl.valueChanges
       .pipe(
         takeWhile(() => this._notDestroyed),
         debounceTime(PropertyConstant.searchDebounceTime)

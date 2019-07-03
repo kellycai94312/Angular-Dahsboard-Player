@@ -5,6 +5,8 @@ import {MatButtonModule, MatDividerModule, MatIconModule, MatRippleModule} from 
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {NgxVirtualScrollModule} from '../../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {ReactiveFormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [ItemListComponent],
@@ -18,7 +20,9 @@ import {NgxVirtualScrollModule} from '../../../components/ngx-virtual-scroll/ngx
     MatDividerModule,
     FlexLayoutModule,
     NgxInputModule,
-    NgxVirtualScrollModule
+    NgxVirtualScrollModule,
+    TranslateModule.forChild(),
+    ReactiveFormsModule
   ]
 })
 export class ItemListModule {

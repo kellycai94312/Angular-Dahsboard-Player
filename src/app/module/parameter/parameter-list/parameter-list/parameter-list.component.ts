@@ -30,7 +30,7 @@ export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuer
   constructor(private _parameterApiService: ParameterApiService,
               private _parameterWindowService: ParameterWindowService) {
     super();
-    this.grid = false;
+    this.translationTitle = 'parameters';
     this.query = new PageQuery();
     this.addItem = async (): Promise<DialogResult<BaseParameter>> => {
       return await this._parameterWindowService.openEditParameter(new BaseParameter());
