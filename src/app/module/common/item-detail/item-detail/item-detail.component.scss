@@ -6,6 +6,11 @@ pre {
   color: rgba(255, 255, 255, .5);
   max-height: 200px;
   overflow: auto;
+  font-size: 14px;
+}
+
+iframe {
+  padding: 0 40px;
 }
 
 .left-side {
@@ -14,6 +19,6 @@ pre {
 }
 
 .right-side {
-  padding: 20px;
+  padding: 20px 0;
   background-color: white;
 }

@@ -138,19 +138,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public refresh() {
     this._ngZone.runOutsideAngular(() => {
-      let minSide = 0;
-      if (this.fixForCarousel) {
-        this.innerWidth = this.width;
-        this.innerHeight = this.height;
-      } else {
-        if (this.width || this.height) {
-          minSide = Math.min(this.width, this.height);
-        } else {
-          minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
-        }
-        this.innerWidth = minSide;
-        this.innerHeight = minSide;
-      }
+      this.innerWidth = this.width || this._parentElementRef.clientWidth;
+      this.innerHeight = this.height || this._parentElementRef.clientHeight;
 
       let url = '';
 

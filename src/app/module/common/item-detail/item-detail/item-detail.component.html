@@ -25,16 +25,18 @@
   </div>
   <div *ngIf="rightFields.length"
        fxFlex="{{leftFields.length ? 50 : ''}}"
+       fxFlex.lt-sm
        class="right-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
-                  [ngTemplateOutletContext]="{$implicit:rightFields}"></ng-container>
+                  [ngTemplateOutletContext]="{$implicit: rightFields,layoutGap: '20px'}"></ng-container>
   </div>
 </div>
 
 <ng-template #fieldsTemplate
-             let-fields>
+             let-fields
+             let-layoutGap="layoutGap">
   <div fxLayout="column"
-       fxLayoutGap="10px">
+       fxLayoutGap="{{layoutGap || '10px'}}">
     <div *ngFor="let item of fields">
       <label *ngIf="item.translationLabel">{{item.translationLabel | translate}}</label>
       <pre *ngIf="isField(item, textFieldClass)">{{item.value}}</pre>

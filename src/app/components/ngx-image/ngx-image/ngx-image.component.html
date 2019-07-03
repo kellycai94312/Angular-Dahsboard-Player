@@ -2,8 +2,7 @@
      class="d-flex flex-column">
   <img *ngIf="fixForCarousel; else elseTemplate"
        [src]="innerUrl"
-       [width]="innerWidth"
-       [height]="innerHeight"
+       [style.maxHeight.px]="innerHeight"
        (dblclick)="onShowImage()"/>
   <ng-template #elseTemplate>
     <div class="img-fluid {{class}} "

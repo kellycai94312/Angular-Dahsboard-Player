@@ -3,15 +3,14 @@
      (keyup.arrowleft)="onPrevious()"
      (keyup.arrowright)="onNext()">
   <div fxLayout
-       fxLayoutAlign="start center"
-       fxLayoutGap="10px">
+       fxLayoutAlign="start center">
     <div *ngIf="images.length > 1">
       <button mat-icon-button
               (click)="onPrevious()">
         <mat-icon>keyboard_arrow_left</mat-icon>
       </button>
     </div>
-    <div [style.width.px]="width"
+    <div fxFlex
          [style.height.px]="height">
       <div fxFlexFill
            fxLayout
@@ -66,12 +65,9 @@
   {{'addImage' | translate}}
 </button>
 
-<div *ngIf="!images.length && !canEdit"
-     [style.width.px]="width"
-     [style.height.px]="height">
+<div *ngIf="!images.length && !canEdit">
   <img [src]="defaultImageUrl"/>
 </div>
-
 
 <input #fileInput
        type="file"
