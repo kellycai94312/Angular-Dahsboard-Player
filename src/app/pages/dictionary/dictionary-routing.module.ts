@@ -4,7 +4,6 @@ import {DictionariesComponent} from './dictionaries/dictionaries.component';
 import {StageStandardDictionaryComponent} from './stage-standard-dictionary/stage-standard-dictionary.component';
 import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
 import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
-import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
 import {BreadcrumbItem} from '../../components/ngx-breadcrumb/bean/breadcrumb-item';
 import {TestsDictionaryComponent} from './tests-dictionary/tests-dictionary.component';
 import {ActivityComponent} from './component/activity/activity.component';
@@ -33,7 +32,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'sport-type', component: SportTypeDictionaryComponent,
+    path: 'sport-type', loadChildren: './sport-types/sport-types.module#SportTypesModule',
     data: {
       breadcrumb: {nameKey: 'sportType'} as BreadcrumbItem
     }

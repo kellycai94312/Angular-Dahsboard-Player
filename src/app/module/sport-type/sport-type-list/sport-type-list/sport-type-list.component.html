@@ -1,0 +1,14 @@
+<app-item-list [canEdit]="canEdit"
+               [query]="query"
+               [compare]="compare"
+               [addItem]="addItem"
+               [fetchItems]="fetchItems">
+  <ng-template #itemTemplate
+               let-item
+               let-canEditItem="canEdit">
+    <div (click)="clickItem.emit(item)">
+      <app-sport-type-item [(data)]="item"
+                           [canEdit]="canEditItem"></app-sport-type-item>
+    </div>
+  </ng-template>
+</app-item-list>

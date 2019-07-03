@@ -1,27 +1,32 @@
-<mat-card *ngIf="data"
-          matRipple
-          (click)="onClick()">
-  <mat-card-header fxLayout
-                   fxLayoutGap="10px"
-                   fxLayoutAlign="space-between start">
-    <div>
-      <mat-card-title>
-        {{data.name}}
-      </mat-card-title>
-    </div>
-    <button *ngIf="canEdit"
-            mat-icon-button
-            (click)="onEdit(); $event.stopPropagation()">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </mat-card-header>
-  <div fxLayout
-       fxLayoutAlign="center center">
-    <ngx-image [object]="data"
-               [width]="100"
-               [height]="100"
-               [autoSave]="false"
-               [type]="imageTypeClass.CROPPED_LOGO"
-               [fileClass]="fileClassClass.DEVICE"></ngx-image>
-  </div>
-</mat-card>
+<app-item-line [fileClass]="fileClassClass.DEVICE"
+               [(data)]="data"
+               [actions]="actions"
+               (clickItem)="onClick()"></app-item-line>
+
+<!--<mat-card *ngIf="data"-->
+<!--          matRipple-->
+<!--          (click)="onClick()">-->
+<!--  <mat-card-header fxLayout-->
+<!--                   fxLayoutGap="10px"-->
+<!--                   fxLayoutAlign="space-between start">-->
+<!--    <div>-->
+<!--      <mat-card-title>-->
+<!--        {{data.name}}-->
+<!--      </mat-card-title>-->
+<!--    </div>-->
+<!--    <button *ngIf="canEdit"-->
+<!--            mat-icon-button-->
+<!--            (click)="onEdit(); $event.stopPropagation()">-->
+<!--      <mat-icon>edit</mat-icon>-->
+<!--    </button>-->
+<!--  </mat-card-header>-->
+<!--  <div fxLayout-->
+<!--       fxLayoutAlign="center center">-->
+<!--    <ngx-image [object]="data"-->
+<!--               [width]="100"-->
+<!--               [height]="100"-->
+<!--               [autoSave]="false"-->
+<!--               [type]="imageTypeClass.CROPPED_LOGO"-->
+<!--               [fileClass]="fileClassClass.DEVICE"></ngx-image>-->
+<!--  </div>-->
+<!--</mat-card>-->

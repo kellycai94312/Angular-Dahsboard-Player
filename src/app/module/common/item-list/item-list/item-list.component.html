@@ -13,11 +13,16 @@
                     [getItems]="fetchItems"
                     [query]="query"
                     [windowScroll]="true">
-  <ng-template let-item>
+  <ng-template let-item
+               let-isLast="last">
     <div *ngIf="!item.deleted"
-         class="mr-3 mb-3">
-      <ng-template [ngTemplateOutlet]="itemTemplate"
-                   [ngTemplateOutletContext]="{$implicit: item, canEdit: canEdit}"></ng-template>
+         class="item"
+         [ngClass]="{'item-list': !grid}">
+      <div matRipple>
+        <ng-template [ngTemplateOutlet]="itemTemplate"
+                     [ngTemplateOutletContext]="{$implicit: item, canEdit: canEdit}"></ng-template>
+      </div>
+      <mat-divider *ngIf="!isLast"></mat-divider>
     </div>
   </ng-template>
 </ngx-virtual-scroll>

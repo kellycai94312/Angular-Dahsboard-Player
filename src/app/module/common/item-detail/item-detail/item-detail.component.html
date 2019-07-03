@@ -24,7 +24,7 @@
     </div>
   </div>
   <div *ngIf="rightFields.length"
-       fxFlex
+       fxFlex="{{leftFields.length ? 50 : ''}}"
        class="right-side">
     <ng-container [ngTemplateOutlet]="fieldsTemplate"
                   [ngTemplateOutletContext]="{$implicit:rightFields}"></ng-container>
@@ -60,9 +60,11 @@
               scrolling="no"
               allow="autoplay; encrypted-media"
               allowfullscreen></iframe>
-      <ngx-carousel *ngIf="isField(item, carouselFieldClass)"
-                    [object]="item.data"
-                    [fileClass]="item.fileClass"></ngx-carousel>
+      <div *ngIf="isField(item, carouselFieldClass)"
+           class="overflow-auto">
+        <ngx-carousel [object]="item.data"
+                      [fileClass]="item.fileClass"></ngx-carousel>
+      </div>
       <a *ngIf="isField(item, urlFieldClass)"
          target="_blank"
          [href]="item.url">

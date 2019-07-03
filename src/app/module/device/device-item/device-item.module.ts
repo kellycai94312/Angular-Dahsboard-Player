@@ -4,6 +4,7 @@ import {DeviceItemComponent} from './device-item/device-item.component';
 import {MatButtonModule, MatCardModule, MatIconModule, MatRippleModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
+import {ItemLineModule} from '../../common/item-line/item-line.module';
 
 @NgModule({
   declarations: [DeviceItemComponent],
@@ -16,7 +17,8 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
     MatIconModule,
     MatRippleModule,
     FlexLayoutModule,
-    NgxImageModule
+    NgxImageModule,
+    ItemLineModule
   ]
 })
 export class DeviceItemModule {

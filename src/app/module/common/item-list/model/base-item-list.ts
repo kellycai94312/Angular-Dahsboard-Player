@@ -8,6 +8,9 @@ import {PageContainer} from '../../../../data/remote/bean/page-container';
 export class BaseItemList<TModel extends IdentifiedObject, Q extends PageQuery> {
 
   @Input()
+  public grid: boolean;
+
+  @Input()
   public canEdit: boolean;
 
   @Input()

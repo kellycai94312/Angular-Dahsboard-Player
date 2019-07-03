@@ -23,6 +23,7 @@ export class UnitListComponent extends BaseItemList<BaseUnit, PageQuery> {
   constructor(private _unitApiService: UnitApiService,
               private _unitWindowService: UnitWindowService) {
     super();
+    this.grid = false;
     this.query = new PageQuery();
     this.addItem = async (): Promise<DialogResult<BaseUnit>> => {
       return await this._unitWindowService.openEditUnit(new BaseUnit());

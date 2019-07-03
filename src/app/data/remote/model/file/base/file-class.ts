@@ -19,5 +19,6 @@ export enum FileClass {
   DEVICE = 'DEVICE',
   APPLICATION = 'APPLICATION',
   PARAMETER = 'PARAMETER',
-  UNIT = 'UNIT'
+  UNIT = 'UNIT',
+  SPORT_TYPE = 'SPORT_TYPE'
 }

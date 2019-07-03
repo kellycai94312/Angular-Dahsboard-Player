@@ -100,14 +100,18 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
       this.data = data;
       this.data.parameterVersions = parameterVersions;
 
-      if (!this._urlExternalResource) {
-        this._urlExternalResource = new ExternalResource();
-        this._urlExternalResource.objectId = this.data.id;
-        this._urlExternalResource.clazz = FileClass.DEVICE;
-      }
-      this._urlExternalResource.url = this.videoUrlNgxInput.control.value;
+      if (this._urlExternalResource && !this.videoUrlNgxInput.control.value) {
+        await this._externalResourceApiService.removeExternalResource(this._urlExternalResource).toPromise();
+      } else if (this.videoUrlNgxInput.control.value) {
+        if (!this._urlExternalResource) {
+          this._urlExternalResource = new ExternalResource();
+          this._urlExternalResource.objectId = this.data.id;
+          this._urlExternalResource.clazz = FileClass.DEVICE;
+        }
+        this._urlExternalResource.url = this.videoUrlNgxInput.control.value;
 
-      await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
+        await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
+      }
 
       this.ngxImageComponent.object = this.data;
       await this.ngxImageComponent.save(null, false);

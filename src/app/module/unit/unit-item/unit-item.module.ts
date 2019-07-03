@@ -4,6 +4,7 @@ import {UnitItemComponent} from './unit-item/unit-item.component';
 import {MatButtonModule, MatCardModule, MatIconModule, MatRippleModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
+import {ItemLineModule} from '../../common/item-line/item-line.module';
 
 @NgModule({
   declarations: [UnitItemComponent],
@@ -16,7 +17,8 @@ import {TranslateModule} from '@ngx-translate/core';
     MatRippleModule,
     MatIconModule,
     FlexLayoutModule,
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    ItemLineModule
   ]
 })
 export class UnitItemModule {

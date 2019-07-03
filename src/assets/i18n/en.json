@@ -724,5 +724,6 @@
   "devices": "Devices",
   "device": "Device",
   "manufacturerUrl": "Manufacturer url",
-  "manufacturer": "Manufacturer"
+  "manufacturer": "Manufacturer",
+  "sportTypes": "Sport types"
 }

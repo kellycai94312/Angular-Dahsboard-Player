@@ -1,21 +1,26 @@
-<mat-card *ngIf="data"
-          matRipple
-          (click)="onClick()">
-  <mat-card-header fxLayout
-                   fxLayoutGap="10px"
-                   fxLayoutAlign="space-between start">
-    <div>
-      <mat-card-title>
-        {{data.name}}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{('unitTypeEnum.' + data.unitTypeEnum) | translate}}
-      </mat-card-subtitle>
-    </div>
-    <button *ngIf="canEdit"
-            mat-icon-button
-            (click)="onEdit(); $event.stopPropagation()">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </mat-card-header>
-</mat-card>
+<app-item-line [fileClass]="fileClassClass.UNIT"
+               [(data)]="data"
+               [actions]="actions"
+               (clickItem)="onClick()"></app-item-line>
+
+<!--<mat-card *ngIf="data"-->
+<!--          matRipple-->
+<!--          (click)="onClick()">-->
+<!--  <mat-card-header fxLayout-->
+<!--                   fxLayoutGap="10px"-->
+<!--                   fxLayoutAlign="space-between start">-->
+<!--    <div>-->
+<!--      <mat-card-title>-->
+<!--        {{data.name}}-->
+<!--      </mat-card-title>-->
+<!--      <mat-card-subtitle>-->
+<!--        {{('unitTypeEnum.' + data.unitTypeEnum) | translate}}-->
+<!--      </mat-card-subtitle>-->
+<!--    </div>-->
+<!--    <button *ngIf="canEdit"-->
+<!--            mat-icon-button-->
+<!--            (click)="onEdit(); $event.stopPropagation()">-->
+<!--      <mat-icon>edit</mat-icon>-->
+<!--    </button>-->
+<!--  </mat-card-header>-->
+<!--</mat-card>-->
