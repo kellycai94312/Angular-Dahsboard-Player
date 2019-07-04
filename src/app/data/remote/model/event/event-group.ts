@@ -10,8 +10,8 @@ import {Game} from './game';
 import {Competition} from './competition';
 import {Relaxation} from './relaxation';
 import {Diet} from './diet';
-import {MeetUp} from './meet-up';
-import {Tuition} from './tuition';
+import {Meeting} from './meeting';
+import {Education} from './education';
 
 export class EventGroup extends IdentifiedObject {
 
@@ -26,8 +26,8 @@ export class EventGroup extends IdentifiedObject {
         {value: Competition, name: EventType.COMPETITION},
         {value: Relaxation, name: EventType.RELAXATION},
         {value: Diet, name: EventType.DIET},
-        {value: MeetUp, name: EventType.MEET_UP},
-        {value: Tuition, name: EventType.TUITION}
+        {value: Meeting, name: EventType.MEETING},
+        {value: Education, name: EventType.EDUCATION}
       ],
     },
     keepDiscriminatorProperty: true

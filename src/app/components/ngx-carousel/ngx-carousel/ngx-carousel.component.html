@@ -1,62 +1,72 @@
-<div *ngIf="images && images.length"
-     id="carouselExampleIndicators"
+<div *ngIf="images.length"
+     fxLayout="column"
      (keyup.arrowleft)="onPrevious()"
-     (keyup.arrowright)="onNext()"
-     class="carousel slide carousel-content {{class}}"
-     data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li *ngFor="let item of images; index as i;"
-        data-target="#carouselExampleIndicators"
-        (click)="setCurrentImageIndex(item)"
-        [ngClass]="{'active' : currentImage === item}"></li>
-  </ol>
-  <div *ngIf="currentImage"
-       class="carousel-inner">
-    <div class="carousel-container carousel-item active d-flex justify-content-center align-items-center">
-      <img (dblclick)="onShowImage(currentImage.data)"
-           [src]="currentImage.name">
-      <div class="carousel-caption d-none d-md-block">
-        <ngx-button *ngIf="canEdit"
-                    [icon]="iconEnumClass.ADD"
-                    [click]="onAddImage"></ngx-button>
-        <ngx-button *ngIf="canEdit && currentImage.data.type !== imageType.LOGO"
-                    class="ml-2"
-                    [icon]="iconEnumClass.IMAGE"
-                    [click]="onEditLogoImage"
-                    [data]="currentImage.data"></ngx-button>
-        <ngx-button *ngIf="canEdit"
-                    class="ml-2"
-                    [icon]="iconEnumClass.REMOVE"
-                    [click]="onRemoveImage"
-                    [data]="currentImage"></ngx-button>
+     (keyup.arrowright)="onNext()">
+  <div fxLayout
+       fxLayoutAlign="start center">
+    <div *ngIf="images.length > 1">
+      <button mat-icon-button
+              (click)="onPrevious()">
+        <mat-icon>keyboard_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div fxFlex
+         [style.height.px]="height">
+      <div fxFlexFill
+           fxLayout
+           fxLayoutAlign="center center">
+        <ngx-image *ngIf="currentImage"
+                   [fixForCarousel]="true"
+                   [image]="currentImage.data"
+                   [object]="object"
+                   [allowFullScreen]="true"
+                   [width]="width"
+                   [height]="height"
+                   [type]="currentImage.data.type"
+                   [fileClass]="currentImage.data.clazz"
+                   [autoSave]="false"></ngx-image>
       </div>
     </div>
+    <div *ngIf="images.length > 1">
+      <button mat-icon-button
+              (click)="onNext()">
+        <mat-icon>keyboard_arrow_right</mat-icon>
+      </button>
+    </div>
   </div>
-  <div *ngIf="images.length > 1">
-    <a class="carousel-control-prev"
-       (click)="onPrevious()"
-       role="button"
-       data-slide="prev">
-    <span class="carousel-control-prev-icon"
-          aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next"
-       (click)="onNext()"
-       role="button"
-       data-slide="next">
-    <span class="carousel-control-next-icon"
-          aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
+  <div fxLayout="column"
+       fxLayoutAlign="center center">
+    <div *ngIf="images.length > 1">
+      <button *ngFor="let item of images"
+              mat-icon-button
+              color="{{currentImage === item ? 'accent' : 'primary'}}"
+              (click)="setCurrentImageIndex(item)">
+        <mat-icon>remove</mat-icon>
+      </button>
+    </div>
+    <div>
+      <button *ngIf="canEdit"
+              mat-icon-button
+              (click)="onAddImage()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button *ngIf="canEdit"
+              mat-icon-button
+              (click)="onRemoveImage(currentImage)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
   </div>
 </div>
 
-<div *ngIf="!images || !images.length"
-     [ngClass]="{'bg-light' : !images || !images.length}">
-  <ngx-button *ngIf="canAdd"
-              nameKey="addImage"
-              [click]="onAddImage"></ngx-button>
+<button *ngIf="!images.length && canEdit"
+        mat-raised-button
+        (click)="onAddImage()">
+  {{'addImage' | translate}}
+</button>
+
+<div *ngIf="!images.length && !canEdit">
+  <img [src]="defaultImageUrl"/>
 </div>
 
 <input #fileInput

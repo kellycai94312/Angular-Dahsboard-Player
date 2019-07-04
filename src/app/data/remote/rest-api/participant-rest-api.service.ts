@@ -2902,6 +2902,23 @@ export class ParticipantRestApiService extends Rest {
     return url;
   }
 
+  getUrlByImage(image: Image, query: ImageQuery, noCache: boolean = false): string {
+    let url = `${environment.restUrl}/file/download/image/${image.id}?`;
+    if (query.width) {
+      url += `&width=${query.width}`;
+    }
+
+    if (query.height) {
+      url += `&height=${query.height}`;
+    }
+
+    if (noCache) {
+      url += `&date=${Date.now()}`;
+    }
+
+    return url;
+  }
+
   async getDataUrl(url: string): Promise<any> {
     return await fetch(url, {credentials: 'include', cache: 'no-cache'})
       .then(response => response.blob())

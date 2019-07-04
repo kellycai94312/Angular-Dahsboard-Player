@@ -1,25 +1,31 @@
-<mat-card *ngIf="data"
-          fxFlex>
-  <mat-card-header fxLayout
-                   fxLayoutGap="10px"
-                   fxLayoutAlign="space-between start">
-    <div>
-      <mat-card-title>
-        {{data.name}}
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{('parameterTypeEnum.' + data.parameterTypeEnum) | translate}}
-      </mat-card-subtitle>
-    </div>
-    <button *ngIf="canEdit"
-            mat-icon-button
-            (click)="onEdit()">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </mat-card-header>
-  <mat-card-content *ngIf="data.unitVersions?.length">
-    <mat-chip-list>
-      <mat-chip *ngFor="let item of data.unitVersions">{{item.shortName}}</mat-chip>
-    </mat-chip-list>
-  </mat-card-content>
-</mat-card>
+<app-item-line [fileClass]="fileClassClass.DEVICE"
+               [(data)]="data"
+               [actions]="actions"
+               [infoAction]="infoAction"></app-item-line>
+<!--<mat-card *ngIf="data"-->
+<!--          fxFlex-->
+<!--          matRipple-->
+<!--          (click)="onClick()">-->
+<!--  <mat-card-header fxLayout-->
+<!--                   fxLayoutGap="10px"-->
+<!--                   fxLayoutAlign="space-between start">-->
+<!--    <div>-->
+<!--      <mat-card-title>-->
+<!--        {{data.name}}-->
+<!--      </mat-card-title>-->
+<!--      <mat-card-subtitle>-->
+<!--        {{('parameterTypeEnum.' + data.parameterTypeEnum) | translate}}-->
+<!--      </mat-card-subtitle>-->
+<!--    </div>-->
+<!--    <button *ngIf="canEdit"-->
+<!--            mat-icon-button-->
+<!--            (click)="onEdit(); $event.stopPropagation()">-->
+<!--      <mat-icon>edit</mat-icon>-->
+<!--    </button>-->
+<!--  </mat-card-header>-->
+<!--  <div *ngIf="data.unitVersions?.length">-->
+<!--    <mat-chip-list>-->
+<!--      <mat-chip *ngFor="let item of data.unitVersions">{{item.shortName}}</mat-chip>-->
+<!--    </mat-chip-list>-->
+<!--  </div>-->
+<!--</mat-card>-->

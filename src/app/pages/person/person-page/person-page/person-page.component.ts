@@ -16,7 +16,6 @@ import {SportType} from '../../../../data/remote/model/sport-type';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
-import {ImageFormat} from '../../../../data/local/image-format';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
 import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
 
@@ -29,7 +28,6 @@ export class PersonPageComponent implements OnInit, OnDestroy {
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
   public readonly iconEnumClass = IconEnum;
   public readonly tabs: NgxTab[]; //PersonTab[];
   public allowEdit: boolean;

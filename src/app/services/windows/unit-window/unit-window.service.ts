@@ -4,12 +4,16 @@ import {BaseUnit} from '../../../data/remote/model/unit/base-unit';
 import {EditUnitComponent} from '../../../module/unit/edit-unit/edit-unit/edit-unit.component';
 import {DialogResult} from '../../../data/local/dialog-result';
 import {UtilService} from '../../util/util.service';
+import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
+import {TextField} from '../../../module/common/item-detail/model/text-field';
+import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
 export class UnitWindowService {
 
   constructor(private _ngxModalService: NgxModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _translateService: TranslateService,
               private _utilService: UtilService) {
   }
 
@@ -36,6 +40,22 @@ export class UnitWindowService {
     dialogResult.result = await this._ngxModalService.awaitModalResult(modal);
     dialogResult.data = editUnitComponent.data as T;
     return dialogResult;
+  }
+
+  public async openUnitDetail(unit: BaseUnit): Promise<void> {
+    const model = this._ngxModalService.open();
+    model.componentInstance.title = `${unit.name}`;
+    model.componentInstance.useContentPadding = false;
+
+    await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
+      component.leftFields = [
+        new TextField('shortName', unit.shortName),
+        new TextField('description', unit.description),
+        new TextField('libraryType', this._translateService.instant(`libraryTypeEnum.${unit.discriminator}`)),
+        new TextField('unitType', this._translateService.instant(`unitTypeEnum.${unit.unitTypeEnum}`))
+      ];
+      await this._ngxModalService.awaitModalResult(model);
+    });
   }
 
 }

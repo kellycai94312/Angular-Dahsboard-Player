@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
@@ -16,9 +16,13 @@ import {DeviceWindowService} from '../../../../services/windows/device-window/de
 })
 export class DeviceListComponent extends BaseItemList<Device, PageQuery> {
 
+  @Output()
+  public readonly clickItem = new EventEmitter<Device>();
+
   constructor(private _deviceApiService: DeviceApiService,
               private _deviceWindowService: DeviceWindowService) {
     super();
+    this.translationTitle = 'devices';
     this.query = new PageQuery();
     this.addItem = async (): Promise<DialogResult<Device>> => {
       return await this._deviceWindowService.openEditDevice(new Device());

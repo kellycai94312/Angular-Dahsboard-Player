@@ -335,6 +335,7 @@ export class NgxModalService {
   public async showFullImage(image: Image);
   public async showFullImage(objectIdOrImage: number | Image, imageType?: ImageType, fileClass?: FileClass) {
     const modal = this.open({size: 'lg', backdrop: true, centered: true});
+    modal.componentInstance.titleKey = 'image';
     await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
       let url = `${environment.restUrl}/file/download/image`;
       if (typeof objectIdOrImage !== 'number') {

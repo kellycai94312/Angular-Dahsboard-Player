@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {ImageFormat} from '../../../data/local/image-format';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
@@ -15,15 +15,16 @@ import {CropperPosition} from 'ngx-image-cropper';
 @Component({
   selector: 'ngx-image',
   templateUrl: './ngx-image.component.html',
-  styleUrls: ['./ngx-image.component.scss']
+  styleUrls: ['./ngx-image.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxImageComponent implements OnInit, OnChanges {
 
   public readonly imageFormatClass = ImageFormat;
 
-  // @deprecated Use object
+  // TODO: Fix it
   @Input()
-  public objectId: number;
+  public fixForCarousel: boolean;
 
   @Input()
   public object: IdentifiedObject;
@@ -35,7 +36,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public fileClass: FileClass;
 
   @Input()
-  public class: string;
+  public class = '';
 
   @Input()
   public canEdit: boolean;
@@ -44,10 +45,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public allowFullScreen: boolean;
 
   @Input()
-  public format: ImageFormat;
+  public format = ImageFormat.CIRCLE;
 
   @Output()
-  public readonly imageChange: EventEmitter<File>;
+  public readonly imageChange = new EventEmitter<File>();
 
   @Input()
   public width: number;
@@ -61,10 +62,15 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public cropImage: boolean;
 
-  public url: string;
-  public innerWidth: number;
-  public innerHeight: number;
+  @Input()
+  public image: Image;
 
+  @Input()
+  public url: string;
+
+  public innerUrl: string;
+  public innerWidth = 0;
+  public innerHeight = 0;
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
   private _tempFile: File;
@@ -75,11 +81,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _elementRef: ElementRef,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _changeDetectorRef: ChangeDetectorRef,
+              private _ngZone: NgZone,
               private _ngxModalService: NgxModalService) {
-    this.imageChange = new EventEmitter<File>();
-    this.class = '';
-    this.innerWidth = 0;
-    this.innerHeight = 0;
   }
 
   async ngOnInit() {
@@ -110,7 +114,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public async save(file: File = null, notify: boolean = true): Promise<boolean> {
     if (this.cropImage) {
       if (!this.autoSave && this._tempNgxCropImageComponent) {
-        this._tempNgxCropImageComponent.objectId = this.objectId || this.object.id;
+        this._tempNgxCropImageComponent.objectId = this.object.id;
         await this._tempNgxCropImageComponent.onSave();
         this.imageChange.emit();
         this.refresh();
@@ -123,7 +127,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
       return await this._appHelper.trySave(async () => {
         const image = new Image();
         image.clazz = this.fileClass;
-        image.objectId = this.objectId || this.object.id;
+        image.objectId = this.object.id;
         image.type = this.type;
         await this._participantRestApiService.uploadFile(image, [file]);
 
@@ -133,41 +137,46 @@ export class NgxImageComponent implements OnInit, OnChanges {
   }
 
   public refresh() {
-    let minSide = 0;
-    if (this.width || this.height) {
-      minSide = Math.min(this.width, this.height);
-    } else {
-      minSide = Math.min(this._parentElementRef.clientWidth, this._parentElementRef.clientHeight);
-    }
-    this.innerWidth = minSide;
-    this.innerHeight = minSide;
+    this._ngZone.runOutsideAngular(() => {
+      this.innerWidth = this.width || this._parentElementRef.clientWidth;
+      this.innerHeight = this.height || this._parentElementRef.clientHeight;
 
-    let url = '';
+      let url = '';
 
-    if (this._tempFile) {
-      url = URL.createObjectURL(this._tempFile);
-    } else {
-      const imageQuery: ImageQuery = {
-        clazz: this.fileClass,
-        type: this.type,
-        objectId: this.objectId || this.object.id || 0,
-      };
+      if (this._tempFile) {
+        url = URL.createObjectURL(this._tempFile);
+      } else {
+        const imageQuery: ImageQuery = {
+          clazz: this.fileClass,
+          type: this.type,
+          objectId: this.object.id || 0,
+        };
 
-      if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
-        imageQuery.width = this.innerWidth;
+        if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
+          imageQuery.width = this.innerWidth;
+        }
+        if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
+          imageQuery.height = this.innerHeight;
+        }
+        if (this.image) {
+          url = `${this._participantRestApiService.getUrlByImage(this.image, imageQuery)}&date=${Date.now()}`;
+        } else {
+          url = `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
+        }
       }
-      if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
-        imageQuery.height = this.innerHeight;
-      }
-      url += `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
-    }
 
-    this.url = url;
+      this.innerUrl = this.url || url;
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
   public async onShowImage() {
     if (this.allowFullScreen) {
-      await this._ngxModalService.showFullImage(this.objectId, this.type, this.fileClass);
+      if (this.image) {
+        await this._ngxModalService.showFullImage(this.image);
+      } else {
+        await this._ngxModalService.showFullImage(this.object.id || 0, this.type, this.fileClass);
+      }
     }
   }
 
@@ -184,9 +193,12 @@ export class NgxImageComponent implements OnInit, OnChanges {
       const dialogResult = await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave);
       if (dialogResult.result) {
         if (!this.autoSave) {
-          this._tempNgxCropImageComponent = dialogResult.data;
-          delete this.url;
-          this.url = this._tempNgxCropImageComponent.croppedImage;
+          this._ngZone.runOutsideAngular(() => {
+            this._tempNgxCropImageComponent = dialogResult.data;
+            this.innerUrl = this._tempNgxCropImageComponent.croppedImage;
+
+            this._changeDetectorRef.markForCheck();
+          });
         } else {
           this.imageChange.emit();
           this.refresh();
@@ -196,4 +208,5 @@ export class NgxImageComponent implements OnInit, OnChanges {
       elem.click();
     }
   }
+
 }

@@ -8,7 +8,6 @@ import {Person} from '../../../data/remote/model/person';
 import {AppHelper} from '../../../utils/app-helper';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {ImageFormat} from '../../../data/local/image-format';
 import {NgxTab} from '../../../module/ngx/ngx-tabs/model/ngx-tab';
 
 @Component({
@@ -20,7 +19,6 @@ export class DashboardPageComponent implements OnInit {
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
 
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;

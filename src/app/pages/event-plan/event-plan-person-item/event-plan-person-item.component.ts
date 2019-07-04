@@ -3,7 +3,6 @@ import {BaseComponent} from '../../../data/local/component/base/base-component';
 import {EventPlanPerson} from '../../../data/remote/model/training/plan/event-plan-person';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {ImageFormat} from '../../../data/local/image-format';
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {UserRoleEnum} from '../../../data/remote/model/user-role-enum';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
@@ -18,7 +17,6 @@ export class EventPlanPersonItemComponent extends BaseComponent<EventPlanPerson>
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly imageFormatClass = ImageFormat;
   public readonly propertyConstantClass = PropertyConstant;
   public readonly userRoleEnumClass = UserRoleEnum;
 

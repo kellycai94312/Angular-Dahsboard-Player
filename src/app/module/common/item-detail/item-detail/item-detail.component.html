@@ -1,0 +1,77 @@
+<div fxLayout
+     fxLayout.lt-sm="column">
+  <div *ngIf="leftFields.length"
+       fxFlex="{{rightFields.length ? 50 : ''}}"
+       fxFlex.lt-sm
+       fxLayout="column"
+       fxLayoutGap="10px"
+       class="left-side">
+    <div *ngIf="leftTopLeftFields.length && leftTopRightFields.length"
+         fxLayout
+         fxLayoutGap="10px">
+      <div>
+        <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                      [ngTemplateOutletContext]="{$implicit:leftTopLeftFields}"></ng-container>
+      </div>
+      <div>
+        <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                      [ngTemplateOutletContext]="{$implicit:leftTopRightFields}"></ng-container>
+      </div>
+    </div>
+    <div>
+      <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                    [ngTemplateOutletContext]="{$implicit:leftFields}"></ng-container>
+    </div>
+  </div>
+  <div *ngIf="rightFields.length"
+       fxFlex="{{leftFields.length ? 50 : ''}}"
+       fxFlex.lt-sm
+       class="right-side">
+    <ng-container [ngTemplateOutlet]="fieldsTemplate"
+                  [ngTemplateOutletContext]="{$implicit: rightFields,layoutGap: '20px'}"></ng-container>
+  </div>
+</div>
+
+<ng-template #fieldsTemplate
+             let-fields
+             let-layoutGap="layoutGap">
+  <div fxLayout="column"
+       fxLayoutGap="{{layoutGap || '10px'}}">
+    <div *ngFor="let item of fields">
+      <label *ngIf="item.translationLabel">{{item.translationLabel | translate}}</label>
+      <pre *ngIf="isField(item, textFieldClass)">{{item.value}}</pre>
+      <mat-chip-list *ngIf="isField(item, chipsFieldClass)">
+        <mat-chip *ngFor="let chip of item.values">{{chip}}</mat-chip>
+      </mat-chip-list>
+      <div *ngIf="isField(item, imageFieldClass)"
+           fxLayoutAlign="center center">
+        <ngx-image [canEdit]="false"
+                   [object]="item.object"
+                   [width]="130"
+                   [height]="130"
+                   [allowFullScreen]="false"
+                   [type]="item.type"
+                   [fileClass]="item.fileClass"
+                   [format]="item.format"></ngx-image>
+      </div>
+      <iframe *ngIf="isField(item, videoFieldClass)"
+              [src]="item.videoUrl | safeUrl"
+              [height]="300"
+              class="w-100"
+              frameborder="0"
+              scrolling="no"
+              allow="autoplay; encrypted-media"
+              allowfullscreen></iframe>
+      <div *ngIf="isField(item, carouselFieldClass)"
+           class="overflow-auto">
+        <ngx-carousel [object]="item.data"
+                      [fileClass]="item.fileClass"></ngx-carousel>
+      </div>
+      <a *ngIf="isField(item, urlFieldClass)"
+         target="_blank"
+         [href]="item.url">
+        {{item.url}}
+      </a>
+    </div>
+  </div>
+</ng-template>

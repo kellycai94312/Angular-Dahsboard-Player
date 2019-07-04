@@ -5,10 +5,9 @@
     <div class="logo"
          fxFlex="0 1 auto"
          fxFlexAlign="start">
-      <ngx-image [objectId]="conversationImageId"
+      <ngx-image [object]="conversationImage"
                  [type]="imageTypeClass.CROPPED_LOGO"
                  [fileClass]="conversationImageClazz"
-                 [format]="imageFormatClass.CIRCLE"
                  [width]="40"
                  [height]="40"></ngx-image>
       <div *ngIf="preview && data.messageWrapper.unread"

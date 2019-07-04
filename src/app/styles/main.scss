@@ -255,3 +255,15 @@ button::-moz-focus-inner {
   height: $size;
   line-height: $size;
 }
+
+.overflow-auto {
+  overflow: auto !important;
+}
+
+.overflow-x {
+  overflow-x: auto !important;
+}
+
+.modal-lg, .modal-xl {
+  max-width: 1100px !important;
+}

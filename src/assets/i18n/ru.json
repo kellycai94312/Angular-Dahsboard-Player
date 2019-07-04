@@ -688,8 +688,8 @@
     "COMPETITION": "Соревнование",
     "RELAXATION": "Отдых",
     "DIET": "Питание",
-    "MEET_UP": "Собрание",
-    "TUITION": "Обучение"
+    "MEETING": "Собрание",
+    "EDUCATION": "Обучение"
   },
   "advancedMode": "Расширенный режим",
   "heads": "Руководители",
@@ -723,5 +723,7 @@
   "selectedParameters": "Выбранные параметры",
   "devices": "Устройства",
   "device": "Устройство",
-  "manufacturerUrl": "Url производителя"
+  "manufacturerUrl": "Url производителя",
+  "manufacturer": "Производитель",
+  "sportTypes": "Виды спорта"
 }

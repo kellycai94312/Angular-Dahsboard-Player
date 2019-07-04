@@ -15,6 +15,8 @@ import {ParameterApiService} from '../../../data/remote/rest-api/api/parameter/p
 import {ParameterQuery} from '../../../data/remote/rest-api/query/parameter/parameter-query';
 import {ParameterItemComponent} from '../../../module/parameter/parameter-item/parameter-item/parameter-item.component';
 import {TranslateService} from '@ngx-translate/core';
+import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
+import {TextField} from '../../../module/common/item-detail/model/text-field';
 
 @Injectable()
 export class ParameterWindowService {
@@ -90,6 +92,22 @@ export class ParameterWindowService {
     }, ParameterItemComponent, async (component, data) => {
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
+  }
+
+  public async openParameterDetail(parameter: BaseParameter): Promise<void> {
+    const model = this._ngxModalService.open();
+    model.componentInstance.title = `${parameter.name}`;
+    model.componentInstance.useContentPadding = false;
+
+    await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
+      component.leftFields = [
+        new TextField('shortName', parameter.shortName),
+        new TextField('specialName', parameter.specialName),
+        new TextField('description', parameter.description),
+        new TextField('parameterType', this._translateService.instant(`parameterTypeEnum.${parameter.parameterTypeEnum}`))
+      ];
+      await this._ngxModalService.awaitModalResult(model);
+    });
   }
 
 }

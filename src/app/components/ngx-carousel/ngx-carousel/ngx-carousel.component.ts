@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnInit, ViewChild} from '@angular/core';
 import {Image} from '../../../data/remote/model/file/image/image';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
@@ -8,46 +8,49 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 import {environment} from '../../../../environments/environment';
 import {PermissionService} from '../../../shared/permission.service';
 import {AppHelper} from '../../../utils/app-helper';
-import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
 import {IconEnum} from '../../ngx-button/model/icon-enum';
+import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 
 @Component({
   selector: 'ngx-carousel',
   templateUrl: './ngx-carousel.component.html',
-  styleUrls: ['./ngx-carousel.component.scss']
+  styleUrls: ['./ngx-carousel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NgxCarouselComponent implements OnInit {
-
-  public readonly imageType = ImageType;
-  public readonly iconEnumClass = IconEnum;
 
   @ViewChild('fileInput')
   public fileInputElementRef: ElementRef;
 
   @Input()
-  public class: string;
+  public class = '';
 
   @Input()
-  public objectId: number;
+  public object: IdentifiedObject;
 
   @Input()
   public fileClass: FileClass;
 
   @Input()
-  public canAdd: boolean;
-
-  public images: NameWrapper<Image>[];
-
-  public currentImage: NameWrapper<Image>;
   public canEdit: boolean;
 
+  @Input()
+  public width = 360;
+
+  @Input()
+  public height = 200;
+
+  public readonly iconEnumClass = IconEnum;
+  public images: NameWrapper<Image>[] = [];
+  public currentImage: NameWrapper<Image>;
+  public defaultImageUrl = 'assets/img/default.png';
   private _fileDialogParameter: Image;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
               private _appHelper: AppHelper,
-              private _ngxModalService: NgxModalService) {
-    this.class = '';
+              private _ngZone: NgZone,
+              private _changeDetectorRef: ChangeDetectorRef) {
   }
 
   async ngOnInit() {
@@ -55,90 +58,70 @@ export class NgxCarouselComponent implements OnInit {
   }
 
   public async initialize() {
-    this.images = (await this._participantRestApiService.getImages({
-      count: PropertyConstant.pageSizeMax,
-      objectId: this.objectId,
-      clazz: this.fileClass,
-      type: ImageType.GALLERY
-    })).list.map(x => this.mapImage(x));
-    const logoImages = (await this._participantRestApiService.getImages({
-      count: PropertyConstant.pageSizeMax,
-      objectId: this.objectId,
-      clazz: this.fileClass,
-      type: ImageType.LOGO
-    })).list.map(x => this.mapImage(x));
+    await this._ngZone.runOutsideAngular(async () => {
+      this.images = (await this._participantRestApiService.getImages({
+        count: PropertyConstant.pageSizeMax,
+        objectId: this.object.id,
+        clazz: this.fileClass,
+        type: ImageType.GALLERY
+      })).list.map(x => this.mapImage(x));
 
-    let logoImage = null;
-    if (logoImages.length) {
-      logoImage = logoImages[0];
-      this.images.push(logoImage);
-    }
-    if (this.images.length && !this.currentImage) {
-      if (logoImage) {
-        this.currentImage = logoImage;
-      } else {
+      if (this.images.length && !this.currentImage) {
         this.currentImage = this.images[0];
       }
-      await this.refreshCanEdit();
-    }
+
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
-  public async onPrevious() {
-    let index = this.images.indexOf(this.currentImage);
-    if (index - 1 >= 0) {
-      index--;
-    } else {
-      index = this.images.length - 1;
-    }
-    this.currentImage = this.images[index];
-    await this.refreshCanEdit();
+  public onPrevious() {
+    this._ngZone.runOutsideAngular(() => {
+      let index = this.images.length - 1;
+      if (this.currentImage) {
+        index = this.images.indexOf(this.currentImage);
+        if (index - 1 >= 0) {
+          index--;
+        }
+      }
+      this.currentImage = this.images[index];
+
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
-  public async onNext() {
-    let index = this.images.indexOf(this.currentImage);
-    if (index + 1 < this.images.length) {
-      index++;
-    } else {
-      index = 0;
-    }
-    this.currentImage = this.images[index];
-    await this.refreshCanEdit();
+  public onNext() {
+    this._ngZone.runOutsideAngular(() => {
+      let index = 0;
+      if (this.currentImage) {
+        index = this.images.indexOf(this.currentImage);
+        if (index + 1 < this.images.length) {
+          index++;
+        }
+      }
+      this.currentImage = this.images[index];
+
+      this._changeDetectorRef.markForCheck();
+    });
   }
 
   public async setCurrentImageIndex(item: NameWrapper<Image>) {
     this.currentImage = item;
-    await this.refreshCanEdit();
   }
 
-  public async refreshCanEdit() {
-    if (this.images.length) {
-      this.canEdit = await this._permissionService.canEditFile(this.currentImage.data);
-    } else {
-      this.canEdit = false;
-    }
-  }
-
-  public onAddImage = async () => {
+  public async onAddImage(): Promise<void> {
     const image = new Image();
     image.type = ImageType.GALLERY;
     image.clazz = this.fileClass;
-    image.objectId = this.objectId;
+    image.objectId = this.object.id;
 
     this.openFileDialog(image);
-  };
+  }
 
-  public onEditLogoImage = async (item: Image) => {
-    item.type = ImageType.LOGO;
-    await this._participantRestApiService.updateFile(item, null);
-    this.currentImage = null;
-    await this.initialize();
-  };
-
-  public onRemoveImage = async (item: NameWrapper<Image>) => {
+  public async onRemoveImage(item: NameWrapper<Image>): Promise<void> {
     await this._participantRestApiService.removeFile({fileId: item.data.id});
     await this.onPrevious();
     this._appHelper.removeItem(this.images, item);
-  };
+  }
 
   public async onImageChange(fileList: FileList) {
     if (fileList.length > 0) {
@@ -154,10 +137,6 @@ export class NgxCarouselComponent implements OnInit {
         await this.onNext();
       }
     }
-  }
-
-  public async onShowImage(image: Image) {
-    await this._ngxModalService.showFullImage(image);
   }
 
   private openFileDialog(data: Image): void {

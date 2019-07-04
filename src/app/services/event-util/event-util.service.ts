@@ -9,8 +9,8 @@ import {Game} from '../../data/remote/model/event/game';
 import {Competition} from '../../data/remote/model/event/competition';
 import {Relaxation} from '../../data/remote/model/event/relaxation';
 import {Diet} from '../../data/remote/model/event/diet';
-import {MeetUp} from '../../data/remote/model/event/meet-up';
-import {Tuition} from '../../data/remote/model/event/tuition';
+import {Meeting} from '../../data/remote/model/event/meeting';
+import {Education} from '../../data/remote/model/event/education';
 import {TranslateService} from '@ngx-translate/core';
 
 @Injectable()
@@ -41,9 +41,9 @@ export class EventUtilService {
         return {primary: '#0000ff', secondary: '#0000ff', font: '#eee'};
       case EventType.DIET:
         return {primary: '#2ab73a', secondary: '#2ab73a', font: '#eee'};
-      case EventType.MEET_UP:
+      case EventType.MEETING:
         return {primary: '#b700b5', secondary: '#b700b5', font: '#eee'};
-      case EventType.TUITION:
+      case EventType.EDUCATION:
         return {primary: '#b77422', secondary: '#b77422', font: '#eee'};
     }
     return void 0;
@@ -74,10 +74,10 @@ export class EventUtilService {
         return new Relaxation();
       case EventType.DIET:
         return new Diet();
-      case EventType.MEET_UP:
-        return new MeetUp();
-      case EventType.TUITION:
-        return new Tuition();
+      case EventType.MEETING:
+        return new Meeting();
+      case EventType.EDUCATION:
+        return new Education();
     }
     return void 0;
   }

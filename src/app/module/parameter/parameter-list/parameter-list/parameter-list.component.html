@@ -1,29 +1,15 @@
-<div fxLayout="column">
-  <div fxFlex
-       fxLayout
-       fxLayoutGap="10px"
-       fxLayoutAlign="start center">
-    <new-ngx-input [data]="searchNgxInput"></new-ngx-input>
-    <button *ngIf="canEdit"
-            mat-icon-button
-            (click)="onAddItem()">
-      <mat-icon>add</mat-icon>
-    </button>
-  </div>
-
-  <ngx-virtual-scroll fxFlex="grow"
-                      class="mt-2 d-flex flex-wrap overflow-auto"
-                      [getItems]="fetchItems"
-                      [query]="query"
-                      [windowScroll]="true">
-    <ng-template let-item>
-      <div *ngIf="!item.deleted"
-           class="mr-3 mb-3 item"
-           (click)="onClickItem(item)">
-        <app-parameter-item [(data)]="item"
-                            [canEdit]="canEdit"></app-parameter-item>
-      </div>
-    </ng-template>
-  </ngx-virtual-scroll>
-</div>
-
+<app-item-list [canEdit]="canEdit"
+               [query]="query"
+               [translationTitle]="translationTitle"
+               [compare]="compare"
+               [addItem]="addItem"
+               [fetchItems]="fetchItems">
+  <ng-template #itemTemplate
+               let-item
+               let-canEditItem="canEdit">
+    <div (click)="clickItem.emit(item)">
+      <app-parameter-item [(data)]="item"
+                          [canEdit]="canEditItem"></app-parameter-item>
+    </div>
+  </ng-template>
+</app-item-list>

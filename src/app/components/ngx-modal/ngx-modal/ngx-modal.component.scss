@@ -1,0 +1,20 @@
+::ng-deep {
+  .modal-content {
+    border: unset;
+    border-radius: unset;
+  }
+}
+
+.ngx-modal {
+  .modal-header {
+    background-color: #009df2;
+    color: #fff;
+    border: unset;
+    border-radius: unset;
+    padding: 10px 20px;
+  }
+
+  .modal-footer {
+    border: unset;
+  }
+}
