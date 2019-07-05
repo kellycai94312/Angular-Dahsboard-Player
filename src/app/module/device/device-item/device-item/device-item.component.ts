@@ -1,10 +1,8 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {DeviceWindowService} from '../../../../services/windows/device-window/device-window.service';
 import {Device} from '../../../../data/remote/model/device/device';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {ItemDisplay} from '../../../common/item-list/model/item-display';
 import {DialogResult} from '../../../../data/local/dialog-result';
+import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
 
 @Component({
   selector: 'app-device-item',
@@ -13,15 +11,7 @@ import {DialogResult} from '../../../../data/local/dialog-result';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DeviceWindowService]
 })
-export class DeviceItemComponent extends BaseComponent<Device> {
-
-  @Input()
-  public canEdit: boolean;
-
-  @Input()
-  public itemDisplay: ItemDisplay = ItemDisplay.LIST;
-
-  public readonly fileClassClass = FileClass;
+export class DeviceItemComponent extends BaseLibraryItem<Device> {
 
   constructor(private _deviceWindowService: DeviceWindowService) {
     super();

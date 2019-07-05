@@ -1,4 +1,7 @@
-<app-item-line [fileClass]="fileClassClass.SPORT_TYPE"
-               [(data)]="data"
-               [actions]="actions"
-               [infoAction]="infoAction"></app-item-line>
+<app-base-library-item [canEdit]="canEdit"
+                       [(data)]="data"
+                       [fileClass]="fileClassClass.UNIT"
+                       [itemDisplay]="itemDisplay"
+                       [getInfo]="getInfo"
+                       [openEditItem]="openEditItem">
+</app-base-library-item>

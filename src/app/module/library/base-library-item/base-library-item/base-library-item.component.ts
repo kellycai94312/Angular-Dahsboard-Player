@@ -1,10 +1,9 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {ItemDisplay} from '../../../common/item-list/model/item-display';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {MenuItem} from '../../../common/item-line/model/menu-item';
-import {DialogResult} from '../../../../data/local/dialog-result';
+import {BaseLibraryItem} from '../model/base-library-item';
 
 @Component({
   selector: 'app-base-library-item',
@@ -12,24 +11,12 @@ import {DialogResult} from '../../../../data/local/dialog-result';
   styleUrls: ['./base-library-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BaseLibraryItemComponent<T> extends BaseComponent<T> {
+export class BaseLibraryItemComponent<T> extends BaseLibraryItem<T> {
 
-  @Input()
-  public canEdit: boolean;
 
   @Input()
   public fileClass: FileClass;
 
-  @Input()
-  public itemDisplay: ItemDisplay = ItemDisplay.LIST;
-
-  @Input()
-  public getInfo: (item: T) => Promise<void>;
-
-  @Input()
-  public openEditItem: (item: T) => Promise<DialogResult<T>>;
-
-  public readonly fileClassClass = FileClass;
   public readonly imageTypeClass = ImageType;
   public readonly itemDisplayClass = ItemDisplay;
   public readonly actions: MenuItem[];
