@@ -4,6 +4,7 @@ import {Input} from '@angular/core';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
+import {ItemDisplay} from './item-display';
 
 export class BaseItemList<TModel extends IdentifiedObject, Q extends PageQuery> {
 
@@ -11,7 +12,7 @@ export class BaseItemList<TModel extends IdentifiedObject, Q extends PageQuery> 
   public translationTitle: string;
 
   @Input()
-  public grid: boolean;
+  public itemDisplay = ItemDisplay.LIST;
 
   @Input()
   public canEdit: boolean;

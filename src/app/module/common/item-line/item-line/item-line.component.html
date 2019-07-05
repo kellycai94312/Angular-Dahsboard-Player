@@ -16,26 +16,18 @@
   <div fxFlex="grow">
     <p class="item-text">{{data.name}}</p>
   </div>
-  <button *ngIf="infoAction"
+  <button *ngFor="let item of actions"
           mat-icon-button
-          (click)="infoAction.action(infoAction); $event.stopPropagation()">
-    <mat-icon>info</mat-icon>
-  </button>
-  <button *ngIf="actions.length"
-          mat-icon-button
-          (click)="actions[0].action(actions[0]); $event.stopPropagation()">
-    <mat-icon *ngIf="actions.length > 1; else singleActionTemplate">edit</mat-icon>
-    <ng-template #singleActionTemplate>
-      <mat-icon>{{actions[0].iconName}}</mat-icon>
-    </ng-template>
+          (click)="item.action(item); $event.stopPropagation()">
+    <mat-icon>{{item.iconName}}</mat-icon>
   </button>
 </div>
-<mat-menu #actionsMenu="matMenu">
-  <ng-container *ngFor="let item of actions; first as isFirst">
-    <button *ngIf="!isFirst"
-            mat-menu-item
-            (click)="item.action(item)">
-      <mat-icon>{{item.iconName}}</mat-icon>
-    </button>
-  </ng-container>
-</mat-menu>
+<!--<mat-menu #actionsMenu="matMenu">-->
+<!--  <ng-container *ngFor="let item of actions; first as isFirst">-->
+<!--    <button *ngIf="!isFirst"-->
+<!--            mat-menu-item-->
+<!--            (click)="item.action(item)">-->
+<!--      <mat-icon>{{item.iconName}}</mat-icon>-->
+<!--    </button>-->
+<!--  </ng-container>-->
+<!--</mat-menu>-->

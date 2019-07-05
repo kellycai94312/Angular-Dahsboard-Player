@@ -1,0 +1,30 @@
+<div class="header accent p-24"
+     fxLayout
+     fxLayoutAlign="space-between center">
+  <h3>{{translationTitle | translate}}</h3>
+  <div class="search-wrapper"
+       fxFlex
+       fxLayout
+       fxLayoutAlign="start center">
+    <div class="search"
+         fxLayout
+         fxLayoutAlign="start center">
+      <mat-icon>search</mat-icon>
+      <input fxFlex
+             [formControl]="searchControl"
+             placeholder="{{'search' | translate}}">
+    </div>
+  </div>
+  <div class="actions-wrapper">
+    <div class="actions-container"
+         fxLayout
+         fxLayoutGap="10px">
+      <button *ngFor="let item of actions"
+              mat-fab
+              color="warn"
+              (click)="item.action(item)">
+        <mat-icon>{{item.iconName}}</mat-icon>
+      </button>
+    </div>
+  </div>
+</div>
