@@ -6,10 +6,12 @@
                [fetchItems]="fetchItems">
   <ng-template #itemTemplate
                let-item
-               let-canEditItem="canEdit">
+               let-canEditItem="canEdit"
+               let-itemDisplay="itemDisplay">
     <div (click)="clickItem.emit(item)">
       <app-unit-item [(data)]="item"
-                     [canEdit]="canEditItem"></app-unit-item>
+                     [canEdit]="canEditItem"
+                     [itemDisplay]="itemDisplay"></app-unit-item>
     </div>
   </ng-template>
 </app-item-list>
