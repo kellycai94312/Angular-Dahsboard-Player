@@ -2902,7 +2902,7 @@ export class ParticipantRestApiService extends Rest {
     return url;
   }
 
-  getUrlByImage(image: Image, query: ImageQuery, noCache: boolean = false): string {
+  getUrlByImage(image: Image, query: { width?: number, height?: number } = {}, noCache: boolean = false): string {
     let url = `${environment.restUrl}/file/download/image/${image.id}?`;
     if (query.width) {
       url += `&width=${query.width}`;
