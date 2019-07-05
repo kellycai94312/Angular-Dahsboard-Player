@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {debounceTime, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -7,8 +7,7 @@ import {MenuItem} from '../../item-line/model/menu-item';
 @Component({
   selector: 'app-list-heading',
   templateUrl: './list-heading.component.html',
-  styleUrls: ['./list-heading.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./list-heading.component.scss']
 })
 export class ListHeadingComponent implements OnInit, OnDestroy {
 

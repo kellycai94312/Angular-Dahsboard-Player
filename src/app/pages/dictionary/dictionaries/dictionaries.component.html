@@ -1,20 +1,33 @@
-<div fxFlexFill
-     fxLayout="row wrap"
-     fxLayoutGap="20px grid"
-     fxLayoutAlign="center start">
-  <div *ngFor="let item of dictionaries"
-       class="item">
-    <mat-card routerLink="{{item.data}}"
-              matRipple>
-      <div fxLayout
-           fxLayoutGap="10px"
-           fxLayoutAlign="start start">
-        <ngx-image [object]="{id:0}"
-                   url="assets/img/default.png"
-                   [width]="100"
-                   [height]="100"></ngx-image>
-        <h4>{{item.name | translate}}</h4>
-      </div>
-    </mat-card>
-  </div>
-</div>
+<app-item-list [canEdit]="canEdit"
+               [query]="query"
+               [itemDisplay]="itemDisplay"
+               [translationTitle]="translationTitle"
+               [compare]="compare"
+               [addItem]="addItem"
+               [fetchItems]="fetchItems">
+  <ng-template #itemTemplate
+               let-item
+               let-canEditItem="canEdit"
+               let-itemDisplay="itemDisplay">
+    <ng-container *ngIf="item">
+      <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
+                     routerLink="{{item.data}}"
+                     [data]="item"></app-item-line>
+      <ng-template #cardItemTemplate>
+        <mat-card routerLink="{{item.data}}"
+                  matRipple
+                  class="item">
+          <div fxLayout
+               fxLayoutGap="10px"
+               fxLayoutAlign="start start">
+            <ngx-image [object]="{id:0}"
+                       url="assets/img/default.png"
+                       [width]="100"
+                       [height]="100"></ngx-image>
+            <h4>{{item.name}}</h4>
+          </div>
+        </mat-card>
+      </ng-template>
+    </ng-container>
+  </ng-template>
+</app-item-list>

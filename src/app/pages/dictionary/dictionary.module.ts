@@ -37,6 +37,8 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {MatCardModule, MatRippleModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {ItemLineModule} from '../../module/common/item-line/item-line.module';
+import {ItemListModule} from '../../module/common/item-list/item-list.module';
 
 @NgModule({
   imports: [
@@ -66,7 +68,9 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     NgxVirtualScrollModule,
     MatCardModule,
     MatRippleModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    ItemListModule,
+    ItemLineModule
   ],
   declarations: [
     DictionariesComponent,

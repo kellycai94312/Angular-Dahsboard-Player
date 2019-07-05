@@ -25,34 +25,33 @@ export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQu
 
   constructor(private _appHelper: AppHelper) {
     super();
-
-    const viewListIconName = 'view_list';
-    const viewModuleIconName = 'view_module';
-
-    this.actions = [
-      {
-        iconName: 'add',
-        action: async (item) => {
-          await this.onAddItem();
-        }
-      },
-      {
-        iconName: viewListIconName,
-        action: (item) => {
-          if (this.itemDisplay === ItemDisplay.LIST) {
-            item.iconName = viewModuleIconName;
-            this.itemDisplay = ItemDisplay.GRID;
-          } else {
-            item.iconName = viewListIconName;
-            this.itemDisplay = ItemDisplay.LIST;
-          }
-        }
-      }
-    ];
   }
 
   async ngOnInit() {
     await this._updateItems();
+
+    const viewListIconName = 'view_list';
+    const viewModuleIconName = 'view_module';
+    if (this.canEdit) {
+      this.actions.push({
+        iconName: 'add',
+        action: async (item) => {
+          await this.onAddItem();
+        }
+      });
+    }
+    this.actions.push({
+      iconName: viewListIconName,
+      action: (item) => {
+        if (this.itemDisplay === ItemDisplay.LIST) {
+          item.iconName = viewModuleIconName;
+          this.itemDisplay = ItemDisplay.GRID;
+        } else {
+          item.iconName = viewListIconName;
+          this.itemDisplay = ItemDisplay.LIST;
+        }
+      }
+    });
   }
 
   public async onSearchTextChanged(value: string): Promise<void> {
