@@ -54,7 +54,8 @@ export class DictionariesComponent extends BaseItemList<NameWrapper<string>, Pag
     ];
 
     this.fetchItems = async (direction: Direction, query: PageQuery): Promise<PageContainer<NameWrapper<string>>> => {
-      return this._appHelper.arrayToPageContainer(this._dictionaries.filter(x => x.name.indexOf(query.name || '') > -1));
+      query.name = query.name ? query.name.toLowerCase() : '';
+      return this._appHelper.arrayToPageContainer(this._dictionaries.filter(x => x.name.toLowerCase().indexOf(query.name) > -1));
     };
   }
 }

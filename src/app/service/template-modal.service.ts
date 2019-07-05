@@ -39,9 +39,6 @@ import {GroupClusterRank} from '../data/remote/model/group/connection/group-clus
 import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
 import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
 import {NgxCropImageComponent} from '../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
-import {IdentifiedObject} from '../data/remote/base/identified-object';
-import {ImageType} from '../data/remote/model/file/image/image-type';
-import {FileClass} from '../data/remote/model/file/base/file-class';
 import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-group-news/edit-group-news.component';
 import {EventPoll} from '../data/remote/model/training/poll/event-poll';
 import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
@@ -51,6 +48,7 @@ import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-
 import {EventData} from '../module/event/edit-base-event/model/event-data';
 import {ImageFormat} from '../data/local/image-format';
 import {CropperPosition} from 'ngx-image-cropper';
+import {Image} from '../data/remote/model/file/image/image';
 
 @Injectable({
   providedIn: 'root'
@@ -363,9 +361,7 @@ export class TemplateModalService {
     });
   }
 
-  public async showCropImageModal(obj: IdentifiedObject,
-                                  type: ImageType,
-                                  fileClass: FileClass,
+  public async showCropImageModal(image: Image,
                                   format: ImageFormat,
                                   imageBase64?: any,
                                   imagePosition?: CropperPosition,
@@ -378,7 +374,7 @@ export class TemplateModalService {
     let ngxCropImageComponent: NgxCropImageComponent;
     await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
       ngxCropImageComponent = component;
-      await component.initialize(obj, type, fileClass, format, imageBase64, imagePosition, file);
+      await component.initialize(image, format, imageBase64, imagePosition, file);
 
       modal.componentInstance.splitButtonItems = [
         {
