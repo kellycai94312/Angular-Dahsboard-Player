@@ -7,6 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCheckboxModule} from '@angular/material';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
+import {MediaLibraryModule} from '../../library/media-library/media-library.module';
 
 @NgModule({
   declarations: [EditUnitComponent],
@@ -19,7 +20,8 @@ import {TranslateModule} from '@ngx-translate/core';
     FormsModule,
     TranslateModule.forChild(),
     NgxInputModule,
-    NgxSelectModule
+    NgxSelectModule,
+    MediaLibraryModule
   ]
 })
 export class EditUnitModule {

@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {DictionaryType} from '../../../../data/remote/model/base/dictionary-type';
 import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
@@ -18,6 +18,8 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {NameWrapper} from '../../../../data/local/name-wrapper';
 import {UnitVersion} from '../../../../data/remote/model/unit/unit-version';
 import {ParameterVersion} from '../../../../data/remote/model/parameter/parameter-version';
+import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-edit-parameter',
@@ -27,8 +29,12 @@ import {ParameterVersion} from '../../../../data/remote/model/parameter/paramete
 })
 export class EditParameterComponent extends BaseEditComponent<BaseParameter> implements OnInit {
 
+  @ViewChild(MediaLibraryComponent)
+  public mediaLibraryComponent: MediaLibraryComponent;
+
   public readonly dictionaryTypeClass = DictionaryType;
   public readonly parameterTypeEnumClass = ParameterTypeEnum;
+  public readonly fileClassClass = FileClass;
   public readonly dictionaryTypeNgxSelect = new NgxSelect();
   public readonly nameNgxInput = new NgxInput();
   public readonly shortNameNgxInput = new NgxInput();
@@ -154,6 +160,9 @@ export class EditParameterComponent extends BaseEditComponent<BaseParameter> imp
       const unitVersions = await this._parameterApiService.updateParameterUnits(data, new ListRequest<IdRequest>(this.data.unitVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
       this.data.unitVersions = unitVersions;
+
+      this.mediaLibraryComponent.ngxImageComponent.object = this.data;
+      await this.mediaLibraryComponent.ngxImageComponent.save(null, false);
     });
   }
 
