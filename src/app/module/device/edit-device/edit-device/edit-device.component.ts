@@ -22,8 +22,7 @@ import {DeviceWindowService} from '../../../../services/windows/device-window/de
 @Component({
   selector: 'app-edit-device',
   templateUrl: './edit-device.component.html',
-  styleUrls: ['./edit-device.component.scss'],
-  providers: [DeviceApiService]
+  styleUrls: ['./edit-device.component.scss']
 })
 export class EditDeviceComponent extends BaseEditComponent<Device> implements OnInit {
 

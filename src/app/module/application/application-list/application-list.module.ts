@@ -6,6 +6,7 @@ import {ApplicationItemModule} from '../application-item/application-item.module
 import {EditApplicationModule} from '../edit-application/edit-application.module';
 import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 import {ApplicationWindowService} from '../../../services/windows/application-window/application-window.service';
+import {DeviceItemModule} from '../../device/device-item/device-item.module';
 
 @NgModule({
   declarations: [ApplicationListComponent],
@@ -19,7 +20,8 @@ import {ApplicationWindowService} from '../../../services/windows/application-wi
     CommonModule,
     ItemListModule,
     ApplicationItemModule,
-    EditApplicationModule
+    EditApplicationModule,
+    DeviceItemModule
   ]
 })
 export class ApplicationListModule {

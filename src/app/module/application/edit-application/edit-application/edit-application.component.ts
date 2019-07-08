@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
@@ -16,12 +16,13 @@ import {ApplicationApiService} from '../../../../data/remote/rest-api/api/applic
 import {Application} from '../../../../data/remote/model/application/application';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
+import {DeviceVersion} from '../../../../data/remote/model/device/device-version';
+import {ApplicationWindowService} from '../../../../services/windows/application-window/application-window.service';
 
 @Component({
   selector: 'app-edit-application',
   templateUrl: './edit-application.component.html',
-  styleUrls: ['./edit-application.component.scss'],
-  providers: [ApplicationApiService]
+  styleUrls: ['./edit-application.component.scss']
 })
 export class EditApplicationComponent extends BaseEditComponent<Application> implements OnInit {
 
@@ -39,6 +40,9 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
 
   constructor(private _applicationApiService: ApplicationApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              // TODO: ApplicationWindowService can't inject without forwardRef()
+              @Inject(forwardRef(() => ApplicationWindowService))
+              private _applicationWindowService: ApplicationWindowService,
               private _externalResourceApiService: ExternalResourceApiService,
               private _parameterWindowService: ParameterWindowService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
@@ -97,8 +101,10 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
     return await this.appHelper.trySave(async () => {
       const data = await this._applicationApiService.saveApplication(this.data).toPromise();
       const parameterVersions = await this._applicationApiService.updateApplicationParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
+      const deviceVersions = await this._applicationApiService.updateApplicationDevices(data, new ListRequest<IdRequest>(this.data.deviceVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
       this.data.parameterVersions = parameterVersions;
+      this.data.deviceVersions = deviceVersions;
 
       if (this._urlExternalResource && !this.videoUrlNgxInput.control.value) {
         await this._externalResourceApiService.removeExternalResource(this._urlExternalResource).toPromise();
@@ -138,6 +144,29 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
     const indexItem = this.data.parameterVersions.findIndex(x => x.parameter.id == item.parameter.id);
     if (indexItem > -1) {
       this.data.parameterVersions.splice(indexItem, 1);
+    }
+  }
+
+  public async onEditDevices(): Promise<void> {
+    const dialogResult = await this._applicationWindowService.openEditDevices(this.data.deviceVersions.map(x => x.device), {
+      componentFactoryResolver: this._componentFactoryResolver,
+      compare: (first, second) => first.id == second.id
+    });
+    if (dialogResult.result) {
+      this.data.deviceVersions = dialogResult.data.map(x => {
+        const deviceVersion = new DeviceVersion();
+        Object.assign(deviceVersion, x);
+        deviceVersion.device = x;
+        deviceVersion.id = x.deviceVersionId;
+        return deviceVersion;
+      });
+    }
+  }
+
+  public onRemoveDevice(item: DeviceVersion): void {
+    const indexItem = this.data.deviceVersions.findIndex(x => x.device.id == item.device.id);
+    if (indexItem > -1) {
+      this.data.deviceVersions.splice(indexItem, 1);
     }
   }
 

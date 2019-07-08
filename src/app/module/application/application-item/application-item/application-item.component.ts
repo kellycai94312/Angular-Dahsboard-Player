@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, forwardRef, Inject} from '@angular/core';
 import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {Application} from '../../../../data/remote/model/application/application';
@@ -7,12 +7,13 @@ import {ApplicationWindowService} from '../../../../services/windows/application
 @Component({
   selector: 'app-application-item',
   templateUrl: './application-item.component.html',
-  styleUrls: ['./application-item.component.scss'],
-  providers: [ApplicationWindowService]
+  styleUrls: ['./application-item.component.scss']
 })
 export class ApplicationItemComponent extends BaseLibraryItem<Application> {
 
-  constructor(private _applicationWindowService: ApplicationWindowService) {
+  constructor(// TODO: ApplicationWindowService can't inject without forwardRef()
+    @Inject(forwardRef(() => ApplicationWindowService))
+    private _applicationWindowService: ApplicationWindowService) {
     super();
   }
 

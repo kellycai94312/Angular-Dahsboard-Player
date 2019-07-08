@@ -8,11 +8,17 @@ import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {MediaLibraryModule} from '../../library/media-library/media-library.module';
+import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
+import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 
 @NgModule({
   declarations: [EditApplicationComponent],
   entryComponents: [EditApplicationComponent],
-  providers: [ApplicationWindowService],
+  providers: [
+    DeviceApiService,
+    ApplicationApiService,
+    ApplicationWindowService
+  ],
   exports: [EditApplicationComponent],
   imports: [
     CommonModule,

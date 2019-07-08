@@ -8,6 +8,7 @@ import {ApplicationQuery} from '../../query/application-query';
 import {ParameterVersion} from '../../../model/parameter/parameter-version';
 import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
+import {DeviceVersion} from '../../../model/device/device-version';
 
 @Injectable()
 export class ApplicationApiService {
@@ -40,6 +41,18 @@ export class ApplicationApiService {
 
   public updateApplicationParameters<T extends ParameterVersion>(application: Application, listRequest: ListRequest<IdRequest>): Observable<T[]> {
     return this._apiService.createValue(ParameterVersion, `${this._basePath}/${application.id}/parameter`, listRequest) as Observable<T[]>;
+  }
+
+  //#endregion
+
+  //#region Device
+
+  public getApplicationDevices<T extends DeviceVersion>(application: Application): Observable<T[]> {
+    return this._apiService.getValues(DeviceVersion, `${this._basePath}/${application.id}/device`, {applicationVersionId: application.applicationVersionId}) as Observable<T[]>;
+  }
+
+  public updateApplicationDevices<T extends DeviceVersion>(application: Application, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+    return this._apiService.createValue(DeviceVersion, `${this._basePath}/${application.id}/device`, listRequest) as Observable<T[]>;
   }
 
   //#endregion

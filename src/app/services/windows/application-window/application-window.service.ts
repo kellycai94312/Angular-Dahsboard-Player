@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, Injectable} from '@angular/core';
+import {ComponentFactoryResolver, forwardRef, Inject, Injectable} from '@angular/core';
 import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
 import {ModalBuilderService} from '../../../service/modal-builder/modal-builder.service';
 import {ExternalResourceApiService} from '../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
@@ -18,6 +18,11 @@ import {VideoField} from '../../../module/common/item-detail/model/video-field';
 import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 import {Application} from '../../../data/remote/model/application/application';
 import {EditApplicationComponent} from '../../../module/application/edit-application/edit-application/edit-application.component';
+import {NgxSelectionConfig} from '../../../components/ngx-selection/model/ngx-selection-config';
+import {PageQuery} from '../../../data/remote/rest-api/page-query';
+import {Device} from '../../../data/remote/model/device/device';
+import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
+import {DeviceItemComponent} from '../../../module/device/device-item/device-item/device-item.component';
 
 @Injectable()
 export class ApplicationWindowService {
@@ -27,6 +32,9 @@ export class ApplicationWindowService {
               private _modalBuilderService: ModalBuilderService,
               private _externalResourceApiService: ExternalResourceApiService,
               private _applicationApiService: ApplicationApiService,
+              // TODO: DeviceApiService can't inject without forwardRef()
+              @Inject(forwardRef(() => DeviceApiService))
+              private _deviceApiService: DeviceApiService,
               private _appHelper: AppHelper,
               private _utilService: UtilService) {
   }
@@ -56,16 +64,6 @@ export class ApplicationWindowService {
     return dialogResult;
   }
 
-  // TODO:
-  // public async openEditApplicationParameters<T extends BaseParameter>(application: Application, parameters: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
-  //   return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: PageQuery) => {
-  //     // const items = (await this._applicationApiService.get(application).toPromise()).map(x => x.parameter);
-  //     // return this._appHelper.arrayToPageContainer(items);
-  //   }, ParameterItemComponent, async (component, data) => {
-  //     await component.initialize(data);
-  //   }, config) as DialogResult<T[]>;
-  // }
-
   public async openApplicationDetail(application: Application): Promise<void> {
     const model = this._ngxModalService.open();
     model.componentInstance.title = `${application.name}`;
@@ -93,6 +91,14 @@ export class ApplicationWindowService {
       }
     });
     await this._ngxModalService.awaitModalResult(model);
+  }
+
+  public async openEditDevices<T extends Device>(devices: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(devices, async (query: PageQuery) => {
+      return await this._deviceApiService.getDevices(query).toPromise();
+    }, DeviceItemComponent, async (component, data) => {
+      await component.initialize(data);
+    }, config) as DialogResult<T[]>;
   }
 
 }

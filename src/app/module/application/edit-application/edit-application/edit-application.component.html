@@ -26,5 +26,23 @@
         <mat-icon>edit</mat-icon>
       </button>
     </div>
+    <div fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="space-between start">
+      <div>
+        <label>{{'devices' | translate}}</label>
+        <mat-chip-list>
+          <mat-chip *ngFor="let item of data.deviceVersions"
+                    [removable]="true"
+                    (removed)="onRemoveDevice(item)">{{item.name}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+      <button mat-icon-button
+              (click)="onEditDevices()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

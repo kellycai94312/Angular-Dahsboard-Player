@@ -11,8 +11,7 @@ import {ApplicationWindowService} from '../../../../services/windows/application
 @Component({
   selector: 'app-application-list',
   templateUrl: './application-list.component.html',
-  styleUrls: ['./application-list.component.scss'],
-  providers: [ApplicationApiService]
+  styleUrls: ['./application-list.component.scss']
 })
 export class ApplicationListComponent extends BaseItemList<Application, PageQuery> {
 
