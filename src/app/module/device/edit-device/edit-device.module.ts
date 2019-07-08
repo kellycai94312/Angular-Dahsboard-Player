@@ -7,8 +7,7 @@ import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {DeviceWindowService} from '../../../services/windows/device-window/device-window.service';
-import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
-import {NgxCarouselModule} from '../../../components/ngx-carousel/ngx-carousel.module';
+import {MediaLibraryModule} from '../../library/media-library/media-library.module';
 
 @NgModule({
   declarations: [EditDeviceComponent],
@@ -25,8 +24,7 @@ import {NgxCarouselModule} from '../../../components/ngx-carousel/ngx-carousel.m
     FormsModule,
     TranslateModule.forChild(),
     NgxInputModule,
-    NgxImageModule,
-    NgxCarouselModule
+    MediaLibraryModule
   ]
 })
 export class EditDeviceModule {

@@ -13,9 +13,9 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 import {ExternalResourceApiService} from '../../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
 import {ExternalResource} from '../../../../data/remote/model/external-resource';
+import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
 
 @Component({
   selector: 'app-edit-device',
@@ -25,8 +25,8 @@ import {ExternalResource} from '../../../../data/remote/model/external-resource'
 })
 export class EditDeviceComponent extends BaseEditComponent<Device> implements OnInit {
 
-  @ViewChild(NgxImageComponent)
-  public ngxImageComponent: NgxImageComponent;
+  @ViewChild(MediaLibraryComponent)
+  public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
@@ -113,8 +113,8 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
       }
 
-      this.ngxImageComponent.object = this.data;
-      await this.ngxImageComponent.save(null, false);
+      this.mediaLibraryComponent.ngxImageComponent.object = this.data;
+      await this.mediaLibraryComponent.ngxImageComponent.save(null, false);
     });
   }
 

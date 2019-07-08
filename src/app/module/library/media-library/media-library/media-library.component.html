@@ -1,0 +1,16 @@
+<div fxLayout
+     fxLayoutAlign="space-between center">
+  <ngx-image [canEdit]="true"
+             [object]="data"
+             [width]="130"
+             [height]="130"
+             [allowFullScreen]="false"
+             [cropImage]="true"
+             [type]="imageTypeClass.LOGO"
+             [fileClass]="fileClass"
+             [autoSave]="false"></ngx-image>
+  <ngx-carousel *ngIf="data.id"
+                [canEdit]="true"
+                [object]="data"
+                [fileClass]="fileClass"></ngx-carousel>
+</div>
