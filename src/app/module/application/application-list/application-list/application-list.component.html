@@ -1,0 +1,17 @@
+<app-item-list [canEdit]="canEdit"
+               [translationTitle]="translationTitle"
+               [query]="query"
+               [compare]="compare"
+               [addItem]="addItem"
+               [fetchItems]="fetchItems">
+  <ng-template #itemTemplate
+               let-item
+               let-canEditItem="canEdit"
+               let-itemDisplay="itemDisplay">
+    <div (click)="clickItem.emit(item)">
+      <app-application-item [(data)]="item"
+                            [canEdit]="canEditItem"
+                            [itemDisplay]="itemDisplay"></app-application-item>
+    </div>
+  </ng-template>
+</app-item-list>

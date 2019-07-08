@@ -725,5 +725,7 @@
   "device": "Device",
   "manufacturerUrl": "Manufacturer url",
   "manufacturer": "Manufacturer",
-  "sportTypes": "Sport types"
+  "sportTypes": "Sport types",
+  "applications": "Applications",
+  "application": "Application"
 }
