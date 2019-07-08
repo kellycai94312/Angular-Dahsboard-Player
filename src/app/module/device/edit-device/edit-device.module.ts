@@ -8,11 +8,15 @@ import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {DeviceWindowService} from '../../../services/windows/device-window/device-window.service';
 import {MediaLibraryModule} from '../../library/media-library/media-library.module';
+import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 
 @NgModule({
   declarations: [EditDeviceComponent],
   entryComponents: [EditDeviceComponent],
-  providers: [DeviceWindowService],
+  providers: [
+    ApplicationApiService,
+    DeviceWindowService
+  ],
   exports: [EditDeviceComponent],
   imports: [
     CommonModule,

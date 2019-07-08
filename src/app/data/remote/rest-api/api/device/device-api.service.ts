@@ -8,6 +8,7 @@ import {PageQuery} from '../../page-query';
 import {ParameterVersion} from '../../../model/parameter/parameter-version';
 import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
+import {ApplicationVersion} from '../../../model/application/application-version';
 
 @Injectable()
 export class DeviceApiService {
@@ -41,6 +42,18 @@ export class DeviceApiService {
 
   public updateDeviceParameters<T extends ParameterVersion>(device: Device, listRequest: ListRequest<IdRequest>): Observable<T[]> {
     return this._apiService.createValue(ParameterVersion, `${this._basePath}/${device.id}/parameter`, listRequest) as Observable<T[]>;
+  }
+
+  //#endregion
+
+  //#region Application
+
+  public getDeviceApplications<T extends ApplicationVersion>(device: Device): Observable<T[]> {
+    return this._apiService.getValues(ApplicationVersion, `${this._basePath}/${device.id}/application`, {deviceVersionId: device.deviceVersionId}) as Observable<T[]>;
+  }
+
+  public updateDeviceApplications<T extends ApplicationVersion>(device: Device, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+    return this._apiService.createValue(ApplicationVersion, `${this._basePath}/${device.id}/application`, listRequest) as Observable<T[]>;
   }
 
   //#endregion

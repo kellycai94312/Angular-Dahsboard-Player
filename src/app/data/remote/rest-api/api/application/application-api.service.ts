@@ -5,6 +5,9 @@ import {Observable} from 'rxjs';
 import {PageContainer} from '../../../bean/page-container';
 import {Application} from '../../../model/application/application';
 import {ApplicationQuery} from '../../query/application-query';
+import {ParameterVersion} from '../../../model/parameter/parameter-version';
+import {ListRequest} from '../../../request/list-request';
+import {IdRequest} from '../../../request/id-request';
 
 @Injectable()
 export class ApplicationApiService {
@@ -28,5 +31,17 @@ export class ApplicationApiService {
   public removeApplication<T extends Application>(value: T): Observable<T> {
     return this._apiService.removeValue(Application, `${this._basePath}/${value.id}`) as Observable<T>;
   }
+
+  //#region Application parameter
+
+  public getApplicationParameters<T extends ParameterVersion>(application: Application): Observable<T[]> {
+    return this._apiService.getValues(ParameterVersion, `${this._basePath}/${application.id}/parameter`, {deviceVersionId: application.applicationVersionId}) as Observable<T[]>;
+  }
+
+  public updateApplicationParameters<T extends ParameterVersion>(application: Application, listRequest: ListRequest<IdRequest>): Observable<T[]> {
+    return this._apiService.createValue(ParameterVersion, `${this._basePath}/${application.id}/parameter`, listRequest) as Observable<T[]>;
+  }
+
+  //#endregion
 
 }

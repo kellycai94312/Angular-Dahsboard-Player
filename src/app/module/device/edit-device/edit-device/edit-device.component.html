@@ -26,5 +26,23 @@
         <mat-icon>edit</mat-icon>
       </button>
     </div>
+    <div fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="space-between start">
+      <div>
+        <label>{{'applications' | translate}}</label>
+        <mat-chip-list>
+          <mat-chip *ngFor="let item of data.applicationVersions"
+                    [removable]="true"
+                    (removed)="onRemoveApplication(item)">{{item.name}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+      <button mat-icon-button
+              (click)="onEditApplications()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
   </div>
 </div>

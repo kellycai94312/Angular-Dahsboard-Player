@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {Application} from '../../../../data/remote/model/application/application';
@@ -8,7 +8,6 @@ import {ApplicationWindowService} from '../../../../services/windows/application
   selector: 'app-application-item',
   templateUrl: './application-item.component.html',
   styleUrls: ['./application-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ApplicationWindowService]
 })
 export class ApplicationItemComponent extends BaseLibraryItem<Application> {

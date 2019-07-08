@@ -6,6 +6,7 @@ import {DeviceItemModule} from '../device-item/device-item.module';
 import {EditDeviceModule} from '../edit-device/edit-device.module';
 import {DeviceWindowService} from '../../../services/windows/device-window/device-window.service';
 import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
+import {ApplicationItemModule} from '../../application/application-item/application-item.module';
 
 @NgModule({
   declarations: [DeviceListComponent],
@@ -18,7 +19,8 @@ import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-
     CommonModule,
     ItemListModule,
     DeviceItemModule,
-    EditDeviceModule
+    EditDeviceModule,
+    ApplicationItemModule
   ]
 })
 export class DeviceListModule {

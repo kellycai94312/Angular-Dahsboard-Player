@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, forwardRef, Inject} from '@angular/core';
+import {Component, forwardRef, Inject} from '@angular/core';
 import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
 import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
 import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
@@ -7,8 +7,7 @@ import {DialogResult} from '../../../../data/local/dialog-result';
 @Component({
   selector: 'app-parameter-item',
   templateUrl: './parameter-item.component.html',
-  styleUrls: ['./parameter-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./parameter-item.component.scss']
 })
 export class ParameterItemComponent extends BaseLibraryItem<BaseParameter> {
 

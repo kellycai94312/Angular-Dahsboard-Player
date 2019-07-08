@@ -1,6 +1,5 @@
 import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {Device} from '../../../../data/remote/model/device/device';
 import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
@@ -15,6 +14,8 @@ import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {ParameterVersion} from '../../../../data/remote/model/parameter/parameter-version';
 import {ApplicationApiService} from '../../../../data/remote/rest-api/api/application/application-api.service';
 import {Application} from '../../../../data/remote/model/application/application';
+import {ListRequest} from '../../../../data/remote/request/list-request';
+import {IdRequest} from '../../../../data/remote/request/id-request';
 
 @Component({
   selector: 'app-edit-application',
@@ -44,31 +45,31 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
     super(participantRestApiService, appHelper);
   }
 
-  protected async initializeComponent(data: Device): Promise<boolean> {
-    const result = await super.initializeComponent(data);
+  protected async initializeComponent(application: Application): Promise<boolean> {
+    const result = await super.initializeComponent(application);
     if (result) {
       return await this.appHelper.tryLoad(async () => {
         this.nameNgxInput.labelTranslation = 'name';
         this.nameNgxInput.required = true;
-        this.nameNgxInput.control.setValue(data.name);
+        this.nameNgxInput.control.setValue(application.name);
         this.nameNgxInput.control.setValidators(Validators.required);
 
         this.shortNameNgxInput.labelTranslation = 'shortName';
         this.shortNameNgxInput.required = true;
-        this.shortNameNgxInput.control.setValue(data.shortName);
+        this.shortNameNgxInput.control.setValue(application.shortName);
         this.shortNameNgxInput.control.setValidators(Validators.required);
 
         this.descriptionNgxInput.labelTranslation = 'description';
         this.descriptionNgxInput.type = NgxInputType.TEXTAREA;
-        this.descriptionNgxInput.control.setValue(data.description);
+        this.descriptionNgxInput.control.setValue(application.description);
 
         this.manufacturerUrlNgxInput.labelTranslation = 'manufacturerUrl';
-        this.manufacturerUrlNgxInput.control.setValue(data.manufacturerResource);
+        this.manufacturerUrlNgxInput.control.setValue(application.manufacturerResource);
 
         this.videoUrlNgxInput.labelTranslation = 'videoUrl';
 
         if (!this.isNew) {
-          const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.APPLICATION, objectId: data.id}).toPromise();
+          const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.APPLICATION, objectId: application.id}).toPromise();
           if (externalResources.length) {
             this._urlExternalResource = externalResources[0];
             this.videoUrlNgxInput.control.setValue(this._urlExternalResource.url);
@@ -95,9 +96,9 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
 
     return await this.appHelper.trySave(async () => {
       const data = await this._applicationApiService.saveApplication(this.data).toPromise();
-      // TODO: const parameterVersions = await this._applicationApiService.update(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
+      const parameterVersions = await this._applicationApiService.updateApplicationParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
       this.data = data;
-      // TODO: this.data.parameterVersions = parameterVersions;
+      this.data.parameterVersions = parameterVersions;
 
       if (this._urlExternalResource && !this.videoUrlNgxInput.control.value) {
         await this._externalResourceApiService.removeExternalResource(this._urlExternalResource).toPromise();
