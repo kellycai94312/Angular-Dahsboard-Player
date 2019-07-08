@@ -2841,20 +2841,14 @@ export class ParticipantRestApiService extends Rest {
     return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
   }
 
-  uploadFile<T extends BaseFile>(baseFile: T, files: File[] = null): Promise<T[]> {
+  uploadFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
     const formData = new FormData();
     formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
 
-    if (files && files.length) {
-      for (let i = 0; i < files.length; i++) {
-        const item = files[i];
-        if (!item) {
-          continue;
-        }
-        formData.append('file', item, item.name);
-      }
+    if (file) {
+      formData.append('file', file, file.name);
     }
-    return this.http.post<T[]>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
+    return this.http.post<T>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
   }
 
   updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
@@ -2902,7 +2896,7 @@ export class ParticipantRestApiService extends Rest {
     return url;
   }
 
-  getUrlByImage(image: Image, query: ImageQuery, noCache: boolean = false): string {
+  getUrlByImage(image: Image, query: { width?: number, height?: number } = {}, noCache: boolean = false): string {
     let url = `${environment.restUrl}/file/download/image/${image.id}?`;
     if (query.width) {
       url += `&width=${query.width}`;

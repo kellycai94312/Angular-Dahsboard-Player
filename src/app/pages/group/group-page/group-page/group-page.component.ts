@@ -23,6 +23,7 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
 import {map, takeWhile} from 'rxjs/operators';
 import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
+import {IdRequest} from '../../../../data/remote/request/id-request';
 
 @Component({
   selector: 'app-group-page',
@@ -99,7 +100,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
           const params = {groupId: this.group.id};
           const result = await this.groupService.showSelectionGroupVacanciesModal(false, [], params);
           if (result.result && await this._templateModalService.addMissingUserRoles(result.data.map(x => x.position))) {
-            await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => x.position)}, {}, params));
+            await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => new IdRequest(x.position.id))}, {}, params));
           }
         },
         visible: (): boolean => {
@@ -221,7 +222,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
             const params = {groupId: this.group.id};
             const result = await this.groupService.showSelectionGroupVacanciesModal(true, vacancies, params);
             if (result.result) {
-              await this._participantRestApiService.updateGroupVacancies({list: result.data.map(x => x.position)}, {}, params);
+              await this._participantRestApiService.updateGroupVacancies({list: result.data.map(x => new IdRequest(x.position.id))}, {}, params);
             }
           }
         },

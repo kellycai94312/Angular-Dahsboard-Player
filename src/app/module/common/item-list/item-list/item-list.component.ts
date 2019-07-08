@@ -1,19 +1,18 @@
-import {Component, ContentChild, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ContentChild, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {AppHelper} from '../../../../utils/app-helper';
-import {debounceTime, takeWhile} from 'rxjs/operators';
-import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {BaseItemList} from '../model/base-item-list';
-import {FormControl} from '@angular/forms';
+import {ItemDisplay} from '../model/item-display';
+import {MenuItem} from '../../item-line/model/menu-item';
 
 @Component({
   selector: 'app-item-list',
   templateUrl: './item-list.component.html',
   styleUrls: ['./item-list.component.scss']
 })
-export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQuery> extends BaseItemList<TModel, Q> implements OnInit, OnDestroy {
+export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQuery> extends BaseItemList<TModel, Q> implements OnInit {
 
   @ContentChild('itemTemplate')
   public itemTemplate: TemplateRef<any>;
@@ -21,28 +20,43 @@ export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQu
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  public readonly searchControl = new FormControl();
-  private _notDestroyed = true;
+  public readonly itemDisplayClass = ItemDisplay;
+  public readonly actions: MenuItem[] = [];
 
   constructor(private _appHelper: AppHelper) {
     super();
-    this.searchControl.valueChanges
-      .pipe(
-        takeWhile(() => this._notDestroyed),
-        debounceTime(PropertyConstant.searchDebounceTime)
-      )
-      .subscribe(async (value) => {
-        this.query.name = value;
-        await this._updateItems();
-      });
   }
 
   async ngOnInit() {
     await this._updateItems();
+
+    const viewListIconName = 'view_list';
+    const viewModuleIconName = 'view_module';
+    if (this.canEdit) {
+      this.actions.push({
+        iconName: 'add',
+        action: async (item) => {
+          await this.onAddItem();
+        }
+      });
+    }
+    this.actions.push({
+      iconName: viewListIconName,
+      action: (item) => {
+        if (this.itemDisplay === ItemDisplay.LIST) {
+          item.iconName = viewModuleIconName;
+          this.itemDisplay = ItemDisplay.GRID;
+        } else {
+          item.iconName = viewListIconName;
+          this.itemDisplay = ItemDisplay.LIST;
+        }
+      }
+    });
   }
 
-  ngOnDestroy(): void {
-    this._notDestroyed = false;
+  public async onSearchTextChanged(value: string): Promise<void> {
+    this.query.name = value;
+    await this._updateItems();
   }
 
   public async onAddItem(): Promise<void> {

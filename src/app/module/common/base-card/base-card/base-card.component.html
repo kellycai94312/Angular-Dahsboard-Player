@@ -1,0 +1,17 @@
+<mat-card matRipple>
+  <div fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between center">
+    <div class="title">
+      {{ cardTitle ? cardTitle : translationTitle | translate}}
+    </div>
+    <div fxLayout>
+      <button *ngFor="let item of actions"
+              mat-icon-button
+              (click)="item.action(item); $event.stopPropagation()">
+        <mat-icon>{{item.iconName}}</mat-icon>
+      </button>
+    </div>
+  </div>
+  <ng-content></ng-content>
+</mat-card>

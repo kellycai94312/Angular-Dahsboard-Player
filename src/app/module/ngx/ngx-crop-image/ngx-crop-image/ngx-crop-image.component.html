@@ -3,6 +3,7 @@
   <image-cropper *ngIf="imageBase64; else elseTemplate"
                  [cropper]="cropper"
                  [maintainAspectRatio]="true"
+                 [aspectRatio]="aspectRatio"
                  [resizeToWidth]="128"
                  [imageBase64]="imageBase64"
                  (imageCropped)="imageCropped($event)"

@@ -1,46 +1,22 @@
 <div fxLayout="column"
-     fxLayoutGap="10px">
-  <div class="header accent p-24"
-       fxLayout
-       fxLayoutAlign="space-between center">
-    <h3>{{translationTitle | translate}}</h3>
-    <div class="search-wrapper"
-         fxFlex
-         fxLayout
-         fxLayoutAlign="start center">
-      <div class="search"
-           fxLayout
-           fxLayoutAlign="start center">
-        <mat-icon>search</mat-icon>
-        <input fxFlex
-               [formControl]="searchControl"
-               placeholder="{{'search' | translate}}">
-      </div>
-    </div>
-    <div>
-      <button *ngIf="canEdit"
-              mat-fab
-              color="warn"
-              class="absolute-button"
-              (click)="onAddItem()">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-  </div>
+     fxLayoutGap="30px">
+  <app-list-heading [actions]="actions"
+                    [translationTitle]="translationTitle"
+                    (searchTextChange)="onSearchTextChanged($event)"></app-list-heading>
   <div>
-    <ngx-virtual-scroll class="mt-4 d-flex flex-wrap"
+    <ngx-virtual-scroll class="d-flex flex-wrap"
                         [getItems]="fetchItems"
                         [query]="query">
       <ng-template let-item
                    let-isLast="last">
         <div *ngIf="!item.deleted"
              class="item"
-             [ngClass]="{'item-list': !grid}">
-          <div matRipple>
+             [ngClass]="{'item-list': itemDisplayClass.LIST === itemDisplay, 'mr-3 mb-3': itemDisplayClass.LIST !== itemDisplay}">
+          <div>
             <ng-template [ngTemplateOutlet]="itemTemplate"
-                         [ngTemplateOutletContext]="{$implicit: item, canEdit: canEdit}"></ng-template>
+                         [ngTemplateOutletContext]="{$implicit: item, canEdit: canEdit, itemDisplay: itemDisplay}"></ng-template>
           </div>
-          <mat-divider *ngIf="!isLast"></mat-divider>
+          <mat-divider *ngIf="itemDisplayClass.LIST === itemDisplay && !isLast"></mat-divider>
         </div>
       </ng-template>
     </ngx-virtual-scroll>

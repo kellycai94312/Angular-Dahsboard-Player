@@ -8,8 +8,9 @@ import {NameWrapper} from '../../../data/local/name-wrapper';
 import {environment} from '../../../../environments/environment';
 import {PermissionService} from '../../../shared/permission.service';
 import {AppHelper} from '../../../utils/app-helper';
-import {IconEnum} from '../../ngx-button/model/icon-enum';
 import {IdentifiedObject} from '../../../data/remote/base/identified-object';
+import {ImageFormat} from '../../../data/local/image-format';
+import {TemplateModalService} from '../../../service/template-modal.service';
 
 @Component({
   selector: 'ngx-carousel',
@@ -40,7 +41,8 @@ export class NgxCarouselComponent implements OnInit {
   @Input()
   public height = 200;
 
-  public readonly iconEnumClass = IconEnum;
+  public readonly imageTypeClass = ImageType;
+  public readonly imageFormatClass = ImageFormat;
   public images: NameWrapper<Image>[] = [];
   public currentImage: NameWrapper<Image>;
   public defaultImageUrl = 'assets/img/default.png';
@@ -48,6 +50,7 @@ export class NgxCarouselComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
+              private _templateModalService: TemplateModalService,
               private _appHelper: AppHelper,
               private _ngZone: NgZone,
               private _changeDetectorRef: ChangeDetectorRef) {
@@ -59,11 +62,13 @@ export class NgxCarouselComponent implements OnInit {
 
   public async initialize() {
     await this._ngZone.runOutsideAngular(async () => {
+      delete this.currentImage;
       this.images = (await this._participantRestApiService.getImages({
         count: PropertyConstant.pageSizeMax,
         objectId: this.object.id,
         clazz: this.fileClass,
-        type: ImageType.GALLERY
+        type: ImageType.GALLERY,
+        cropped: true
       })).list.map(x => this.mapImage(x));
 
       if (this.images.length && !this.currentImage) {
@@ -81,6 +86,8 @@ export class NgxCarouselComponent implements OnInit {
         index = this.images.indexOf(this.currentImage);
         if (index - 1 >= 0) {
           index--;
+        } else {
+          index = this.images.length - 1;
         }
       }
       this.currentImage = this.images[index];
@@ -96,6 +103,8 @@ export class NgxCarouselComponent implements OnInit {
         index = this.images.indexOf(this.currentImage);
         if (index + 1 < this.images.length) {
           index++;
+        } else {
+          index = 0;
         }
       }
       this.currentImage = this.images[index];
@@ -110,11 +119,12 @@ export class NgxCarouselComponent implements OnInit {
 
   public async onAddImage(): Promise<void> {
     const image = new Image();
+    image.objectId = this.object.id;
     image.type = ImageType.GALLERY;
     image.clazz = this.fileClass;
-    image.objectId = this.object.id;
 
-    this.openFileDialog(image);
+    await this._templateModalService.showCropImageModal(image, ImageFormat.SQUARE, null, null, null, null, true, 3 / 2);
+    await this.initialize();
   }
 
   public async onRemoveImage(item: NameWrapper<Image>): Promise<void> {
@@ -124,11 +134,11 @@ export class NgxCarouselComponent implements OnInit {
   }
 
   public async onImageChange(fileList: FileList) {
-    if (fileList.length > 0) {
+    if (fileList.length) {
       const file: File = fileList[0];
       const isNew = this._appHelper.isNewObject(this._fileDialogParameter);
       if (isNew) {
-        await this._participantRestApiService.uploadFile(this._fileDialogParameter, [file]);
+        await this._participantRestApiService.uploadFile(this._fileDialogParameter, file);
       } else {
         await this._participantRestApiService.updateFile(this._fileDialogParameter, file);
       }
@@ -139,6 +149,10 @@ export class NgxCarouselComponent implements OnInit {
     }
   }
 
+  public async onChangeImage(): Promise<void> {
+    await this.initialize();
+  }
+
   private openFileDialog(data: Image): void {
     this._fileDialogParameter = data;
     this.fileInputElementRef.nativeElement.dispatchEvent(new MouseEvent('click', {bubbles: false}));
@@ -147,7 +161,7 @@ export class NgxCarouselComponent implements OnInit {
   private mapImage(image: Image): NameWrapper<Image> {
     const nameWrapper = new NameWrapper<Image>();
     nameWrapper.data = image;
-    nameWrapper.name = `${environment.restUrl}/file/download/image/${image.id}?date=${Math.random() * Date.now()}`;
+    nameWrapper.name = `${environment.restUrl}/file/download/image/${image.id}?cropped=true&date=${Math.random() * Date.now()}`;
     return nameWrapper;
   }
 

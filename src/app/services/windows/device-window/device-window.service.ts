@@ -75,7 +75,7 @@ export class DeviceWindowService {
     model.componentInstance.useContentPadding = false;
     await model.componentInstance.initializeBody(ItemDetailComponent, async component => {
       component.leftTopLeftFields = [
-        new ImageField('', device, ImageType.CROPPED_LOGO, FileClass.DEVICE, ImageFormat.CIRCLE)
+        new ImageField('', device, ImageType.LOGO, FileClass.DEVICE, ImageFormat.CIRCLE)
       ];
       component.leftTopRightFields = [
         new TextField('shortName', device.shortName),

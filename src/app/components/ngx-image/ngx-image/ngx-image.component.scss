@@ -6,34 +6,45 @@ $img-change-content-background-hover: rgba(0, 0, 0, .3);
 $img-size: 100%;
 $img-content-height: $img-size / 4;
 
-img {
-  height: auto;
-  width: auto;
+:host {
+  width: 100%;
 }
 
-.img-circle-change {
-  position: absolute;
-  overflow: hidden;
-  border-radius: $img-size;
+.image {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 
-  .img-content {
-    margin-top: calc(#{$img-size} - #{$img-content-height});
-    height: $img-content-height;
-    background: $img-change-content-background-hover;
-    transition: all $img-change-transition;
-    text-align: center;
+  .img-change {
+    position: absolute;
+    overflow: hidden;
+    border-radius: $img-size;
+    width: $img-size;
+    height: $img-size;
 
-    &:hover {
-      margin-top: 0;
-      height: $img-size;
-    }
+    .img-content {
+      position: absolute;
+      bottom: 0;
+      cursor: pointer;
+      width: $img-size;
+      height: $img-content-height;
+      background: $img-change-content-background-hover;
+      transition: all $img-change-transition;
 
-    input[type=file] {
-      display: block;
-    }
+      &:hover {
+        margin-top: 0;
+        height: $img-size;
+      }
 
-    > mat-icon {
-      @include mat-icon-size(14px);
+      input[type=file] {
+        display: block;
+      }
+
+      > mat-icon {
+        @include mat-icon-size(16x);
+        color: #fff;
+      }
     }
   }
 }

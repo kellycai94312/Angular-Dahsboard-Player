@@ -1,6 +1,5 @@
 import {Component, ElementRef, Input, ViewChild} from '@angular/core';
 import {CropperPosition, ImageCroppedEvent, ImageCropperComponent} from 'ngx-image-cropper';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -35,6 +34,7 @@ export class NgxCropImageComponent {
   public imagePosition: CropperPosition;
   public file: File;
   public objectId: number;
+  public aspectRatio: number;
 
   private _image: Image;
   private _type: ImageType;
@@ -46,40 +46,27 @@ export class NgxCropImageComponent {
               private _appHelper: AppHelper) {
   }
 
-  public async initialize(obj: IdentifiedObject,
-                          type: ImageType,
-                          fileClass: FileClass,
+  public async initialize(image: Image,
                           format: ImageFormat,
                           imageBase64?: any,
                           imagePosition?: CropperPosition,
                           file?: File): Promise<boolean> {
     return await this._appHelper.tryLoad(async () => {
-      if (obj) {
-        this.objectId = obj.id;
-      }
-      this._type = type.toString().replace('CROPPED_', '') as ImageType;
-      this._croppedImageType = type;
-      this._fileClass = fileClass;
+      this.objectId = image.objectId;
+
+      this._type = image.type;
+      this._croppedImageType = image.type;
+      this._fileClass = image.clazz;
       this.format = format;
       this.imageBase64 = imageBase64;
       this.imagePosition = imagePosition;
       this.file = file;
 
-      if (!imageBase64 && this.objectId) {
-        const query: ImageQuery = {
-          objectId: this.objectId,
-          type: this._type,
-          clazz: this._fileClass,
-          count: 1
-        };
+      if (!imageBase64 && image.id) {
+        this._image = image;
 
-        const originalImages = (await this._participantRestApiService.getImages(query)).list;
-        if (originalImages.length) {
-          this._image = originalImages[0];
-
-          const urlImage = this._participantRestApiService.getUrlImage(query);
-          this.imageBase64 = await this._participantRestApiService.getDataUrl(urlImage);
-        }
+        const urlImage = this._participantRestApiService.getUrlByImage(image);
+        this.imageBase64 = await this._participantRestApiService.getDataUrl(urlImage);
       }
     });
   }
@@ -148,13 +135,13 @@ export class NgxCropImageComponent {
 
   public async onSave(): Promise<boolean> {
     return await this._appHelper.trySave(async () => {
-      if (!this._image) {
+      if (!this._image || !this._image.id) {
         this._image = new Image();
         this._image.objectId = this.objectId;
         this._image.type = this._type;
         this._image.clazz = this._fileClass;
 
-        this._image = (await this._participantRestApiService.uploadFile(this._image, [this.file]))[0];
+        this._image = (await this._participantRestApiService.uploadFile(this._image, this.file));
       }
 
       this._image = await this._participantRestApiService.cropImage({

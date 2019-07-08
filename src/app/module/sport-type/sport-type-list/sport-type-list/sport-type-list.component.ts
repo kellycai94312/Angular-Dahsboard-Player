@@ -19,10 +19,8 @@ export class SportTypeListComponent extends BaseItemList<SportType, PageQuery> {
   constructor(private _participantRestApiService: ParticipantRestApiService) {
     super();
     this.translationTitle = 'sportTypes';
-    this.grid = false;
     this.canEdit = false;
     this.query = new PageQuery();
-
     this.fetchItems = async (direction: Direction, query: PageQuery): Promise<PageContainer<SportType>> => {
       return await this._participantRestApiService.getSportTypes(query);
     };

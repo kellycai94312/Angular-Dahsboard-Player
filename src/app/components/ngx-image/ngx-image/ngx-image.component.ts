@@ -22,10 +22,6 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public readonly imageFormatClass = ImageFormat;
 
-  // TODO: Fix it
-  @Input()
-  public fixForCarousel: boolean;
-
   @Input()
   public object: IdentifiedObject;
 
@@ -51,6 +47,12 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public readonly imageChange = new EventEmitter<File>();
 
   @Input()
+  public autoWidth: boolean;
+
+  @Input()
+  public autoHeight: boolean;
+
+  @Input()
   public width: number;
 
   @Input()
@@ -68,9 +70,15 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public url: string;
 
+  @Input()
+  public cropped = true;
+
+  @Input()
+  public aspectRatio = 1;
+
   public innerUrl: string;
-  public innerWidth = 0;
-  public innerHeight = 0;
+  public innerWidth = '100%';
+  public innerHeight = '100%';
   private _parentElementRef: HTMLElement;
   private _initialized: boolean;
   private _tempFile: File;
@@ -124,12 +132,13 @@ export class NgxImageComponent implements OnInit, OnChanges {
       if (!file) {
         return;
       }
+
       return await this._appHelper.trySave(async () => {
         const image = new Image();
         image.clazz = this.fileClass;
         image.objectId = this.object.id;
         image.type = this.type;
-        await this._participantRestApiService.uploadFile(image, [file]);
+        await this._participantRestApiService.uploadFile(image, file);
 
         this._tempFile = null;
       }, notify);
@@ -138,8 +147,8 @@ export class NgxImageComponent implements OnInit, OnChanges {
 
   public refresh() {
     this._ngZone.runOutsideAngular(() => {
-      this.innerWidth = this.width || this._parentElementRef.clientWidth;
-      this.innerHeight = this.height || this._parentElementRef.clientHeight;
+      const width = this.width || this._parentElementRef.clientWidth;
+      const height = this.height || this._parentElementRef.clientHeight;
 
       let url = '';
 
@@ -152,17 +161,31 @@ export class NgxImageComponent implements OnInit, OnChanges {
           objectId: this.object.id || 0,
         };
 
-        if (!this._appHelper.isUndefinedOrNull(this.innerWidth)) {
-          imageQuery.width = this.innerWidth;
+        if (!this._appHelper.isUndefinedOrNull(width)) {
+          imageQuery.width = width;
         }
-        if (!this._appHelper.isUndefinedOrNull(this.innerHeight)) {
-          imageQuery.height = this.innerHeight;
+        if (!this._appHelper.isUndefinedOrNull(height)) {
+          imageQuery.height = height;
         }
         if (this.image) {
-          url = `${this._participantRestApiService.getUrlByImage(this.image, imageQuery)}&date=${Date.now()}`;
+          let image = this.image;
+          if (this.cropped && this.image.croppedImage) {
+            image = this.image.croppedImage;
+          }
+          url = `${this._participantRestApiService.getUrlByImage(image, imageQuery)}&date=${Date.now()}`;
         } else {
           url = `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
         }
+        if (this.cropped) {
+          url += '&cropped=true';
+        }
+      }
+
+      if (!this.autoWidth) {
+        this.innerWidth = `${width}px`;
+      }
+      if (!this.autoHeight) {
+        this.innerHeight = `${height}px`;
       }
 
       this.innerUrl = this.url || url;
@@ -185,12 +208,31 @@ export class NgxImageComponent implements OnInit, OnChanges {
       let imageBase64;
       let imagePosition: CropperPosition;
       let file: File;
+      let image = new Image();
+      image.objectId = this.object.id;
+      image.clazz = this.fileClass;
+      image.type = this.type;
+
       if (this._tempNgxCropImageComponent) {
         imageBase64 = this._tempNgxCropImageComponent.imageBase64;
         imagePosition = this._tempNgxCropImageComponent.imagePosition;
         file = this._tempNgxCropImageComponent.file;
+      } else {
+        const images = (await this._participantRestApiService.getImages({clazz: this.fileClass, objectId: this.object.id, type: this.type, count: 1})).list;
+        if (images.length) {
+          image = images[0];
+          if (image.croppedImage) {
+            imagePosition = {
+              x1: image.croppedImage.x1,
+              y1: image.croppedImage.y1,
+              x2: image.croppedImage.x2,
+              y2: image.croppedImage.y2
+            };
+          }
+        }
       }
-      const dialogResult = await this._templateModalService.showCropImageModal(this.object, this.type, this.fileClass, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave);
+
+      const dialogResult = await this._templateModalService.showCropImageModal(this.image || image, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave, this.aspectRatio);
       if (dialogResult.result) {
         if (!this.autoSave) {
           this._ngZone.runOutsideAngular(() => {

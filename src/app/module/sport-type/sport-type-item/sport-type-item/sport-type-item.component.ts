@@ -1,43 +1,28 @@
-import {Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {MenuItem} from '../../../common/item-line/model/menu-item';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {SportTypeWindowService} from '../../../../services/windows/sport-type-window/sport-type-window.service';
+import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
+import {DialogResult} from '../../../../data/local/dialog-result';
 
 @Component({
   selector: 'app-sport-type-item',
   templateUrl: './sport-type-item.component.html',
   styleUrls: ['./sport-type-item.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SportTypeWindowService]
 })
-export class SportTypeItemComponent extends BaseComponent<SportType> {
-
-  @Input()
-  public canEdit: boolean;
-
-  public readonly fileClassClass = FileClass;
-  public readonly actions: MenuItem[] = [];
-  public readonly infoAction: MenuItem;
+export class SportTypeItemComponent extends BaseLibraryItem<SportType> {
 
   constructor(private _sportTypeWindowService: SportTypeWindowService) {
     super();
-    this.infoAction = {
-      iconName: 'info', action: async (item: MenuItem) => {
-        await this._sportTypeWindowService.openSportTypeDetail(this.data);
-      }
-    };
-    // TODO:
-    // this.actions = [
-    //   {
-    //     iconName: 'edit', action: async (item: MenuItem) => {
-    //       await this.onEdit();
-    //     }
-    //   }
-    // ];
   }
 
-  public async onEdit(): Promise<void> {
-  }
+  public getInfo = async (item: SportType): Promise<void> => {
+    await this._sportTypeWindowService.openSportTypeDetail(this.data);
+  };
+
+  public openEditItem = async (item: SportType): Promise<DialogResult<SportType>> => {
+    return null;
+  };
 
 }
