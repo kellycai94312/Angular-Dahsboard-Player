@@ -16,15 +16,17 @@
            fxLayout
            fxLayoutAlign="center center">
         <ngx-image *ngIf="currentImage"
-                   [fixForCarousel]="true"
+                   [canEdit]="canEdit"
                    [image]="currentImage.data"
                    [object]="object"
                    [allowFullScreen]="true"
-                   [width]="width"
+                   [autoWidth]="true"
                    [height]="height"
-                   [type]="currentImage.data.type"
+                   [type]="imageTypeClass.GALLERY"
                    [fileClass]="currentImage.data.clazz"
-                   [autoSave]="false"></ngx-image>
+                   [format]="imageFormatClass.SQUARE"
+                   [cropImage]="true"
+                   [cropped]="true"></ngx-image>
       </div>
     </div>
     <div *ngIf="images.length > 1">

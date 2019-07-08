@@ -1,28 +1,21 @@
-<div *ngIf="innerWidth && innerHeight"
-     class="d-flex flex-column">
-  <img *ngIf="fixForCarousel; else elseTemplate"
-       [src]="innerUrl"
-       [style.maxHeight.px]="innerHeight"
-       (dblclick)="onShowImage()"/>
-  <ng-template #elseTemplate>
-    <div class="img-fluid {{class}} "
-         [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
-         (dblclick)="onShowImage()"
-         [style.width.px]="innerWidth"
-         [style.height.px]="innerHeight"
-         [style.background-size]="'cover'"
-         [style.background-image]="'url('+ innerUrl +')' | safeStyle"></div>
+<div class="d-flex flex-column">
+  <div class="img-fluid image {{class}} "
+       [ngClass]="{'img-circle': format === imageFormatClass.CIRCLE}"
+       [style.width]="innerWidth"
+       [style.height]="innerHeight"
+       [style.background-image]="'url('+ innerUrl +')' | safeStyle"
+       (dblclick)="onShowImage()">
     <div *ngIf="canEdit"
-         class="img-circle-change"
-         [style.width.px]="innerWidth"
-         [style.height.px]="innerHeight"
+         class="img-change"
          [style.border-radius]="format === imageFormatClass.CIRCLE ? '100%' : '0px'">
       <div class="img-content"
+           fxLayout
+           fxLayoutAlign="center center"
            (click)="onEditImage(fileInput)">
-        <mat-icon>edit</mat-icon>
+        <mat-icon color="accent">edit</mat-icon>
       </div>
     </div>
-  </ng-template>
+  </div>
 </div>
 <input #fileInput
        id="file-upload"

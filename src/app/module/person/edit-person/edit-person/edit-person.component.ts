@@ -265,11 +265,10 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
     });
   }
 
-  private async uploadOrUpdateFile<T extends BaseFile>(obj: T, files: File[] = null): Promise<T> {
+  private async uploadOrUpdateFile<T extends BaseFile>(obj: T, file: File = null): Promise<T> {
     if (this.appHelper.isNewObject(obj)) {
-      return (await this.participantRestApiService.uploadFile(obj, files))[0];
+      return (await this.participantRestApiService.uploadFile(obj, file));
     } else {
-      const file = files && files.length ? files[0] : void 0;
       return await this.participantRestApiService.updateFile(obj, file);
     }
   }

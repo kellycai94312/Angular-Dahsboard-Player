@@ -67,7 +67,7 @@ export class AttachFileComponent<T extends BaseFile> {
 
   public async updateFile() {
     if (this._appHelper.isNewObject(this.baseFile)) {
-      const baseFile = (await this._participantRestApiService.uploadFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? [this.baseFile.resource.file] : null))[0];
+      const baseFile = (await this._participantRestApiService.uploadFile(this.baseFile, this.baseFile.resource && this.baseFile.resource.file ? this.baseFile.resource.file : null));
       this._appHelper.updateObject(this.baseFile, baseFile);
     } else {
       if (this._removedResource && !this.baseFile.resource) {

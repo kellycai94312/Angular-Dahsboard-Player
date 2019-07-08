@@ -30,14 +30,14 @@ export class ChangeNotificationsComponent {
 
   public onApprove = async (obj: VersionObject) => {
     await this._appHelper.trySave(async () => {
-      await this._participantRestApiService.approveVersionObject(obj);
+      await this._participantRestApiService.approveVersionObject({id: obj.id, versionActionType: obj.versionActionType});
       await this.resetItems();
     });
   };
 
   public onDisapprove = async (obj: VersionObject) => {
     await this._appHelper.trySave(async () => {
-      await this._participantRestApiService.disapproveVersionObject(obj);
+      await this._participantRestApiService.disapproveVersionObject({id: obj.id, versionActionType: obj.versionActionType});
       await this.resetItems();
     });
   };
