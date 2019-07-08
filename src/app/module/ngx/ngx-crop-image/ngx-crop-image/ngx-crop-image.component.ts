@@ -34,6 +34,7 @@ export class NgxCropImageComponent {
   public imagePosition: CropperPosition;
   public file: File;
   public objectId: number;
+  public aspectRatio: number;
 
   private _image: Image;
   private _type: ImageType;

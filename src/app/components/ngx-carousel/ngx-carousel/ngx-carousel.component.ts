@@ -62,6 +62,7 @@ export class NgxCarouselComponent implements OnInit {
 
   public async initialize() {
     await this._ngZone.runOutsideAngular(async () => {
+      delete this.currentImage;
       this.images = (await this._participantRestApiService.getImages({
         count: PropertyConstant.pageSizeMax,
         objectId: this.object.id,
@@ -122,7 +123,7 @@ export class NgxCarouselComponent implements OnInit {
     image.type = ImageType.GALLERY;
     image.clazz = this.fileClass;
 
-    await this._templateModalService.showCropImageModal(image, ImageFormat.SQUARE);
+    await this._templateModalService.showCropImageModal(image, ImageFormat.SQUARE, null, null, null, null, true, 3 / 2);
     await this.initialize();
   }
 
@@ -146,6 +147,10 @@ export class NgxCarouselComponent implements OnInit {
         await this.onNext();
       }
     }
+  }
+
+  public async onChangeImage(): Promise<void> {
+    await this.initialize();
   }
 
   private openFileDialog(data: Image): void {

@@ -26,7 +26,9 @@
                    [fileClass]="currentImage.data.clazz"
                    [format]="imageFormatClass.SQUARE"
                    [cropImage]="true"
-                   [cropped]="true"></ngx-image>
+                   [cropped]="true"
+                   [aspectRatio]="3/2"
+                   (imageChange)="onChangeImage()"></ngx-image>
       </div>
     </div>
     <div *ngIf="images.length > 1">

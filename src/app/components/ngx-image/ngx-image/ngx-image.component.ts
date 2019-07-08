@@ -73,6 +73,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
   @Input()
   public cropped = true;
 
+  @Input()
+  public aspectRatio = 1;
+
   public innerUrl: string;
   public innerWidth = '100%';
   public innerHeight = '100%';
@@ -229,7 +232,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
         }
       }
 
-      const dialogResult = await this._templateModalService.showCropImageModal(this.image || image, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave);
+      const dialogResult = await this._templateModalService.showCropImageModal(this.image || image, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave, this.aspectRatio);
       if (dialogResult.result) {
         if (!this.autoSave) {
           this._ngZone.runOutsideAngular(() => {

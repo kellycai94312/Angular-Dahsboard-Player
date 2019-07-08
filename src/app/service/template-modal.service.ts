@@ -367,13 +367,15 @@ export class TemplateModalService {
                                   imagePosition?: CropperPosition,
                                   file?: File,
                                   config?: NgxModalConfiguration,
-                                  autoSave: boolean = true): Promise<DialogResult<NgxCropImageComponent>> {
+                                  autoSave: boolean = true,
+                                  aspectRatio?: number): Promise<DialogResult<NgxCropImageComponent>> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
 
     let ngxCropImageComponent: NgxCropImageComponent;
     await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
       ngxCropImageComponent = component;
+      component.aspectRatio = aspectRatio || 1;
       await component.initialize(image, format, imageBase64, imagePosition, file);
 
       modal.componentInstance.splitButtonItems = [
