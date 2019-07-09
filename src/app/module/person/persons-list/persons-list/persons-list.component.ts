@@ -12,6 +12,7 @@ import {Person} from '../../../../data/remote/model/person';
 import {Router} from '@angular/router';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-persons-list',
@@ -20,14 +21,17 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 })
 export class PersonsListComponent implements OnInit {
 
-  public readonly propertyConstantClass = PropertyConstant;
-
   @ViewChild(NgxVirtualScrollComponent)
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
   public personQuery: PersonQuery;
 
+  @Input()
+  public itemDisplay: ItemDisplay;
+
+  public readonly propertyConstantClass = PropertyConstant;
+  public readonly itemDisplayClass = ItemDisplay;
   public sexEnums: NameWrapper<SexEnum>[];
   public userRoles: UserRole[];
 
@@ -53,7 +57,12 @@ export class PersonsListComponent implements OnInit {
   };
 
   public fetchItems = async (direction: Direction, query: PageQuery) => {
-    return await this._participantRestApiService.getPersons(query);
+    // TODO: Fix creating name field for ItemLineComponent
+    const pageContainer = await this._participantRestApiService.getPersons(query);
+    pageContainer.list.forEach(value => {
+      value['name'] = `${value.lastName} ${value.firstName}`;
+    });
+    return pageContainer;
   };
 
   public async updateItems() {

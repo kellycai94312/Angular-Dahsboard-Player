@@ -8,6 +8,8 @@ import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {Router} from '@angular/router';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
+import {MenuItem} from '../../../common/item-line/model/menu-item';
 
 @Component({
   selector: 'app-person-item',
@@ -19,6 +21,7 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
+  public readonly itemDisplayClass = ItemDisplay;
 
   public translateConnection: string;
 
@@ -29,11 +32,15 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   public visibleEditConnection: boolean;
 
   @Input()
+  public itemDisplay: ItemDisplay;
+
+  @Input()
   public width: number;
 
   @Input()
   public height: number;
 
+  public actions: MenuItem[] = [];
   public hasConnection: boolean;
 
   constructor(private _appHelper: AppHelper,
@@ -46,6 +53,19 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
     await super.initializeComponent(data);
     return await this._appHelper.tryLoad(async () => {
       await this.refreshConnection();
+      this.actions = [
+        {
+          iconName: 'message', action: async item => {
+            await this.onSendMessage();
+          }
+        },
+        {
+          iconName: this.hasConnection ? 'remove_circle_outline' : 'add_circle_outline', action: async item => {
+            await this.onEditConnection();
+            item.iconName = this.hasConnection ? 'remove_circle_outline' : 'add_circle_outline';
+          }
+        }
+      ];
     });
   }
 

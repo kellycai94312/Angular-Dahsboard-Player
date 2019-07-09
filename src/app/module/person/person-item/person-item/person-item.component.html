@@ -1,40 +1,47 @@
-<mat-card *ngIf="data"
-          fxFlex
-          class="mat-elevation-z2"
-          [style.width.px]="width"
-          [style.height.px]="height">
-  <mat-card-header fxLayout
-                   fxLayoutAlign="space-between center">
-    <div fxFlex="auto"
-         class="text-truncate">
-      <mat-card-title
-        class="text-truncate">{{data.lastName + ' ' + data.firstName}}</mat-card-title>
-    </div>
+<ng-container *ngIf="data">
+  <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
+                 [fileClass]="fileClassClass.PERSON"
+                 [(data)]="data"
+                 [actions]="actions"></app-item-line>
+  <ng-template #cardItemTemplate>
+    <mat-card fxFlex
+              class="mat-elevation-z2"
+              [style.width.px]="width"
+              [style.height.px]="height">
+      <mat-card-header fxLayout
+                       fxLayoutAlign="space-between center">
+        <div fxFlex="auto"
+             class="text-truncate">
+          <mat-card-title
+            class="text-truncate">{{data.lastName + ' ' + data.firstName}}</mat-card-title>
+        </div>
 
-    <div fxFlex="none">
-      <button *ngIf="visibleSendMessage"
-              mat-icon-button
-              (click)="onSendMessage(); $event.stopPropagation()">
-        <mat-icon>message</mat-icon>
-      </button>
-      <button *ngIf="visibleEditConnection && translateConnection"
-              mat-icon-button
-              (click)="onEditConnection(); $event.stopPropagation()">
-        <mat-icon *ngIf="hasConnection; else personAddConnectionTemplate">remove_circle_outline</mat-icon>
-        <ng-template #personAddConnectionTemplate>
-          <mat-icon>add_circle_outline</mat-icon>
-        </ng-template>
-      </button>
-    </div>
-  </mat-card-header>
-  <mat-card-content fxLayout
-                    fxLayoutAlign="center center">
-    <ngx-image [object]="data"
-               [width]="100"
-               [height]="100"
-               [allowFullScreen]="false"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.PERSON"></ngx-image>
-  </mat-card-content>
-  <ng-content></ng-content>
-</mat-card>
+        <div fxFlex="none">
+          <button *ngIf="visibleSendMessage"
+                  mat-icon-button
+                  (click)="onSendMessage(); $event.stopPropagation()">
+            <mat-icon>message</mat-icon>
+          </button>
+          <button *ngIf="visibleEditConnection && translateConnection"
+                  mat-icon-button
+                  (click)="onEditConnection(); $event.stopPropagation()">
+            <mat-icon *ngIf="hasConnection; else personAddConnectionTemplate">remove_circle_outline</mat-icon>
+            <ng-template #personAddConnectionTemplate>
+              <mat-icon>add_circle_outline</mat-icon>
+            </ng-template>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content fxLayout
+                        fxLayoutAlign="center center">
+        <ngx-image [object]="data"
+                   [width]="100"
+                   [height]="100"
+                   [allowFullScreen]="false"
+                   [type]="imageTypeClass.LOGO"
+                   [fileClass]="fileClassClass.PERSON"></ngx-image>
+      </mat-card-content>
+      <ng-content></ng-content>
+    </mat-card>
+  </ng-template>
+</ng-container>

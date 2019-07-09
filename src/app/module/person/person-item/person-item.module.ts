@@ -4,6 +4,7 @@ import {PersonItemComponent} from './person-item/person-item.component';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
+import {ItemLineModule} from '../../common/item-line/item-line.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
     FlexLayoutModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ItemLineModule
   ],
   declarations: [PersonItemComponent],
   entryComponents: [PersonItemComponent],

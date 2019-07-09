@@ -2,14 +2,21 @@
                     [getItems]="fetchItems"
                     [query]="personQuery"
                     [windowScroll]="true">
-  <ng-template let-item>
-    <div class="mr-3 mb-3"
+  <ng-template let-item
+               let-isLast="last">
+    <div *ngIf="!item.deleted"
+         class="item"
+         [ngClass]="{'item-list': itemDisplayClass.LIST === itemDisplay, 'mr-3 mb-3': itemDisplayClass.LIST !== itemDisplay}"
          (click)="onClickByItem(item)">
-      <app-person-item class="list-item"
-                       [visibleSendMessage]="true"
-                       [visibleEditConnection]="true"
-                       [data]="item"
-                       [width]="250"></app-person-item>
+      <div>
+        <app-person-item class="list-item"
+                         [visibleSendMessage]="true"
+                         [visibleEditConnection]="true"
+                         [data]="item"
+                         [itemDisplay]="itemDisplay"
+                         [width]="250"></app-person-item>
+      </div>
+      <mat-divider *ngIf="itemDisplayClass.LIST === itemDisplay && !isLast"></mat-divider>
     </div>
   </ng-template>
 </ngx-virtual-scroll>
