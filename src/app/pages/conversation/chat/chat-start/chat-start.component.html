@@ -4,16 +4,15 @@
     <mat-icon class="s-64 s-md-128 mat-accent">chat</mat-icon>
   </div>
 
-  <span class="app-title mt-48 mb-8">
-        Chat App
-    </span>
+  <span fxHide fxShow.gt-md
+        class="app-message">
+        {{'selectAContactToStartAChat' | translate}}
+  </span>
 
-  <span fxHide fxShow.gt-md class="app-message">
-        Select a contact to start a chat!
-    </span>
-
-  <button mat-raised-button fxHide.gt-md fuseMatSidenavToggler="chat-left-sidenav">
-    Select a contact to start a chat!
+  <button mat-raised-button
+          fxHide.gt-md
+          fuseMatSidenavToggler="chat-left-sidenav">
+    {{'selectAContactToStartAChat' | translate}}
   </button>
 
 </div>

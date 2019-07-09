@@ -13,7 +13,7 @@ import {ItemDisplay} from '../../../../module/common/item-list/model/item-displa
 export class PersonsPageComponent {
 
   public readonly tabs: NgxTab[];
-  public readonly translationTitle = 'persons';
+  public readonly translationTitle = 'persons.section';
   public readonly actions: MenuItem[] = [];
   public itemDisplay = ItemDisplay.GRID;
 

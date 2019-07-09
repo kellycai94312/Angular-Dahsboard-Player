@@ -9,7 +9,8 @@
                  [type]="imageTypeClass.LOGO"
                  [fileClass]="conversationImageClazz"
                  [width]="40"
-                 [height]="40"></ngx-image>
+                 [height]="40"
+                 [cropped]="true"></ngx-image>
       <div *ngIf="preview && data.messageWrapper.unread"
            class="unread-message-count accent">{{data.messageWrapper.unread}}</div>
     </div>

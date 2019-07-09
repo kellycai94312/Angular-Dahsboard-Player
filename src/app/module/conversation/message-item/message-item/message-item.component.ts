@@ -9,6 +9,8 @@ import {Router} from '@angular/router';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
 import {AppHelper} from '../../../../utils/app-helper';
 import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
+import {ImageType} from '../../../../data/remote/model/file/image/image-type';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 
 @Component({
   selector: 'app-message-item',
@@ -20,6 +22,8 @@ export class MessageItemComponent implements OnInit, DoCheck {
   public readonly propertyConstantClass = PropertyConstant;
   public readonly baseMessageContentTypeClass = BaseMessageContentType;
   public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
 
   @Input()
   public class: string;
