@@ -82,6 +82,7 @@ export class ParameterWindowService {
     return await this._modalBuilderService.showSelectionItemsModal(units, async (query: UnitQuery) => {
       return await this._unitApiService.getUnits(query).toPromise();
     }, UnitItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }
@@ -90,6 +91,7 @@ export class ParameterWindowService {
     return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: ParameterQuery) => {
       return await this._parameterApiService.getParameters(query).toPromise();
     }, ParameterItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }

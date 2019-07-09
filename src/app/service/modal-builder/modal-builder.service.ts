@@ -28,7 +28,11 @@ export class ModalBuilderService {
                                                            initializeNgxSelectionComponent?: (component: NgxSelectionComponent<TComponent, PageQuery, TModel>) => void): Promise<DialogResult<TModel[]>> {
     const modal = this._ngxModalService.open();
     if (config) {
-      modal.componentInstance.title = config.title;
+      if (config.title) {
+        modal.componentInstance.title = config.title;
+      } else {
+        modal.componentInstance.titleKey = 'selection';
+      }
     } else {
       modal.componentInstance.titleKey = 'selection';
     }

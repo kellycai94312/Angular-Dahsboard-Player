@@ -69,6 +69,7 @@ export class DeviceWindowService {
       const items = (await this._deviceApiService.getDeviceParameters(device).toPromise()).map(x => x.parameter);
       return this._appHelper.arrayToPageContainer(items);
     }, ParameterItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }
@@ -106,6 +107,7 @@ export class DeviceWindowService {
     return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: PageQuery) => {
       return await this._applicationApiService.getApplications(query).toPromise();
     }, ApplicationItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }

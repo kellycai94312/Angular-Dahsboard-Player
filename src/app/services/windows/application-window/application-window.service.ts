@@ -97,6 +97,7 @@ export class ApplicationWindowService {
     return await this._modalBuilderService.showSelectionItemsModal(devices, async (query: PageQuery) => {
       return await this._deviceApiService.getDevices(query).toPromise();
     }, DeviceItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }

@@ -4,6 +4,7 @@ import {BaseLibraryItemComponent} from './base-library-item/base-library-item.co
 import {ItemLineModule} from '../../common/item-line/item-line.module';
 import {BaseCardModule} from '../../common/base-card/base-card.module';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [BaseLibraryItemComponent],
@@ -12,7 +13,8 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
     CommonModule,
     ItemLineModule,
     BaseCardModule,
-    NgxImageModule
+    NgxImageModule,
+    FlexLayoutModule
   ]
 })
 export class BaseLibraryItemModule {
