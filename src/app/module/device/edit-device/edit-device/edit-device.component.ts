@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -13,20 +13,21 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 import {ExternalResourceApiService} from '../../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
 import {ExternalResource} from '../../../../data/remote/model/external-resource';
+import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
+import {ApplicationVersion} from '../../../../data/remote/model/application/application-version';
+import {DeviceWindowService} from '../../../../services/windows/device-window/device-window.service';
 
 @Component({
   selector: 'app-edit-device',
   templateUrl: './edit-device.component.html',
-  styleUrls: ['./edit-device.component.scss'],
-  providers: [DeviceApiService]
+  styleUrls: ['./edit-device.component.scss']
 })
 export class EditDeviceComponent extends BaseEditComponent<Device> implements OnInit {
 
-  @ViewChild(NgxImageComponent)
-  public ngxImageComponent: NgxImageComponent;
+  @ViewChild(MediaLibraryComponent)
+  public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
@@ -38,6 +39,9 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
   private _urlExternalResource: ExternalResource;
 
   constructor(private _deviceApiService: DeviceApiService,
+              // TODO: DeviceWindowService can't inject without forwardRef()
+              @Inject(forwardRef(() => DeviceWindowService))
+              private _deviceWindowService: DeviceWindowService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _externalResourceApiService: ExternalResourceApiService,
               private _parameterWindowService: ParameterWindowService,
@@ -77,6 +81,7 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         }
 
         this.data.parameterVersions = this.data.parameterVersions || [];
+        this.data.applicationVersions = this.data.applicationVersions || [];
       });
     }
     return result;
@@ -97,8 +102,11 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
     return await this.appHelper.trySave(async () => {
       const data = await this._deviceApiService.saveDevice(this.data).toPromise();
       const parameterVersions = await this._deviceApiService.updateDeviceParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
+      const applicationVersions = await this._deviceApiService.updateDeviceApplications(data, new ListRequest<IdRequest>(this.data.applicationVersions.map(x => new IdRequest(x.id)))).toPromise();
+
       this.data = data;
       this.data.parameterVersions = parameterVersions;
+      this.data.applicationVersions = applicationVersions;
 
       if (this._urlExternalResource && !this.videoUrlNgxInput.control.value) {
         await this._externalResourceApiService.removeExternalResource(this._urlExternalResource).toPromise();
@@ -113,8 +121,8 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
       }
 
-      this.ngxImageComponent.object = this.data;
-      await this.ngxImageComponent.save(null, false);
+      this.mediaLibraryComponent.ngxImageComponent.object = this.data;
+      await this.mediaLibraryComponent.ngxImageComponent.save(null, false);
     });
   }
 
@@ -138,6 +146,29 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
     const indexItem = this.data.parameterVersions.findIndex(x => x.parameter.id == item.parameter.id);
     if (indexItem > -1) {
       this.data.parameterVersions.splice(indexItem, 1);
+    }
+  }
+
+  public async onEditApplications(): Promise<void> {
+    const dialogResult = await this._deviceWindowService.openEditApplications(this.data.applicationVersions.map(x => x.application), {
+      componentFactoryResolver: this._componentFactoryResolver,
+      compare: (first, second) => first.id == second.id
+    });
+    if (dialogResult.result) {
+      this.data.applicationVersions = dialogResult.data.map(x => {
+        const applicationVersion = new ApplicationVersion();
+        Object.assign(applicationVersion, x);
+        applicationVersion.application = x;
+        applicationVersion.id = x.applicationVersionId;
+        return applicationVersion;
+      });
+    }
+  }
+
+  public onRemoveApplication(item: ApplicationVersion): void {
+    const indexItem = this.data.applicationVersions.findIndex(x => x.application.id == item.application.id);
+    if (indexItem > -1) {
+      this.data.applicationVersions.splice(indexItem, 1);
     }
   }
 

@@ -22,6 +22,9 @@ import {CarouselField} from '../../../module/common/item-detail/model/carousel-f
 import {UrlField} from '../../../module/common/item-detail/model/url-field';
 import {ExternalResourceApiService} from '../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
 import {VideoField} from '../../../module/common/item-detail/model/video-field';
+import {Application} from '../../../data/remote/model/application/application';
+import {ApplicationItemComponent} from '../../../module/application/application-item/application-item/application-item.component';
+import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 
 @Injectable()
 export class DeviceWindowService {
@@ -31,6 +34,7 @@ export class DeviceWindowService {
               private _modalBuilderService: ModalBuilderService,
               private _externalResourceApiService: ExternalResourceApiService,
               private _deviceApiService: DeviceApiService,
+              private _applicationApiService: ApplicationApiService,
               private _appHelper: AppHelper,
               private _utilService: UtilService) {
   }
@@ -96,6 +100,14 @@ export class DeviceWindowService {
       }
     });
     await this._ngxModalService.awaitModalResult(model);
+  }
+
+  public async openEditApplications<T extends Application>(parameters: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: PageQuery) => {
+      return await this._applicationApiService.getApplications(query).toPromise();
+    }, ApplicationItemComponent, async (component, data) => {
+      await component.initialize(data);
+    }, config) as DialogResult<T[]>;
   }
 
 }

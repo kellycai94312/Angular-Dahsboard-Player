@@ -56,6 +56,12 @@ const routes: Routes = [
     }
   },
   {
+    path: 'application', loadChildren: './applications/applications.module#ApplicationsModule',
+    data: {
+      breadcrumb: {nameKey: 'application'} as BreadcrumbItem
+    }
+  },
+  {
     path: 'exercise',
     data: {
       breadcrumb: {nameKey: 'exercises'} as BreadcrumbItem

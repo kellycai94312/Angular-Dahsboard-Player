@@ -5,6 +5,7 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
+import {ItemLineModule} from '../../common/item-line/item-line.module';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
     FlexLayoutModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    ItemLineModule
   ],
   declarations: [GroupItemComponent],
   entryComponents: [GroupItemComponent],

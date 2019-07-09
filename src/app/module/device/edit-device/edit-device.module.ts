@@ -6,14 +6,19 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
+import {MediaLibraryModule} from '../../library/media-library/media-library.module';
+import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
+import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
 import {DeviceWindowService} from '../../../services/windows/device-window/device-window.service';
-import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
-import {NgxCarouselModule} from '../../../components/ngx-carousel/ngx-carousel.module';
 
 @NgModule({
   declarations: [EditDeviceComponent],
   entryComponents: [EditDeviceComponent],
-  providers: [DeviceWindowService],
+  providers: [
+    ApplicationApiService,
+    DeviceApiService,
+    DeviceWindowService
+  ],
   exports: [EditDeviceComponent],
   imports: [
     CommonModule,
@@ -25,8 +30,7 @@ import {NgxCarouselModule} from '../../../components/ngx-carousel/ngx-carousel.m
     FormsModule,
     TranslateModule.forChild(),
     NgxInputModule,
-    NgxImageModule,
-    NgxCarouselModule
+    MediaLibraryModule
   ]
 })
 export class EditDeviceModule {

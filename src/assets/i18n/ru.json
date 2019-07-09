@@ -725,5 +725,7 @@
   "device": "Устройство",
   "manufacturerUrl": "Url производителя",
   "manufacturer": "Производитель",
-  "sportTypes": "Виды спорта"
+  "sportTypes": "Виды спорта",
+  "applications": "Приложения",
+  "application": "Приложение"
 }

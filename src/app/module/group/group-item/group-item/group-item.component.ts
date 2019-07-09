@@ -3,6 +3,7 @@ import {BaseComponent} from '../../../../data/local/component/base/base-componen
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-group-item',
@@ -11,14 +12,18 @@ import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 })
 export class GroupItemComponent<T extends Group> extends BaseComponent<T> implements OnInit {
 
-  public readonly imageTypeClass = ImageType;
-  public readonly fileClassClass = FileClass;
-
   @Input()
   public width: number;
 
   @Input()
   public height: number;
+
+  @Input()
+  public itemDisplay: ItemDisplay;
+
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+  public readonly itemDisplayClass = ItemDisplay;
 
   constructor() {
     super();

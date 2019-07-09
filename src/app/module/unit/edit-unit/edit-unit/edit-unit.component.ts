@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseUnit} from '../../../../data/remote/model/unit/base-unit';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -12,6 +12,8 @@ import {Validators} from '@angular/forms';
 import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {UserUnit} from '../../../../data/remote/model/unit/user-unit';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
 
 @Component({
   selector: 'app-edit-unit',
@@ -21,12 +23,16 @@ import {UserUnit} from '../../../../data/remote/model/unit/user-unit';
 })
 export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements OnInit {
 
+  @ViewChild(MediaLibraryComponent)
+  public mediaLibraryComponent: MediaLibraryComponent;
+
   public readonly dictionaryTypeClass = DictionaryType;
   public readonly dictionaryTypeNgxSelect = new NgxSelect();
   public readonly nameNgxInput = new NgxInput();
   public readonly shortNameNgxInput = new NgxInput();
   public readonly descriptionNgxInput = new NgxInput();
   public readonly unitTypeNgxSelect = new NgxSelect();
+  public readonly fileClassClass = FileClass;
 
   constructor(private _unitApiService: UnitApiService,
               private _translateObjectService: TranslateObjectService,
@@ -90,6 +96,9 @@ export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements On
 
     return await this.appHelper.trySave(async () => {
       this.data = await this._unitApiService.saveUnit(this.data).toPromise();
+
+      this.mediaLibraryComponent.ngxImageComponent.object = this.data;
+      await this.mediaLibraryComponent.ngxImageComponent.save(null, false);
     });
   }
 

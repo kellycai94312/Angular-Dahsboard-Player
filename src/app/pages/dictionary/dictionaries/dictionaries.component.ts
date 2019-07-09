@@ -50,7 +50,8 @@ export class DictionariesComponent extends BaseItemList<Dictionary, PageQuery> {
       // new Dictionary(this._translateService.instant( 'tests'), data: 'test'},
       new Dictionary(this._translateService.instant('parameters'), 'parameter'),
       new Dictionary(this._translateService.instant('units'), 'unit'),
-      new Dictionary(this._translateService.instant('devices'), 'device')
+      new Dictionary(this._translateService.instant('devices'), 'device'),
+      new Dictionary(this._translateService.instant('applications'), 'application')
     ];
 
     this.fetchItems = async (direction: Direction, query: PageQuery): Promise<PageContainer<Dictionary>> => {

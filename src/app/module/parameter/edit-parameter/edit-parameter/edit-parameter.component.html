@@ -1,45 +1,50 @@
-<div fxLayout="column">
-  <ngx-select [data]="dictionaryTypeNgxSelect"></ngx-select>
-  <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
-  <new-ngx-input [data]="shortNameNgxInput"></new-ngx-input>
-  <new-ngx-input [data]="specialNameNgxInput"></new-ngx-input>
-  <new-ngx-input [data]="descriptionNgxInput"></new-ngx-input>
-  <ngx-select [data]="parameterTypeNgxSelect"></ngx-select>
-  <div *ngIf="parameterTypeNgxSelect.control.value.data === parameterTypeEnumClass.CALCULATED"
-       fxLayout
-       fxLayoutGap="10px"
-       fxLayoutAlign="space-between start">
-    <div>
-      <label>{{'formula' | translate}}</label>
-      <mat-chip-list>
-        <mat-chip *ngFor="let item of formulaParameters">{{item.name}}</mat-chip>
-      </mat-chip-list>
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <app-media-library [data]="data"
+                     [fileClass]="fileClassClass.PARAMETER"></app-media-library>
+  <div fxLayout="column">
+    <ngx-select [data]="dictionaryTypeNgxSelect"></ngx-select>
+    <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="shortNameNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="specialNameNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="descriptionNgxInput"></new-ngx-input>
+    <ngx-select [data]="parameterTypeNgxSelect"></ngx-select>
+    <div *ngIf="parameterTypeNgxSelect.control.value.data === parameterTypeEnumClass.CALCULATED"
+         fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="space-between start">
+      <div>
+        <label>{{'formula' | translate}}</label>
+        <mat-chip-list>
+          <mat-chip *ngFor="let item of formulaParameters">{{item.name}}</mat-chip>
+        </mat-chip-list>
+      </div>
+      <button mat-icon-button
+              (click)="onEditFormula()">
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
-    <button mat-icon-button
-            (click)="onEditFormula()">
-      <mat-icon>edit</mat-icon>
-    </button>
-  </div>
-  <div fxLayout
-       fxLayoutGap="10px"
-       fxLayoutAlign="space-between start">
-    <div>
-      <label>{{'units' | translate}}</label>
-      <mat-chip-list>
-        <mat-chip *ngFor="let item of data.unitVersions"
-                  [removable]="true"
-                  (removed)="onRemoveUnit(item)">{{item.name}}
-          <mat-icon matChipRemove>cancel</mat-icon>
-        </mat-chip>
-      </mat-chip-list>
+    <div fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="space-between start">
+      <div>
+        <label>{{'units' | translate}}</label>
+        <mat-chip-list>
+          <mat-chip *ngFor="let item of data.unitVersions"
+                    [removable]="true"
+                    (removed)="onRemoveUnit(item)">{{item.name}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+        </mat-chip-list>
+      </div>
+      <button mat-icon-button
+              (click)="onEditUnits()">
+        <mat-icon>edit</mat-icon>
+      </button>
     </div>
-    <button mat-icon-button
-            (click)="onEditUnits()">
-      <mat-icon>edit</mat-icon>
-    </button>
+    <ng-container *ngIf="dictionaryTypeNgxSelect.control.value.data === dictionaryTypeClass.USER">
+      <mat-checkbox [(ngModel)]="data.open">{{'openAdj' | translate}}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="data.free">{{'free' | translate}}</mat-checkbox>
+    </ng-container>
   </div>
-  <ng-container *ngIf="dictionaryTypeNgxSelect.control.value.data === dictionaryTypeClass.USER">
-    <mat-checkbox [(ngModel)]="data.open">{{'openAdj' | translate}}</mat-checkbox>
-    <mat-checkbox [(ngModel)]="data.free">{{'free' | translate}}</mat-checkbox>
-  </ng-container>
 </div>

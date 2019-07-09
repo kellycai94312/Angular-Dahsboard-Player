@@ -11,8 +11,7 @@ import {DeviceWindowService} from '../../../../services/windows/device-window/de
 @Component({
   selector: 'app-device-list',
   templateUrl: './device-list.component.html',
-  styleUrls: ['./device-list.component.scss'],
-  providers: [DeviceApiService]
+  styleUrls: ['./device-list.component.scss']
 })
 export class DeviceListComponent extends BaseItemList<Device, PageQuery> {
 
