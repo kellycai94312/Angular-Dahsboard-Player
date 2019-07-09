@@ -9,6 +9,11 @@ import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrol
 import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
 import {IEnvironment} from '../../../../../../environments/ienvironment';
 import {environment} from '../../../../../../environments/environment';
+import {AuthorizationService} from '../../../../../shared/authorization.service';
+import {FileClass} from '../../../../../data/remote/model/file/base/file-class';
+import {ImageType} from '../../../../../data/remote/model/file/image/image-type';
+import {Person} from '../../../../../data/remote/model/person';
+import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 
 @Component({
   selector: 'navbar-vertical-style-1',
@@ -19,6 +24,8 @@ import {environment} from '../../../../../../environments/environment';
 export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
   public readonly environment: IEnvironment;
+  public  person: Person;
+  public  personLogoUrl: string;
 
   fuseConfig: any;
   navigation: any;
@@ -40,10 +47,30 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSidebarService: FuseSidebarService,
-    private _router: Router
+    private _router: Router,
+    private _authorizationService: AuthorizationService,
+    private _participantRestApiService: ParticipantRestApiService
   ) {
     this.environment = environment;
     this._unsubscribeAll = new Subject();
+
+    this._authorizationService.personSubject.pipe(
+      takeUntil(this._unsubscribeAll)
+    )
+      .subscribe(val => {
+        this.person = val;
+        if (val) {
+          this.personLogoUrl = this._participantRestApiService.getUrlImage({
+            clazz: FileClass.PERSON,
+            type: ImageType.LOGO,
+            objectId: val.id,
+            width: 72,
+            height: 72
+          }, true);
+        } else {
+          delete this.personLogoUrl;
+        }
+      });
   }
 
   // -----------------------------------------------------------------------------------------------------
