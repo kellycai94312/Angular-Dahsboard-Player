@@ -9,6 +9,7 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Group} from '../../../../data/remote/model/group/base/group';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-groups-list',
@@ -22,6 +23,11 @@ export class GroupsListComponent implements OnInit {
 
   @Input()
   public groupQuery: GroupQuery;
+
+  @Input()
+  public itemDisplay: ItemDisplay;
+
+  public readonly itemDisplayClass = ItemDisplay;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _translateObjectService: TranslateObjectService,

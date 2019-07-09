@@ -2,12 +2,19 @@
                     [getItems]="fetchItems"
                     [query]="groupQuery"
                     [windowScroll]="true">
-  <ng-template let-item>
-    <div class="mr-3 mb-3"
+  <ng-template let-item
+               let-isLast="last">
+    <div *ngIf="!item.deleted"
+         class="item"
+         [ngClass]="{'item-list': itemDisplayClass.LIST === itemDisplay, 'mr-3 mb-3': itemDisplayClass.LIST !== itemDisplay}"
          (click)="onClickByItem(item)">
-      <app-group-item class="list-item"
-                      [data]="item"
-                      [width]="250"></app-group-item>
+      <div>
+        <app-group-item class="list-item"
+                        [data]="item"
+                        [width]="250"
+                        [itemDisplay]="itemDisplay"></app-group-item>
+      </div>
+      <mat-divider *ngIf="itemDisplayClass.LIST === itemDisplay && !isLast"></mat-divider>
     </div>
   </ng-template>
 </ngx-virtual-scroll>

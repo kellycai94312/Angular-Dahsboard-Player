@@ -81,6 +81,7 @@ export class EditDeviceComponent extends BaseEditComponent<Device> implements On
         }
 
         this.data.parameterVersions = this.data.parameterVersions || [];
+        this.data.applicationVersions = this.data.applicationVersions || [];
       });
     }
     return result;

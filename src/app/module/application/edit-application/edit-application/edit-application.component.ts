@@ -81,6 +81,7 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
         }
 
         this.data.parameterVersions = this.data.parameterVersions || [];
+        this.data.deviceVersions = this.data.deviceVersions || [];
       });
     }
     return result;
