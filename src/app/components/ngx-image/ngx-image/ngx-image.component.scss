@@ -6,10 +6,6 @@ $img-change-content-background-hover: rgba(0, 0, 0, .3);
 $img-size: 100%;
 $img-content-height: $img-size / 4;
 
-:host {
-  width: 100%;
-}
-
 .image {
   background-size: contain;
   background-position: center;

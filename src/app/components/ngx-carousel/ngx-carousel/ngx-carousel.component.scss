@@ -3,10 +3,14 @@
   height: 100%;
 }
 
-.carousel-content {
-  background-color: #ccc !important;
-}
-
 img {
   padding: 0 40px;
+}
+
+ngx-image {
+  width: 100%;
+}
+
+.carousel-content {
+  background-color: #ccc !important;
 }

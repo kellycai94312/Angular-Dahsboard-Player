@@ -24,8 +24,8 @@ import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/par
 export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
 
   public readonly environment: IEnvironment;
-  public  person: Person;
-  public  personLogoUrl: string;
+  public person: Person;
+  public personLogoUrl: string;
 
   fuseConfig: any;
   navigation: any;
@@ -65,7 +65,8 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
             type: ImageType.LOGO,
             objectId: val.id,
             width: 72,
-            height: 72
+            height: 72,
+            cropped: true
           }, true);
         } else {
           delete this.personLogoUrl;
