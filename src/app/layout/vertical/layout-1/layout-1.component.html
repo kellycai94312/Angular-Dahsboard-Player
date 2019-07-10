@@ -83,6 +83,7 @@
 
 <!-- SIDE PANEL -->
 <ngx-container *ngIf="!fuseConfig.layout.sidepanel.hidden && fuseConfig.layout.sidepanel.position === 'right'"
+  fxHide.lt-sm
   [reverse]="true"
   [(size)]="sizeNgxContainer"
   [minSize]="'60px'"

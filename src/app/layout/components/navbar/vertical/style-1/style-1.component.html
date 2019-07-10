@@ -30,7 +30,9 @@
 
     <div class="h3 username">{{person?.lastName + ' ' + person?.firstName}}</div>
     <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
-      <img class="avatar" [src]="personLogoUrl">
+      <img class="avatar"
+           [src]="personLogoUrl"
+           routerLink="/person/{{person?.id}}">
     </div>
 
   </div>

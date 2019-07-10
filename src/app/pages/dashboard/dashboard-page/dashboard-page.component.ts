@@ -41,6 +41,13 @@ export class DashboardPageComponent implements OnInit {
     await this.resetItems();
   }
 
+  public async onLogoChanged() {
+    const person = await this._appHelper.toPromise(this._authorizationService.personSubject.asObservable());
+    const image = (await this._participantRestApiService.getImages({clazz: FileClass.PERSON, objectId: person.id, type: ImageType.LOGO})).list[0];
+    // TODO: Need to refresh image
+    this._authorizationService.personSubject.next(person);
+  }
+
   public fetchItems = async (direction: Direction, pageQuery: PageQuery) => {
     return await this._participantRestApiService.getPersonNewsItems(pageQuery);
   };
