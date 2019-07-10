@@ -12,7 +12,7 @@ export class BaseItemList<TModel extends IdentifiedObject, Q extends PageQuery> 
   public translationTitle: string;
 
   @Input()
-  public itemDisplay = ItemDisplay.LIST;
+  public itemDisplay: ItemDisplay;
 
   @Input()
   public canEdit: boolean;
