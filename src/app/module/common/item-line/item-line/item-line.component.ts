@@ -16,7 +16,10 @@ export class ItemLineComponent<T extends object> extends BaseComponent<T> {
   public fileClass: FileClass;
 
   @Input()
-  public actions: MenuItem[] = [];
+  public leftActions: MenuItem[] = [];
+
+  @Input()
+  public rightActions: MenuItem[] = [];
 
   @Output()
   public readonly clickItem = new EventEmitter<Event>();

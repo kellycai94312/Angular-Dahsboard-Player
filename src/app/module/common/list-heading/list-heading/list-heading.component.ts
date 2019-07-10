@@ -18,6 +18,12 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
   @Input()
   public actions: MenuItem[] = [];
 
+  @Input()
+  public canSearch = true;
+
+  @Input()
+  public canChangeItemDisplay = true;
+
   @Output()
   public readonly searchTextChange = new EventEmitter<string>();
 

@@ -82,7 +82,7 @@ export class ApplicationWindowService {
       ];
 
       component.rightFields = [
-        new CarouselField(application, FileClass.DEVICE, '')
+        new CarouselField(application, FileClass.APPLICATION, '')
       ];
 
       const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.APPLICATION, objectId: application.id}).toPromise();

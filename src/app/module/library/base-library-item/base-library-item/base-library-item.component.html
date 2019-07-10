@@ -2,7 +2,8 @@
   <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
                  [fileClass]="fileClass"
                  [(data)]="data"
-                 [actions]="actions"></app-item-line>
+                 [leftActions]="leftActions"
+                 [rightActions]="rightActions"></app-item-line>
   <ng-template #cardItemTemplate>
     <app-base-card [cardTitle]="data.name"
                    [actions]="actions">

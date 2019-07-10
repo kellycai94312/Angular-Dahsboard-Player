@@ -20,21 +20,27 @@ export class BaseLibraryItemComponent<T> extends BaseLibraryItem<T> {
   public readonly imageTypeClass = ImageType;
   public readonly itemDisplayClass = ItemDisplay;
   public readonly actions: MenuItem[];
+  public readonly leftActions: MenuItem[];
+  public readonly rightActions: MenuItem[];
 
   constructor() {
     super();
-    this.actions = [
+
+    this.leftActions = [
       {
         iconName: 'info', action: async (item: MenuItem) => {
           await this.getInfo(this.data);
         }
-      },
+      }
+    ];
+    this.rightActions = [
       {
         iconName: 'edit', action: async (item: MenuItem) => {
           await this.onEdit();
         }
       }
     ];
+    this.actions = [...this.leftActions, ...this.rightActions];
   }
 
   public async onEdit(): Promise<void> {

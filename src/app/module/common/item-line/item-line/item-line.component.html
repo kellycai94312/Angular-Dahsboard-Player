@@ -1,11 +1,14 @@
 <div *ngIf="data"
      fxFlex
      fxLayout
-     fxLayoutGap="10px"
+     fxLayoutGap="5px"
      fxLayoutAlign="start center"
      class="item"
      (click)="clickItem.emit($event)">
-  <div fxFlex="none">
+  <div fxFlex="none"
+       fxLayout>
+    <ng-container [ngTemplateOutlet]="actionsTemplate"
+                  [ngTemplateOutletContext]="{$implicit: leftActions}"></ng-container>
     <ngx-image [object]="data"
                [width]="40"
                [height]="40"
@@ -16,12 +19,17 @@
   <div fxFlex="grow">
     <p class="item-text">{{data.name}}</p>
   </div>
+  <ng-container [ngTemplateOutlet]="actionsTemplate"
+                [ngTemplateOutletContext]="{$implicit: rightActions}"></ng-container>
+</div>
+<ng-template #actionsTemplate
+             let-actions>
   <button *ngFor="let item of actions"
           mat-icon-button
           (click)="item.action(item); $event.stopPropagation()">
     <mat-icon>{{item.iconName}}</mat-icon>
   </button>
-</div>
+</ng-template>
 <!--<mat-menu #actionsMenu="matMenu">-->
 <!--  <ng-container *ngFor="let item of actions; first as isFirst">-->
 <!--    <button *ngIf="!isFirst"-->

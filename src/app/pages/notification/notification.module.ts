@@ -1,7 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-
 import {NotificationsComponent} from './notifications/notifications.component';
 import {NotificationRoutingModule} from './notification-routing.module';
 import {NotificationComponent} from './notification/notification.component';
@@ -13,6 +12,7 @@ import {ChangeNotificationsComponent} from './notifications/change-notifications
 import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {NgxTabsModule} from '../../module/ngx/ngx-tabs/ngx-tabs.module';
+import {ListHeadingModule} from '../../module/common/list-heading/list-heading.module';
 
 @NgModule({
   imports: [
@@ -24,7 +24,8 @@ import {NgxTabsModule} from '../../module/ngx/ngx-tabs/ngx-tabs.module';
     NgxTabsModule,
     NgxGridModule,
     NgxButtonModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    ListHeadingModule
   ],
   declarations: [NotificationsComponent, NotificationComponent, AllNotificationsComponent, ChangeNotificationsComponent]
 })

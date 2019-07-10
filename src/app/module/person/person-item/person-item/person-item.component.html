@@ -2,7 +2,7 @@
   <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
                  [fileClass]="fileClassClass.PERSON"
                  [(data)]="data"
-                 [actions]="actions"></app-item-line>
+                 [rightActions]="actions"></app-item-line>
   <ng-template #cardItemTemplate>
     <mat-card fxFlex
               class="mat-elevation-z2"
