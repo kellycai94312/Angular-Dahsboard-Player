@@ -104,8 +104,9 @@
       </ng-container>
     </div>
     <div fxFlexFill
-         fxLayout>
-      <app-conversations fxFlex="60px"
+         fxLayout
+         class="conversation-content">
+    <app-conversations fxFlex="60px"
         [preview]="true"
         (selectItemChange)="onSelectConversation($event)"></app-conversations>
       <div fxFlex>

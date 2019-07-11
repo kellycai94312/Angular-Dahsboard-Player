@@ -3,7 +3,7 @@
      fxLayoutAlign="start start"
      fxLayoutAlign.lt-sm="start stretch"
      fxLayoutGap="10px">
-  <mat-card fxFlex="25"
+  <mat-card fxFlex="20"
             fxHide.lt-sm
             class="mat-elevation-z2"
             mwlDroppable>
@@ -11,18 +11,23 @@
     <mat-card-content fxLayout="column"
                       fxLayoutGap="5px">
       <div *ngFor="let item of externalEvents"
+           fxLayout
+           fxLayoutAlign="space-between center"
            class="draggable"
            mwlDraggable
            [ngClass]="item.cssClass"
            [dropData]="{event: item}"
-           [ngStyle]="{'background-color': item.color.primary}"
            dragActiveClass="drag-active">
-        <p class="p cal-event-title">{{item.title}}</p>
+        <div>
+          <p class="p cal-event-title">{{item.title}}</p>
+        </div>
+        <div class="circle"
+              [ngStyle]="{'background-color': item.color.primary}"></div>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <mat-card fxFlex="75"
+  <mat-card fxFlex="80"
             class="mat-elevation-z2">
     <mat-card-content fxLayout="column"
                       fxLayoutGap="10px">
