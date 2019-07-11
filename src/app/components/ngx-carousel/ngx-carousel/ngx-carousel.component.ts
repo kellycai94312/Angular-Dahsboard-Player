@@ -39,7 +39,7 @@ export class NgxCarouselComponent implements OnInit {
   public width = 360;
 
   @Input()
-  public height = 200;
+  public height = 300;
 
   public readonly imageTypeClass = ImageType;
   public readonly imageFormatClass = ImageFormat;
@@ -123,7 +123,7 @@ export class NgxCarouselComponent implements OnInit {
     image.type = ImageType.GALLERY;
     image.clazz = this.fileClass;
 
-    await this._templateModalService.showCropImageModal(image, ImageFormat.SQUARE, null, null, null, null, true, 3 / 2);
+    await this._templateModalService.showCropImageModal(image, ImageFormat.SQUARE, null, null, null, null, true, 11 / 6);
     await this.initialize();
   }
 

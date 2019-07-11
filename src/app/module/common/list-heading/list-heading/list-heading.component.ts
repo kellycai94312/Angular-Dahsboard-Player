@@ -24,6 +24,9 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
   @Input()
   public canChangeItemDisplay = true;
 
+  @Input()
+  public itemDisplay: ItemDisplay;
+
   @Output()
   public readonly searchTextChange = new EventEmitter<string>();
 
@@ -33,23 +36,22 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
   public readonly searchControl = new FormControl();
   public itemDisplayAction: MenuItem;
   private _notDestroyed = true;
-  private _itemDisplay: ItemDisplay;
 
   public ngOnInit(): void {
     const viewListIconName = 'view_list';
     const viewModuleIconName = 'view_module';
 
     this.itemDisplayAction = {
-      iconName: viewModuleIconName,
+      iconName: this.itemDisplay === ItemDisplay.LIST ? viewListIconName : viewModuleIconName,
       action: (item) => {
-        if (this._itemDisplay === ItemDisplay.LIST) {
+        if (this.itemDisplay === ItemDisplay.LIST) {
           item.iconName = viewModuleIconName;
-          this._itemDisplay = ItemDisplay.GRID;
+          this.itemDisplay = ItemDisplay.GRID;
         } else {
           item.iconName = viewListIconName;
-          this._itemDisplay = ItemDisplay.LIST;
+          this.itemDisplay = ItemDisplay.LIST;
         }
-        this.itemDisplayChange.emit(this._itemDisplay);
+        this.itemDisplayChange.emit(this.itemDisplay);
       }
     };
 

@@ -7,6 +7,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {Application} from '../../../../data/remote/model/application/application';
 import {ApplicationWindowService} from '../../../../services/windows/application-window/application-window.service';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-application-list',
@@ -23,6 +24,7 @@ export class ApplicationListComponent extends BaseItemList<Application, PageQuer
     super();
     this.translationTitle = 'applications';
     this.query = new PageQuery();
+    this.itemDisplay = ItemDisplay.LIST;
     this.addItem = async (): Promise<DialogResult<Application>> => {
       return await this._applicationWindowService.openEditApplication(new Application());
     };

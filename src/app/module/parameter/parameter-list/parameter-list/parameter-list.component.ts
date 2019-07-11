@@ -9,6 +9,7 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {ItemListComponent} from '../../../common/item-list/item-list/item-list.component';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-parameter-list',
@@ -32,6 +33,7 @@ export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuer
     super();
     this.translationTitle = 'parameters';
     this.query = new PageQuery();
+    this.itemDisplay = ItemDisplay.LIST;
     this.addItem = async (): Promise<DialogResult<BaseParameter>> => {
       return await this._parameterWindowService.openEditParameter(new BaseParameter());
     };
