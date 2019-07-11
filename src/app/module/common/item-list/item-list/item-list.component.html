@@ -1,6 +1,7 @@
 <div fxLayout="column"
      fxLayoutGap="30px">
   <app-list-heading [actions]="actions"
+                    [(itemDisplay)]="itemDisplay"
                     [translationTitle]="translationTitle"
                     (searchTextChange)="onSearchTextChanged($event)"
                     (itemDisplayChange)="onItemDisplayChange($event)"></app-list-heading>

@@ -5,6 +5,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-sport-type-list',
@@ -20,6 +21,7 @@ export class SportTypeListComponent extends BaseItemList<SportType, PageQuery> {
     super();
     this.translationTitle = 'sportTypes';
     this.canEdit = false;
+    this.itemDisplay = ItemDisplay.LIST;
     this.query = new PageQuery();
     this.fetchItems = async (direction: Direction, query: PageQuery): Promise<PageContainer<SportType>> => {
       return await this._participantRestApiService.getSportTypes(query);

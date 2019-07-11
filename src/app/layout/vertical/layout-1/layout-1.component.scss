@@ -64,3 +64,7 @@ vertical-layout-1 {
 app-conversation-view {
   min-height: calc(100% - 64px) !important;
 }
+
+.conversation-content {
+  box-shadow: -1px 0 2px 0 rgba(0, 0, 0, .25);
+}

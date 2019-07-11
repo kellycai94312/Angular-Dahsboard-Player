@@ -8,6 +8,7 @@ import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {BaseItemList} from '../../../common/item-list/model/base-item-list';
+import {ItemDisplay} from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-unit-list',
@@ -25,6 +26,7 @@ export class UnitListComponent extends BaseItemList<BaseUnit, PageQuery> {
     super();
     this.translationTitle = 'units';
     this.query = new PageQuery();
+    this.itemDisplay = ItemDisplay.LIST;
     this.addItem = async (): Promise<DialogResult<BaseUnit>> => {
       return await this._unitWindowService.openEditUnit(new BaseUnit());
     };
