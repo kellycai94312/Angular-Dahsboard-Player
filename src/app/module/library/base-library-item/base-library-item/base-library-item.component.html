@@ -2,18 +2,22 @@
   <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
                  [fileClass]="fileClass"
                  [(data)]="data"
-                 [actions]="actions"></app-item-line>
+                 [leftActions]="leftActions"
+                 [rightActions]="rightActions"></app-item-line>
   <ng-template #cardItemTemplate>
     <app-base-card [cardTitle]="data.name"
                    [actions]="actions">
-      <div fxLayout
+      <div fxFlexFill
+           fxLayout
            fxLayoutAlign="center center">
-        <ngx-image [object]="data"
-                   [width]="100"
-                   [height]="100"
-                   [autoSave]="false"
-                   [type]="imageTypeClass.LOGO"
-                   [fileClass]="fileClass"></ngx-image>
+        <div>
+          <ngx-image [object]="data"
+                     [width]="100"
+                     [height]="100"
+                     [autoSave]="false"
+                     [type]="imageTypeClass.LOGO"
+                     [fileClass]="fileClass"></ngx-image>
+        </div>
       </div>
     </app-base-card>
   </ng-template>

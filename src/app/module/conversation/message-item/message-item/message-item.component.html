@@ -38,14 +38,13 @@
                    'contact': message.sender.person.id !== person.id,
                    'selected': message.selected}">
 
-    <app-image #logo
-               *ngIf="message.sender.person.id != person.id"
-               class="avatar"
-               [type]="'LOGO'"
-               [clazz]="'PERSON'"
-               [id]="message.sender.person.id"
-               [dimension]="'W40xH40'"
-               [format]="'CIRCLE'"></app-image>
+    <ngx-image *ngIf="message.sender.person.id != person.id"
+               [object]="message.sender.person"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.PERSON"
+               [width]="40"
+               [height]="40"
+               [cropped]="true"></ngx-image>
 
     <div class="bubble">
       <div class="message d-flex flex-column">

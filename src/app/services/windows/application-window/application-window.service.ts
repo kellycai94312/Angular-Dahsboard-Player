@@ -82,7 +82,7 @@ export class ApplicationWindowService {
       ];
 
       component.rightFields = [
-        new CarouselField(application, FileClass.DEVICE, '')
+        new CarouselField(application, FileClass.APPLICATION, '')
       ];
 
       const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.APPLICATION, objectId: application.id}).toPromise();
@@ -97,6 +97,7 @@ export class ApplicationWindowService {
     return await this._modalBuilderService.showSelectionItemsModal(devices, async (query: PageQuery) => {
       return await this._deviceApiService.getDevices(query).toPromise();
     }, DeviceItemComponent, async (component, data) => {
+      component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;
   }

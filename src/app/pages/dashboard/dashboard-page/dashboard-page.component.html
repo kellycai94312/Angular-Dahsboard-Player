@@ -4,12 +4,15 @@
        class="header">
     <div fxLayout
          fxLayoutGap="10px">
-      <ngx-image [object]="person"
+      <ngx-image [canEdit]="true"
+                 [object]="person"
                  [width]="130"
                  [height]="130"
                  [allowFullScreen]="false"
+                 [cropImage]="true"
                  [type]="imageTypeClass.LOGO"
-                 [fileClass]="fileClassClass.PERSON"></ngx-image>
+                 [fileClass]="fileClassClass.PERSON"
+                 (imageChange)="onLogoChanged()"></ngx-image>
       <div fxLayout="column"
            fxLayoutAlign="center start">
         <h4>{{person.lastName}}</h4>

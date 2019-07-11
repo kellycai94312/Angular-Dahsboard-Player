@@ -87,6 +87,10 @@ export class StructureSubgroupsPageComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this._rootSubgroupName = await this._translateObjectService.getTranslation('rootSubgroup');
+
+    this.getChildren(null).subscribe(async (value) => {
+      await this.onSelectedNodeChange(value[0]);
+    });
   }
 
   public onGetNodeContextMenuItem = async (node: FlatNode): Promise<ContextMenuItem[]> => {

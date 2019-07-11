@@ -1,8 +1,23 @@
 <div class="header accent p-24"
      fxLayout
      fxLayoutAlign="space-between center">
-  <h3>{{translationTitle | translate}}</h3>
-  <div class="search-wrapper"
+  <div class="actions-wrapper">
+    <div class="actions-container"
+         fxLayout
+         fxLayoutGap="10px">
+      <button *ngFor="let item of actions"
+              mat-fab
+              color="warn"
+              (click)="item.action(item)">
+        <mat-icon>{{item.iconName}}</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div fxFlex>
+    <h3 class="text-uppercase">{{translationTitle | translate}}</h3>
+  </div>
+  <div *ngIf="canSearch"
+       class="search-wrapper"
        fxFlex
        fxLayout
        fxLayoutAlign="start center">
@@ -15,16 +30,14 @@
              placeholder="{{'search' | translate}}">
     </div>
   </div>
-  <div class="actions-wrapper">
-    <div class="actions-container"
-         fxLayout
-         fxLayoutGap="10px">
-      <button *ngFor="let item of actions"
-              mat-fab
-              color="warn"
-              (click)="item.action(item)">
-        <mat-icon>{{item.iconName}}</mat-icon>
-      </button>
-    </div>
+  <div *ngIf="canChangeItemDisplay"
+       fxFlex
+       fxLayout
+       fxLayoutAlign="end center">
+    <button *ngIf="itemDisplayAction"
+            mat-icon-button
+            (click)="itemDisplayAction.action(itemDisplayAction)">
+      <mat-icon>{{itemDisplayAction.iconName}}</mat-icon>
+    </button>
   </div>
 </div>

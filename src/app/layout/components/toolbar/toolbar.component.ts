@@ -94,7 +94,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             type: ImageType.LOGO,
             objectId: val.id,
             width: 40,
-            height: 40
+            height: 40,
+            cropped: true
           }, true);
         } else {
           delete this.personLogoUrl;

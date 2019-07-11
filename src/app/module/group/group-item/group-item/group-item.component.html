@@ -1,6 +1,6 @@
 <ng-container *ngIf="data">
   <app-item-line *ngIf="itemDisplay === itemDisplayClass.LIST; else cardItemTemplate"
-                 [fileClass]="fileClassClass.PERSON"
+                 [fileClass]="fileClassClass.GROUP"
                  [(data)]="data"></app-item-line>
   <ng-template #cardItemTemplate>
     <mat-card fxFlex

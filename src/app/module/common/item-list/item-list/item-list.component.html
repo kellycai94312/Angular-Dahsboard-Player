@@ -2,9 +2,10 @@
      fxLayoutGap="30px">
   <app-list-heading [actions]="actions"
                     [translationTitle]="translationTitle"
-                    (searchTextChange)="onSearchTextChanged($event)"></app-list-heading>
+                    (searchTextChange)="onSearchTextChanged($event)"
+                    (itemDisplayChange)="onItemDisplayChange($event)"></app-list-heading>
   <div>
-    <ngx-virtual-scroll class="d-flex flex-wrap"
+    <ngx-virtual-scroll class="d-flex flex-wrap justify-content-center"
                         [getItems]="fetchItems"
                         [query]="query">
       <ng-template let-item

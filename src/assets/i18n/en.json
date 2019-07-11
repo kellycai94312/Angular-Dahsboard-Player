@@ -727,5 +727,6 @@
   "manufacturer": "Manufacturer",
   "sportTypes": "Sport types",
   "applications": "Applications",
-  "application": "Application"
+  "application": "Application",
+  "selectAContactToStartAChat": "Select a contact to start a chat!"
 }

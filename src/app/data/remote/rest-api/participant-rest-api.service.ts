@@ -2889,6 +2889,10 @@ export class ParticipantRestApiService extends Rest {
       url += `&height=${query.height}`;
     }
 
+    if (query.cropped) {
+      url += `&cropped=${query.cropped}`;
+    }
+
     if (noCache) {
       url += `&date=${Date.now()}`;
     }
