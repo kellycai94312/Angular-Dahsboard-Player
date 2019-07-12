@@ -6,11 +6,11 @@ import {Router} from '@angular/router';
 import {EventReportService} from '../service/event-report.service';
 import {TrainingReport} from '../../../../data/remote/model/training/report/training-report';
 
-@Component({
-  selector: 'app-event-report-general',
-  templateUrl: './event-report-general.component.html',
-  styleUrls: ['./event-report-general.component.scss']
-})
+// @Component({
+//   selector: 'app-event-report-general',
+//   templateUrl: './event-report-general.component.html',
+//   styleUrls: ['./event-report-general.component.scss']
+// })
 export class EventReportGeneralComponent implements OnInit {
 
   public trainingReport: TrainingReport;

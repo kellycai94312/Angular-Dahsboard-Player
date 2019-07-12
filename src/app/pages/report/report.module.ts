@@ -26,38 +26,38 @@ import {PersonItemModule} from '../../module/person/person-item/person-item.modu
 import {GroupItemModule} from '../../module/group/group-item/group-item.module';
 import {ExerciseMeasureItemModule} from '../../module/action/exercise-measure-item/exercise-measure-item.module';
 
-@NgModule({
-  imports: [
-    CommonModule,
-    ReportRoutingModule,
-    NgxVirtualScrollModule,
-    TranslateModule.forChild(),
-    NgxButtonModule,
-    NgxModalModule,
-    NamedObjectModule,
-    NgxTabModule,
-    NgxSplitButtonModule,
-    DxDateBoxModule,
-    DxSelectBoxModule,
-    NamedObjectItemModule,
-    NgxButtonGroupModule,
-    GroupModule,
-    PersonItemModule,
-    GroupItemModule,
-    ExerciseMeasureItemModule
-  ],
-  declarations: [
-    ReportsPageComponent,
-    ReportPageComponent,
-    EventBlocksComponent,
-    EventReportGeneralComponent,
-    PersonsEventBlockComponent,
-    GeneralEventBlockComponent,
-    ExercisesEventBlockComponent,
-    TrainingReportBlockComponent,
-    EventBlockComponent
-  ],
-  providers: [EventReportService]
-})
+// @NgModule({
+//   imports: [
+//     CommonModule,
+//     ReportRoutingModule,
+//     NgxVirtualScrollModule,
+//     TranslateModule.forChild(),
+//     NgxButtonModule,
+//     NgxModalModule,
+//     NamedObjectModule,
+//     NgxTabModule,
+//     NgxSplitButtonModule,
+//     DxDateBoxModule,
+//     DxSelectBoxModule,
+//     NamedObjectItemModule,
+//     NgxButtonGroupModule,
+//     GroupModule,
+//     PersonItemModule,
+//     GroupItemModule,
+//     ExerciseMeasureItemModule
+//   ],
+//   declarations: [
+//     ReportsPageComponent,
+//     ReportPageComponent,
+//     EventBlocksComponent,
+//     EventReportGeneralComponent,
+//     PersonsEventBlockComponent,
+//     GeneralEventBlockComponent,
+//     ExercisesEventBlockComponent,
+//     TrainingReportBlockComponent,
+//     EventBlockComponent
+//   ],
+//   providers: [EventReportService]
+// })
 export class ReportModule {
 }

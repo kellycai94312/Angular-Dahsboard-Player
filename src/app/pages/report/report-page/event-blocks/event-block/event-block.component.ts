@@ -3,11 +3,11 @@ import {Tab} from '../../../../../data/local/tab';
 import {ActivatedRoute} from '@angular/router';
 import {EventReportService} from '../../service/event-report.service';
 
-@Component({
-  selector: 'app-event-block',
-  templateUrl: './event-block.component.html',
-  styleUrls: ['./event-block.component.scss']
-})
+// @Component({
+//   selector: 'app-event-block',
+//   templateUrl: './event-block.component.html',
+//   styleUrls: ['./event-block.component.scss']
+// })
 export class EventBlockComponent implements OnInit {
 
   public readonly tabs: Tab[];

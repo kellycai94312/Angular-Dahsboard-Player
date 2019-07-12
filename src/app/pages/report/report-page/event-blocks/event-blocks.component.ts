@@ -16,11 +16,11 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {ReportExtension} from '../../../../data/remote/bean/report-extension';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 
-@Component({
-  selector: 'app-event-blocks',
-  templateUrl: './event-blocks.component.html',
-  styleUrls: ['./event-blocks.component.scss']
-})
+// @Component({
+//   selector: 'app-event-blocks',
+//   templateUrl: './event-blocks.component.html',
+//   styleUrls: ['./event-blocks.component.scss']
+// })
 export class EventBlocksComponent implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;

@@ -13,11 +13,11 @@ import {TrainingReport} from '../../../data/remote/model/training/report/trainin
 import {PropertyConstant} from '../../../data/local/property-constant';
 import {Direction} from '../../../components/ngx-virtual-scroll/model/direction';
 
-@Component({
-  selector: 'app-reports-page',
-  templateUrl: './reports-page.component.html',
-  styleUrls: ['./reports-page.component.scss']
-})
+// @Component({
+//   selector: 'app-reports-page',
+//   templateUrl: './reports-page.component.html',
+//   styleUrls: ['./reports-page.component.scss']
+// })
 export class ReportsPageComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInput')

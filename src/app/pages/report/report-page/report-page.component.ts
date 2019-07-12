@@ -3,11 +3,11 @@ import {Tab} from '../../../data/local/tab';
 import {ActivatedRoute} from '@angular/router';
 import {EventReportService} from './service/event-report.service';
 
-@Component({
-  selector: 'app-report-page',
-  templateUrl: './report-page.component.html',
-  styleUrls: ['./report-page.component.scss']
-})
+// @Component({
+//   selector: 'app-report-page',
+//   templateUrl: './report-page.component.html',
+//   styleUrls: ['./report-page.component.scss']
+// })
 export class ReportPageComponent implements OnInit {
 
   public readonly tabs: Tab[];

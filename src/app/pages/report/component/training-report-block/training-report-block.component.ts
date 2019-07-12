@@ -16,11 +16,11 @@ import {TrainingBlock} from '../../../../data/remote/model/training/report/train
 import {ChartType} from '../../../../data/remote/model/training/report/chart-type';
 import {TranslateService} from '@ngx-translate/core';
 
-@Component({
-  selector: 'app-training-report-block',
-  templateUrl: './training-report-block.component.html',
-  styleUrls: ['./training-report-block.component.scss']
-})
+// @Component({
+//   selector: 'app-training-report-block',
+//   templateUrl: './training-report-block.component.html',
+//   styleUrls: ['./training-report-block.component.scss']
+// })
 export class TrainingReportBlockComponent implements OnInit {
 
   @ViewChild('chart')

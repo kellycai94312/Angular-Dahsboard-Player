@@ -4,7 +4,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {Mutex} from '../../../../data/local/mutex';
 import {TrainingBlock} from '../../../../data/remote/model/training/report/training-block';
 
-@Injectable()
+// @Injectable()
 export class EventReportService {
 
   public static colorPalette: string[] = [

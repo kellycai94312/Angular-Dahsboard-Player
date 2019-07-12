@@ -13,11 +13,11 @@ import {fromEvent, SubscriptionLike as ISubscription} from 'rxjs';
 import {TrainingBlock} from '../../../../../../data/remote/model/training/report/training-block';
 import {debounceTime} from 'rxjs/operators';
 
-@Component({
-  selector: 'app-persons-event-block',
-  templateUrl: './persons-event-block.component.html',
-  styleUrls: ['./persons-event-block.component.scss']
-})
+// @Component({
+//   selector: 'app-persons-event-block',
+//   templateUrl: './persons-event-block.component.html',
+//   styleUrls: ['./persons-event-block.component.scss']
+// })
 export class PersonsEventBlockComponent implements OnInit, OnDestroy {
 
   @ViewChild('searchInput')

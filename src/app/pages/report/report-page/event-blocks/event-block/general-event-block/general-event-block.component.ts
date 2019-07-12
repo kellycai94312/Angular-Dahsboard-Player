@@ -16,11 +16,11 @@ import {GroupItemComponent} from '../../../../../../module/group/group-item/grou
 import {TrainingBlockQuery} from '../../../../../../data/remote/rest-api/query/training-block-query';
 import {ModalBuilderService} from '../../../../../../service/modal-builder/modal-builder.service';
 
-@Component({
-  selector: 'app-general-event-block',
-  templateUrl: './general-event-block.component.html',
-  styleUrls: ['./general-event-block.component.scss']
-})
+// @Component({
+//   selector: 'app-general-event-block',
+//   templateUrl: './general-event-block.component.html',
+//   styleUrls: ['./general-event-block.component.scss']
+// })
 export class GeneralEventBlockComponent implements OnInit {
 
   public readonly splitButtonItems: SplitButtonItem[];

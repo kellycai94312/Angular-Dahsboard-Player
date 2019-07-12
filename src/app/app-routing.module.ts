@@ -60,11 +60,11 @@ const routes: Routes = [
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard]
   },
-  {
-    path: 'report',
-    loadChildren: './pages/report/report.module#ReportModule',
-    canActivate: [AuthGuard, DeactivateGuard]
-  },
+  // {
+  //   path: 'report',
+  //   loadChildren: './pages/report/report.module#ReportModule',
+  //   canActivate: [AuthGuard, DeactivateGuard]
+  // },
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',

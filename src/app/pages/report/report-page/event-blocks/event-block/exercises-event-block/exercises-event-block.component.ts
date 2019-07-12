@@ -9,11 +9,11 @@ import {TrainingBlock} from '../../../../../../data/remote/model/training/report
 import {ExerciseMeasureItemComponent} from '../../../../../../module/action/exercise-measure-item/exercise-measure-item/exercise-measure-item.component';
 import {ModalBuilderService} from '../../../../../../service/modal-builder/modal-builder.service';
 
-@Component({
-  selector: 'app-exercises-event-block',
-  templateUrl: './exercises-event-block.component.html',
-  styleUrls: ['./exercises-event-block.component.scss']
-})
+// @Component({
+//   selector: 'app-exercises-event-block',
+//   templateUrl: './exercises-event-block.component.html',
+//   styleUrls: ['./exercises-event-block.component.scss']
+// })
 export class ExercisesEventBlockComponent implements OnInit {
 
   public exerciseMeasures: ExerciseMeasure[];
