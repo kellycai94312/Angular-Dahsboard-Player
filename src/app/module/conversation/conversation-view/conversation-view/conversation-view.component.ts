@@ -35,7 +35,6 @@ import {BaseComponent} from '../../../../data/local/component/base/base-componen
 import {Router} from '@angular/router';
 import {ISelected} from '../../../../data/local/iselected';
 import {DialogResult} from '../../../../data/local/dialog-result';
-import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {FuseMatSidenavHelperService} from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
 
 @Component({
@@ -381,7 +380,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     return (val as Chat).name;
   }
 
-  private async addEvent(): Promise<DialogResult<BaseTraining>> {
+  private async addEvent(): Promise<DialogResult<any>> {
     // TODO: Add event
     // const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.data, true);
     // if (dialogResult.result) {

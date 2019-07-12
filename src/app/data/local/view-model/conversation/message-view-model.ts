@@ -6,8 +6,6 @@ import {SystemMessageContentType} from '../../../remote/model/chat/message/syste
 import {BaseMessageContentType} from '../../../remote/model/chat/message/base/base-message-content-type';
 import {SystemMessageContent} from '../../../remote/model/chat/message/system-message-content';
 import {MessageContent} from '../../../remote/model/chat/message/message-content';
-import {EventMessageContent} from '../../../remote/model/chat/message/event-message-content';
-import {BaseTraining} from '../../../remote/model/training/base/base-training';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {HtmlService} from '../../../../service/html/html.service';
 
@@ -38,7 +36,7 @@ export class MessageViewModel extends BaseViewModel<Message> {
         this.body = (this.data.content as MessageContent).content;
         break;
       case BaseMessageContentType.SYSTEM_MESSAGE_CONTENT:
-        const messageContent = <SystemMessageContent> this.data.content;
+        const messageContent = <SystemMessageContent>this.data.content;
         switch (messageContent.systemMessageType) {
           case SystemMessageContentType.CREATE_CHAT:
             this.body = await this._translateObjectService.getTranslation('conversationSystemMessage.createChat', {
@@ -75,7 +73,8 @@ export class MessageViewModel extends BaseViewModel<Message> {
         }
         break;
       case BaseMessageContentType.EVENT_MESSAGE_CONTENT:
-        this.body = await this._htmlService.getEventPreview((this.data.content as EventMessageContent<BaseTraining>).training);
+        // TODO:
+        // this.body = await this._htmlService.getEventPreview((this.data.content as EventMessageContent<BaseTraining>).training);
         break;
     }
   }

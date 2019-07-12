@@ -22,7 +22,6 @@ import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
 import {DynamicComponentService} from './shared/dynamic-component.service';
-import {ReportsService} from './shared/reports.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
@@ -112,7 +111,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageService,
     DatePipe,
     AppHelper,
-    ReportsService,
     DynamicComponentService,
     ParticipantStompService,
     AuthorizationService,

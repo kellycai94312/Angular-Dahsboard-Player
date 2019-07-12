@@ -22,7 +22,6 @@ import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {environment} from '../../../../environments/environment';
 import {Image} from '../../../data/remote/model/file/image/image';
-import {EstimatedParameter} from '../../../data/remote/model/training/testing/estimated-parameter';
 import {SportType} from '../../../data/remote/model/sport-type';
 import {SportRole} from '../../../data/remote/model/sport-role';
 import {QueryParams} from '../../../data/remote/rest-api/query-params';
@@ -34,8 +33,6 @@ import {UserRole} from '../../../data/remote/model/user-role';
 import {Person} from '../../../data/remote/model/person';
 import {PersonQuery} from '../../../data/remote/rest-api/query/person-query';
 import {OrganizationTrainer} from '../../../data/remote/model/group/organization-trainer';
-import {BaseTraining} from '../../../data/remote/model/training/base/base-training';
-import {BaseTrainingQuery} from '../../../data/remote/rest-api/query/base-training-query';
 
 @Injectable()
 export class NgxModalService {
@@ -207,20 +204,6 @@ export class NgxModalService {
     });
   }
 
-  //#region Event
-
-  public async showSelectionEventModal(apply: (selectedItems: BaseTraining[]) => Promise<void>) {
-    await this.showSelectionNameObjectsModal<BaseTraining>(async (query: BaseTrainingQuery) => {
-        return await this._participantRestApiService.getBaseTrainings(query);
-      },
-      data => {
-        return data.name;
-      },
-      [], apply, 1);
-  }
-
-  //#endregion
-
   public async showSelectionPersonsModal(personQuery: PersonQuery, apply: (selectedItems: Person[]) => Promise<void>) {
     await this.showSelectionNameObjectsModal<Person>(async (query: PersonQuery) => {
         return await this._participantRestApiService.getPersons(this._appHelper.updatePageQuery(query, personQuery));
@@ -247,15 +230,6 @@ export class NgxModalService {
       selectedItems, apply);
   }
 
-  public async showSelectionEstimatedParametersModal<T extends EstimatedParameter>(selectedItems: T[], apply: (selectedItems: T[]) => Promise<void>) {
-    await this.showSelectionNameObjectsModal(async query => {
-        return await this._participantRestApiService.getEstimatedParameters(query);
-      },
-      data => {
-        return data.name;
-      },
-      selectedItems, apply);
-  }
 
   public async showSelectionGroupsModal<T extends Group>(selectedItems: T[],
                                                          apply: (selectedItems: T[]) => Promise<void>,

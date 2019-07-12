@@ -30,11 +30,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'event-plan',
-    loadChildren: './pages/event-plan/event-plan.module#EventPlanModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'notification',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]
@@ -54,11 +49,6 @@ const routes: Routes = [
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'report',
-  //   loadChildren: './pages/report/report.module#ReportModule',
-  //   canActivate: [AuthGuard, DeactivateGuard]
-  // },
   {
     path: 'dictionary',
     loadChildren: './pages/dictionary/dictionary.module#DictionaryModule',
