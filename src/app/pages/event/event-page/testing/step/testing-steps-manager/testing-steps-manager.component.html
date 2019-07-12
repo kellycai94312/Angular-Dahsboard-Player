@@ -1,8 +1,0 @@
-<div *ngIf="event"
-     class="mb-2">
-  <h1 class="mb-0">{{event.name}}</h1>
-  <p class="text-muted">{{('state'| translate) + ": " + (('eventStateEnum.' + event.trainingState)| translate)}}</p>
-</div>
-
-<ngx-tab [tabs]="tabs"
-         (tabChange)="onTabChange($event)"></ngx-tab>
