@@ -2,18 +2,12 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DictionariesComponent} from './dictionaries/dictionaries.component';
 import {DictionaryRoutingModule} from './dictionary-routing.module';
-import {StageStandardDictionaryComponent} from './stage-standard-dictionary/stage-standard-dictionary.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {InputSelectModule} from '../../components/input-select/input-select.module';
 import {DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {NgxGridModule} from '../../components/ngx-grid/ngx-grid.module';
-import {StageDictionaryComponent} from './stage-dictionary/stage-dictionary.component';
-import {EditStageComponent} from './component/edit-stage/edit-stage.component';
 import {NgxModalModule} from '../../components/ngx-modal/ngx-modal.module';
-import {StageTypeDictionaryComponent} from './stage-type-dictionary/stage-type-dictionary.component';
-import {EditStageTypeComponent} from './component/edit-stage-type/edit-stage-type.component';
 import {SportTypeDictionaryComponent} from './sport-type-dictionary/sport-type-dictionary.component';
-import {EditStageStandardComponent} from './component/edit-stage-standard/edit-stage-standard.component';
 import {OperatorValueModule} from '../../components/operator-value/operator-value.module';
 import {NamedObjectModule} from '../../components/named-object/named-object.module';
 import {NamedObjectItemModule} from '../../components/named-object-item/named-object-item.module';
@@ -74,13 +68,7 @@ import {ItemListModule} from '../../module/common/item-list/item-list.module';
   ],
   declarations: [
     DictionariesComponent,
-    StageStandardDictionaryComponent,
-    StageDictionaryComponent,
-    EditStageComponent,
-    StageTypeDictionaryComponent,
-    EditStageTypeComponent,
     SportTypeDictionaryComponent,
-    EditStageStandardComponent,
     ExercisesDictionaryComponent,
     TestsDictionaryComponent,
     ActivitiesComponent,
@@ -90,9 +78,6 @@ import {ItemListModule} from '../../module/common/item-list/item-list.module';
     EditTagComponent
   ],
   entryComponents: [
-    EditStageComponent,
-    EditStageTypeComponent,
-    EditStageStandardComponent,
     EditActivityComponent,
     EditTagComponent
   ]

@@ -76,17 +76,10 @@ import {PersonMeasure} from '../bean/person-measure';
 import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
 import {MedicalExamination} from '../model/person/medical-examination';
-import {StageQuery} from './query/stage-query';
-import {StageStandard} from '../model/stage/stage-standard';
-import {Stage} from '../model/stage/stage';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
-import {StageType} from '../model/stage/stage-type';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
-import {StagePerson} from '../bean/stage-person';
-import {StagePersonRank} from '../bean/stage-person-rank';
 import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
-import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
@@ -145,6 +138,8 @@ import {PollPerson} from '../model/training/poll/poll-person';
 import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
 import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
 import {GroupNews} from '../model/group/news/group-news';
+import {Stage} from '../model/stage/stage';
+import {StageType} from '../model/stage/stage-type';
 
 @Injectable()
 @RestParams({
@@ -604,16 +599,6 @@ export class ParticipantRestApiService extends Rest {
   removeMedicalExamination: IRestMethod<{ personId: number, medicalExaminationId: number }, MedicalExamination>;
 
   //#endregion
-
-  //#region StageStandard
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/stage/{!stageId}/sportType/{!sportTypeId}'
-  })
-  getStageStandardMeasureValues: IRestMethodStrict<any, PageQuery, { personId: number, stageId: number, sportTypeId: number }, PageContainer<StageStandardMeasureValue>>;
-
-  ///#endregion
 
   //#region News
 
@@ -2053,18 +2038,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/sportType/{!sportTypeId}/stagePerson',
-  })
-  getStagePersons: IRestMethod<{ sportTypeId: number }, StagePerson[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/sportType/{!sportTypeId}/stagePersonRank',
-  })
-  getStagePersonRanks: IRestMethodStrict<any, { stageTypeId: number }, { sportTypeId: number }, StagePersonRank[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/sportType/person',
   })
   getSportTypePersons: IRestMethod<void, SportTypePerson[]>;
@@ -2078,40 +2051,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/estimatedParameter',
   })
   getEstimatedParameters: IRestMethod<PageQuery, PageContainer<EstimatedParameter>>;
-
-  //#endregion
-
-  //#region StageStandard
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stageStandard'
-  })
-  getStageStandards: IRestMethod<StageQuery, PageContainer<StageStandard>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/stageStandard'
-  })
-  createStageStandard: IRestMethod<StageStandard, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/stageStandard/{!stageStandardId}'
-  })
-  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageStandardId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/stageStandard/{!stageStandardId}'
-  })
-  removeStageStandard: IRestMethod<{ stageStandardId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stageStandard/exerciseMeasure/unassigned'
-  })
-  getUnassignedExerciseMeasuresByStage: IRestMethod<StageQuery, PageContainer<ExerciseMeasure>>;
 
   //#endregion
 
