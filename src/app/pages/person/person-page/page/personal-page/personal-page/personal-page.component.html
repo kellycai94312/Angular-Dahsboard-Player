@@ -1,130 +1,25 @@
-<div class="row cols-padding">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label for="lastName">{{'lastName' | translate}}</label>
-      <dx-text-box id="lastName"
-                   [(value)]="person.lastName"
-                   [readOnly]="!allowEdit">
-        <dx-validator>
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dx-validator>
-      </dx-text-box>
+<div fxFlex.lt-sm
+     fxFlex.gt-sm="70"
+     fxLayout="column">
+  <div fxLayout="column">
+    <div fxLayout
+         fxLayoutGap="10px">
+      <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+    </div>
+    <div fxLayout
+         fxLayoutGap="10px">
+      <ngx-date fxFlex="33"
+                [data]="birthDateNgxDate"></ngx-date>
+      <ngx-select fxFlex="33"
+                  [data]="sexNgxSelect"></ngx-select>
     </div>
   </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label for="firstName">{{'firstName' | translate}}</label>
-      <dx-text-box id="firstName"
-                   [(value)]="person.firstName"
-                   [readOnly]="!allowEdit">
-        <dx-validator>
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dx-validator>
-      </dx-text-box>
-    </div>
-  </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label>{{'patronymic' | translate}}</label>
-      <dx-text-box [(value)]="person.patronymic"
-                   [showClearButton]="true"
-                   [readOnly]="!allowEdit">
-      </dx-text-box>
-    </div>
-  </div>
+
+  <ngx-button *ngIf="canEdit"
+              class="mt-2"
+              nameKey="save"
+              [click]="onSave"></ngx-button>
 </div>
-<div class="row cols-padding">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label for="birthDate">{{'birthDate' | translate}}</label>
-      <dx-date-box id="birthDate"
-                   [(value)]="person.birthDate"
-                   type="date"
-                   class="w-100"
-                   [displayFormat]="propertyConstant.dateFormat"
-                   [readOnly]="!allowEdit">
-        <dx-validator>
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dx-validator>
-      </dx-date-box>
-    </div>
-  </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label for="sex">{{'sex' | translate}}</label>
-      <dx-select-box id="sex"
-                     [items]="sexEnumNameWrappers"
-                     [(value)]="selectedSexEnum"
-                     displayExpr="name"
-                     placeholder="{{'sex' | translate}}"
-                     [readOnly]="!allowEdit">
-        <dx-validator>
-          <dxi-validation-rule type="required"></dxi-validation-rule>
-        </dx-validator>
-      </dx-select-box>
-    </div>
-  </div>
-</div>
-<div *ngIf="personService.selectedUserRole && personService.selectedUserRole.userRoleEnum === userRoleEnum.ATHLETE"
-     class="row cols-padding">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <div class="form-group">
-      <label>{{'athleteState' | translate}}</label>
-      <dx-select-box [items]="athleteStates"
-                     [(value)]="person.athleteState"
-                     displayExpr="name"
-                     acceptCustomValue="true"
-                     showClearButton="true"
-                     [readOnly]="!allowEdit">
-      </dx-select-box>
-    </div>
-  </div>
-</div>
-<div *ngIf="person.address"
-     class="row cols-padding">
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <label for="country">{{'persons.person.personal.country' | translate}}</label>
-    <app-input-select id="country"
-                      [loadData]="loadCountries"
-                      [(model)]="person.address.country"
-                      [pageSize]="pageSize"
-                      [disabled]="!allowEdit"
-                      (onChange)="onCountryChange($event)"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a country"
-                      ngDefaultControl>
-    </app-input-select>
-  </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <label for="region">{{'persons.person.personal.region' | translate}}</label>
-    <app-input-select id="region"
-                      [loadData]="loadRegions"
-                      [(model)]="person.address.region"
-                      [pageSize]="pageSize"
-                      [disabled]="!allowEdit || !person.address.country"
-                      (onChange)="onRegionChange($event)"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a region"
-                      ngDefaultControl>
-    </app-input-select>
-  </div>
-  <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
-    <label for="city">{{'persons.person.personal.city' | translate}}</label>
-    <app-input-select id="city"
-                      [loadData]="loadCities"
-                      [(model)]="person.address.city"
-                      [pageSize]="pageSize"
-                      [disabled]="!allowEdit || !person.address.region"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a city"
-                      ngDefaultControl>
-    </app-input-select>
-  </div>
-</div>
-<ngx-button *ngIf="allowEdit"
-            class="mt-2"
-            nameKey="save"
-            [click]="onSave"></ngx-button>
+
