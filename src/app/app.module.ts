@@ -34,7 +34,6 @@ import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
-import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
@@ -87,7 +86,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageToastrModule,
     HtmlContentModule,
     GroupModule,
-    EditEventModule,
     EventPersonItemModule,
     NamedObjectModule,
     FuseModule.forRoot(fuseConfig),

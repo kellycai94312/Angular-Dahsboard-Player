@@ -24,7 +24,6 @@ import {SystemMessageContent} from '../../../../../data/remote/model/chat/messag
 import {SystemMessageContentType} from '../../../../../data/remote/model/chat/message/system-message-content-type';
 import {Direction} from '../../../../../components/ngx-virtual-scroll/model/direction';
 import {Chat} from '../../../../../data/remote/model/chat/conversation/chat';
-import {EventMessageContent} from '../../../../../data/remote/model/chat/message/event-message-content';
 import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/base/base-message-content';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {ConfirmationRemovingMessageComponent} from '../../../../../module/conversation/confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
@@ -350,12 +349,12 @@ export class ConversationPageComponent implements OnDestroy {
   }
 
   public onAddEvent = async () => {
-    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.conversation, true);
-    if (dialogResult.result) {
-      const message = new EventMessageContent();
-      message.training = dialogResult.data;
-      await this.createMessage(message);
-    }
+    // TODO: Add event
+    // if (dialogResult.result) {
+    //   const message = new EventMessageContent();
+    //   message.training = dialogResult.data;
+    //   await this.createMessage(message);
+    // }
   };
 
   private readMessageFrom(date: Date): void {

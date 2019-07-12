@@ -26,7 +26,6 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {ConfirmationRemovingMessageComponent} from '../../confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
-import {EventMessageContent} from '../../../../data/remote/model/chat/message/event-message-content';
 import {BaseMessageContent} from '../../../../data/remote/model/chat/message/base/base-message-content';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
@@ -383,13 +382,15 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   }
 
   private async addEvent(): Promise<DialogResult<BaseTraining>> {
-    const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.data, true);
-    if (dialogResult.result) {
-      const message = new EventMessageContent();
-      message.training = dialogResult.data;
-      await this.createMessage(message);
-    }
-    return dialogResult;
+    // TODO: Add event
+    // const dialogResult = await this._templateModalService.showEditEventModal(null, null, null, this.data, true);
+    // if (dialogResult.result) {
+    //   const message = new EventMessageContent();
+    //   message.training = dialogResult.data;
+    //   await this.createMessage(message);
+    // }
+    // return dialogResult;
+    return {result: false};
   }
 
 }
