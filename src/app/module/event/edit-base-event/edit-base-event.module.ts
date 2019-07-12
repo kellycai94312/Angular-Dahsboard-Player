@@ -4,9 +4,9 @@ import {EditBaseEventComponent} from './edit-base-event/edit-base-event.componen
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {DxDateBoxModule} from 'devextreme-angular';
 import {TranslateModule} from '@ngx-translate/core';
 import {EditEventPersonsModule} from '../edit-event-persons/edit-event-persons.module';
+import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
 
 @NgModule({
   declarations: [EditBaseEventComponent],
@@ -16,8 +16,8 @@ import {EditEventPersonsModule} from '../edit-event-persons/edit-event-persons.m
     CommonModule,
     NgxInputModule,
     NgxSelectModule,
+    NgxDateModule,
     FlexLayoutModule,
-    DxDateBoxModule,
     TranslateModule.forChild(),
     EditEventPersonsModule
   ]

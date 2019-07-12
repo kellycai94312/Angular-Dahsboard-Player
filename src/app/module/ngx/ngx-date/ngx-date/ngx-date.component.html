@@ -1,5 +1,5 @@
 <md2-datepicker *ngIf="data"
-                placeholder="{{data.placeholder}}"
+                placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
                 [touchUi]="data.touchUi"
                 [format]="data.format"
                 [mode]="data.mode"
