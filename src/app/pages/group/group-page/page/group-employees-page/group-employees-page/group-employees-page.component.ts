@@ -10,6 +10,8 @@ import {GroupPersonState} from '../../../../../../data/remote/model/group/group-
 import {TranslateObjectService} from '../../../../../../shared/translate-object.service';
 import {NameWrapper} from '../../../../../../data/local/name-wrapper';
 import {PositionLevelEnum} from '../../../../../../data/remote/model/person-position/position-level-enum';
+import {NgxSelect} from '../../../../../../module/ngx/ngx-select/model/ngx-select';
+import {takeWhile} from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-employees-page',
@@ -22,8 +24,8 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
   public groupPersonsListComponent: GroupPersonsListComponent;
 
   public query: GroupPersonQuery;
-  public positionLevels: NameWrapper<PositionLevelEnum>[];
-  public selectedPositionLevel: NameWrapper<PositionLevelEnum>;
+
+  public positionLevelNgxSelect: NgxSelect;
 
   constructor(private _translateObjectService: TranslateObjectService,
               groupService: GroupService, appHelper: AppHelper) {
@@ -39,9 +41,19 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
     if (!groupPerson || groupPerson.state !== GroupPersonState.APPROVED) {
       positionLevels = positionLevels.filter(x => x.data === PositionLevelEnum.HEAD);
     }
-    this.positionLevels = positionLevels;
-    this.selectedPositionLevel = this.positionLevels[0];
-    this.query.positionLevelEnum = this.selectedPositionLevel.data;
+
+    this.positionLevelNgxSelect = new NgxSelect();
+    this.positionLevelNgxSelect.labelTranslation = 'personPosition';
+    this.positionLevelNgxSelect.display = 'name';
+    this.positionLevelNgxSelect.items = positionLevels;
+    this.positionLevelNgxSelect.control.setValue(positionLevels[0]);
+
+    this.positionLevelNgxSelect.control.valueChanges
+      .pipe(takeWhile(() => this.notDestroyed))
+      .subscribe(async (value) => {
+        await this.onPositionLevelChanged(value);
+      });
+
     await this.groupPersonsListComponent.updateItems();
   }
 
