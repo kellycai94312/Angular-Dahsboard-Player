@@ -1,18 +1,21 @@
 <mat-form-field *ngIf="data"
-                [appearance]="data.appearance">
+                [appearance]="data.appearance"
+                [floatLabel]="data.floatLabel">
   <mat-label *ngIf="data.label || data.labelTranslation">{{data.label ? data.label : (data.labelTranslation | translate)}}</mat-label>
   <input *ngIf="data.type !== ngxInputTypeClass.TEXTAREA; else textareaTemplate"
          matInput
+         autocomplete="off"
+         placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
          [required]="data.required"
          [type]="data.type"
-         [formControl]="data.control"
-         [placeholder]="data.placeholder">
+         [formControl]="data.control">
   <ng-template #textareaTemplate>
     <textarea matInput
+              autocomplete="off"
+              placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
               [required]="data.required"
               [rows]="data.rows"
-              [formControl]="data.control"
-              [placeholder]="data.placeholder"></textarea>
+              [formControl]="data.control"></textarea>
   </ng-template>
   <button *ngIf="data.showClearButton && data.control.value"
           matSuffix
