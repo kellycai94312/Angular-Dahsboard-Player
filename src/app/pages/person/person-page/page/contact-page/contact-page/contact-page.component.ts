@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseContact} from '../../../../../../data/remote/model/contact/base/base-contact';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {PersonService} from '../../../service/person.service';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {ListRequest} from '../../../../../../data/remote/request/list-request';
 import {ContactType} from '../../../../../../data/remote/model/contact/base/contact-type';
 import {NgxModalService} from '../../../../../../components/ngx-modal/service/ngx-modal.service';
+import {ContactNgxInput} from '../model/contact-ngx-input';
 import {PersonActivationComponent} from '../../../../../../module/person/person-activation/person-activation/person-activation.component';
+import {BaseContact} from '../../../../../../data/remote/model/contact/base/base-contact';
 
 @Component({
   selector: 'app-contact-page',
@@ -16,10 +17,9 @@ import {PersonActivationComponent} from '../../../../../../module/person/person-
 export class ContactPageComponent implements OnInit {
 
   public readonly contactTypeClass = ContactType;
-
-  public allowEdit: boolean;
+  public contactNgxInputs: ContactNgxInput[] = [];
+  public canEdit: boolean;
   public enabled: boolean;
-  public contacts: BaseContact[];
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _personService: PersonService,
@@ -28,25 +28,25 @@ export class ContactPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.allowEdit = await this._personService.allowEdit();
+    this.canEdit = await this._personService.allowEdit();
     this.enabled = await this._personService.personViewModel.data.user.enabled;
-    this.contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
-    this.contacts.forEach(value => {
-      value.visible = value.visible || false;
-    });
+
+    const contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
+    this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
   }
 
   public onSave = async () => {
     await this._appHelper.trySave(async () => {
-      this.contacts = await this._participantRestApiService.updatePersonContacts(new ListRequest(this.contacts), {}, {personId: this._personService.personViewModel.data.id});
+      const contacts = await this._participantRestApiService.updatePersonContacts(new ListRequest(this.contactNgxInputs.map(x => x.getResult())), {}, {personId: this._personService.personViewModel.data.id});
+      this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
     });
   };
 
   public onPersonActivation = async () => {
     let defaultEmail = '';
-    const emailContacts = this.contacts.filter(contact => contact.discriminator == ContactType.EMAIL);
-    if (emailContacts.length) {
-      defaultEmail = emailContacts[0].value;
+    const contactNgxInput = this.contactNgxInputs.find(x => x.contact.discriminator === ContactType.EMAIL);
+    if (contactNgxInput) {
+      defaultEmail = contactNgxInput.getResult().value;
     }
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'personActivation';
@@ -64,5 +64,15 @@ export class ContactPageComponent implements OnInit {
       ];
     });
   };
+
+  private _convertContactsToContactNgxInputs(contacts: BaseContact[]): ContactNgxInput[] {
+    return contacts.map(x => {
+      const contactNgxInput = new ContactNgxInput(x);
+      if (!this.canEdit) {
+        contactNgxInput.ngxInput.control.disable();
+      }
+      return contactNgxInput;
+    });
+  }
 
 }

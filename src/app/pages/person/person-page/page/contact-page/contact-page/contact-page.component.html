@@ -1,33 +1,19 @@
-<div class="row cols-padding">
-  <div class="col-xl-6 col-lg-6 col-md-10 col-sm-12">
-    <div *ngFor="let contact of contacts"
-         class="d-flex flex-row">
-      <div class="form-group w-100">
-        <label>{{contact.discriminator}}
-          <ngx-button *ngIf="!enabled && contact.discriminator === contactTypeClass.EMAIL"
-                      nameKey="activate"
-                      [click]="onPersonActivation"></ngx-button>
-        </label>
-        <dx-text-box id="value"
-                     [(value)]="contact.value"
-                     [readOnly]="!allowEdit"
-                     [showClearButton]="true">
-          <dx-validator>
-            <dxi-validation-rule *ngIf="contact.discriminator === contactTypeClass.EMAIL"
-                                 type="email"></dxi-validation-rule>
-          </dx-validator>
-        </dx-text-box>
-      </div>
-      <div class="align-self-center">
-        <dx-check-box *ngIf="allowEdit"
-                      class="ml-2"
-                      [(value)]="contact.visible"
-                      text="{{'public' | translate}}">
-        </dx-check-box>
-      </div>
-    </div>
-    <ngx-button *ngIf="allowEdit"
-                nameKey="save"
-                [click]="onSave"></ngx-button>
+<div *ngIf="contactNgxInputs.length"
+     fxFlex.lt-sm
+     fxFlex.gt-sm="30"
+     class="content">
+  <div *ngFor="let item of contactNgxInputs"
+       fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="start center">
+    <new-ngx-input [data]="item.ngxInput"></new-ngx-input>
+    <ngx-button *ngIf="!enabled && item.contact.discriminator === contactTypeClass.EMAIL"
+                nameKey="activate"
+                [click]="onPersonActivation"></ngx-button>
+    <mat-checkbox *ngIf="canEdit"
+                  [(ngModel)]="item.contact.visible">{{'public' | translate}}</mat-checkbox>
   </div>
+  <ngx-button *ngIf="canEdit"
+              nameKey="save"
+              [click]="onSave"></ngx-button>
 </div>

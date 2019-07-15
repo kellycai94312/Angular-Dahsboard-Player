@@ -728,5 +728,10 @@
   "sportTypes": "Sport types",
   "applications": "Applications",
   "application": "Application",
-  "selectAContactToStartAChat": "Select a contact to start a chat!"
+  "selectAContactToStartAChat": "Select a contact to start a chat!",
+  "contactTypeEnum": {
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "SKYPE": "Skype"
+  }
 }
