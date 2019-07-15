@@ -1,12 +1,6 @@
-<div class="d-flex">
-  <div class="ml-auto">
-    <label>{{'language' | translate }}</label>
-    <dx-select-box [items]="languages"
-                   displayExpr="name"
-                   [(value)]="selectedLanguage"
-                   acceptCustomValue="true"
-                   (onValueChanged)="onLanguageChanged($event.value)"
-                   placeholder="{{'language' | translate}}">
-    </dx-select-box>
-  </div>
+<div fxLayout
+     fxLayoutAlign="end start"
+     class="content">
+  <ngx-select fxFlex="20"
+              [data]="languageNgxSelect"></ngx-select>
 </div>
