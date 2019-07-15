@@ -4,7 +4,6 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PersonService} from '../../../person/person-page/service/person.service';
@@ -65,33 +64,33 @@ export class EditPersonStageComponent extends BaseEditComponent<any> {
   }
 
   public editDocument = async () => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-
-    await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
-      await component.initialize(this.appHelper.cloneObject(this._document));
-
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'save',
-          default: true,
-          callback: async () => {
-            await this._ngxModalService.save(modal, component);
-          },
-        },
-        {
-          nameKey: 'remove',
-          callback: async () => {
-            await this._ngxModalService.remove(modal, component);
-          },
-        }
-      ];
-
-      modal.result.then(async x => {
-      }, async reason => {
-        this._document = component.data;
-      });
-    });
+    // const modal = this._ngxModalService.open();
+    // modal.componentInstance.titleKey = 'edit';
+    //
+    // await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
+    //   await component.initialize(this.appHelper.cloneObject(this._document));
+    //
+    //   modal.componentInstance.splitButtonItems = [
+    //     {
+    //       nameKey: 'save',
+    //       default: true,
+    //       callback: async () => {
+    //         await this._ngxModalService.save(modal, component);
+    //       },
+    //     },
+    //     {
+    //       nameKey: 'remove',
+    //       callback: async () => {
+    //         await this._ngxModalService.remove(modal, component);
+    //       },
+    //     }
+    //   ];
+    //
+    //   modal.result.then(async x => {
+    //   }, async reason => {
+    //     this._document = component.data;
+    //   });
+    // });
   };
 
 }

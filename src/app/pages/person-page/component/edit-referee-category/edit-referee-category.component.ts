@@ -9,7 +9,6 @@ import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditDocumentComponent} from '../../../groups/component/edit-document/edit-document.component';
 
 // @Component({
 //   selector: 'app-edit-referee-category',
@@ -77,25 +76,25 @@ export class EditRefereeCategoryComponent extends BaseEditComponent<PersonRefere
   }
 
   public editDocument = async () => {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-    await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
-      await component.initialize(this.appHelper.cloneObject(this._document));
-
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
-
-      modal.result.then(async x => {
-      }, async reason => {
-        this._document = this.appHelper.cloneObject(component.data);
-      });
-    });
+    // const modal = this._ngxModalService.open();
+    // modal.componentInstance.titleKey = 'edit';
+    // await modal.componentInstance.initializeBody(EditDocumentComponent, async component => {
+    //   await component.initialize(this.appHelper.cloneObject(this._document));
+    //
+    //   modal.componentInstance.splitButtonItems = [
+    //     this._ngxModalService.saveSplitItemButton(async () => {
+    //       await this._ngxModalService.save(modal, component);
+    //     }),
+    //     this._ngxModalService.removeSplitItemButton(async () => {
+    //       await this._ngxModalService.remove(modal, component);
+    //     })
+    //   ];
+    //
+    //   modal.result.then(async x => {
+    //   }, async reason => {
+    //     this._document = this.appHelper.cloneObject(component.data);
+    //   });
+    // });
   };
 
 }
