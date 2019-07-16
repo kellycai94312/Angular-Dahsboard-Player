@@ -2,9 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DictionariesComponent} from './dictionaries/dictionaries.component';
 import {BreadcrumbItem} from '../../components/ngx-breadcrumb/bean/breadcrumb-item';
-import {TestsDictionaryComponent} from './tests-dictionary/tests-dictionary.component';
-import {ActivityComponent} from './component/activity/activity.component';
-import {ExercisesDictionaryComponent} from './exercises-dictionary/exercises-dictionary.component';
 
 const routes: Routes = [
   {
@@ -39,36 +36,6 @@ const routes: Routes = [
     data: {
       breadcrumb: {nameKey: 'application'} as BreadcrumbItem
     }
-  },
-  {
-    path: 'exercise',
-    data: {
-      breadcrumb: {nameKey: 'exercises'} as BreadcrumbItem
-    },
-    children: [
-      {path: '', component: ExercisesDictionaryComponent},
-      {
-        path: ':id', component: ActivityComponent,
-        data: {
-          breadcrumb: {} as BreadcrumbItem
-        }
-      }
-    ]
-  },
-  {
-    path: 'test',
-    data: {
-      breadcrumb: {nameKey: 'tests'} as BreadcrumbItem
-    },
-    children: [
-      {path: '', component: TestsDictionaryComponent},
-      {
-        path: ':id', component: ActivityComponent,
-        data: {
-          breadcrumb: {} as BreadcrumbItem
-        }
-      }
-    ]
   }
 ];
 
