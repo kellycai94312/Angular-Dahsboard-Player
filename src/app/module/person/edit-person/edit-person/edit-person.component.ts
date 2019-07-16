@@ -441,6 +441,7 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   }
 
   private updateComponentData<T extends IdentifiedObject>(component: ComponentWithAttach<T>, items: T[], components: ComponentWithAttach<T>[]) {
+    component.updateData();
     let itemIndex = components.findIndex(x => x.data === component.data);
     if (itemIndex < 0) {
       components.push(component);
