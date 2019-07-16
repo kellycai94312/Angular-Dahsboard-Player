@@ -1,14 +1,6 @@
 <div fxLayout="column"
      fxLayoutGap="10px">
-  <label>{{'connectionType' | translate}}</label>
-  <dx-select-box class="input-height-sm"
-                 [items]="groupConnectionTypes"
-                 [(value)]="selectedGroupConnectionType"
-                 displayExpr="name"
-                 placeholder="{{'connectionType' | translate}}"
-                 [disabled]="data.id"
-                 (onValueChanged)="onSelectedGroupConnectionType($event.value)">
-  </dx-select-box>
+  <ngx-select [data]="connectionTypeNgxSelect"></ngx-select>
   <div>
     <label>{{'groupForConnection' | translate}}</label>
     <app-input-select [loadData]="fetchGroups"
