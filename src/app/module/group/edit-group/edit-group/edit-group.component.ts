@@ -1,13 +1,7 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
-import {SportType} from '../../../../data/remote/model/sport-type';
-import {Stage} from '../../../../data/remote/model/stage/stage';
-import {StageType} from '../../../../data/remote/model/stage/stage-type';
-import {TeamType} from '../../../../data/remote/model/group/team/team-type';
-import {OrganizationType} from '../../../../data/remote/model/group/organization/organization-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Router} from '@angular/router';
@@ -17,23 +11,30 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 import {PermissionService} from '../../../../shared/permission.service';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {OrganizationTypeEnum} from '../../../../data/remote/model/group/organization/organization-type-enum';
+import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
+import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
+import {Validators} from '@angular/forms';
+import {takeWhile} from 'rxjs/operators';
+import {Organization} from '../../../../data/remote/model/group/organization/organization';
+import {Team} from '../../../../data/remote/model/group/team/team';
 
 @Component({
   selector: 'app-edit-group',
   templateUrl: './edit-group.component.html',
   styleUrls: ['./edit-group.component.scss']
 })
-export class EditGroupComponent extends BaseEditComponent<Group> {
+export class EditGroupComponent extends BaseEditComponent<Group> implements OnDestroy {
 
   public readonly groupTypeEnum = GroupTypeEnum;
 
-  public groupTypeEnums: NameWrapper<GroupTypeEnum>[];
-  public selectedGroupTypeEnum: NameWrapper<GroupTypeEnum>;
-  public sportTypes: SportType[];
-  public stages: Stage[];
-  public stageTypes: StageType[];
-  public teamTypes: TeamType[];
-  public organizationTypes: OrganizationType[];
+  public readonly nameNgxInput = new NgxInput();
+  public readonly typeNgxSelect = new NgxSelect();
+  public readonly organizationTypeNgxSelect = new NgxSelect();
+  public readonly sportTypeNgxSelect = new NgxSelect();
+  public readonly teamTypeNgxSelect = new NgxSelect();
+  public readonly stageNgxSelect = new NgxSelect();
+  public readonly stageYearNgxInput = new NgxInput();
+  private _notDestroyed = true;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _router: Router,
@@ -43,18 +44,33 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
     super(participantRestApiService, appHelper);
   }
 
+  public ngOnDestroy(): void {
+    this._notDestroyed = false;
+  }
+
   protected async initializeComponent(data: Group): Promise<boolean> {
     await super.initializeComponent(data);
     data.visible = data.visible || true;
 
     return await this.appHelper.tryLoad(async () => {
-      this.groupTypeEnums = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum')).filter(x => x.data === GroupTypeEnum.ORGANIZATION);
-      this.selectedGroupTypeEnum = this.groupTypeEnums[0];
-      this.onGroupTypeChanged(this.selectedGroupTypeEnum);
-      this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
-      this.stages = await this.participantRestApiService.getStages();
-      this.teamTypes = await this.participantRestApiService.getTeamTypes();
-      this.stageTypes = await this.participantRestApiService.getStageTypes();
+      this.nameNgxInput.labelTranslation = 'name';
+      this.nameNgxInput.required = true;
+      this.nameNgxInput.control.setValidators(Validators.required);
+      this.nameNgxInput.control.setValue(data.name);
+
+      this.typeNgxSelect.labelTranslation = 'type';
+      this.typeNgxSelect.display = 'name';
+      this.typeNgxSelect.required = true;
+      this.typeNgxSelect.items = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum')).filter(x => x.data === GroupTypeEnum.ORGANIZATION);
+      this.typeNgxSelect.control.setValidators(Validators.required);
+      data.discriminator = data.discriminator || this.typeNgxSelect.items[0].data;
+      this.typeNgxSelect.control.setValue(data.discriminator ? this.typeNgxSelect.items.find(x => x.data === data.discriminator) : this.typeNgxSelect.items[0].data);
+
+      this.typeNgxSelect.control.valueChanges
+        .pipe(takeWhile(() => this._notDestroyed))
+        .subscribe(value => {
+          this.data.discriminator = value.data;
+        });
 
       let organizationTypes = await this.participantRestApiService.getOrganizationTypes();
       if (!await this._permissionService.hasAnyRole([UserRoleEnum.OPERATOR])) {
@@ -64,11 +80,51 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
           x.organizationTypeEnum === OrganizationTypeEnum.OTHER
         );
       }
-      this.organizationTypes = organizationTypes;
+
+      this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
+      this.organizationTypeNgxSelect.display = 'name';
+      this.organizationTypeNgxSelect.required = true;
+      this.organizationTypeNgxSelect.items = organizationTypes;
+      this.organizationTypeNgxSelect.control.setValidators(Validators.required);
+      this.organizationTypeNgxSelect.control.setValue((data as Organization).organizationType ? this.organizationTypeNgxSelect.items.find(x => x.id == (data as Organization).organizationType.id) : this.organizationTypeNgxSelect.items[0]);
+
+      this.sportTypeNgxSelect.labelTranslation = 'sportTypes';
+      this.sportTypeNgxSelect.display = 'name';
+      this.sportTypeNgxSelect.required = true;
+      this.sportTypeNgxSelect.items = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
+      this.sportTypeNgxSelect.control.setValidators(Validators.required);
+      this.sportTypeNgxSelect.control.setValue((data as Team).sportType ? this.sportTypeNgxSelect.items.find(x => x.id == (data as Team).sportType.id) : this.sportTypeNgxSelect.items[0]);
+
+      this.teamTypeNgxSelect.labelTranslation = 'teamType';
+      this.teamTypeNgxSelect.display = 'name';
+      this.teamTypeNgxSelect.required = true;
+      this.teamTypeNgxSelect.items = await this.participantRestApiService.getTeamTypes();
+      this.teamTypeNgxSelect.control.setValidators(Validators.required);
+      this.teamTypeNgxSelect.control.setValue((data as Team).teamType ? this.teamTypeNgxSelect.items.find(x => x.id == (data as Team).teamType.id) : this.teamTypeNgxSelect.items[0]);
+
+      this.stageNgxSelect.labelTranslation = 'stages';
+      this.stageNgxSelect.display = 'name';
+      this.stageNgxSelect.required = true;
+      this.stageNgxSelect.items = await this.participantRestApiService.getStages();
+      this.stageNgxSelect.control.setValidators(Validators.required);
+      this.stageNgxSelect.control.setValue((data as Team).stage ? this.stageNgxSelect.items.find(x => x.id == (data as Team).stage.id) : this.stageNgxSelect.items[0]);
+
+      this.stageYearNgxInput.labelTranslation = 'yearPreparation';
+      this.stageYearNgxInput.required = true;
+      this.stageYearNgxInput.control.setValidators(Validators.required);
+      this.stageYearNgxInput.control.setValue((data as Team).stageYear);
     });
   }
 
   async onSave(): Promise<boolean> {
+    this.data.name = this.nameNgxInput.control.value;
+    this.data.discriminator = this.typeNgxSelect.control.value.data;
+    (this.data as Organization).organizationType = this.organizationTypeNgxSelect.control.value;
+    (this.data as Team).sportType = this.sportTypeNgxSelect.control.value;
+    (this.data as Team).teamType = this.teamTypeNgxSelect.control.value;
+    (this.data as Team).stage = this.stageNgxSelect.control.value;
+    (this.data as Team).stageYear = this.stageYearNgxInput.control.value;
+
     return await this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);
       if (isNew) {
@@ -89,18 +145,6 @@ export class EditGroupComponent extends BaseEditComponent<Group> {
 
   public async navigateToPage(): Promise<void> {
     await this._router.navigate(['/group', this.data.id]);
-  }
-
-  public onGroupTypeChanged(val: NameWrapper<GroupTypeEnum>) {
-    this.data.discriminator = val.data;
-  }
-
-  getKey(group: Group) {
-    return group.id;
-  }
-
-  getName(group: Group) {
-    return group.name;
   }
 
 }

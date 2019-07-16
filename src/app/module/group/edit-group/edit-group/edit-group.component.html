@@ -1,49 +1,13 @@
-<label class="mt-2">{{'name' | translate}}</label>
-<ngx-input class="w-100"
-           [(value)]="data.name"></ngx-input>
-
-<div *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION">
-  <label class="mt-2">{{'type' | translate }}</label>
-  <dx-select-box [items]="organizationTypes"
-                 [(value)]="data.organizationType"
-                 [acceptCustomValue]="true"
-                 [disabled]="data.id"
-                 displayExpr="name"
-                 placeholder="{{'type' | translate}}">
-  </dx-select-box>
-</div>
-
-<div *ngIf="data?.discriminator === groupTypeEnum.TEAM">
-  <label class="mt-2">{{'sportType' | translate}}</label>
-  <dx-select-box [items]="sportTypes"
-                 [(value)]="data.sportType"
-                 [acceptCustomValue]="true"
-                 displayExpr="name"
-                 [disabled]="data.id"
-                 placeholder="{{'sportType' | translate}}">
-  </dx-select-box>
-
-  <div *ngIf="data?.discriminator === groupTypeEnum.TEAM">
-    <label class="mt-2">{{'teamType' | translate }}</label>
-    <dx-select-box [items]="teamTypes"
-                   [(value)]="data.teamType"
-                   [acceptCustomValue]="true"
-                   displayExpr="name"
-                   placeholder="{{'teamType' | translate}}">
-    </dx-select-box>
-  </div>
-
-  <label class="mt-2">{{'stage' | translate}}</label>
-  <dx-select-box [items]="stages"
-                 [(value)]="data.stage"
-                 [acceptCustomValue]="true"
-                 displayExpr="name"
-                 placeholder="{{'stage' | translate}}">
-  </dx-select-box>
-
-  <label class="mt-2">{{'yearPreparation' | translate}}</label>
-  <dx-number-box [(value)]="data.stageYear"
-                 [min]="1"
-                 [max]="99">
-  </dx-number-box>
+<div fxLayout="column">
+  <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
+  <!--  <ngx-select *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION"-->
+  <!--              [data]="typeNgxSelect"></ngx-select>-->
+  <ngx-select *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION"
+              [data]="organizationTypeNgxSelect"></ngx-select>
+  <ng-container *ngIf="data?.discriminator === groupTypeEnum.TEAM">
+    <ngx-select [data]="sportTypeNgxSelect"></ngx-select>
+    <ngx-select [data]="teamTypeNgxSelect"></ngx-select>
+    <ngx-select [data]="stageNgxSelect"></ngx-select>
+    <new-ngx-input [data]="stageYearNgxInput"></new-ngx-input>
+  </ng-container>
 </div>

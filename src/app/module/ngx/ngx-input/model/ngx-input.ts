@@ -6,7 +6,7 @@ import {FloatLabelType} from '@angular/material';
 
 export class NgxInput {
   public appearance: MatFormFieldAppearance = 'legacy';
-  public floatLabel: FloatLabelType = 'always';
+  public floatLabel: FloatLabelType = 'auto';
   public type = NgxInputType.TEXT;
   public control = new FormControl();
   public label?: string;

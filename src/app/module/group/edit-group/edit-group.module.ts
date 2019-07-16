@@ -1,17 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {EditGroupComponent} from './edit-group/edit-group.component';
-import {NgxInputModule} from '../../../components/ngx-input/ngx-input.module';
-import {DxNumberBoxModule, DxSelectBoxModule} from 'devextreme-angular';
 import {TranslateModule} from '@ngx-translate/core';
+import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
+import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
     CommonModule,
+    FlexLayoutModule,
     TranslateModule.forChild(),
-    DxSelectBoxModule,
-    DxNumberBoxModule,
-    NgxInputModule
+    NgxInputModule,
+    NgxSelectModule
   ],
   declarations: [EditGroupComponent],
   entryComponents: [EditGroupComponent],
