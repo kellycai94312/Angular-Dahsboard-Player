@@ -38,8 +38,8 @@ export class PersonalPageComponent implements OnInit {
   }
 
   public async initialize(person: Person): Promise<void> {
-    this.firstNgxInput = this._getNgxInput('firstName', person.firstName);
-    this.lastNgxInput = this._getNgxInput('lastName', person.lastName);
+    this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
+    this.lastNgxInput = this._getNgxInput('lastName', person.lastName, true);
     this.patronymicNgxInput = this._getNgxInput('patronymic', person.patronymic);
 
     this.birthDateNgxDate = new NgxDate();
@@ -82,12 +82,14 @@ export class PersonalPageComponent implements OnInit {
     });
   };
 
-  private _getNgxInput(labelTranslation: string, value: string): NgxInput {
+  private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
     const ngxInput = new NgxInput();
     ngxInput.labelTranslation = labelTranslation;
-    ngxInput.required = true;
+    ngxInput.required = required;
     ngxInput.control.setValue(value);
-    ngxInput.control.setValidators(Validators.required);
+    if (required) {
+      ngxInput.control.setValidators(Validators.required);
+    }
     return ngxInput;
   }
 

@@ -90,4 +90,16 @@ export class ValidationService {
     return '';
   }
 
+  public getBirthDateMin() {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 125);
+    return date;
+  }
+
+  public getBirthDateMax() {
+    const date = new Date();
+    date.setFullYear(date.getFullYear() - 3);
+    return date;
+  }
+
 }

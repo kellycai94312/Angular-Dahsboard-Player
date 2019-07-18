@@ -81,13 +81,9 @@ export class SignInComponent implements OnInit, OnDestroy {
           await this._router.navigate(['/sign-up/person']);
         }
       } else {
-        await this._showWrongLoginOrPasswordMessage();
+        await this._appHelper.showErrorMessage('wrongLoginOrPassword');
       }
     });
-  }
-
-  private async _showWrongLoginOrPasswordMessage(): Promise<void> {
-    await this._appHelper.showErrorMessage('wrongLoginOrPassword');
   }
 
 }

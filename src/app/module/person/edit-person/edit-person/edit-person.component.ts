@@ -21,7 +21,6 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {Router} from '@angular/router';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {PersonContant} from '../../../../data/local/person-contant';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
 import {PersonQuery} from '../../../../data/remote/rest-api/query/person-query';
@@ -33,6 +32,7 @@ import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {EditPersonService} from '../service/edit-person.service';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 import {BaseFile} from '../../../../data/remote/model/file/base/base-file';
+import {ValidationService} from '../../../../service/validation/validation.service';
 
 @Component({
   selector: 'app-edit-person',
@@ -79,11 +79,12 @@ export class EditPersonComponent extends BaseEditComponent<Person> implements On
   constructor(private _ngxModalService: NgxModalService,
               private _editPersonService: EditPersonService,
               private _router: Router,
+              private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
-    this.dateMin = PersonContant.getBirthDateMin();
-    this.dateMax = PersonContant.getBirthDateMax();
+    this.dateMin = this._validationService.getBirthDateMin();
+    this.dateMax = this._validationService.getBirthDateMax();
     this.document = new Document();
     this.document.clazz = FileClass.GROUP_TRANSITION;
     this.document.type = DocumentType.ORDER;
