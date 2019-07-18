@@ -1,4 +1,5 @@
-<app-logo-card [titleTranslation]="'welcome'"
+<app-logo-card *ngIf="formGroup"
+               [titleTranslation]="'welcome'"
                (keyup.enter)="onSignIn()">
   <new-ngx-input [data]="emailNgxInput"></new-ngx-input>
   <new-ngx-input [data]="passwordNgxInput"></new-ngx-input>

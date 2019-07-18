@@ -7,7 +7,8 @@ import {AuthDenyGuard} from '../../guard/auth-deny.guard';
 
 const routes: Routes = [
   {path: '', component: SignUpComponent, canActivate: [AuthDenyGuard, EnvironmentGuard]},
-  {path: 'person', loadChildren: './person-sign-up/person-sign-up.module#PersonSignUpModule', canActivate: [RegistrationPersonPageGuard, EnvironmentGuard]}
+  {path: 'person', loadChildren: './person-sign-up/person-sign-up.module#PersonSignUpModule', canActivate: [RegistrationPersonPageGuard, EnvironmentGuard]},
+  {path: 'enable', loadChildren: './person-enable-sign-up/person-enable-sign-up.module#PersonEnableSignUpModule'}
 ];
 
 @NgModule({
