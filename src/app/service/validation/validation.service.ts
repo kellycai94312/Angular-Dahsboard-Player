@@ -12,6 +12,14 @@ export class ValidationService {
     return Validators.minLength(8)(control) || Validators.maxLength(255)(control);
   };
 
+  public static readonly emailValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    if (control.value) {
+      const matches = control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
+      return matches ? null : {email: true};
+    }
+    return null;
+  };
+
   public static readonly compareValidator = (target: AbstractControl): ValidatorFn => {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control.value !== target.value) {
@@ -37,6 +45,8 @@ export class ValidationService {
       return this._translateObjectService.getTranslation$('maxLengthParam', {length: error.requiredLength});
     } else if (formControl.hasError('compare')) {
       return this._translateObjectService.getTranslation$('valuesNotMatch');
+    } else if (formControl.hasError('email')) {
+      return this._translateObjectService.getTranslation$('wrongEmailAddress');
     }
     return null;
   }

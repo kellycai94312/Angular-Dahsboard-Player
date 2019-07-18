@@ -733,5 +733,6 @@
   "retypePassword": "Retype password",
   "signUp": "Sign up",
   "invalidCredentials": "Invalid credentials",
-  "newUserSignUp": "New user sign up"
+  "newUserSignUp": "New user sign up",
+  "wrongEmailAddress": "Wrong email address"
 }

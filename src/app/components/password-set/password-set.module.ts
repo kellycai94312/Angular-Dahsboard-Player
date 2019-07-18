@@ -1,23 +1,25 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {PasswordSetComponent} from './password-set.component';
+import {PasswordSetComponent} from './password-set/password-set.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {NgxButtonModule} from '../ngx-button/ngx-button.module';
 import {RouterModule} from '@angular/router';
-import {NgxInputModule} from '../ngx-input/ngx-input.module';
-import {NgxFormModule} from '../ngx-form/ngx-form.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatButtonModule} from '@angular/material';
+import {LogoCardModule} from '../../module/common/logo-card/logo-card.module';
+import {NgxInputModule} from '../../module/ngx/ngx-input/ngx-input.module';
 
 @NgModule({
+  declarations: [PasswordSetComponent],
+  exports: [PasswordSetComponent],
   imports: [
     CommonModule,
+    FlexLayoutModule,
+    MatButtonModule,
     TranslateModule.forChild(),
     RouterModule.forChild([]),
-    NgxButtonModule,
     NgxInputModule,
-    NgxFormModule
-  ],
-  exports: [PasswordSetComponent],
-  declarations: [PasswordSetComponent]
+    LogoCardModule
+  ]
 })
 export class PasswordSetModule {
 }

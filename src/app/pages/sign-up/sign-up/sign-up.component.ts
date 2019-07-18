@@ -44,8 +44,9 @@ export class SignUpComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.emailNgxInput.labelTranslation = 'enterEmail';
+    this.emailNgxInput.type = NgxInputType.EMAIL;
     this.emailNgxInput.appearance = 'outline';
-    this.emailNgxInput.control.setValidators([Validators.required, Validators.email]);
+    this.emailNgxInput.control.setValidators([Validators.required, ValidationService.emailValidator]);
 
     this.passwordNgxInput.labelTranslation = 'createPassword';
     this.passwordNgxInput.type = NgxInputType.PASSWORD;
