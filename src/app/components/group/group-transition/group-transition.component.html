@@ -23,20 +23,10 @@
 
 <div class="row cols-padding mt-2">
   <div class="col">
-    <dx-text-box class="input-height-sm"
-                 [(value)]="document.number"
-                 placeholder="{{'documentNumber' | translate}}"></dx-text-box>
+    <new-ngx-input [data]="documentNumberNgxInput"></new-ngx-input>
   </div>
   <div class="col">
-    <dx-date-box class="w-100 input-height-sm"
-                 [displayFormat]="propertyConstantClass.dateFormat"
-                 type="date"
-                 placeholder="{{'date' | translate}}"
-                 (onValueChanged)="onDateChanged($event.value)">
-      <dx-validator>
-        <dxi-validation-rule type="required"></dxi-validation-rule>
-      </dx-validator>
-    </dx-date-box>
+    <ngx-date [data]="dateNgxDate"></ngx-date>
   </div>
   <div *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER"
        class="col">

@@ -22,24 +22,24 @@
   </table>
 </div>
 <div class="mt-2">
-  <label>{{'additional' | translate}}</label>
-  <div class="row cols-padding">
-    <div class="col-10">
-      <dx-text-box placeholder="{{'search' | translate}}"
-                   mode="search"
-                   [showClearButton]="true"
-                   (onInput)="onNameChanged($event.event.target.value)">
-      </dx-text-box>
-    </div>
-    <div class="col-2">
-      <dx-select-box [items]="groupTypeEnums"
-                     displayExpr="name"
-                     (onValueChanged)="onGroupTypeChanged($event.value)"
-                     placeholder="{{'groupType' | translate}}"
-                     [showClearButton]="true">
-      </dx-select-box>
-    </div>
-  </div>
+<!--  <label>{{'additional' | translate}}</label>-->
+<!--  <div class="row cols-padding">-->
+<!--    <div class="col-10">-->
+<!--      <dx-text-box placeholder="{{'search' | translate}}"-->
+<!--                   mode="search"-->
+<!--                   [showClearButton]="true"-->
+<!--                   (onInput)="onNameChanged($event.event.target.value)">-->
+<!--      </dx-text-box>-->
+<!--    </div>-->
+<!--    <div class="col-2">-->
+<!--      <dx-select-box [items]="groupTypeEnums"-->
+<!--                     displayExpr="name"-->
+<!--                     (onValueChanged)="onGroupTypeChanged($event.value)"-->
+<!--                     placeholder="{{'groupType' | translate}}"-->
+<!--                     [showClearButton]="true">-->
+<!--      </dx-select-box>-->
+<!--    </div>-->
+<!--  </div>-->
 
   <table class="table table-sm mt-2">
     <thead>

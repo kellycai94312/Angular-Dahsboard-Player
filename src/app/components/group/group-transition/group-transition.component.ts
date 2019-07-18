@@ -20,6 +20,9 @@ import {SubgroupTemplateGroupVersion} from '../../../data/remote/model/group/sub
 import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
 import {TranslateObjectService} from '../../../shared/translate-object.service';
 import {SubgroupVersion} from '../../../data/remote/model/group/subgroup/version/subgroup-version';
+import {NgxInput} from '../../../module/ngx/ngx-input/model/ngx-input';
+import {NgxDate} from '../../../module/ngx/ngx-date/model/ngx-date';
+import {FormControl} from '@angular/forms';
 
 @Component({
   selector: 'app-group-transition',
@@ -52,6 +55,8 @@ export class GroupTransitionComponent {
   @Input()
   public persons: Person[];
 
+  public readonly documentNumberNgxInput = new NgxInput();
+  public readonly dateNgxDate = new NgxDate();
   public selectedSubgroupGroup: SubgroupGroup;
   public document: Document;
   public selectedSubgroupTemplateGroup: SubgroupTemplateGroup;
@@ -68,6 +73,12 @@ export class GroupTransitionComponent {
     this.groupTransitionType = groupPersonTransitionType;
     this.group = group;
     this.persons = persons;
+
+    this.documentNumberNgxInput.labelTranslation = 'documentNumber';
+
+    this.dateNgxDate.placeholderTranslation = 'date';
+    this.dateNgxDate.control = new FormControl();
+
     if (!this.subgroupTemplateGroupVersion) {
       this.selectedSubgroupTemplateGroup = (await this.fetchSubgroupTemplateGroups(0, '')).list[0];
       this.subgroupTemplateGroupVersion = this.selectedSubgroupTemplateGroup.subgroupTemplateGroupVersion;
@@ -115,6 +126,9 @@ export class GroupTransitionComponent {
   };
 
   public async onSave(): Promise<boolean> {
+    this.document.number = this.documentNumberNgxInput.control.value;
+    this.document.date = this._appHelper.getGmtDate(this.dateNgxDate.control.value);
+
     return await this._appHelper.trySave(async () => {
       let transition: GroupTransition | SubgroupTransition;
       switch (this.groupTransitionType) {
@@ -158,10 +172,6 @@ export class GroupTransitionComponent {
       await this.attachFileComponent.updateFile();
     });
   };
-
-  public onDateChanged(val: Date) {
-    this.document.date = this._appHelper.getGmtDate(val);
-  }
 
   public onSelectedSubgroupTemplateGroup(subgroupTemplateGroup: SubgroupTemplateGroup) {
     this.subgroupTemplateGroupVersion = subgroupTemplateGroup.subgroupTemplateGroupVersion;
