@@ -7,7 +7,7 @@
          autocomplete="off"
          placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
          [required]="data.required"
-         [type]="data.type"
+         [type]="data.type.toString().toLowerCase()"
          [formControl]="data.control">
   <ng-template #textareaTemplate>
     <textarea matInput

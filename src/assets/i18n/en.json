@@ -733,5 +733,6 @@
     "EMAIL": "Email",
     "PHONE": "Phone",
     "SKYPE": "Skype"
-  }
+  },
+  "welcome": "Welcome"
 }

@@ -1,26 +1,16 @@
-<div class="m-2 form"
-     (keyup.enter)="busyButton.onKeyUp($event)">
-  <img src="/assets/img/athlete-readiness-logo.png">
-  <ngx-form>
-    <ngx-input [type]="ngxInputTypeClass.TEXT"
-               placeholderKey="enterEmailOrPhoneNumber"
-               [(value)]="auth.email"
-               [checkValidation]="onRequiredValidation"></ngx-input>
-    <ngx-input class="mt-2"
-               [type]="ngxInputTypeClass.PASSWORD"
-               placeholderKey="enterPassword"
-               [(value)]="auth.password"
-               [checkValidation]="onPasswordValidation"></ngx-input>
-  </ngx-form>
-  <ngx-button #busyButton
-              class="mt-3 w-100"
-              nameKey="signIn"
-              [click]="signIn"
-              [checkPressedEnter]="true"></ngx-button>
-  <div class="mt-2 text-center">
-    <u *ngIf="environment.type === environmentTypeClass.PRODUCTION"><a
+<app-logo-card [titleTranslation]="'welcome'"
+               (keyup.enter)="onSignIn()">
+  <new-ngx-input [data]="emailNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="passwordNgxInput"></new-ngx-input>
+  <button mat-raised-button
+          class="mt-2"
+          color="accent"
+          [disabled]="formGroup.invalid"
+          (click)="onSignIn()">{{'signIn' | translate}}</button>
+  <div class="mt-3">
+    <u *ngIf="environment.type === environmentTypeClass.LOCAL || environment.type === environmentTypeClass.PRODUCTION"><a
       routerLink="/sign-up"
       class="mr-5">{{'registration.signUp' | translate}}</a></u>
     <u><a routerLink="/password/reset">{{'forgotYourPassword' | translate}}</a></u>
   </div>
-</div>
+</app-logo-card>

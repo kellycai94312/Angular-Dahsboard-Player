@@ -1,15 +1,16 @@
 import {Injectable} from '@angular/core';
 import {TranslateObjectService} from '../../shared/translate-object.service';
 import {Observable} from 'rxjs';
-import {FormControl} from '@angular/forms';
+import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ValidationService {
 
-  public readonly minPasswordLength = 8;
-  public readonly maxPasswordLength = 255;
+  public static readonly passwordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
+    return Validators.minLength(8)(control) || Validators.maxLength(255)(control);
+  };
 
   constructor(private _translateObjectService: TranslateObjectService) {
   }
@@ -19,6 +20,12 @@ export class ValidationService {
       return this._translateObjectService.getTranslation$('requiredField');
     } else if (formControl.hasError('pattern')) {
       return this._translateObjectService.getTranslation$('notMatchWithThePatternParam', {pattern: formControl.getError('pattern').requiredPattern});
+    } else if (formControl.hasError('minlength')) {
+      const error = formControl.getError('minlength');
+      return this._translateObjectService.getTranslation$('minLengthParam', {length: error.requiredLength});
+    } else if (formControl.hasError('maxlength')) {
+      const error = formControl.getError('maxlength');
+      return this._translateObjectService.getTranslation$('maxLengthParam', {length: error.requiredLength});
     }
     return null;
   }
@@ -35,12 +42,13 @@ export class ValidationService {
     if (message) {
       return message;
     }
-    if (val.length < this.minPasswordLength) {
-      return await this._translateObjectService.getTranslation('minLengthParam', {length: this.minPasswordLength});
-    }
-    if (val.length > this.maxPasswordLength) {
-      return await this._translateObjectService.getTranslation('maxLengthParam', {length: this.maxPasswordLength});
-    }
+    // TODO: Remove
+    // if (val.length < 8) {
+    //   return await this._translateObjectService.getTranslation('minLengthParam', {length: this.minPasswordLength});
+    // }
+    // if (val.length > 255) {
+    //   return await this._translateObjectService.getTranslation('maxLengthParam', {length: this.maxPasswordLength});
+    // }
     return '';
   }
 
