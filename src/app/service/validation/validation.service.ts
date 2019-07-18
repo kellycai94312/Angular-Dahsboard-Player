@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {TranslateObjectService} from '../../shared/translate-object.service';
 import {Observable} from 'rxjs';
-import {FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,15 @@ export class ValidationService {
 
   public static readonly passwordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     return Validators.minLength(8)(control) || Validators.maxLength(255)(control);
+  };
+
+  public static readonly compareValidator = (target: AbstractControl): ValidatorFn => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control.value !== target.value) {
+        return {compare: {value: control.value, targetValue: target.value}};
+      }
+      return null;
+    };
   };
 
   constructor(private _translateObjectService: TranslateObjectService) {
@@ -26,6 +35,8 @@ export class ValidationService {
     } else if (formControl.hasError('maxlength')) {
       const error = formControl.getError('maxlength');
       return this._translateObjectService.getTranslation$('maxLengthParam', {length: error.requiredLength});
+    } else if (formControl.hasError('compare')) {
+      return this._translateObjectService.getTranslation$('valuesNotMatch');
     }
     return null;
   }

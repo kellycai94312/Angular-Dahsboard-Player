@@ -14,11 +14,11 @@ import {ValidationService} from '../../../../service/validation/validation.servi
 import {NgxInputType} from '../../../../components/ngx-input/model/ngx-input-type';
 import {LayoutService} from '../../../../shared/layout.service';
 
-@Component({
-  selector: 'app-person-sign-up',
-  templateUrl: './person-sign-up.component.html',
-  styleUrls: ['./person-sign-up.component.scss']
-})
+// @Component({
+//   selector: 'app-person-sign-up',
+//   templateUrl: './person-sign-up.component.html',
+//   styleUrls: ['./person-sign-up.component.scss']
+// })
 export class PersonSignUpComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstantClass = PropertyConstant;

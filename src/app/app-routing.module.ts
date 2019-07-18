@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
+import {EnvironmentGuard} from './guard/environment.guard';
 
 const routes: Routes = [
   {
@@ -17,7 +18,8 @@ const routes: Routes = [
   },
   {
     path: 'sign-up',
-    loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
+    loadChildren: './pages/sign-up/sign-up.module#SignUpModule',
+    canActivate: [AuthDenyGuard, EnvironmentGuard]
   },
   {
     path: 'dashboard',
