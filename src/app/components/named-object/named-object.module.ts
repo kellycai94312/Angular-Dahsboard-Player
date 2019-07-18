@@ -1,17 +1,15 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
-import {DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
 import {NamedObjectComponent} from './named-object/named-object.component';
 import {PreviewNamedObjectComponent} from './preview-named-object/preview-named-object.component';
+import {NgxInputModule} from '../../module/ngx/ngx-input/ngx-input.module';
 
 @NgModule({
   imports: [
     CommonModule,
     TranslateModule.forChild(),
-    DxTextBoxModule,
-    DxValidatorModule,
-    DxTextAreaModule
+    NgxInputModule
   ],
   declarations: [NamedObjectComponent, PreviewNamedObjectComponent],
   exports: [NamedObjectComponent, PreviewNamedObjectComponent],
