@@ -3,10 +3,13 @@ import {ComponentWithAttach} from '../../../../data/local/component/base/compone
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Person} from '../../../../data/remote/model/person';
-import {SportType} from '../../../../data/remote/model/sport-type';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
+import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
 
 @Component({
   selector: 'app-edit-medical-examination',
@@ -20,7 +23,11 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
   @Input()
   public person: Person;
 
-  public sportTypes: SportType[];
+  public readonly sportTypeNgxSelect = new NgxSelect();
+  public readonly numberNgxInput = new NgxInput();
+  public readonly startDateNgxDate = new NgxDate();
+  public readonly finishDateNgxDate = new NgxDate();
+  public readonly formGroup = new FormGroup({});
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -33,7 +40,33 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
     return await this.appHelper.tryLoad(async () => {
       await super.initialize(obj);
       obj.allowed = obj.allowed || false;
-      this.sportTypes = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
+
+      this.sportTypeNgxSelect.labelTranslation = 'sportTypes';
+      this.sportTypeNgxSelect.required = true;
+      this.sportTypeNgxSelect.display = 'name';
+      this.sportTypeNgxSelect.items = (await this.participantRestApiService.getSportTypes({count: PropertyConstant.pageSizeMax})).list;
+      this.sportTypeNgxSelect.control.setValue(obj.sportType ? this.sportTypeNgxSelect.items.find(x => x.id == obj.sportType.id) : this.sportTypeNgxSelect.items[0]);
+      this.sportTypeNgxSelect.control.setValidators(Validators.required);
+
+      this.numberNgxInput.labelTranslation = 'number';
+      this.numberNgxInput.required = true;
+      this.numberNgxInput.control.setValue(obj.number);
+      this.numberNgxInput.control.setValidators(Validators.required);
+
+      this.startDateNgxDate.placeholderTranslation = 'issued';
+      this.startDateNgxDate.required = true;
+      this.startDateNgxDate.format = PropertyConstant.dateFormat;
+      this.startDateNgxDate.control = new FormControl(obj.startDate, [Validators.required]);
+
+      this.finishDateNgxDate.placeholderTranslation = 'actual';
+      this.finishDateNgxDate.required = true;
+      this.finishDateNgxDate.format = PropertyConstant.dateFormat;
+      this.finishDateNgxDate.control = new FormControl(obj.finishDate, [Validators.required]);
+
+      this.formGroup.setControl('sportType', this.sportTypeNgxSelect.control);
+      this.formGroup.setControl('number', this.numberNgxInput.control);
+      this.formGroup.setControl('startDate', this.startDateNgxDate.control);
+      this.formGroup.setControl('finishDate', this.finishDateNgxDate.control);
 
       await this.attachFileComponent.initialize();
     });
@@ -47,6 +80,11 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
     if (!(await this.validWithNotify())) {
       return false;
     }
+    this.data.sportType = this.sportTypeNgxSelect.control.value;
+    this.data.number = this.numberNgxInput.control.value;
+    this.data.startDate = this.appHelper.getGmtDate(this.startDateNgxDate.control.value);
+    this.data.finishDate = this.appHelper.getGmtDate(this.finishDateNgxDate.control.value);
+
     return await this.appHelper.trySave(async () => {
       if (this.changeWatcher.hasChanges()) {
         if (this.appHelper.isNewObject(this.data)) {
@@ -78,15 +116,7 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
   }
 
   valid(): boolean {
-    return super.valid() && !!(this.data.sportType && this.data.number && this.data.startDate && this.data.finishDate);
-  }
-
-  public onStartDateChanged(val: Date) {
-    this.data.startDate = this.appHelper.getGmtDate(val);
-  }
-
-  public onFinishDateChanged(val: Date) {
-    this.data.finishDate = this.appHelper.getGmtDate(val);
+    return super.valid() && this.formGroup.valid;
   }
 
 }
