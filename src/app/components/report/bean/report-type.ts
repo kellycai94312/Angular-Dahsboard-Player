@@ -1,6 +1,0 @@
-export enum ReportType {
-  GAME = 'GAME',
-  GROUP_BY_PERSONAL = 'GROUP_BY_PERSONAL',
-  GROUP = 'GROUP',
-  PERSONAL = 'PERSONAL'
-}

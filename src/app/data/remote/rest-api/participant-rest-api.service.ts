@@ -31,25 +31,16 @@ import {ExerciseResult} from '../bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
 import {Location} from '../model/location';
-import {TrainingPerson} from '../model/training/training-person';
-import {TrainingGroup} from '../model/training-group';
-import {TrainingAccess} from '../misc/training-access';
 import {NoteQuery} from './query/note-query';
 import {Note} from '../model/note/base/note';
 import {NamedQuery} from './named-query';
 import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
 import {AnthropometryQuery} from './query/anthropometry-query';
-import {BaseTrainingQuery} from './query/base-training-query';
-import {BaseTraining} from '../model/training/base/base-training';
-import {TrainingPart} from '../model/training/training-part';
-import {TrainingPersonQuery} from './query/training-person-query';
-import {PersonMeasureValue} from '../bean/person-measure-value';
 import {PageQuery} from './page-query';
 import {BaseNotification} from '../model/notification/base/base-notification';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
-import {TrainingStateRequest} from '../request/training-state-request';
 import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
 import {Dialogue} from '../model/chat/conversation/dialogue';
 import {Chat} from '../model/chat/conversation/chat';
@@ -69,38 +60,15 @@ import {Document} from '../model/file/document/document';
 import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
-import {TrainingReport} from '../model/training/report/training-report';
-import {TrainingBlockQuery} from './query/training-block-query';
-import {TrainingPersonMeasure} from '../bean/training-person-measure';
-import {PersonMeasure} from '../bean/person-measure';
-import {TrainingBlock} from '../model/training/report/training-block';
 import {GroupPersonLog} from '../model/group/group-person-log';
 import {MedicalExamination} from '../model/person/medical-examination';
-import {StageQuery} from './query/stage-query';
-import {StageStandard} from '../model/stage/stage-standard';
-import {Stage} from '../model/stage/stage';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
-import {StageType} from '../model/stage/stage-type';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
-import {StagePerson} from '../bean/stage-person';
-import {StagePersonRank} from '../bean/stage-person-rank';
-import {EstimatedParameter} from '../model/training/testing/estimated-parameter';
-import {StageStandardMeasureValue} from '../bean/stage-standard-measure-value';
 import {SportTypePerson} from '../bean/sport-type-person';
 import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {Tag} from '../model/tag';
-import {GroupScore} from '../model/training/game/group-score';
-import {EventPlanQuery} from './query/event/plan/event-plan-query';
-import {EventPlan} from '../model/training/plan/event-plan';
-import {EventPlanPerson} from '../model/training/plan/event-plan-person';
-import {EventPlanLoadTypeEnum} from '../model/training/plan/event-plan-load-type-enum';
-import {Period} from '../../local/period';
-import {EventPlanLoadPeriod} from '../bean/event-plan-load-period';
-import {EventPlanLoad} from '../model/training/plan/event-plan-load';
-import {EventPlanTrainingValueEnum} from '../model/training/plan/event-plan-training-value-enum';
-import {EventGroupQuery} from './query/event/event-group-query';
 import {Rank} from '../model/rank';
 import {Position} from '../model/person-position/position';
 import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
@@ -145,6 +113,8 @@ import {PollPerson} from '../model/training/poll/poll-person';
 import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
 import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
 import {GroupNews} from '../model/group/news/group-news';
+import {Stage} from '../model/stage/stage';
+import {StageType} from '../model/stage/stage-type';
 
 @Injectable()
 @RestParams({
@@ -455,12 +425,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getAnthropometryHistory: IRestMethod<AnthropometryQuery, PageContainer<PersonAnthropometry>>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/training',
-  })
-  getPersonTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { personId: number }, PageContainer<TrainingPerson>>;
-
   //#endregion
 
   //#endregion
@@ -605,16 +569,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region StageStandard
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/stage/{!stageId}/sportType/{!sportTypeId}'
-  })
-  getStageStandardMeasureValues: IRestMethodStrict<any, PageQuery, { personId: number, stageId: number, sportTypeId: number }, PageContainer<StageStandardMeasureValue>>;
-
-  ///#endregion
-
   //#region News
 
   @RestAction({
@@ -719,18 +673,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/measureTemplate',
   })
   updateGroupMeasureTemplate: IRestMethodStrict<ListRequest<ExerciseMeasure>, any, { groupId: number }, ExerciseMeasure[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/training',
-  })
-  getGroupTrainings: IRestMethodStrict<{}, BaseTrainingQuery, { groupId: number }, PageContainer<TrainingGroup>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/training/{!trainingId}/visible',
-  })
-  updateTrainingVisible: IRestMethodStrict<{ access?: TrainingAccess }, any, { groupId: number, trainingId: number }, PageContainer<TrainingGroup>>;
 
   //#region GroupPerson
 
@@ -1143,98 +1085,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining'
-  })
-  getBaseTrainings: IRestMethod<BaseTrainingQuery, PageContainer<BaseTraining>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining/{!id}'
-  })
-  getBaseTraining: IRestMethod<{ id: number, measureParameterEnum?: string }, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining'
-  })
-  createBaseTraining: IRestMethod<BaseTraining, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/baseTraining/{!id}'
-  })
-  updateBaseTraining: IRestMethodStrict<BaseTraining, any, { id: number }, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/baseTraining/{!eventId}'
-  })
-  removeEvent: IRestMethod<{ eventId: number }, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/template'
-  })
-  createEventTemplate: IRestMethod<IdRequest, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/baseTraining/{!eventId}/template'
-  })
-  updateEventTemplate: IRestMethodStrict<IdRequest, any, { eventId: number }, BaseTraining>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/{!id}/state'
-  })
-  updateBaseTrainingState: IRestMethodStrict<TrainingStateRequest, any, { id: number }, BaseTraining>;
-
-  //#region Group
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining/{!eventId}/group'
-  })
-  getTrainingGroupsByBaseTraining: IRestMethodStrict<any, EventGroupQuery, { eventId: number }, PageContainer<TrainingGroup>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/{!baseTrainingId}/group'
-  })
-  updateGroupsByBaseTraining: IRestMethodStrict<ListRequest<Group>, any, { baseTrainingId: number }, TrainingGroup[]>;
-
-  //#endregion
-
-  //#region TrainingPart
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining/{!id}/part'
-  })
-  getTrainingParts: IRestMethod<{ id: number }, TrainingPart[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/{!baseTrainingId}/part'
-  })
-  createTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number }, TrainingPart>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
-  })
-  updateTrainingPart: IRestMethodStrict<TrainingPart, any, { baseTrainingId: number, trainingPartId: number }, TrainingPart>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/baseTraining/{!baseTrainingId}/part/{!trainingPartId}'
-  })
-  removeTrainingPart: IRestMethod<{ baseTrainingId: number, trainingPartId: number }, TrainingPart>;
-
-  //#endregion
-
   //#region ExerciseExecMeasureValue
 
   @RestAction({
@@ -1468,207 +1318,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Game
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/game/{!gameId}/group/{!trainingGroupId}/part/{!trainingPartId}/personMeasure',
-  })
-  getPersonMeasures: IRestMethod<{ gameId: number, trainingGroupId: number, trainingPartId: number }, TrainingPersonMeasure<ExerciseExecMeasureValue>[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/game/{!gameId}/group/{!trainingGroupId}/personMeasure',
-  })
-  getTotalPersonMeasures: IRestMethod<{ gameId: number, trainingGroupId: number }, TrainingPersonMeasure<PersonMeasureValue>[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/game/{!gameId}/score',
-  })
-  getGameGroupScores: IRestMethod<{ gameId: number, measureParameterEnum: string }, GroupScore[]>;
-
-  //#endregion
-
-  //#region TrainingPerson
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining/{!eventId}/person'
-  })
-  getTrainingPersons: IRestMethodStrict<any, TrainingPersonQuery, { eventId: number }, PageContainer<TrainingPerson>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/{!baseTrainingId}/person'
-  })
-  createTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number }, TrainingPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
-  })
-  updateTrainingPerson: IRestMethodStrict<TrainingPerson, any, { baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/baseTraining/{!baseTrainingId}/person/{!trainingPersonId}'
-  })
-  removeTrainingPerson: IRestMethod<{ baseTrainingId: number, trainingPersonId: number }, TrainingPerson>;
-
-  //#endregion
-
-  //#region Event plan
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan'
-  })
-  getEventPlans: IRestMethod<EventPlanQuery, PageContainer<EventPlan>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}'
-  })
-  getEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan'
-  })
-  createEventPlan: IRestMethod<EventPlan, EventPlan>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/eventPlan/{!eventPlanId}'
-  })
-  updateEventPlan: IRestMethodStrict<EventPlan, any, { eventPlanId: number }, EventPlan>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/eventPlan/{!eventPlanId}'
-  })
-  removeEventPlan: IRestMethod<{ eventPlanId: number }, EventPlan>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/template'
-  })
-  createEventPlanTemplate: IRestMethod<IdRequest, EventPlan>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/template'
-  })
-  updateEventPlanTemplate: IRestMethodStrict<IdRequest, any, { eventPlanId: number }, EventPlan>;
-
-  //#region Event plan person
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}/person'
-  })
-  getEventPlanPersons: IRestMethodStrict<any, PersonQuery, { eventPlanId: number }, PageContainer<EventPlanPerson>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/person'
-  })
-  createEventPlanPerson: IRestMethodStrict<EventPlanPerson, any, { eventPlanId: number }, EventPlanPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/eventPlan/{!eventPlanId}/person/{!eventPlanPersonId}'
-  })
-  updateEventPlanPerson: IRestMethodStrict<EventPlanPerson, any, { eventPlanId: number, eventPlanPersonId: number }, EventPlanPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/eventPlan/{!eventPlanId}/person/{!eventPlanPersonId}'
-  })
-  removeEventPlanPerson: IRestMethod<{ eventPlanId: number, eventPlanPersonId: number }, EventPlanPerson>;
-
-  //#endregion
-
-  //#region Event plan group
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}/group'
-  })
-  getEventPlanGroups: IRestMethodStrict<any, GroupQuery, { eventPlanId: number }, PageContainer<Group>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/group'
-  })
-  updateEventPlanGroups: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, Group[]>;
-
-  //#endregion
-
-  //#region Event plan sport role
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}/sportRole'
-  })
-  getEventPlanSportRoles: IRestMethodStrict<any, { unassigned?: number }, { eventPlanId: number }, SportRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/sportRole'
-  })
-  updateEventPlanSportRoles: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, SportRole[]>;
-
-  //#endregion
-
-  //#region Event plan estimated parameters
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}/estimatedParameter'
-  })
-  getEventPlanEstimatedParameters: IRestMethodStrict<any, { unassigned?: number, count: number }, { eventPlanId: number }, PageContainer<EstimatedParameter>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/estimatedParameter'
-  })
-  updateEventPlanEstimatedParameters: IRestMethodStrict<ListRequest<IdRequest>, any, { eventPlanId: number }, EstimatedParameter[]>;
-
-  //#endregion
-
-
-  //#region Event plan load
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/eventPlan/{!eventPlanId}/load'
-  })
-  getEventPlanLoads: IRestMethod<{ eventPlanId: number, eventPlanLoadTypeEnum: EventPlanLoadTypeEnum, eventPlanPeriodEnum: Period, eventPlanTrainingValueEnum?: EventPlanTrainingValueEnum, trainingId?: number, from?: number, count?: number }, PageContainer<EventPlanLoadPeriod>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPlan/{!eventPlanId}/load'
-  })
-  createEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number }, EventPlanLoad>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
-  })
-  updateEventPlanLoad: IRestMethodStrict<EventPlanLoad, {}, { eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/eventPlan/{!eventPlanId}/load/{!eventPlanLoadId}'
-  })
-  removeEventPlanLoad: IRestMethod<{ eventPlanId: number, eventPlanLoadId: number }, EventPlanLoad>;
-
-  //#endregion
-
-  //#endregion
-
   //#region Notification
 
   @RestAction({
@@ -1848,135 +1497,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region TrainingReport
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport'
-  })
-  getTrainingReports: IRestMethod<PageQuery, PageContainer<TrainingReport>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}'
-  })
-  getTrainingReport: IRestMethod<{ trainingReportId: number }, TrainingReport>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/trainingReport'
-  })
-  createTrainingReport: IRestMethod<TrainingReport, TrainingReport>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/trainingReport/{!trainingReportId}'
-  })
-  updateTrainingReport: IRestMethodStrict<TrainingReport, any, { trainingReportId: number }, TrainingReport>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/trainingReport/{!trainingReportId}'
-  })
-  removeTrainingReport: IRestMethod<{ trainingReportId: number }, TrainingReport>;
-
-  //#endregion
-
-  //#region TrainingBlock
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block'
-  })
-  getTrainingBlocks: IRestMethodStrict<any, PageQuery, { trainingReportId: number }, PageContainer<TrainingBlock>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
-  })
-  getTrainingBlock: IRestMethod<{ trainingReportId: number, trainingBlockId: number }, TrainingBlock>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block'
-  })
-  createTrainingBlock: IRestMethodStrict<TrainingBlock, any, { trainingReportId: number }, TrainingBlock>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
-  })
-  updateTrainingBlock: IRestMethodStrict<TrainingBlock, any, { trainingReportId: number, trainingBlockId: number }, TrainingBlock>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}'
-  })
-  removeTrainingBlock: IRestMethod<{ trainingReportId: number, trainingBlockId: number }, TrainingBlock>;
-
-  //#region Group
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group'
-  })
-  getTrainingBlockGroups: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<Group>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/group',
-    resultFactory: (item, options) => {
-      return plainToClass(Group, item);
-    }
-  })
-  updateTrainingBlockGroups: IRestMethodStrict<ListRequest<Group>, any, { trainingReportId: number, trainingBlockId: number }, Group[]>;
-
-  //#endregion
-
-  //#region Exercise measure
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/exerciseMeasure'
-  })
-  getTrainingBlockExerciseMeasures: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<ExerciseMeasure>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/exerciseMeasure'
-  })
-  updateTrainingBlockExerciseMeasures: IRestMethodStrict<ListRequest<ExerciseMeasure>, any, { trainingReportId: number, trainingBlockId: number }, ExerciseMeasure[]>;
-
-  //#endregion
-
-  //#region Person
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/person'
-  })
-  getTrainingBlockPersons: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PageContainer<Person>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/person'
-  })
-  updateTrainingBlockPersons: IRestMethodStrict<ListRequest<Person>, any, { trainingReportId: number, trainingBlockId: number }, Person[]>;
-
-  //#endregion
-
-  //#region Result
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/trainingReport/{!trainingReportId}/block/{!trainingBlockId}/result'
-  })
-  getTrainingBlockResults: IRestMethodStrict<any, TrainingBlockQuery, { trainingReportId: number, trainingBlockId: number }, PersonMeasure[]>;
-
-  //#endregion
-
-  //#endregion
-
   //#region Stage
 
   @RestAction({
@@ -2053,65 +1573,9 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/sportType/{!sportTypeId}/stagePerson',
-  })
-  getStagePersons: IRestMethod<{ sportTypeId: number }, StagePerson[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/sportType/{!sportTypeId}/stagePersonRank',
-  })
-  getStagePersonRanks: IRestMethodStrict<any, { stageTypeId: number }, { sportTypeId: number }, StagePersonRank[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/sportType/person',
   })
   getSportTypePersons: IRestMethod<void, SportTypePerson[]>;
-
-  //#endregion
-
-  //#region EstimatedParameter
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/estimatedParameter',
-  })
-  getEstimatedParameters: IRestMethod<PageQuery, PageContainer<EstimatedParameter>>;
-
-  //#endregion
-
-  //#region StageStandard
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stageStandard'
-  })
-  getStageStandards: IRestMethod<StageQuery, PageContainer<StageStandard>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/stageStandard'
-  })
-  createStageStandard: IRestMethod<StageStandard, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/stageStandard/{!stageStandardId}'
-  })
-  updateStageStandard: IRestMethodStrict<StageStandard, any, { stageStandardId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/stageStandard/{!stageStandardId}'
-  })
-  removeStageStandard: IRestMethod<{ stageStandardId: number }, StageStandard>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/stageStandard/exerciseMeasure/unassigned'
-  })
-  getUnassignedExerciseMeasuresByStage: IRestMethod<StageQuery, PageContainer<ExerciseMeasure>>;
 
   //#endregion
 

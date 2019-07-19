@@ -1,43 +1,8 @@
-<label>{{'rank' | translate}}</label>
-<dx-select-box [items]="ranks"
-               [(value)]="data.rank"
-               [acceptCustomValue]="true"
-               displayExpr="name"
-               [disabled]="data.id">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
-</dx-select-box>
-
-<label class="mt-2">{{'sportType' | translate}}</label>
-<dx-select-box [items]="sportTypes"
-               [(value)]="data.sportType"
-               [acceptCustomValue]="true"
-               displayExpr="name"
-               [disabled]="data.id">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
-</dx-select-box>
-
-<label class="mt-2">{{'documentNumber' | translate}}</label>
-<dx-text-box [(value)]="data.number">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
-</dx-text-box>
-
-<label class="mt-2">{{'date' | translate}}</label>
-<dx-date-box class="w-100"
-             [(value)]="data.date"
-             type="date"
-             [displayFormat]="propertyConstant.dateFormat"
-             (onValueChanged)="onDateChanged($event.value)">
-  <dx-validator>
-    <dxi-validation-rule type="required"></dxi-validation-rule>
-  </dx-validator>
-</dx-date-box>
-
-<app-attach-file class="mt-2"
-                 [(baseFile)]="document"
-                 [documentQuery]="documentQuery"></app-attach-file>
+<div fxLayout="column">
+  <ngx-select [data]="rankNgxSelect"></ngx-select>
+  <ngx-select [data]="sportTypeNgxSelect"></ngx-select>
+  <new-ngx-input [data]="documentNumberNgxInput"></new-ngx-input>
+  <ngx-date [data]="dateNgxDate"></ngx-date>
+  <app-attach-file [(baseFile)]="document"
+                   [documentQuery]="documentQuery"></app-attach-file>
+</div>

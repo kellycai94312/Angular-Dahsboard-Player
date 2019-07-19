@@ -3,21 +3,20 @@ import {CommonModule} from '@angular/common';
 
 import {PersonalPageRoutingModule} from './personal-page-routing.module';
 import {PersonalPageComponent} from './personal-page/personal-page.component';
-import {DxDateBoxModule, DxSelectBoxModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
-import {InputSelectModule} from '../../../../../components/input-select/input-select.module';
 import {NgxButtonModule} from '../../../../../components/ngx-button/ngx-button.module';
-import {TranslateModule} from '@ngx-translate/core';
+import {NgxInputModule} from '../../../../../module/ngx/ngx-input/ngx-input.module';
+import {NgxSelectModule} from '../../../../../module/ngx/ngx-select/ngx-select.module';
+import {NgxDateModule} from '../../../../../module/ngx/ngx-date/ngx-date.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   imports: [
     CommonModule,
     PersonalPageRoutingModule,
-    TranslateModule.forChild(),
-    DxTextBoxModule,
-    DxDateBoxModule,
-    DxSelectBoxModule,
-    DxValidatorModule,
-    InputSelectModule,
+    FlexLayoutModule,
+    NgxInputModule,
+    NgxSelectModule,
+    NgxDateModule,
     NgxButtonModule
   ],
   declarations: [PersonalPageComponent]

@@ -1,0 +1,13 @@
+<div fxFlexFill
+     fxLayout="column"
+     fxLayoutAlign="center center">
+  <mat-card class="mat-elevation-z24">
+    <div fxFlex
+         fxLayout="column"
+         fxLayoutAlign="center center">
+      <img src="/assets/img/athlete-readiness-logo.png">
+      <h1 class="text-uppercase text-center">{{titleTranslation | translate}}</h1>
+      <ng-content></ng-content>
+    </div>
+  </mat-card>
+</div>

@@ -22,7 +22,6 @@ import {AssetsService} from './data/remote/rest-api/assets.service';
 import {RoundPipeModule} from './pipes/round-pipe.module';
 import {AppHelper} from './utils/app-helper';
 import {DynamicComponentService} from './shared/dynamic-component.service';
-import {ReportsService} from './shared/reports.service';
 import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
 import {AuthorizationService} from './shared/authorization.service';
 import {NotificationService} from './shared/notification.service';
@@ -34,7 +33,6 @@ import {CanDeactivateGuard} from './guard/can-deactivate.guard';
 import {NgxModalModule} from './components/ngx-modal/ngx-modal.module';
 import {GroupModule} from './components/group/group.module';
 import {HtmlContentModule} from './components/html-content/html-content.module';
-import {EditEventModule} from './module/event/edit-event/edit-event.module';
 import {EventPersonItemModule} from './module/event/event-person-item/event-person-item.module';
 import {RestModule} from 'rest-ngx';
 import {NamedObjectModule} from './components/named-object/named-object.module';
@@ -87,7 +85,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     MessageToastrModule,
     HtmlContentModule,
     GroupModule,
-    EditEventModule,
     EventPersonItemModule,
     NamedObjectModule,
     FuseModule.forRoot(fuseConfig),
@@ -114,7 +111,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     ImageService,
     DatePipe,
     AppHelper,
-    ReportsService,
     DynamicComponentService,
     ParticipantStompService,
     AuthorizationService,

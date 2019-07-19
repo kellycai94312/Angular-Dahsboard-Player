@@ -22,6 +22,7 @@ import {PositionLevelEnum} from '../../../../data/remote/model/person-position/p
 import {Person} from '../../../../data/remote/model/person';
 import {from} from 'rxjs';
 import {flatMap, last} from 'rxjs/operators';
+import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
 
 @Component({
   selector: 'app-edit-base-event',
@@ -38,6 +39,8 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
   public eventTypeNgxSelect: NgxSelect;
   public nameNgxInput: NgxInput;
   public descriptionNgxInput: NgxInput;
+  public startDateNgxDate: NgxDate;
+  public endDateNgxDate: NgxDate;
 
   constructor(private _baseEventApiService: BaseEventApiService,
               private _ngxModalService: NgxModalService,
@@ -70,6 +73,20 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
         this.descriptionNgxInput.rows = 4;
         this.descriptionNgxInput.control = new FormControl(data.description);
 
+        this.startDateNgxDate = new NgxDate();
+        this.startDateNgxDate.placeholderTranslation = 'startDate';
+        this.startDateNgxDate.format = PropertyConstant.dateTimeFormat;
+        this.startDateNgxDate.type = 'datetime';
+        this.startDateNgxDate.control = new FormControl(data.startDate, [Validators.required]);
+        this.startDateNgxDate.required = true;
+
+        this.endDateNgxDate = new NgxDate();
+        this.endDateNgxDate.placeholderTranslation = 'finishDate';
+        this.endDateNgxDate.format = PropertyConstant.dateTimeFormat;
+        this.endDateNgxDate.type = 'datetime';
+        this.endDateNgxDate.control = new FormControl(data.finishDate, [Validators.required]);
+        this.endDateNgxDate.required = true;
+
         if (!this.isNew) {
           this.eventTypeNgxSelect.control.setValue(this.eventTypeNgxSelect.items.find(x => x.data === data.discriminator));
           this.eventTypeNgxSelect.control.disable();
@@ -89,8 +106,8 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
     this.data.discriminator = this.eventTypeNgxSelect.control.value.data;
     this.data.name = this.nameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
-    this.data.startDate = this.appHelper.getGmtDate(this.data.startDate);
-    this.data.finishDate = this.appHelper.getGmtDate(this.data.finishDate);
+    this.data.startDate = this.appHelper.getGmtDate(this.startDateNgxDate.control.value);
+    this.data.finishDate = this.appHelper.getGmtDate(this.endDateNgxDate.control.value);
 
     return await this.appHelper.trySave(async () => {
       this.data = await this._baseEventApiService.saveEvent(this.data).toPromise();

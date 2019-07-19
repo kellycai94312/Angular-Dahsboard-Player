@@ -1,6 +1,6 @@
 import {IdentifiedObject} from '../../../remote/base/identified-object';
 import {BaseEditComponent} from './base-edit-component';
-import {ViewChild} from '@angular/core';
+import {OnDestroy, ViewChild} from '@angular/core';
 import {AttachFileComponent} from '../../../../components/attach-file/attach-file/attach-file.component';
 import {Document} from '../../../remote/model/file/document/document';
 import {DocumentQuery} from '../../../remote/rest-api/query/file/document-query';
@@ -9,7 +9,7 @@ import {ParticipantRestApiService} from '../../../remote/rest-api/participant-re
 import {AppHelper} from '../../../../utils/app-helper';
 import {ClientError} from '../../error/client-error';
 
-export abstract class ComponentWithAttach<T extends IdentifiedObject> extends BaseEditComponent<T> {
+export abstract class ComponentWithAttach<T extends IdentifiedObject> extends BaseEditComponent<T> implements OnDestroy {
 
   @ViewChild(AttachFileComponent)
   public attachFileComponent: AttachFileComponent<Document>;
@@ -18,6 +18,7 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
   public readonly dataName: string;
   public document: Document;
   public documentQuery: DocumentQuery;
+  public notDestroyed = true;
 
   protected constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -25,6 +26,10 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
     this.documentQuery = new DocumentQuery();
     this.changeWatcher = new ChangeWatcher(this.appHelper);
     this.dataName = 'data';
+  }
+
+  public ngOnDestroy(): void {
+    this.notDestroyed = false;
   }
 
   async initialize(obj: T): Promise<boolean> {
@@ -55,6 +60,9 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
       await this.appHelper.showErrorMessage('someFieldsNotValid');
     }
     return valid;
+  }
+
+  public updateData(): void {
   }
 
 }

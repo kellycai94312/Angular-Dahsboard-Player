@@ -1,81 +1,29 @@
 <div *ngIf="data"
-     class="row">
-  <div class="col-12 col-md-6 col-lg-4">
+     fxLayout
+     fxLayoutGap="10px">
+  <div fxFlex="50">
     <h5>{{'basicInformation' | translate }}</h5>
     <app-edit-group [(data)]="data"></app-edit-group>
   </div>
-
-  <div class="col-12 mt-2 col-md-6 mt-md-0 col-lg-4 mt-lg-0">
+  <div fxFlex="50">
     <h5>{{'additionalInformation' | translate }}</h5>
-
-    <div *ngIf="data.discriminator === groupTypeEnumClass.TEAM">
-      <label>{{'league' | translate }}</label>
-      <dx-select-box [items]="leagues"
-                     [(value)]="data.league"
-                     displayExpr="name"
-                     [acceptCustomValue]="true"
-                     [showClearButton]="true"
-                     placeholder="{{'league' | translate}}">
-      </dx-select-box>
-
-      <label class="mt-2">{{'ageGroup' | translate }}</label>
-      <dx-select-box [items]="ageGroups"
-                     [(value)]="data.ageGroup"
-                     displayExpr="name"
-                     [showClearButton]="true"
-                     [acceptCustomValue]="true"
-                     placeholder="{{'ageGroup' | translate}}">
-      </dx-select-box>
-    </div>
-
-    <label class="mt-2">{{'persons.person.personal.country' | translate}}</label>
-    <app-input-select [loadData]="loadCountries"
-                      [(model)]="data.address.country"
-                      [pageSize]="pageSize"
-                      (onChange)="onCountryChange($event)"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a country"
-                      ngDefaultControl>
-    </app-input-select>
-
-    <label class="mt-2">{{'persons.person.personal.region' | translate}}</label>
-    <app-input-select [loadData]="loadRegions"
-                      [(model)]="data.address.region"
-                      [pageSize]="pageSize"
-                      [disabled]="data.address.country == null"
-                      (onChange)="onRegionChange($event)"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a region"
-                      ngDefaultControl>
-    </app-input-select>
-
-    <label class="mt-2">{{'persons.person.personal.city' | translate}}</label>
-    <app-input-select [loadData]="loadCities"
-                      [(model)]="data.address.city"
-                      [pageSize]="pageSize"
-                      [disabled]="data.address.region == null"
-                      [getKey]="getKey"
-                      [getName]="getName"
-                      placeholder="Select a city"
-                      ngDefaultControl>
-    </app-input-select>
-
-    <div
-      *ngIf="data?.discriminator === groupTypeEnumClass.TEAM || data?.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
-      <div class="d-flex flex-row mt-2">
+    <ng-container *ngIf="data.discriminator === groupTypeEnumClass.TEAM">
+      <ngx-select [data]="leagueNgxSelect"></ngx-select>
+      <ngx-select [data]="ageGroupNgxSelect"></ngx-select>
+    </ng-container>
+    <ng-container *ngIf="data.discriminator === groupTypeEnumClass.TEAM || data.discriminator === groupTypeEnumClass.PREPARATION_GROUP">
+      <div fxLayout
+           fxLayoutGap="10px">
         <div>
           <ngx-button nameKey="trainers"
                       [click]="onSelectTrainers"></ngx-button>
         </div>
-        <div class="ml-2">
+        <div>
           <p *ngFor="let item of organizationTrainers">
             {{item.groupPerson.person.lastName + ' ' + item.groupPerson.person.firstName}}
           </p>
         </div>
       </div>
-
       <label class="mt-2 w-100">{{'leadTrainer' | translate}}</label>
       <app-input-select [loadData]="fetchOrganizationTrainers"
                         [(model)]="selectedOrganizationTrainer"
@@ -83,7 +31,6 @@
                         [getName]="getPersonName"
                         ngDefaultControl>
       </app-input-select>
-
-    </div>
+    </ng-container>
   </div>
 </div>

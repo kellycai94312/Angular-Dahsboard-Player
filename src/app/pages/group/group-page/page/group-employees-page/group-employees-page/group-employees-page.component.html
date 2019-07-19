@@ -1,10 +1,7 @@
-<label>{{'personPosition' | translate }}</label>
-<dx-select-box class="mb-2"
-               [items]="positionLevels"
-               displayExpr="name"
-               [(value)]="selectedPositionLevel"
-               placeholder="{{'personPosition' | translate}}"
-               (onValueChanged)="onPositionLevelChanged($event.value)">
-</dx-select-box>
-<app-group-persons-list [canEdit]="canEdit"
-                        [query]="query"></app-group-persons-list>
+<div fxLayout="column"
+     class="content">
+  <ngx-select [data]="positionLevelNgxSelect"></ngx-select>
+  <app-group-persons-list [canEdit]="canEdit"
+                          [query]="query"></app-group-persons-list>
+</div>
+

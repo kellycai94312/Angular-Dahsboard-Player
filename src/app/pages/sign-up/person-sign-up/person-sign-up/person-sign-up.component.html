@@ -1,0 +1,14 @@
+<app-logo-card *ngIf="formGroup"
+               [titleTranslation]="'registration.completeYourProfile'"
+               (keyup.enter)="onSave()">
+  <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+  <ngx-date [data]="birthDateNgxDate"></ngx-date>
+  <ngx-select [data]="sexNgxSelect"></ngx-select>
+  <button mat-raised-button
+          class="mt-2"
+          color="accent"
+          [disabled]="formGroup.invalid"
+          (click)="onSave()">{{'save' | translate}}</button>
+</app-logo-card>

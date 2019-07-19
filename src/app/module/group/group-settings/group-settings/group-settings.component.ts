@@ -3,7 +3,6 @@ import {BaseEditComponent} from '../../../../data/local/component/base/base-edit
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
 import {League} from '../../../../data/remote/model/group/team/league';
-import {AgeGroup} from '../../../../data/remote/model/age-group';
 import {OrganizationTrainer} from '../../../../data/remote/model/group/organization-trainer';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -14,6 +13,7 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {NamedObject} from '../../../../data/remote/base/named-object';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {EditGroupComponent} from '../../edit-group/edit-group/edit-group.component';
+import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-group-settings',
@@ -27,8 +27,8 @@ export class GroupSettingsComponent extends BaseEditComponent<Group> implements 
   @ViewChild(EditGroupComponent)
   public editGroupComponent: EditGroupComponent;
 
-  public leagues: League[];
-  public ageGroups: AgeGroup[];
+  public readonly leagueNgxSelect = new NgxSelect();
+  public readonly ageGroupNgxSelect = new NgxSelect();
   public pageSize: number;
   public organizationTrainers: OrganizationTrainer[];
   public selectedOrganizationTrainer: OrganizationTrainer;
@@ -43,8 +43,20 @@ export class GroupSettingsComponent extends BaseEditComponent<Group> implements 
 
   async ngOnInit() {
     if (this.data.discriminator === GroupTypeEnum.TEAM) {
-      this.leagues = await this.participantRestApiService.getLeaguesBySportType({sportTypeId: (this.data as Team).sportType.id});
-      this.ageGroups = (await this.participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
+      const temp = this.data as Team;
+      this.leagueNgxSelect.labelTranslation = 'league';
+      this.leagueNgxSelect.display = 'name';
+      this.leagueNgxSelect.items = await this.participantRestApiService.getLeaguesBySportType({sportTypeId: temp.sportType.id});
+      if (temp.league) {
+        this.leagueNgxSelect.control.setValue(this.leagueNgxSelect.items.find((x: League) => x.id == temp.league.id));
+      }
+
+      this.ageGroupNgxSelect.labelTranslation = 'ageGroup';
+      this.ageGroupNgxSelect.display = 'name';
+      this.ageGroupNgxSelect.items = (await this.participantRestApiService.getAgeGroups({count: PropertyConstant.pageSizeMax})).list;
+      if (temp.ageGroup) {
+        this.ageGroupNgxSelect.control.setValue(this.ageGroupNgxSelect.items.find((x: League) => x.id == temp.ageGroup.id));
+      }
     }
 
     this.organizationTrainers = await this.participantRestApiService.getOrganizationTrainers({}, {unassigned: false}, {groupId: this.data.id});

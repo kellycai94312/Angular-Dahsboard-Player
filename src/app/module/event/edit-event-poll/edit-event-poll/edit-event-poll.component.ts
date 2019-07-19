@@ -4,7 +4,6 @@ import {EventPoll} from '../../../../data/remote/model/training/poll/event-poll'
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {BaseTraining} from '../../../../data/remote/model/training/base/base-training';
 import {Validators} from '@angular/forms';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {EditPollQuestionComponent} from '../../edit-poll-question/edit-poll-question/edit-poll-question.component';
@@ -13,6 +12,7 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {Person} from '../../../../data/remote/model/person';
 import {takeWhile} from 'rxjs/operators';
 import {PollPerson} from '../../../../data/remote/model/training/poll/poll-person';
+import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
 
 @Component({
   selector: 'app-edit-event-poll',
@@ -22,7 +22,7 @@ import {PollPerson} from '../../../../data/remote/model/training/poll/poll-perso
 export class EditEventPollComponent extends BaseEditComponent<EventPoll> implements OnDestroy {
 
   @Input()
-  public event: BaseTraining;
+  public event: BaseEvent;
 
   public nameNgxInput: NgxInput;
   public pollQuestions: PollQuestion[] = [];

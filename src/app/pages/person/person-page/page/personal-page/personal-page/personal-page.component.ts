@@ -1,17 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
 import {Person} from '../../../../../../data/remote/model/person';
-import {UserRole} from '../../../../../../data/remote/model/user-role';
-import {NameWrapper} from '../../../../../../data/local/name-wrapper';
 import {SexEnum} from '../../../../../../data/remote/misc/sex-enum';
-import {AthleteState} from '../../../../../../data/remote/model/person/athlete-state';
 import {PersonService} from '../../../service/person.service';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {TranslateObjectService} from '../../../../../../shared/translate-object.service';
-import {IdentifiedObject} from '../../../../../../data/remote/base/identified-object';
-import {NamedObject} from '../../../../../../data/remote/base/named-object';
+import {NgxInput} from '../../../../../../module/ngx/ngx-input/model/ngx-input';
+import {NgxDate} from '../../../../../../module/ngx/ngx-date/model/ngx-date';
+import {NgxSelect} from '../../../../../../module/ngx/ngx-select/model/ngx-select';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-personal-page',
@@ -20,94 +18,79 @@ import {NamedObject} from '../../../../../../data/remote/base/named-object';
 })
 export class PersonalPageComponent implements OnInit {
 
-  public readonly propertyConstant = PropertyConstant;
-  public readonly userRoleEnum = UserRoleEnum;
-  public readonly pageSize: number;
-
-  public allowEdit: boolean;
+  public canEdit: boolean;
   public person: Person;
-  public baseUserRole: UserRole;
-  public sexEnumNameWrappers: NameWrapper<SexEnum>[];
-  public selectedSexEnum: NameWrapper<SexEnum>;
-  public athleteStates: AthleteState[];
+  public firstNgxInput: NgxInput;
+  public lastNgxInput: NgxInput;
+  public patronymicNgxInput: NgxInput;
+  public birthDateNgxDate: NgxDate;
+  public sexNgxSelect: NgxSelect;
 
   constructor(public personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService) {
-    this.pageSize = PropertyConstant.pageSize;
     this.person = this.personService.personViewModel.data;
   }
 
   async ngOnInit() {
-    this.allowEdit = await this.personService.allowEdit();
+    await this.initialize(this.person);
+  }
 
-    this.sexEnumNameWrappers = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
-    this.selectedSexEnum = this.sexEnumNameWrappers.find(x => x.data === this.person.sex);
-    this.athleteStates = await this._participantRestApiService.getAthleteStates();
-    try {
-      if (this.person && this.person.id) {
-        this.person.address = await this._participantRestApiService.getPersonAddress({id: this.person.id});
-        // this.baseUserRole = await this._participantRestApiService.getBaseUserRoleByUser({userId: this.person.user.id});
-      }
-    } catch (e) {
+  public async initialize(person: Person): Promise<void> {
+    this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
+    this.lastNgxInput = this._getNgxInput('lastName', person.lastName, true);
+    this.patronymicNgxInput = this._getNgxInput('patronymic', person.patronymic);
+
+    this.birthDateNgxDate = new NgxDate();
+    this.birthDateNgxDate.placeholderTranslation = 'birthDate';
+    this.birthDateNgxDate.format = PropertyConstant.dateFormat;
+    this.birthDateNgxDate.required = true;
+    this.birthDateNgxDate.control = new FormControl(person.birthDate, [Validators.required]);
+
+    this.sexNgxSelect = new NgxSelect();
+    this.sexNgxSelect.labelTranslation = 'sex';
+    this.sexNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
+    this.sexNgxSelect.required = true;
+    this.sexNgxSelect.display = 'name';
+    this.sexNgxSelect.control.setValidators(Validators.required);
+    this.sexNgxSelect.control.setValue(this.sexNgxSelect.items.find(x => x.data === person.sex));
+
+    const formGroup = new FormGroup({
+      'firstName': this.firstNgxInput.control,
+      'lastName': this.lastNgxInput.control,
+      'patronymic': this.patronymicNgxInput.control,
+      'birthDate': this.birthDateNgxDate.control,
+      'sex': this.sexNgxSelect.control
+    });
+    this.canEdit = await this.personService.allowEdit();
+    if (!this.canEdit) {
+      formGroup.disable();
     }
-  }
-
-  onCountryChange(e: any) {
-    this.person.address.region = null;
-    this.person.address.city = null;
-  }
-
-  onRegionChange(e: any): void {
-    this.person.address.city = null;
   }
 
   public onSave = async () => {
     await this._appHelper.trySave(async () => {
-      this.person.sex = this.selectedSexEnum.data;
-      const person = await this._participantRestApiService.updatePerson(this.person, {}, {personId: this.person.id});
-      this.personService.personViewModel.update(person);
+      this.person.firstName = this.firstNgxInput.control.value;
+      this.person.lastName = this.lastNgxInput.control.value;
+      this.person.patronymic = this.patronymicNgxInput.control.value;
+      this.person.birthDate = this.birthDateNgxDate.control.value;
+      this.person.sex = this.sexNgxSelect.control.value.data;
 
-      // TODO: this._profileService.emitFullNameChange(this.person);
-      if (this.baseUserRole) {
-        await this._participantRestApiService.updateUserBaseUserRole(this.baseUserRole, {}, {userId: this.personService.personViewModel.data.user.id});
-      }
+      this.person = await this._participantRestApiService.updatePerson(this.person, {}, {personId: this.person.id});
+      this.personService.personViewModel.update(this.person);
     });
   };
 
-  loadCountries = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCountries({
-      from: from,
-      count: this.pageSize,
-      name: searchText
-    });
-  };
-
-  loadRegions = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getRegions({
-      from: from,
-      count: this.pageSize,
-      name: searchText,
-      countryId: this.person.address.country.id
-    });
-  };
-
-  loadCities = async (from: number, searchText: string) => {
-    return this._participantRestApiService.getCities({
-      from: from,
-      count: this.pageSize,
-      name: searchText,
-      regionId: this.person.address.region.id
-    });
-  };
-
-  getKey(item: IdentifiedObject) {
-    return item.id;
-  }
-
-  getName(item: NamedObject) {
-    return item.name;
+  private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
+    const ngxInput = new NgxInput();
+    ngxInput.labelTranslation = labelTranslation;
+    ngxInput.required = required;
+    ngxInput.control.setValue(value);
+    if (required) {
+      ngxInput.control.setValidators(Validators.required);
+    }
+    return ngxInput;
   }
 
 }

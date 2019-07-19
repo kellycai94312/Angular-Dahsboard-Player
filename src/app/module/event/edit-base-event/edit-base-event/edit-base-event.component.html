@@ -5,24 +5,10 @@
   <div fxLayout
        fxLayoutGap="10px">
     <div fxFlex="50">
-      <label>{{startDateDateBox.placeholder}}</label>
-      <dx-date-box #startDateDateBox
-                   class="w-100"
-                   type="datetime"
-                   [(value)]="data.startDate"
-                   [displayFormat]="propertyConstantClass.dateTimeFormat"
-                   placeholder="{{'startDate' | translate}}">
-      </dx-date-box>
+      <ngx-date [data]="startDateNgxDate"></ngx-date>
     </div>
     <div fxFlex="50">
-      <label>{{finishDateDateBox.placeholder}}</label>
-      <dx-date-box #finishDateDateBox
-                   class="w-100"
-                   type="datetime"
-                   [(value)]="data.finishDate"
-                   [displayFormat]="propertyConstantClass.dateTimeFormat"
-                   placeholder="{{'finishDate' | translate}}">
-      </dx-date-box>
+      <ngx-date [data]="endDateNgxDate"></ngx-date>
     </div>
   </div>
 </div>

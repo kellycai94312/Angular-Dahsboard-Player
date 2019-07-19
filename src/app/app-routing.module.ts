@@ -3,7 +3,6 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
 import {AuthDenyGuard} from './guard/auth-deny.guard';
 import {BreadcrumbItem} from './components/ngx-breadcrumb/bean/breadcrumb-item';
-import {DeactivateGuard} from './guard/deactivate/deactivate.guard';
 
 const routes: Routes = [
   {
@@ -31,11 +30,6 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'event-plan',
-    loadChildren: './pages/event-plan/event-plan.module#EventPlanModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'notification',
     loadChildren: './pages/notification/notification.module#NotificationModule',
     canActivate: [AuthGuard]
@@ -50,20 +44,10 @@ const routes: Routes = [
     loadChildren: './pages/group/base-group-page.module#BaseGroupPageModule',
     canActivate: [AuthGuard]
   },
-  // {
-  //   path: 'connection',
-  //   loadChildren: './pages/connection/connection.module#ConnectionModule',
-  //   canActivate: [AuthGuard]
-  // },
   {
     path: 'conversation',
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard]
-  },
-  {
-    path: 'report',
-    loadChildren: './pages/report/report.module#ReportModule',
-    canActivate: [AuthGuard, DeactivateGuard]
   },
   {
     path: 'dictionary',
@@ -77,14 +61,6 @@ const routes: Routes = [
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]
-  },
-  {
-    path: 'statistics',
-    loadChildren: './pages/statistics/statistics.module#StatisticsModule',
-    canActivate: [AuthGuard, DeactivateGuard],
-    data: {
-      breadcrumb: {nameKey: 'statistics'} as BreadcrumbItem
-    }
   },
   {
     path: 'not-found',

@@ -1,0 +1,28 @@
+<app-logo-card *ngIf="formGroup"
+               [titleTranslation]="titleTranslation"
+               (keyup.enter)="onSignUp()">
+  <ng-container *ngIf="!isRegistrationComplete; else registrationCompleteTemplate">
+    <new-ngx-input [data]="emailNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="passwordNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="repeatPasswordNgxInput"></new-ngx-input>
+    <button mat-raised-button
+            class="mt-2"
+            color="accent"
+            [disabled]="formGroup.invalid"
+            (click)="onSignUp()">{{'signUp' | translate}}</button>
+    <div class="mt-3 text-center">
+      <p>{{'clickOnButtonYouAgreeWith' | translate}}</p>
+      <a class="link"
+         (click)="onShowUserAgreement()">{{'userAgreement' | translate}}</a>
+      <p>{{'alreadyRegistered'| translate}}
+        <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
+      </p>
+    </div>
+  </ng-container>
+  <ng-template #registrationCompleteTemplate>
+    <p>{{'registration.anEmailWithAKeyForActivationWillBeSentToYourEmail' | translate }}<br>
+      {{'registration.followTheInstructionsInIt' | translate }}<br>
+      {{'checkEmailInSpamFolder' | translate }}</p>
+    <u><a routerLink="/sign-in">{{'signIn' | translate}}</a></u>
+  </ng-template>
+</app-logo-card>

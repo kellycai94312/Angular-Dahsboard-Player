@@ -4,8 +4,8 @@ import {Observable} from 'rxjs';
 import {Type} from '@angular/core/src/type';
 import {EnvironmentType} from '../../environments/environment-type';
 import {environment} from '../../environments/environment';
-import {GeneralSignUpComponent} from '../pages/sign-up/step/general-sign-up/general-sign-up.component';
-import {PersonSignUpComponent} from '../pages/sign-up/step/person-sign-up/person-sign-up.component';
+import {PersonSignUpComponent} from '../pages/sign-up/person-sign-up/person-sign-up/person-sign-up.component';
+import {SignUpComponent} from '../pages/sign-up/sign-up/sign-up.component';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class EnvironmentGuard implements CanActivate {
     this._environmentDeactivationComponents = [
       {
         environmentTypes: [EnvironmentType.DEMO],
-        deactivationComponents: [GeneralSignUpComponent, PersonSignUpComponent]
+        deactivationComponents: [SignUpComponent, PersonSignUpComponent]
       }
     ];
   }

@@ -74,18 +74,12 @@
   "alreadyRegistered": "Уже зарегистрированы?",
   "forgotYourPassword": "Забыли пароль?",
   "registration": {
-    "enterEmail": "Введите электронную почту",
-    "createPassword": "Создайте пароль",
-    "retypePassword": "Повторите ввод пароля",
-    "signUp": "Зарегистрироваться",
-    "newUserSignUp": "Регистрация нового пользователя",
     "completeYourProfile": "Заполнение профиля",
     "notRegistered": "Не зарегистрированы?",
     "registrationComplete": "Регистрация завершена",
     "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Ваша учётная запись была создана, теперь необходимо её активировать",
     "anEmailWithAKeyForActivationWillBeSentToYourEmail": "На ваш e-mail будет выслано письмо с ключом для активации",
-    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям",
-    "invalidCredentials": "Недопустимые учетные данные"
+    "followTheInstructionsInIt": "Следуйте указанным в нём инструкциям"
   },
   "password": {
     "resetPassword": "Сброс пароля",
@@ -728,5 +722,17 @@
   "sportTypes": "Виды спорта",
   "applications": "Приложения",
   "application": "Приложение",
-  "selectAContactToStartAChat": "Выберите диалог для отправки сообщений!"
+  "selectAContactToStartAChat": "Выберите диалог для отправки сообщений!",
+  "contactTypeEnum": {
+    "EMAIL": "Электронная почта",
+    "PHONE": "Телефон",
+    "SKYPE": "Skype"
+  },
+  "welcome": "Добро пожаловать",
+  "createPassword": "Создайте пароль",
+  "retypePassword": "Повторите ввод пароля",
+  "signUp": "Зарегистрироваться",
+  "invalidCredentials": "Недопустимые учетные данные",
+  "newUserSignUp": "Регистрация нового пользователя",
+  "wrongEmailAddress": "Неправильный адрес электронной почты"
 }

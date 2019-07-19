@@ -73,18 +73,12 @@
   "alreadyRegistered": "Already registered?",
   "forgotYourPassword": "Forgot your password?",
   "registration": {
-    "enterEmail": "Enter email",
-    "createPassword": "Create password",
-    "retypePassword": "Retype password",
-    "signUp": "Sign up",
-    "newUserSignUp": "New user sign up",
     "completeYourProfile": "Complete your profile",
     "notRegistered": "Not registered?",
     "registrationComplete": "Registration complete",
     "yourAccountHasBeenCreatedNowYouNeedToActivateIt": "Your account has been created, now you need to activate it",
     "anEmailWithAKeyForActivationWillBeSentToYourEmail": "An email with a key for activation will be sent to your e-mail",
-    "followTheInstructionsInIt": "Follow the instructions in it",
-    "invalidCredentials": "Invalid credentials"
+    "followTheInstructionsInIt": "Follow the instructions in it"
   },
   "password": {
     "resetPassword": "Reset password",
@@ -728,5 +722,17 @@
   "sportTypes": "Sport types",
   "applications": "Applications",
   "application": "Application",
-  "selectAContactToStartAChat": "Select a contact to start a chat!"
+  "selectAContactToStartAChat": "Select a contact to start a chat!",
+  "contactTypeEnum": {
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "SKYPE": "Skype"
+  },
+  "welcome": "Welcome",
+  "createPassword": "Create password",
+  "retypePassword": "Retype password",
+  "signUp": "Sign up",
+  "invalidCredentials": "Invalid credentials",
+  "newUserSignUp": "New user sign up",
+  "wrongEmailAddress": "Wrong email address"
 }

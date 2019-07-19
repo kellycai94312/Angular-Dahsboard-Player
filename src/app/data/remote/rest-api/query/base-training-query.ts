@@ -1,14 +1,12 @@
 import {PageQuery} from '../page-query';
 import {TrainingState} from '../../misc/training-state';
-import {TrainingDiscriminator} from '../../model/training/base/training-discriminator';
-import {TrainingType} from '../../model/training/training/training-type';
 import {UserRoleEnum} from '../../model/user-role-enum';
+import {EventType} from '../../model/event/base/event-type';
 
 export class BaseTrainingQuery extends PageQuery {
   template?: boolean;
   state?: TrainingState;
-  type?: TrainingType;
-  discriminator?: TrainingDiscriminator;
+  discriminator?: EventType;
   measureParameterEnum?: string;
   locationId?: number;
   dateFrom?: Date;

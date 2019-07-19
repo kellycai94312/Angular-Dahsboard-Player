@@ -13,11 +13,6 @@ import {environment} from '../../environments/environment';
 import {ListRequest} from '../data/remote/request/list-request';
 import {IdRequest} from '../data/remote/request/id-request';
 import {Period} from '../data/local/period';
-import {BaseTraining} from '../data/remote/model/training/base/base-training';
-import {TrainingDiscriminator} from '../data/remote/model/training/base/training-discriminator';
-import {Training} from '../data/remote/model/training/training/training';
-import {Game} from '../data/remote/model/training/game/game';
-import {Testing} from '../data/remote/model/training/testing/testing';
 import {PropertyConstant} from '../data/local/property-constant';
 import {Observable} from 'rxjs';
 import {PageQuery} from '../data/remote/rest-api/page-query';
@@ -348,22 +343,6 @@ export class AppHelper {
       from = new Date(from);
     }
     return new Date(from.getTime() + offset * countDaysInPeriod * 24 * 60 * 60 * 1000);
-  }
-
-  public eventFactory<T extends BaseTraining>(eventType: TrainingDiscriminator): T {
-    let event: BaseTraining = null;
-    switch (eventType) {
-      case TrainingDiscriminator.GAME:
-        event = new Game();
-        break;
-      case TrainingDiscriminator.TESTING:
-        event = new Testing();
-        break;
-      case TrainingDiscriminator.TRAINING:
-        event = new Training();
-        break;
-    }
-    return event as T;
   }
 
   public getListChanges<T extends IdentifiedObject>(aItems: T[] = [], bItems: T[] = [], equals: (a: T, b: T) => boolean): { newItems: T[], removedItems: T[] } {
