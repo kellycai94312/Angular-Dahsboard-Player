@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {EditPersonComponent} from './edit-person/edit-person.component';
+import {OldEditPersonComponent} from './edit-person/old-edit-person.component';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxGridModule} from '../../../components/ngx-grid/ngx-grid.module';
 import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module';
@@ -30,10 +30,10 @@ import {GroupPersonPositionItemModule} from '../../group/group-person-position-i
     EditMedicalExaminationModule,
     GroupPersonPositionItemModule
   ],
-  declarations: [EditPersonComponent],
-  entryComponents: [EditPersonComponent],
+  declarations: [OldEditPersonComponent],
+  entryComponents: [OldEditPersonComponent],
   providers: [EditPersonService],
-  exports: [EditPersonComponent],
+  exports: [OldEditPersonComponent],
 })
-export class EditPersonModule {
+export class OldEditPersonModule {
 }

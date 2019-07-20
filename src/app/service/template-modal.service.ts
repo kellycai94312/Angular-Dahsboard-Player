@@ -12,7 +12,7 @@ import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-
 import {TranslateObjectService} from '../shared/translate-object.service';
 import {GroupItemComponent} from '../module/group/group-item/group-item/group-item.component';
 import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
-import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
+import {OldEditPersonComponent} from '../module/person/old-edit-person/edit-person/old-edit-person.component';
 import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-configuration';
 import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
@@ -230,7 +230,7 @@ export class TemplateModalService {
                                    config?: NgxModalConfiguration): Promise<boolean> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
-    await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
+    await modal.componentInstance.initializeBody(OldEditPersonComponent, async component => {
       if (personModalConfig) {
         component.group = personModalConfig.group;
       }

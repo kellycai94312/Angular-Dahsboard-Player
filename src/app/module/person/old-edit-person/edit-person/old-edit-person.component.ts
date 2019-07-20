@@ -35,11 +35,11 @@ import {BaseFile} from '../../../../data/remote/model/file/base/base-file';
 import {ValidationService} from '../../../../service/validation/validation.service';
 
 @Component({
-  selector: 'app-edit-person',
-  templateUrl: './edit-person.component.html',
-  styleUrls: ['./edit-person.component.scss']
+  selector: 'app-old-edit-person',
+  templateUrl: './old-edit-person.component.html',
+  styleUrls: ['./old-edit-person.component.scss']
 })
-export class EditPersonComponent extends BaseEditComponent<Person> implements OnInit {
+export class OldEditPersonComponent extends BaseEditComponent<Person> implements OnInit {
 
   public readonly propertyConstantClass = PropertyConstant;
 
