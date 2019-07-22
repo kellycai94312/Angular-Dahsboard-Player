@@ -283,7 +283,8 @@ export class StructureSubgroupsPageComponent implements OnInit {
   };
 
   private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
-    await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
+    // await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
+    await this._templateModalService.openEditPersonWindow(person, this.group, {componentFactoryResolver: this._componentFactoryResolver});
     // TODO: Update only edited item
     await this.resetItems();
   }

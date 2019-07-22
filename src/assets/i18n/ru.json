@@ -351,6 +351,7 @@
     "ORDER": "Приказ",
     "DISPOSITION": "Распоряжение",
     "PASSPORT": "Паспорт",
+    "BIRTH_CERTIFICATE": "Свидетельство о рождении",
     "CERTIFICATE_NUMBER": "Номер сертификата",
     "OTHER": "Другой"
   },
@@ -734,5 +735,10 @@
   "signUp": "Зарегистрироваться",
   "invalidCredentials": "Недопустимые учетные данные",
   "newUserSignUp": "Регистрация нового пользователя",
-  "wrongEmailAddress": "Неправильный адрес электронной почты"
+  "wrongEmailAddress": "Неправильный адрес электронной почты",
+  "identityDocument": "Документ удостоверяющий личность",
+  "emailForActivation": "E-mail для активации",
+  "documentDataIsNotUnique": "Данные документа не являются уникальными",
+  "series": "Серия",
+  "documentDataIsIncorrect": "Данные документа неверны"
 }

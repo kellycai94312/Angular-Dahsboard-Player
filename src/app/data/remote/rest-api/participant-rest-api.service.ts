@@ -856,6 +856,12 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Post,
     path: '/group/{!groupId}/person',
   })
+  enrollPerson: IRestMethodStrict<{ personId: number, positionIds: number[] }, any, { groupId: number }, GroupPersonTransition[]>;
+
+  @RestAction({
+    method: RestRequestMethod.Post,
+    path: '/group/{!groupId}/person',
+  })
   enrollPersonsToGroup: IRestMethodStrict<ListRequest<Person>, any, { groupId: number }, GroupPersonTransition[]>;
 
   @RestAction({

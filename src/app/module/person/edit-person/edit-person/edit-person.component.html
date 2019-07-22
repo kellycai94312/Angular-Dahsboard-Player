@@ -1,0 +1,61 @@
+<div *ngIf="person"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+  </div>
+  <div fxLayout
+       fxLayoutGap="10px">
+    <ngx-date fxFlex="50"
+              [data]="birthDateNgxDate"></ngx-date>
+    <ngx-select fxFlex="50"
+                [data]="sexNgxSelect"></ngx-select>
+  </div>
+  <div fxLayout
+       fxLayoutGap="10px">
+    <new-ngx-input *ngIf="!person.user.verified"
+                   fxFlex="50"
+                   [data]="emailForActivationNgxInput"></new-ngx-input>
+    <new-ngx-input fxFlex="{{person.user.verified ? '100' : '50'}}"
+                   [data]="contactPhoneNumberNgxInput"></new-ngx-input>
+  </div>
+  <div>
+    <label class="label">{{'identityDocument' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
+  <div fxLayout
+       fxLayoutGap="10px">
+    <ngx-select class="document-field"
+                [data]="documentTypeNgxSelect"></ngx-select>
+    <new-ngx-input class="document-field"
+                   [data]="documentSeriesNgxInput"></new-ngx-input>
+    <new-ngx-input class="document-field"
+                   [data]="documentNumberNgxInput"></new-ngx-input>
+    <ngx-date [data]="documentDateNgxInput"></ngx-date>
+    <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
+  </div>
+  <ng-container *ngIf="group">
+    <div fxLayout
+         fxLayoutAlign="space-between center"
+         fxLayoutGap="10px">
+      <label class="label">{{'personPositions' | translate}} <span>*</span></label>
+      <button mat-icon-button
+              (click)="onEditGroupPersonPositions()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <mat-divider></mat-divider>
+    <div>
+      <mat-chip-list>
+        <mat-chip *ngFor="let item of positions"
+                  [removable]="true"
+                  (removed)="onRemovePosition(item)">{{item.name}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+  </ng-container>
+</div>

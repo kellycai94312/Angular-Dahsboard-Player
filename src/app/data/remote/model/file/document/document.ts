@@ -4,6 +4,7 @@ import {FileType} from '../base/file-type';
 
 export class Document extends BaseFile {
   type: DocumentType;
+  series: number;
   number: number;
   date: Date;
   issuedBy?: string;

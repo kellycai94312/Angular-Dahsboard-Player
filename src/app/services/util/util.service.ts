@@ -28,4 +28,9 @@ export class UtilService {
     return plainToClassFromExist(new DiscriminatorObject(type), {obj}).obj;
   }
 
+  public getAge(date: Date): number {
+    const diff = Date.now() - date.getTime();
+    return Math.abs(new Date(diff).getUTCFullYear() - 1970);
+  }
+
 }
