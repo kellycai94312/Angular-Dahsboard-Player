@@ -7,9 +7,17 @@ import {DiscriminatorObject} from '../../data/remote/bean/discriminator-object';
 })
 export class UtilService {
 
-  public clone<T>(obj: T, options?: ClassTransformOptions): T {
+  public clone<T>(obj: T, options?: ClassTransformOptions & { excludeNullable?: boolean }): T {
     options = options || {};
     options.excludePrefixes = options.excludePrefixes || ['_'];
+
+    if (obj && options.excludeNullable) {
+      for (const item of Object.keys(obj)) {
+        if (!obj[item]) {
+          delete obj[item];
+        }
+      }
+    }
 
     return classToClass(obj, options);
   }

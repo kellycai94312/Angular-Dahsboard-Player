@@ -24,7 +24,7 @@ export class PersonApiService {
   }
 
   public updatePerson<T extends Person>(value: T): Observable<T> {
-    return this._apiService.updateValue(Person, this._basePath, value) as Observable<T>;
+    return this._apiService.updateValue(Person, `${this._basePath}/${value.id}`, value) as Observable<T>;
   }
 
   public savePerson<T extends Person>(value: T): Observable<T> {

@@ -609,8 +609,9 @@
   "positionLevelEnum": {
     "HEAD": "Руководитель",
     "SPECIALIST": "Специалист",
-    "TECH_STAFF": "Технический персонал"
+    "STAFF": "Персонал"
   },
+  "personPositionType": "Тип должности",
   "personPosition": "Должность",
   "personPositions": "Должности",
   "vacancies": "Вакансии",

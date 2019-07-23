@@ -1,0 +1,44 @@
+<div fxLayout
+     fxLayoutGap="10px"
+     class="content">
+  <div fxFlex="30"
+       fxLayout="column">
+    <ngx-select [data]="clusterNgxSelect"></ngx-select>
+    <ngx-tree *ngIf="dataSource"
+              [nodeConfigurations]="nodeConfigurations"
+              [dataSource]="dataSource"
+              (selectedNodeChange)="onSelectedNode($event)">
+      <ng-template #nodeTemplate
+                   let-item>
+        <pre>{{item.data.name}}</pre>
+      </ng-template>
+    </ngx-tree>
+  </div>
+  <div *ngIf="selectedNode"
+       fxFlex="grow"
+       fxLayout="column">
+    <div fxLayout
+         fxLayoutAlign="start center"
+         fxLayoutGap="10px">
+      <ngx-select [data]="positionLevelNgxSelect"></ngx-select>
+      <ngx-select [data]="positionNgxSelect"></ngx-select>
+      <div>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!selectedNode"
+                (click)="onUpdateReport()">
+          {{'report' | translate}}
+        </button>
+      </div>
+    </div>
+    <table *ngIf="clusterGroupPositions.length"
+           class="table table-bordered table-hover">
+      <tr *ngFor="let item of clusterGroupPositions">
+        <td *ngFor="let groupItem of item.groups">{{groupItem?.name}}</td>
+        <td>
+          <span *ngFor="let person of item.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < item.persons.length) ? ', ' : ''}}</span>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

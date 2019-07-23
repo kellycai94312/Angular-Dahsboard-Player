@@ -46,15 +46,12 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
     this.positionLevelNgxSelect.labelTranslation = 'personPosition';
     this.positionLevelNgxSelect.display = 'name';
     this.positionLevelNgxSelect.items = positionLevels;
-    this.positionLevelNgxSelect.control.setValue(positionLevels[0]);
-
     this.positionLevelNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
       .subscribe(async (value) => {
         await this.onPositionLevelChanged(value);
       });
-
-    await this.groupPersonsListComponent.updateItems();
+    this.positionLevelNgxSelect.control.setValue(positionLevels[0]);
   }
 
   public async onPositionLevelChanged(item: NameWrapper<PositionLevelEnum>) {

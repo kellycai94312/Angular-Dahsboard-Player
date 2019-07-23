@@ -607,8 +607,9 @@
   "positionLevelEnum": {
     "HEAD": "Head",
     "SPECIALIST": "Specialist",
-    "TECH_STAFF": "Tech staff"
+    "STAFF": "Tech staff"
   },
+  "personPositionType": "Position type",
   "personPosition": "Position",
   "personPositions": "Positions",
   "vacancies": "Vacancies",
