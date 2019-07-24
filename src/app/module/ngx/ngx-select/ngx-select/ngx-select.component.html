@@ -6,6 +6,8 @@
               [multiple]="data.multiple"
               [compareWith]="data.compare"
               [placeholder]="data.placeholder">
+    <mat-option *ngIf="!data.multiple && data.hasNone"
+                class="muted-text">{{'notSelected' | translate}}</mat-option>
     <mat-option *ngFor="let item of data.items"
                 [value]="item">
       {{getDisplay(item)}}

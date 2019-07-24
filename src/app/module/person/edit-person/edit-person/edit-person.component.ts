@@ -29,6 +29,8 @@ import {PreviewNamedObjectComponent} from '../../../../components/named-object/p
 import {Position} from '../../../../data/remote/model/person-position/position';
 import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
 import {ListRequest} from '../../../../data/remote/request/list-request';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {UserRole} from '../../../../data/remote/model/user-role';
 
 @Component({
   selector: 'app-edit-person',
@@ -216,8 +218,24 @@ export class EditPersonComponent {
             if (this._appHelper.isNewObject(this.person)) {
               return this._personApiService.createPerson(this.person)
                 .pipe(flatMap(person => {
-                  return from(this._participantRestApiService.enrollPerson({personId: person.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))
-                    .pipe(map(() => person));
+                  let athleteUserRole: UserRole;
+                  this.positions.forEach(position => {
+                    const athletePosition = position.positionUserRoles.find(x => x.userRole.userRoleEnum === UserRoleEnum.ATHLETE);
+                    if (athletePosition) {
+                      athleteUserRole = athletePosition.userRole;
+                    }
+                  });
+
+                  let updateUserRole$: Observable<any> = of(void 0);
+                  if (athleteUserRole) {
+                    updateUserRole$ = from(this._participantRestApiService.updateUserUserRoles({list: [athleteUserRole]}, {}, {userId: person.user.id}));
+                  }
+
+                  return updateUserRole$
+                    .pipe(
+                      flatMap(() => from(this._participantRestApiService.enrollPerson({personId: person.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))),
+                      map(() => person)
+                    );
                 }));
             }
             return this._personApiService.updatePerson(this.person)

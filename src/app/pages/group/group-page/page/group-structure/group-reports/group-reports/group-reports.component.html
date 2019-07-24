@@ -40,10 +40,13 @@
         <td *ngFor="let groupItem of item.groups">{{groupItem?.name}}</td>
         <td>
           <ng-container *ngIf="byName; else personCountTemplate">
-            <span *ngFor="let person of item.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < item.persons.length) ? ', ' : ''}}</span>
+            <ng-container *ngIf="item.persons.length; else emptyTemplate">
+              <span *ngFor="let person of item.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < item.persons.length) ? ', ' : ''}}</span>
+            </ng-container>
+            <ng-template #emptyTemplate>-</ng-template>
           </ng-container>
           <ng-template #personCountTemplate>
-            {{item.persons.length ? item.persons.length : ''}}
+            {{item.persons.length ? item.persons.length : '-'}}
           </ng-template>
         </td>
       </tr>

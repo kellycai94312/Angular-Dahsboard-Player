@@ -742,5 +742,6 @@
   "documentDataIsNotUnique": "Document data is not unique",
   "series": "Series",
   "documentDataIsIncorrect": "Document data is incorrect",
-  "byName": "By name"
+  "byName": "By name",
+  "notSelected": "Not selected"
 }

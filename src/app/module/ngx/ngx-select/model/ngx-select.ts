@@ -12,6 +12,7 @@ export class NgxSelect {
   public multiple?: boolean;
   // TODO: Get dynamically from FormControl
   public required?: boolean;
+  public hasNone?: boolean;
   public getErrorMessage?: (ngxSelect: NgxSelect) => Observable<string>;
   public display?: ((item: any) => string) | string;
   public compare: <T extends any>(first: T, second: T) => boolean = <T>(first: T, second: T) => {

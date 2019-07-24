@@ -67,6 +67,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
       });
     this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
     this.organizationTypeNgxSelect.display = 'name';
+    this.organizationTypeNgxSelect.hasNone = true;
     this.organizationTypeNgxSelect.items = await this._participantRestApiService.getOrganizationTypes();
     this.organizationTypeNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
@@ -76,8 +77,8 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
     this.positionLevelNgxSelect.labelTranslation = 'personPositionType';
     this.positionLevelNgxSelect.display = 'name';
+    this.positionLevelNgxSelect.hasNone = true;
     this.positionLevelNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<PositionLevelEnum>(PositionLevelEnum, 'PositionLevelEnum');
-    this.positionLevelNgxSelect.control.setValue(this.positionLevelNgxSelect.items[0]);
     this.positionLevelNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
       .subscribe(() => {
@@ -86,6 +87,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
     this.positionNgxSelect.labelTranslation = 'personPosition';
     this.positionNgxSelect.display = 'name';
+    this.positionNgxSelect.hasNone = true;
     this.positionNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
       .subscribe(() => {
@@ -98,6 +100,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
     this.rankNgxSelect.labelTranslation = 'rank';
     this.rankNgxSelect.display = 'name';
+    this.rankNgxSelect.hasNone = true;
     this.rankNgxSelect.items = await this._participantRestApiService.getRanks();
     this.rankNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
@@ -120,7 +123,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
     this.positionNgxSelect.control.reset();
     this.positionNgxSelect.control.disable();
     this._groupClusterApiService.getNestedGroupPositions(this.clusterNgxSelect.control.value,
-      this.selectedNode.data, {positionLevelEnum: this.positionLevelNgxSelect.control.value.data})
+      this.selectedNode.data, {positionLevelEnum: this.positionLevelNgxSelect.control.value ? this.positionLevelNgxSelect.control.value.data : void 0})
       .subscribe(positions => {
         this.positionNgxSelect.items = positions;
         if (positions.length) {
