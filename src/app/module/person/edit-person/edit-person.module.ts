@@ -1,39 +1,29 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {EditPersonComponent} from './edit-person/edit-person.component';
+import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
+import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
+import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
-import {NgxGridModule} from '../../../components/ngx-grid/ngx-grid.module';
-import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module';
-import {DxDateBoxModule, DxNumberBoxModule, DxSelectBoxModule, DxTextAreaModule, DxTextBoxModule, DxValidatorModule} from 'devextreme-angular';
-import {InputSelectModule} from '../../../components/input-select/input-select.module';
-import {AttachFileModule} from '../../../components/attach-file/attach-file.module';
-import {EditPersonRankModule} from '../edit-person-rank/edit-person-rank.module';
-import {EditMedicalExaminationModule} from '../edit-medical-examination/edit-medical-examination.module';
-import {EditPersonService} from './service/edit-person.service';
-import {GroupPersonPositionItemModule} from '../../group/group-person-position-item/group-person-position-item.module';
+import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '@angular/material';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    TranslateModule.forChild(),
-    DxTextBoxModule,
-    DxValidatorModule,
-    DxDateBoxModule,
-    DxSelectBoxModule,
-    DxNumberBoxModule,
-    DxTextAreaModule,
-    NgxGridModule,
-    NgxButtonModule,
-    InputSelectModule,
-    AttachFileModule,
-    EditPersonRankModule,
-    EditMedicalExaminationModule,
-    GroupPersonPositionItemModule
-  ],
   declarations: [EditPersonComponent],
   entryComponents: [EditPersonComponent],
-  providers: [EditPersonService],
   exports: [EditPersonComponent],
+  imports: [
+    CommonModule,
+    MatDividerModule,
+    MatChipsModule,
+    MatIconModule,
+    MatButtonModule,
+    TranslateModule.forChild(),
+    FlexLayoutModule,
+    NgxInputModule,
+    NgxSelectModule,
+    NgxDateModule
+  ]
 })
 export class EditPersonModule {
 }

@@ -186,7 +186,7 @@
   "organization": "Организация",
   "report": "Отчет",
   "reportError": "Недостаточно данных для формирования отчета",
-  "rank": "Разряд",
+  "rank": "Ранг",
   "assignee": "Кем присвоен(о)",
   "orderNumber": "№ приказа, распоряжения",
   "certificateNumber": "№ удостоверения",
@@ -351,6 +351,7 @@
     "ORDER": "Приказ",
     "DISPOSITION": "Распоряжение",
     "PASSPORT": "Паспорт",
+    "BIRTH_CERTIFICATE": "Свидетельство о рождении",
     "CERTIFICATE_NUMBER": "Номер сертификата",
     "OTHER": "Другой"
   },
@@ -608,8 +609,9 @@
   "positionLevelEnum": {
     "HEAD": "Руководитель",
     "SPECIALIST": "Специалист",
-    "TECH_STAFF": "Технический персонал"
+    "STAFF": "Персонал"
   },
+  "personPositionType": "Тип должности",
   "personPosition": "Должность",
   "personPositions": "Должности",
   "vacancies": "Вакансии",
@@ -734,5 +736,12 @@
   "signUp": "Зарегистрироваться",
   "invalidCredentials": "Недопустимые учетные данные",
   "newUserSignUp": "Регистрация нового пользователя",
-  "wrongEmailAddress": "Неправильный адрес электронной почты"
+  "wrongEmailAddress": "Неправильный адрес электронной почты",
+  "identityDocument": "Документ удостоверяющий личность",
+  "emailForActivation": "E-mail для активации",
+  "documentDataIsNotUnique": "Данные документа не являются уникальными",
+  "series": "Серия",
+  "documentDataIsIncorrect": "Данные документа неверны",
+  "byName": "Поименно",
+  "notSelected": "Не выбрано"
 }

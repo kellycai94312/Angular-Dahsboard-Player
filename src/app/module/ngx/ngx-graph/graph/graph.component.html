@@ -1,9 +1,12 @@
 <ngx-graph *ngIf="nodes?.length && links?.length"
+           [view]="[1200, 500]"
            [links]="links"
            [nodes]="nodes"
            [curve]="curve"
-           [autoCenter]="true">
-
+           [autoZoom]="true"
+           [draggingEnabled]="false"
+           [autoCenter]="true"
+           [layoutSettings]="layoutSettings">
   <ng-template #defsTemplate>
     <svg:marker id="arrow"
                 viewBox="0 -5 10 10"

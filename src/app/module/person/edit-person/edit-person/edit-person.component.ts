@@ -1,501 +1,315 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
+import {Component, forwardRef, Inject} from '@angular/core';
 import {Person} from '../../../../data/remote/model/person';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {AttachFileComponent} from '../../../../components/attach-file/attach-file/attach-file.component';
-import {Document} from '../../../../data/remote/model/file/document/document';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
+import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
 import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {PersonTransitionType} from '../../../../data/remote/model/group/transition/person-transition-type';
-import {DocumentQuery} from '../../../../data/remote/rest-api/query/file/document-query';
-import {GroupTransition} from '../../../../data/remote/model/group/transition/group-transition';
-import {StageType} from '../../../../data/remote/model/stage/stage-type';
-import {EditPersonRankComponent} from '../../edit-person-rank/edit-person-rank/edit-person-rank.component';
-import {EditMedicalExaminationComponent} from '../../edit-medical-examination/edit-medical-examination/edit-medical-examination.component';
-import {PersonRank} from '../../../../data/remote/model/person-rank';
-import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {Router} from '@angular/router';
+import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {Document} from '../../../../data/remote/model/file/document/document';
 import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
-import {PersonQuery} from '../../../../data/remote/rest-api/query/person-query';
-import {ListRequest} from '../../../../data/remote/request/list-request';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {EditPersonService} from '../service/edit-person.service';
-import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
-import {BaseFile} from '../../../../data/remote/model/file/base/base-file';
+import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {ValidationService} from '../../../../service/validation/validation.service';
+import {FileApiService} from '../../../../data/remote/rest-api/api/file/file-api.service';
+import {TemplateModalService} from '../../../../service/template-modal.service';
+import {flatMap, map} from 'rxjs/operators';
+import {EMPTY, from, NEVER, Observable, of} from 'rxjs';
+import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
+import {GroupPerson} from '../../../../data/remote/model/group/group-person';
+import {AppHelper} from '../../../../utils/app-helper';
+import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {UtilService} from '../../../../services/util/util.service';
+import {User} from '../../../../data/remote/model/user';
+import {EditPersonService} from '../../old-edit-person/service/edit-person.service';
+import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
+import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
+import {Position} from '../../../../data/remote/model/person-position/position';
+import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
+import {ListRequest} from '../../../../data/remote/request/list-request';
+import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
+import {UserRole} from '../../../../data/remote/model/user-role';
 
 @Component({
   selector: 'app-edit-person',
   templateUrl: './edit-person.component.html',
   styleUrls: ['./edit-person.component.scss']
 })
-export class EditPersonComponent extends BaseEditComponent<Person> implements OnInit {
+export class EditPersonComponent {
 
-  public readonly propertyConstantClass = PropertyConstant;
-
-  @ViewChild(AttachFileComponent)
-  public attachFileComponent: AttachFileComponent<Document>;
-
-  @ViewChild('sportRanks')
-  public sportRankNgxGridComponent: NgxGridComponent;
-
-  @ViewChild('medicalExaminations')
-  public medicalExaminationNgxGridComponent: NgxGridComponent;
-
-  @Input()
+  public readonly formGroup = new FormGroup({});
+  public readonly documentFormGroup = new FormGroup({});
+  public person: Person;
   public group: Group;
+  public firstNgxInput: NgxInput;
+  public lastNgxInput: NgxInput;
+  public patronymicNgxInput: NgxInput;
+  public birthDateNgxDate: NgxDate;
+  public sexNgxSelect: NgxSelect;
+  public emailForActivationNgxInput: NgxInput;
+  public contactPhoneNumberNgxInput: NgxInput;
 
-  public readonly dateMin: Date;
-  public readonly dateMax: Date;
-  public sexEnums: NameWrapper<SexEnum>[];
-  public selectedSexEnum: NameWrapper<SexEnum>;
-  public groupPersonPositions: GroupPersonPosition[];
-  public joinGroupPersonTransitionTypes: NameWrapper<PersonTransitionType>[];
-  public selectedJoinGroupPersonTransitionType: NameWrapper<PersonTransitionType>;
-  public document: Document;
-  public documentQuery: DocumentQuery;
-  public joinGroupTransition: GroupTransition;
-  public stageTypes: StageType[];
-  public selectedStageType: StageType;
-  public passportDocument: Document;
-  public personalDataProcessingDocument: Document;
-  public serviceAgreementDocument: Document;
+  public documentTypeNgxSelect: NgxSelect;
+  public documentSeriesNgxInput: NgxInput;
+  public documentNumberNgxInput: NgxInput;
+  public documentDateNgxInput: NgxDate;
+  public documentIssuedByNgxInput: NgxInput;
 
-  private readonly _personRankComponents: EditPersonRankComponent[];
-  private readonly _medicalExaminationComponents: EditMedicalExaminationComponent[];
-  private _initialPersonRanks: PersonRank[];
-  private _initialMedicalExaminations: MedicalExamination[];
+  public groupPerson: GroupPerson;
+  public positions: Position[] = [];
 
-  constructor(private _ngxModalService: NgxModalService,
+  private _document: Document;
+
+  constructor(private _translateObjectService: TranslateObjectService,
+              // TODO: TemplateModalService can't inject without forwardRef()
+              @Inject(forwardRef(() => TemplateModalService))
+              private _templateModalService: TemplateModalService,
+              private _personApiService: PersonApiService,
+              private _appHelper: AppHelper,
+              private _utilService: UtilService,
               private _editPersonService: EditPersonService,
-              private _router: Router,
+              private _modalBuilderService: ModalBuilderService,
               private _validationService: ValidationService,
-              private _translateObjectService: TranslateObjectService,
-              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
-    super(participantRestApiService, appHelper);
-    this.dateMin = this._validationService.getBirthDateMin();
-    this.dateMax = this._validationService.getBirthDateMax();
-    this.document = new Document();
-    this.document.clazz = FileClass.GROUP_TRANSITION;
-    this.document.type = DocumentType.ORDER;
-    this.documentQuery = new DocumentQuery();
-    this.documentQuery.clazz = this.document.clazz;
-    this.documentQuery.type = this.document.type;
-
-    this.personalDataProcessingDocument = new Document();
-    this.personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
-    this.personalDataProcessingDocument.type = DocumentType.ORDER;
-
-    this.serviceAgreementDocument = new Document();
-    this.serviceAgreementDocument.clazz = FileClass.GROUP_PERSON;
-    this.serviceAgreementDocument.type = DocumentType.ORDER;
-
-    this.passportDocument = new Document();
-    this.passportDocument.clazz = FileClass.PERSON;
-    this.passportDocument.type = DocumentType.PASSPORT;
-
-    this._personRankComponents = [];
-    this._medicalExaminationComponents = [];
-    this.groupPersonPositions = [];
+              private _participantRestApiService: ParticipantRestApiService,
+              private _fileApiService: FileApiService) {
   }
 
-  async ngOnInit(): Promise<void> {
-    await super.ngOnInit();
-    this.stageTypes = await this.participantRestApiService.getStageTypes();
+  public async initialize(person: Person, group?: Group): Promise<void> {
+    person.user = person.user || new User();
+
+    this.person = person;
+    this.group = group;
+
+    this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
+    this.lastNgxInput = this._getNgxInput('lastName', person.lastName, true);
+    this.patronymicNgxInput = this._getNgxInput('patronymic', person.patronymic);
+
+    this.birthDateNgxDate = new NgxDate();
+    this.birthDateNgxDate.placeholderTranslation = 'birthDate';
+    this.birthDateNgxDate.format = PropertyConstant.dateFormat;
+    this.birthDateNgxDate.required = true;
+    this.birthDateNgxDate.min = this._validationService.getBirthDateMin();
+    this.birthDateNgxDate.max = this._validationService.getBirthDateMax();
+    this.birthDateNgxDate.control = new FormControl(person.birthDate, [Validators.required]);
+
+    this.sexNgxSelect = new NgxSelect();
+    this.sexNgxSelect.labelTranslation = 'sex';
+    this.sexNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
+    this.sexNgxSelect.required = true;
+    this.sexNgxSelect.display = 'name';
+    this.sexNgxSelect.control.setValidators(Validators.required);
+    this.sexNgxSelect.control.setValue(this.sexNgxSelect.items.find(x => x.data === person.sex));
+
+    this.emailForActivationNgxInput = this._getNgxInput('emailForActivation', person.user.email);
+    this.emailForActivationNgxInput.control.setValidators(ValidationService.emailValidator);
+
+    // TODO: Set phone number
+    this.contactPhoneNumberNgxInput = this._getNgxInput('contactPhoneNumber', '');
+
+    this.formGroup.setControl('firstName', this.firstNgxInput.control);
+    this.formGroup.setControl('lastName', this.lastNgxInput.control);
+    this.formGroup.setControl('patronymic', this.patronymicNgxInput.control);
+    this.formGroup.setControl('birthDate', this.birthDateNgxDate.control);
+    this.formGroup.setControl('sex', this.sexNgxSelect.control);
+
+    if (group && !this._appHelper.isNewObject(person)) {
+      this.groupPerson = await this._participantRestApiService.getGroupPerson({groupId: group.id, personId: person.id});
+      this.positions = (await this._participantRestApiService.getGroupPersonPositions({}, {unassigned: false}, {
+        groupId: group.id,
+        personId: person.id
+      })).list.map(x => x.position);
+    }
+
+    await this.initializeDocument(person);
   }
 
-  async initialize(obj: Person): Promise<boolean> {
-    return await this.appHelper.tryLoad(async () => {
-      await super.initialize(obj);
-
-      this.sexEnums = await this._translateObjectService.getTranslatedEnumCollection<SexEnum>(SexEnum, 'SexEnum');
-      if (this.data.sex) {
-        this.selectedSexEnum = this.sexEnums.find(x => x.data === this.data.sex);
-      } else {
-        this.selectedSexEnum = this.sexEnums[0];
-        this.data.sex = this.selectedSexEnum.data;
+  private async initializeDocument(person: Person) {
+    this._document = new Document();
+    this._document.type = DocumentType.PASSPORT;
+    this._document.clazz = FileClass.PERSON;
+    if (!this._appHelper.isNewObject(person)) {
+      const age = this._utilService.getAge(new Date(this.person.birthDate));
+      const documentPageContainer = await this._fileApiService
+        .getDocuments(
+          {
+            clazz: FileClass.PERSON,
+            count: 1,
+            objectId: person.id,
+            type: age >= 14 ? DocumentType.PASSPORT : DocumentType.BIRTH_CERTIFICATE
+          })
+        .toPromise();
+      if (documentPageContainer.list.length) {
+        this._document = documentPageContainer.list[0];
       }
-      this.joinGroupPersonTransitionTypes = await this._translateObjectService.getTranslatedEnumCollection<PersonTransitionType>(PersonTransitionType, 'GroupTransitionTypeEnum');
-      this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === PersonTransitionType.ENROLL);
+    }
 
-      if (!this.appHelper.isNewObject(obj)) {
-        if (this.group) {
-          try {
-            this.groupPersonPositions = (await this.participantRestApiService.getGroupPersonPositions({}, {unassigned: false}, {
-              groupId: this.group.id,
-              personId: obj.id
-            })).list;
-          } catch (e) {
-          }
+    this.documentTypeNgxSelect = new NgxSelect();
+    this.documentTypeNgxSelect.labelTranslation = 'documentType';
+    this.documentTypeNgxSelect.items = (await this._translateObjectService
+      .getTranslatedEnumCollection<DocumentType>(DocumentType, 'DocumentTypeEnum'))
+      .filter(value => value.data === DocumentType.PASSPORT || value.data === DocumentType.BIRTH_CERTIFICATE);
+    this.documentTypeNgxSelect.required = true;
+    this.documentTypeNgxSelect.display = 'name';
+    this.documentTypeNgxSelect.control.setValidators(Validators.required);
+    this.documentTypeNgxSelect.control.setValue(this.documentTypeNgxSelect.items.find(x => x.data === this._document.type));
 
-          const groupPerson = await this.getGroupPerson();
-          if (groupPerson) {
-            this.selectedStageType = groupPerson.stageType;
-            // this.joinGroupTransition = groupPerson.groupTransition;
-            // this.documentQuery.objectId = this.joinGroupTransition.id;
-            // this.selectedJoinGroupPersonTransitionType = this.joinGroupPersonTransitionTypes.find(x => x.data === this.joinGroupTransition.type);
+    this.documentSeriesNgxInput = this._getNgxInput('series', (this._document.series || '') as string, true);
+    this.documentNumberNgxInput = this._getNgxInput('number', (this._document.number || '') as string, true);
 
-            // await this.attachFileComponent.initialize();
+    this.documentDateNgxInput = new NgxDate();
+    this.documentDateNgxInput.placeholderTranslation = 'date';
+    this.documentDateNgxInput.format = PropertyConstant.dateFormat;
+    this.documentDateNgxInput.required = true;
+    this.documentDateNgxInput.control = new FormControl(this._document.date, [Validators.required]);
 
-            try {
-              const serviceAgreementDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.GROUP_PERSON, count: 1, objectId: groupPerson.id})).list;
-              if (serviceAgreementDocuments.length) {
-                this.serviceAgreementDocument = serviceAgreementDocuments[0];
-              }
-            } catch (e) {
+    this.documentIssuedByNgxInput = this._getNgxInput('issuedBy', this._document.issuedBy, true);
+    this.documentIssuedByNgxInput.type = NgxInputType.TEXTAREA;
+
+    this.documentFormGroup.setControl('documentType', this.documentTypeNgxSelect.control);
+    this.documentFormGroup.setControl('documentSeries', this.documentSeriesNgxInput.control);
+    this.documentFormGroup.setControl('documentNumber', this.documentNumberNgxInput.control);
+    this.documentFormGroup.setControl('documentDate', this.documentDateNgxInput.control);
+    this.documentFormGroup.setControl('documentIssuedBy', this.documentIssuedByNgxInput.control);
+  }
+
+  public onSave(): Observable<boolean> {
+    this._document.type = this.documentTypeNgxSelect.control.value.data;
+    this._document.series = this.documentSeriesNgxInput.control.value;
+    this._document.number = this.documentNumberNgxInput.control.value;
+    this._document.date = this._appHelper.getGmtDate(this.documentDateNgxInput.control.value);
+    this._document.issuedBy = this.documentIssuedByNgxInput.control.value;
+
+    const addOrUpdateDocument = !!(this._document.id || this.documentSeriesNgxInput.control.value ||
+      this.documentNumberNgxInput.control.value || this.documentDateNgxInput.control.value || this.documentIssuedByNgxInput.control.value);
+
+    return of(addOrUpdateDocument)
+      .pipe(
+        flatMap(value => {
+          if (value) {
+            this.documentFormGroup.updateValueAndValidity();
+            if (this.documentFormGroup.valid) {
+              return this._fileApiService.getDocumentAvailable(this._document.series, this._document.number, this._document.type as any).pipe(map(value1 => value1.value));
+            } else {
+              const dialog = this._templateModalService.showQuestionModal('documentDataIsIncorrect', modal => {
+                return [{
+                  nameKey: 'apply',
+                  callback: async () => {
+                    modal.close(true);
+                  }
+                }];
+              });
+              return from(dialog).pipe(flatMap(() => NEVER));
             }
           }
-        }
+          return of(true);
+        }),
+        flatMap(value => {
+          if (value) {
+            this.person.firstName = this.firstNgxInput.control.value;
+            this.person.lastName = this.lastNgxInput.control.value;
+            this.person.patronymic = this.patronymicNgxInput.control.value;
+            this.person.birthDate = this._appHelper.dateByFormat(this.birthDateNgxDate.control.value, PropertyConstant.dateTimeServerFormat);
+            this.person.sex = this.sexNgxSelect.control.value.data;
+            this.person.user.email = this.emailForActivationNgxInput.control.value;
+            // TODO: Save contact phone number contactPhoneNumberNgxInput
 
-        await this.sportRankNgxGridComponent.reset();
-        await this.medicalExaminationNgxGridComponent.reset();
-        try {
-          const personalDataProcessingDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSONAL_DATA_PROCESSING, count: 1, objectId: this.data.id})).list;
-          if (personalDataProcessingDocuments.length) {
-            this.personalDataProcessingDocument = personalDataProcessingDocuments[0];
-          }
-        } catch (e) {
-        }
+            if (this._appHelper.isNewObject(this.person)) {
+              return this._personApiService.createPerson(this.person)
+                .pipe(flatMap(person => {
+                  let athleteUserRole: UserRole;
+                  this.positions.forEach(position => {
+                    const athletePosition = position.positionUserRoles.find(x => x.userRole.userRoleEnum === UserRoleEnum.ATHLETE);
+                    if (athletePosition) {
+                      athleteUserRole = athletePosition.userRole;
+                    }
+                  });
 
-        try {
-          const passportDocuments = (await this.participantRestApiService.getDocuments({clazz: FileClass.PERSON, count: 1, objectId: this.data.id, type: DocumentType.PASSPORT})).list;
-          if (passportDocuments.length) {
-            this.passportDocument = passportDocuments[0];
-          }
-        } catch (e) {
-        }
-      }
+                  let updateUserRole$: Observable<any> = of(void 0);
+                  if (athleteUserRole) {
+                    updateUserRole$ = from(this._participantRestApiService.updateUserUserRoles({list: [athleteUserRole]}, {}, {userId: person.user.id}));
+                  }
 
-      this._initialPersonRanks = this.sportRankNgxGridComponent.items.slice();
-      this._initialMedicalExaminations = this.medicalExaminationNgxGridComponent.items.slice();
-    });
-  }
-
-  async onRemove(): Promise<boolean> {
-    return await this.appHelper.tryRemove(async () => {
-      await this.participantRestApiService.removePerson({personId: this.data.id});
-    });
-  }
-
-  async onSave(): Promise<boolean> {
-    return await this.appHelper.trySave(async () => {
-      let groupTransition = this.joinGroupTransition;
-      if (this.appHelper.isNewObject(this.data)) {
-        let personFullName = `${this.data.firstName} ${this.data.lastName}`;
-        if (this.data.patronymic) {
-          personFullName += ` ${this.data.patronymic}`;
-        }
-        const query: PersonQuery = {
-          name: personFullName,
-          dateBirth: this.appHelper.dateByFormat(this.data.birthDate, this.propertyConstantClass.dateFormat),
-          sex: this.data.sex,
-          count: 1
-        };
-        let selectedPerson: Person;
-        if ((await this.participantRestApiService.getPersons(query)).list.length && await this._ngxModalService.showMatchWasFoundDialogModal()) {
-          await this._ngxModalService.showSelectionPersonsModal(query, async selectedItems => {
-            if (selectedItems.length) {
-              selectedPerson = selectedItems[0];
-              this.appHelper.updateObject(this.data, selectedPerson);
+                  return updateUserRole$
+                    .pipe(
+                      flatMap(() => from(this._participantRestApiService.enrollPerson({personId: person.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))),
+                      map(() => person)
+                    );
+                }));
             }
-          });
-        }
-
-        if (this.group) {
-          if (selectedPerson) {
-            groupTransition = (await this.participantRestApiService.enrollPersonsToGroup(new ListRequest([selectedPerson]), {}, {groupId: this.group.id}))[0].groupTransition;
+            return this._personApiService.updatePerson(this.person)
+              .pipe(
+                flatMap(person => {
+                  return from(this._participantRestApiService.updateGroupPersonPositions(new ListRequest(this.positions), {}, {
+                    groupId: this.group.id,
+                    personId: this.person.id
+                  }))
+                    .pipe(map(() => person));
+                })
+              );
           } else {
-            const groupPersonTransition = await this.participantRestApiService.createAndEnrollToGroup(this.data, {}, {groupId: this.group.id});
-            groupTransition = groupPersonTransition.groupTransition;
-            this.appHelper.updateObject(this.data, groupPersonTransition.person);
+            const dialog = this._templateModalService.showQuestionModal('documentDataIsNotUnique', modal => {
+              return [{
+                nameKey: 'apply',
+                callback: async () => {
+                  modal.close(true);
+                }
+              }];
+            });
+            return from(dialog);
           }
-        } else {
-          this.appHelper.updateObject(this.data, await this.participantRestApiService.createPerson(this.data));
+        }),
+        flatMap(value => {
+          if (value) {
+            this.person = value;
+
+            // TODO: Save contacts
+
+            this._document.objectId = this.person.id;
+            if (addOrUpdateDocument) {
+              return this._fileApiService.saveFile(this._document);
+            }
+          }
+          return EMPTY;
+        }),
+        flatMap(value => {
+          return of(!!value);
+        })
+      );
+  }
+
+  public async onEditGroupPersonPositions(): Promise<void> {
+    const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async (query: GroupPersonPositionQuery) => {
+        return await this._participantRestApiService.getGroupVacancies({}, query, {groupId: this.group.id});
+      }, PreviewNamedObjectComponent,
+      async (component, data) => {
+        component.data = data;
+      },
+      {
+        minCount: 1,
+        compare: (first, second) => {
+          return first.id == second.id;
         }
-      } else {
-        this.appHelper.updateObject(this.data, await this.participantRestApiService.updatePerson(this.data, {}, {personId: this.data.id}));
-      }
-
-      if (this.group) {
-        // TODO: Fix this expression because you can't empty array
-        if (this.groupPersonPositions.length) {
-          await this.participantRestApiService.updateGroupPersonPositions(new ListRequest(this.groupPersonPositions.map(x => x.position)), {}, {
-            groupId: this.group.id,
-            personId: this.data.id
-          });
-        }
-
-        await this.participantRestApiService.updateGroupPersonStageType({id: this.selectedStageType ? this.selectedStageType.id : null}, {}, {
-          groupId: this.group.id,
-          personId: this.data.id
-        });
-
-        this.serviceAgreementDocument.objectId = (await this.getGroupPerson()).id;
-        this.serviceAgreementDocument.date = this.appHelper.dateByFormat(this.serviceAgreementDocument.date, PropertyConstant.dateTimeServerFormat);
-        await this.uploadOrUpdateFile(this.serviceAgreementDocument);
-      }
-      // this.document.objectId = groupTransition.id;
-      // await this.attachFileComponent.updateFile();
-      this.personalDataProcessingDocument.objectId = this.data.id;
-      this.personalDataProcessingDocument.date = this.appHelper.dateByFormat(this.personalDataProcessingDocument.date, PropertyConstant.dateTimeServerFormat);
-      await this.uploadOrUpdateFile(this.personalDataProcessingDocument);
-
-
-      this.passportDocument.objectId = this.data.id;
-      this.passportDocument.date = this.appHelper.dateByFormat(this.passportDocument.date, PropertyConstant.dateTimeServerFormat);
-      await this.uploadOrUpdateFile(this.passportDocument);
-
-      await this.applyComponentsData(this._initialPersonRanks, this.sportRankNgxGridComponent.items, this._personRankComponents,
-        async (obj: PersonRank) => {
-          return await this.participantRestApiService.removePersonRank({personId: this.data.id, personRankId: obj.id});
-        });
-      await this.applyComponentsData(this._initialMedicalExaminations, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents,
-        async (obj: MedicalExamination) => {
-          return await this.participantRestApiService.removeMedicalExamination({personId: this.data.id, medicalExaminationId: obj.id});
-        });
-    });
-  }
-
-  private async uploadOrUpdateFile<T extends BaseFile>(obj: T, file: File = null): Promise<T> {
-    if (this.appHelper.isNewObject(obj)) {
-      return (await this.participantRestApiService.uploadFile(obj, file));
-    } else {
-      return await this.participantRestApiService.updateFile(obj, file);
-    }
-  }
-
-  public async navigateToPage(): Promise<void> {
-    if (this.data && this.data.id) {
-      await this._router.navigate(['/person', this.data.id]);
-    }
-  }
-
-  public onEditGroupPersonPositions = async () => {
-    const result = await this._editPersonService.showSelectionGroupPersonPositions(this.groupPersonPositions, {groupId: this.group.id, personId: this.data.id});
+      });
     if (result.result) {
-      this.groupPersonPositions = result.data;
-    }
-  };
-
-  public fetchPersonRanks = async (query: PageQuery) => {
-    if (!this.data) {
-      return;
-    }
-    const items = await this.participantRestApiService.getPersonRanks({personId: this.data.id});
-    return this.appHelper.arrayToPageContainer(items);
-  };
-
-  public fetchMedicalExaminations = async (query: PageQuery) => {
-    if (!this.data) {
-      return;
-    }
-    const items = (await this.participantRestApiService.getMedicalExaminations({}, {count: PropertyConstant.pageSizeMax}, {personId: this.data.id})).list;
-    return this.appHelper.arrayToPageContainer(items);
-  };
-
-  getKey(group: Group) {
-    return group.id;
-  }
-
-  getName(group: any): string {
-    return group.name;
-  }
-
-  public fetchGroups = async (from: number, searchText: string) => {
-    return await this.participantRestApiService.getGroups({
-      from: from,
-      count: PropertyConstant.pageSize,
-      name: searchText,
-      canEdit: true
-    });
-  };
-
-  //#region Person ranks
-
-  public onAddSportRank = async () => {
-    await this.onShowSportRankModel(new PersonRank());
-  };
-
-  public onEditSportRank = async (obj: PersonRank) => {
-    await this.onShowSportRankModel(obj);
-  };
-
-  private async onShowSportRankModel(personRank: PersonRank) {
-    const tempFile = this.getFileFromTempComponent(personRank, this._personRankComponents);
-
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-    let editRankComponent: EditPersonRankComponent = null;
-    await modal.componentInstance.initializeBody(EditPersonRankComponent, async component => {
-      editRankComponent = component;
-      component.person = this.data;
-      await component.initialize(personRank);
-
-      if (tempFile) {
-        component.initializeTempFile(tempFile);
-      }
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            if (!(await component.validWithNotify())) {
-              return;
-            }
-            this.updateComponentData(component, this.sportRankNgxGridComponent.items, this._personRankComponents);
-            modal.close();
-          }
-        },
-        {
-          nameKey: 'remove',
-          callback: async () => {
-            this.removeComponentData(component, this.sportRankNgxGridComponent.items, this._personRankComponents);
-            modal.close();
-          }
-        }
-      ];
-    }, {componentFactoryResolver: this._editPersonService.componentFactoryResolver});
-
-    if (!await this._ngxModalService.awaitModalResult(modal)) {
-      editRankComponent.changeWatcher.reset();
+      this.positions = result.data;
     }
   }
 
-  //#endregion
-
-  //#region Medical examinations
-
-  public onAddMedicalExamination = async () => {
-    await this.onShowMedicalExaminationModel(new MedicalExamination());
-  };
-
-  public onEditMedicalExamination = async (obj: MedicalExamination) => {
-    await this.onShowMedicalExaminationModel(obj);
-  };
-
-  private async onShowMedicalExaminationModel(medicalExamination: MedicalExamination) {
-    const tempFile = this.getFileFromTempComponent(medicalExamination, this._medicalExaminationComponents);
-
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'edit';
-    let editMedicalExaminationComponent: EditMedicalExaminationComponent = null;
-    await modal.componentInstance.initializeBody(EditMedicalExaminationComponent, async component => {
-      editMedicalExaminationComponent = component;
-      component.person = this.data;
-      await component.initialize(medicalExamination);
-
-      if (tempFile) {
-        component.initializeTempFile(tempFile);
-      }
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            if (!(await component.validWithNotify())) {
-              return;
-            }
-            this.updateComponentData(component, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents);
-            modal.close();
-          }
-        },
-        {
-          nameKey: 'remove',
-          callback: async () => {
-            this.removeComponentData(component, this.medicalExaminationNgxGridComponent.items, this._medicalExaminationComponents);
-            modal.close();
-          }
-        }
-      ];
-    }, {componentFactoryResolver: this._editPersonService.componentFactoryResolver});
-    if (!await this._ngxModalService.awaitModalResult(modal)) {
-      editMedicalExaminationComponent.changeWatcher.reset();
-    }
+  public onRemovePosition(value: Position): void {
+    this.positions.splice(this.positions.indexOf(value), 1);
   }
 
-  //#endregion
-
-  //#region Other
-
-  public onSexChanged(val: NameWrapper<SexEnum>) {
-    this.data.sex = val.data;
+  private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
+    const ngxInput = new NgxInput();
+    ngxInput.labelTranslation = labelTranslation;
+    ngxInput.required = required;
+    ngxInput.control.setValue(value);
+    if (required) {
+      ngxInput.control.setValidators(Validators.required);
+    }
+    return ngxInput;
   }
-
-  public onJoinDateChanged(val: Date) {
-    this.document.date = this.appHelper.getGmtDate(val);
-  }
-
-  private getFileFromTempComponent<T extends IdentifiedObject>(obj: T, components: ComponentWithAttach<T>[]) {
-    const tempComponent = components.find(x => x.data === obj);
-    if (tempComponent) {
-      return tempComponent.document;
-    }
-    return null;
-  }
-
-  private updateComponentData<T extends IdentifiedObject>(component: ComponentWithAttach<T>, items: T[], components: ComponentWithAttach<T>[]) {
-    component.updateData();
-    let itemIndex = components.findIndex(x => x.data === component.data);
-    if (itemIndex < 0) {
-      components.push(component);
-    } else {
-      components[itemIndex] = component;
-    }
-
-    itemIndex = items.findIndex((x: T) => x === component.data);
-    if (itemIndex < 0) {
-      items.push(component.data);
-    } else {
-      items[itemIndex] = component.data;
-    }
-  }
-
-  private removeComponentData<T extends IdentifiedObject>(component: ComponentWithAttach<T>, items: T[], components: ComponentWithAttach<T>[]) {
-    let itemIndex = components.findIndex(x => x.data === component.data);
-    if (itemIndex > -1) {
-      components.splice(itemIndex, 1);
-    }
-    itemIndex = items.findIndex((x: T) => x === component.data);
-    if (itemIndex > -1) {
-      items.splice(itemIndex, 1);
-    }
-  }
-
-  private async applyComponentsData<T extends IdentifiedObject>(initialItems: T[], items: T[], components: ComponentWithAttach<T>[], remove: (obj: T) => Promise<T>) {
-    const forRemove: T[] = [];
-    for (const item of initialItems) {
-      if (!items.find(x => x === item)) {
-        forRemove.push(item);
-      }
-    }
-    for (const item of forRemove) {
-      await remove(item);
-    }
-
-    for (const item of components) {
-      if (forRemove.find(x => x === item.data)) {
-        continue;
-      }
-      await item.onSave();
-    }
-  }
-
-  private async getGroupPerson(): Promise<GroupPerson> {
-    try {
-      return await this.participantRestApiService.getGroupPerson({groupId: this.group.id, personId: this.data.id});
-    } catch (e) {
-    }
-    return null;
-  }
-
-  //#endregion
 
 }

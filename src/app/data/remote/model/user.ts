@@ -6,4 +6,5 @@ export class User extends IdentifiedObject {
   password: string;
   locale: Locale;
   enabled: boolean;
+  verified: boolean;
 }

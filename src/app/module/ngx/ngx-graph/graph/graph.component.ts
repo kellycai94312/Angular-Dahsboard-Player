@@ -20,6 +20,9 @@ export class GraphComponent {
   public readonly doubleClickLink = new EventEmitter<Link>();
 
   public readonly curve: any = shape.curveBundle.beta(1);
+  public readonly layoutSettings = {
+    orientation: 'TB'
+  };
 
   public onDoubleClickLink(link: Link): void {
     this.doubleClickLink.emit(link);

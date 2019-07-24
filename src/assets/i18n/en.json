@@ -350,6 +350,7 @@
     "ORDER": "Order",
     "DISPOSITION": "Disposition",
     "PASSPORT": "Passport",
+    "BIRTH_CERTIFICATE": "Birth certificate",
     "CERTIFICATE_NUMBER": "Certificate number",
     "OTHER": "Other"
   },
@@ -606,8 +607,9 @@
   "positionLevelEnum": {
     "HEAD": "Head",
     "SPECIALIST": "Specialist",
-    "TECH_STAFF": "Tech staff"
+    "STAFF": "Tech staff"
   },
+  "personPositionType": "Position type",
   "personPosition": "Position",
   "personPositions": "Positions",
   "vacancies": "Vacancies",
@@ -734,5 +736,12 @@
   "signUp": "Sign up",
   "invalidCredentials": "Invalid credentials",
   "newUserSignUp": "New user sign up",
-  "wrongEmailAddress": "Wrong email address"
+  "wrongEmailAddress": "Wrong email address",
+  "identityDocument": "Identity document",
+  "emailForActivation": "E-mail for activation",
+  "documentDataIsNotUnique": "Document data is not unique",
+  "series": "Series",
+  "documentDataIsIncorrect": "Document data is incorrect",
+  "byName": "By name",
+  "notSelected": "Not selected"
 }

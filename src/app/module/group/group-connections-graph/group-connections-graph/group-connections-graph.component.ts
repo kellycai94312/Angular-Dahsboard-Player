@@ -67,8 +67,8 @@ export class GroupConnectionsGraphComponent {
     } catch (e) {
     }
     for (const groupConnection of groupConnections) {
-      const sourceGroupDataNode: Node = new Node(groupConnection.group.id.toString(), groupConnection, groupConnection.group.name);
-      const targetGroupDataNode: Node = new Node(groupConnection.parentGroup.id.toString(), groupConnection, groupConnection.parentGroup.name);
+      const targetGroupDataNode: Node = new Node(groupConnection.group.id.toString(), groupConnection, groupConnection.group.name);
+      const sourceGroupDataNode: Node = new Node(groupConnection.parentGroup.id.toString(), groupConnection, groupConnection.parentGroup.name);
 
       const sourceNode = this.pushToNodes(sourceGroupDataNode);
       const targetNode = this.pushToNodes(targetGroupDataNode);

@@ -1,0 +1,55 @@
+<div fxLayout
+     fxLayoutGap="10px"
+     class="content">
+  <div fxFlex="30"
+       fxLayout="column">
+    <ngx-select [data]="clusterNgxSelect"></ngx-select>
+    <ngx-tree *ngIf="dataSource"
+              [nodeConfigurations]="nodeConfigurations"
+              [dataSource]="dataSource"
+              (selectedNodeChange)="onSelectedNode($event)">
+      <ng-template #nodeTemplate
+                   let-item>
+        <pre>{{item.data.name}}</pre>
+      </ng-template>
+    </ngx-tree>
+  </div>
+  <div *ngIf="selectedNode"
+       fxFlex="grow"
+       fxLayout="column">
+    <div fxLayout
+         fxLayoutAlign="start center"
+         fxLayoutGap="10px">
+      <ngx-select [data]="organizationTypeNgxSelect"></ngx-select>
+      <ngx-select [data]="positionLevelNgxSelect"></ngx-select>
+      <ngx-select [data]="positionNgxSelect"></ngx-select>
+      <ngx-select [data]="rankNgxSelect"></ngx-select>
+      <mat-checkbox [(ngModel)]="byName">{{'byName' | translate}}</mat-checkbox>
+      <div>
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!selectedNode"
+                (click)="onUpdateReport()">
+          {{'report' | translate}}
+        </button>
+      </div>
+    </div>
+    <table *ngIf="clusterGroupPositions.length"
+           class="table table-bordered table-hover">
+      <tr *ngFor="let item of clusterGroupPositions">
+        <td *ngFor="let groupItem of item.groups">{{groupItem?.name}}</td>
+        <td>
+          <ng-container *ngIf="byName; else personCountTemplate">
+            <ng-container *ngIf="item.persons.length; else emptyTemplate">
+              <span *ngFor="let person of item.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < item.persons.length) ? ', ' : ''}}</span>
+            </ng-container>
+            <ng-template #emptyTemplate>-</ng-template>
+          </ng-container>
+          <ng-template #personCountTemplate>
+            {{item.persons.length ? item.persons.length : '-'}}
+          </ng-template>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>

@@ -144,7 +144,7 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
 
       for (const item of this.eventData.participants) {
         const specialists = await getPositions(PositionLevelEnum.SPECIALIST, item);
-        const techStaffs = await getPositions(PositionLevelEnum.TECH_STAFF, item);
+        const techStaffs = await getPositions(PositionLevelEnum.STAFF, item);
         eventPersonRequests.push({eventPersonTypeEnum: EventPersonTypeEnum.PARTICIPANT, personId: item.id, positionIds: specialists.concat(techStaffs)});
       }
       delete this.eventData;

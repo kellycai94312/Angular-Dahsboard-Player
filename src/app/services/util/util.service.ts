@@ -7,9 +7,17 @@ import {DiscriminatorObject} from '../../data/remote/bean/discriminator-object';
 })
 export class UtilService {
 
-  public clone<T>(obj: T, options?: ClassTransformOptions): T {
+  public clone<T>(obj: T, options?: ClassTransformOptions & { excludeNullable?: boolean }): T {
     options = options || {};
     options.excludePrefixes = options.excludePrefixes || ['_'];
+
+    if (obj && options.excludeNullable) {
+      for (const item of Object.keys(obj)) {
+        if (!obj[item]) {
+          delete obj[item];
+        }
+      }
+    }
 
     return classToClass(obj, options);
   }
@@ -26,6 +34,11 @@ export class UtilService {
 
   public plainDiscriminatorObjectToClass<T extends any>(type: Function, obj: T): T {
     return plainToClassFromExist(new DiscriminatorObject(type), {obj}).obj;
+  }
+
+  public getAge(date: Date): number {
+    const diff = Date.now() - date.getTime();
+    return Math.abs(new Date(diff).getUTCFullYear() - 1970);
   }
 
 }

@@ -6,6 +6,7 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
 import {DialogResult} from '../../../../data/local/dialog-result';
 
+// TODO: Add to group window
 @Injectable()
 export class EditPersonService {
 

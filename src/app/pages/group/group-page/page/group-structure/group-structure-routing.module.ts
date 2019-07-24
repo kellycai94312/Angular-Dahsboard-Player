@@ -9,7 +9,8 @@ const routes: Routes = [
       {path: '', redirectTo: 'cluster', pathMatch: 'full'},
       {path: 'cluster', loadChildren: './group-clusters/group-clusters.module#GroupClustersModule'},
       {path: 'hierarchy', loadChildren: './groups-hierarchies/groups-hierarchies.module#GroupsHierarchiesModule'},
-      {path: 'request', loadChildren: './group-requests/group-requests.module#GroupRequestsModule'}
+      {path: 'request', loadChildren: './group-requests/group-requests.module#GroupRequestsModule'},
+      {path: 'report', loadChildren: './group-reports/group-reports.module#GroupReportsModule'}
     ]
   }
 ];

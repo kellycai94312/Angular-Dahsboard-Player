@@ -14,7 +14,8 @@ export class GroupStructureComponent {
     this.tabs = [
       {translation: 'clusters', link: 'cluster'},
       {translation: 'hierarchies', link: 'hierarchy'},
-      {translation: 'requests', link: 'request'}
+      {translation: 'requests', link: 'request'},
+      {translation: 'reports', link: 'report'}
     ];
   }
 
