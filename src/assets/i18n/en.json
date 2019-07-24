@@ -741,5 +741,6 @@
   "emailForActivation": "E-mail for activation",
   "documentDataIsNotUnique": "Document data is not unique",
   "series": "Series",
-  "documentDataIsIncorrect": "Document data is incorrect"
+  "documentDataIsIncorrect": "Document data is incorrect",
+  "byName": "By name"
 }

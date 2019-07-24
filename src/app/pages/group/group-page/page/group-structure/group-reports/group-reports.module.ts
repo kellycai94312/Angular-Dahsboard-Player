@@ -7,8 +7,9 @@ import {InputSelectModule} from '../../../../../../components/input-select/input
 import {NgxTreeModule} from '../../../../../../module/ngx/ngx-tree/ngx-tree.module';
 import {NgxSelectModule} from '../../../../../../module/ngx/ngx-select/ngx-select.module';
 import {NgxGridModule} from '../../../../../../components/ngx-grid/ngx-grid.module';
-import {MatButtonModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
   declarations: [GroupReportsComponent],
@@ -16,12 +17,14 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     GroupReportsRoutingModule,
     MatButtonModule,
+    MatCheckboxModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
     InputSelectModule,
     NgxTreeModule,
     NgxSelectModule,
-    NgxGridModule
+    NgxGridModule,
+    FormsModule
   ]
 })
 export class GroupReportsModule {

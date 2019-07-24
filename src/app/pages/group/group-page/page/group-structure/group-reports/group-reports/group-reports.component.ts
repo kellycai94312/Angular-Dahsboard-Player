@@ -26,8 +26,10 @@ import {ClusterGroupPosition} from '../../../../../../../data/remote/rest-api/ap
 export class GroupReportsComponent extends BaseGroupComponent<Group> implements OnInit {
 
   public readonly clusterNgxSelect = new NgxSelect();
+  public readonly organizationTypeNgxSelect = new NgxSelect();
   public readonly positionLevelNgxSelect = new NgxSelect();
   public readonly positionNgxSelect = new NgxSelect();
+  public readonly rankNgxSelect = new NgxSelect();
   public readonly nodeConfigurations = [
     new NodeConfiguration('leaf'),
     new NodeConfiguration('nested', (index, nodeData: FlatNode) => {
@@ -37,6 +39,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
   public dataSource: DynamicDataSource<FlatNode>;
   public selectedNode: FlatNode;
   public clusterGroupPositions: ClusterGroupPosition[] = [];
+  public byName: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupClusterApiService: GroupClusterApiService,
@@ -62,6 +65,14 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
             .pipe(map(value => value.map(x => new FlatNode(x, nextLevel, true))));
         });
       });
+    this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
+    this.organizationTypeNgxSelect.display = 'name';
+    this.organizationTypeNgxSelect.items = await this._participantRestApiService.getOrganizationTypes();
+    this.organizationTypeNgxSelect.control.valueChanges
+      .pipe(takeWhile(() => this.notDestroyed))
+      .subscribe(() => {
+        this.clusterGroupPositions = [];
+      });
 
     this.positionLevelNgxSelect.labelTranslation = 'personPositionType';
     this.positionLevelNgxSelect.display = 'name';
@@ -84,6 +95,15 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
     if (groupClusters.length) {
       this.clusterNgxSelect.control.setValue(groupClusters[0]);
     }
+
+    this.rankNgxSelect.labelTranslation = 'rank';
+    this.rankNgxSelect.display = 'name';
+    this.rankNgxSelect.items = await this._participantRestApiService.getRanks();
+    this.rankNgxSelect.control.valueChanges
+      .pipe(takeWhile(() => this.notDestroyed))
+      .subscribe(() => {
+        this.clusterGroupPositions = [];
+      });
   }
 
   public onSelectedNode(node: FlatNode) {
@@ -115,8 +135,10 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
     const groupCluster = this.clusterNgxSelect.control.value;
     if (group && groupCluster) {
       return this._groupApiService.getClusterGroupPositions(group, groupCluster, {
-        positionId: this.positionNgxSelect.control.value ? this.positionNgxSelect.control.value.id : null,
-        positionLevelEnum: this.positionLevelNgxSelect.control.value ? this.positionLevelNgxSelect.control.value.data : null
+        organizationTypeId: this.organizationTypeNgxSelect.control.value ? this.organizationTypeNgxSelect.control.value.id : void 0,
+        positionLevelEnum: this.positionLevelNgxSelect.control.value ? this.positionLevelNgxSelect.control.value.data : void 0,
+        positionId: this.positionNgxSelect.control.value ? this.positionNgxSelect.control.value.id : void 0,
+        rankId: this.rankNgxSelect.control.value ? this.rankNgxSelect.control.value.id : void 0
       })
         .pipe(map(value => {
           const clusterGroupPositions = value;
