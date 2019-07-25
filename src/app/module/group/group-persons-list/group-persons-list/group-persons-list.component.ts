@@ -6,7 +6,6 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {AppHelper} from '../../../../utils/app-helper';
 import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {Person} from '../../../../data/remote/model/person';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 
 @Component({
@@ -33,25 +32,11 @@ export class GroupPersonsListComponent {
   }
 
   public onEditItem = async (item: GroupPerson) => {
-    if (this.canEdit) {
-      await this.showEditGroupPerson(item);
-    }
   };
 
   public fetchItems = async (direction: Direction, query: PageQuery) => {
     return await this._participantRestApiService.getGroupPersonsByGroup(query);
   };
-
-  public async showEditGroupPerson(groupPerson?: GroupPerson) {
-    let person = new Person();
-    if (groupPerson) {
-      person = groupPerson.person;
-    }
-    if (await this._templateModalService.showEditPersonModal(person, {group: groupPerson.group}, {componentFactoryResolver: this._componentFactoryResolver})) {
-      // TODO: Update only edited item!
-      await this.updateItems();
-    }
-  }
 
   public async updateItems() {
     await this._appHelper.delay();

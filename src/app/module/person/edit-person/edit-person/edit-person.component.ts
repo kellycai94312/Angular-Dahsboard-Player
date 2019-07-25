@@ -23,7 +23,6 @@ import {ParticipantRestApiService} from '../../../../data/remote/rest-api/partic
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {UtilService} from '../../../../services/util/util.service';
 import {User} from '../../../../data/remote/model/user';
-import {EditPersonService} from '../../old-edit-person/service/edit-person.service';
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
 import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
 import {Position} from '../../../../data/remote/model/person-position/position';
@@ -69,7 +68,6 @@ export class EditPersonComponent {
               private _personApiService: PersonApiService,
               private _appHelper: AppHelper,
               private _utilService: UtilService,
-              private _editPersonService: EditPersonService,
               private _modalBuilderService: ModalBuilderService,
               private _validationService: ValidationService,
               private _participantRestApiService: ParticipantRestApiService,

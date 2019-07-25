@@ -12,7 +12,6 @@ import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-
 import {TranslateObjectService} from '../shared/translate-object.service';
 import {GroupItemComponent} from '../module/group/group-item/group-item/group-item.component';
 import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
-import {OldEditPersonComponent} from '../module/person/old-edit-person/edit-person/old-edit-person.component';
 import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-configuration';
 import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
@@ -279,60 +278,6 @@ export class TemplateModalService {
       }
     }
     return true;
-  }
-
-  public async showEditPersonModal(person: Person,
-                                   personModalConfig: PersonModalConfig,
-                                   config?: NgxModalConfiguration): Promise<boolean> {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'person';
-    await modal.componentInstance.initializeBody(OldEditPersonComponent, async component => {
-      if (personModalConfig) {
-        component.group = personModalConfig.group;
-      }
-      await component.initialize(person);
-      const isNewObject = (): boolean => {
-        return !this._appHelper.isNewObject(component.data);
-      };
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        })
-      ];
-
-      if (personModalConfig) {
-        modal.componentInstance.splitButtonItems.push(...[
-          {
-            nameKey: 'transfer',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, personModalConfig.group, [component.data], personModalConfig)) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          },
-          {
-            nameKey: 'deduct',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, personModalConfig.group, [component.data])) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          },
-          {
-            nameKey: 'deductFromSubgroup',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          }
-        ]);
-      }
-    }, config);
-    return await this._ngxModalService.awaitModalResult(modal);
   }
 
   public async showEditGroupNewsModal<T extends GroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {

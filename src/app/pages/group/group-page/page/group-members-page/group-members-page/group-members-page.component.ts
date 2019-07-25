@@ -6,7 +6,6 @@ import {Group} from '../../../../../../data/remote/model/group/base/group';
 import {GroupService} from '../../../service/group.service';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {Person} from '../../../../../../data/remote/model/person';
 import {GroupPerson} from '../../../../../../data/remote/model/group/group-person';
 import {PersonQuery} from '../../../../../../data/remote/rest-api/query/person-query';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
@@ -73,23 +72,11 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
   };
 
   public onAddGroupPerson = async () => {
-    await this.showEditGroupPerson();
   };
 
   public onEditGroupPerson = async (obj: GroupPerson) => {
-    await this.showEditGroupPerson(obj);
   };
 
-  public async showEditGroupPerson(groupPerson?: GroupPerson) {
-    let person = new Person();
-    if (groupPerson) {
-      person = groupPerson.person;
-    }
-    if (await this._templateModalService.showEditPersonModal(person, {group: this.group}, {componentFactoryResolver: this._componentFactoryResolver})) {
-      // TODO: Update only edited item!
-      await this.resetItems();
-    }
-  }
 
   public async onSortChange(val: string) {
     if (val) {

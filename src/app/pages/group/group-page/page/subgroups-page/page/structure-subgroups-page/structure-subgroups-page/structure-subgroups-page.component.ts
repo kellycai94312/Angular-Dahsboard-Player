@@ -194,11 +194,11 @@ export class StructureSubgroupsPageComponent implements OnInit {
   };
 
   public onEdit = async (obj: ObjectWrapper) => {
-    await this.showEditPersonModal(obj.data, this.getPersonModalConfig());
+    await this.openEditPersonWindow(obj.data, this.getPersonModalConfig());
   };
 
   public onAdd = async (obj: ObjectWrapper) => {
-    await this.showEditPersonModal(new Person(), {group: this.group});
+    await this.openEditPersonWindow(new Person(), {group: this.group});
   };
 
   public onSelectedItemsChange(selectedItems: ObjectWrapper[]) {
@@ -282,8 +282,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
     }
   };
 
-  private async showEditPersonModal(person: Person, personModalConfig: PersonModalConfig) {
-    // await this._templateModalService.showEditPersonModal(person, personModalConfig, {componentFactoryResolver: this._componentFactoryResolver});
+  private async openEditPersonWindow(person: Person, personModalConfig: PersonModalConfig) {
     await this._templateModalService.openEditPersonWindow(person, this.group, {componentFactoryResolver: this._componentFactoryResolver});
     // TODO: Update only edited item
     await this.resetItems();
