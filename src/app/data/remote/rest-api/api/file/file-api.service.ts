@@ -28,15 +28,11 @@ export class FileApiService {
   }
 
   public createFile<T extends BaseFile>(baseFile: T, file?: File): Observable<T> {
-    return this._apiService.post<T>(this._basePath, this._getFileFormData(baseFile, file)).pipe(
-      map(x => plainToClass(BaseFile, x) as T)
-    );
+    return this._apiService.createValue(BaseFile, this._basePath, this._getFileFormData(baseFile, file)) as Observable<T>;
   }
 
   public updateFile<T extends BaseFile>(baseFile: T, file?: File): Observable<T> {
-    return this._apiService.post<T>(`${this._basePath}/${baseFile.id}`, this._getFileFormData(baseFile, file)).pipe(
-      map(x => plainToClass(BaseFile, x) as T)
-    );
+    return this._apiService.updateValue(BaseFile, `${this._basePath}/${baseFile.id}`, this._getFileFormData(baseFile, file)) as Observable<T>;
   }
 
   public saveFile<T extends BaseFile>(baseFile: T, file?: File): Observable<T> {
@@ -46,10 +42,16 @@ export class FileApiService {
     return this.createFile(baseFile, file);
   }
 
-  public getDocumentAvailable(documentSeries: number,
+  public getDocumentAvailable(document: Document,
+                              documentSeries: number,
                               documentNumber: number,
                               documentType: DocumentType.PASSPORT | DocumentType.BIRTH_CERTIFICATE): Observable<BooleanWrapper> {
-    return this._apiService.get(`${this._basePath}/document/available`, this._apiService.getHttpParamsFromObject({series: documentSeries, number: documentNumber, documentType})).pipe(
+    return this._apiService.get(`${this._basePath}/document/available`, this._apiService.getHttpParamsFromObject({
+      documentId: document.id || void 0,
+      series: documentSeries,
+      number: documentNumber,
+      documentType
+    })).pipe(
       map(x => plainToClass(BooleanWrapper, x))
     );
   }
