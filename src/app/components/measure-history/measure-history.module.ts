@@ -4,7 +4,6 @@ import {ChartHistoryComponent} from './chart-history/chart-history.component';
 import {TableHistoryComponent} from './table-history/table-history.component';
 import {MeasureHistoryComponent} from './measure-history.component';
 import {TranslateModule} from '@ngx-translate/core';
-import {DxDateBoxModule} from 'devextreme-angular';
 import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MeasureHistoryService} from './measure-history.service';
@@ -16,7 +15,6 @@ import {NgxTabModule} from '../ngx-tab/ngx-tab.module';
     CommonModule,
     FormsModule,
     TranslateModule.forChild(),
-    DxDateBoxModule,
     NgxTabModule,
     NgxVirtualScrollModule,
     NgbModule
