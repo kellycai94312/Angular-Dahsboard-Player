@@ -1,0 +1,53 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutAlign="space-between center"
+       fxLayoutGap="10px">
+    <label class="label">{{'contract' | translate}}</label>
+    <button mat-icon-button
+            (click)="onAddContract()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <ngx-grid [fetchItems]="fetchItems">
+    <ngx-column nameKey="groupContractType">
+      <ng-template let-item>
+        {{'groupContractTypeEnum.' + item.discriminator | translate}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="number">
+      <ng-template let-item>
+        {{item.number}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="validSince">
+      <ng-template let-item>
+        {{item.validSince | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="validUntil">
+      <ng-template let-item>
+        {{item.validUntil | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column>
+      <ng-template let-item>
+        <div fxLayout>
+          <button mat-icon-button
+                  (click)="onEditContract(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onRemoveContract(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onGetReportContract(item)">
+            <mat-icon>get_app</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+</div>

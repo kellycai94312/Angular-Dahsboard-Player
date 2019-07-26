@@ -743,5 +743,26 @@
   "series": "Серия",
   "documentDataIsIncorrect": "Данные документа неверны",
   "byName": "Поименно",
-  "notSelected": "Не выбрано"
+  "notSelected": "Не выбрано",
+  "contract": "Договор",
+  "groupContractTypeEnum": {
+    "SERVICE": "Услуга"
+  },
+  "groupContractType": "Тип услуги",
+  "validSince": "Действует с",
+  "validUntil": "Действует до",
+  "recipientData": "Recipient data",
+  "customerData": "Данные заказчика",
+  "groupContractService": {
+    "workPlace": "Образовательное учреждение / место работы",
+    "course": "Класс / курс",
+    "paidService": "Платные",
+    "pricePerMonth": "Стоимость занятий в месяц",
+    "classesPerMonth": "Количество занятий",
+    "classesPerWeek": "Количество занятий в неделю",
+    "classDuration": "Продолжительность занятий",
+    "registrationAddress": "Адрес регистрации",
+    "section": "Секция",
+    "head": "Руководитель"
+  }
 }

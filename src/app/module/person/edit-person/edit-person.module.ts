@@ -7,6 +7,7 @@ import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '@angular/material';
+import {GroupContractListModule} from '../../group/group-contract-list/group-contract-list.module';
 
 @NgModule({
   declarations: [EditPersonComponent],
@@ -22,7 +23,8 @@ import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '
     FlexLayoutModule,
     NgxInputModule,
     NgxSelectModule,
-    NgxDateModule
+    NgxDateModule,
+    GroupContractListModule
   ]
 })
 export class EditPersonModule {

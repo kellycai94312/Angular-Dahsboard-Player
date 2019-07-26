@@ -743,5 +743,26 @@
   "series": "Series",
   "documentDataIsIncorrect": "Document data is incorrect",
   "byName": "By name",
-  "notSelected": "Not selected"
+  "notSelected": "Not selected",
+  "contract": "Contract",
+  "groupContractTypeEnum": {
+    "SERVICE": "Service"
+  },
+  "groupContractType": "Service type",
+  "validSince": "Valid since",
+  "validUntil": "Valid until",
+  "recipientData": "Recipient data",
+  "customerData": "Customer data",
+  "groupContractService": {
+    "workPlace": "Educational institution / place of work",
+    "course": "Class / course",
+    "paidService": "Paid",
+    "pricePerMonth": "Cost per month",
+    "classesPerMonth": "Classes number",
+    "classesPerWeek": "Classes number per week",
+    "classDuration": "Classes duration",
+    "registrationAddress": "Registration address",
+    "section": "Section",
+    "head": "Head"
+  }
 }

@@ -8,6 +8,8 @@ import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, 
 })
 export class ValidationService {
 
+  public readonly numberPattern = '^\\d+$';
+
   public static readonly passwordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     return Validators.minLength(8)(control) || Validators.maxLength(255)(control);
   };
