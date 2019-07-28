@@ -764,5 +764,6 @@
     "registrationAddress": "Адрес регистрации",
     "section": "Секция",
     "head": "Руководитель"
-  }
+  },
+  "personRepresentative": "Законный представитель"
 }

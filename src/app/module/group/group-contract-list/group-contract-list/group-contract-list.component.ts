@@ -51,8 +51,8 @@ export class GroupContractListComponent {
     this.ngxGridComponent.items.splice(this.ngxGridComponent.items.indexOf(groupContract), 1);
   };
 
-  public async onGetReportContract(groupContract: BaseGroupContract): Promise<void> {
-    await this._groupApiService.downloadGroupContractReport(groupContract, this.groupPerson.group, this.groupPerson.person, {extension: ReportExtension.PDF}).toPromise();
+  public onGetReportContract(groupContract: BaseGroupContract): void {
+    window.open(this._groupApiService.getUrlForDownloadGroupContractReport(groupContract, this.groupPerson.group, this.groupPerson.person, {extension: ReportExtension.PDF}), '_blank');
   };
 
   private async _openEditGroupContract(groupContract: BaseGroupContract): Promise<void> {

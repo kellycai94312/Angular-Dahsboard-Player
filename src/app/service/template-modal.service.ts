@@ -40,6 +40,8 @@ import {ImageFormat} from '../data/local/image-format';
 import {CropperPosition} from 'ngx-image-cropper';
 import {Image} from '../data/remote/model/file/image/image';
 import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
+import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
+import {GroupApiService} from '../data/remote/rest-api/api/group/group-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +52,8 @@ export class TemplateModalService {
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService,
               private _modalBuilderService: ModalBuilderService,
+              private _personApiService: PersonApiService,
+              private _groupApiService: GroupApiService,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
   }

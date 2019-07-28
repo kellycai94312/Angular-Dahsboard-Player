@@ -35,4 +35,16 @@ export class PersonApiService {
     return this._apiService.removeValue(Person, `${this._basePath}/${value.id}`) as Observable<T>;
   }
 
+  //#region representative
+
+  public getPersonDependant<T extends Person>(person: Person): Observable<T[]> {
+    return this._apiService.getValues(Person, `${this._basePath}/${person.id}/dependant`) as Observable<T[]>;
+  }
+
+  public getPersonRepresentatives<T extends Person>(person: Person): Observable<T[]> {
+    return this._apiService.getValues(Person, `${this._basePath}/${person.id}/representative`) as Observable<T[]>;
+  }
+
+  //#endregion
+
 }

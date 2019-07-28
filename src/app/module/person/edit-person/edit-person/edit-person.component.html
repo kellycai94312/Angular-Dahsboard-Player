@@ -49,6 +49,9 @@
       <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
     </div>
   </ng-container>
+  <app-person-representative-list *ngIf="person?.id"
+                                  [group]="group"
+                                  [person]="person"></app-person-representative-list>
   <ng-container *ngIf="group">
     <div fxLayout
          fxLayoutAlign="space-between center"

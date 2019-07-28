@@ -8,6 +8,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '@angular/material';
 import {GroupContractListModule} from '../../group/group-contract-list/group-contract-list.module';
+import {PersonRepresentativeListModule} from '../person-representative-list/person-representative-list.module';
 
 @NgModule({
   declarations: [EditPersonComponent],
@@ -24,7 +25,8 @@ import {GroupContractListModule} from '../../group/group-contract-list/group-con
     NgxInputModule,
     NgxSelectModule,
     NgxDateModule,
-    GroupContractListModule
+    GroupContractListModule,
+    PersonRepresentativeListModule
   ]
 })
 export class EditPersonModule {

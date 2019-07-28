@@ -1,4 +1,4 @@
-import {Component, forwardRef, Inject, OnDestroy} from '@angular/core';
+import {Component, forwardRef, Inject, Input, OnDestroy} from '@angular/core';
 import {Person} from '../../../../data/remote/model/person';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
@@ -38,11 +38,15 @@ import {filter, flatMap, map, takeWhile} from 'rxjs/operators';
 })
 export class EditPersonComponent implements OnDestroy {
 
+  @Input()
+  public person: Person;
+
+  @Input()
+  public group: Group;
+
   public readonly formGroup = new FormGroup({});
   public readonly documentFormGroup = new FormGroup({});
   public readonly personalDataProcessingDocumentFormGroup = new FormGroup({});
-  public person: Person;
-  public group: Group;
   public firstNgxInput: NgxInput;
   public lastNgxInput: NgxInput;
   public patronymicNgxInput: NgxInput;

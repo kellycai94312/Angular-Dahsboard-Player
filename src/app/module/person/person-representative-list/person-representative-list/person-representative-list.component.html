@@ -1,0 +1,50 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutAlign="space-between center"
+       fxLayoutGap="10px">
+    <label class="label">{{'personRepresentative' | translate}}</label>
+    <div>
+      <button mat-icon-button
+              (click)="onAdd()">
+        <mat-icon>add</mat-icon>
+      </button>
+      <button mat-icon-button
+              (click)="onSelect()">
+        <mat-icon>view_list</mat-icon>
+      </button>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <ngx-grid [fetchItems]="fetchItems">
+    <ngx-column nameKey="lastName">
+      <ng-template let-item>
+        {{item.lastName }}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="firstName">
+      <ng-template let-item>
+        {{item.firstName }}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="patronymic">
+      <ng-template let-item>
+        {{item.patronymic }}
+      </ng-template>
+    </ngx-column>
+    <ngx-column>
+      <ng-template let-item>
+        <div fxLayout>
+          <button mat-icon-button
+                  (click)="onEdit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onRemove(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+</div>
