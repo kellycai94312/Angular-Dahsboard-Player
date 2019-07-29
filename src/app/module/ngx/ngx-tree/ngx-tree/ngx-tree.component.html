@@ -1,40 +1,45 @@
-<mat-tree [dataSource]="dataSource"
-          [treeControl]="dataSource.treeControl">
-  <ng-container *ngFor="let item of nodeConfigurations">
-    <mat-tree-node *matTreeNodeDef="let node; when: item.when"
-                   [ngClass]="{'selected': selectedNode === node}"
-                   (click)="onClickNode(node)"
-                   matTreeNodePadding>
-      <button *ngIf="dataSource.treeControl.isExpandable(node); else defaultPaddingTemplate"
-              mat-icon-button
-              matTreeNodeToggle>
-        <mat-icon>
-          {{dataSource.treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
-        </mat-icon>
-      </button>
-      <ng-template #defaultPaddingTemplate>
-        <button *ngIf="node.level"
-                mat-icon-button disabled></button>
-      </ng-template>
-
-      <ng-container *ngIf="selectable">
-        <mat-checkbox *ngIf="dataSource.treeControl.isExpandable(node); else leafCheckboxTemplate"
-                      [checked]="dataSource.descendantsAllSelected(node)"
-                      [indeterminate]="dataSource.descendantsPartiallySelected(node)"
-                      (change)="dataSource.itemSelectionToggle(node)"></mat-checkbox>
-        <ng-template #leafCheckboxTemplate>
-          <mat-checkbox [checked]="dataSource.selectionModel.isSelected(node)"
-                        (change)="dataSource.leafItemSelectionToggle(node)">{{node.item}}</mat-checkbox>
+<div fxFlex
+     fxLayout
+     class="overflow-auto">
+  <mat-tree fxFlex
+            [dataSource]="dataSource"
+            [treeControl]="dataSource.treeControl">
+    <ng-container *ngFor="let item of nodeConfigurations">
+      <mat-tree-node *matTreeNodeDef="let node; when: item.when"
+                     [ngClass]="{'selected': selectedNode === node}"
+                     (click)="onClickNode(node)"
+                     matTreeNodePadding>
+        <button *ngIf="dataSource.treeControl.isExpandable(node); else defaultPaddingTemplate"
+                mat-icon-button
+                matTreeNodeToggle>
+          <mat-icon>
+            {{dataSource.treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+          </mat-icon>
+        </button>
+        <ng-template #defaultPaddingTemplate>
+          <button *ngIf="node.level"
+                  mat-icon-button disabled></button>
         </ng-template>
-      </ng-container>
 
-      <ng-template *ngIf="nodeTemplate"
-                   [ngTemplateOutlet]="nodeTemplate"
-                   [ngTemplateOutletContext]="{$implicit: node, treeNode: item}"></ng-template>
+        <ng-container *ngIf="selectable">
+          <mat-checkbox *ngIf="dataSource.treeControl.isExpandable(node); else leafCheckboxTemplate"
+                        [checked]="dataSource.descendantsAllSelected(node)"
+                        [indeterminate]="dataSource.descendantsPartiallySelected(node)"
+                        (change)="dataSource.itemSelectionToggle(node)"></mat-checkbox>
+          <ng-template #leafCheckboxTemplate>
+            <mat-checkbox [checked]="dataSource.selectionModel.isSelected(node)"
+                          (change)="dataSource.leafItemSelectionToggle(node)">{{node.item}}</mat-checkbox>
+          </ng-template>
+        </ng-container>
 
-      <mat-progress-bar *ngIf="node.isLoading"
-                        mode="indeterminate"
-                        class="ml-2"></mat-progress-bar>
-    </mat-tree-node>
-  </ng-container>
-</mat-tree>
+        <ng-template *ngIf="nodeTemplate"
+                     [ngTemplateOutlet]="nodeTemplate"
+                     [ngTemplateOutletContext]="{$implicit: node, treeNode: item}"></ng-template>
+
+        <mat-progress-bar *ngIf="node.isLoading"
+                          mode="indeterminate"
+                          class="ml-2"></mat-progress-bar>
+      </mat-tree-node>
+    </ng-container>
+  </mat-tree>
+</div>
