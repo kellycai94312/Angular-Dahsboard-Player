@@ -128,7 +128,9 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     (this.data as Team).stage = this.stageNgxSelect.control.value;
     (this.data as Team).stageYear = this.stageYearNgxInput.control.value;
 
-    this.editGroupDetailsComponent.updateModel();
+    if (this.editGroupDetailsComponent) {
+      this.editGroupDetailsComponent.updateModel();
+    }
 
     return await this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);
