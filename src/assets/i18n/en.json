@@ -128,7 +128,6 @@
   "ageGroup": "Age group",
   "country": "Country",
   "region": "Region",
-  "city": "City",
   "join": "Join",
   "cancelJoin": "Cancel join",
   "leave": "Leave",
@@ -170,7 +169,6 @@
   "showMore": "Show more",
   "from": "From",
   "to": "To",
-  "location": "Location",
   "public": "Public",
   "moreInfo": "More info",
   "description": "Description",
@@ -766,5 +764,22 @@
     "section": "Section",
     "head": "Head"
   },
-  "personRepresentative": "Person representative"
+  "personRepresentative": "Person representative",
+  "groupDetails": "Group details",
+  "location": "Location",
+  "postIndex": "Post index",
+  "city": "City",
+  "street": "Street",
+  "house": "House",
+  "addressBlock": "Block",
+  "liter": "Liter",
+  "kpp": "KPP",
+  "oktmo": "OKTMO",
+  "recipient": "Recipient",
+  "bankFacility": "Bank facility",
+  "bik": "BIK",
+  "kbk": "KBK",
+  "editGroupDetails": {
+    "account": "Account"
+  }
 }

@@ -129,7 +129,6 @@
   "ageGroup": "Возрастная группа",
   "country": "Страна",
   "region": "Регион",
-  "city": "Город",
   "join": "Вступить",
   "cancelJoin": "Отменить заявку",
   "leave": "Выйти",
@@ -151,7 +150,7 @@
   "sportRole": "Спортивная роль",
   "number": "Номер",
   "save": "Сохранить",
-  "fullName": "ФИО",
+  "fullName": "Полное имя",
   "birthDate": "Дата рождения",
   "group": "Группа",
   "role": "Роль",
@@ -171,7 +170,6 @@
   "showMore": "Показать больше",
   "from": "C",
   "to": "По",
-  "location": "Место проведения",
   "public": "Публичное",
   "moreInfo": "Подробнее",
   "description": "Описание",
@@ -301,7 +299,6 @@
   "reports": "Отчеты",
   "createReport": "Создание отчета",
   "general": "Общий",
-  "block": "Блок",
   "blocks": "Блоки",
   "exportToPdf": "Экспорт в Pdf",
   "exportToExcel": "Экспорт в Excel",
@@ -766,5 +763,22 @@
     "section": "Секция",
     "head": "Руководитель"
   },
-  "personRepresentative": "Законный представитель"
+  "personRepresentative": "Законный представитель",
+  "groupDetails": "Group details",
+  "location": "Место нахождения",
+  "postIndex": "Почтовый индекс",
+  "city": "Город",
+  "street": "Улица",
+  "house": "Дом",
+  "addressBlock": "Корпус",
+  "liter": "Литер",
+  "kpp": "КПП",
+  "oktmo": "ОКТМО",
+  "recipient": "Получатель",
+  "bankFacility": "Учреждение банка",
+  "bik": "БИК",
+  "kbk": "БКБ",
+  "editGroupDetails": {
+    "account": "Счет получателя"
+  }
 }
