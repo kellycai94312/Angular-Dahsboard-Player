@@ -654,6 +654,8 @@
   "requestType": "Тип заявки",
   "dependentGroup": "Подчиненная группа",
   "dependentCluster": "Подчиненный кластер",
+  "groupForConnection": "Группа для соединения",
+  "clusterForConnection": "Кластер для соединения",
   "approveConnectionWithTheGroupQuestion": "Утвердить связь с группой?",
   "addedNewRank": "Добавлен новый ранг",
   "removeThisConnection": "Удалить это соединение",
