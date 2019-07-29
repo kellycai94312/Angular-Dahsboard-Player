@@ -61,7 +61,6 @@ import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
 import {GroupPersonLog} from '../model/group/group-person-log';
-import {MedicalExamination} from '../model/person/medical-examination';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
@@ -538,34 +537,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/note/{!id}',
   })
   removeNote: IRestMethod<{ id: number }, void>;
-
-  //#endregion
-
-  //#region Medical examination
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/medicalExamination'
-  })
-  getMedicalExaminations: IRestMethodStrict<any, { sportTypeId?: number, from?: number, count?: number }, { personId: number }, PageContainer<MedicalExamination>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/person/{!personId}/medicalExamination'
-  })
-  createMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number }, MedicalExamination>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
-  })
-  updateMedicalExamination: IRestMethodStrict<MedicalExamination, any, { personId: number, medicalExaminationId: number }, MedicalExamination>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/person/{!personId}/medicalExamination/{!medicalExaminationId}'
-  })
-  removeMedicalExamination: IRestMethod<{ personId: number, medicalExaminationId: number }, MedicalExamination>;
 
   //#endregion
 

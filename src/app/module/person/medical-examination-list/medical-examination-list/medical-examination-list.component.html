@@ -1,0 +1,54 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutAlign="space-between center"
+       fxLayoutGap="10px">
+    <label class="label">{{'medicalExaminations' | translate}}</label>
+    <button mat-icon-button
+            (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <mat-divider></mat-divider>
+  <ngx-grid [fetchItems]="fetchItems">
+    <ngx-column nameKey="sportType">
+      <ng-template let-item>
+        {{item.sportType.name}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="allowed">
+      <ng-template let-item>
+        {{item.allowed ? ('yes' | translate) : ('no' | translate)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="documentNumber">
+      <ng-template let-item>
+        {{item.number}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="issued">
+      <ng-template let-item>
+        {{item.startDate | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="actual">
+      <ng-template let-item>
+        {{item.finishDate | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column>
+      <ng-template let-item>
+        <div fxLayout>
+          <button mat-icon-button
+                  (click)="onEdit(item)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button
+                  (click)="onRemove(item)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+</div>

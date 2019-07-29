@@ -358,6 +358,7 @@
   "stage": "Stage",
   "duration": "Duration",
   "medicalExaminations": "Medical examinations",
+  "medicalExamination": "Medical examination",
   "passDate": "Pass date",
   "recommendations": "Recommendations",
   "dictionaries": "Dictionaries",

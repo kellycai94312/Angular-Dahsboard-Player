@@ -49,6 +49,8 @@
       <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
     </div>
   </ng-container>
+  <app-medical-examination-list *ngIf="person?.id"
+                                [person]="person"></app-medical-examination-list>
   <app-person-representative-list *ngIf="person?.id"
                                   [group]="group"
                                   [person]="person"></app-person-representative-list>

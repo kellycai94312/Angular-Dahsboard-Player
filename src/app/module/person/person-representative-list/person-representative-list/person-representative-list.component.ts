@@ -76,7 +76,7 @@ export class PersonRepresentativeListComponent {
   };
 
   public async _openEditPersonWindow(person: Person) {
-    await this._templateModalService.openEditPersonWindow(this._utilService.clone(person));
+    await this._templateModalService.openEditPersonWindow(this._utilService.clone(person), this.group);
   }
 
 }
