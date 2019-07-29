@@ -10,6 +10,7 @@ import {DocumentQuery} from '../../query/file/document-query';
 import {PageContainer} from '../../../bean/page-container';
 import {Document} from '../../../model/file/document/document';
 import {BaseFile} from '../../../model/file/base/base-file';
+import {UtilService} from '../../../../../services/util/util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class FileApiService {
 
   private readonly _basePath = `${environment.restUrl}/file`;
 
-  constructor(private _apiService: ApiService) {
+  constructor(private _apiService: ApiService,
+              private _utilService: UtilService) {
   }
 
   public getDocuments(query: DocumentQuery): Observable<PageContainer<Document>> {
@@ -46,14 +48,16 @@ export class FileApiService {
                               documentSeries: number,
                               documentNumber: number,
                               documentType: DocumentType.PASSPORT | DocumentType.BIRTH_CERTIFICATE): Observable<BooleanWrapper> {
-    return this._apiService.get(`${this._basePath}/document/available`, this._apiService.getHttpParamsFromObject({
-      documentId: document.id || void 0,
-      series: documentSeries,
-      number: documentNumber,
-      documentType
-    })).pipe(
-      map(x => plainToClass(BooleanWrapper, x))
-    );
+    return this._apiService.get(`${this._basePath}/document/available`, this._apiService.getHttpParamsFromObject(this._utilService.clone({
+        documentId: document.id || void 0,
+        series: documentSeries,
+        number: documentNumber,
+        documentType
+      }, {excludeNullable: true}))
+    )
+      .pipe(
+        map(x => plainToClass(BooleanWrapper, x))
+      );
   }
 
   private _getFileFormData<T extends BaseFile>(baseFile: T, file: File): FormData {

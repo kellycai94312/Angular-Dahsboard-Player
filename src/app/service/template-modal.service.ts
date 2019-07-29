@@ -60,10 +60,12 @@ export class TemplateModalService {
 
   public async openEditPersonWindow(person: Person,
                                     group?: Group,
-                                    config?: NgxModalConfiguration): Promise<void> {
+                                    config?: NgxModalConfiguration): Promise<Person> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
+    let editPersonComponent: EditPersonComponent;
     await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
+      editPersonComponent = component;
       await component.initialize(person, group);
 
       const isNewObject = (): boolean => {
@@ -73,7 +75,7 @@ export class TemplateModalService {
         this._ngxModalService.saveSplitItemButton(async () => {
           component.onSave().subscribe(value => {
             if (value) {
-              modal.close();
+              modal.close(value);
             }
           });
         })
@@ -111,6 +113,8 @@ export class TemplateModalService {
         ]);
       }
     }, config);
+    const result = await this._ngxModalService.awaitModalResult(modal);
+    return result ? editPersonComponent.person : void 0;
   }
 
   //#region Group

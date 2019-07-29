@@ -76,7 +76,12 @@ export class PersonRepresentativeListComponent {
   };
 
   public async _openEditPersonWindow(person: Person) {
-    await this._templateModalService.openEditPersonWindow(this._utilService.clone(person), this.group);
+    const isNew = this._appHelper.isNewObject(person);
+    const dialogResult = await this._templateModalService.openEditPersonWindow(this._utilService.clone(person), this.group);
+    if (dialogResult && isNew) {
+      await this._groupApiService.createPersonRepresentative({id: dialogResult.id}, this.group, this.person).toPromise();
+    }
+    await this.ngxGridComponent.reset();
   }
 
 }
