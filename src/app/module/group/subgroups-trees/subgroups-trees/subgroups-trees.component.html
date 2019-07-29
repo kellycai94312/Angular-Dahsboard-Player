@@ -4,13 +4,20 @@
           (selectedNodeChange)="onSelectedNodeChanged($event)">
   <ng-template #nodeTemplate
                let-item>
-    <pre>{{getNodeName(item)}}</pre>
-    <button mat-icon-button
-            #menuTrigger="matMenuTrigger"
-            [matMenuTriggerFor]="contextMenu"
-            (click)="onShowContextMenu(item,menuTrigger)">
-      <mat-icon>more_vert</mat-icon>
-    </button>
+    <div fxFlex
+         fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="space-between center">
+      <div>
+        <pre>{{getNodeName(item)}}</pre>
+      </div>
+      <button mat-icon-button
+              #menuTrigger="matMenuTrigger"
+              [matMenuTriggerFor]="contextMenu"
+              (click)="onShowContextMenu(item, menuTrigger)">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
   </ng-template>
 </ngx-tree>
 

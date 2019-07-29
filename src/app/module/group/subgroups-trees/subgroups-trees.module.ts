@@ -4,6 +4,7 @@ import {SubgroupsTreesComponent} from './subgroups-trees/subgroups-trees.compone
 import {MatButtonModule, MatIconModule, MatMenuModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxTreeModule} from '../../ngx/ngx-tree/ngx-tree.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 @NgModule({
   declarations: [SubgroupsTreesComponent],
@@ -13,6 +14,7 @@ import {NgxTreeModule} from '../../ngx/ngx-tree/ngx-tree.module';
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
+    FlexLayoutModule,
     TranslateModule.forChild(),
     NgxTreeModule
   ]
