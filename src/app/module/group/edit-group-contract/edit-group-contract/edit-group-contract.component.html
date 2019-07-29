@@ -12,10 +12,10 @@
   <div fxLayout="column">
     <new-ngx-input [data]="workPlaceNgxInput"></new-ngx-input>
     <new-ngx-input [data]="courseNgxInput"></new-ngx-input>
-    <mat-checkbox [(ngModel)]="data.paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
+    <mat-checkbox [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
     <new-ngx-input [data]="sectionNgxInput"></new-ngx-input>
     <new-ngx-input [data]="headNgxInput"></new-ngx-input>
-    <new-ngx-input *ngIf="data.paidService"
+    <new-ngx-input *ngIf="getGroupContractService(data).paidService"
                    [data]="pricePerMonthNgxInput"></new-ngx-input>
     <new-ngx-input [data]="classesPerMonthNgxInput"></new-ngx-input>
     <new-ngx-input [data]="classesPerWeekNgxInput"></new-ngx-input>

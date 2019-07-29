@@ -11,7 +11,9 @@
                      (click)="onClickNode(node)">
         <div fxFlex
              fxLayout="column">
-          <div fxFlex>
+          <div fxFlex
+               fxLayout
+               fxLayoutAlign="start center">
             <button *ngIf="dataSource.treeControl.isExpandable(node); else defaultPaddingTemplate"
                     mat-icon-button
                     matTreeNodeToggle

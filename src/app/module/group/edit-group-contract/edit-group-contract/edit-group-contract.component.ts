@@ -110,6 +110,10 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     });
   }
 
+  public getGroupContractService(groupContract: BaseGroupContract): GroupContractService {
+    return groupContract as GroupContractService;
+  }
+
   private _getNgxInput(labelTranslation: string, value: string | number, required = false, isNumber = false): NgxInput {
     const ngxInput = new NgxInput();
     ngxInput.labelTranslation = labelTranslation;
