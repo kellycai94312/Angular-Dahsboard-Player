@@ -5,7 +5,6 @@ import {UtilService} from '../../../../services/util/util.service';
 import {endOfDay, endOfMonth, endOfWeek, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {AppHelper} from '../../../../utils/app-helper';
-import {BaseTrainingQuery} from '../../../../data/remote/rest-api/query/base-training-query';
 import {Observable, Subject} from 'rxjs';
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {CustomDateFormatter} from '../model/custom-date-formatter';
@@ -15,6 +14,7 @@ import {EventType} from '../../../../data/remote/model/event/base/event-type';
 import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
 import {takeWhile} from 'rxjs/operators';
 import {EventUtilService} from '../../../../services/event-util/event-util.service';
+import {BaseEventQuery} from '../../../../data/remote/rest-api/query/event/base-event-query';
 
 @Component({
   selector: 'app-calendar',
@@ -45,7 +45,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public activeDayIsOpen: boolean;
   public weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
 
-  private readonly _eventQuery = new BaseTrainingQuery();
+  private readonly _eventQuery = new BaseEventQuery();
   private _notDestroyed = true;
 
   constructor(public translateService: TranslateService,
@@ -80,8 +80,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const end = await this.getDateTo();
     end.setDate(end.getDate() + 1);
 
-    this._eventQuery.dateFrom = this._appHelper.dateByFormat(start, PropertyConstant.dateFormat);
-    this._eventQuery.dateTo = this._appHelper.dateByFormat(end, PropertyConstant.dateFormat);
+    this._eventQuery.startDate = this._appHelper.dateByFormat(start, PropertyConstant.dateFormat);
+    this._eventQuery.finishDate = this._appHelper.dateByFormat(end, PropertyConstant.dateFormat);
 
     this._baseEventApiService.getEvents(this._eventQuery)
       .subscribe(value => {
