@@ -12,7 +12,6 @@ import {SplitButtonItem} from '../components/ngx-split-button/bean/split-button-
 import {TranslateObjectService} from '../shared/translate-object.service';
 import {GroupItemComponent} from '../module/group/group-item/group-item/group-item.component';
 import {HtmlContentComponent} from '../components/html-content/html-content/html-content.component';
-import {OldEditPersonComponent} from '../module/person/old-edit-person/edit-person/old-edit-person.component';
 import {NgxModalConfiguration} from '../components/ngx-modal/bean/ngx-modal-configuration';
 import {GroupQuery} from '../data/remote/rest-api/query/group-query';
 import {NgxSelectionConfig} from '../components/ngx-selection/model/ngx-selection-config';
@@ -41,6 +40,9 @@ import {ImageFormat} from '../data/local/image-format';
 import {CropperPosition} from 'ngx-image-cropper';
 import {Image} from '../data/remote/model/file/image/image';
 import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
+import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
+import {GroupApiService} from '../data/remote/rest-api/api/group/group-api.service';
+import {SubgroupPerson} from '../data/remote/model/group/subgroup/person/subgroup-person';
 
 @Injectable({
   providedIn: 'root'
@@ -51,16 +53,20 @@ export class TemplateModalService {
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService,
               private _modalBuilderService: ModalBuilderService,
+              private _personApiService: PersonApiService,
+              private _groupApiService: GroupApiService,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
   }
 
   public async openEditPersonWindow(person: Person,
                                     group?: Group,
-                                    config?: NgxModalConfiguration): Promise<void> {
+                                    config?: NgxModalConfiguration): Promise<Person> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
+    let editPersonComponent: EditPersonComponent;
     await modal.componentInstance.initializeBody(EditPersonComponent, async component => {
+      editPersonComponent = component;
       await component.initialize(person, group);
 
       const isNewObject = (): boolean => {
@@ -70,7 +76,7 @@ export class TemplateModalService {
         this._ngxModalService.saveSplitItemButton(async () => {
           component.onSave().subscribe(value => {
             if (value) {
-              modal.close();
+              modal.close(value);
             }
           });
         })
@@ -108,6 +114,8 @@ export class TemplateModalService {
         ]);
       }
     }, config);
+    const result = await this._ngxModalService.awaitModalResult(modal);
+    return result ? editPersonComponent.person : void 0;
   }
 
   //#region Group
@@ -220,12 +228,7 @@ export class TemplateModalService {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = `groupTransitionTypeEnum.${groupTransitionType}`;
     await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
-      if (personTransitionModalConfig) {
-        component.fromSubgroupGroup = personTransitionModalConfig.subgroupGroup;
-        component.subgroupTemplateGroupVersion = personTransitionModalConfig.subgroupTemplateGroupVersion;
-      }
-
-      await component.initialize(groupTransitionType, currentGroup, persons);
+      await component.initialize(groupTransitionType, currentGroup, persons, personTransitionModalConfig);
       modal.componentInstance.splitButtonItems = [
         {
           nameKey: 'apply',
@@ -279,60 +282,6 @@ export class TemplateModalService {
       }
     }
     return true;
-  }
-
-  public async showEditPersonModal(person: Person,
-                                   personModalConfig: PersonModalConfig,
-                                   config?: NgxModalConfiguration): Promise<boolean> {
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'person';
-    await modal.componentInstance.initializeBody(OldEditPersonComponent, async component => {
-      if (personModalConfig) {
-        component.group = personModalConfig.group;
-      }
-      await component.initialize(person);
-      const isNewObject = (): boolean => {
-        return !this._appHelper.isNewObject(component.data);
-      };
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        })
-      ];
-
-      if (personModalConfig) {
-        modal.componentInstance.splitButtonItems.push(...[
-          {
-            nameKey: 'transfer',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.TRANSFER, personModalConfig.group, [component.data], personModalConfig)) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          },
-          {
-            nameKey: 'deduct',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL, personModalConfig.group, [component.data])) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          },
-          {
-            nameKey: 'deductFromSubgroup',
-            callback: async () => {
-              if (await this.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, personModalConfig.group, [component.data], personModalConfig)) {
-                modal.close();
-              }
-            },
-            visible: isNewObject
-          }
-        ]);
-      }
-    }, config);
-    return await this._ngxModalService.awaitModalResult(modal);
   }
 
   public async showEditGroupNewsModal<T extends GroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
@@ -552,6 +501,7 @@ export class TemplateModalService {
 export class PersonTransitionModalConfig {
   subgroupGroup?: SubgroupGroup;
   subgroupTemplateGroupVersion?: SubgroupTemplateGroupVersion;
+  subgroupPerson?: SubgroupPerson[];
 }
 
 export class PersonModalConfig extends PersonTransitionModalConfig {

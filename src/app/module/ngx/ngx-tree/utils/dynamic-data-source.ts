@@ -2,7 +2,7 @@ import {FlatNode} from '../model/flat-node';
 import {TreeDataSource} from './tree-data-source';
 import {CollectionViewer, SelectionChange} from '@angular/cdk/collections';
 import {merge, Observable} from 'rxjs';
-import {map, takeWhile} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 export class DynamicDataSource<T extends FlatNode> extends TreeDataSource<T> {
 
@@ -34,31 +34,30 @@ export class DynamicDataSource<T extends FlatNode> extends TreeDataSource<T> {
 
       const getChildrenObservable = this.getChildren(node) as Observable<T[]>;
       if (getChildrenObservable) {
-        getChildrenObservable.pipe(takeWhile(() => this._notDestroyed))
-          .subscribe((children: T[]) => {
-            let nextNodeLevel = 0;
-            let index = -1;
-            if (node) {
-              nextNodeLevel = node.level + 1;
+        getChildrenObservable.subscribe((children: T[]) => {
+          let nextNodeLevel = 0;
+          let index = -1;
+          if (node) {
+            nextNodeLevel = node.level + 1;
 
-              index = this.data.indexOf(node);
-              if (!children || !children.length || index < 0) {
-                this.treeControl.collapse(node);
-                return;
-              }
+            index = this.data.indexOf(node);
+            if (!children || !children.length || index < 0) {
+              this.treeControl.collapse(node);
+              return;
             }
+          }
 
-            const nodes = children.map((x) => {
-              x.level = nextNodeLevel;
-              return x;
-            });
-            this.data.splice(index + 1, 0, ...nodes);
-            this.data = this.data;
-          }, (error) => {
-            stopLoading();
-          }, () => {
-            stopLoading();
+          const nodes = children.map((x) => {
+            x.level = nextNodeLevel;
+            return x;
           });
+          this.data.splice(index + 1, 0, ...nodes);
+          this.data = this.data;
+        }, () => {
+          stopLoading();
+        }, () => {
+          stopLoading();
+        });
       }
     } else {
       this.collapse(node);

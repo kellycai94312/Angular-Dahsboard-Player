@@ -16,6 +16,7 @@ import {EditGroupNewsModule} from '../../module/group/edit/edit-group-news/edit-
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxInputModule} from '../../module/ngx/ngx-input/ngx-input.module';
 import {NgxDateModule} from '../../module/ngx/ngx-date/ngx-date.module';
+import {NgxSelectModule} from '../../module/ngx/ngx-select/ngx-select.module';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import {NgxDateModule} from '../../module/ngx/ngx-date/ngx-date.module';
     // TODO: Remove this import
     EditGroupNewsModule,
     NgxInputModule,
-    NgxDateModule
+    NgxDateModule,
+    NgxSelectModule
   ],
   declarations: [
     GroupTransitionComponent,

@@ -128,7 +128,6 @@
   "ageGroup": "Age group",
   "country": "Country",
   "region": "Region",
-  "city": "City",
   "join": "Join",
   "cancelJoin": "Cancel join",
   "leave": "Leave",
@@ -170,7 +169,6 @@
   "showMore": "Show more",
   "from": "From",
   "to": "To",
-  "location": "Location",
   "public": "Public",
   "moreInfo": "More info",
   "description": "Description",
@@ -358,6 +356,7 @@
   "stage": "Stage",
   "duration": "Duration",
   "medicalExaminations": "Medical examinations",
+  "medicalExamination": "Medical examination",
   "passDate": "Pass date",
   "recommendations": "Recommendations",
   "dictionaries": "Dictionaries",
@@ -510,6 +509,7 @@
     "ENROLL": "Enroll",
     "TRANSFER": "Transfer",
     "EXPEL": "Expel",
+    "ENROLL_IN_SUBGROUP": "Enroll in subgroup",
     "EXPEL_FROM_SUBGROUP": "Expel from subgroup"
   },
   "firstName": "First name",
@@ -743,5 +743,50 @@
   "series": "Series",
   "documentDataIsIncorrect": "Document data is incorrect",
   "byName": "By name",
-  "notSelected": "Not selected"
+  "notSelected": "Not selected",
+  "contract": "Contract",
+  "groupContractTypeEnum": {
+    "SERVICE": "Service"
+  },
+  "groupContractType": "Service type",
+  "validSince": "Valid since",
+  "validUntil": "Valid until",
+  "recipientData": "Recipient data",
+  "customerData": "Customer data",
+  "groupContractService": {
+    "workPlace": "Educational institution / place of work",
+    "course": "Class / course",
+    "paidService": "Paid",
+    "pricePerMonth": "Cost per month",
+    "classesPerMonth": "Classes number",
+    "classesPerWeek": "Classes number per week",
+    "classDuration": "Classes duration",
+    "registrationAddress": "Registration address",
+    "section": "Section",
+    "head": "Head"
+  },
+  "personRepresentative": "Person representative",
+  "groupDetails": "Group details",
+  "location": "Location",
+  "postIndex": "Post index",
+  "city": "City",
+  "street": "Street",
+  "house": "House",
+  "addressBlock": "Block",
+  "liter": "Liter",
+  "kpp": "KPP",
+  "oktmo": "OKTMO",
+  "recipient": "Recipient",
+  "bankFacility": "Bank facility",
+  "bik": "BIK",
+  "kbk": "KBK",
+  "editGroupDetails": {
+    "account": "Account"
+  },
+  "subgroupPersonTypeEnum": {
+    "PARTICIPANT": "Participant",
+    "LEAD": "Lead",
+    "SECONDARY": "Secondary"
+  },
+  "subgroupPersonType": "Subgroup person type"
 }

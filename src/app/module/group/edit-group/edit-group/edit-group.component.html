@@ -10,4 +10,6 @@
     <ngx-select [data]="stageNgxSelect"></ngx-select>
     <new-ngx-input [data]="stageYearNgxInput"></new-ngx-input>
   </ng-container>
+  <app-edit-group-details *ngIf="data.id"
+                          [group]="data"></app-edit-group-details>
 </div>

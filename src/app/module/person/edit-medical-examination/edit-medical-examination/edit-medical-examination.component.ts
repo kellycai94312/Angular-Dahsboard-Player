@@ -10,6 +10,7 @@ import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
+import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
 
 @Component({
   selector: 'app-edit-medical-examination',
@@ -29,7 +30,8 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
   public readonly finishDateNgxDate = new NgxDate();
   public readonly formGroup = new FormGroup({});
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  constructor(private _personApiService: PersonApiService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
 
     this.document.clazz = FileClass.MEDICAL_EXAMINATION;
@@ -86,18 +88,10 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
     this.data.finishDate = this.appHelper.getGmtDate(this.finishDateNgxDate.control.value);
 
     return await this.appHelper.trySave(async () => {
-      if (this.changeWatcher.hasChanges()) {
-        if (this.appHelper.isNewObject(this.data)) {
-          this.appHelper.updateObject(this.data, await this.participantRestApiService.createMedicalExamination(this.data, {}, {personId: this.person.id}));
-        } else {
-          this.appHelper.updateObject(this.data, await this.participantRestApiService.updateMedicalExamination(this.data, {}, {
-            personId: this.person.id,
-            medicalExaminationId: this.data.id
-          }));
-        }
-        this.document.number = this.data.number;
-        this.document.date = this.data.startDate;
-      }
+      this.data = await this._personApiService.saveMedicalExamination(this.person, this.data).toPromise();
+
+      this.document.number = this.data.number;
+      this.document.date = this.data.startDate;
 
       if (this.attachFileComponent.hasChanges()) {
         this.document.objectId = this.data.id;
@@ -108,10 +102,7 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
 
   async onRemove(): Promise<boolean> {
     return this.appHelper.isNewObject(this.data) || await this.appHelper.tryRemove(async () => {
-      this.data = await this.participantRestApiService.removeMedicalExamination({
-        personId: this.person.id,
-        medicalExaminationId: this.data.id
-      });
+      this.data = await this._personApiService.removeMedicalExamination(this.person, this.data).toPromise();
     });
   }
 

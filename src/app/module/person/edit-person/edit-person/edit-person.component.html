@@ -23,20 +23,37 @@
                    [data]="contactPhoneNumberNgxInput"></new-ngx-input>
   </div>
   <div>
-    <label class="label">{{'identityDocument' | translate}}</label>
+    <label class="label">{{'personalDataProcessingContract' | translate}}</label>
     <mat-divider></mat-divider>
   </div>
   <div fxLayout
        fxLayoutGap="10px">
-    <ngx-select class="document-field"
-                [data]="documentTypeNgxSelect"></ngx-select>
     <new-ngx-input class="document-field"
-                   [data]="documentSeriesNgxInput"></new-ngx-input>
-    <new-ngx-input class="document-field"
-                   [data]="documentNumberNgxInput"></new-ngx-input>
-    <ngx-date [data]="documentDateNgxInput"></ngx-date>
-    <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
+                   [data]="personalDataProcessingNumberNgxInput"></new-ngx-input>
+    <ngx-date class="document-field"
+              [data]="personalDataProcessingDateNgxDate"></ngx-date>
   </div>
+  <ng-container *ngIf="birthDateNgxDate.control.value">
+    <div>
+      <label class="label">{{'identityDocument' | translate}}</label>
+      <mat-divider></mat-divider>
+    </div>
+    <div fxLayout
+         fxLayoutGap="10px">
+      <ngx-select [data]="documentTypeNgxSelect"></ngx-select>
+      <new-ngx-input class="document-field"
+                     [data]="documentSeriesNgxInput"></new-ngx-input>
+      <new-ngx-input class="document-field"
+                     [data]="documentNumberNgxInput"></new-ngx-input>
+      <ngx-date [data]="documentDateNgxInput"></ngx-date>
+      <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
+    </div>
+  </ng-container>
+  <app-medical-examination-list *ngIf="person?.id"
+                                [person]="person"></app-medical-examination-list>
+  <app-person-representative-list *ngIf="person?.id"
+                                  [group]="group"
+                                  [person]="person"></app-person-representative-list>
   <ng-container *ngIf="group">
     <div fxLayout
          fxLayoutAlign="space-between center"
@@ -57,5 +74,7 @@
         </mat-chip>
       </mat-chip-list>
     </div>
+    <app-group-contract-list *ngIf="groupPerson"
+                             [groupPerson]="groupPerson"></app-group-contract-list>
   </ng-container>
 </div>

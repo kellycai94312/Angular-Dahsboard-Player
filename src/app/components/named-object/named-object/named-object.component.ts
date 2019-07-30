@@ -1,6 +1,5 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {NamedObject} from '../../../data/remote/base/named-object';
-import {DxTextBoxComponent} from 'devextreme-angular';
 import {NgxInput} from '../../../module/ngx/ngx-input/model/ngx-input';
 import {FormGroup, Validators} from '@angular/forms';
 import {takeWhile} from 'rxjs/operators';
@@ -12,9 +11,6 @@ import {NgxInputType} from '../../../module/ngx/ngx-input/model/ngx-input-type';
   styleUrls: ['./named-object.component.scss']
 })
 export class NamedObjectComponent<T extends NamedObject> implements OnInit, OnDestroy {
-
-  @ViewChild('name')
-  public name: DxTextBoxComponent;
 
   @Input()
   public data: T;

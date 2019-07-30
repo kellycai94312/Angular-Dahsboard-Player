@@ -7,6 +7,7 @@ import {SubgroupPersonQuery} from '../../../../data/remote/rest-api/query/subgro
 import {SubgroupPersonTypeEnum} from '../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {SubgroupPerson} from '../../../../data/remote/model/group/subgroup/person/subgroup-person';
+import {SubgroupGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
 
 @Component({
   selector: 'app-edit-subgroup-group',
@@ -21,7 +22,8 @@ export class EditSubgroupGroupComponent extends BaseEditComponent<SubgroupGroup>
   private _lastLeadSubgroupPerson: SubgroupPerson;
   private _lastSecondarySubgroupPerson: SubgroupPerson;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  constructor(private _subgroupGroupApiService: SubgroupGroupApiService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
 
@@ -79,21 +81,18 @@ export class EditSubgroupGroupComponent extends BaseEditComponent<SubgroupGroup>
   };
 
   private async getSubgroupPersons(query: SubgroupPersonQuery): Promise<PageContainer<SubgroupPerson>> {
-    return await this.participantRestApiService.getSubgroupPersons({}, query, {subgroupGroupId: this.data.id});
+    return await this._subgroupGroupApiService.getSubgroupPersons(this.data, query).toPromise();
   }
 
   private async saveSubgroupPerson(subgroupPerson: SubgroupPerson, type: SubgroupPersonTypeEnum): Promise<SubgroupPerson> {
-    return (await this.participantRestApiService.createSubgroupPersons({
+    return (await this._subgroupGroupApiService.createSubgroupPersons(this.data, {
       subgroupPersonTypeEnum: type,
       personIds: [subgroupPerson.person.id]
-    }, {}, {subgroupGroupId: this.data.id}))[0];
+    }).toPromise())[0];
   }
 
   private async removeSubgroupPerson(subgroupPerson: SubgroupPerson, type: SubgroupPersonTypeEnum): Promise<SubgroupPerson> {
-    return (await this.participantRestApiService.removeSubgroupPersons({
-      subgroupPersonTypeEnum: type,
-      personIds: [subgroupPerson.person.id]
-    }, {}, {subgroupGroupId: subgroupPerson.subgroupGroup.id}))[0];
+    return (await this._subgroupGroupApiService.removeSubgroupPersons(subgroupPerson.subgroupGroup, [subgroupPerson]).toPromise())[0];
   }
 
   private async updateSubgroupPerson(subgroupPerson: SubgroupPerson, lastSubgroupPerson: SubgroupPerson, type: SubgroupPersonTypeEnum) {

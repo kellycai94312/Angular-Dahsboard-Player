@@ -16,6 +16,7 @@ import {from, Observable} from 'rxjs';
 import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-node';
 import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
 import {RootSubgroup} from '../model/root-subgroup';
+import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -34,6 +35,7 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
 
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
+              private _groupApiService: GroupApiService,
               private _groupService: GroupService,
               private _subgroupService: SubgroupService,
               private _translateObjectService: TranslateObjectService,
@@ -86,7 +88,7 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
           .pipe(map(val => val.map(x => new FlatNode(x, nextLevel, true))));
       }
     } else {
-      return from(this._participantRestApiService.getSubgroupTemplates({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
+      return this._groupApiService.getSubgroupTemplates(this.group, {count: PropertyConstant.pageSizeMax})
         .pipe(
           map(val => val.list),
           flatMap(async subgroupTemplates => {

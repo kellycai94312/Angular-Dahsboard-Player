@@ -5,7 +5,6 @@ import {NgxGridModule} from '../../../../../components/ngx-grid/ngx-grid.module'
 import {NgxSplitButtonModule} from '../../../../../components/ngx-split-button/ngx-split-button.module';
 import {GroupMembersPageComponent} from './group-members-page/group-members-page.component';
 import {GroupMembersPageRoutingModule} from './group-members-page-routing.module';
-import {OldEditPersonModule} from '../../../../../module/person/old-edit-person/old-edit-person.module';
 
 @NgModule({
   imports: [
@@ -13,8 +12,7 @@ import {OldEditPersonModule} from '../../../../../module/person/old-edit-person/
     GroupMembersPageRoutingModule,
     TranslateModule.forChild(),
     NgxGridModule,
-    NgxSplitButtonModule,
-    OldEditPersonModule
+    NgxSplitButtonModule
   ],
   declarations: [GroupMembersPageComponent]
 })

@@ -59,7 +59,7 @@ hr {
   @extend .input-height;
 }
 
-.btn, .dx-button {
+.btn {
   @extend .input-height;
   text-transform: uppercase;
 }
@@ -78,11 +78,6 @@ hr {
 
 .max-height-content {
   max-height: $max-height-content;
-}
-
-.dx-toast-content {
-  min-width: 100px;
-  max-width: $max-width-content;
 }
 
 .form-control {

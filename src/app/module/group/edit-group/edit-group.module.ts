@@ -5,6 +5,7 @@ import {TranslateModule} from '@ngx-translate/core';
 import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
 import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {EditGroupDetailsModule} from '../edit/edit-group-details/edit-group-details.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     FlexLayoutModule,
     TranslateModule.forChild(),
     NgxInputModule,
-    NgxSelectModule
+    NgxSelectModule,
+    EditGroupDetailsModule
   ],
   declarations: [EditGroupComponent],
   entryComponents: [EditGroupComponent],

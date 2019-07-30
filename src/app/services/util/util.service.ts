@@ -41,4 +41,15 @@ export class UtilService {
     return Math.abs(new Date(diff).getUTCFullYear() - 1970);
   }
 
+  public getHttpQueryFromObject(obj: object): string {
+    const items = [];
+    for (const item of Object.keys(obj)) {
+      const value = obj[item];
+      if (value) {
+        items.push(`${item}=${value}`);
+      }
+    }
+    return items.join('&');
+  }
+
 }

@@ -1,7 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgxTreeComponent} from './ngx-tree/ngx-tree.component';
-import {MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressBarModule, MatTreeModule} from '@angular/material';
+import {MatButtonModule, MatCheckboxModule, MatIconModule, MatTreeModule} from '@angular/material';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {NgxBusyModule} from '../../../directives/ngx-busy/ngx-busy.module';
 
 @NgModule({
   declarations: [NgxTreeComponent],
@@ -12,7 +14,8 @@ import {MatButtonModule, MatCheckboxModule, MatIconModule, MatProgressBarModule,
     MatButtonModule,
     MatIconModule,
     MatCheckboxModule,
-    MatProgressBarModule
+    FlexLayoutModule,
+    NgxBusyModule
   ]
 })
 export class NgxTreeModule {

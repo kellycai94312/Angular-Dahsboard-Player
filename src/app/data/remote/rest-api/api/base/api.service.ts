@@ -89,9 +89,14 @@ export class ApiService {
     return this.createValue(classObj, url, value) as Observable<T>;
   }
 
-  public removeValue<T>(classObj: Type<T>, url: string): Observable<T> {
-    return this.delete(url).pipe(
-      map(x => plainToClass(classObj, x) as any)
+  public removeValue<T extends object>(classObj: Type<T>, url: string, query?: object, body?: object): Observable<T | T[]> {
+    const options = this._utilService.clone(this._restApiOptions);
+    (options as any).params = this.getHttpParamsFromObject(query);
+    if (body) {
+      (options as any).body = this._utilService.clone(body);
+    }
+    return this._httpClient.delete<T>(url, options).pipe(
+      map(x => plainToClass(classObj, x) as T)
     );
   }
 
