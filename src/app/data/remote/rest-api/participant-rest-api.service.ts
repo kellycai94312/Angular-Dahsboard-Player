@@ -86,16 +86,12 @@ import {GroupPersonPositionQuery} from './query/group-person-position-query';
 import {SubgroupTemplate} from '../model/group/subgroup/template/subgroup-template';
 import {SubgroupBookmark} from '../model/group/subgroup/subgroup-bookmark';
 import {SubgroupBookmarkQuery} from './query/subgroup-bookmark-query';
-import {SubgroupPerson} from '../model/group/subgroup/person/subgroup-person';
-import {SubgroupPersonRequest} from '../request/subgroup-person-request';
 import {SubgroupTemplatePersonType} from '../model/group/subgroup/person/subgroup-template-person-type';
 import {SubgroupTemplateVersion} from '../model/group/subgroup/template/subgroup-template-version';
 import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
 import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
 import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
-import {SubgroupPersonListRequest} from '../request/subgroup-person-list-request';
-import {SubgroupPersonQuery} from './query/subgroup-person-query';
 import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
 import {plainToClass, plainToClassFromExist} from 'class-transformer';
 import {GroupCluster} from '../model/group/connection/group-cluster';
@@ -898,28 +894,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Subgroup
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/subgroupTemplate',
-    resultFactory: (item, options) => {
-      return plainToClassFromExist(new PageContainer<SubgroupTemplate>(SubgroupTemplate), item);
-    }
-  })
-  getSubgroupTemplates: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplate>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/subgroupTemplateGroup',
-    resultFactory: (item, options) => {
-      return plainToClassFromExist(new PageContainer<SubgroupTemplateGroup>(SubgroupTemplateGroup), item);
-    }
-  })
-  getSubgroupTemplateGroupsByGroup: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<SubgroupTemplateGroup>>;
-
-  //#endregion
-
   //#region Group cluster
 
   @RestAction({
@@ -1712,34 +1686,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region SubgroupGroup
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupGroup/{!subgroupGroupId}/person'
-  })
-  getSubgroupPersons: IRestMethodStrict<any, SubgroupPersonQuery, { subgroupGroupId: number }, PageContainer<SubgroupPerson>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/subgroupGroup/{!subgroupGroupId}/person'
-  })
-  createSubgroupPersons: IRestMethodStrict<SubgroupPersonListRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/subgroupGroup/{!subgroupGroupId}/person'
-  })
-  transferSubgroupPersons: IRestMethodStrict<SubgroupPersonRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/subgroupGroup/{!subgroupGroupId}/person'
-  })
-  removeSubgroupPersons: IRestMethodStrict<SubgroupPersonListRequest, any, { subgroupGroupId: number }, SubgroupPerson[]>;
-
-  //#endregion
-
   //#region SubgroupTemplate
 
   @RestAction({
@@ -2016,12 +1962,6 @@ export class ParticipantRestApiService extends Rest {
     }
   })
   getSubgroupTemplateGroupChildrenSubgroupGroups: IRestMethodStrict<{}, { subgroupGroupId?: number }, { subgroupTemplateGroupVersionId: number }, SubgroupGroup[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/subgroupTemplateGroupVersion/{!subgroupTemplateGroupVersionId}/unassignedSubgroupGroup'
-  })
-  getUnassignedSubgroupGroupsForPersons: IRestMethod<{ subgroupTemplateGroupVersionId: number, personIds: string }, SubgroupGroup[]>;
 
   @RestAction({
     method: RestRequestMethod.Post,

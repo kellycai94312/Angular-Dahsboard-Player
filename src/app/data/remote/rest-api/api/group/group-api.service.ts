@@ -16,6 +16,9 @@ import {GroupPerson} from '../../../model/group/group-person';
 import {PageContainer} from '../../../bean/page-container';
 import {GroupPersonQuery} from '../../query/group-person-query';
 import {HttpClient} from '@angular/common/http';
+import {SubgroupTemplate} from '../../../model/group/subgroup/template/subgroup-template';
+import {PageQuery} from '../../page-query';
+import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subgroup-template-group';
 
 @Injectable({
   providedIn: 'root'
@@ -76,7 +79,7 @@ export class GroupApiService {
 
   //#endregion
 
-  //#region representative
+  //#region Representative
 
   public createPersonRepresentative(value: IdRequest,
                                     group: Group,
@@ -88,6 +91,25 @@ export class GroupApiService {
                                     group: Group,
                                     person: Person): Observable<PersonRepresentative> {
     return this._apiService.removeValue(PersonRepresentative, `${this._basePath}/${group.id}/person/${person.id}/representative/${value.id}`) as Observable<PersonRepresentative>;
+  }
+
+  //#endregion
+
+
+  //#region SubgroupTemplate
+
+  public getSubgroupTemplates(group: Group,
+                              query?: PageQuery): Observable<PageContainer<SubgroupTemplate>> {
+    return this._apiService.getPageContainer(SubgroupTemplate, `${this._basePath}/${group.id}/subgroupTemplate`, query) as Observable<PageContainer<SubgroupTemplate>>;
+  }
+
+  //#endregion
+
+  //#region SubgroupTemplateGroup
+
+  public getSubgroupTemplateGroups(group: Group,
+                                   query?: PageQuery): Observable<PageContainer<SubgroupTemplateGroup>> {
+    return this._apiService.getPageContainer(SubgroupTemplateGroup, `${this._basePath}/${group.id}/subgroupTemplateGroup`, query) as Observable<PageContainer<SubgroupTemplateGroup>>;
   }
 
   //#endregion

@@ -1,62 +1,40 @@
-<ngx-grid [fetchItems]="fetchItems">
-  <ngx-column nameKey="firstName">
-    <ng-template let-item>
-      {{item.firstName}}
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="lastName">
-    <ng-template let-item>
-      {{item.lastName}}
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="patronymic">
-    <ng-template let-item>
-      {{item.patronymic}}
-    </ng-template>
-  </ngx-column>
-  <ngx-column nameKey="birthDate">
-    <ng-template let-item>
-      {{item.birthDate | date: propertyConstantClass.dateFormat}}
-    </ng-template>
-  </ngx-column>
-</ngx-grid>
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <ngx-grid *ngIf="persons.length"
+            [fetchItems]="fetchItems">
+    <ngx-column nameKey="firstName">
+      <ng-template let-item>
+        {{item.firstName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="lastName">
+      <ng-template let-item>
+        {{item.lastName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="patronymic">
+      <ng-template let-item>
+        {{item.patronymic}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="birthDate">
+      <ng-template let-item>
+        {{item.birthDate | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
 
-<div class="row cols-padding mt-2">
-  <div class="col">
+  <div fxLayout
+       fxLayoutGap="10px">
     <new-ngx-input [data]="documentNumberNgxInput"></new-ngx-input>
+    <ngx-date [data]="documentDateNgxDate"></ngx-date>
+    <ngx-select *ngIf="groupTransitionType !== groupTransitionTypeClass.EXPEL && groupTransitionType !== groupTransitionTypeClass.EXPEL_FROM_SUBGROUP"
+                [data]="subgroupPersonTypeNgxSelect"></ngx-select>
+    <ngx-select *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER"
+                [data]="subgroupTemplateGroupNgxSelect"></ngx-select>
+    <ngx-select *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER || groupTransitionType === groupTransitionTypeClass.ENROLL_IN_SUBGROUP"
+                [data]="subgroupGroupNgxSelect"></ngx-select>
   </div>
-  <div class="col">
-    <ngx-date [data]="dateNgxDate"></ngx-date>
-  </div>
-  <div *ngIf="groupTransitionType === groupTransitionTypeClass.TRANSFER"
-       class="col">
-    <div class="row cols-padding">
-      <div class="col">
-        <app-input-select class="w-auto"
-                          [(model)]="selectedSubgroupTemplateGroup"
-                          [loadData]="fetchSubgroupTemplateGroups"
-                          [getKey]="getSubgroupTemplateGroupKey"
-                          [getName]="getSubgroupTemplateGroupName"
-                          placeholder="{{'templates' | translate}}"
-                          ngDefaultControl
-                          [showClearButton]="false"
-                          (modelChange)="onSelectedSubgroupTemplateGroup($event)">
-        </app-input-select>
-      </div>
-      <div class="col">
-        <app-input-select class="w-100"
-                          [loadData]="fetchSubgroups"
-                          [(model)]="selectedSubgroupGroup"
-                          [getKey]="getKey"
-                          [getName]="getName"
-                          placeholder="{{'subgroup' | translate}}"
-                          [disabled]="!subgroupTemplateGroupVersion"
-                          [showClearButton]="false"
-                          ngDefaultControl>
-        </app-input-select>
-      </div>
-    </div>
-  </div>
+
+  <app-attach-file [(baseFile)]="document"></app-attach-file>
 </div>
-<app-attach-file class="mt-2"
-                 [(baseFile)]="document"></app-attach-file>

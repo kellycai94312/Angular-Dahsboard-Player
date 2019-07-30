@@ -509,6 +509,7 @@
     "ENROLL": "Enroll",
     "TRANSFER": "Transfer",
     "EXPEL": "Expel",
+    "ENROLL_IN_SUBGROUP": "Enroll in subgroup",
     "EXPEL_FROM_SUBGROUP": "Expel from subgroup"
   },
   "firstName": "First name",
@@ -781,5 +782,11 @@
   "kbk": "KBK",
   "editGroupDetails": {
     "account": "Account"
-  }
+  },
+  "subgroupPersonTypeEnum": {
+    "PARTICIPANT": "Participant",
+    "LEAD": "Lead",
+    "SECONDARY": "Secondary"
+  },
+  "subgroupPersonType": "Subgroup person type"
 }

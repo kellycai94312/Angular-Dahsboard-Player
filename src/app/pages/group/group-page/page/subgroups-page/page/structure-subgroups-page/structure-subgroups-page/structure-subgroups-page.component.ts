@@ -34,6 +34,8 @@ import {RootSubgroupGroup} from '../model/root-subgroup-group';
 import {EventUtilService} from '../../../../../../../../services/event-util/event-util.service';
 import {EventType} from '../../../../../../../../data/remote/model/event/base/event-type';
 import {EventData} from '../../../../../../../../module/event/edit-base-event/model/event-data';
+import {SubgroupGroupApiService} from '../../../../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -70,6 +72,8 @@ export class StructureSubgroupsPageComponent implements OnInit {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
+              private _groupApiService: GroupApiService,
+              private _subgroupGroupApiService: SubgroupGroupApiService,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupModalService: SubgroupModalService,
@@ -172,7 +176,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
 
         const subgroupPersonQuery = query as SubgroupPersonQuery;
         subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
-        const pageContainer = await this._participantRestApiService.getSubgroupPersons({}, subgroupPersonQuery, {subgroupGroupId: config.subgroupGroup.id});
+        const pageContainer = await this._subgroupGroupApiService.getSubgroupPersons(config.subgroupGroup, subgroupPersonQuery).toPromise();
 
         return await this._appHelper.pageContainerConverter(pageContainer, obj => {
           return new ObjectWrapper(obj, obj.person);
@@ -220,6 +224,12 @@ export class StructureSubgroupsPageComponent implements OnInit {
           }
         },
         {
+          nameKey: 'groupTransitionTypeEnum.ENROLL_IN_SUBGROUP',
+          callback: async () => {
+            await this._templateModalService.showGroupPersonTransitionModal(PersonTransitionType.ENROLL_IN_SUBGROUP, config.group, persons, config);
+          }
+        },
+        {
           nameKey: 'deductFromSubgroup',
           callback: async () => {
             await this._templateModalService.showGroupPersonTransitionModal(PersonTransitionType.EXPEL_FROM_SUBGROUP, config.group, persons, config);
@@ -235,7 +245,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
     if (node) {
       const nextLevel = (node.level || 0) + 1;
       if (node.data instanceof Group) {
-        return from(this._participantRestApiService.getSubgroupTemplateGroupsByGroup({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id}))
+        return this._groupApiService.getSubgroupTemplateGroups(this.group, {count: PropertyConstant.pageSizeMax})
           .pipe(
             map(val => val.list),
             flatMap(async subgroupTemplateGroups => {
@@ -338,11 +348,11 @@ export class StructureSubgroupsPageComponent implements OnInit {
       subgroupGroup = this.selectedNode.data;
       subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
     }
-    return {group: this.group, subgroupGroup, subgroupTemplateGroupVersion};
+    return {group: this.group, subgroupGroup, subgroupTemplateGroupVersion, subgroupPerson: this.selectedItems.map(x => x.original)};
   }
 
   private async getSubgroupPersons(query: SubgroupPersonQuery, subgroupGroup: SubgroupGroup): Promise<PageContainer<SubgroupPerson>> {
-    return await this._participantRestApiService.getSubgroupPersons({}, query, {subgroupGroupId: subgroupGroup.id});
+    return await this._subgroupGroupApiService.getSubgroupPersons(subgroupGroup, query).toPromise();
   }
 
 }

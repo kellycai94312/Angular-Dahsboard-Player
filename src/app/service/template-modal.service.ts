@@ -42,6 +42,7 @@ import {Image} from '../data/remote/model/file/image/image';
 import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit-person.component';
 import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
 import {GroupApiService} from '../data/remote/rest-api/api/group/group-api.service';
+import {SubgroupPerson} from '../data/remote/model/group/subgroup/person/subgroup-person';
 
 @Injectable({
   providedIn: 'root'
@@ -227,12 +228,7 @@ export class TemplateModalService {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = `groupTransitionTypeEnum.${groupTransitionType}`;
     await modal.componentInstance.initializeBody(GroupTransitionComponent, async component => {
-      if (personTransitionModalConfig) {
-        component.fromSubgroupGroup = personTransitionModalConfig.subgroupGroup;
-        component.subgroupTemplateGroupVersion = personTransitionModalConfig.subgroupTemplateGroupVersion;
-      }
-
-      await component.initialize(groupTransitionType, currentGroup, persons);
+      await component.initialize(groupTransitionType, currentGroup, persons, personTransitionModalConfig);
       modal.componentInstance.splitButtonItems = [
         {
           nameKey: 'apply',
@@ -505,6 +501,7 @@ export class TemplateModalService {
 export class PersonTransitionModalConfig {
   subgroupGroup?: SubgroupGroup;
   subgroupTemplateGroupVersion?: SubgroupTemplateGroupVersion;
+  subgroupPerson?: SubgroupPerson[];
 }
 
 export class PersonModalConfig extends PersonTransitionModalConfig {

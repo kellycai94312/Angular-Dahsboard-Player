@@ -509,6 +509,7 @@
     "ENROLL": "Зачислить",
     "TRANSFER": "Перевести",
     "EXPEL": "Отчислить",
+    "ENROLL_IN_SUBGROUP": "Зачислить в подгруппу",
     "EXPEL_FROM_SUBGROUP": "Удалить из подгруппы"
   },
   "firstName": "Имя",
@@ -782,5 +783,11 @@
   "kbk": "БКБ",
   "editGroupDetails": {
     "account": "Счет получателя"
-  }
+  },
+  "subgroupPersonTypeEnum": {
+    "PARTICIPANT": "Участник",
+    "LEAD": "Руководитель",
+    "SECONDARY": "Заместитель руководителя"
+  },
+  "subgroupPersonType": "Тип пользователя в подгруппе"
 }
