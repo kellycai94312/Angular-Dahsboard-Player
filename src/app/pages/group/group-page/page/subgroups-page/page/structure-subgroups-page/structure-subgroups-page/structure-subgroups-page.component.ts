@@ -92,9 +92,9 @@ export class StructureSubgroupsPageComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this._rootSubgroupName = await this._translateObjectService.getTranslation('rootSubgroup');
 
-    this.getChildren(null).subscribe(async (value) => {
-      await this.onSelectedNodeChange(value[0]);
-    });
+    const node = this.subgroupsTreesComponent.dataSource.data[0];
+    await this.onSelectedNodeChange(node);
+    this.subgroupsTreesComponent.dataSource.treeControl.expand(node);
   }
 
   public onGetNodeContextMenuItem = async (node: FlatNode): Promise<ContextMenuItem[]> => {
