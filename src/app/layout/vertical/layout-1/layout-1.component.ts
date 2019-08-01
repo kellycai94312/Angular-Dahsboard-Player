@@ -1,10 +1,11 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {takeWhile} from 'rxjs/operators';
 
 import {FuseConfigService} from '@fuse/services/config.service';
 import {navigation} from 'app/navigation/navigation';
 import {ConversationWrapper} from '../../../data/local/conversation-wrapper';
+import {AuthorizationService} from '../../../shared/authorization.service';
+import {Person} from '../../../data/remote/model/person';
 
 @Component({
   selector: 'vertical-layout-1',
@@ -13,52 +14,35 @@ import {ConversationWrapper} from '../../../data/local/conversation-wrapper';
   encapsulation: ViewEncapsulation.None
 })
 export class VerticalLayout1Component implements OnInit, OnDestroy {
-  fuseConfig: any;
-  navigation: any;
+
+  public fuseConfig: any;
+  public navigation: any;
   public selectedConversation: ConversationWrapper;
   public sizeNgxContainer = '60px';
+  public person: Person;
+  private _notDestroyed = true;
 
-  // Private
-  private _unsubscribeAll: Subject<any>;
-
-  /**
-   * Constructor
-   *
-   * @param {FuseConfigService} _fuseConfigService
-   */
-  constructor(
-    private _fuseConfigService: FuseConfigService
-  ) {
-    // Set the defaults
+  constructor(private _fuseConfigService: FuseConfigService,
+              private _authorizationService: AuthorizationService) {
     this.navigation = navigation;
-
-    // Set the private defaults
-    this._unsubscribeAll = new Subject();
   }
 
-  // -----------------------------------------------------------------------------------------------------
-  // @ Lifecycle hooks
-  // -----------------------------------------------------------------------------------------------------
-
-  /**
-   * On init
-   */
-  ngOnInit(): void {
-    // Subscribe to config changes
+  public ngOnInit(): void {
     this._fuseConfigService.config
-      .pipe(takeUntil(this._unsubscribeAll))
+      .pipe(takeWhile(() => this._notDestroyed))
       .subscribe((config) => {
         this.fuseConfig = config;
       });
+
+    this._authorizationService.personSubject
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(value => {
+        this.person = value;
+      });
   }
 
-  /**
-   * On destroy
-   */
-  ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
+  public ngOnDestroy(): void {
+    delete this._notDestroyed;
   }
 
   public onSelectConversation(val: ConversationWrapper) {

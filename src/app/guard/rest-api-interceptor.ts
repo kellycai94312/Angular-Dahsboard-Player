@@ -16,12 +16,17 @@ export class RestApiInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       map((event: HttpEvent<any>) => event),
       catchError(value => {
+        let canShowNotification = true;
         if (value instanceof HttpErrorResponse) {
           switch (value.status) {
             case 401:
               this._authorizationService.logOut();
               break;
+            case 403:
+              canShowNotification = !(value.error.path === '/auth');
+              break;
           }
+
           let message = value.message;
           if (value.error) {
             const errors: string[] = value.error.errors;
@@ -29,8 +34,9 @@ export class RestApiInterceptor implements HttpInterceptor {
               message = errors.join('\n');
             }
           }
-
-          this._appHelper.showErrorMessage(message);
+          if (canShowNotification) {
+            this._appHelper.showErrorMessage(message);
+          }
           return throwError(value);
         }
       })
