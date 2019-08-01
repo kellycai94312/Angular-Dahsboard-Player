@@ -14,6 +14,7 @@ import {PreviewNamedObjectComponent} from '../../../../components/named-object/p
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
 import {PositionEnum} from '../../../../data/remote/model/person-position/position-enum';
 import {map} from 'rxjs/operators';
+import {IdRequest} from '../../../../data/remote/request/id-request';
 
 @Component({
   selector: 'app-person-representative-list',
@@ -55,12 +56,13 @@ export class PersonRepresentativeListComponent {
       }, PreviewNamedObjectComponent, async (component, data: any) => {
         component.name = `${data.lastName} ${data.firstName}`;
       }, {
-        selected: (value, component) => {
-          return this._groupApiService.createPersonRepresentative(value.id, this.group, this.person).pipe(map(x => !!x));
+        selected: (value: Person, component) => {
+          return this._groupApiService.createPersonRepresentative(new IdRequest(value.id), this.group, this.person).pipe(map(x => !!x));
         },
-        deselected: (value, component) => {
-          return this._groupApiService.removePersonRepresentative(value.id, this.group, this.person).pipe(map(x => !!x));
-        }
+        deselected: (value: Person, component) => {
+          return this._groupApiService.removePersonRepresentative(value, this.group, this.person).pipe(map(x => !!x));
+        },
+        actions: () => []
       }
     );
     await this.ngxGridComponent.reset();

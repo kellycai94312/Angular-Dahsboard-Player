@@ -1,6 +1,11 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {NgxInput} from '../../../../ngx/ngx-input/model/ngx-input';
 import {Group} from '../../../../../data/remote/model/group/base/group';
+import {NgxSelect} from '../../../../ngx/ngx-select/model/ngx-select';
+import {GroupApiService} from '../../../../../data/remote/rest-api/api/group/group-api.service';
+import {PositionLevelEnum} from '../../../../../data/remote/model/person-position/position-level-enum';
+import {PropertyConstant} from '../../../../../data/local/property-constant';
+import {Person} from '../../../../../data/remote/model/person';
 
 @Component({
   selector: 'app-edit-group-details',
@@ -13,6 +18,8 @@ export class EditGroupDetailsComponent implements OnInit {
   public group: Group;
 
   public fullNameNgxInput: NgxInput;
+  public shortNameNgxInput: NgxInput;
+  public headNgxSelect: NgxSelect;
   public postIndexNgxInput: NgxInput;
   public cityNgxInput: NgxInput;
   public streetNgxInput: NgxInput;
@@ -29,9 +36,26 @@ export class EditGroupDetailsComponent implements OnInit {
   public bikNgxInput: NgxInput;
   public kbkNgxInput: NgxInput;
 
-  public ngOnInit() {
+
+  constructor(private _groupApiService: GroupApiService) {
+  }
+
+  public async ngOnInit(): Promise<void> {
     const group = this.group;
     this.fullNameNgxInput = this._getNgxInput('fullName', group.fullName);
+    this.shortNameNgxInput = this._getNgxInput('shortName', group.shortName);
+
+    this.headNgxSelect = new NgxSelect();
+    this.headNgxSelect.labelTranslation = 'groupContractService.head';
+    this.headNgxSelect.hasNone = true;
+    this.headNgxSelect.display = (item: Person) => `${item.lastName} ${item.firstName}`;
+    this.headNgxSelect.compare = (first, second) => first.id == second.id;
+    this.headNgxSelect.items = (await this._groupApiService.getPersons(this.group, {
+      positionLevelEnum: PositionLevelEnum.HEAD,
+      count: PropertyConstant.pageSizeMax
+    }).toPromise()).list.map(x => x.person);
+    this.headNgxSelect.control.setValue(group.head);
+
     this.postIndexNgxInput = this._getNgxInput('postIndex', group.legalAddress.postIndex);
     this.cityNgxInput = this._getNgxInput('city', group.legalAddress.city);
     this.streetNgxInput = this._getNgxInput('street', group.legalAddress.street);
@@ -51,6 +75,8 @@ export class EditGroupDetailsComponent implements OnInit {
 
   public updateModel(): void {
     this.group.fullName = this.fullNameNgxInput.control.value;
+    this.group.shortName = this.shortNameNgxInput.control.value;
+    this.group.head = this.headNgxSelect.control.value;
     this.group.legalAddress.postIndex = this.postIndexNgxInput.control.value;
     this.group.legalAddress.city = this.cityNgxInput.control.value;
     this.group.legalAddress.street = this.streetNgxInput.control.value;
