@@ -19,16 +19,23 @@ import {HttpClient} from '@angular/common/http';
 import {SubgroupTemplate} from '../../../model/group/subgroup/template/subgroup-template';
 import {PageQuery} from '../../page-query';
 import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subgroup-template-group';
+import {GroupQuery} from '../../query/group-query';
+import {GroupNews} from '../../../model/group/news/group-news';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupApiService {
+
   private readonly _basePath = `${environment.restUrl}/group`;
 
   constructor(private _apiService: ApiService,
               private _httpClient: HttpClient,
               private _utilService: UtilService) {
+  }
+
+  public getGroups<T extends Group>(query?: GroupQuery): Observable<PageContainer<T>> {
+    return this._apiService.getPageContainer(Group, this._basePath, query) as Observable<PageContainer<T>>;
   }
 
   public getPersons<T extends GroupPerson>(group: Group,
@@ -110,6 +117,43 @@ export class GroupApiService {
   public getSubgroupTemplateGroups(group: Group,
                                    query?: PageQuery): Observable<PageContainer<SubgroupTemplateGroup>> {
     return this._apiService.getPageContainer(SubgroupTemplateGroup, `${this._basePath}/${group.id}/subgroupTemplateGroup`, query) as Observable<PageContainer<SubgroupTemplateGroup>>;
+  }
+
+  //#endregion
+
+  //#region Group news
+
+  public getGroupNews(group: Group,
+                      query?: PageQuery): Observable<PageContainer<GroupNews>> {
+    return this._apiService.getPageContainer(GroupNews, `${this._basePath}/${group.id}/news`, query) as Observable<PageContainer<GroupNews>>;
+  }
+
+  public getGroupNewsById(group: Group,
+                          groupNews: GroupNews): Observable<GroupNews> {
+    return this._apiService.getValue(GroupNews, `${this._basePath}/${group.id}/news/${groupNews.id}`) as Observable<GroupNews>;
+  }
+
+  public createGroupNews(group: Group,
+                         value: GroupNews): Observable<GroupNews> {
+    return this._apiService.createValue(GroupNews, `${this._basePath}/${group.id}/news`, value) as Observable<GroupNews>;
+  }
+
+  public updateGroupNews(group: Group,
+                         value: GroupNews): Observable<GroupNews> {
+    return this._apiService.updateValue(GroupNews, `${this._basePath}/${group.id}/news/${value.id}`, value) as Observable<GroupNews>;
+  }
+
+  public saveGroupNews(group: Group,
+                       value: GroupNews): Observable<GroupNews> {
+    if (value.id) {
+      return this.updateGroupNews(group, value);
+    }
+    return this.createGroupNews(group, value);
+  }
+
+  public removeGroupNews(group: Group,
+                         value: GroupNews): Observable<GroupNews> {
+    return this._apiService.removeValue(GroupNews, `${this._basePath}/${group.id}/news/${value.id}`) as Observable<GroupNews>;
   }
 
   //#endregion

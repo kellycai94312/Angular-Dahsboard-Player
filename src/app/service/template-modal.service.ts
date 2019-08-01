@@ -29,10 +29,8 @@ import {GroupClusterRank} from '../data/remote/model/group/connection/group-clus
 import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
 import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
 import {NgxCropImageComponent} from '../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
-import {EditGroupNewsComponent} from '../module/group/edit/edit-group-news/edit-group-news/edit-group-news.component';
 import {EventPoll} from '../data/remote/model/training/poll/event-poll';
 import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
-import {GroupNews} from '../data/remote/model/group/news/group-news';
 import {BaseEvent} from '../data/remote/model/event/base/base-event';
 import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
 import {EventData} from '../module/event/edit-base-event/model/event-data';
@@ -282,40 +280,6 @@ export class TemplateModalService {
       }
     }
     return true;
-  }
-
-  public async showEditGroupNewsModal<T extends GroupNews>(obj: T, group: Group): Promise<DialogResult<T>> {
-    const modal = this._ngxModalService.open();
-    this._modalBuilderService.updateTitleKeyModal(modal, obj);
-    let editGroupNewsComponent: EditGroupNewsComponent = null;
-    await modal.componentInstance.initializeBody(EditGroupNewsComponent, async component => {
-      editGroupNewsComponent = component;
-      component.group = group;
-      await component.initialize(this._appHelper.cloneObject(obj));
-      modal.componentInstance.splitButtonItems = [
-        // TODO:
-        // {
-        //   nameKey: 'addExistingEvent',
-        //   callback: async () => {
-        //     await this._ngxModalService.showSelectionEventModal(async selectedItems => {
-        //       if (selectedItems.length) {
-        //         component.data.training = selectedItems[0];
-        //       }
-        //     });
-        //   }
-        // },
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
-    });
-    if (await this._ngxModalService.awaitModalResult(modal)) {
-      return {result: true, data: editGroupNewsComponent.data as T};
-    }
-    return {result: false};
   }
 
   public async showEditGroupClusterModal<T extends GroupCluster>(obj: T): Promise<DialogResult<T>> {

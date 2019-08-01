@@ -1,20 +1,20 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {GroupNewsItemComponent} from './group-news-item.component';
+import {PersonNewsComponent} from './person-news.component';
 
-describe('GroupNewsItemComponent', () => {
-  let component: GroupNewsItemComponent;
-  let fixture: ComponentFixture<GroupNewsItemComponent>;
+describe('PersonNewsComponent', () => {
+  let component: PersonNewsComponent;
+  let fixture: ComponentFixture<PersonNewsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [GroupNewsItemComponent]
+      declarations: [PersonNewsComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GroupNewsItemComponent);
+    fixture = TestBed.createComponent(PersonNewsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

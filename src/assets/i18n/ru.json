@@ -789,5 +789,12 @@
     "LEAD": "Руководитель",
     "SECONDARY": "Заместитель руководителя"
   },
-  "subgroupPersonType": "Тип пользователя в подгруппе"
+  "subgroupPersonType": "Тип пользователя в подгруппе",
+  "groupNews": "Новости групп",
+  "personNews": "Личные новости",
+  "newsTypeEnum": {
+    "GROUP_NEWS": "Новости групп",
+    "PERSON_NEWS": "Личные новости"
+  },
+  "newsType": "Тип новости"
 }

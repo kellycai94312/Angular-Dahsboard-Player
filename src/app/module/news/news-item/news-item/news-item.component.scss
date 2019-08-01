@@ -1,9 +1,10 @@
 $margin-size: 10px;
-$padding-size: $margin-size;
+$padding-size: 10px;
 
 mat-card {
   padding: $padding-size;
   margin: calc(#{$margin-size} / 2);
-  width: inherit;
   overflow: auto;
+  height: calc(100% - #{$margin-size});
+  width: calc(100% - #{$margin-size});
 }
