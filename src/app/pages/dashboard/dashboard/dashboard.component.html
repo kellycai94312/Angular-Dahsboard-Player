@@ -22,25 +22,5 @@
     </div>
   </div>
 
-  <ngx-tabs [tabs]="tabs"
-            [withoutRouting]="true"
-            [(selectedTab)]="selectedTab"></ngx-tabs>
-
-  <div fxLayout="row"
-       fxLayoutAlign="center stretch">
-    <div fxLayout="column"
-         fxFlex="grow"
-         fxFlex.md="80"
-         fxFlex.gt-md="60"
-         fxLayoutAlign="start stretch">
-      <ngx-virtual-scroll [getItems]="fetchItems"
-                          [windowScroll]="true">
-        <ng-template let-item>
-          <div class="mt-2">
-            <app-group-news-item [data]="item"></app-group-news-item>
-          </div>
-        </ng-template>
-      </ngx-virtual-scroll>
-    </div>
-  </div>
+  <ngx-tabs [tabs]="tabs"></ngx-tabs>
 </div>

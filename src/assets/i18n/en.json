@@ -788,5 +788,12 @@
     "LEAD": "Lead",
     "SECONDARY": "Secondary"
   },
-  "subgroupPersonType": "Subgroup person type"
+  "subgroupPersonType": "Subgroup person type",
+  "groupNews": "Group news",
+  "personNews": "Person news",
+  "newsTypeEnum": {
+    "GROUP_NEWS": "Group news",
+    "PERSON_NEWS": "Person news"
+  },
+  "newsType": "News type"
 }

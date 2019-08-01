@@ -1,0 +1,10 @@
+<div *ngIf="data"
+     fxLayout="column">
+  <ng-container *ngIf="isNew && !data.group">
+    <ngx-select [data]="newsTypeNgxSelect"></ngx-select>
+    <ngx-select *ngIf="newsTypeNgxSelect.control?.value?.data === newsTypeClass.GROUP_NEWS"
+                [data]="groupNgxSelect"></ngx-select>
+  </ng-container>
+  <new-ngx-input [data]="titleNgxInput"></new-ngx-input>
+  <ngx-html-editor [(data)]="data.content"></ngx-html-editor>
+</div>

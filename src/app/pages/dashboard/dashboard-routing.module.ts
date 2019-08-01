@@ -1,8 +1,17 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DashboardPageComponent} from './dashboard-page/dashboard-page.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
 
-const routes: Routes = [{path: '', component: DashboardPageComponent}];
+const routes: Routes = [
+  {
+    path: '', component: DashboardComponent,
+    children: [
+      {path: '', redirectTo: 'group-news', pathMatch: 'full'},
+      {path: 'group-news', loadChildren: './group-news/group-news.module#GroupNewsModule'},
+      {path: 'person-news', loadChildren: './person-news/person-news.module#PersonNewsModule'}
+    ]
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

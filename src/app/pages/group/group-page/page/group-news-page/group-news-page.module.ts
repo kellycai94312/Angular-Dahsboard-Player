@@ -1,18 +1,14 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {NgxVirtualScrollModule} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
-import {GroupModule} from '../../../../../components/group/group.module';
 import {GroupNewsPageRoutingModule} from './group-news-page-routing.module';
 import {GroupNewsPageComponent} from './group-news-page/group-news-page.component';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import {NewsListModule} from '../../../../../module/news/news-list/news-list.module';
 
 @NgModule({
   imports: [
     CommonModule,
     GroupNewsPageRoutingModule,
-    NgxVirtualScrollModule,
-    GroupModule,
-    FlexLayoutModule
+    NewsListModule
   ],
   declarations: [GroupNewsPageComponent]
 })

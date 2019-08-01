@@ -107,7 +107,6 @@ import {PollQuestion} from '../model/training/poll/poll-question';
 import {PollPerson} from '../model/training/poll/poll-person';
 import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
 import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
-import {GroupNews} from '../model/group/news/group-news';
 import {Stage} from '../model/stage/stage';
 import {StageType} from '../model/stage/stage-type';
 
@@ -536,16 +535,6 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region News
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/news'
-  })
-  getPersonNewsItems: IRestMethod<PageQuery, PageContainer<GroupNews>>;
-
-  //#endregion
-
   //#endregion
 
   //#region Country
@@ -842,55 +831,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/transfer',
   })
   transferPersonsToGroup: IRestMethodStrict<GroupPersonsTransferRequest, any, { groupId: number }, GroupPersonTransition[]>;
-
-  //#endregion
-
-  //#region Group news
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/news',
-    resultFactory: (item, options) => {
-      return plainToClassFromExist(new PageContainer<GroupNews>(GroupNews), item);
-    }
-  })
-  getGroupNewsItems: IRestMethodStrict<any, PageQuery, { groupId: number }, PageContainer<GroupNews>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/news/{!groupNewsId}',
-    resultFactory: (item, options) => {
-      return plainToClass(GroupNews, item);
-    }
-  })
-  getGroupNews: IRestMethodStrict<any, PageQuery, { groupId: number, groupNewsId: number }, GroupNews>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/news',
-    resultFactory: (item, options) => {
-      return plainToClass(GroupNews, item);
-    }
-  })
-  createGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number }, GroupNews>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/news/{!groupNewsId}',
-    resultFactory: (item, options) => {
-      return plainToClass(GroupNews, item);
-    }
-  })
-  updateGroupNews: IRestMethodStrict<GroupNews, any, { groupId: number, groupNewsId: number }, GroupNews>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/group/{!groupId}/news/{!groupNewsId}',
-    resultFactory: (item, options) => {
-      return plainToClass(GroupNews, item);
-    }
-  })
-  removeGroupNews: IRestMethod<{ groupId: number, groupNewsId: number }, GroupNews>;
 
   //#endregion
 

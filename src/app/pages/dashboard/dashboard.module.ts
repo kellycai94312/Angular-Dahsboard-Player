@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {DashboardPageComponent} from './dashboard-page/dashboard-page.component';
+import {DashboardComponent} from './dashboard/dashboard.component';
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {GroupModule} from '../../components/group/group.module';
@@ -18,7 +18,7 @@ import {NgxTabsModule} from '../../module/ngx/ngx-tabs/ngx-tabs.module';
     FlexLayoutModule,
     GroupModule
   ],
-  declarations: [DashboardPageComponent]
+  declarations: [DashboardComponent]
 })
 export class DashboardModule {
 }

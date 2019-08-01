@@ -22,7 +22,6 @@ import {GroupPersonPosition} from '../../../../data/remote/model/group/position/
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
 import {map, takeWhile} from 'rxjs/operators';
-import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 import {IdRequest} from '../../../../data/remote/request/id-request';
 
 @Component({
@@ -56,18 +55,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
     this.tabs = [
       {
         translation: 'news',
-        link: 'news',
-        actions: [
-          {
-            iconName: 'add', action: async () => {
-              const dialogResult = await this._templateModalService.showEditGroupNewsModal(new GroupNews(), this.group);
-              if (dialogResult.result) {
-                this.groupService.updateData(dialogResult.data);
-              }
-            },
-            hidden$: this.canEditSubject.pipe(map(value => !value))
-          }
-        ]
+        link: 'news'
       },
       {
         translation: 'employees',

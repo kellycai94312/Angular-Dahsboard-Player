@@ -7,6 +7,8 @@ import {Person} from '../../../model/person';
 import {PersonQuery} from '../../query/person-query';
 import {PageQuery} from '../../page-query';
 import {MedicalExamination} from '../../../model/person/medical-examination';
+import {GroupNews} from '../../../model/group/news/group-news';
+import {PersonNews} from '../../../model/group/news/person-news';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +67,41 @@ export class PersonApiService {
   public removeMedicalExamination(person: Person,
                                   value: MedicalExamination): Observable<MedicalExamination> {
     return this._apiService.removeValue(MedicalExamination, `${this._basePath}/${person.id}/medicalExamination/${value.id}`) as Observable<MedicalExamination>;
+  }
+
+  //#endregion
+
+  //#region News
+
+  public getGroupNews(query?: PageQuery): Observable<PageContainer<GroupNews>> {
+    return this._apiService.getPageContainer(GroupNews, `${this._basePath}/news`, query) as Observable<PageContainer<GroupNews>>;
+  }
+
+  public getPersonNews(person: Person, query?: PageQuery): Observable<PageContainer<PersonNews>> {
+    return this._apiService.getPageContainer(PersonNews, `${this._basePath}/${person.id}/news`, query) as Observable<PageContainer<PersonNews>>;
+  }
+
+  public getPersonNewsById(person: Person, personNews: PersonNews): Observable<PersonNews> {
+    return this._apiService.getValue(PersonNews, `${this._basePath}/${person.id}/news/${personNews.id}`) as Observable<PersonNews>;
+  }
+
+  public createPersonNews(personNews: PersonNews): Observable<PersonNews> {
+    return this._apiService.createValue(PersonNews, `${this._basePath}/news`, personNews) as Observable<PersonNews>;
+  }
+
+  public updatePersonNews(personNews: PersonNews): Observable<PersonNews> {
+    return this._apiService.updateValue(PersonNews, `${this._basePath}/news/${personNews.id}`, personNews) as Observable<PersonNews>;
+  }
+
+  public savePersonNews(personNews: PersonNews): Observable<PersonNews> {
+    if (personNews.id) {
+      return this.updatePersonNews(personNews);
+    }
+    return this.createPersonNews(personNews);
+  }
+
+  public removePersonNews(personNews: PersonNews): Observable<PersonNews> {
+    return this._apiService.removeValue(PersonNews, `${this._basePath}/news/${personNews.id}`) as Observable<PersonNews>;
   }
 
   //#endregion
