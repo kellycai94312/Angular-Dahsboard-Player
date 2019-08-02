@@ -1,5 +1,6 @@
 export enum PositionLevelEnum {
   HEAD = 'HEAD',
   SPECIALIST = 'SPECIALIST',
-  STAFF = 'STAFF'
+  STAFF = 'STAFF',
+  SERVICE_RECIPIENT = 'SERVICE_RECIPIENT'
 }

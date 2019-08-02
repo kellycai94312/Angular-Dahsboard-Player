@@ -608,7 +608,8 @@
   "positionLevelEnum": {
     "HEAD": "Руководитель",
     "SPECIALIST": "Специалист",
-    "STAFF": "Персонал"
+    "STAFF": "Персонал",
+    "SERVICE_RECIPIENT": "Законный представитель"
   },
   "personPositionType": "Тип должности",
   "personPosition": "Должность",

@@ -607,7 +607,8 @@
   "positionLevelEnum": {
     "HEAD": "Head",
     "SPECIALIST": "Specialist",
-    "STAFF": "Tech staff"
+    "STAFF": "Tech staff",
+    "SERVICE_RECIPIENT": "Service recipient"
   },
   "personPositionType": "Position type",
   "personPosition": "Position",

@@ -9,6 +9,8 @@ import {PageQuery} from '../../page-query';
 import {MedicalExamination} from '../../../model/person/medical-examination';
 import {GroupNews} from '../../../model/group/news/group-news';
 import {PersonNews} from '../../../model/group/news/person-news';
+import {BaseContact} from '../../../model/contact/base/base-contact';
+import {ListRequest} from '../../../request/list-request';
 
 @Injectable({
   providedIn: 'root'
@@ -114,6 +116,18 @@ export class PersonApiService {
 
   public getPersonRepresentatives<T extends Person>(person: Person): Observable<T[]> {
     return this._apiService.getValues(Person, `${this._basePath}/${person.id}/representative`) as Observable<T[]>;
+  }
+
+  //#endregion
+
+  //#region Contact
+
+  public getContacts<T extends BaseContact>(person: Person): Observable<T[]> {
+    return this._apiService.getValues(BaseContact, `${this._basePath}/${person.id}/contact`) as Observable<T[]>;
+  }
+
+  public updateContacts<T extends BaseContact>(person: Person, contacts: T[]): Observable<T[]> {
+    return this._apiService.updateValue(BaseContact, `${this._basePath}/${person.id}/contact`, new ListRequest(contacts)) as Observable<T[]>;
   }
 
   //#endregion

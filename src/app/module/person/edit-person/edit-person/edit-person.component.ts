@@ -30,6 +30,9 @@ import {ListRequest} from '../../../../data/remote/request/list-request';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../../data/remote/model/user-role';
 import {filter, flatMap, map, takeWhile} from 'rxjs/operators';
+import {ContactPhone} from '../../../../data/remote/model/contact/contact-phone';
+import {ContactType} from '../../../../data/remote/model/contact/base/contact-type';
+import {ContactPrivacyEnum} from '../../../../data/remote/model/contact/base/contact-privacy-enum';
 
 @Component({
   selector: 'app-edit-person',
@@ -69,6 +72,7 @@ export class EditPersonComponent implements OnDestroy {
 
   private _personalDataProcessingDocument: Document;
   private _document: Document;
+  private _contactPhone = new ContactPhone();
   private _notDestroyed = true;
 
   constructor(private _translateObjectService: TranslateObjectService,
@@ -127,8 +131,13 @@ export class EditPersonComponent implements OnDestroy {
     this.emailForActivationNgxInput = this._getNgxInput('emailForActivation', person.user.email);
     this.emailForActivationNgxInput.control.setValidators(ValidationService.emailValidator);
 
-    // TODO: Set phone number
     this.contactPhoneNumberNgxInput = this._getNgxInput('contactPhoneNumber', '');
+
+    if (!this._appHelper.isNewObject(person)) {
+      this._contactPhone = (await this._personApiService.getContacts(person).toPromise()).find(x => x.discriminator === ContactType.PHONE) || new ContactPhone();
+      this.contactPhoneNumberNgxInput.control.setValue(this._contactPhone.value);
+    }
+    this._contactPhone.contactPrivacyEnum = this._contactPhone.contactPrivacyEnum || ContactPrivacyEnum.GROUP_MANAGEMENT;
 
     this.formGroup.setControl('firstName', this.firstNgxInput.control);
     this.formGroup.setControl('lastName', this.lastNgxInput.control);
@@ -239,6 +248,7 @@ export class EditPersonComponent implements OnDestroy {
     this._document.number = this.documentNumberNgxInput.control.value;
     this._document.date = this._appHelper.getGmtDate(this.documentDateNgxInput.control.value);
     this._document.issuedBy = this.documentIssuedByNgxInput.control.value;
+    this._contactPhone.value = this.contactPhoneNumberNgxInput.control.value;
 
     const addOrUpdateDocument = !!(this._document.id || this.documentSeriesNgxInput.control.value || this.documentNumberNgxInput.control.value || this.documentDateNgxInput.control.value || this.documentIssuedByNgxInput.control.value);
     const addOrUpdatePersonalDataProcessingDocument: boolean = this._personalDataProcessingDocument.id || this.personalDataProcessingNumberNgxInput.control.value || this.personalDataProcessingDateNgxDate.control.value;
@@ -308,14 +318,14 @@ export class EditPersonComponent implements OnDestroy {
             return from(dialog).pipe(flatMap(() => NEVER));
           }
         }),
-        flatMap(value => {
-          if (value) {
-            this.person = value;
+        flatMap(person => this._personApiService.updateContacts(person, [this._contactPhone]).pipe(map(() => person))),
+        flatMap(person => {
+          if (person) {
+            this.person = person;
 
-            // TODO: Save contacts
             let personalDataProcessingDocument$ = of(void 0);
             if (addOrUpdatePersonalDataProcessingDocument) {
-              this._personalDataProcessingDocument.objectId = value.id;
+              this._personalDataProcessingDocument.objectId = person.id;
               this._personalDataProcessingDocument.number = this.personalDataProcessingNumberNgxInput.control.value;
               this._personalDataProcessingDocument.date = this._appHelper.getGmtDate(this.personalDataProcessingDateNgxDate.control.value);
 
@@ -324,7 +334,7 @@ export class EditPersonComponent implements OnDestroy {
 
             let document$ = of(void 0);
             if (addOrUpdateDocument) {
-              this._document.objectId = value.id;
+              this._document.objectId = person.id;
               document$ = this._fileApiService.saveFile(this._document);
             }
             return merge(personalDataProcessingDocument$, document$);
