@@ -607,7 +607,8 @@
   "positionLevelEnum": {
     "HEAD": "Head",
     "SPECIALIST": "Specialist",
-    "STAFF": "Tech staff"
+    "STAFF": "Tech staff",
+    "SERVICE_RECIPIENT": "Service recipient"
   },
   "personPositionType": "Position type",
   "personPosition": "Position",
@@ -748,7 +749,7 @@
   "groupContractTypeEnum": {
     "SERVICE": "Service"
   },
-  "groupContractType": "Service type",
+  "groupContractType": "Contract type",
   "validSince": "Valid since",
   "validUntil": "Valid until",
   "recipientData": "Recipient data",
@@ -760,7 +761,7 @@
     "pricePerMonth": "Cost per month",
     "classesPerMonth": "Classes number",
     "classesPerWeek": "Classes number per week",
-    "classDuration": "Classes duration",
+    "classDuration": "Classes duration in minutes",
     "registrationAddress": "Registration address",
     "section": "Section",
     "head": "Head"

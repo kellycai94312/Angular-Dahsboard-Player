@@ -608,7 +608,8 @@
   "positionLevelEnum": {
     "HEAD": "Руководитель",
     "SPECIALIST": "Специалист",
-    "STAFF": "Персонал"
+    "STAFF": "Персонал",
+    "SERVICE_RECIPIENT": "Законный представитель"
   },
   "personPositionType": "Тип должности",
   "personPosition": "Должность",
@@ -749,10 +750,10 @@
   "groupContractTypeEnum": {
     "SERVICE": "Услуга"
   },
-  "groupContractType": "Тип услуги",
+  "groupContractType": "Тип договора",
   "validSince": "Действует с",
   "validUntil": "Действует до",
-  "recipientData": "Recipient data",
+  "recipientData": "Данные получателя",
   "customerData": "Данные заказчика",
   "groupContractService": {
     "workPlace": "Образовательное учреждение / место работы",
@@ -761,7 +762,7 @@
     "pricePerMonth": "Стоимость занятий в месяц",
     "classesPerMonth": "Количество занятий",
     "classesPerWeek": "Количество занятий в неделю",
-    "classDuration": "Продолжительность занятий",
+    "classDuration": "Продолжительность занятий в минутах",
     "registrationAddress": "Адрес регистрации",
     "section": "Секция",
     "head": "Руководитель"
@@ -780,7 +781,7 @@
   "recipient": "Получатель",
   "bankFacility": "Учреждение банка",
   "bik": "БИК",
-  "kbk": "БКБ",
+  "kbk": "КБК",
   "editGroupDetails": {
     "account": "Счет получателя"
   },

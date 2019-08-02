@@ -118,11 +118,12 @@
 </ngx-container>
 <!-- / SIDE PANEL -->
 
-<!-- QUICK PANEL -->
-<fuse-sidebar name="quickPanel" position="right" class="quick-panel">
+<fuse-sidebar *ngIf="person"
+  name="quickPanel"
+  position="right"
+  class="quick-panel">
   <quick-panel></quick-panel>
 </fuse-sidebar>
-<!-- / QUICK PANEL -->
 
 <!-- ----------------------------------------------------------------------------------------------------- -->
 <!-- @ PARTIALS

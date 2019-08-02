@@ -4,6 +4,7 @@ import {EditGroupDetailsComponent} from './edit-group-details/edit-group-details
 import {NgxInputModule} from '../../../ngx/ngx-input/ngx-input.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
+import {NgxSelectModule} from '../../../ngx/ngx-select/ngx-select.module';
 
 @NgModule({
   declarations: [EditGroupDetailsComponent],
@@ -13,7 +14,8 @@ import {TranslateModule} from '@ngx-translate/core';
     CommonModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
-    NgxInputModule
+    NgxInputModule,
+    NgxSelectModule
   ]
 })
 export class EditGroupDetailsModule {
