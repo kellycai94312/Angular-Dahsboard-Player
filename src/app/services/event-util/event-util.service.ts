@@ -13,7 +13,9 @@ import {Meeting} from '../../data/remote/model/event/meeting';
 import {Education} from '../../data/remote/model/event/education';
 import {TranslateService} from '@ngx-translate/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class EventUtilService {
 
   public readonly defaultDurationMs = 30 * 60 * 1000;

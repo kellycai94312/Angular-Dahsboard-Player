@@ -13,7 +13,8 @@ const routes: Routes = [
       {path: 'subgroup', loadChildren: './page/subgroups-page/subgroups-page.module#SubgroupsPageModule'},
       // {path: 'member', loadChildren: './page/group-members-page/group-members-page.module#GroupMembersPageModule'},
       {path: 'request', loadChildren: './page/group-person-requests-page/group-person-requests-page.module#GroupPersonRequestsPageModule'},
-      {path: 'structure', loadChildren: './page/group-structure/group-structure.module#GroupStructureModule'}
+      {path: 'structure', loadChildren: './page/group-structure/group-structure.module#GroupStructureModule'},
+      {path: 'schedule', loadChildren: './page/group-schedule/group-schedule.module#GroupScheduleModule'}
     ]
   }
 ];

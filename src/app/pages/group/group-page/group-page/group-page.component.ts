@@ -78,6 +78,10 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
       {
         translation: 'structure',
         link: 'structure'
+      },
+      {
+        translation: 'timetableOfClasses',
+        link: 'schedule'
       }
     ];
 

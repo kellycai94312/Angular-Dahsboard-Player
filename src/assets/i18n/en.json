@@ -797,5 +797,6 @@
     "PERSON_NEWS": "Person news"
   },
   "newsType": "News type",
-  "saveAndContinue": "Save and continue"
+  "saveAndContinue": "Save and continue",
+  "timetableOfClasses": "Timetable of classes"
 }
