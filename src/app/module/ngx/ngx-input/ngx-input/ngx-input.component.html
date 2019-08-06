@@ -17,11 +17,12 @@
               [rows]="data.rows"
               [formControl]="data.control"></textarea>
   </ng-template>
-  <button *ngIf="data.showClearButton && data.control.value"
+  <button *ngIf="data.ngxInputSuffix && (!data.ngxInputSuffix.visibleWhenHasValue || data.control.value)"
           matSuffix
           mat-icon-button
-          (click)="onClearValue()">
-    <mat-icon class="suffix-icon">close</mat-icon>
+          class="suffix"
+          (click)="data.ngxInputSuffix.action(data.ngxInputSuffix, $event)">
+    <mat-icon>{{data.ngxInputSuffix.iconName}}</mat-icon>
   </button>
   <mat-error *ngIf="data.control.invalid && data.getErrorMessage">{{data.getErrorMessage(data) | async}}</mat-error>
 </mat-form-field>

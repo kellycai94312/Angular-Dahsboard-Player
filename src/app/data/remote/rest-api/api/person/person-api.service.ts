@@ -21,6 +21,10 @@ export class PersonApiService {
   constructor(private _apiService: ApiService) {
   }
 
+  public getPerson(personId: number): Observable<Person> {
+    return this._apiService.getValue(Person, `${this._basePath}/${personId}`);
+  }
+
   public getPersons<T extends Person>(query: PersonQuery): Observable<PageContainer<T>> {
     return this._apiService.getPageContainer(Person, this._basePath, query) as Observable<PageContainer<T>>;
   }

@@ -7,6 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {NgxGridModule} from '../../../../../../../components/ngx-grid/ngx-grid.module';
 import {NgxModalModule} from '../../../../../../../components/ngx-modal/ngx-modal.module';
 import {NgxSplitButtonModule} from '../../../../../../../components/ngx-split-button/ngx-split-button.module';
+import {SubgroupReportModule} from '../../../../../../../module/group/subgroup-report/subgroup-report.module';
 
 @NgModule({
   declarations: [StructureSubgroupsPageComponent],
@@ -17,7 +18,8 @@ import {NgxSplitButtonModule} from '../../../../../../../components/ngx-split-bu
     FlexLayoutModule,
     NgxGridModule,
     NgxModalModule,
-    NgxSplitButtonModule
+    NgxSplitButtonModule,
+    SubgroupReportModule
   ]
 })
 export class StructureSubgroupsPageModule {

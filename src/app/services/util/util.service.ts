@@ -13,7 +13,8 @@ export class UtilService {
 
     if (obj && options.excludeNullable) {
       for (const item of Object.keys(obj)) {
-        if (!obj[item]) {
+        const value = obj[item];
+        if (value == null || value == NaN) {
           delete obj[item];
         }
       }

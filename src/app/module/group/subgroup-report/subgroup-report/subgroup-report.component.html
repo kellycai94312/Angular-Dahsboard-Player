@@ -1,0 +1,59 @@
+<div fxLayout
+     fxLayoutGap="10px"
+     class="content">
+  <ngx-tree *ngIf="dataSource"
+            fxFlex="30"
+            [nodeConfigurations]="nodeConfigurations"
+            [dataSource]="dataSource"
+            (selectedNodeChange)="onSelectedNode($event)">
+    <ng-template #nodeTemplate
+                 let-item>
+      <pre>{{getNodeName(item)}}</pre>
+    </ng-template>
+  </ngx-tree>
+  <div *ngIf="selectedNode"
+       fxFlex
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <div fxLayout
+         fxLayoutGap="10px"
+         fxLayoutAlign="start center">
+      <ngx-select [data]="positionLevelNgxSelect"></ngx-select>
+      <ngx-select [data]="positionNgxSelect"></ngx-select>
+      <ngx-select [data]="rankNgxSelect"></ngx-select>
+      <mat-checkbox [(ngModel)]="byName">{{'byName' | translate}}</mat-checkbox>
+      <div>
+        <button mat-raised-button
+                [disabled]="!isSubgroupGroup"
+                (click)="onApply()">{{'apply' | translate}}</button>
+      </div>
+      <button mat-icon-button
+              [disabled]="!(positionNgxSelect?.control?.value && isSubgroupGroup)"
+              (click)="onGetReport()">
+        <mat-icon>get_app</mat-icon>
+      </button>
+    </div>
+    <div>
+      <table *ngIf="tableData.length"
+             class="table table-bordered table-hover">
+        <tr *ngFor="let item of tableData">
+          <td *ngFor="let subgroup of item.subgroups">{{subgroup?.subgroupVersion?.name}}</td>
+          <td>
+            <ng-container *ngIf="item.positions.length; else emptyTemplate">
+              <div *ngFor="let position of item.positions">
+                <div><b>{{position.position.name}}</b></div>
+                <ng-container *ngIf="byName; else personCountTemplate">
+                  <span *ngFor="let person of position.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < position.persons.length) ? ', ' : ''}}</span>
+                </ng-container>
+                <ng-template #personCountTemplate>
+                  {{position.persons.length}}
+                </ng-template>
+              </div>
+            </ng-container>
+            <ng-template #emptyTemplate>-</ng-template>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>

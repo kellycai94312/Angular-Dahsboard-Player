@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {NgxInput} from '../model/ngx-input';
 import {ValidationService} from '../../../../service/validation/validation.service';
 import {NgxInputType} from '../model/ngx-input-type';
@@ -22,9 +22,6 @@ export class NgxInputComponent {
     this.initialize(value);
   }
 
-  @Output()
-  public readonly clearValue = new EventEmitter<void>();
-
   public readonly ngxInputTypeClass = NgxInputType;
   private _data: NgxInput;
 
@@ -42,11 +39,6 @@ export class NgxInputComponent {
         return this._validationService.getError(ngxInput.control);
       };
     }
-  }
-
-  public onClearValue(): void {
-    this.data.control.setValue('');
-    this.clearValue.emit();
   }
 
 }
