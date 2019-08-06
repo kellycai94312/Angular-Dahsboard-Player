@@ -21,6 +21,7 @@ import {PageQuery} from '../../page-query';
 import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subgroup-template-group';
 import {GroupQuery} from '../../query/group-query';
 import {GroupNews} from '../../../model/group/news/group-news';
+import {EventDay} from '../../../bean/event/event-day';
 
 @Injectable({
   providedIn: 'root'
@@ -163,5 +164,14 @@ export class GroupApiService {
                                   query?: { organizationTypeId?: number, positionLevelEnum?: PositionLevelEnum, positionId?: number, rankId?: number }): Observable<ClusterGroupPosition[]> {
     return this._apiService.getValues(ClusterGroupPosition, `${this._basePath}/${group.id}/cluster/${groupCluster.id}/position`, this._utilService.clone(query, {excludeNullable: true})) as Observable<ClusterGroupPosition[]>;
   }
+
+  //#region Event
+
+  public getGroupSchedule(group: Group,
+                          query?: { weekOffset?: number }): Observable<EventDay[]> {
+    return this._apiService.getValues(EventDay, `${this._basePath}/${group.id}/schedule`, this._utilService.clone(query, {excludeNullable: true}));
+  }
+
+  //#endregion
 
 }
