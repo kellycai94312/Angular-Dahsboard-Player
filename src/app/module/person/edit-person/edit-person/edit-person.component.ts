@@ -29,7 +29,7 @@ import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/g
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {UserRole} from '../../../../data/remote/model/user-role';
-import {filter, flatMap, map, takeWhile} from 'rxjs/operators';
+import {flatMap, map, takeWhile} from 'rxjs/operators';
 import {ContactPhone} from '../../../../data/remote/model/contact/contact-phone';
 import {ContactType} from '../../../../data/remote/model/contact/base/contact-type';
 import {ContactPrivacyEnum} from '../../../../data/remote/model/contact/base/contact-privacy-enum';
@@ -111,14 +111,24 @@ export class EditPersonComponent implements OnDestroy {
     this.birthDateNgxDate.control = new FormControl('', [Validators.required]);
     this.birthDateNgxDate.control.valueChanges
       .pipe(
-        takeWhile(() => this._notDestroyed),
-        filter(value => value)
+        takeWhile(() => this._notDestroyed)
       )
       .subscribe(async (value) => {
-        this.person.birthDate = this._appHelper.dateByFormat(value, PropertyConstant.dateTimeServerFormat);
-        await this.initializeDocument(this.person);
+        if (value && value !== 'Invalid Date') {
+          this.person.birthDate = this._appHelper.dateByFormat(value, PropertyConstant.dateTimeServerFormat);
+          await this.initializeDocument(this.person);
+          this.documentFormGroup.enable();
+          // TODO: Fix it!
+          this.documentDateNgxInput.control.enable();
+          this.documentDateNgxInput.disabled = false;
+        } else {
+          this.documentFormGroup.disable();
+          this.documentDateNgxInput.control.disable();
+          this.documentDateNgxInput.disabled = true;
+        }
       });
-    this.birthDateNgxDate.control.setValue(person.birthDate);
+    await this.initializeDocument(person);
+    this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : void 0);
 
     this.sexNgxSelect = new NgxSelect();
     this.sexNgxSelect.labelTranslation = 'sex';

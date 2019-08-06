@@ -12,4 +12,5 @@ export class NgxDate {
   public control: FormControl;
   public placeholder?: string;
   public placeholderTranslation?: string;
+  public disabled?: boolean;
 }

@@ -60,6 +60,17 @@ export class TemplateModalService {
   public async openEditPersonWindow(person: Person,
                                     group?: Group,
                                     config?: NgxModalConfiguration): Promise<Person> {
+    const result = await this._openEditPersonWindow(person, group, config);
+    if (result.reload) {
+      return (await this._openEditPersonWindow(result.person, group, config)).person;
+    }
+    return result.person;
+  }
+
+  private async _openEditPersonWindow(person: Person,
+                                      group?: Group,
+                                      config?: NgxModalConfiguration): Promise<{ person: Person, reload: boolean }> {
+    let isReload = false;
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'person';
     let editPersonComponent: EditPersonComponent;
@@ -71,6 +82,19 @@ export class TemplateModalService {
         return !this._appHelper.isNewObject(component.person);
       };
       modal.componentInstance.splitButtonItems = [
+        {
+          default: true,
+          nameKey: 'saveAndContinue',
+          callback: async () => {
+            component.onSave().subscribe(async value => {
+              if (value) {
+                isReload = true;
+                modal.close(value);
+              }
+            });
+          },
+          visible: () => !isNewObject()
+        },
         this._ngxModalService.saveSplitItemButton(async () => {
           component.onSave().subscribe(value => {
             if (value) {
@@ -113,7 +137,7 @@ export class TemplateModalService {
       }
     }, config);
     const result = await this._ngxModalService.awaitModalResult(modal);
-    return result ? editPersonComponent.person : void 0;
+    return {person: result ? editPersonComponent.person : void 0, reload: isReload};
   }
 
   //#region Group

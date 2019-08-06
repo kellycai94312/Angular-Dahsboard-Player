@@ -796,5 +796,6 @@
     "GROUP_NEWS": "Group news",
     "PERSON_NEWS": "Person news"
   },
-  "newsType": "News type"
+  "newsType": "News type",
+  "saveAndContinue": "Save and continue"
 }

@@ -37,6 +37,7 @@ import {EventData} from '../../../../../../../../module/event/edit-base-event/mo
 import {SubgroupGroupApiService} from '../../../../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
 import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
 import {SubgroupReportComponent} from '../../../../../../../../module/group/subgroup-report/subgroup-report/subgroup-report.component';
+import {SubgroupTemplate} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -119,15 +120,17 @@ export class StructureSubgroupsPageComponent implements OnInit {
       }
     };
 
-    const reportContextMenuItem: ContextMenuItem = {
-      translation: 'report', action: async item => {
-        const modal = this._ngxModalService.open();
-        modal.componentInstance.titleKey = 'report';
+    const getReportContextMenuItem = (subgroupTemplate: SubgroupTemplate): ContextMenuItem => {
+      return {
+        translation: 'report', action: async item => {
+          const modal = this._ngxModalService.open();
+          modal.componentInstance.titleKey = 'report';
 
-        await modal.componentInstance.initializeBody(SubgroupReportComponent, async component => {
-          component.subgroupTemplate = node.data.subgroupTemplateGroup.subgroupTemplateGroupVersion.template;
-        });
-      }
+          await modal.componentInstance.initializeBody(SubgroupReportComponent, async component => {
+            component.subgroupTemplate = subgroupTemplate;
+          });
+        }
+      };
     };
 
     if (node.data instanceof RootSubgroupGroup) {
@@ -139,7 +142,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
           }
         },
         createEventContextMenuItem,
-        reportContextMenuItem
+        getReportContextMenuItem(node.data.subgroupTemplateGroupVersion.template)
       ];
 
       if (!node.data.subgroupTemplateGroupVersion.applied) {
@@ -174,7 +177,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
         }
       },
         createEventContextMenuItem,
-        reportContextMenuItem
+        getReportContextMenuItem(node.data.subgroupTemplateGroupVersion.template)
       ];
     }
     return [];

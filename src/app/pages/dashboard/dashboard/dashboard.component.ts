@@ -23,8 +23,8 @@ export class DashboardComponent implements OnInit {
               private _appHelper: AppHelper,
               private _authorizationService: AuthorizationService) {
     this.tabs = [
-      {translation: 'groupNews', link: 'group-news'},
-      {translation: 'personNews', link: 'person-news'}
+      {translation: 'news', link: 'group-news'},
+      // {translation: 'personNews', link: 'person-news'}
     ];
   }
 
