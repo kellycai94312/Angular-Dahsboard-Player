@@ -65,7 +65,7 @@ export class ApiService {
   }
 
   public getPageContainer<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<PageContainer<T>> {
-    return this.get(url, this.getHttpParamsFromObject(query)).pipe(
+    return this.get(url, this.getHttpParamsFromObject(this._utilService.clone(query, {excludeNullable: true}))).pipe(
       map(x => plainToClassFromExist(new PageContainer<T>(classObj), x) as any)
     );
   }

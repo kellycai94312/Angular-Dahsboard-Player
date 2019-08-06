@@ -11,10 +11,10 @@
       <div>
         <pre>{{getNodeName(item)}}</pre>
       </div>
-      <button mat-icon-button
-              #menuTrigger="matMenuTrigger"
+      <button #menuTrigger="matMenuTrigger"
+              mat-icon-button
               [matMenuTriggerFor]="contextMenu"
-              (click)="onShowContextMenu(item, menuTrigger)">
+              (click)="onShowContextMenu(item, menuTrigger); $event.stopPropagation()">
         <mat-icon>more_vert</mat-icon>
       </button>
     </div>

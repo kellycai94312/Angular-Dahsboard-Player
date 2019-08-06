@@ -36,6 +36,7 @@ import {EventType} from '../../../../../../../../data/remote/model/event/base/ev
 import {EventData} from '../../../../../../../../module/event/edit-base-event/model/event-data';
 import {SubgroupGroupApiService} from '../../../../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
 import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
+import {SubgroupReportComponent} from '../../../../../../../../module/group/subgroup-report/subgroup-report/subgroup-report.component';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -118,6 +119,17 @@ export class StructureSubgroupsPageComponent implements OnInit {
       }
     };
 
+    const reportContextMenuItem: ContextMenuItem = {
+      translation: 'report', action: async item => {
+        const modal = this._ngxModalService.open();
+        modal.componentInstance.titleKey = 'report';
+
+        await modal.componentInstance.initializeBody(SubgroupReportComponent, async component => {
+          component.subgroupTemplate = node.data.subgroupTemplateGroup.subgroupTemplateGroupVersion.template;
+        });
+      }
+    };
+
     if (node.data instanceof RootSubgroupGroup) {
       const contextMenuItems: ContextMenuItem[] = [
         {
@@ -125,7 +137,9 @@ export class StructureSubgroupsPageComponent implements OnInit {
             await this._subgroupModalService.showEditSubgroupGroup(node.data.defaultSubgroupGroup);
             await this.resetItems();
           }
-        }, createEventContextMenuItem
+        },
+        createEventContextMenuItem,
+        reportContextMenuItem
       ];
 
       if (!node.data.subgroupTemplateGroupVersion.applied) {
@@ -158,7 +172,10 @@ export class StructureSubgroupsPageComponent implements OnInit {
           await this._subgroupModalService.showEditSubgroupGroup(node.data);
           await this.resetItems();
         }
-      }, createEventContextMenuItem];
+      },
+        createEventContextMenuItem,
+        reportContextMenuItem
+      ];
     }
     return [];
   };
