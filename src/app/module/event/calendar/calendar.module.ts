@@ -7,6 +7,7 @@ import {MatButtonModule, MatCardModule, MatIconModule} from '@angular/material';
 import {adapterFactory} from 'angular-calendar/date-adapters/date-fns';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxBusyModule} from '../../../directives/ngx-busy/ngx-busy.module';
+import {CalendarLayersModule} from '../calendar-layers/calendar-layers.module';
 
 @NgModule({
   declarations: [CalendarComponent],
@@ -23,7 +24,8 @@ import {NgxBusyModule} from '../../../directives/ngx-busy/ngx-busy.module';
     MatIconModule,
     MatButtonModule,
     TranslateModule,
-    NgxBusyModule
+    NgxBusyModule,
+    CalendarLayersModule
   ]
 })
 export class CalendarModule {

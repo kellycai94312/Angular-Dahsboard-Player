@@ -1,0 +1,24 @@
+:host {
+  ::ng-deep {
+    .mat-chip-list-wrapper {
+      width: inherit;
+      height: inherit;
+
+      max-width: inherit;
+      max-height: inherit;
+
+      min-width: inherit;
+      min-height: inherit;
+
+      overflow: auto;
+    }
+  }
+}
+
+mat-chip-list {
+  max-height: 300px;
+}
+
+.tooltip-content {
+  font-size: 12px;
+}

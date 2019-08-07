@@ -77,14 +77,14 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
         this.startDateNgxDate.placeholderTranslation = 'startDate';
         this.startDateNgxDate.format = PropertyConstant.dateTimeFormat;
         this.startDateNgxDate.type = 'datetime';
-        this.startDateNgxDate.control = new FormControl(data.startDate, [Validators.required]);
+        this.startDateNgxDate.control = new FormControl(this.appHelper.getGmtDate(data.startDate), [Validators.required]);
         this.startDateNgxDate.required = true;
 
         this.endDateNgxDate = new NgxDate();
         this.endDateNgxDate.placeholderTranslation = 'finishDate';
         this.endDateNgxDate.format = PropertyConstant.dateTimeFormat;
         this.endDateNgxDate.type = 'datetime';
-        this.endDateNgxDate.control = new FormControl(data.finishDate, [Validators.required]);
+        this.endDateNgxDate.control = new FormControl(this.appHelper.getGmtDate(data.finishDate), [Validators.required]);
         this.endDateNgxDate.required = true;
 
         if (!this.isNew) {

@@ -1,0 +1,9 @@
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>{{'layers' | translate}}</mat-card-title>
+
+  <chip-list labelTranslation="groups"
+             display="name"
+             [(selectedItems)]="selectedGroups"
+             (edit)="onEditGroups()"
+             (selectedItemsChange)="onSelectedItemsChange($event)"></chip-list>
+</mat-card>
