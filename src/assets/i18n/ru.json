@@ -609,7 +609,7 @@
     "HEAD": "Руководитель",
     "SPECIALIST": "Специалист",
     "STAFF": "Персонал",
-    "SERVICE_RECIPIENT": "Законный представитель"
+    "SERVICE_RECIPIENT": "Получатель услуг"
   },
   "personPositionType": "Тип должности",
   "personPosition": "Должность",
