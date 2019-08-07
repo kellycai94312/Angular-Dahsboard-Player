@@ -3,7 +3,7 @@
 
   <chip-list labelTranslation="groups"
              display="name"
-             [selectedItems]="selectedGroups"
+             [(selectedItems)]="selectedGroups"
              (edit)="onEditGroups()"
              (selectedItemsChange)="onSelectedItemsChange($event)"></chip-list>
 </mat-card>

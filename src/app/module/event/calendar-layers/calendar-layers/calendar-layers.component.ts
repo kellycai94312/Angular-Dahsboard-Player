@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, Input, Output} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {BaseEventQuery} from '../../../../data/remote/rest-api/query/event/base-event-query';
 import {GroupWindowService} from '../../../../services/windows/group-window/group-window.service';
@@ -20,22 +20,24 @@ export class CalendarLayersComponent {
   public selectedGroups: Group[] = [];
 
   constructor(private _groupWindowService: GroupWindowService,
-              private _componentFactoryResolver: ComponentFactoryResolver,
-              private _changeDetectorRef: ChangeDetectorRef) {
+              private _componentFactoryResolver: ComponentFactoryResolver) {
   }
 
   public async onEditGroups(): Promise<void> {
     const dialogResult = await this._groupWindowService.openSelectionGroups(this.selectedGroups, {all: true}, {componentFactoryResolver: this._componentFactoryResolver});
     if (dialogResult.result) {
       this.selectedGroups = dialogResult.data;
-      this._changeDetectorRef.markForCheck();
+      this._updateQuery();
     }
   }
 
   public onSelectedItemsChange(items: Group[]): void {
-    this.selectedGroups = items;
+    this._updateQuery();
+  }
+
+  private _updateQuery(): void {
     if (this.query) {
-      this.query.groupIds = items.map(x => x.id).join('_');
+      this.query.groupIds = this.selectedGroups.map(x => x.id).join('_');
       this.queryChange.emit(this.query);
     }
   }
