@@ -1,0 +1,39 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between center">
+    <label>{{labelTranslation | translate}}</label>
+    <button mat-icon-button
+            (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+  <ng-container *ngIf="selectedItems.length">
+    <div>
+      <mat-divider></mat-divider>
+    </div>
+    <mat-chip-list fxFlex>
+      <mat-chip *ngFor="let item of selectedItems"
+                matTooltipPosition="above"
+                matTooltipShowDelay="500"
+                matTooltipClass="tooltip-content"
+                [matTooltip]="getDisplay(item)"
+                [removable]="true"
+                (removed)="onRemove(item)">
+        <div fxFlex
+             fxLayout="row"
+             fxLayoutAlign="start center"
+             class="text-truncate">
+          <div fxFlex="initial"
+               class="text-truncate">{{getDisplay(item)}}</div>
+          <div fxFlex
+               fxLayout="row"
+               fxLayoutAlign="center center">
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </div>
+        </div>
+      </mat-chip>
+    </mat-chip-list>
+  </ng-container>
+</div>

@@ -3,29 +3,35 @@
      fxLayoutAlign="start start"
      fxLayoutAlign.lt-sm="start stretch"
      fxLayoutGap="10px">
-  <mat-card fxFlex="20"
-            fxHide.lt-sm
-            class="mat-elevation-z2"
-            mwlDroppable>
-    <mat-card-title>{{'eventType' | translate}}</mat-card-title>
-    <mat-card-content fxLayout="column"
-                      fxLayoutGap="5px">
-      <div *ngFor="let item of externalEvents"
-           fxLayout
-           fxLayoutAlign="space-between center"
-           class="draggable"
-           mwlDraggable
-           [ngClass]="item.cssClass"
-           [dropData]="{event: item}"
-           dragActiveClass="drag-active">
-        <div>
-          <p class="p cal-event-title">{{item.title}}</p>
+  <div fxFlex="25"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <mat-card fxHide.lt-sm
+              class="mat-elevation-z2"
+              mwlDroppable>
+      <mat-card-title>{{'eventType' | translate}}</mat-card-title>
+      <mat-card-content fxLayout="column"
+                        fxLayoutGap="5px">
+        <div *ngFor="let item of externalEvents"
+             mwlDraggable
+             fxLayout
+             fxLayoutAlign="space-between center"
+             class="draggable"
+             dragActiveClass="drag-active"
+             [ngClass]="item.cssClass"
+             [dropData]="{event: item}">
+          <div>
+            <p class="p cal-event-title">{{item.title}}</p>
+          </div>
+          <div class="circle"
+               [ngStyle]="{'background-color': item.color.primary}"></div>
         </div>
-        <div class="circle"
-              [ngStyle]="{'background-color': item.color.primary}"></div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+
+    <app-calendar-layers [(query)]="eventQuery"
+                         (queryChange)="onQueryChange($event)"></app-calendar-layers>
+  </div>
 
   <mat-card fxFlex="80"
             class="mat-elevation-z2">

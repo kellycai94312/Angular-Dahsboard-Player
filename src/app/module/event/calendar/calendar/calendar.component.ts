@@ -44,8 +44,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   public isBusy: boolean;
   public activeDayIsOpen: boolean;
   public weekStartsOn: number = DAYS_OF_WEEK.MONDAY;
-
-  private readonly _eventQuery = new BaseEventQuery();
+  public eventQuery = new BaseEventQuery();
   private _notDestroyed = true;
 
   constructor(public translateService: TranslateService,
@@ -80,10 +79,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const end = await this.getDateTo();
     end.setDate(end.getDate() + 1);
 
-    this._eventQuery.startDate = this._appHelper.dateByFormat(start, PropertyConstant.dateFormat);
-    this._eventQuery.finishDate = this._appHelper.dateByFormat(end, PropertyConstant.dateFormat);
+    this.eventQuery.startDate = this._appHelper.dateByFormat(start, PropertyConstant.dateFormat);
+    this.eventQuery.finishDate = this._appHelper.dateByFormat(end, PropertyConstant.dateFormat);
 
-    this._baseEventApiService.getEvents(this._eventQuery)
+    this._baseEventApiService.getEvents(this.eventQuery)
       .subscribe(value => {
         this.events = value.list.map(x => this.getCalendarEvent(x));
         this.refreshSubject.next();
@@ -148,6 +147,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   public async onAddEvent(): Promise<void> {
     await this.addEvent(new Date());
+  }
+
+  public async onQueryChange(query: BaseEventQuery): Promise<void> {
+    await this.updateEvents();
   }
 
   private updateSortEvents(): void {
