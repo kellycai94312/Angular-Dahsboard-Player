@@ -1,0 +1,19 @@
+<div fxLayout="column">
+  <ngx-select [data]="clusterNgxSelect"></ngx-select>
+  <ngx-tree *ngIf="dataSource"
+            [nodeConfigurations]="nodeConfigurations"
+            [dataSource]="dataSource"
+            (selectedNodeChange)="onSelectedNode($event)">
+    <ng-template #nodeTemplate
+                 let-item
+                 let-treeNode="treeNode">
+      <ng-template *ngIf="itemTemplate; else defaultTemplate"
+                   [ngTemplateOutlet]="itemTemplate"
+                   [ngTemplateOutletContext]="{$implicit: item, treeNode: treeNode}">
+      </ng-template>
+      <ng-template #defaultTemplate>
+        <pre>{{item.data.name}}</pre>
+      </ng-template>
+    </ng-template>
+  </ngx-tree>
+</div>

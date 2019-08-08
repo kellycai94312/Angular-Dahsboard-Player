@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
 import {ContextMenuItem} from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
 import {SubgroupModalService} from '../../../service/subgroup-modal.service';
 import {AppHelper} from '../../../../../../../../utils/app-helper';
@@ -17,6 +17,7 @@ import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-n
 import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
 import {RootSubgroup} from '../model/root-subgroup';
 import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
+import {GroupWindowService} from '../../../../../../../../services/windows/group-window/group-window.service';
 
 @Component({
   selector: 'app-templates-subgroups-page',
@@ -30,14 +31,16 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
 
   public group: Group;
   private _notDestroyed = true;
-  private _canEdit = false;
+  private _canEdit: boolean;
   private _rootSubgroupName: string;
 
   constructor(private _subgroupModalService: SubgroupModalService,
               private _appHelper: AppHelper,
               private _groupApiService: GroupApiService,
               private _groupService: GroupService,
+              private _groupWindowService: GroupWindowService,
               private _subgroupService: SubgroupService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService) {
     this._groupService.group$
@@ -189,7 +192,13 @@ export class TemplatesSubgroupsPageComponent implements OnInit {
                 await this._participantRestApiService.createSubgroupTemplateGroup(subgroupTemplateGroup, {}, {subgroupTemplateId: node.data.subgroupTemplate.id});
               });
             }
-          }]);
+          },
+          {
+            translation: 'applyToGroups', action: async item => {
+              await this._groupWindowService.openApplyingSubgroupTemplateWindow(this.group, node.data.subgroupTemplate, {componentFactoryResolver: this._componentFactoryResolver});
+            }
+          }
+        ]);
       }
       return contextMenuItems;
     } else if (node.data instanceof Subgroup) {

@@ -19,4 +19,14 @@ export class SubgroupTemplateApiService {
     return this._apiService.getValues(SubgroupTemplateGroup, `${this._basePath}/${subgroupTemplate.id}/group`);
   }
 
+  public createSubgroupTemplateGroup(subgroupTemplate: SubgroupTemplate,
+                                     value: SubgroupTemplateGroup): Observable<SubgroupTemplateGroup> {
+    return this._apiService.createValue(SubgroupTemplateGroup, `${this._basePath}/${subgroupTemplate.id}/group`, value) as Observable<SubgroupTemplateGroup>;
+  }
+
+  public removeSubgroupTemplateGroupByTemplateOwner(subgroupTemplate: SubgroupTemplate,
+                                                    subgroupTemplateGroup: SubgroupTemplateGroup): Observable<SubgroupTemplateGroup> {
+    return this._apiService.removeValue(SubgroupTemplateGroup, `${this._basePath}/${subgroupTemplate.id}/group/${subgroupTemplateGroup.id}`) as Observable<SubgroupTemplateGroup>;
+  }
+
 }

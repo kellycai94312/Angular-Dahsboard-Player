@@ -5,18 +5,15 @@ import {GroupService} from '../../../../service/group.service';
 import {AppHelper} from '../../../../../../../utils/app-helper';
 import {NgxSelect} from '../../../../../../../module/ngx/ngx-select/model/ngx-select';
 import {ParticipantRestApiService} from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {PropertyConstant} from '../../../../../../../data/local/property-constant';
 import {map, takeWhile} from 'rxjs/operators';
-import {GroupCluster} from '../../../../../../../data/remote/model/group/connection/group-cluster';
-import {NodeConfiguration} from '../../../../../../../module/ngx/ngx-tree/model/node-configuration';
 import {FlatNode} from '../../../../../../../module/ngx/ngx-tree/model/flat-node';
-import {DynamicDataSource} from '../../../../../../../module/ngx/ngx-tree/utils/dynamic-data-source';
 import {GroupClusterApiService} from '../../../../../../../data/remote/rest-api/api/group-cluster/group-cluster-api.service';
 import {PositionLevelEnum} from '../../../../../../../data/remote/model/person-position/position-level-enum';
 import {TranslateObjectService} from '../../../../../../../shared/translate-object.service';
 import {GroupApiService} from '../../../../../../../data/remote/rest-api/api/group/group-api.service';
 import {Observable, of} from 'rxjs';
 import {ClusterGroupPosition} from '../../../../../../../data/remote/rest-api/api/group/model/cluster-group-position';
+import {GroupCluster} from '../../../../../../../data/remote/model/group/connection/group-cluster';
 
 @Component({
   selector: 'app-group-reports',
@@ -25,21 +22,14 @@ import {ClusterGroupPosition} from '../../../../../../../data/remote/rest-api/ap
 })
 export class GroupReportsComponent extends BaseGroupComponent<Group> implements OnInit {
 
-  public readonly clusterNgxSelect = new NgxSelect();
   public readonly organizationTypeNgxSelect = new NgxSelect();
   public readonly positionLevelNgxSelect = new NgxSelect();
   public readonly positionNgxSelect = new NgxSelect();
   public readonly rankNgxSelect = new NgxSelect();
-  public readonly nodeConfigurations = [
-    new NodeConfiguration('leaf'),
-    new NodeConfiguration('nested', (index, nodeData: FlatNode) => {
-      return nodeData.expandable;
-    })
-  ];
-  public dataSource: DynamicDataSource<FlatNode>;
   public selectedNode: FlatNode;
   public clusterGroupPositions: ClusterGroupPosition[] = [];
   public byName: boolean;
+  private _groupCluster: GroupCluster;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupClusterApiService: GroupClusterApiService,
@@ -50,21 +40,6 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
   }
 
   public async ngOnInit(): Promise<void> {
-    const groupClusters = (await this._participantRestApiService.getGroupClusters({}, {count: PropertyConstant.pageSize}, {groupId: this.group.id})).list;
-    this.clusterNgxSelect.labelTranslation = 'cluster';
-    this.clusterNgxSelect.display = 'name';
-    this.clusterNgxSelect.items = groupClusters;
-    this.clusterNgxSelect.control.valueChanges
-      .pipe(takeWhile(() => this.notDestroyed))
-      .subscribe((groupCluster: GroupCluster) => {
-        delete this.selectedNode;
-
-        this.dataSource = new DynamicDataSource(node => {
-          const nextLevel = node ? (node.level || 0) + 1 : 0;
-          return this._groupClusterApiService.getChildrenGroups(groupCluster, node ? node.data : this.group)
-            .pipe(map(value => value.map(x => new FlatNode(x, nextLevel, true))));
-        });
-      });
     this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
     this.organizationTypeNgxSelect.display = 'name';
     this.organizationTypeNgxSelect.hasNone = true;
@@ -94,10 +69,6 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
         this.clusterGroupPositions = [];
       });
 
-    if (groupClusters.length) {
-      this.clusterNgxSelect.control.setValue(groupClusters[0]);
-    }
-
     this.rankNgxSelect.labelTranslation = 'rank';
     this.rankNgxSelect.display = 'name';
     this.rankNgxSelect.hasNone = true;
@@ -107,6 +78,10 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
       .subscribe(() => {
         this.clusterGroupPositions = [];
       });
+  }
+
+  public onGroupClusterChange(value: GroupCluster): void {
+    this._groupCluster = value;
   }
 
   public onSelectedNode(node: FlatNode) {
@@ -122,7 +97,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
   private _updateGroupPositions(): void {
     this.positionNgxSelect.control.reset();
     this.positionNgxSelect.control.disable();
-    this._groupClusterApiService.getNestedGroupPositions(this.clusterNgxSelect.control.value,
+    this._groupClusterApiService.getNestedGroupPositions(this._groupCluster,
       this.selectedNode.data, {positionLevelEnum: this.positionLevelNgxSelect.control.value ? this.positionLevelNgxSelect.control.value.data : void 0})
       .subscribe(positions => {
         this.positionNgxSelect.items = positions;
@@ -135,7 +110,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
   private _updateTableData(): Observable<boolean> {
     const group = this.selectedNode.data;
-    const groupCluster = this.clusterNgxSelect.control.value;
+    const groupCluster = this._groupCluster;
     if (group && groupCluster) {
       return this._groupApiService.getClusterGroupPositions(group, groupCluster, {
         organizationTypeId: this.organizationTypeNgxSelect.control.value ? this.organizationTypeNgxSelect.control.value.id : void 0,

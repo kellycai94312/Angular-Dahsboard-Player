@@ -800,5 +800,6 @@
   "newsType": "Тип новости",
   "saveAndContinue": "Сохранить и продолжить",
   "timetableOfClasses": "Расписание занятий",
-  "layers": "Слои"
+  "layers": "Слои",
+  "applyToGroups": "Применить группам"
 }

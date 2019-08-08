@@ -1,0 +1,19 @@
+<app-group-tree *ngIf="data"
+                [group]="data">
+  <ng-template #itemTemplate
+               let-item>
+    <div fxFlex
+         fxLayout="row"
+         fxLayoutAlign="space-between center"
+         fxLayoutGap="10px">
+      <pre fxFlex>{{item.data.name}}</pre>
+      <div>
+        <button mat-icon-button
+                [disabled]="getSubgroupTemplateGroup(item.data)?.deletedByTemplateOwner"
+                (click)="onEdit(item.data)">
+          <mat-icon>{{getSubgroupTemplateGroup(item.data) ? 'remove' : 'add'}}</mat-icon>
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</app-group-tree>

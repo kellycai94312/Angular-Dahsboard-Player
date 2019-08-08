@@ -799,5 +799,6 @@
   "newsType": "News type",
   "saveAndContinue": "Save and continue",
   "timetableOfClasses": "Timetable of classes",
-  "layers": "layers"
+  "layers": "layers",
+  "applyToGroups": "Apply to groups"
 }

@@ -24,7 +24,7 @@ export class CalendarLayersComponent {
   }
 
   public async onEditGroups(): Promise<void> {
-    const dialogResult = await this._groupWindowService.openSelectionGroups(this.selectedGroups, {all: true}, {componentFactoryResolver: this._componentFactoryResolver});
+    const dialogResult = await this._groupWindowService.openSelectionGroupsWindow(this.selectedGroups, {all: true}, {componentFactoryResolver: this._componentFactoryResolver});
     if (dialogResult.result) {
       this.selectedGroups = dialogResult.data;
       this._updateQuery();
