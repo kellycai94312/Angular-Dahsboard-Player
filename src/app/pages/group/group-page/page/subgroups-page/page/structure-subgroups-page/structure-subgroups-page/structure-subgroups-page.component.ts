@@ -127,6 +127,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
           modal.componentInstance.titleKey = 'report';
 
           await modal.componentInstance.initializeBody(SubgroupReportComponent, async component => {
+            component.group = this.group;
             component.subgroupTemplate = subgroupTemplate;
           });
         }
