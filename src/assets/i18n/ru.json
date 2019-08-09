@@ -205,31 +205,6 @@
   "score": "Счет",
   "access": "Доступ",
   "showPrevious": "Показать предыдущий",
-  "trainingNotification": {
-    "scheduledEvent": "Скоро начнется событие '{{event}}'",
-    "updateDate": "Обновлена дата в событии '{{event}}'",
-    "updateLocation": "Обновлено местоположение в событии '{{event}}'",
-    "updateExercises": "Обновлен список упражнений в событии '{{event}}'",
-    "addPerson": "Вас добавили в событие '{{event}}'",
-    "addGroup": "Ваша группа добавлена в событие '{{event}}'",
-    "deletePerson": "{{sender}} исключил из события '{{event}}' {{person}}",
-    "deletePersonSelf": "Вас исключили из события '{{event}}' {{sender}}",
-    "deleteTraining": "{{sender}} удалил событие '{{event}}'",
-    "approvePerson": "{{person}} подтвердил участие в событии '{{event}}'",
-    "refusePerson": "{{person}} отказался от участия в событии '{{event}}'"
-  },
-  "groupNotification": {
-    "joinPersonParams": "{{person}} подал(a) заявку в группу '{{group}}' на должности '{{positions}}'",
-    "joinPersonApproveParams": "{{sender}} одобрил(a) вашу заявку на вступление в группу '{{group}}'",
-    "joinPersonRefuseParams": "{{sender}} отклонил(a) вашу заявку на вступление в группу '{{group}}'",
-    "invitePersonParams": "{{sender}} пригласил(a) вас в группу '{{group}}'",
-    "invitePersonApproveParams": "{{person}} принял(а) приглашение в группу '{{group}}'",
-    "invitePersonRefuseParams": "{{person}} отклонил(а) приглашение в группу '{{group}}'",
-    "deletePersonParams": "{{sender}} исключил(a) вас из группы '{{group}}'",
-    "updatePositionsParams": "{{sender}} обновил(a) ваши должности '{{positions}}' в '{{group}}'",
-    "updatePositionsApproveParams": "{{person}} подтвердил(a) изменение должностей в '{{group}}'",
-    "updatePositionsRefuseParams": "{{person}} отклонил(a) изменение должностей в '{{group}}'"
-  },
   "conversationSystemMessage": {
     "createChat": "{{sender}} создал беседу",
     "updateName": "{{sender}} обновил наименование беседы",
@@ -801,5 +776,46 @@
   "saveAndContinue": "Сохранить и продолжить",
   "timetableOfClasses": "Расписание занятий",
   "layers": "Слои",
-  "applyToGroups": "Применить группам"
+  "applyToGroups": "Применить группам",
+  "eventNotification": {
+    "EVENT_DELETE": "{{sender}} удалил(a) событие {{event}}",
+    "DATE_UPDATE": "{{sender}}  изменил(a) дату события {{event}}",
+    "GROUP_ADD": "{{sender}} добавил(a) группу {{group}} в событие {{event}}",
+    "PERSON_ADD": "{{sender}} добавил(a) пользователя {{person}} в событие {{event}}",
+    "PERSON_DELETE": "{{sender}} удалил(a) пользователя {{person}} из события {{event}}",
+    "PERSON_DELETE_SELF": "{{sender}} удалил(a) вас из события {{event}}",
+    "PERSON_APPROVE": "{{person}} подтвердил(a) участие в собитии {{event}}",
+    "PERSON_REFUSE": "{{person}} отклонил(а) участие в собитии {{event}}"
+  },
+  "eventPollNotificationType": {
+    "CREATE_EVENT_POLL": "Принять участие в опросе {{poll}}",
+    "COMPLETE_POLL_PERSON": "{{person}} завершил(a) опрос {{poll}}"
+  },
+  "groupNotification": {
+    "JOIN_PERSON": "{{person}} подал(a) заявку в группу {{group}} на должности {{positions}}",
+    "JOIN_PERSON_APPROVE": "{{sender}} одобрил(a) вашу заявку на вступление в группу {{group}}",
+    "JOIN_PERSON_REFUSE": "{{sender}} отклонил(a) вашу заявку на вступление в группу {{group}}",
+    "INVITE_PERSON": "{{sender}} пригласил(a) вас в группу {{group}}",
+    "INVITE_PERSON_APPROVE": "{{person}} принял(а) приглашение в группу {{group}}",
+    "INVITE_PERSON_REFUSE": "{{person}} отклонил(а) приглашение в группу {{group}}",
+    "DELETE_PERSON": "{{sender}} исключил(a) вас из группы {{group}}",
+    "UPDATE_POSITIONS": "{{sender}} обновил(a) ваши должности {{positions}} в {{group}}",
+    "UPDATE_POSITIONS_APPROVE": "{{person}} подтвердил(a) изменение должностей в {{group}}",
+    "UPDATE_POSITIONS_REFUSE": "{{person}} отклонил(a) изменение должностей в {{group}}"
+  },
+  "groupConnectionNotificationType": {
+    "CREATE_GROUP_CONNECTION_REQUEST": "{{group}} пригласила группу {{parentGroup}}",
+    "APPROVE_GROUP_CONNECTION_REQUEST": "{{group}} одобрил соединене с группой {{parentGroup}}",
+    "REJECT_GROUP_CONNECTION_REQUEST": "{{group}} отклонил соединене с группой {{parentGroup}}"
+  },
+  "subgroupNotificationType": {
+    "CREATE_SUBGROUP_TEMPLATE_GROUP": "{{sender}} применил шаблон {{template}} к группе {{group}}",
+    "CREATE_SUBGROUP_TEMPLATE_GROUP_VERSION": "{{sender}} обновил версию шаблона {{template}}",
+    "APPROVE_SUBGROUP_TEMPLATE_VERSION": "{{sender}} подтвердил версию шаблона {{template}}",
+    "DELETE_SUBGROUP_TEMPLATE": "{{sender}} удалил шаблон {{template}}"
+  },
+  "groupPersonPositionStateEnum": {
+    "ADDED": "Добавлен",
+    "DELETED": "Удален"
+  }
 }

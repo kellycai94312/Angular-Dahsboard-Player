@@ -38,7 +38,6 @@ import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
 import {AnthropometryQuery} from './query/anthropometry-query';
 import {PageQuery} from './page-query';
-import {BaseNotification} from '../model/notification/base/base-notification';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
 import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
@@ -110,7 +109,9 @@ import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
 import {Stage} from '../model/stage/stage';
 import {StageType} from '../model/stage/stage-type';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 @RestParams({
   url: environment.restUrl,
   withCredentials: true
@@ -1206,40 +1207,6 @@ export class ParticipantRestApiService extends Rest {
   removePollPersonAnswer: IRestMethod<{ pollQuestionId: number, pollPersonAnswerId: number }, PollPersonAnswer>;
 
   //#endregion
-
-  //#endregion
-
-  //#region Notification
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/notification'
-  })
-  getNotifications: IRestMethod<PageQuery, PageContainer<BaseNotification>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/notification/unread'
-  })
-  getUnreadCountNotifications: IRestMethod<void, IntegerWrapper>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/notification/read'
-  })
-  createReadNotifications: IRestMethod<DateWrapper, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/notification/{!id}/approve'
-  })
-  approveNotification: IRestMethod<{ id: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/notification/{!id}/refuse'
-  })
-  refuseNotification: IRestMethod<{ id: number }, void>;
 
   //#endregion
 

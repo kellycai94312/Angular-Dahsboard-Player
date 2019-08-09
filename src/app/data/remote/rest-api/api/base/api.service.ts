@@ -31,7 +31,7 @@ export class ApiService {
     return this._httpClient.put<T>(url, body, this._restApiOptions);
   }
 
-  public post<T = any>(url: string, body: any): Observable<T> {
+  public post<T = any>(url: string, body?: any): Observable<T> {
     return this._httpClient.post<T>(url, body, this._restApiOptions);
   }
 
@@ -70,7 +70,7 @@ export class ApiService {
     );
   }
 
-  public createValue<T>(classObj: Type<T>, url: string, value: T | any): Observable<T | T[]> {
+  public createValue<T>(classObj: Type<T>, url: string, value?: T | any): Observable<T | T[]> {
     return this.post(url, value).pipe(
       map(x => plainToClass(classObj, x) as any)
     );

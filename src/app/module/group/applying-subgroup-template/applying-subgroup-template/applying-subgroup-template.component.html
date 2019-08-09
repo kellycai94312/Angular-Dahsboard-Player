@@ -8,10 +8,10 @@
          fxLayoutGap="10px">
       <pre fxFlex>{{item.data.name}}</pre>
       <div>
-        <button mat-icon-button
+        <button mat-raised-button
                 [disabled]="getSubgroupTemplateGroup(item.data)?.deletedByTemplateOwner"
                 (click)="onEdit(item.data)">
-          <mat-icon>{{getSubgroupTemplateGroup(item.data) ? 'remove' : 'add'}}</mat-icon>
+          {{((getSubgroupTemplateGroup(item.data) ? 'remove' : 'add') | translate) + ' ' + ('template' | translate | lowercase)}}
         </button>
       </div>
     </div>

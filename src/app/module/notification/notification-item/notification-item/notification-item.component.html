@@ -1,0 +1,24 @@
+<div *ngIf="data"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <div>
+    <label class="date">{{data.created | date: propertyConstantClass.dateTimeFormat}}</label>
+    <div [innerHTML]="notificationService.getNotificationContent(data) | safeHtml"
+         (click)="onClickContent($event)"></div>
+  </div>
+  <div *ngIf="data.action"
+       fxLayout="row">
+    <div *ngIf="data.approved == null; else elseContent"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <button mat-raised-button
+              color="primary"
+              (click)="onApprove()">{{'approve' | translate}}</button>
+      <button mat-raised-button
+              (click)="onRefuse()">{{'refuse' | translate}}</button>
+    </div>
+    <ng-template #elseContent>
+      {{(data.approved ? 'youApproved' : 'youRefused') | translate}}
+    </ng-template>
+  </div>
+</div>

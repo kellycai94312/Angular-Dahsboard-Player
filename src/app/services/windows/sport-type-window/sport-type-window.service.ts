@@ -4,7 +4,9 @@ import {ItemDetailComponent} from '../../../module/common/item-detail/item-detai
 import {TextField} from '../../../module/common/item-detail/model/text-field';
 import {SportType} from '../../../data/remote/model/sport-type';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SportTypeWindowService {
 
   constructor(private _ngxModalService: NgxModalService) {

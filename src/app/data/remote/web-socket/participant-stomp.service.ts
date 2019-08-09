@@ -7,7 +7,9 @@ import * as SockJS from 'sockjs-client';
 import {environment} from '../../../../environments/environment';
 import {IdRequest} from '../request/id-request';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ParticipantStompService {
 
   private readonly baseQuery: string = '/user/ws';

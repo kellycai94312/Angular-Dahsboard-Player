@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {TranslateModule} from '@ngx-translate/core';
 import {NotificationsComponent} from './notifications/notifications.component';
 import {NotificationRoutingModule} from './notification-routing.module';
-import {NotificationComponent} from './notification/notification.component';
 import {SafeHtmlModule} from '../../pipes/safe-html/safe-html.module';
 import {NgxVirtualScrollModule} from '../../components/ngx-virtual-scroll/ngx-virtual-scroll.module';
 import {AllNotificationsComponent} from './notifications/all-notifications/all-notifications.component';
@@ -13,6 +12,7 @@ import {NgxButtonModule} from '../../components/ngx-button/ngx-button.module';
 import {NgxSplitButtonModule} from '../../components/ngx-split-button/ngx-split-button.module';
 import {NgxTabsModule} from '../../module/ngx/ngx-tabs/ngx-tabs.module';
 import {ListHeadingModule} from '../../module/common/list-heading/list-heading.module';
+import {NotificationListModule} from '../../module/notification/notification-list/notification-list.module';
 
 @NgModule({
   imports: [
@@ -25,9 +25,10 @@ import {ListHeadingModule} from '../../module/common/list-heading/list-heading.m
     NgxGridModule,
     NgxButtonModule,
     NgxSplitButtonModule,
-    ListHeadingModule
+    ListHeadingModule,
+    NotificationListModule
   ],
-  declarations: [NotificationsComponent, NotificationComponent, AllNotificationsComponent, ChangeNotificationsComponent]
+  declarations: [NotificationsComponent, AllNotificationsComponent, ChangeNotificationsComponent]
 })
 export class NotificationModule {
 }

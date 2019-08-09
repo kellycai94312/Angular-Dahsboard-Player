@@ -63,7 +63,7 @@ export class EventUtilService {
   public getEventInstance(eventType: EventType): BaseEvent {
     switch (eventType) {
       case EventType.EVENT:
-        return new Event;
+        return new Event();
       case EventType.TRAINING:
         return new Training();
       case EventType.TESTING:

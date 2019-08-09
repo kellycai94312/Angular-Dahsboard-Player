@@ -204,31 +204,6 @@
   "score": "Score",
   "access": "Access",
   "showPrevious": "Show previous",
-  "trainingNotification": {
-    "scheduledEvent": "Event will soon start '{{event}}'",
-    "updateDate": "Updated date in event '{{event}}'",
-    "updateLocation": "Updated location in event '{{event}}'",
-    "updateExercises": "Updated exercises in event '{{event}}'",
-    "addPerson": "You were added in event '{{event}}'",
-    "addGroup": "Your group has been added in event '{{event}}'",
-    "deletePerson": "{{sender}} excluded from the event '{{event}}' {{person}}",
-    "deletePersonSelf": "You were expelled from event '{{event}}' {{sender}}",
-    "deleteTraining": "{{sender}} removed the event '{{event}}'",
-    "approvePerson": "{{person}} approved participation in the event '{{event}}'",
-    "refusePerson": "{{person}} refused to participate in the event '{{event}}'"
-  },
-  "groupNotification": {
-    "joinPersonParams": "{{person}} applied to the group '{{group}}' on positions '{{positions}}'",
-    "joinPersonApproveParams": "{{sender}} added you to the group '{{group}}'",
-    "joinPersonRefuseParams": "{{sender}} refused you to add in the group '{{group}}'",
-    "invitePersonParams": "{{sender}} invited you in the group '{{group}}'",
-    "invitePersonApproveParams": "{{person}} approved to add in the group '{{group}}'",
-    "invitePersonRefuseParams": "{{person}} refused to add in the group '{{group}}'",
-    "deletePersonParams": "{{sender}} removed you from the group '{{group}}'",
-    "updatePositionsParams": "{{sender}} updated your positions '{{positions}}' in the '{{group}}'",
-    "updatePositionsApproveParams": "{{person}} approved positions changes in the '{{group}}'",
-    "updatePositionsRefuseParams": "{{person}} refused positions changes in the '{{group}}'"
-  },
   "conversationSystemMessage": {
     "createChat": "{{sender}} created chat",
     "updateName": "{{sender}} updated chat name",
@@ -800,5 +775,46 @@
   "saveAndContinue": "Save and continue",
   "timetableOfClasses": "Timetable of classes",
   "layers": "layers",
-  "applyToGroups": "Apply to groups"
+  "applyToGroups": "Apply to groups",
+  "eventNotification": {
+    "EVENT_DELETE": "{{sender}} has removed the event {{event}}",
+    "DATE_UPDATE": "{{sender}}  has changed the data event {{event}}",
+    "GROUP_ADD": "{{sender}} has added the group {{group}} in the event {{event}}",
+    "PERSON_ADD": "{{sender}} has added the person {{person}} in the event {{event}}",
+    "PERSON_DELETE": "{{sender}} has removed the person {{person}} from the event {{event}}",
+    "PERSON_DELETE_SELF": "{{sender}} has removed you from the event {{event}}",
+    "PERSON_APPROVE": "{{person}} has approved participation in the event {{event}}",
+    "PERSON_REFUSE": "{{person}} has refused participation in the event {{event}}"
+  },
+  "eventPollNotificationType": {
+    "CREATE_EVENT_POLL": "Take the poll {{poll}}",
+    "COMPLETE_POLL_PERSON": "{{person}} has completed the poll {{poll}}"
+  },
+  "groupNotification": {
+    "JOIN_PERSON": "{{person}} applied to the group {{group}} on positions {{positions}}",
+    "JOIN_PERSON_APPROVE": "{{sender}} added you to the group {{group}}",
+    "JOIN_PERSON_REFUSE": "{{sender}} refused you to add in the group {{group}}",
+    "INVITE_PERSON": "{{sender}} invited you in the group {{group}}",
+    "INVITE_PERSON_APPROVE": "{{person}} approved to add in the group {{group}}",
+    "INVITE_PERSON_REFUSE": "{{person}} refused to add in the group {{group}}",
+    "DELETE_PERSON": "{{sender}} removed you from the group {{group}}",
+    "UPDATE_POSITIONS": "{{sender}} updated your positions {{positions}} in the {{group}}",
+    "UPDATE_POSITIONS_APPROVE": "{{person}} approved positions changes in the {{group}}",
+    "UPDATE_POSITIONS_REFUSE": "{{person}} refused positions changes in the {{group}}"
+  },
+  "groupConnectionNotificationType": {
+    "CREATE_GROUP_CONNECTION_REQUEST": "{{group}} has invited the group {{parentGroup}}",
+    "APPROVE_GROUP_CONNECTION_REQUEST": "{{group}} has approved connect with the group {{parentGroup}}",
+    "REJECT_GROUP_CONNECTION_REQUEST": "{{group}} has rejected connect with the group {{parentGroup}}"
+  },
+  "subgroupNotificationType": {
+    "CREATE_SUBGROUP_TEMPLATE_GROUP": "{{sender}} has applied the template {{template}} to the group {{group}}",
+    "CREATE_SUBGROUP_TEMPLATE_GROUP_VERSION": "{{sender}} has updated the template version {{template}}",
+    "APPROVE_SUBGROUP_TEMPLATE_VERSION": "{{sender}} has approved the template version {{template}}",
+    "DELETE_SUBGROUP_TEMPLATE": "{{sender}} has deleted the template {{template}}"
+  },
+  "groupPersonPositionStateEnum": {
+    "ADDED": "Added",
+    "DELETED": "Deleted"
+  }
 }

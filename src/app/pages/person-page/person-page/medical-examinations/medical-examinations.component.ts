@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {OnInit, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {Document} from '../../../../data/remote/model/file/document/document';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -9,7 +9,6 @@ import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scro
 import {PersonService} from '../../../person/person-page/service/person.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
-import {MedicalExaminationViewModel} from '../../../../data/local/view-model/person/medical-examination-view-model';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {EditMedicalExaminationComponent} from '../../../../module/person/edit-medical-examination/edit-medical-examination/edit-medical-examination.component';
@@ -45,7 +44,7 @@ export class MedicalExaminationsComponent implements OnInit {
     await this.showModal(new MedicalExamination());
   };
 
-  public onEdit = async (e: any, parameter: MedicalExaminationViewModel) => {
+  public onEdit = async (e: any, parameter: any) => {
     await this.showModal(parameter.data);
   };
 
