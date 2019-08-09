@@ -18,7 +18,9 @@ import {TranslateService} from '@ngx-translate/core';
 import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
 import {TextField} from '../../../module/common/item-detail/model/text-field';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ParameterWindowService {
 
   constructor(private _ngxModalService: NgxModalService,

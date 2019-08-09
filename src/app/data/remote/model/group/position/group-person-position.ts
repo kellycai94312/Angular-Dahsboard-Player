@@ -1,8 +1,13 @@
 import {IdentifiedObject} from '../../../base/identified-object';
-import {Position} from '../../../model/person-position/position';
+import {Position} from '../../person-position/position';
 import {GroupPersonPositionStateEnum} from './group-person-position-state-enum';
+import {Type} from 'class-transformer';
 
 export class GroupPersonPosition extends IdentifiedObject {
-  position: Position;
-  state: GroupPersonPositionStateEnum;
+
+  @Type(() => Position)
+  public position: Position;
+
+  public state?: GroupPersonPositionStateEnum;
+
 }

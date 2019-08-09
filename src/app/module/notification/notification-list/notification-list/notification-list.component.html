@@ -1,0 +1,6 @@
+<ngx-virtual-scroll class="list-group-flush"
+                    [getItems]="fetchItems">
+  <ng-template let-item>
+    <app-notification-item [data]="item"></app-notification-item>
+  </ng-template>
+</ngx-virtual-scroll>

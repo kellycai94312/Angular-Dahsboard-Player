@@ -26,7 +26,9 @@ import {Application} from '../../../data/remote/model/application/application';
 import {ApplicationItemComponent} from '../../../module/application/application-item/application-item/application-item.component';
 import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DeviceWindowService {
 
   constructor(private _ngxModalService: NgxModalService,

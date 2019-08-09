@@ -64,10 +64,10 @@ export class AppComponent implements OnInit, OnDestroy {
           this._layoutService.toggleLayout(val.url);
         }
       });
-    this._notificationService.handleNotification
+    this._notificationService.notification$
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(x => {
-        this._toastrService.info(x.body, null, {
+      .subscribe(value => {
+        this._toastrService.info(this._notificationService.getNotificationContent(value.notification), null, {
           enableHtml: true,
           tapToDismiss: false
         });

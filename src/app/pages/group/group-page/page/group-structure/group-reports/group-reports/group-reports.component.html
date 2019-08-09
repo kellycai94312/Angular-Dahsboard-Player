@@ -3,16 +3,10 @@
      class="content">
   <div fxFlex="30"
        fxLayout="column">
-    <ngx-select [data]="clusterNgxSelect"></ngx-select>
-    <ngx-tree *ngIf="dataSource"
-              [nodeConfigurations]="nodeConfigurations"
-              [dataSource]="dataSource"
-              (selectedNodeChange)="onSelectedNode($event)">
-      <ng-template #nodeTemplate
-                   let-item>
-        <pre>{{item.data.name}}</pre>
-      </ng-template>
-    </ngx-tree>
+    <app-group-tree *ngIf="group"
+                    [group]="group"
+                    (groupClusterChange)="onGroupClusterChange($event)"
+                    (selectedNodeChange)="onSelectedNode($event)"></app-group-tree>
   </div>
   <div *ngIf="selectedNode"
        fxFlex="grow"

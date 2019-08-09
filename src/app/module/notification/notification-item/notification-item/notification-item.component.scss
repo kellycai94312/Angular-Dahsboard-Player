@@ -1,0 +1,17 @@
+.date {
+  font-size: 12px;
+  color: rgba(0, 0, 0, .54);
+}
+
+.link {
+  color: #007bff !important;
+  cursor: pointer;
+
+  &:hover {
+    color: rgba(51, 122, 183, .4) !important;
+  }
+
+  &:focus {
+    color: #337ab7 !important;
+  }
+}

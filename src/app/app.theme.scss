@@ -115,7 +115,6 @@ $typography: mat-typography-config(
 @import "src/app/main/pages/knowledge-base/knowledge-base.theme";
 
 
-@import "src/app/main/angular-material-elements/example-viewer/example-viewer.theme";
 
 // Define a mixin for easier access
 @mixin components-theme($theme) {
@@ -158,9 +157,6 @@ $typography: mat-typography-config(
     @include search-modern-theme($theme);
     @include faq-theme($theme);
     @include knowledge-base-theme($theme);
-
-    // Example Viewer
-    @include example-viewer-theme($theme);
 }
 
 // -----------------------------------------------------------------------------------------------------

@@ -8,7 +8,9 @@ import {ItemDetailComponent} from '../../../module/common/item-detail/item-detai
 import {TextField} from '../../../module/common/item-detail/model/text-field';
 import {TranslateService} from '@ngx-translate/core';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UnitWindowService {
 
   constructor(private _ngxModalService: NgxModalService,
