@@ -9,12 +9,10 @@ import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subg
 import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
 import {ObjectWrapper} from '../../../../../../../../data/local/object-wrapper';
 import {SubgroupGroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {GroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/group-person-query';
 import {NgxGridComponent} from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
 import {PersonModalConfig, TemplateModalService} from '../../../../../../../../service/template-modal.service';
 import {Person} from '../../../../../../../../data/remote/model/person';
-import {PageQuery} from '../../../../../../../../data/remote/rest-api/page-query';
 import {SubgroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
 import {SubgroupPersonTypeEnum} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
 import {SubgroupModalService} from '../../../service/subgroup-modal.service';
@@ -66,8 +64,6 @@ export class StructureSubgroupsPageComponent implements OnInit {
   public secondaryPersonType: SubgroupTemplatePersonType;
   public leadSubgroupPerson: SubgroupPerson;
   public secondarySubgroupPerson: SubgroupPerson;
-  public visiblePersons: boolean;
-
   private _notDestroyed = true;
   private _canEdit = false;
   private _rootSubgroupName: string;
@@ -108,7 +104,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
       translation: 'createEvent', action: async item => {
         const eventData = new EventData();
         eventData.group = this.group;
-        eventData.participants = (await this.fetchItems({count: PropertyConstant.pageSizeMax})).list.map((x: ObjectWrapper) => x.data);
+        // eventData.participants = (await this.fetchItems({count: PropertyConstant.pageSizeMax})).list.map((x: ObjectWrapper) => x.data);
         eventData.heads = [];
         if (this.leadSubgroupPerson) {
           eventData.heads.push(this.leadSubgroupPerson.person);
@@ -188,43 +184,6 @@ export class StructureSubgroupsPageComponent implements OnInit {
     this.selectedNode = node;
     await this.resetItems();
   }
-
-  public fetchItems = async (query: PageQuery): Promise<PageContainer<ObjectWrapper>> => {
-    if (this.selectedNode) {
-      const config = this.getPersonModalConfig();
-      if (config.subgroupGroup) {
-        this.visiblePersons = true;
-
-        const subgroupPersonQuery = query as SubgroupPersonQuery;
-        subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
-        const pageContainer = await this._subgroupGroupApiService.getSubgroupPersons(config.subgroupGroup, subgroupPersonQuery).toPromise();
-
-        return await this._appHelper.pageContainerConverter(pageContainer, obj => {
-          return new ObjectWrapper(obj, obj.person);
-        });
-      } else if (this.selectedNode.data instanceof Group) {
-        this.visiblePersons = true;
-
-        const groupPersonQuery = query as GroupPersonQuery;
-        groupPersonQuery.id = this.group.id;
-        const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(groupPersonQuery);
-
-        return await this._appHelper.pageContainerConverter(pageContainer, obj => {
-          return new ObjectWrapper(obj, obj.person);
-        });
-      }
-    }
-    this.visiblePersons = false;
-    return;
-  };
-
-  public onEdit = async (obj: ObjectWrapper) => {
-    await this.openEditPersonWindow(obj.data, this.getPersonModalConfig());
-  };
-
-  public onAdd = async (obj: ObjectWrapper) => {
-    await this.openEditPersonWindow(new Person(), {group: this.group});
-  };
 
   public onSelectedItemsChange(selectedItems: ObjectWrapper[]) {
     this.selectedItems = selectedItems;
@@ -313,12 +272,6 @@ export class StructureSubgroupsPageComponent implements OnInit {
     }
   };
 
-  private async openEditPersonWindow(person: Person, personModalConfig: PersonModalConfig) {
-    await this._templateModalService.openEditPersonWindow(person, this.group, {componentFactoryResolver: this._componentFactoryResolver});
-    // TODO: Update only edited item
-    await this.resetItems();
-  }
-
   private async resetItems() {
     delete this.leadPersonType;
     delete this.secondaryPersonType;
@@ -354,7 +307,7 @@ export class StructureSubgroupsPageComponent implements OnInit {
     }
   }
 
-  private getPersonModalConfig(): PersonModalConfig {
+  public getPersonModalConfig(): PersonModalConfig {
     if (!this.selectedNode) {
       return {group: this.group};
     }

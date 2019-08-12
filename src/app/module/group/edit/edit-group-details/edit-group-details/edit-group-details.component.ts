@@ -31,6 +31,7 @@ export class EditGroupDetailsComponent implements OnInit {
   public kppNgxInput: NgxInput;
   public oktmoNgxInput: NgxInput;
   public recipientNgxInput: NgxInput;
+  public recipientPersonalAccountNgxInput: NgxInput;
   public bankFacilityNgxInput: NgxInput;
   public accountNgxInput: NgxInput;
   public bikNgxInput: NgxInput;
@@ -67,6 +68,7 @@ export class EditGroupDetailsComponent implements OnInit {
     this.kppNgxInput = this._getNgxInput('kpp', group.kpp);
     this.oktmoNgxInput = this._getNgxInput('oktmo', group.oktmo);
     this.recipientNgxInput = this._getNgxInput('recipient', group.recipient);
+    this.recipientPersonalAccountNgxInput = this._getNgxInput('editGroupDetails.recipientPersonalAccount', group.recipientPersonalAccount);
     this.bankFacilityNgxInput = this._getNgxInput('bankFacility', group.bankFacility);
     this.accountNgxInput = this._getNgxInput('editGroupDetails.account', group.account);
     this.bikNgxInput = this._getNgxInput('bik', group.bik);
@@ -88,6 +90,7 @@ export class EditGroupDetailsComponent implements OnInit {
     this.group.kpp = this.kppNgxInput.control.value;
     this.group.oktmo = this.oktmoNgxInput.control.value;
     this.group.recipient = this.recipientNgxInput.control.value;
+    this.group.recipientPersonalAccount = this.recipientPersonalAccountNgxInput.control.value;
     this.group.bankFacility = this.bankFacilityNgxInput.control.value;
     this.group.account = this.accountNgxInput.control.value;
     this.group.bik = this.bikNgxInput.control.value;

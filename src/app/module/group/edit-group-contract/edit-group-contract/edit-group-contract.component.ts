@@ -42,6 +42,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
   public classesPerMonthNgxInput: NgxInput;
   public classesPerWeekNgxInput: NgxInput;
   public classDurationNgxInput: NgxInput;
+  public childPersonalAccountNgxInput: NgxInput;
 
   public registrationAddressNgxInput: NgxInput;
 
@@ -76,6 +77,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     this.classesPerMonthNgxInput = this._getNgxInput('groupContractService.classesPerMonth', groupContractService.classesPerMonth, true, true);
     this.classesPerWeekNgxInput = this._getNgxInput('groupContractService.classesPerWeek', groupContractService.classesPerWeek, true, true);
     this.classDurationNgxInput = this._getNgxInput('groupContractService.classDuration', groupContractService.classDuration, true, true);
+    this.childPersonalAccountNgxInput = this._getNgxInput('groupContractService.childPersonalAccount', groupContractService.childPersonalAccount, true);
     this.registrationAddressNgxInput = this._getNgxInput('groupContractService.registrationAddress', groupContractService.registrationAddress, true);
 
     return true;
@@ -98,6 +100,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
       groupContractService.classesPerMonth = this.classesPerMonthNgxInput.control.value;
       groupContractService.classesPerWeek = this.classesPerWeekNgxInput.control.value;
       groupContractService.classDuration = this.classDurationNgxInput.control.value;
+      groupContractService.childPersonalAccount = this.childPersonalAccountNgxInput.control.value;
       groupContractService.registrationAddress = this.registrationAddressNgxInput.control.value;
 
       this.data = await this._groupApiService.saveGroupContract(this.data, this.group, this.person).toPromise();

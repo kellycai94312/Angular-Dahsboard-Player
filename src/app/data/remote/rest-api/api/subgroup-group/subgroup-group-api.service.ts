@@ -10,6 +10,9 @@ import {SubgroupPersonListRequest} from '../../../request/subgroup-person-list-r
 import {SubgroupPersonRequest} from '../../../request/subgroup-person-request';
 import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
+import {UtilService} from '../../../../../services/util/util.service';
+import {Person} from '../../../model/person';
+import {AppHelper} from '../../../../../utils/app-helper';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +21,9 @@ export class SubgroupGroupApiService {
 
   private readonly _basePath = `${environment.restUrl}/subgroupGroup`;
 
-  constructor(private _apiService: ApiService) {
+  constructor(private _apiService: ApiService,
+              private _utilService: UtilService,
+              private _appHelper: AppHelper) {
   }
 
   public getSubgroupPersons(subgroupGroup: SubgroupGroup, query: SubgroupPersonQuery): Observable<PageContainer<SubgroupPerson>> {
@@ -35,6 +40,14 @@ export class SubgroupGroupApiService {
 
   public removeSubgroupPersons(subgroupGroup: SubgroupGroup, values: SubgroupPerson[]): Observable<SubgroupPerson[]> {
     return this._apiService.removeValue(SubgroupPerson, `${this._basePath}/${subgroupGroup.id}/person`, null, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<SubgroupPerson[]>;
+  }
+
+  public getSubgroupGroupReceiptReport(subgroupGroup: SubgroupGroup,
+                                       persons: Person[],
+                                       kosgu: string,
+                                       date: Date): string {
+    const query = {personIds: persons.map(x => x.id).join('_'), kosgu, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
+    return `${this._basePath}/${subgroupGroup.id}/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
   }
 
 }

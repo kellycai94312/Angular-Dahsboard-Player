@@ -1,0 +1,15 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <new-ngx-input [data]="kosguNgxInput"></new-ngx-input>
+  <ngx-date [data]="dateNgxDate"></ngx-date>
+  <app-subgroup-person-list [subgroupGroup]="subgroupGroup"
+                            (selectedItemsChange)="onSelectedItemsChange($event)"></app-subgroup-person-list>
+  <div>
+    <button mat-raised-button
+            color="primary"
+            [disabled]="formGroup?.invalid"
+            (click)="onGetReport()">
+      {{'report' | translate}}
+    </button>
+  </div>
+</div>

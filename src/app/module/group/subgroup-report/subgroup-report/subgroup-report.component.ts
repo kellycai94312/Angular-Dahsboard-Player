@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, OnInit} from '@angular/core';
 import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {PositionLevelEnum} from '../../../../data/remote/model/person-position/position-level-enum';
@@ -22,6 +22,8 @@ import {SubgroupTemplateGroupVersionQuery} from '../../../../data/remote/rest-ap
 import {RootSubgroupGroup} from '../../../../pages/group/group-page/page/subgroups-page/page/structure-subgroups-page/model/root-subgroup-group';
 import {from} from 'rxjs';
 import {SubgroupVersion} from '../../../../data/remote/model/group/subgroup/version/subgroup-version';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {SubgroupGroupReceiptComponent} from '../../subgroup-group-receipt/subgroup-group-receipt/subgroup-group-receipt.component';
 
 @Component({
   selector: 'app-subgroup-report',
@@ -53,6 +55,8 @@ export class SubgroupReportComponent implements OnInit {
 
   constructor(private _translateObjectService: TranslateObjectService,
               private _participantRestApiService: ParticipantRestApiService,
+              private _ngxModalService: NgxModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupTemplateApiService: SubgroupTemplateApiService,
               private _subgroupTemplateGroupApiService: SubgroupTemplateGroupApiService,
               private _subgroupTemplateGroupVersionApiService: SubgroupTemplateGroupVersionApiService,
@@ -80,8 +84,15 @@ export class SubgroupReportComponent implements OnInit {
     };
   }
 
-  public get isSubgroupGroup(): boolean {
-    return this.selectedNode && (this.selectedNode.data instanceof SubgroupGroup || this.selectedNode.data instanceof RootSubgroupGroup);
+  public get subgroupGroup(): SubgroupGroup {
+    if (this.selectedNode) {
+      if (this.selectedNode.data instanceof SubgroupGroup) {
+        return this.selectedNode.data;
+      } else if (this.selectedNode.data instanceof RootSubgroupGroup) {
+        return this.selectedNode.data.defaultSubgroupGroup;
+      }
+    }
+    return void 0;
   }
 
   public async ngOnInit(): Promise<void> {
@@ -181,6 +192,14 @@ export class SubgroupReportComponent implements OnInit {
     const query: any = this.query;
     query.byName = this.byName;
     window.open(this._subgroupTemplateGroupVersionApiService.getSubgroupTemplateGroupVersionReport(this.subgroupTemplateGroupVersion, query), '_blank');
+  }
+
+  public async onGetSubgroupGroupReceipt(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'report';
+    await modal.componentInstance.initializeBody(SubgroupGroupReceiptComponent, async component => {
+      component.subgroupGroup = this.subgroupGroup;
+    }, {componentFactoryResolver: this._componentFactoryResolver});
   }
 
   public getNodeName(node: FlatNode): string {

@@ -31,6 +31,7 @@ export class Group extends NamedObject {
   public kpp?: string;
   public oktmo?: string;
   public recipient?: string;
+  public recipientPersonalAccount?: string;
   public bankFacility?: string;
   public account?: string;
   public bik?: string;

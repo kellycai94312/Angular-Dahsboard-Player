@@ -4,10 +4,9 @@ import {StructureSubgroupsPageRoutingModule} from './structure-subgroups-page-ro
 import {StructureSubgroupsPageComponent} from './structure-subgroups-page/structure-subgroups-page.component';
 import {SubgroupsTreesModule} from '../../../../../../../module/group/subgroups-trees/subgroups-trees.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {NgxGridModule} from '../../../../../../../components/ngx-grid/ngx-grid.module';
-import {NgxModalModule} from '../../../../../../../components/ngx-modal/ngx-modal.module';
 import {NgxSplitButtonModule} from '../../../../../../../components/ngx-split-button/ngx-split-button.module';
 import {SubgroupReportModule} from '../../../../../../../module/group/subgroup-report/subgroup-report.module';
+import {SubgroupPersonListModule} from '../../../../../../../module/group/subgroup-person-list/subgroup-person-list.module';
 
 @NgModule({
   declarations: [StructureSubgroupsPageComponent],
@@ -16,10 +15,9 @@ import {SubgroupReportModule} from '../../../../../../../module/group/subgroup-r
     StructureSubgroupsPageRoutingModule,
     SubgroupsTreesModule,
     FlexLayoutModule,
-    NgxGridModule,
-    NgxModalModule,
     NgxSplitButtonModule,
-    SubgroupReportModule
+    SubgroupReportModule,
+    SubgroupPersonListModule
   ]
 })
 export class StructureSubgroupsPageModule {

@@ -740,7 +740,8 @@
     "classDuration": "Продолжительность занятий в минутах",
     "registrationAddress": "Адрес регистрации",
     "section": "Секция",
-    "head": "Руководитель"
+    "head": "Руководитель",
+    "childPersonalAccount": "Л/с ребенка"
   },
   "personRepresentative": "Законный представитель",
   "groupDetails": "Group details",
@@ -758,7 +759,8 @@
   "bik": "БИК",
   "kbk": "КБК",
   "editGroupDetails": {
-    "account": "Счет получателя"
+    "account": "Счет получателя",
+    "recipientPersonalAccount": "л/c"
   },
   "subgroupPersonTypeEnum": {
     "PARTICIPANT": "Участник",
@@ -817,5 +819,6 @@
   "groupPersonPositionStateEnum": {
     "ADDED": "Добавлен",
     "DELETED": "Удален"
-  }
+  },
+  "kosgu": "КОСГУ"
 }

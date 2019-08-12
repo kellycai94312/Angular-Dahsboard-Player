@@ -8,6 +8,8 @@ import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {FormsModule} from '@angular/forms';
 import {NgxTreeModule} from '../../ngx/ngx-tree/ngx-tree.module';
+import {SubgroupGroupReceiptModule} from '../subgroup-group-receipt/subgroup-group-receipt.module';
+import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
 
 @NgModule({
   declarations: [SubgroupReportComponent],
@@ -23,7 +25,9 @@ import {NgxTreeModule} from '../../ngx/ngx-tree/ngx-tree.module';
     TranslateModule.forChild(),
     NgxGridModule,
     NgxSelectModule,
-    NgxTreeModule
+    NgxTreeModule,
+    NgxModalModule,
+    SubgroupGroupReceiptModule
   ]
 })
 export class SubgroupReportModule {
