@@ -4,26 +4,37 @@
       {{'participants' | translate}}
     </mat-expansion-panel-header>
 
-    <ngx-grid [autoInit]="true"
-              [fetchItems]="fetchParticipants"
-              [selectionType]="selectionTypeClass.MULTIPLE"
-              (selectedItemChange)="onSelectedItemChange($event)">
-      <ngx-column nameKey="lastName">
-        <ng-template let-item>
-          {{item.lastName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="firstName">
-        <ng-template let-item>
-          {{item.firstName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="patronymic">
-        <ng-template let-item>
-          {{item.patronymic}}
-        </ng-template>
-      </ngx-column>
-    </ngx-grid>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <div fxLayout="row"
+           fxLayoutGap="10px">
+        <button mat-raised-button
+                (click)="onSelectAll(eventPersonTypeEnumClass.PARTICIPANT, participantNgxGrid.items)">{{'selectAll' | translate}}</button>
+        <button mat-raised-button
+                (click)="onDeselectAll(eventPersonTypeEnumClass.PARTICIPANT, participantNgxGrid.items)">{{'deselectAll' | translate}}</button>
+      </div>
+      <ngx-grid #participantNgxGrid
+                [autoInit]="true"
+                [fetchItems]="fetchParticipants"
+                [selectionType]="selectionTypeClass.MULTIPLE"
+                (selectedItemChange)="onSelectedItemChange($event)">
+        <ngx-column nameKey="lastName">
+          <ng-template let-item>
+            {{item.lastName}}
+          </ng-template>
+        </ngx-column>
+        <ngx-column nameKey="firstName">
+          <ng-template let-item>
+            {{item.firstName}}
+          </ng-template>
+        </ngx-column>
+        <ngx-column nameKey="patronymic">
+          <ng-template let-item>
+            {{item.patronymic}}
+          </ng-template>
+        </ngx-column>
+      </ngx-grid>
+    </div>
   </mat-expansion-panel>
 
   <mat-expansion-panel>
@@ -31,25 +42,36 @@
       {{'heads' | translate}}
     </mat-expansion-panel-header>
 
-    <ngx-grid [autoInit]="true"
-              [fetchItems]="fetchHeads"
-              [selectionType]="selectionTypeClass.MULTIPLE"
-              (selectedItemChange)="onSelectedItemChange($event)">
-      <ngx-column nameKey="lastName">
-        <ng-template let-item>
-          {{item.lastName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="firstName">
-        <ng-template let-item>
-          {{item.firstName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="patronymic">
-        <ng-template let-item>
-          {{item.patronymic}}
-        </ng-template>
-      </ngx-column>
-    </ngx-grid>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <div fxLayout="row"
+           fxLayoutGap="10px">
+        <button mat-raised-button
+                (click)="onSelectAll(eventPersonTypeEnumClass.HEAD, headNgxGrid.items)">{{'selectAll' | translate}}</button>
+        <button mat-raised-button
+                (click)="onDeselectAll(eventPersonTypeEnumClass.HEAD, headNgxGrid.items)">{{'deselectAll' | translate}}</button>
+      </div>
+      <ngx-grid #headNgxGrid
+                [autoInit]="true"
+                [fetchItems]="fetchHeads"
+                [selectionType]="selectionTypeClass.MULTIPLE"
+                (selectedItemChange)="onSelectedItemChange($event)">
+        <ngx-column nameKey="lastName">
+          <ng-template let-item>
+            {{item.lastName}}
+          </ng-template>
+        </ngx-column>
+        <ngx-column nameKey="firstName">
+          <ng-template let-item>
+            {{item.firstName}}
+          </ng-template>
+        </ngx-column>
+        <ngx-column nameKey="patronymic">
+          <ng-template let-item>
+            {{item.patronymic}}
+          </ng-template>
+        </ngx-column>
+      </ngx-grid>
+    </div>
   </mat-expansion-panel>
 </mat-accordion>

@@ -127,6 +127,16 @@ export class BaseEventApiService {
     return this._apiService.updateValue(EventPerson, `${this._basePath}/${event.id}/person/${person.id}/absent`, value) as Observable<EventPerson>;
   }
 
+  public setEventPersonsAbsent(event: BaseEvent,
+                               eventPersonTypeEnum: EventPersonTypeEnum): Observable<EventPerson[]> {
+    return this._apiService.createValue(EventPerson, `${this._basePath}/${event.id}/person/absent`, {value: eventPersonTypeEnum}) as Observable<EventPerson[]>;
+  }
+
+  public unsetEventPersonsAbsent(event: BaseEvent,
+                                 eventPersonTypeEnum: EventPersonTypeEnum): Observable<EventPerson[]> {
+    return this._apiService.removeValue(EventPerson, `${this._basePath}/${event.id}/person/absent`, void 0, {value: eventPersonTypeEnum}) as Observable<EventPerson[]>;
+  }
+
   //#endregion
 
 }

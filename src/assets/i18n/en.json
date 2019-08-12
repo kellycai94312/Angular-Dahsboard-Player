@@ -821,5 +821,8 @@
   },
   "kosgu": "KOSGU",
   "receipt": "Receipt",
-  "attendance": "Attendance"
+  "attendance": "Attendance",
+  "absent": "Absent",
+  "selectAll": "Select all",
+  "deselectAll": "Deselect all"
 }

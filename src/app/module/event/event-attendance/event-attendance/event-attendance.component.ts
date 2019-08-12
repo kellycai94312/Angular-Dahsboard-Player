@@ -18,6 +18,7 @@ export class EventAttendanceComponent {
   public event: BaseEvent;
 
   public readonly selectionTypeClass = SelectionType;
+  public readonly eventPersonTypeEnumClass = EventPersonTypeEnum;
   public isBusyPersonParticipants: boolean;
   public isBusyPersonHeads: boolean;
 
@@ -26,9 +27,25 @@ export class EventAttendanceComponent {
   }
 
   public onSelectedItemChange(item: { value: Person, selected: boolean }): void {
-    this._baseEventApiService.updateEventPersonAbsent(this.event, item.value, {value: item.selected}).subscribe(value => {
-      value.person['selected'] = value.absent;
+    this._baseEventApiService.updateEventPersonAbsent(this.event, item.value, {value: !item.selected}).subscribe(value => {
+      value.person['selected'] = !value.absent;
       Object.assign(item.value, value.person);
+    });
+  }
+
+  public onSelectAll(eventPersonTypeEnum: EventPersonTypeEnum, items: Person[]): void {
+    this._baseEventApiService.unsetEventPersonsAbsent(this.event, eventPersonTypeEnum).subscribe(() => {
+      items.forEach(value => {
+        value['selected'] = true;
+      });
+    });
+  }
+
+  public onDeselectAll(eventPersonTypeEnum: EventPersonTypeEnum, items: Person[]): void {
+    this._baseEventApiService.setEventPersonsAbsent(this.event, eventPersonTypeEnum).subscribe(() => {
+      items.forEach(value => {
+        delete value['selected'];
+      });
     });
   }
 
@@ -37,7 +54,7 @@ export class EventAttendanceComponent {
     query.unassigned = false;
     query.eventPersonTypeEnum = EventPersonTypeEnum.HEAD;
     const pageContainer = await this._appHelper.pageContainerConverter(await this._baseEventApiService.getEventPersons(this.event, query).toPromise(), obj => {
-      if (obj.absent) {
+      if (!obj.absent) {
         obj.person['selected'] = true;
       }
       return obj.person;
@@ -52,7 +69,7 @@ export class EventAttendanceComponent {
     query.unassigned = false;
     query.eventPersonTypeEnum = EventPersonTypeEnum.PARTICIPANT;
     const pageContainer = await this._appHelper.pageContainerConverter(await this._baseEventApiService.getEventPersons(this.event, query).toPromise(), obj => {
-      if (obj.absent) {
+      if (!obj.absent) {
         obj.person['selected'] = true;
       }
       return obj.person;

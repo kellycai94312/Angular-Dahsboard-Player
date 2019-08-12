@@ -404,6 +404,7 @@ export class TemplateModalService {
             {
               nameKey: 'attendance',
               callback: async data => {
+                await component.onSave();
                 await component.showAttendanceWindow();
               }
             }
