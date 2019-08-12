@@ -20,6 +20,9 @@ export class GroupContractService extends BaseGroupContract {
   public section?: string;
   // Руководитель/специалист
   public head?: string;
+  // persAcc
+  // л/с ребенка
+  public childPersonalAccount?: string;
 
   constructor() {
     super();

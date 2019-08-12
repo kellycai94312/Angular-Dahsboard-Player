@@ -1,0 +1,23 @@
+<ngx-grid [autoInit]="true"
+          [fetchItems]="fetchItems"
+          [edit]="onEdit"
+          [add]="onAdd"
+          [selectionType]="selectionTypeClass.MULTIPLE"
+          [canEdit]="canEdit"
+          (selectedItemsChange)="selectedItemsChange.emit($event)">
+  <ngx-column nameKey="lastName">
+    <ng-template let-item>
+      {{item.data.lastName}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="firstName">
+    <ng-template let-item>
+      {{item.data.firstName}}
+    </ng-template>
+  </ngx-column>
+  <ngx-column nameKey="patronymic">
+    <ng-template let-item>
+      {{item.data.patronymic}}
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

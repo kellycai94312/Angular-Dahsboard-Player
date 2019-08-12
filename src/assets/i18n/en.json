@@ -739,7 +739,8 @@
     "classDuration": "Classes duration in minutes",
     "registrationAddress": "Registration address",
     "section": "Section",
-    "head": "Head"
+    "head": "Head",
+    "childPersonalAccount": "P/a child"
   },
   "personRepresentative": "Person representative",
   "groupDetails": "Group details",
@@ -757,7 +758,8 @@
   "bik": "BIK",
   "kbk": "KBK",
   "editGroupDetails": {
-    "account": "Account"
+    "account": "Account",
+    "recipientPersonalAccount": "p/a"
   },
   "subgroupPersonTypeEnum": {
     "PARTICIPANT": "Participant",
@@ -816,5 +818,7 @@
   "groupPersonPositionStateEnum": {
     "ADDED": "Added",
     "DELETED": "Deleted"
-  }
+  },
+  "kosgu": "KOSGU",
+  "receipt": "Квитанция"
 }

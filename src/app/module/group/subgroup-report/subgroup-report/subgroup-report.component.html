@@ -24,13 +24,17 @@
       <mat-checkbox [(ngModel)]="byName">{{'byName' | translate}}</mat-checkbox>
       <div>
         <button mat-raised-button
-                [disabled]="!isSubgroupGroup"
+                [disabled]="!subgroupGroup"
                 (click)="onApply()">{{'apply' | translate}}</button>
       </div>
       <button mat-icon-button
-              [disabled]="!(positionNgxSelect?.control?.value && isSubgroupGroup)"
+              [disabled]="!(positionNgxSelect?.control?.value && subgroupGroup)"
               (click)="onGetReport()">
         <mat-icon>get_app</mat-icon>
+      </button>
+      <button mat-icon-button
+              [matMenuTriggerFor]="reportMenu">
+        <mat-icon>more_vert</mat-icon>
       </button>
     </div>
     <div>
@@ -57,3 +61,9 @@
     </div>
   </div>
 </div>
+
+<mat-menu #reportMenu="matMenu">
+  <button mat-menu-item
+          [disabled]="!subgroupGroup"
+          (click)="onGetSubgroupGroupReceipt()">{{'receipt' | translate}}</button>
+</mat-menu>

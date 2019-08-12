@@ -6,53 +6,18 @@
                        [getNodeContextMenuItem]="onGetNodeContextMenuItem"
                        (selectedNodeChange)="onSelectedNodeChange($event)"></app-subgroups-trees>
   <div *ngIf="selectedNode"
-       [hidden]="!visiblePersons"
-       fxFlex>
+       fxFlex
+       fxLayout="column"
+       fxLayoutGap="10px">
     <p *ngIf="leadSubgroupPerson"> {{leadPersonType?.name}}
       : {{leadSubgroupPerson.person.lastName + ' ' + leadSubgroupPerson.person.firstName}}</p>
     <p *ngIf="secondarySubgroupPerson"> {{secondaryPersonType?.name}}
       : {{secondarySubgroupPerson.person.lastName + ' ' + secondarySubgroupPerson.person.firstName}}</p>
-    <ngx-split-button class="mb-2"
-                      [items]="splitButtonItems"></ngx-split-button>
-    <ngx-grid [fetchItems]="fetchItems"
-              [edit]="onEdit"
-              [add]="onAdd"
-              [selectionType]="selectionTypeClass.MULTIPLE"
-              [canEdit]="canEdit"
-              (selectedItemsChange)="onSelectedItemsChange($event)">
-      <ngx-column nameKey="lastName">
-        <ng-template let-item>
-          {{item.data.lastName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="firstName">
-        <ng-template let-item>
-          {{item.data.firstName}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column nameKey="patronymic">
-        <ng-template let-item>
-          {{item.data.patronymic}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column *ngIf="subgroupPersonInterface?.showBirthYear"
-                  nameKey="birthDate">
-        <ng-template let-item>
-          {{item.data.birthDate | date: propertyConstantClass.dateFormat}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column *ngIf="subgroupPersonInterface?.showRank"
-                  nameKey="rank">
-        <ng-template let-item>
-          {{item.original.personRank?.rank?.name}}
-        </ng-template>
-      </ngx-column>
-      <ngx-column *ngIf="subgroupPersonInterface?.showStageType"
-                  nameKey="stageType">
-        <ng-template let-item>
-          {{item.original.stageType?.name}}
-        </ng-template>
-      </ngx-column>
-    </ngx-grid>
+
+    <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
+    <app-subgroup-person-list [group]="group"
+                              [canEdit]="canEdit"
+                              [subgroupGroup]="getPersonModalConfig()?.subgroupGroup"
+                              (selectedItemsChange)="onSelectedItemsChange($event)"></app-subgroup-person-list>
   </div>
 </div>
