@@ -820,5 +820,6 @@
     "DELETED": "Deleted"
   },
   "kosgu": "KOSGU",
-  "receipt": "Квитанция"
+  "receipt": "Receipt",
+  "attendance": "Attendance"
 }

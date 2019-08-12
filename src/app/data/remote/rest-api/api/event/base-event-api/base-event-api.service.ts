@@ -19,6 +19,7 @@ import {EventPersonType} from '../../../../model/event/person/event-person-type'
 import {IdRequest} from '../../../../request/id-request';
 import {Person} from '../../../../model/person';
 import {EventPersonTypeEnum} from '../../../../model/event/person/event-person-type-enum';
+import {BooleanWrapper} from '../../../../bean/wrapper/boolean-wrapper';
 
 @Injectable()
 export class BaseEventApiService {
@@ -89,7 +90,7 @@ export class BaseEventApiService {
 
   //#endregion
 
-  //#region
+  //#region Person
 
   public getEventPersons(event: BaseEvent,
                          query: EventPersonQuery): Observable<PageContainer<EventPerson>> {
@@ -118,6 +119,12 @@ export class BaseEventApiService {
       this._apiService.getHttpParamsFromObject({eventPersonTypeEnum: query.eventPersonTypeEnum})).pipe(
       map(x => plainToClass(EventPersonType, x) as any)
     );
+  }
+
+  public updateEventPersonAbsent(event: BaseEvent,
+                                 person: Person,
+                                 value: BooleanWrapper): Observable<EventPerson> {
+    return this._apiService.updateValue(EventPerson, `${this._basePath}/${event.id}/person/${person.id}/absent`, value) as Observable<EventPerson>;
   }
 
   //#endregion

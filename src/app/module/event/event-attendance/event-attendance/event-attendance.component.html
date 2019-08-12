@@ -1,0 +1,55 @@
+<mat-accordion [multi]="true">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      {{'participants' | translate}}
+    </mat-expansion-panel-header>
+
+    <ngx-grid [autoInit]="true"
+              [fetchItems]="fetchParticipants"
+              [selectionType]="selectionTypeClass.MULTIPLE"
+              (selectedItemChange)="onSelectedItemChange($event)">
+      <ngx-column nameKey="lastName">
+        <ng-template let-item>
+          {{item.lastName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="firstName">
+        <ng-template let-item>
+          {{item.firstName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="patronymic">
+        <ng-template let-item>
+          {{item.patronymic}}
+        </ng-template>
+      </ngx-column>
+    </ngx-grid>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      {{'heads' | translate}}
+    </mat-expansion-panel-header>
+
+    <ngx-grid [autoInit]="true"
+              [fetchItems]="fetchHeads"
+              [selectionType]="selectionTypeClass.MULTIPLE"
+              (selectedItemChange)="onSelectedItemChange($event)">
+      <ngx-column nameKey="lastName">
+        <ng-template let-item>
+          {{item.lastName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="firstName">
+        <ng-template let-item>
+          {{item.firstName}}
+        </ng-template>
+      </ngx-column>
+      <ngx-column nameKey="patronymic">
+        <ng-template let-item>
+          {{item.patronymic}}
+        </ng-template>
+      </ngx-column>
+    </ngx-grid>
+  </mat-expansion-panel>
+</mat-accordion>

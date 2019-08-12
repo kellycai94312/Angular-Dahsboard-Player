@@ -5,11 +5,13 @@ import {Type} from 'class-transformer';
 
 export class EventPerson extends IdentifiedObject {
 
-  @Type(type => Person)
+  @Type(() => Person)
   public person: Person;
 
-  //#region Transient
+  public absent?: boolean;
+
+  //region Transient
   public positions?: Position[];
-  //#endregion
+  //endregion
 
 }

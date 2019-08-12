@@ -30,6 +30,9 @@ export class NgxModalComponent {
   public tempSplitButtonItems: SplitButtonItem[] = [];
 
   @Input()
+  public temp2SplitButtonItems: SplitButtonItem[] = [];
+
+  @Input()
   public splitButtonItems: SplitButtonItem[] = [];
 
   public bodyComponentType: Type<any>;

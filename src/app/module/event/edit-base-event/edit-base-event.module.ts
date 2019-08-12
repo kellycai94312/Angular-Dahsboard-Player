@@ -7,6 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {EditEventPersonsModule} from '../edit-event-persons/edit-event-persons.module';
 import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
+import {EventAttendanceModule} from '../event-attendance/event-attendance.module';
 
 @NgModule({
   declarations: [EditBaseEventComponent],
@@ -19,7 +20,8 @@ import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
     NgxDateModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
-    EditEventPersonsModule
+    EditEventPersonsModule,
+    EventAttendanceModule
   ]
 })
 export class EditBaseEventModule {
