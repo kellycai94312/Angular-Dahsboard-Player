@@ -462,7 +462,7 @@
   "language": "Язык",
   "eventStateEnum": {
     "DRAFT": "Черновик",
-    "PLAN": "План",
+    "READY": "Готово",
     "START": "Выполнение",
     "PAUSE": "Пауза",
     "RESUME": "Возобновлено",

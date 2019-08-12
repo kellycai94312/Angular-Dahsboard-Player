@@ -462,7 +462,7 @@
   "language": "Language",
   "eventStateEnum": {
     "DRAFT": "Draft",
-    "PLAN": "Plan",
+    "READY": "Ready",
     "START": "Start",
     "PAUSE": "Pause",
     "RESUME": "Resume",
