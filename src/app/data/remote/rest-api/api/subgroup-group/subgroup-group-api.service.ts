@@ -50,4 +50,13 @@ export class SubgroupGroupApiService {
     return `${this._basePath}/${subgroupGroup.id}/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
   }
 
+  public getSubgroupGroupAttendanceReport(subgroupGroup: SubgroupGroup,
+                                          headPerson: Person,
+                                          executorPerson: Person,
+                                          specialistPerson: Person,
+                                          date: Date): string {
+    const query = {headPersonId: headPerson.id, executorPersonId: executorPerson.id, specialistPersonId: specialistPerson.id, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
+    return `${this._basePath}/${subgroupGroup.id}/attendance?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
+  }
+
 }

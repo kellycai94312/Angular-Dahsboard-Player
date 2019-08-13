@@ -1,4 +1,4 @@
-import {Component, ComponentFactoryResolver, Input, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, OnDestroy, OnInit} from '@angular/core';
 import {EventType} from '../../../../data/remote/model/event/base/event-type';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
@@ -23,6 +23,8 @@ import {Person} from '../../../../data/remote/model/person';
 import {from} from 'rxjs';
 import {flatMap, last} from 'rxjs/operators';
 import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
+import {EventStateEnum} from '../../../../data/remote/model/event/base/event-state-enum';
+import {EventAttendanceComponent} from '../../event-attendance/event-attendance/event-attendance.component';
 
 @Component({
   selector: 'app-edit-base-event',
@@ -30,17 +32,19 @@ import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
   styleUrls: ['./edit-base-event.component.scss'],
   providers: [BaseEventApiService]
 })
-export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditComponent<T> implements OnInit {
+export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditComponent<T> implements OnInit, OnDestroy {
 
   @Input()
   public eventData: EventData;
 
   public readonly propertyConstantClass = PropertyConstant;
   public eventTypeNgxSelect: NgxSelect;
+  public eventStateTypeNgxSelect: NgxSelect;
   public nameNgxInput: NgxInput;
   public descriptionNgxInput: NgxInput;
   public startDateNgxDate: NgxDate;
   public endDateNgxDate: NgxDate;
+  public notDestroyed = true;
 
   constructor(private _baseEventApiService: BaseEventApiService,
               private _ngxModalService: NgxModalService,
@@ -49,6 +53,10 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+  }
+
+  public ngOnDestroy(): void {
+    delete this.notDestroyed;
   }
 
   protected async initializeComponent(data: T): Promise<boolean> {
@@ -60,7 +68,14 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
         this.eventTypeNgxSelect.display = 'name';
         this.eventTypeNgxSelect.required = true;
         this.eventTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<EventType>(EventType, 'EventTypeEnum');
-        this.eventTypeNgxSelect.control = new FormControl(this.eventTypeNgxSelect.items[0], [Validators.required]);
+        this.eventTypeNgxSelect.control = new FormControl(data.discriminator ? this.eventTypeNgxSelect.items.find(x => x.data === data.discriminator) : this.eventTypeNgxSelect.items[0], [Validators.required]);
+
+        this.eventStateTypeNgxSelect = new NgxSelect();
+        this.eventStateTypeNgxSelect.labelTranslation = 'eventState';
+        this.eventStateTypeNgxSelect.display = 'name';
+        this.eventStateTypeNgxSelect.required = true;
+        this.eventStateTypeNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<EventStateEnum>(EventStateEnum, 'EventStateEnum');
+        this.eventStateTypeNgxSelect.control = new FormControl(data.discriminator ? this.eventStateTypeNgxSelect.items.find(x => x.data === data.eventStateEnum) : this.eventStateTypeNgxSelect.items[0], [Validators.required]);
 
         this.nameNgxInput = new NgxInput();
         this.nameNgxInput.labelTranslation = 'name';
@@ -104,6 +119,7 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
 
   async onSave(): Promise<boolean> {
     this.data.discriminator = this.eventTypeNgxSelect.control.value.data;
+    this.data.eventStateEnum = this.eventStateTypeNgxSelect.control.value.data;
     this.data.name = this.nameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
     this.data.startDate = this.appHelper.getGmtDate(this.startDateNgxDate.control.value);
@@ -126,6 +142,14 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
       }, {componentFactoryResolver: this._componentFactoryResolver});
       return await this._ngxModalService.awaitModalResult(modal);
     }
+  }
+
+  public async showAttendanceWindow(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'attendance';
+    await modal.componentInstance.initializeBody(EventAttendanceComponent, async component => {
+      component.event = this.data;
+    });
   }
 
   private async preSave(): Promise<void> {

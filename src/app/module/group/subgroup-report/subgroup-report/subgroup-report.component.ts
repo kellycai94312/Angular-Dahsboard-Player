@@ -24,6 +24,7 @@ import {from} from 'rxjs';
 import {SubgroupVersion} from '../../../../data/remote/model/group/subgroup/version/subgroup-version';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 import {SubgroupGroupReceiptComponent} from '../../subgroup-group-receipt/subgroup-group-receipt/subgroup-group-receipt.component';
+import {SubgroupGroupAttendanceReportComponent} from '../../report/subgroup-group-attendance-report/subgroup-group-attendance-report/subgroup-group-attendance-report.component';
 
 @Component({
   selector: 'app-subgroup-report',
@@ -198,6 +199,14 @@ export class SubgroupReportComponent implements OnInit {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'report';
     await modal.componentInstance.initializeBody(SubgroupGroupReceiptComponent, async component => {
+      component.subgroupGroup = this.subgroupGroup;
+    }, {componentFactoryResolver: this._componentFactoryResolver});
+  }
+
+  public async onGetSubgroupGroupAttendanceReport(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'report';
+    await modal.componentInstance.initializeBody(SubgroupGroupAttendanceReportComponent, async component => {
       component.subgroupGroup = this.subgroupGroup;
     }, {componentFactoryResolver: this._componentFactoryResolver});
   }

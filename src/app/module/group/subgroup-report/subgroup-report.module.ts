@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import {NgxTreeModule} from '../../ngx/ngx-tree/ngx-tree.module';
 import {SubgroupGroupReceiptModule} from '../subgroup-group-receipt/subgroup-group-receipt.module';
 import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
+import {SubgroupGroupAttendanceReportModule} from '../report/subgroup-group-attendance-report/subgroup-group-attendance-report.module';
 
 @NgModule({
   declarations: [SubgroupReportComponent],
@@ -28,7 +29,8 @@ import {NgxModalModule} from '../../../components/ngx-modal/ngx-modal.module';
     NgxSelectModule,
     NgxTreeModule,
     NgxModalModule,
-    SubgroupGroupReceiptModule
+    SubgroupGroupReceiptModule,
+    SubgroupGroupAttendanceReportModule
   ]
 })
 export class SubgroupReportModule {

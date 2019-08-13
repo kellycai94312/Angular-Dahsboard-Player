@@ -47,7 +47,8 @@
               <div *ngFor="let position of item.positions">
                 <div><b>{{position.position.name}}</b></div>
                 <ng-container *ngIf="byName; else personCountTemplate">
-                  <span *ngFor="let person of position.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < position.persons.length) ? ', ' : ''}}</span>
+                  <span
+                    *ngFor="let person of position.persons; let i=index">{{person.lastName + ' ' + person.firstName }}{{((i + 1) < position.persons.length) ? ', ' : ''}}</span>
                 </ng-container>
                 <ng-template #personCountTemplate>
                   {{position.persons.length}}
@@ -66,4 +67,7 @@
   <button mat-menu-item
           [disabled]="!subgroupGroup"
           (click)="onGetSubgroupGroupReceipt()">{{'receipt' | translate}}</button>
+  <button mat-menu-item
+          [disabled]="!subgroupGroup"
+          (click)="onGetSubgroupGroupAttendanceReport()">{{'attendance' | translate}}</button>
 </mat-menu>

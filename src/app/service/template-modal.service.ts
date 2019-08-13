@@ -41,6 +41,9 @@ import {EditPersonComponent} from '../module/person/edit-person/edit-person/edit
 import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
 import {GroupApiService} from '../data/remote/rest-api/api/group/group-api.service';
 import {SubgroupPerson} from '../data/remote/model/group/subgroup/person/subgroup-person';
+import {EventStateEnum} from '../data/remote/model/event/base/event-state-enum';
+import {takeWhile} from 'rxjs/operators';
+import {NameWrapper} from '../data/local/name-wrapper';
 
 @Injectable({
   providedIn: 'root'
@@ -395,6 +398,28 @@ export class TemplateModalService {
       editBaseEventComponent.eventData = eventData;
       await component.initialize(this._appHelper.cloneObject(event));
 
+      const updateVisibilityAttendanceButton = (nameWrapper: NameWrapper<EventStateEnum>) => {
+        if (nameWrapper.data !== EventStateEnum.DRAFT && nameWrapper.data !== EventStateEnum.READY) {
+          modal.componentInstance.temp2SplitButtonItems = [
+            {
+              nameKey: 'attendance',
+              callback: async data => {
+                await component.onSave();
+                await component.showAttendanceWindow();
+              }
+            }
+          ];
+        } else {
+          modal.componentInstance.temp2SplitButtonItems = [];
+        }
+      };
+      editBaseEventComponent.eventStateTypeNgxSelect.control.valueChanges
+        .pipe(takeWhile(() => component.notDestroyed))
+        .subscribe((value) => {
+          updateVisibilityAttendanceButton(value);
+        });
+      updateVisibilityAttendanceButton(component.eventStateTypeNgxSelect.control.value);
+
       modal.componentInstance.removeSplitButtonItem = this._ngxModalService.removeSplitItemButton(async () => {
         if (await this.showConfirmModal('areYouSure')) {
           await this._ngxModalService.remove(modal, component);
@@ -408,6 +433,7 @@ export class TemplateModalService {
           }
         }
       ];
+
       modal.componentInstance.splitButtonItems = [
         this._ngxModalService.saveSplitItemButton(async () => {
           await this._ngxModalService.save(modal, component);

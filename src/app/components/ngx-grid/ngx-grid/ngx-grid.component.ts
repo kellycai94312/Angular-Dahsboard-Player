@@ -1,16 +1,5 @@
 import {merge as observableMerge} from 'rxjs';
-import {
-  AfterViewInit,
-  Component,
-  ContentChildren,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-  QueryList,
-  ViewEncapsulation
-} from '@angular/core';
+import {AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewEncapsulation} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -63,6 +52,9 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
 
   @Output()
   public selectedItemsChange: EventEmitter<any[]>;
+
+  @Output()
+  public readonly selectedItemChange = new EventEmitter<any>();
 
   @Output()
   public sortChange: EventEmitter<string>;
@@ -162,7 +154,8 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     }
   }
 
-  public onSelectOrDeselectItem(item: any) {
+  public onSelectOrDeselectItem(value: any) {
+    this.selectedItemChange.emit({value, selected: !!value['selected']});
     this.selectedItemsChange.emit(this.items.filter(x => x['selected']));
   }
 

@@ -462,7 +462,7 @@
   "language": "Язык",
   "eventStateEnum": {
     "DRAFT": "Черновик",
-    "PLAN": "План",
+    "READY": "Готово",
     "START": "Выполнение",
     "PAUSE": "Пауза",
     "RESUME": "Возобновлено",
@@ -821,5 +821,9 @@
     "DELETED": "Удален"
   },
   "kosgu": "КОСГУ",
-  "receipt": "Квитанция"
+  "receipt": "Квитанция",
+  "attendance": "Посещаемость",
+  "absent": "Отсутствует",
+  "selectAll": "Выделить все",
+  "deselectAll": "Убрать выделение"
 }

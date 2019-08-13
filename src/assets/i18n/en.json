@@ -462,7 +462,7 @@
   "language": "Language",
   "eventStateEnum": {
     "DRAFT": "Draft",
-    "PLAN": "Plan",
+    "READY": "Ready",
     "START": "Start",
     "PAUSE": "Pause",
     "RESUME": "Resume",
@@ -820,5 +820,9 @@
     "DELETED": "Deleted"
   },
   "kosgu": "KOSGU",
-  "receipt": "Квитанция"
+  "receipt": "Receipt",
+  "attendance": "Attendance",
+  "absent": "Absent",
+  "selectAll": "Select all",
+  "deselectAll": "Deselect all"
 }

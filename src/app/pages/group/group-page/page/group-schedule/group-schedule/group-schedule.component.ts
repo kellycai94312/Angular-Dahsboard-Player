@@ -36,10 +36,6 @@ export class GroupScheduleComponent extends BaseGroupComponent<Group> {
     super(groupService, appHelper);
   }
 
-  public get canGetPrevious(): boolean {
-    return this.weekOffset > 0;
-  }
-
   public get startWeekDay(): Date {
     return this.eventDays[0].date;
   }
