@@ -1,0 +1,16 @@
+<div fxLayout="row"
+     fxLayoutGap="10px"
+     fxLayoutAlign="start center">
+  <ngx-select [data]="headNgxSelect"></ngx-select>
+  <ngx-select [data]="specialistNgxSelect"></ngx-select>
+  <ngx-select [data]="staffNgxSelect"></ngx-select>
+  <ngx-date [data]="dateNgxDate"></ngx-date>
+  <div>
+    <button mat-raised-button
+            color="primary"
+            [disabled]="formGroup.invalid"
+            (click)="onGetReport()">
+      {{'report' | translate}}
+    </button>
+  </div>
+</div>
