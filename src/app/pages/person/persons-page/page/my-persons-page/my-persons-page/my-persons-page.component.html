@@ -1,2 +1,3 @@
-<app-persons-list [personQuery]="personQuery"
+<app-persons-list *ngIf="canShow"
+                  [personQuery]="personQuery"
                   [itemDisplay]="itemDisplay"></app-persons-list>

@@ -1,0 +1,39 @@
+<div fxFlexFill
+     class="content">
+  <div class="header"
+       [ngStyle]="{'background-color': backgroundColor}">
+  </div>
+  <div fxLayout="column"
+       fxLayoutGap="5px"
+       class="inner-content">
+    <div fxLayoutAlign="center center">
+      <ngx-image [object]="data"
+                 [width]="100"
+                 [height]="100"
+                 [allowFullScreen]="false"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="fileClass"></ngx-image>
+    </div>
+    <div class="title-content text-truncate text-center">
+      <h4 class="text-truncate"
+          matTooltipPosition="above"
+          matTooltipShowDelay="500"
+          [matTooltip]="title">{{title}}</h4>
+      <h6 *ngIf="subtitle"
+          class="text-truncate"
+          matTooltipPosition="above"
+          matTooltipShowDelay="500"
+          [matTooltip]="subtitle">{{subtitle}}</h6>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="center center"
+         fxLayoutGap="10px">
+      <button *ngFor="let item of actions"
+              mat-icon-button
+              (click)="item.action(item); $event.stopPropagation()">
+        <mat-icon>{{item.iconName}}</mat-icon>
+      </button>
+    </div>
+    <ng-content></ng-content>
+  </div>
+</div>

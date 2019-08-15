@@ -3,26 +3,11 @@
                  [fileClass]="fileClassClass.GROUP"
                  [(data)]="data"></app-item-line>
   <ng-template #cardItemTemplate>
-    <mat-card fxFlex
-              class="mat-elevation-z2"
-              [style.width.px]="width"
-              [style.height.px]="height">
-      <mat-card-header>
-        <div class="text-truncate">
-          <mat-card-title class="text-truncate">{{data.name}}</mat-card-title>
-          <mat-card-subtitle
-            class="text-truncate">{{('groupTypeEnum.' + data.discriminator) | translate}}</mat-card-subtitle>
-        </div>
-      </mat-card-header>
-      <mat-card-content fxLayout
-                        fxLayoutAlign="center center">
-        <ngx-image [object]="data"
-                   [width]="100"
-                   [height]="100"
-                   [allowFullScreen]="false"
-                   [type]="imageTypeClass.LOGO"
-                   [fileClass]="fileClassClass.GROUP"></ngx-image>
-      </mat-card-content>
-    </mat-card>
+    <app-vertical-card title="{{data.name}}"
+                       [subtitle]="subtitle"
+                       [fileClass]="fileClassClass.GROUP"
+                       [(data)]="data">
+      <ng-content></ng-content>
+    </app-vertical-card>
   </ng-template>
 </ng-container>
