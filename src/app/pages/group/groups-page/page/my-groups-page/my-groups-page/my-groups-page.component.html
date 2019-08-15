@@ -1,2 +1,3 @@
-<app-groups-list [groupQuery]="groupQuery"
+<app-groups-list *ngIf="canShow"
+                 [groupQuery]="groupQuery"
                  [itemDisplay]="itemDisplay"></app-groups-list>
