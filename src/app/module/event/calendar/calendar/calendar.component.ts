@@ -81,6 +81,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
     this.eventQuery.startDate = this._appHelper.dateByFormat(start, PropertyConstant.dateFormat);
     this.eventQuery.finishDate = this._appHelper.dateByFormat(end, PropertyConstant.dateFormat);
+    this.eventQuery.count = PropertyConstant.pageSizeMax;
 
     this._baseEventApiService.getEvents(this.eventQuery)
       .subscribe(value => {

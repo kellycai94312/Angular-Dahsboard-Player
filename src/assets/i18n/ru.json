@@ -723,7 +723,8 @@
   "notSelected": "Не выбрано",
   "contract": "Договор",
   "groupContractTypeEnum": {
-    "SERVICE": "Услуга"
+    "SERVICE": "Услуга",
+    "JOB": "Контракт"
   },
   "groupContractType": "Тип договора",
   "validSince": "Действует с",
@@ -741,7 +742,7 @@
     "registrationAddress": "Адрес регистрации",
     "section": "Секция",
     "head": "Руководитель",
-    "childPersonalAccount": "Л/с ребенка"
+    "personalAccount": "Учетный номер (л/с)"
   },
   "personRepresentative": "Законный представитель",
   "groupDetails": "Group details",
@@ -825,5 +826,11 @@
   "attendance": "Посещаемость",
   "absent": "Отсутствует",
   "selectAll": "Выделить все",
-  "deselectAll": "Убрать выделение"
+  "deselectAll": "Убрать выделение",
+  "dailyRate": "Дневная ставка",
+  "tariffRateType": "Тип тарифной ставки",
+  "tariffRateEnum": {
+    "HOURLY": "Почасовая",
+    "DAILY": "Дневная оплата"
+  }
 }

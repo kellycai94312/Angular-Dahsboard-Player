@@ -42,7 +42,8 @@
                   (click)="onRemoveContract(item)">
             <mat-icon>delete</mat-icon>
           </button>
-          <button mat-icon-button
+          <button *ngIf="item.discriminator === groupContractTypeClass.SERVICE"
+                  mat-icon-button
                   (click)="onGetReportContract(item)">
             <mat-icon>get_app</mat-icon>
           </button>

@@ -8,4 +8,5 @@ export class BaseGroupContract extends IdentifiedObject {
   public number: string;
   public validSince: Date;
   public validUntil: Date;
+  public personalAccount?: string;
 }

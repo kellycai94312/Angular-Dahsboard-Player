@@ -2,27 +2,24 @@ import {BaseGroupContract} from './base-group-contract';
 import {GroupContractType} from './group-contract-type';
 
 export class GroupContractService extends BaseGroupContract {
-  public workPlace?: string;
-  public course?: string;
+  public workPlace: string;
+  public course: string;
   // Услуги платные
-  public paidService?: boolean;
+  public paidService: boolean;
   // Стоимость занятий в месяц
-  public pricePerMonth?: number;
+  public pricePerMonth: number;
   // Количество занятий в месяц
-  public classesPerMonth?: number;
+  public classesPerMonth: number;
   // Количество занятий в неделю
-  public classesPerWeek?: number;
+  public classesPerWeek: number;
   // Продолжительность занятий
-  public classDuration?: number;
+  public classDuration: number;
   // Адрес регистрации
-  public registrationAddress?: string;
+  public registrationAddress: string;
   // Кружок/секция
-  public section?: string;
+  public section: string;
   // Руководитель/специалист
-  public head?: string;
-  // persAcc
-  // л/с ребенка
-  public childPersonalAccount?: string;
+  public head: string;
 
   constructor() {
     super();

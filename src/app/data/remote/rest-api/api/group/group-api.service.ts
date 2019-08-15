@@ -22,6 +22,7 @@ import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subg
 import {GroupQuery} from '../../query/group-query';
 import {GroupNews} from '../../../model/group/news/group-news';
 import {EventDay} from '../../../bean/event/event-day';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -48,19 +49,20 @@ export class GroupApiService {
 
   public getGroupContracts<T extends BaseGroupContract>(group: Group,
                                                         person: Person): Observable<T[]> {
-    return this._apiService.getValues(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract`) as Observable<T[]>;
+
+    return this._mapBaseGroupContract(this._apiService.getValues(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract`)) as Observable<T[]>;
   }
 
   public createGroupContract<T extends BaseGroupContract>(value: T,
                                                           group: Group,
                                                           person: Person): Observable<T> {
-    return this._apiService.createValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract`, value) as Observable<T>;
+    return this._mapBaseGroupContract(this._apiService.createValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract`, value) as Observable<T>) as Observable<T>;
   }
 
   public updateGroupContract<T extends BaseGroupContract>(value: T,
                                                           group: Group,
                                                           person: Person): Observable<T> {
-    return this._apiService.updateValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract/${value.id}`, value) as Observable<T>;
+    return this._mapBaseGroupContract(this._apiService.updateValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract/${value.id}`, value) as Observable<T>) as Observable<T>;
   }
 
   public saveGroupContract<T extends BaseGroupContract>(value: T,
@@ -75,7 +77,7 @@ export class GroupApiService {
   public removeGroupContract<T extends BaseGroupContract>(value: T,
                                                           group: Group,
                                                           person: Person): Observable<T> {
-    return this._apiService.removeValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract/${value.id}`) as Observable<T>;
+    return this._mapBaseGroupContract(this._apiService.removeValue(BaseGroupContract, `${this._basePath}/${group.id}/person/${person.id}/contract/${value.id}`) as Observable<T>) as Observable<T>;
   }
 
   public getUrlForDownloadGroupContractReport<T extends BaseGroupContract>(value: T,
@@ -173,5 +175,9 @@ export class GroupApiService {
   }
 
   //#endregion
+
+  private _mapBaseGroupContract<T extends BaseGroupContract>(observable: Observable<T | T[]>): Observable<T | T[]> {
+    return observable.pipe(map(value => this._utilService.plainDiscriminatorObjectToClass(BaseGroupContract, value))) as Observable<T | T[]>;
+  }
 
 }
