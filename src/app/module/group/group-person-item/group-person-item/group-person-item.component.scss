@@ -1,3 +1,9 @@
-p, mat-icon {
-  color: #fff;
+app-person-item {
+  min-height: 204px;
+}
+
+.position-item {
+  max-height: 42px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

@@ -53,19 +53,23 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
     await super.initializeComponent(data);
     return await this._appHelper.tryLoad(async () => {
       await this.refreshConnection();
-      this.actions = [
-        {
+      this.actions = [];
+      if (this.visibleSendMessage) {
+        this.actions.push({
           iconName: 'message', action: async item => {
             await this.onSendMessage();
           }
-        },
-        {
+        });
+      }
+
+      if (this.visibleEditConnection && this.translateConnection) {
+        this.actions.push({
           iconName: this.hasConnection ? 'remove_circle_outline' : 'add_circle_outline', action: async item => {
             await this.onEditConnection();
             item.iconName = this.hasConnection ? 'remove_circle_outline' : 'add_circle_outline';
           }
-        }
-      ];
+        });
+      }
     });
   }
 

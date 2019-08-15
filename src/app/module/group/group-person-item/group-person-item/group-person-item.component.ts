@@ -13,20 +13,19 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
 })
 export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
 
-  public groupPersonPositions: GroupPersonPosition[];
+  private _groupPersonPositions: GroupPersonPosition[] = [];
   public visibleGroupPersonPositions: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper) {
     super();
-    this.groupPersonPositions = [];
   }
 
   async initializeComponent(data: GroupPerson): Promise<boolean> {
     const result = super.initializeComponent(data);
     if (result && data.group) {
       return await this._appHelper.tryLoad(async () => {
-        this.groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
+        this._groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
           {
             unassigned: false,
             count: PropertyConstant.pageSizeMax
@@ -37,6 +36,14 @@ export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
       });
     }
     return result;
+  }
+
+  public get firstGroupPersonPosition(): GroupPersonPosition {
+    return this._groupPersonPositions.length > 0 ? this._groupPersonPositions[0] : void 0;
+  }
+
+  public get groupPersonPositionsWithoutFirst(): GroupPersonPosition[] {
+    return this._groupPersonPositions.length > 1 ? this._groupPersonPositions.slice(1, this._groupPersonPositions.length) : [];
   }
 
   public toggleGroupPersonPositions() {
