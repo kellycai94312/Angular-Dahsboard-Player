@@ -15,6 +15,9 @@ import {SubgroupNotification} from '../model/notification/subgroup/subgroup-noti
 import {GroupConnectionNotification} from '../model/notification/group/connection/group-connection-notification';
 import {EventNotification} from '../model/notification/event/event-notification';
 import {EventPollNotification} from '../model/notification/event/poll/event-poll-notification';
+import {GroupContractService} from '../model/group/contract/group-contract-service';
+import {GroupContractType} from '../model/group/contract/group-contract-type';
+import {GroupContractJob} from '../model/group/contract/group-contract-job';
 
 
 export class DiscriminatorObject {
@@ -40,7 +43,11 @@ export class DiscriminatorObject {
         {value: SubgroupNotification, name: NotificationType.SUBGROUP},
         {value: GroupConnectionNotification, name: NotificationType.GROUP_CONNECTION},
         {value: EventNotification, name: NotificationType.EVENT},
-        {value: EventPollNotification, name: NotificationType.EVENT_POLL}
+        {value: EventPollNotification, name: NotificationType.EVENT_POLL},
+        //endregion
+        //region GroupContract
+        {value: GroupContractService, name: GroupContractType.SERVICE},
+        {value: GroupContractJob, name: GroupContractType.JOB}
         //endregion
       ],
     },

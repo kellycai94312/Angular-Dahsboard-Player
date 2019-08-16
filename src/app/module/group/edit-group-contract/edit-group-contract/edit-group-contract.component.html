@@ -10,20 +10,28 @@
   <label>{{'recipientData' | translate}}</label>
   <mat-divider></mat-divider>
   <div fxLayout="column">
-    <new-ngx-input [data]="workPlaceNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="courseNgxInput"></new-ngx-input>
-    <mat-checkbox [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
-    <new-ngx-input [data]="sectionNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="headNgxInput"></new-ngx-input>
-    <new-ngx-input *ngIf="getGroupContractService(data).paidService"
-                   [data]="pricePerMonthNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="classesPerMonthNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="classesPerWeekNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="classDurationNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="childPersonalAccountNgxInput"></new-ngx-input>
-  </div>
+    <ng-container *ngIf="data.discriminator === groupContractTypeClass.SERVICE">
+      <new-ngx-input [data]="workPlaceNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="courseNgxInput"></new-ngx-input>
+      <mat-checkbox [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
+      <new-ngx-input [data]="sectionNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="headNgxInput"></new-ngx-input>
+      <new-ngx-input *ngIf="getGroupContractService(data).paidService"
+                     [data]="pricePerMonthNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="classesPerMonthNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="classesPerWeekNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="classDurationNgxInput"></new-ngx-input>
+    </ng-container>
+    <ng-container *ngIf="data.discriminator === groupContractTypeClass.JOB">
+      <ngx-select [data]="tariffRateNgxSelect"></ngx-select>
+      <new-ngx-input [data]="dailyRateNgxInput"></new-ngx-input>
+    </ng-container>
 
-  <label>{{'customerData' | translate}}</label>
-  <mat-divider></mat-divider>
-  <new-ngx-input [data]="registrationAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="personalAccountNgxInput"></new-ngx-input>
+  </div>
+  <ng-container *ngIf="data.discriminator === groupContractTypeClass.SERVICE">
+    <label>{{'customerData' | translate}}</label>
+    <mat-divider></mat-divider>
+    <new-ngx-input [data]="registrationAddressNgxInput"></new-ngx-input>
+  </ng-container>
 </div>

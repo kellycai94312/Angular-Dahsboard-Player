@@ -1,3 +1,4 @@
 export enum GroupContractType {
-  SERVICE = 'SERVICE'
+  SERVICE = 'SERVICE',
+  JOB = 'JOB'
 }

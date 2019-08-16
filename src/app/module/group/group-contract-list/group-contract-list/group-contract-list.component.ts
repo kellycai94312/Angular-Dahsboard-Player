@@ -12,6 +12,7 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import {ReportExtension} from '../../../../data/remote/bean/report-extension';
+import {GroupContractType} from '../../../../data/remote/model/group/contract/group-contract-type';
 
 @Component({
   selector: 'app-group-contract-list',
@@ -27,6 +28,7 @@ export class GroupContractListComponent {
   public groupPerson: GroupPerson;
 
   public readonly propertyConstantClass = PropertyConstant;
+  public readonly groupContractTypeClass = GroupContractType;
 
   constructor(private _ngxModalService: NgxModalService,
               private _groupApiService: GroupApiService,

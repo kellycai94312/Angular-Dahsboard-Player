@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
 import {BaseGroupComponent} from '../../../../../../../data/local/component/group/base-group-component';
 import {Group} from '../../../../../../../data/remote/model/group/base/group';
 import {GroupService} from '../../../../service/group.service';
@@ -14,6 +14,8 @@ import {GroupApiService} from '../../../../../../../data/remote/rest-api/api/gro
 import {Observable, of} from 'rxjs';
 import {ClusterGroupPosition} from '../../../../../../../data/remote/rest-api/api/group/model/cluster-group-position';
 import {GroupCluster} from '../../../../../../../data/remote/model/group/connection/group-cluster';
+import {NgxModalService} from '../../../../../../../components/ngx-modal/service/ngx-modal.service';
+import {GroupWorkTimeReportComponent} from '../../../../../../../module/group/report/group-work-time-report/group-work-time-report/group-work-time-report.component';
 
 @Component({
   selector: 'app-group-reports',
@@ -34,6 +36,8 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupClusterApiService: GroupClusterApiService,
               private _groupApiService: GroupApiService,
+              private _ngxModalService: NgxModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
@@ -92,6 +96,16 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
   public onUpdateReport(): void {
     this._updateTableData().subscribe();
+  }
+
+  public async getGroupTimeReport(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'report';
+
+    await modal.componentInstance.initializeBody(GroupWorkTimeReportComponent, async component => {
+      component.groupCluster = this._groupCluster;
+      component.group = this.selectedNode.data;
+    }, {componentFactoryResolver: this._componentFactoryResolver});
   }
 
   private _updateGroupPositions(): void {

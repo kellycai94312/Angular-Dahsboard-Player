@@ -722,7 +722,8 @@
   "notSelected": "Not selected",
   "contract": "Contract",
   "groupContractTypeEnum": {
-    "SERVICE": "Service"
+    "SERVICE": "Service",
+    "JOB": "Job"
   },
   "groupContractType": "Contract type",
   "validSince": "Valid since",
@@ -740,7 +741,7 @@
     "registrationAddress": "Registration address",
     "section": "Section",
     "head": "Head",
-    "childPersonalAccount": "P/a child"
+    "personalAccount": "Registration number (p/a)"
   },
   "personRepresentative": "Person representative",
   "groupDetails": "Group details",
@@ -824,5 +825,21 @@
   "attendance": "Attendance",
   "absent": "Absent",
   "selectAll": "Select all",
-  "deselectAll": "Deselect all"
+  "deselectAll": "Deselect all",
+  "dailyRate": "Daily rate",
+  "tariffRateType": "Tariff rate type",
+  "tariffRateEnum": {
+    "HOURLY": "Hourly",
+    "DAILY": "Daily"
+  },
+  "groupWorkTimeReportComponent": {
+    "createdByPerson": "Created",
+    "checkedByPerson": "Checked",
+    "secondCheckedByPerson": "Checked",
+    "accountantPerson": "Executor"
+  },
+  "workTimePeriodEnum": {
+    "_1_15": "1 to 15",
+    "_1_31": "1 to 30"
+  }
 }

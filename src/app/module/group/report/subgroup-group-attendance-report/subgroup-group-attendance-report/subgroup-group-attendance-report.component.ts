@@ -52,6 +52,11 @@ export class SubgroupGroupAttendanceReportComponent implements OnInit {
       )
       .subscribe(value => {
         this.staffNgxSelect = value;
+
+        const items = [...this.headNgxSelect.items, ...this.specialistNgxSelect.items, ...this.staffNgxSelect.items];
+        this.headNgxSelect.items = items;
+        this.specialistNgxSelect.items = items;
+        this.staffNgxSelect.items = items;
       });
   }
 
