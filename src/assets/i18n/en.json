@@ -839,7 +839,7 @@
     "accountantPerson": "Executor"
   },
   "workTimePeriodEnum": {
-    "_1_15": "Document period 15",
-    "_1_31": "Document period 30"
+    "_1_15": "1 to 15",
+    "_1_31": "1 to 30"
   }
 }
