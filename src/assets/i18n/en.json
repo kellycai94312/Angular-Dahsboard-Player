@@ -831,5 +831,15 @@
   "tariffRateEnum": {
     "HOURLY": "Hourly",
     "DAILY": "Daily"
+  },
+  "groupWorkTimeReportComponent": {
+    "createdByPerson": "Created",
+    "checkedByPerson": "Checked",
+    "secondCheckedByPerson": "Checked",
+    "accountantPerson": "Executor"
+  },
+  "workTimePeriodEnum": {
+    "_1_15": "Document period 15",
+    "_1_31": "Document period 30"
   }
 }

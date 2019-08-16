@@ -27,6 +27,13 @@
           {{'report' | translate}}
         </button>
       </div>
+      <div>
+        <button mat-icon-button
+                [disabled]="!selectedNode"
+                (click)="getGroupTimeReport()">
+          <mat-icon>get_app</mat-icon>
+        </button>
+      </div>
     </div>
     <table *ngIf="clusterGroupPositions.length"
            class="table table-bordered table-hover">

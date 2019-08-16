@@ -34,14 +34,14 @@ export class GroupClusterApiService {
     return this._apiService.getValues(Position, `${this._basePath}/${groupCluster.id}/group/${group.id}/nestedGroupPosition`, this._utilService.clone(query, {excludeNullable: true})) as Observable<T[]>;
   }
 
-  public downloadGroupWorkTimeReport(groupCluster: GroupCluster,
-                                     group: Group,
-                                     workTimePeriodEnum: WorkTimePeriodEnum,
-                                     createdByPerson: Person,
-                                     checkedByPerson: Person,
-                                     secondCheckedByPerson: Person,
-                                     accountantPerson: Person,
-                                     date: Date): string {
+  public getGroupWorkTimeReport(groupCluster: GroupCluster,
+                                group: Group,
+                                workTimePeriodEnum: WorkTimePeriodEnum,
+                                createdByPerson: Person,
+                                checkedByPerson: Person,
+                                secondCheckedByPerson: Person,
+                                accountantPerson: Person,
+                                date: Date): string {
     const query = {
       workTimePeriodEnum,
       createdByPersonId: createdByPerson.id,

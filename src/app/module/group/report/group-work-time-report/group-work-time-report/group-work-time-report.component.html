@@ -1,0 +1,15 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <ngx-select [data]="workTimePeriodNgxSelect"></ngx-select>
+  <ngx-select [data]="createdByPersonNgxSelect"></ngx-select>
+  <ngx-select [data]="checkedByPersonNgxSelect"></ngx-select>
+  <ngx-select [data]="secondCheckedByPersonNgxSelect"></ngx-select>
+  <ngx-select [data]="accountantPersonNgxSelect"></ngx-select>
+  <ngx-date [data]="dateNgxDate"></ngx-date>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="formGroup.invalid"
+          (click)="onGetReport()">
+    {{'report' | translate}}
+  </button>
+</div>

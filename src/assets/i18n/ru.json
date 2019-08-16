@@ -832,5 +832,15 @@
   "tariffRateEnum": {
     "HOURLY": "Почасовая",
     "DAILY": "Дневная оплата"
+  },
+  "groupWorkTimeReportComponent": {
+    "createdByPerson": "Составил",
+    "checkedByPerson": "Проверил",
+    "secondCheckedByPerson": "Проверил",
+    "accountantPerson": "Исполнитель"
+  },
+  "workTimePeriodEnum": {
+    "_1_15": "Период документа 15",
+    "_1_31": "Период документа 30"
   }
 }
