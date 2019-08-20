@@ -32,7 +32,7 @@ export class TestsResultsHistoryComponent implements OnInit, OnDestroy {
               private _appHelper: AppHelper) {
     this.measureValues = [];
     this.query = new MeasureTemplateQuery();
-    this.query.personId = this._personService.personViewModel.data.id;
+    // this.query.personId = this._personService.personViewModel.data.id;
     this._paramsSubscription = this._route.params.subscribe(params => {
       this.query.exerciseMeasureId = +params.id;
     });

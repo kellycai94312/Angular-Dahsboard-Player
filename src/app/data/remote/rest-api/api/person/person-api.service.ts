@@ -11,6 +11,9 @@ import {GroupNews} from '../../../model/group/news/group-news';
 import {PersonNews} from '../../../model/group/news/person-news';
 import {BaseContact} from '../../../model/contact/base/base-contact';
 import {ListRequest} from '../../../request/list-request';
+import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
+import {map} from 'rxjs/operators';
+import {Dialogue} from '../../../model/chat/conversation/dialogue';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +46,10 @@ export class PersonApiService {
 
   public removePerson<T extends Person>(value: T): Observable<T> {
     return this._apiService.removeValue(Person, `${this._basePath}/${value.id}`) as Observable<T>;
+  }
+
+  public canEditPerson(person: Person): Observable<boolean> {
+    return this._apiService.getValue(BooleanWrapper, `${this._basePath}/${person.id}/canEdit`).pipe(map(x => x.value));
   }
 
   //#region Medical examination
@@ -136,4 +143,11 @@ export class PersonApiService {
 
   //#endregion
 
+  //#region Dialogue
+
+  public getDialogue(person: Person): Observable<Dialogue> {
+    return this._apiService.getValue(Dialogue, `${this._basePath}/${person.id}/dialogue`);
+  }
+
+  //#endregion
 }

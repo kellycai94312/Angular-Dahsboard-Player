@@ -45,35 +45,35 @@ export class GroupsComponent implements OnInit, OnDestroy {
     this.groupQuery.from = 0;
     this.groupQuery.count = PropertyConstant.pageSize;
 
-    this._userRoleSubscription = this._personService.userRoleHandler.subscribe(async userRole => {
-      this.selectedPublicUserRole = userRole;
-      if (userRole) {
-        this.groupQuery.userRoleEnum = userRole.userRoleEnum;
-      } else {
-        if (this._personService.selectedUserRole) {
-          this.selectedPublicUserRole = this._personService.selectedUserRole;
-          this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
-        } else {
-          delete this.groupQuery.userRoleEnum;
-        }
-      }
-      await this.updateItems();
-    });
-    this._baseGroupSubscription = this._personService.baseGroupHandler.subscribe(groupPerson => {
-      this.selectedBaseGroup = groupPerson;
-    });
+    // this._userRoleSubscription = this._personService.userRoleHandler.subscribe(async userRole => {
+    //   this.selectedPublicUserRole = userRole;
+    //   if (userRole) {
+    //     this.groupQuery.userRoleEnum = userRole.userRoleEnum;
+    //   } else {
+    //     if (this._personService.selectedUserRole) {
+    //       this.selectedPublicUserRole = this._personService.selectedUserRole;
+    //       this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
+    //     } else {
+    //       delete this.groupQuery.userRoleEnum;
+    //     }
+    //   }
+    //   await this.updateItems();
+    // });
+    // this._baseGroupSubscription = this._personService.baseGroupHandler.subscribe(groupPerson => {
+    //   this.selectedBaseGroup = groupPerson;
+    // });
   }
 
   async ngOnInit() {
-    this.canEdit = await this._personService.allowEdit();
-    this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
-    this.selectedBaseGroup = this._personService.baseGroup;
-    this.selectedPublicUserRole = this._personService.selectedUserRole;
-
-    if (this._personService.selectedUserRole) {
-      this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
-      await this.updateItems();
-    }
+    // this.canEdit = await this._personService.allowEdit();
+    // this.groupTypeEnums = await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum');
+    // this.selectedBaseGroup = this._personService.baseGroup;
+    // this.selectedPublicUserRole = this._personService.selectedUserRole;
+    //
+    // if (this._personService.selectedUserRole) {
+    //   this.groupQuery.userRoleEnum = this._personService.selectedUserRole.userRoleEnum;
+    //   await this.updateItems();
+    // }
   }
 
   ngOnDestroy(): void {
@@ -100,24 +100,24 @@ export class GroupsComponent implements OnInit, OnDestroy {
   //#endregion
 
   public async onChangeGroupPerson(groupPerson: GroupPerson) {
-    const index = this.ngxVirtualScrollComponent.items.indexOf(groupPerson);
-    if (index === -1) {
-      this._personService.setBaseGroup(groupPerson);
-    } else {
-      this.ngxVirtualScrollComponent.items.splice(index, 1);
-    }
+    // const index = this.ngxVirtualScrollComponent.items.indexOf(groupPerson);
+    // if (index === -1) {
+    //   this._personService.setBaseGroup(groupPerson);
+    // } else {
+    //   this.ngxVirtualScrollComponent.items.splice(index, 1);
+    // }
   }
 
   loadData = async (from: number, searchText: string) => {
-    return await this._participantRestApiService.getPersonGroups({}, {
-      personId: this._personService.personViewModel.data.id,
-      userRoleId: this.selectedPublicUserRole.id
-    }, {
-      from: from,
-      count: this.pageSize,
-      name: searchText,
-      select: true
-    });
+    // return await this._participantRestApiService.getPersonGroups({}, {
+    //   personId: this._personService.personViewModel.data.id,
+    //   userRoleId: this.selectedPublicUserRole.id
+    // }, {
+    //   from: from,
+    //   count: this.pageSize,
+    //   name: searchText,
+    //   select: true
+    // });
   };
 
   public getKey(item: GroupPerson) {
@@ -129,9 +129,9 @@ export class GroupsComponent implements OnInit, OnDestroy {
   }
 
   public async addGroup() {
-    await this._participantRestApiService.createPublicRole(this.newGroup.group, {userRoleId: this.selectedPublicUserRole.id}, {personId: this._personService.personViewModel.data.id});
-    this.ngxVirtualScrollComponent.items.push(this.newGroup);
-    this.newGroup = null;
+    // await this._participantRestApiService.createPublicRole(this.newGroup.group, {userRoleId: this.selectedPublicUserRole.id}, {personId: this._personService.personViewModel.data.id});
+    // this.ngxVirtualScrollComponent.items.push(this.newGroup);
+    // this.newGroup = null;
   }
 
   public getItems: Function = async (direction: Direction, pageQuery: PageQuery) => {

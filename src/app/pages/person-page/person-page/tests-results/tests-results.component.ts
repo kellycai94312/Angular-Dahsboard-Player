@@ -33,32 +33,32 @@ export class TestsResultsComponent implements OnInit {
     this.measureTemplateQuery = new MeasureTemplateQuery();
     this.measureTemplateQuery.from = 0;
     this.measureTemplateQuery.count = PropertyConstant.pageSize;
-    this.measureTemplateQuery.personId = this._personService.personViewModel.data.id;
+    // this.measureTemplateQuery.personId = this._personService.personViewModel.data.id;
   }
 
   async ngOnInit() {
-    this.isEditAllow = await this._personService.allowEdit();
-    this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
-    await this.updateItems();
+    // this.isEditAllow = await this._personService.allowEdit();
+    // this.personMeasureValues = (await this._participantRestApiService.getExerciseValue({personId: this._personService.personViewModel.data.id})).list;
+    // await this.updateItems();
   }
 
   public async showMoreValues(result: ExerciseResult) {
-    if (result) {
-      const groupId = result.group.id;
-      const list = result.exerciseValues.list;
-      const container = await this._participantRestApiService.getExerciseValue({
-        personId: this._personService.personViewModel.data.id,
-        groupId: groupId,
-        from: list.length
-      });
-      this._appHelper.pushItemsInList(list.length, list, container);
-    } else {
-      const container = await this._participantRestApiService.getExerciseValue({
-        personId: this._personService.personViewModel.data.id,
-        from: this.personMeasureValues.length
-      });
-      this._appHelper.pushItemsInList(this.personMeasureValues.length, this.personMeasureValues, container);
-    }
+    // if (result) {
+    //   const groupId = result.group.id;
+    //   const list = result.exerciseValues.list;
+    //   const container = await this._participantRestApiService.getExerciseValue({
+    //     personId: this._personService.personViewModel.data.id,
+    //     groupId: groupId,
+    //     from: list.length
+    //   });
+    //   this._appHelper.pushItemsInList(list.length, list, container);
+    // } else {
+    //   const container = await this._participantRestApiService.getExerciseValue({
+    //     personId: this._personService.personViewModel.data.id,
+    //     from: this.personMeasureValues.length
+    //   });
+    //   this._appHelper.pushItemsInList(this.personMeasureValues.length, this.personMeasureValues, container);
+    // }
   }
 
   public async editPersonal() {

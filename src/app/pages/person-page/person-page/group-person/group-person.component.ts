@@ -46,26 +46,26 @@ export class GroupPersonComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.allowEdit = await this._personService.allowEdit();
-    this.splitButtonItems = [];
-    if (this.allowEdit) {
-      this.splitButtonItems.push({
-        nameKey: 'remove',
-        default: true,
-        callback: async () => {
-          if (this.baseGroup) {
-            await this._participantRestApiService.updatePersonBaseGroup({id: null}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
-            this.data = null;
-          } else {
-            if (this.data) {
-              await this._participantRestApiService.removePublicRole(this.data.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
-            }
-          }
-          this.change.emit(this.data);
-          await this.refreshGroupPersonLog();
-        }
-      });
-    }
+    // this.allowEdit = await this._personService.allowEdit();
+    // this.splitButtonItems = [];
+    // if (this.allowEdit) {
+    //   this.splitButtonItems.push({
+    //     nameKey: 'remove',
+    //     default: true,
+    //     callback: async () => {
+    //       if (this.baseGroup) {
+    //         await this._participantRestApiService.updatePersonBaseGroup({id: null}, {}, {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+    //         this.data = null;
+    //       } else {
+    //         if (this.data) {
+    //           await this._participantRestApiService.removePublicRole(this.data.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
+    //         }
+    //       }
+    //       this.change.emit(this.data);
+    //       await this.refreshGroupPersonLog();
+    //     }
+    //   });
+    // }
     this.splitButtonItems.push({
       nameKey: 'showHistory',
       callback: async () => {
@@ -76,18 +76,18 @@ export class GroupPersonComponent implements OnInit {
   }
 
   loadData = async (from: number, searchText: string) => {
-    const container = await this._participantRestApiService.getPersonGroups({
-      id: this._personService.personViewModel.data.id,
-      from: from,
-      count: this.pageSize,
-      name: searchText,
-      select: true,
-      userRoleId: this.role.id,
-    });
-    if (this.data) {
-      container.list.push(this.data);
-    }
-    return container;
+    // const container = await this._participantRestApiService.getPersonGroups({
+    //   id: this._personService.personViewModel.data.id,
+    //   from: from,
+    //   count: this.pageSize,
+    //   name: searchText,
+    //   select: true,
+    //   userRoleId: this.role.id,
+    // });
+    // if (this.data) {
+    //   container.list.push(this.data);
+    // }
+    // return container;
   };
 
   getKey(item: GroupPerson) {
@@ -99,22 +99,22 @@ export class GroupPersonComponent implements OnInit {
   }
 
   async onGroupChange(e) {
-    if (this.baseGroup) {
-      await this._participantRestApiService.updatePersonBaseGroup({id: e.current == null ? null : e.current.group.id}, {},
-        {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
-      this.change.emit(this.data);
-    } else {
-      if (e.prev) {
-        await this._participantRestApiService.removePublicRole(e.prev.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
-      }
-      if (e.current) {
-        await this._participantRestApiService.createPublicRole(e.current.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
-      }
-      if (!e.current) {
-        this.change.emit(e.prev);
-      }
-    }
-    await this.refreshGroupPersonLog();
+    // if (this.baseGroup) {
+    //   await this._participantRestApiService.updatePersonBaseGroup({id: e.current == null ? null : e.current.group.id}, {},
+    //     {personId: this._personService.personViewModel.data.id, userRoleId: this.role.id});
+    //   this.change.emit(this.data);
+    // } else {
+    //   if (e.prev) {
+    //     await this._participantRestApiService.removePublicRole(e.prev.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
+    //   }
+    //   if (e.current) {
+    //     await this._participantRestApiService.createPublicRole(e.current.group, {userRoleId: this.role.id}, {personId: this._personService.personViewModel.data.id});
+    //   }
+    //   if (!e.current) {
+    //     this.change.emit(e.prev);
+    //   }
+    // }
+    // await this.refreshGroupPersonLog();
   }
 
   private async refreshGroupPersonLog(): Promise<void> {

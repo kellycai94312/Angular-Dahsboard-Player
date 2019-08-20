@@ -32,7 +32,9 @@
     </div>
   </nav>
 
-  <router-outlet *ngIf="!hasExternalRouterOutlet && !withoutRouting"></router-outlet>
+  <div class="tab-content-wrapper">
+    <router-outlet *ngIf="!hasExternalRouterOutlet && !withoutRouting"></router-outlet>
+  </div>
 </ng-container>
 
 <ng-template #tabContentTemplate

@@ -1,5 +1,5 @@
 import {Injectable, Injector} from '@angular/core';
-import {ReplaySubject, Subject} from 'rxjs';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {Session} from '../data/remote/model/session';
 import {Auth} from '../data/remote/model/auth';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
@@ -13,19 +13,20 @@ import {UserRoleEnum} from '../data/remote/model/user-role-enum';
 @Injectable()
 export class AuthorizationService {
 
-  public readonly handleLogIn: Subject<Session>;
-  public readonly handleLogOut: Subject<boolean>;
-  public readonly personSubject: ReplaySubject<Person>;
+  public readonly handleLogIn = new Subject<Session>();
+  public readonly handleLogOut = new Subject<boolean>();
+  public readonly personSubject = new ReplaySubject<Person>(1);
 
   public session: Session;
+
+  public get person$(): Observable<Person> {
+    return this.personSubject.asObservable();
+  }
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _layoutService: LayoutService,
               private _localStorageService: LocalStorageService,
               private _injector: Injector) {
-    this.handleLogIn = new Subject<Session>();
-    this.handleLogOut = new Subject<boolean>();
-    this.personSubject = new ReplaySubject<Person>(1);
   }
 
   public async initialize() {

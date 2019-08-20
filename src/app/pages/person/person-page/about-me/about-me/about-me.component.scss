@@ -1,0 +1,27 @@
+@import "../../../../../module/person/person-detail/person-detail/person-detail.component";
+
+$color: rgba(0, 0, 0, .54);
+
+:host {
+  ::ng-deep {
+    @include disabled-fields($color, $color);
+
+    .mat-card {
+      padding: 0;
+
+      .mat-card-header {
+        padding: 16px;
+        background-color: #039be5 !important;
+        color: #fff !important;
+
+        .mat-card-header-text {
+          margin: 0 !important;
+        }
+      }
+
+      .mat-card-content {
+        padding: 16px;
+      }
+    }
+  }
+}

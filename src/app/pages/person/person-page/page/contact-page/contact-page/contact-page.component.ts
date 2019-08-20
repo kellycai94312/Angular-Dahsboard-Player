@@ -28,18 +28,18 @@ export class ContactPageComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.canEdit = await this._personService.allowEdit();
-    this.enabled = await this._personService.personViewModel.data.user.enabled;
-
-    const contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
-    this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
+    // this.canEdit = await this._personService.allowEdit();
+    // this.enabled = await this._personService.personViewModel.data.user.enabled;
+    //
+    // const contacts = await this._participantRestApiService.getPersonContacts({personId: this._personService.personViewModel.data.id});
+    // this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
   }
 
   public onSave = async () => {
-    await this._appHelper.trySave(async () => {
-      const contacts = await this._participantRestApiService.updatePersonContacts(new ListRequest(this.contactNgxInputs.map(x => x.getResult())), {}, {personId: this._personService.personViewModel.data.id});
-      this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
-    });
+    // await this._appHelper.trySave(async () => {
+    //   const contacts = await this._participantRestApiService.updatePersonContacts(new ListRequest(this.contactNgxInputs.map(x => x.getResult())), {}, {personId: this._personService.personViewModel.data.id});
+    //   this.contactNgxInputs = this._convertContactsToContactNgxInputs(contacts);
+    // });
   };
 
   public onPersonActivation = async () => {
@@ -48,21 +48,21 @@ export class ContactPageComponent implements OnInit {
     if (contactNgxInput) {
       defaultEmail = contactNgxInput.getResult().value;
     }
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'personActivation';
-    await modal.componentInstance.initializeBody(PersonActivationComponent, async component => {
-      component.initialize(this._personService.personViewModel.data, defaultEmail);
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'activate',
-          callback: async data => {
-            if (await component.onSave()) {
-              modal.close();
-            }
-          }
-        }
-      ];
-    });
+    // const modal = this._ngxModalService.open();
+    // modal.componentInstance.titleKey = 'personActivation';
+    // await modal.componentInstance.initializeBody(PersonActivationComponent, async component => {
+    //   component.initialize(this._personService.personViewModel.data, defaultEmail);
+    //   modal.componentInstance.splitButtonItems = [
+    //     {
+    //       nameKey: 'activate',
+    //       callback: async data => {
+    //         if (await component.onSave()) {
+    //           modal.close();
+    //         }
+    //       }
+    //     }
+    //   ];
+    // });
   };
 
   private _convertContactsToContactNgxInputs(contacts: BaseContact[]): ContactNgxInput[] {

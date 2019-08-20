@@ -1,0 +1,20 @@
+<div *ngIf="person"
+     fxLayout="row"
+     fxLayoutAlign="center center">
+  <div fxFlex
+       fxFlex.md="80"
+       fxFlex.gt-md="60"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <mat-card *ngFor="let item of items"
+              class="mat-elevation-z4">
+      <mat-card-header>
+        {{item.translationLabel | translate}}
+      </mat-card-header>
+      <mat-card-content [ngSwitch]="item.data">
+        <app-basic-person *ngSwitchCase="personMenuItemTypeClass.BASIC"
+                          [person]="person"></app-basic-person>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

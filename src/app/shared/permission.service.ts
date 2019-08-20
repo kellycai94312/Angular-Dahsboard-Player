@@ -9,6 +9,9 @@ import {BaseFile} from '../data/remote/model/file/base/base-file';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {UserRole} from '../data/remote/model/user-role';
 import {AppHelper} from '../utils/app-helper';
+import {Observable, of} from 'rxjs';
+import {flatMap} from 'rxjs/operators';
+import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +20,21 @@ export class PermissionService {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
+              private _personApiService: PersonApiService,
               private _authorizationService: AuthorizationService) {
+  }
+
+  public canEditPerson(person: Person): Observable<boolean> {
+    return this._authorizationService.personSubject
+      .pipe(flatMap(value => {
+        if (value) {
+          if (value.user.id == person.owner.id) {
+            return of(true);
+          }
+          return this._personApiService.canEditPerson(person);
+        }
+        return of(false);
+      }));
   }
 
   public async canEditTag(data: Tag, person: Person): Promise<boolean> {
