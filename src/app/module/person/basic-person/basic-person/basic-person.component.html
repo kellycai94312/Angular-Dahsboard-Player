@@ -1,0 +1,14 @@
+<div fxLayout="column">
+  <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+  <new-ngx-input *ngIf="canEdit || patronymicNgxInput?.control?.value"
+                 [data]="patronymicNgxInput"></new-ngx-input>
+  <ngx-date [data]="birthDateNgxDate"></ngx-date>
+  <ngx-select [data]="sexNgxSelect"></ngx-select>
+  <button *ngIf="canEdit"
+          mat-raised-button
+          fxFlexAlign="start"
+          (click)="onSave()">
+    {{'save' | translate}}
+  </button>
+</div>

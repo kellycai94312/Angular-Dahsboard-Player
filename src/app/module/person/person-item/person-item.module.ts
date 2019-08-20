@@ -5,14 +5,14 @@ import {ItemLineModule} from '../../common/item-line/item-line.module';
 import {VerticalCardModule} from '../../common/vertical-card/vertical-card.module';
 
 @NgModule({
+  declarations: [PersonItemComponent],
+  entryComponents: [PersonItemComponent],
+  exports: [PersonItemComponent],
   imports: [
     CommonModule,
     ItemLineModule,
     VerticalCardModule
-  ],
-  declarations: [PersonItemComponent],
-  entryComponents: [PersonItemComponent],
-  exports: [PersonItemComponent]
+  ]
 })
 export class PersonItemModule {
 }

@@ -1,15 +1,17 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, ComponentFactoryResolver, Input, OnInit} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {Person} from '../../../../data/remote/model/person';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Dialogue} from '../../../../data/remote/model/chat/conversation/dialogue';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {Router} from '@angular/router';
 import {ItemDisplay} from '../../../common/item-list/model/item-display';
 import {MenuItem} from '../../../common/item-line/model/menu-item';
+import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
+import {PersonDetailComponent} from '../../person-detail/person-detail/person-detail.component';
+import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
 
 @Component({
   selector: 'app-person-item',
@@ -40,10 +42,16 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   @Input()
   public height: number;
 
+  @Input()
+  public canShowDetail: boolean;
+
   public actions: MenuItem[] = [];
   public hasConnection: boolean;
 
   constructor(private _appHelper: AppHelper,
+              private _personApiService: PersonApiService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
+              private _ngxModalService: NgxModalService,
               private _participantRestApiService: ParticipantRestApiService,
               private _router: Router) {
     super();
@@ -73,10 +81,9 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
     });
   }
 
-  public async onSendMessage() {
-    await this._appHelper.tryLoad(async () => {
-      const dialogue: Dialogue = await this._participantRestApiService.getDialogue({personId: this.data.id});
-      await this._router.navigate(['/conversation', dialogue.id]);
+  public onSendMessage(): void {
+    this._personApiService.getDialogue(this.data).subscribe(async value => {
+      await this._router.navigate(['/conversation', value.id]);
     });
   };
 
@@ -91,6 +98,16 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
       await this.refreshConnection();
     });
   };
+
+  public async onShowDetail(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.title = `${this.data.lastName} ${this.data.firstName}`;
+    modal.componentInstance.useContentPadding = false;
+    await modal.componentInstance.initializeBody(PersonDetailComponent, async component => {
+      await component.initialize(this._appHelper.cloneObject(this.data));
+      component.onNavigate = () => modal.close();
+    }, {componentFactoryResolver: this._componentFactoryResolver});
+  }
 
   private async refreshConnection(): Promise<boolean> {
     this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.data.id})).value;

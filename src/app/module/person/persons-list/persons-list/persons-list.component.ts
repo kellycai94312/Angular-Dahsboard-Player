@@ -53,7 +53,6 @@ export class PersonsListComponent implements OnInit {
   }
 
   public onClickByItem = async (item: Person) => {
-    await this._router.navigate(['/person', item.id]);
   };
 
   public fetchItems = async (direction: Direction, query: PageQuery) => {

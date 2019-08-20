@@ -9,12 +9,12 @@
       <p class="position-item">{{firstGroupPersonPosition.position.name}}</p>
       <button *ngIf="groupPersonPositionsWithoutFirst.length"
               mat-icon-button
-              (click)="toggleGroupPersonPositions()">
+              (click)="toggleGroupPersonPositions(); $event.stopPropagation()">
         <mat-icon>{{visibleGroupPersonPositions ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
       </button>
     </div>
     <div *ngIf="visibleGroupPersonPositions"
-         (click)="toggleGroupPersonPositions()">
+         (click)="toggleGroupPersonPositions(); $event.stopPropagation()">
       <p *ngFor="let item of groupPersonPositionsWithoutFirst"
          class="position-item">{{item.position.name}}</p>
     </div>

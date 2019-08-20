@@ -7,7 +7,8 @@
     <app-vertical-card title="{{data.lastName}} {{data.firstName}}"
                        [fileClass]="fileClassClass.PERSON"
                        [actions]="actions"
-                       [(data)]="data">
+                       [(data)]="data"
+                       (click)="onShowDetail()">
       <ng-content></ng-content>
     </app-vertical-card>
   </ng-template>

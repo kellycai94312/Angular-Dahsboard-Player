@@ -1,0 +1,88 @@
+@import "../../menu-person-detail/menu-person-detail/menu-person-detail.component";
+
+@mixin disabled-fields($label-color, $value-color) {
+  input {
+    padding: 0 !important;
+  }
+
+  .label {
+    font-size: 16px;
+    font-weight: 600;
+    color: $label-color !important;
+  }
+
+  .value {
+    font-size: 14px;
+    color: $value-color !important;
+  }
+
+  .mat-form-field-label {
+    @extend .label;
+  }
+
+  .mat-form-field-underline,
+  .mat-select-arrow-wrapper {
+    display: none !important;
+  }
+
+  .mat-input-element,
+  .mat-select-value-text {
+    @extend .value;
+  }
+
+  .md2-datepicker-trigger {
+    padding: 16px 0;
+
+    .md2-datepicker-button {
+      display: none;
+    }
+
+    .md2-datepicker-input {
+      border: unset !important;
+      padding: unset !important;
+      background: unset !important;
+
+      .md2-datepicker-placeholder {
+        @extend .label;
+
+        &::after {
+          content: none !important;
+        }
+      }
+
+      .md2-datepicker-value {
+        @extend .value;
+      }
+
+      .md2-datepicker-arrow {
+        display: none;
+      }
+    }
+  }
+}
+
+:host {
+  ::ng-deep {
+    @include disabled-fields(#0099f1, #fff);
+    @extend .dark-menu-person-detail-theme;
+
+    .header {
+      background: transparent !important;
+      padding: 0 !important;
+    }
+  }
+}
+
+.content {
+  background-color: #32383e;
+
+  .right-content {
+    color: #fff;
+    margin: 10px;
+
+    .selected-content {
+      padding: 10px;
+      background-color: #272d32;
+    }
+  }
+}

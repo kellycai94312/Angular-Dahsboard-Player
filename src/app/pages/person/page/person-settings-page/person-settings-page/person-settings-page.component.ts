@@ -4,6 +4,8 @@ import {LocalStorageService} from '../../../../../shared/local-storage.service';
 import {TranslateObjectService} from '../../../../../shared/translate-object.service';
 import {NgxSelect} from '../../../../../module/ngx/ngx-select/model/ngx-select';
 import {takeWhile} from 'rxjs/operators';
+import {AuthorizationService} from '../../../../../shared/authorization.service';
+import {Person} from '../../../../../data/remote/model/person';
 
 @Component({
   selector: 'app-person-settings-page',
@@ -13,9 +15,11 @@ import {takeWhile} from 'rxjs/operators';
 export class PersonSettingsPageComponent implements OnInit, OnDestroy {
 
   public languageNgxSelect: NgxSelect;
+  public person: Person;
   private _notDestroyed = true;
 
   constructor(private _localStorageService: LocalStorageService,
+              private _authorizationService: AuthorizationService,
               private _translateObjectService: TranslateObjectService) {
   }
 
@@ -31,12 +35,17 @@ export class PersonSettingsPageComponent implements OnInit, OnDestroy {
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe((value) => {
         this._localStorageService.setLocale(value.data);
+      });
 
+    this._authorizationService.person$
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(value => {
+        this.person = value;
       });
   }
 
   ngOnDestroy(): void {
-    this._notDestroyed = false;
+    delete this._notDestroyed;
   }
 
 }

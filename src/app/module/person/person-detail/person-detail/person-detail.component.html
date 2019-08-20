@@ -1,0 +1,30 @@
+<div *ngIf="data">
+  <div fxFlexFill
+       fxLayout="row"
+       fxLayoutGap="10px"
+       class="content">
+    <div fxFlex="30">
+      <app-menu-person-detail class="dark-menu-person-detail-theme"
+                              (selectedItemChange)="onSelectedItemChange($event)"></app-menu-person-detail>
+    </div>
+    <div fxFlex
+         fxLayout="column"
+         fxLayoutGap="10px"
+         class="right-content">
+      <app-person-head *ngIf="showHead"
+                       [canEdit]="canEdit"
+                       [person]="data"
+                       (navigate)="onNavigate()"
+                       (editPerson)="onEditPerson()"></app-person-head>
+      <div [ngSwitch]="selectedMenuItem?.data"
+           class="selected-content">
+        <app-basic-person *ngSwitchCase="personMenuItemTypeClass.BASIC"
+                          [canEdit]="canEdit"
+                          [person]="data"></app-basic-person>
+        <ng-container *ngSwitchDefault>
+          {{'noData' | translate}}
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
