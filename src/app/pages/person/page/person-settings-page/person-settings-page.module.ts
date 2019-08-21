@@ -4,13 +4,15 @@ import {PersonSettingsPageRoutingModule} from './person-settings-page-routing.mo
 import {PersonSettingsPageComponent} from './person-settings-page/person-settings-page.component';
 import {NgxSelectModule} from '../../../../module/ngx/ngx-select/ngx-select.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {PersonDetailModule} from '../../../../module/person/person-detail/person-detail.module';
 
 @NgModule({
   imports: [
     CommonModule,
     PersonSettingsPageRoutingModule,
     FlexLayoutModule,
-    NgxSelectModule
+    NgxSelectModule,
+    PersonDetailModule
   ],
   declarations: [PersonSettingsPageComponent]
 })

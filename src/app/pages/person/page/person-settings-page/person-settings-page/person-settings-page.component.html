@@ -1,6 +1,8 @@
-<div fxLayout
-     fxLayoutAlign="end start"
+<div fxLayout="column"
      class="content">
-  <ngx-select fxFlex="20"
-              [data]="languageNgxSelect"></ngx-select>
+  <ngx-select [data]="languageNgxSelect"></ngx-select>
+  <app-person-detail *ngIf="person"
+                     [canEdit]="true"
+                     [showHead]="false"
+                     [(data)]="person"></app-person-detail>
 </div>

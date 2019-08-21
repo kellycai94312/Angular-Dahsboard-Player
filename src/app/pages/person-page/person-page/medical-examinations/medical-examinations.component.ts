@@ -37,7 +37,7 @@ export class MedicalExaminationsComponent implements OnInit {
   async ngOnInit() {
     await this.resetItems();
 
-    this.allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
+    // this.allowEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
   }
 
   public onAdd = async () => {

@@ -30,11 +30,11 @@ export class RanksComponent implements OnInit {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _ngxModalService: NgxModalService) {
-    this.personId = this.personId || this._personService.personViewModel.data.id;
+    // this.personId = this.personId || this._personService.personViewModel.data.id;
   }
 
   async ngOnInit() {
-    this.canEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
+    // this.canEdit = await this._personService.allowEdit() && await this._authorizationService.hasUserRole(UserRoleEnum.OPERATOR);
   }
 
   public fetchItems = async () => {

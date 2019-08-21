@@ -1,6 +1,7 @@
 <app-person-item *ngIf="data"
                  [class]="class"
-                 [data]="data.person">
+                 [data]="data.person"
+                 [clickableComponent]="clickableComponent">
   <div *ngIf="data.id"
        fxLayout
        fxLayoutGap="10px"
@@ -11,7 +12,7 @@
     </div>
     <button *ngIf="canEdit"
             mat-icon-button
-            (click)="onEditPositions()">
+            (click)="onEditPositions(); $event.stopPropagation()">
       <mat-icon>edit</mat-icon>
     </button>
   </div>

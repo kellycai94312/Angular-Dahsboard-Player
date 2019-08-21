@@ -1,0 +1,18 @@
+@mixin menu-person-detail-theme($item-color, $selected-item-color) {
+  .item {
+    color: $item-color !important;
+  }
+
+  .selected-item {
+    color: $selected-item-color !important;
+    background-color: #039be5;
+  }
+}
+
+.dark-menu-person-detail-theme {
+  @include menu-person-detail-theme(#fff, #fff);
+}
+
+.light-menu-person-detail-theme {
+  @include menu-person-detail-theme(#000, #fff);
+}

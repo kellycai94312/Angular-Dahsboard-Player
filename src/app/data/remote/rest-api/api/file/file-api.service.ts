@@ -3,7 +3,7 @@ import {environment} from '../../../../../../environments/environment';
 import {ApiService} from '../base/api.service';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {plainToClass, plainToClassFromExist} from 'class-transformer';
+import {plainToClass} from 'class-transformer';
 import {DocumentType} from '../../../model/file/document/document-type';
 import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
 import {DocumentQuery} from '../../query/file/document-query';
@@ -11,6 +11,8 @@ import {PageContainer} from '../../../bean/page-container';
 import {Document} from '../../../model/file/document/document';
 import {BaseFile} from '../../../model/file/base/base-file';
 import {UtilService} from '../../../../../services/util/util.service';
+import {ImageQuery} from '../../query/file/image-query';
+import {Image} from '../../../model/file/image/image';
 
 @Injectable({
   providedIn: 'root'
@@ -24,9 +26,11 @@ export class FileApiService {
   }
 
   public getDocuments(query: DocumentQuery): Observable<PageContainer<Document>> {
-    return this._apiService.get(`${this._basePath}/document`, this._apiService.getHttpParamsFromObject(query)).pipe(
-      map(x => plainToClassFromExist(new PageContainer<Document>(Document), x) as any)
-    );
+    return this._apiService.getPageContainer(Document, `${this._basePath}/document`, query);
+  }
+
+  public getImages(query: ImageQuery): Observable<PageContainer<Image>> {
+    return this._apiService.getPageContainer(Image, `${this._basePath}/image`, query);
   }
 
   public createFile<T extends BaseFile>(baseFile: T, file?: File): Observable<T> {

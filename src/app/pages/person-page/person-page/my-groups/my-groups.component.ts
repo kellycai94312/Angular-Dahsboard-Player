@@ -19,10 +19,10 @@ export class MyGroupsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    try {
-      this.groupPersons = await this._participantRestApiService.getGroupPersons({personId: this._personService.personViewModel.data.id});
-    } catch (e) {
-    }
+    // try {
+    //   this.groupPersons = await this._participantRestApiService.getGroupPersons({personId: this._personService.personViewModel.data.id});
+    // } catch (e) {
+    // }
   }
 
   public onEdit = async () => {

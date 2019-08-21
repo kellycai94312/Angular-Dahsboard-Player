@@ -33,7 +33,7 @@ export class AnthropometryHistoryComponent implements OnInit, OnDestroy {
               private _appHelper: AppHelper) {
     this.anthropometries = [];
     this.query = new AnthropometryQuery();
-    this.query.personId = this._personService.personViewModel.data.id;
+    // this.query.personId = this._personService.personViewModel.data.id;
     this._paramsSubscription = this._route.params.subscribe(params => {
       this.query.measureId = +params.id;
     });

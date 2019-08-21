@@ -2,31 +2,19 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PersonPageComponent} from './person-page/person-page.component';
 import {PersonPageRoutingModule} from './person-page-routing.module';
-import {PersonService} from './service/person.service';
-import {NgxButtonModule} from '../../../components/ngx-button/ngx-button.module';
-import {GroupModule} from '../../../components/group/group.module';
-import {TranslateModule} from '@ngx-translate/core';
-import {NgxSplitButtonModule} from '../../../components/ngx-split-button/ngx-split-button.module';
-import {NgxButtonGroupModule} from '../../../components/ngx-button-group/ngx-button-group.module';
-import {GroupItemModule} from '../../../module/group/group-item/group-item.module';
-import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {PersonHeadModule} from '../../../module/person/person-head/person-head.module';
 import {NgxTabsModule} from '../../../module/ngx/ngx-tabs/ngx-tabs.module';
 
 @NgModule({
+  declarations: [PersonPageComponent],
   imports: [
     CommonModule,
     PersonPageRoutingModule,
-    TranslateModule.forChild(),
-    NgxButtonModule,
+    FlexLayoutModule,
     NgxTabsModule,
-    NgxSplitButtonModule,
-    NgxButtonGroupModule,
-    NgxImageModule,
-    GroupModule,
-    GroupItemModule
-  ],
-  declarations: [PersonPageComponent],
-  providers: [PersonService]
+    PersonHeadModule
+  ]
 })
 export class PersonPageModule {
 }

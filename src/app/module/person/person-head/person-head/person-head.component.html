@@ -1,0 +1,43 @@
+<div *ngIf="person"
+     fxLayout="row"
+     fxLayoutGap="10px"
+     class="header">
+  <div fxLayout="column"
+       fxLayoutGap="10px">
+    <ngx-image [canEdit]="canEdit"
+               [object]="person"
+               [width]="130"
+               [height]="130"
+               [allowFullScreen]="false"
+               [cropImage]="true"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.PERSON"
+               (click)="onNavigate()"
+               (imageChange)="onLogoChange()"></ngx-image>
+  </div>
+  <div fxFlex="grow"
+       fxLayout="column"
+       fxFlexAlign="center"
+       (click)="onNavigate()">
+    <h4>{{person?.lastName}}</h4>
+    <h4>{{person?.firstName}}</h4>
+    <h4>{{person?.patronymic}}</h4>
+  </div>
+  <div fxLayout="column"
+       fxLayoutAlign="space-between end">
+    <div>
+      <button mat-icon-button
+              (click)="editPerson.emit()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="end end"
+         fxFlexAlign="end">
+      <button *ngFor="let item of actions"
+              mat-raised-button
+              (click)="item.action(item)">{{item.label || (item.translationLabel | translate)}}</button>
+    </div>
+  </div>
+</div>

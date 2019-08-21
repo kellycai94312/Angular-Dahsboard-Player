@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
@@ -12,6 +12,9 @@ import {PropertyConstant} from '../../../../data/local/property-constant';
   styleUrls: ['./group-person-item.component.scss']
 })
 export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
+
+  @Input()
+  public clickableComponent = true;
 
   private _groupPersonPositions: GroupPersonPosition[] = [];
   public visibleGroupPersonPositions: boolean;

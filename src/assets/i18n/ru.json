@@ -462,7 +462,7 @@
   "language": "Язык",
   "eventStateEnum": {
     "DRAFT": "Черновик",
-    "READY": "Готово",
+    "READY": "Запланировано",
     "START": "Выполнение",
     "PAUSE": "Пауза",
     "RESUME": "Возобновлено",
@@ -842,5 +842,12 @@
   "workTimePeriodEnum": {
     "_1_15": "С 1 по 15",
     "_1_31": "С 1 по 30"
+  },
+  "aboutMe": "Обо мне",
+  "publications": "Публикации",
+  "personMenuItemTypeEnum": {
+    "BASIC": "Основные данные",
+    "CONTACTS": "Контакты",
+    "CAREER": "Карьера"
   }
 }

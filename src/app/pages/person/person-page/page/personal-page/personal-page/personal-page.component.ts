@@ -30,7 +30,7 @@ export class PersonalPageComponent implements OnInit {
               private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
               private _translateObjectService: TranslateObjectService) {
-    this.person = this.personService.personViewModel.data;
+    // this.person = this.personService.personViewModel.data;
   }
 
   async ngOnInit() {
@@ -63,23 +63,23 @@ export class PersonalPageComponent implements OnInit {
       'birthDate': this.birthDateNgxDate.control,
       'sex': this.sexNgxSelect.control
     });
-    this.canEdit = await this.personService.allowEdit();
-    if (!this.canEdit) {
-      formGroup.disable();
-    }
+    // this.canEdit = await this.personService.allowEdit();
+    // if (!this.canEdit) {
+    //   formGroup.disable();
+    // }
   }
 
   public onSave = async () => {
-    await this._appHelper.trySave(async () => {
-      this.person.firstName = this.firstNgxInput.control.value;
-      this.person.lastName = this.lastNgxInput.control.value;
-      this.person.patronymic = this.patronymicNgxInput.control.value;
-      this.person.birthDate = this.birthDateNgxDate.control.value;
-      this.person.sex = this.sexNgxSelect.control.value.data;
-
-      this.person = await this._participantRestApiService.updatePerson(this.person, {}, {personId: this.person.id});
-      this.personService.personViewModel.update(this.person);
-    });
+    // await this._appHelper.trySave(async () => {
+    //   this.person.firstName = this.firstNgxInput.control.value;
+    //   this.person.lastName = this.lastNgxInput.control.value;
+    //   this.person.patronymic = this.patronymicNgxInput.control.value;
+    //   this.person.birthDate = this.birthDateNgxDate.control.value;
+    //   this.person.sex = this.sexNgxSelect.control.value.data;
+    //
+    //   this.person = await this._participantRestApiService.updatePerson(this.person, {}, {personId: this.person.id});
+    //   this.personService.personViewModel.update(this.person);
+    // });
   };
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {

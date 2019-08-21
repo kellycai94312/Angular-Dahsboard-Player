@@ -41,7 +41,6 @@ import {PageQuery} from './page-query';
 import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../bean/wrapper/date-wrapper';
 import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
-import {Dialogue} from '../model/chat/conversation/dialogue';
 import {Chat} from '../model/chat/conversation/chat';
 import {MessageWrapper} from '../bean/wrapper/message-wrapper';
 import {Message} from '../model/chat/message/message';
@@ -269,16 +268,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}/requisites'
   })
   updatePersonRequisites: IRestMethodStrict<Requisites, any, { personId: number }, Requisites>;
-
-  //#endregion
-
-  //#region Dialogue
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/dialogue'
-  })
-  getDialogue: IRestMethod<{ personId: number }, Dialogue>;
 
   //#endregion
 

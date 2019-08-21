@@ -841,5 +841,12 @@
   "workTimePeriodEnum": {
     "_1_15": "1 to 15",
     "_1_31": "1 to 30"
+  },
+  "aboutMe": "About me",
+  "publications": "Publications",
+  "personMenuItemTypeEnum": {
+    "BASIC": "Basic",
+    "CONTACTS": "Contacts",
+    "CAREER": "Career"
   }
 }

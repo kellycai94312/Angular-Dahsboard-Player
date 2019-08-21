@@ -5,6 +5,7 @@ import {NgxVirtualScrollModule} from '../../../components/ngx-virtual-scroll/ngx
 import {PersonItemModule} from '../person-item/person-item.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatDividerModule} from '@angular/material';
+import {PersonDetailModule} from '../person-detail/person-detail.module';
 
 @NgModule({
   imports: [
@@ -12,7 +13,8 @@ import {MatDividerModule} from '@angular/material';
     MatDividerModule,
     NgxVirtualScrollModule,
     PersonItemModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    PersonDetailModule
   ],
   declarations: [PersonsListComponent],
   exports: [PersonsListComponent]
