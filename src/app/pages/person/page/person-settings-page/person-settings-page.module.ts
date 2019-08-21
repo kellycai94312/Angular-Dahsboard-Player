@@ -4,15 +4,21 @@ import {PersonSettingsPageRoutingModule} from './person-settings-page-routing.mo
 import {PersonSettingsPageComponent} from './person-settings-page/person-settings-page.component';
 import {NgxSelectModule} from '../../../../module/ngx/ngx-select/ngx-select.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
-import {PersonDetailModule} from '../../../../module/person/person-detail/person-detail.module';
+import {MenuPersonDetailModule} from '../../../../module/person/menu-person-detail/menu-person-detail.module';
+import {BasicPersonModule} from '../../../../module/person/basic-person/basic-person.module';
+import {TranslateModule} from '@ngx-translate/core';
+import {MatCardModule} from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
     PersonSettingsPageRoutingModule,
+    MatCardModule,
     FlexLayoutModule,
+    TranslateModule.forChild(),
     NgxSelectModule,
-    PersonDetailModule
+    MenuPersonDetailModule,
+    BasicPersonModule
   ],
   declarations: [PersonSettingsPageComponent]
 })

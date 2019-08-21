@@ -6,6 +6,8 @@ import {NgxSelect} from '../../../../../module/ngx/ngx-select/model/ngx-select';
 import {takeWhile} from 'rxjs/operators';
 import {AuthorizationService} from '../../../../../shared/authorization.service';
 import {Person} from '../../../../../data/remote/model/person';
+import {MenuItem} from '../../../../../module/common/item-line/model/menu-item';
+import {PersonMenuItemType} from '../../../../../module/person/menu-person-detail/model/person-menu-item-type';
 
 @Component({
   selector: 'app-person-settings-page',
@@ -14,8 +16,10 @@ import {Person} from '../../../../../data/remote/model/person';
 })
 export class PersonSettingsPageComponent implements OnInit, OnDestroy {
 
+  public readonly personMenuItemTypeClass = PersonMenuItemType;
   public languageNgxSelect: NgxSelect;
   public person: Person;
+  public selectedItem: MenuItem;
   private _notDestroyed = true;
 
   constructor(private _localStorageService: LocalStorageService,
@@ -46,6 +50,10 @@ export class PersonSettingsPageComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     delete this._notDestroyed;
+  }
+
+  public onSelectedItemChange(item: MenuItem): void {
+    this.selectedItem = item;
   }
 
 }

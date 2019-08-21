@@ -1,3 +1,15 @@
+@import "../../../../../module/person/menu-person-detail/menu-person-detail/menu-person-detail.component";
+
+:host {
+  ::ng-deep {
+    @extend .light-menu-person-detail-theme;
+
+    .mat-card-header-text {
+      margin: 0;
+    }
+  }
+}
+
 .content {
   padding: 10px;
 }
