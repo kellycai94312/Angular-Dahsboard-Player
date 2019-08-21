@@ -26,6 +26,9 @@ export class EventPersonItemComponent extends BaseComponent<EventPerson> {
   @Input()
   public canEdit: boolean;
 
+  @Input()
+  public clickableComponent = true;
+
   constructor(private _appHelper: AppHelper,
               private _modalBuilderService: ModalBuilderService,
               private _baseEventApiService: BaseEventApiService) {

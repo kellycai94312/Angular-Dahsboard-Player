@@ -70,6 +70,9 @@ export class NgxComponentFactoryComponent<TComponent extends any, TModel extends
 
     this.contentViewContainerRef.clear();
     const componentRef = this.contentViewContainerRef.createComponent(componentFactory);
+    // TODO: For deny click action
+    componentRef.instance.clickableComponent = false;
+
     componentRef.changeDetectorRef.detectChanges();
     if (initialize) {
       await initialize(componentRef.instance, data);

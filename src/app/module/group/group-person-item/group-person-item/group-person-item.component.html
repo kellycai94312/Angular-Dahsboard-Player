@@ -1,6 +1,7 @@
 <app-person-item *ngIf="data"
                  [data]="data.person"
-                 [width]="250">
+                 [width]="250"
+                 [clickableComponent]="clickableComponent">
   <div *ngIf="firstGroupPersonPosition"
        fxLayout="column">
     <div fxLayout

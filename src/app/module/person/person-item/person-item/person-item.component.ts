@@ -45,6 +45,9 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   @Input()
   public canShowDetail: boolean;
 
+  @Input()
+  public clickableComponent = true;
+
   public actions: MenuItem[] = [];
   public hasConnection: boolean;
 
@@ -100,6 +103,9 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
   };
 
   public async onShowDetail(): Promise<void> {
+    if (!this.clickableComponent) {
+      return;
+    }
     const modal = this._ngxModalService.open();
     modal.componentInstance.title = `${this.data.lastName} ${this.data.firstName}`;
     modal.componentInstance.useContentPadding = false;
