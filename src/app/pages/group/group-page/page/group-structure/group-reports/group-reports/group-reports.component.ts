@@ -44,6 +44,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
   }
 
   public async ngOnInit(): Promise<void> {
+    super.ngOnInit();
     this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
     this.organizationTypeNgxSelect.display = 'name';
     this.organizationTypeNgxSelect.hasNone = true;

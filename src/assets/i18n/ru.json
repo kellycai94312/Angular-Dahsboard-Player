@@ -849,5 +849,13 @@
     "BASIC": "Основные данные",
     "CONTACTS": "Контакты",
     "CAREER": "Карьера"
+  },
+  "groupSettingsItemEnum": {
+    "BASIC": "Основная информация",
+    "REQUISITES": "Реквизиты",
+    "ADDRESS": "Адрес",
+    "VACANCIES": "Вакансии",
+    "POSITIONS": "Должности",
+    "INVITES": "Приглашения"
   }
 }

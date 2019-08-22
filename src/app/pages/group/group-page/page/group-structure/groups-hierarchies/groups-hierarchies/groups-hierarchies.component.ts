@@ -22,6 +22,7 @@ export class GroupsHierarchiesComponent extends BaseGroupComponent<Group> implem
   }
 
   public async ngOnInit(): Promise<void> {
+    super.ngOnInit();
     // TODO: Use normal first select
     const clusters = await this.fetchClusters(0, '');
     if (clusters.list.length) {

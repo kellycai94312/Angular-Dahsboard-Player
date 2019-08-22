@@ -1,0 +1,8 @@
+export enum GroupSettingsItem {
+  BASIC = 'BASIC',
+  REQUISITES = 'REQUISITES',
+  ADDRESS = 'ADDRESS',
+  VACANCIES = 'VACANCIES',
+  POSITIONS = 'POSITIONS',
+  INVITES = 'INVITES'
+}

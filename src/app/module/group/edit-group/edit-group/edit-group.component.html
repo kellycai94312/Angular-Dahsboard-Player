@@ -1,15 +1,14 @@
-<div fxLayout="column">
+<div *ngIf="data"
+     fxLayout="column">
   <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
   <!--  <ngx-select *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION"-->
   <!--              [data]="typeNgxSelect"></ngx-select>-->
-  <ngx-select *ngIf="data?.discriminator === groupTypeEnum.ORGANIZATION"
+  <ngx-select *ngIf="data.discriminator === groupTypeEnum.ORGANIZATION"
               [data]="organizationTypeNgxSelect"></ngx-select>
-  <ng-container *ngIf="data?.discriminator === groupTypeEnum.TEAM">
+  <ng-container *ngIf="data.discriminator === groupTypeEnum.TEAM">
     <ngx-select [data]="sportTypeNgxSelect"></ngx-select>
     <ngx-select [data]="teamTypeNgxSelect"></ngx-select>
     <ngx-select [data]="stageNgxSelect"></ngx-select>
     <new-ngx-input [data]="stageYearNgxInput"></new-ngx-input>
   </ng-container>
-  <app-edit-group-details *ngIf="data.id"
-                          [group]="data"></app-edit-group-details>
 </div>

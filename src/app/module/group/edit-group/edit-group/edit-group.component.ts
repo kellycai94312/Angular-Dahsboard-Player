@@ -1,4 +1,4 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
@@ -17,7 +17,6 @@ import {Validators} from '@angular/forms';
 import {takeWhile} from 'rxjs/operators';
 import {Organization} from '../../../../data/remote/model/group/organization/organization';
 import {Team} from '../../../../data/remote/model/group/team/team';
-import {EditGroupDetailsComponent} from '../../edit/edit-group-details/edit-group-details/edit-group-details.component';
 
 @Component({
   selector: 'app-edit-group',
@@ -25,9 +24,6 @@ import {EditGroupDetailsComponent} from '../../edit/edit-group-details/edit-grou
   styleUrls: ['./edit-group.component.scss']
 })
 export class EditGroupComponent extends BaseEditComponent<Group> implements OnDestroy {
-
-  @ViewChild(EditGroupDetailsComponent)
-  public editGroupDetailsComponent: EditGroupDetailsComponent;
 
   public readonly groupTypeEnum = GroupTypeEnum;
   public readonly nameNgxInput = new NgxInput();
@@ -127,10 +123,6 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     (this.data as Team).teamType = this.teamTypeNgxSelect.control.value;
     (this.data as Team).stage = this.stageNgxSelect.control.value;
     (this.data as Team).stageYear = this.stageYearNgxInput.control.value;
-
-    if (this.editGroupDetailsComponent) {
-      this.editGroupDetailsComponent.updateModel();
-    }
 
     return await this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);

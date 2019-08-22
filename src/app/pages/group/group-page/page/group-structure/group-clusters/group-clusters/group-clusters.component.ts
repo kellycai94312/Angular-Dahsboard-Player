@@ -26,6 +26,8 @@ export class GroupClustersComponent extends BaseGroupComponent<Group> implements
   }
 
   public async ngOnInit() {
+    super.ngOnInit();
+
     const groupClusters = (await this._participantRestApiService.getGroupClusters({}, {count: PropertyConstant.pageSizeMax}, {groupId: this.group.id})).list;
     for (const item of groupClusters) {
       this.groupClusterMap.set(item, new Map<GroupClusterRank, Group[]>());

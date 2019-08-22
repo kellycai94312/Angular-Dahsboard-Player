@@ -36,9 +36,28 @@ export class GroupApiService {
               private _utilService: UtilService) {
   }
 
+  //region Group
+
   public getGroups<T extends Group>(query?: GroupQuery): Observable<PageContainer<T>> {
     return this._apiService.getPageContainer(Group, this._basePath, query) as Observable<PageContainer<T>>;
   }
+
+  public createGroup<T extends Group>(value: T): Observable<T> {
+    return this._apiService.createValue(Group, this._basePath, value) as Observable<T>;
+  }
+
+  public updateGroup<T extends Group>(value: T): Observable<T> {
+    return this._apiService.updateValue(Group, `${this._basePath}/${value.id}`, value) as Observable<T>;
+  }
+
+  public saveGroup<T extends Group>(value: T): Observable<T> {
+    if (value.id) {
+      return this.updateGroup(value);
+    }
+    return this.createGroup(value);
+  }
+
+  //endregion
 
   public getPersons<T extends GroupPerson>(group: Group,
                                            query: GroupPersonQuery): Observable<PageContainer<T>> {
@@ -104,7 +123,6 @@ export class GroupApiService {
   }
 
   //#endregion
-
 
   //#region SubgroupTemplate
 

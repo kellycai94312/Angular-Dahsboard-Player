@@ -848,5 +848,13 @@
     "BASIC": "Basic",
     "CONTACTS": "Contacts",
     "CAREER": "Career"
+  },
+  "groupSettingsItemEnum": {
+    "BASIC": "Basic",
+    "REQUISITES": "Requisites",
+    "ADDRESS": "Address",
+    "VACANCIES": "Vacancies",
+    "POSITIONS": "Positions",
+    "INVITES": "Invites"
   }
 }
