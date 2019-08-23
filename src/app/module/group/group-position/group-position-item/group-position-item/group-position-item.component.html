@@ -1,0 +1,14 @@
+<div *ngIf="data"
+     fxLayout="row"
+     fxLayoutGap="10px">
+  <div fxFlex="grow">
+    <p class="text-muted">{{position.activity.name}} / {{('positionLevelEnum.' + position.positionLevelEnum) | translate}} ({{position.name}})</p>
+    <strong>{{data.name ? data.name : position.name}}</strong>
+  </div>
+  <div *ngIf="canEdit">
+    <button mat-icon-button
+            (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+</div>

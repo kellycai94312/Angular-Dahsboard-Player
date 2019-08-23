@@ -18,6 +18,7 @@ export class BasicGroupSettingsComponent extends BaseGroupSettingsComponent<Grou
 
   constructor(groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
+    this.allowSave = true;
   }
 
 }

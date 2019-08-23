@@ -12,9 +12,9 @@
                    (deactivate)="onRouterOutletDeactivate($event)"></router-outlet>
     <div fxLayout="row"
          fxLayoutAlign="end start">
-      <button mat-raised-button
+      <button *ngIf="selectedComponent?.canSave"
+              mat-raised-button
               color="primary"
-              [disabled]="!selectedComponent?.onSave"
               (click)="onSave()">
         {{'save' | translate}}
       </button>

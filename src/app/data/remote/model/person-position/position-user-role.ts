@@ -1,7 +1,12 @@
 import {IdentifiedObject} from '../../base/identified-object';
 import {UserRole} from '../user-role';
+import {Type} from 'class-transformer';
 
 export class PositionUserRole extends IdentifiedObject {
-  userRole: UserRole;
-  defaultPosition?: boolean;
+
+  @Type(() => UserRole)
+  public userRole: UserRole;
+
+  public defaultPosition?: boolean;
+
 }

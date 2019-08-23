@@ -18,6 +18,7 @@ export class RequisitesGroupSettingsComponent extends BaseGroupSettingsComponent
 
   constructor(groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
+    this.allowSave = true;
   }
 
 }

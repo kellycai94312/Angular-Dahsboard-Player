@@ -8,7 +8,7 @@ import {AppHelper} from '../../../../../utils/app-helper';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ImageType} from '../../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../../data/remote/model/file/base/file-class';
-import {BaseEditComponent} from '../../../../../data/local/component/base/base-edit-component';
+import {BaseGroupSettingsComponent} from '../model/base-group-settings-component';
 
 @Component({
   selector: 'app-group-settings',
@@ -19,7 +19,7 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public selectedComponent: BaseEditComponent<any>;
+  public selectedComponent: BaseGroupSettingsComponent<Group>;
   public items: NameWrapper<string>[];
 
   constructor(private _activatedRoute: ActivatedRoute,
