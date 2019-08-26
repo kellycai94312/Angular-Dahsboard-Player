@@ -33,7 +33,7 @@ export class VacanciesGroupSettingsComponent extends BaseGroupSettingsComponent<
   public async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
 
-    this._groupApiService.getGroupVacancies(this.group, {unassigned: false, count: PropertyConstant.pageSizeMax}).subscribe(value => {
+    this._groupApiService.getGroupVacancies(this.group, {unassigned: false, groupPositions: true, count: PropertyConstant.pageSizeMax}).subscribe(value => {
       this.vacancies = value.list;
     });
   }
@@ -41,6 +41,7 @@ export class VacanciesGroupSettingsComponent extends BaseGroupSettingsComponent<
   public async onEdit(): Promise<void> {
     const result = await this._modalBuilderService.showSelectionItemsModal(this.vacancies, async (query: GroupPersonPositionQuery) => {
       query.unassigned = true;
+      query.groupPositions = true;
       return await this._groupApiService.getGroupVacancies(this.group, query).toPromise();
     }, GroupPositionItemComponent, async (component, data) => {
       await component.initialize(data as GroupPosition);

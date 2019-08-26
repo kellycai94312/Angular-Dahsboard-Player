@@ -28,6 +28,8 @@ import {PositionQuery} from '../position/model/position-query';
 import {BasePosition} from '../../../model/person-position/base-position';
 import {ListRequest} from '../../../request/list-request';
 import {GroupPersonPositionQuery} from '../../query/group-person-position-query';
+import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
+import {GroupPersonPosition} from '../../../model/group/position/group-person-position';
 
 @Injectable({
   providedIn: 'root'
@@ -60,6 +62,22 @@ export class GroupApiService {
       return this.updateGroup(value);
     }
     return this.createGroup(value);
+  }
+
+  //endregion
+
+  //region Group person
+
+  public getCurrentGroupPerson<T extends GroupPerson>(group: Group): Observable<T> {
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`).pipe(map(value => value.value)) as Observable<T>;
+  }
+
+  public getGroupPersonPositions(groupPerson: GroupPerson, query?: GroupPersonPositionQuery): Observable<PageContainer<GroupPersonPosition>> {
+    return this._apiService.getPageContainer(GroupPersonPosition, `${this._basePath}/${groupPerson.group.id}/person/${groupPerson.person.id}/position`, query);
+  }
+
+  public updateGroupPersonPositions(groupPerson: GroupPerson, values: BasePosition[]): Observable<GroupPersonPosition[]> {
+    return this._apiService.createValue(GroupPersonPosition, `${this._basePath}/${groupPerson.group.id}/person/${groupPerson.person.id}/position`, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<GroupPersonPosition[]>;
   }
 
   //endregion

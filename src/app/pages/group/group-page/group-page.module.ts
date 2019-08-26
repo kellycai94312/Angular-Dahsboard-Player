@@ -12,6 +12,7 @@ import {GroupPersonItemModule} from '../../../module/group/group-person-item/gro
 import {NgxTabsModule} from '../../../module/ngx/ngx-tabs/ngx-tabs.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {GroupService} from './service/group.service';
+import {GroupPositionItemModule} from '../../../module/group/group-position/group-position-item/group-position-item.module';
 
 @NgModule({
   imports: [
@@ -25,6 +26,7 @@ import {GroupService} from './service/group.service';
     NgxSplitButtonModule,
     GroupPersonPositionItemModule,
     GroupPersonItemModule,
+    GroupPositionItemModule,
     FlexLayoutModule
   ],
   declarations: [GroupPageComponent],

@@ -10,6 +10,7 @@ import {MatButtonModule, MatChipsModule, MatDividerModule, MatIconModule} from '
 import {GroupContractListModule} from '../../group/group-contract-list/group-contract-list.module';
 import {PersonRepresentativeListModule} from '../person-representative-list/person-representative-list.module';
 import {MedicalExaminationListModule} from '../medical-examination-list/medical-examination-list.module';
+import {GroupPositionItemModule} from '../../group/group-position/group-position-item/group-position-item.module';
 
 @NgModule({
   declarations: [EditPersonComponent],
@@ -28,7 +29,8 @@ import {MedicalExaminationListModule} from '../medical-examination-list/medical-
     NgxDateModule,
     GroupContractListModule,
     PersonRepresentativeListModule,
-    MedicalExaminationListModule
+    MedicalExaminationListModule,
+    GroupPositionItemModule
   ]
 })
 export class EditPersonModule {

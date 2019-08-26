@@ -11,15 +11,17 @@ import {GroupPersonState} from '../../../../data/remote/model/group/group-person
 import {shareReplay} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {UserRole} from '../../../../data/remote/model/user-role';
-import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
-import {GroupPersonPositionItemComponent} from '../../../../module/group/group-person-position-item/group-person-position-item/group-person-position-item.component';
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
 import {PageContainer} from '../../../../data/remote/bean/page-container';
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
 import {GroupPersonItemComponent} from '../../../../module/group/group-person-item/group-person-item/group-person-item.component';
+import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
+import {GroupPositionItemComponent} from '../../../../module/group/group-position/group-position-item/group-position-item/group-position-item.component';
+import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
+import {Position} from '../../../../data/remote/model/person-position/position';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -40,6 +42,7 @@ export class GroupService implements OnDestroy {
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _permissionService: PermissionService,
               private _translateObjectService: TranslateObjectService,
+              private _groupApiService: GroupApiService,
               private _modalBuilderService: ModalBuilderService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _appHelper: AppHelper) {
@@ -65,12 +68,8 @@ export class GroupService implements OnDestroy {
     });
   }
 
-  private async initializeGroupPerson(group: Group) {
-    let groupPerson: GroupPerson = null;
-    try {
-      groupPerson = await this._participantRestApiService.getCurrentGroupPerson({id: group.id});
-    } catch (e) {
-    }
+  private async initializeGroupPerson(group: Group): Promise<void> {
+    const groupPerson = await this._groupApiService.getCurrentGroupPerson(group).toPromise();
     await this.updateGroupPerson(groupPerson);
   }
 
@@ -82,29 +81,25 @@ export class GroupService implements OnDestroy {
     this._groupPersonSubject.next(groupPerson);
   }
 
-  public async showSelectionGroupVacanciesModal(unassigned: boolean,
-                                                items: GroupPersonPosition[],
-                                                params: { groupId: number }): Promise<DialogResult<GroupPersonPosition[]>> {
+  public async showSelectionGroupVacanciesModal(group: Group,
+                                                unassigned: boolean,
+                                                items: BasePosition[]): Promise<DialogResult<BasePosition[]>> {
     return await this.showSelectionGroupPersonPositions(items, async (query: GroupPersonPositionQuery) => {
       query.unassigned = unassigned;
-      return this._appHelper.pageContainerConverter(await this._participantRestApiService.getGroupVacancies({}, query, params), obj => {
-        const result = new GroupPersonPosition();
-        result.position = obj;
-        return result;
-      });
+      return await this._groupApiService.getGroupVacancies(group, query).toPromise();
     });
   }
 
-  private async showSelectionGroupPersonPositions(items: GroupPersonPosition[],
-                                                  fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<GroupPersonPosition>>): Promise<DialogResult<GroupPersonPosition[]>> {
-    return await this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPersonPositionItemComponent,
+  private async showSelectionGroupPersonPositions(items: BasePosition[],
+                                                  fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<BasePosition>>): Promise<DialogResult<BasePosition[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPositionItemComponent,
       async (component, data) => {
         await component.initialize(data);
       },
       {
         componentFactoryResolver: this._componentFactoryResolver,
         compare: (first, second) => {
-          return first.position.id == second.position.id;
+          return first.id == second.id;
         },
         title: `${await this._translateObjectService.getTranslation('vacancies')} | ${await this._translateObjectService.getTranslation('selection')}`,
         minCount: 1
@@ -163,10 +158,10 @@ export class GroupService implements OnDestroy {
         return false;
       }
 
-      const positions = (await this._participantRestApiService.getGroupPersonPositions({},
-        {unassigned: false, count: PropertyConstant.pageSizeMax},
-        {groupId: groupPerson.group.id, personId: groupPerson.person.id}
-      )).list.map(x => x.position);
+      const positions = (await this._groupApiService.getGroupPersonPositions(groupPerson, {
+        unassigned: false,
+        count: PropertyConstant.pageSizeMax
+      }).toPromise()).list.map(x => x.position as any as Position);
 
       let userRoles: UserRole[] = [];
       for (const item of positions) {

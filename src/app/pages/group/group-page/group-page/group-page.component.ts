@@ -83,31 +83,32 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         nameKey: 'join',
         callback: async () => {
           const params = {groupId: this.group.id};
-          const result = await this.groupService.showSelectionGroupVacanciesModal(false, [], params);
-          if (result.result && await this._templateModalService.addMissingUserRoles(result.data.map(x => x.position))) {
-            await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => new IdRequest(x.position.id))}, {}, params));
+          const result = await this.groupService.showSelectionGroupVacanciesModal(this.group, false, []);
+          if (result.result) {
+            await this.groupService.updateGroupPerson(await this._participantRestApiService.joinGroup({list: result.data.map(x => new IdRequest(x.id))}, {}, params));
           }
         },
         visible: (): boolean => {
           return !this.isOwner && (!this.groupPerson);
         }
       },
-      {
-        nameKey: 'editRequest',
-        callback: async () => {
-          const groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
-            {unassigned: false, count: PropertyConstant.pageSizeMax},
-            {groupId: this.group.id, personId: this.groupPerson.person.id})).list;
-          const params = {groupId: this.group.id};
-          const result = await this.groupService.showSelectionGroupVacanciesModal(false, groupPersonPositions, params);
-          if (result.result && await this._templateModalService.addMissingUserRoles(result.data.map(x => x.position))) {
-            await this._participantRestApiService.updateGroupPersonPositions({list: result.data.map(x => x.position)}, {}, {groupId: this.group.id, personId: this.groupPerson.person.id});
-          }
-        },
-        visible: (): boolean => {
-          return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.JOIN_REQUEST);
-        }
-      },
+      // TODO:
+      // {
+      //   nameKey: 'editRequest',
+      //   callback: async () => {
+      //     const groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
+      //       {unassigned: false, count: PropertyConstant.pageSizeMax},
+      //       {groupId: this.group.id, personId: this.groupPerson.person.id})).list;
+      //     const params = {groupId: this.group.id};
+      //     const result = await this.groupService.showSelectionGroupVacanciesModal(this.group, false, groupPersonPositions);
+      //     if (result.result) {
+      //       await this._participantRestApiService.updateGroupPersonPositions({list: result.data.map(x => x.position)}, {}, {groupId: this.group.id, personId: this.groupPerson.person.id});
+      //     }
+      //   },
+      //   visible: (): boolean => {
+      //     return !this.isOwner && (this.groupPerson && this.groupPerson.state === GroupPersonState.JOIN_REQUEST);
+      //   }
+      // },
       // TODO: Approve in notifications
       // {
       //   nameKey: 'viewRequest',

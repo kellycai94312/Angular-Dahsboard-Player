@@ -283,32 +283,6 @@ export class TemplateModalService {
     return await this._ngxModalService.awaitModalResult(modal);
   }
 
-  public async addMissingUserRoles(positions: Position[]): Promise<boolean> {
-    let positionUserRoles: UserRole[] = [];
-    const compare: (first: UserRole, second: UserRole) => boolean = (first, second) => first.id == second.id;
-    for (const item of positions) {
-      const items = await this._appHelper.except(positionUserRoles, item.positionUserRoles.map(x => x.userRole), compare);
-      if (items.length) {
-        const newItems = await this._appHelper.except(positionUserRoles, items, compare);
-        if (newItems.length) {
-          positionUserRoles = positionUserRoles.concat(newItems);
-        }
-      }
-    }
-    const userRoles = await this._authorizationService.getUserRoles();
-    const differenceUserRoles = this._appHelper.except(positionUserRoles, userRoles, compare);
-
-    if (differenceUserRoles.length) {
-      if (await this.showConfirmModal('addMissingUserRoles')) {
-        const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
-        await this._participantRestApiService.updateUserUserRoles({list: differenceUserRoles.concat(userRoles)}, {}, {userId: person.user.id});
-      } else {
-        return false;
-      }
-    }
-    return true;
-  }
-
   public async showEditGroupClusterModal<T extends GroupCluster>(obj: T): Promise<DialogResult<T>> {
     const modal = this._ngxModalService.open();
     this._modalBuilderService.updateTitleKeyModal(modal, obj);

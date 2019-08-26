@@ -25,6 +25,7 @@ import {flatMap, last} from 'rxjs/operators';
 import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
 import {EventStateEnum} from '../../../../data/remote/model/event/base/event-state-enum';
 import {EventAttendanceComponent} from '../../event-attendance/event-attendance/event-attendance.component';
+import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
 
 @Component({
   selector: 'app-edit-base-event',
@@ -49,6 +50,7 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
   constructor(private _baseEventApiService: BaseEventApiService,
               private _ngxModalService: NgxModalService,
               private _utilService: UtilService,
+              private _groupApiService: GroupApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
@@ -157,9 +159,8 @@ export class EditBaseEventComponent<T extends BaseEvent> extends BaseEditCompone
       await this._baseEventApiService.updateEventGroups(this.data, {list: [new IdRequest(this.eventData.group.id)]}).toPromise();
       const eventPersonRequests: EventPersonRequest[] = [];
       const getPositions = async (positionLevelEnum: PositionLevelEnum, person: Person): Promise<IdRequest[]> => {
-        const positions = (await this.participantRestApiService.getGroupPersonPositions({},
-          {count: PropertyConstant.pageSizeMax, positionLevelEnum: positionLevelEnum},
-          {personId: person.id, groupId: this.eventData.group.id})).list;
+        const positions = (await this._groupApiService.getGroupPersonPositions({group: this.eventData.group, person} as any,
+          {count: PropertyConstant.pageSizeMax, positionLevelEnum: positionLevelEnum}).toPromise()).list;
         return positions.map(x => new IdRequest(x.position.id));
       };
       for (const item of this.eventData.heads) {

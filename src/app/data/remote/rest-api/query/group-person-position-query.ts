@@ -7,4 +7,5 @@ export class GroupPersonPositionQuery extends PageQuery {
   positionLevelEnum?: PositionLevelEnum;
   withState?: boolean; // Должности, которые были изменены
   unassigned?: boolean;
+  groupPositions?: boolean;
 }

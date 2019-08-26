@@ -624,12 +624,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!id}/currentGroupPerson',
-  })
-  getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/group/{!groupId}/person/{!personId}',
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
@@ -690,18 +684,6 @@ export class ParticipantRestApiService extends Rest {
   })
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/position',
-  })
-  getGroupPersonPositions: IRestMethodStrict<any, GroupPersonPositionQuery, { groupId: number, personId: number }, PageContainer<GroupPersonPosition>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/position',
-  })
-  updateGroupPersonPositions: IRestMethodStrict<ListRequest<Position>, any, { groupId: number, personId: number }, GroupPersonPosition[]>;
-
   //#region Organization trainer
 
   @RestAction({
@@ -721,22 +703,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
   })
   updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
-
-  //#endregion
-
-  //#region Vacancy
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/vacancy',
-  })
-  getGroupVacancies: IRestMethodStrict<any, GroupPersonPositionQuery, { groupId: number }, PageContainer<Position>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/vacancy',
-  })
-  updateGroupVacancies: IRestMethodStrict<ListRequest<IdRequest>, GroupPersonPositionQuery, { groupId: number }, Position[]>;
 
   //#endregion
 
