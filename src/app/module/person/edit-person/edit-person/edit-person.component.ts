@@ -358,7 +358,7 @@ export class EditPersonComponent implements OnDestroy {
 
   public async onEditGroupPersonPositions(): Promise<void> {
     const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async query => {
-        return await this._groupApiService.getGroupVacancies(this.group, query).toPromise();
+        return await this._groupApiService.getGroupPositions(this.group, query).toPromise();
       }, GroupPositionItemComponent,
       async (component, data) => {
         await component.initialize(data as any);

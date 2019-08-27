@@ -5,6 +5,8 @@
                  [rightActions]="actions"></app-item-line>
   <ng-template #cardItemTemplate>
     <app-vertical-card title="{{data.lastName}} {{data.firstName}}"
+                       [subtitle]="this.data && this.data.groupPersonJob && this.data.groupPersonJob.group.name"
+                       [text]="this.data && this.data.groupPersonJob && this.data.groupPersonJob.position.name"
                        [fileClass]="fileClassClass.PERSON"
                        [actions]="actions"
                        [(data)]="data"

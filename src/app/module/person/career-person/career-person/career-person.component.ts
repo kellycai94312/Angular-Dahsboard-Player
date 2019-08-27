@@ -90,6 +90,10 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
           .subscribe(async (group) => {
             await this._updatePositions(group);
           });
+
+        if (!this.canEdit) {
+          this.formGroup.disable();
+        }
       });
     }
     return result;
@@ -98,7 +102,9 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
   private async _updatePositions(group: Group): Promise<void> {
     this.positionNgxSelect.items = (await this._groupApiService.getGroupPersonPositions({group, person: this.data} as any, {count: PropertyConstant.pageSizeMax}).toPromise())
       .list.map(x => x.position);
-    this.positionNgxSelect.control.enable();
+    if (this.canEdit) {
+      this.positionNgxSelect.control.enable();
+    }
   }
 
   public async onRemove(): Promise<boolean> {

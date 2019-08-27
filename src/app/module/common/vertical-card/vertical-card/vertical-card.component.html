@@ -14,7 +14,8 @@
                  [type]="imageTypeClass.LOGO"
                  [fileClass]="fileClass"></ngx-image>
     </div>
-    <div class="title-content text-truncate text-center">
+    <div fxFlex="grow"
+         class="title-content text-truncate text-center">
       <h4 class="text-truncate"
           matTooltipPosition="above"
           matTooltipShowDelay="500"
@@ -24,8 +25,14 @@
           matTooltipPosition="above"
           matTooltipShowDelay="500"
           [matTooltip]="subtitle">{{subtitle}}</h6>
+      <h6 *ngIf="text"
+          class="text-truncate"
+          matTooltipPosition="above"
+          matTooltipShowDelay="500"
+          [matTooltip]="text">{{text}}</h6>
     </div>
-    <div fxLayout="row"
+    <div fxFlex
+         fxLayout="row"
          fxLayoutAlign="center center"
          fxLayoutGap="10px">
       <button *ngFor="let item of actions"

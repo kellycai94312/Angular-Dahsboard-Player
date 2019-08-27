@@ -1,4 +1,6 @@
 <div fxLayout="column">
-  <ngx-select [data]="groupNgxSelect"></ngx-select>
-  <ngx-select [data]="positionNgxSelect"></ngx-select>
+  <ngx-select *ngIf="canEdit || groupNgxSelect.control.value"
+              [data]="groupNgxSelect"></ngx-select>
+  <ngx-select *ngIf="canEdit || positionNgxSelect.control.value"
+              [data]="positionNgxSelect"></ngx-select>
 </div>
