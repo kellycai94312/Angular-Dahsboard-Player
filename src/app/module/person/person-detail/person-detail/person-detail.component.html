@@ -17,9 +17,12 @@
                        (editPerson)="onEditPerson()"></app-person-head>
       <div [ngSwitch]="selectedMenuItem?.data"
            class="selected-content">
-        <app-basic-person *ngSwitchCase="personMenuItemTypeClass.BASIC"
+        <app-basic-person *ngSwitchCase="personItemTypeClass.BASIC"
                           [canEdit]="canEdit"
-                          [person]="data"></app-basic-person>
+                          [data]="data"></app-basic-person>
+        <app-career-person *ngSwitchCase="personItemTypeClass.CAREER"
+                           [canEdit]="canEdit"
+                           [data]="data"></app-career-person>
         <ng-container *ngSwitchDefault>
           {{'noData' | translate}}
         </ng-container>

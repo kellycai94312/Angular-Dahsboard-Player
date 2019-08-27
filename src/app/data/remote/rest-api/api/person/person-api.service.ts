@@ -14,6 +14,9 @@ import {ListRequest} from '../../../request/list-request';
 import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
 import {map} from 'rxjs/operators';
 import {Dialogue} from '../../../model/chat/conversation/dialogue';
+import {GroupPersonJob} from '../../../model/group/group-person-job';
+import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
+import {plainToClass} from 'class-transformer';
 
 @Injectable({
   providedIn: 'root'
@@ -119,7 +122,7 @@ export class PersonApiService {
 
   //#endregion
 
-  //#region representative
+  //#region Representative
 
   public getPersonDependant<T extends Person>(person: Person): Observable<T[]> {
     return this._apiService.getValues(Person, `${this._basePath}/${person.id}/dependant`) as Observable<T[]>;
@@ -150,4 +153,20 @@ export class PersonApiService {
   }
 
   //#endregion
+
+  //region Group person job
+
+  public getGroupPersonJob(person: Person): Observable<GroupPersonJob> {
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${person.id}/job`).pipe(map(value => plainToClass(GroupPersonJob, value.value)));
+  }
+
+  public updateGroupPersonJob(person: Person, value: GroupPersonJob): Observable<GroupPersonJob> {
+    return this._apiService.createValue(GroupPersonJob, `${this._basePath}/${person.id}/job`, value) as Observable<GroupPersonJob>;
+  }
+
+  public removeGroupPersonJob(person: Person): Observable<GroupPersonJob> {
+    return this._apiService.removeValue(GroupPersonJob, `${this._basePath}/${person.id}/job`) as Observable<GroupPersonJob>;
+  }
+
+  //endregion
 }

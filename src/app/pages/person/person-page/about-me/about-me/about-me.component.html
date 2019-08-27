@@ -12,8 +12,8 @@
         {{item.translationLabel | translate}}
       </mat-card-header>
       <mat-card-content [ngSwitch]="item.data">
-        <app-basic-person *ngSwitchCase="personMenuItemTypeClass.BASIC"
-                          [person]="person"></app-basic-person>
+        <app-basic-person *ngSwitchCase="personItemTypeClass.BASIC"
+                          [data]="person"></app-basic-person>
       </mat-card-content>
     </mat-card>
   </div>

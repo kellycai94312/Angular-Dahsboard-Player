@@ -844,7 +844,7 @@
   },
   "aboutMe": "About me",
   "publications": "Publications",
-  "personMenuItemTypeEnum": {
+  "personItemTypeEnum": {
     "BASIC": "Basic",
     "CONTACTS": "Contacts",
     "CAREER": "Career"

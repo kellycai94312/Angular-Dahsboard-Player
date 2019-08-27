@@ -845,7 +845,7 @@
   },
   "aboutMe": "Обо мне",
   "publications": "Публикации",
-  "personMenuItemTypeEnum": {
+  "personItemTypeEnum": {
     "BASIC": "Основные данные",
     "CONTACTS": "Контакты",
     "CAREER": "Карьера"

@@ -2,10 +2,10 @@ import {MatFormFieldAppearance} from '@angular/material';
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
-export class NgxSelect {
+export class NgxSelect<T = any> {
   public appearance: MatFormFieldAppearance = 'legacy';
   public control = new FormControl();
-  public items: any[];
+  public items: T[];
   public label?: string;
   public labelTranslation?: string;
   public placeholder?: string;
@@ -13,9 +13,7 @@ export class NgxSelect {
   // TODO: Get dynamically from FormControl
   public required?: boolean;
   public hasNone?: boolean;
-  public getErrorMessage?: (ngxSelect: NgxSelect) => Observable<string>;
-  public display?: ((item: any) => string) | string;
-  public compare: <T extends any>(first: T, second: T) => boolean = <T>(first: T, second: T) => {
-    return first === second;
-  };
+  public getErrorMessage?: (ngxSelect: NgxSelect<T>) => Observable<string>;
+  public display?: ((item: T) => string) | string;
+  public compare: (first: T, second: T) => boolean = (first: T, second: T) => first === second;
 }

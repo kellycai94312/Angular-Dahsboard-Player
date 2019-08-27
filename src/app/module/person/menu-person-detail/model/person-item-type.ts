@@ -1,4 +1,4 @@
-export enum PersonMenuItemType {
+export enum PersonItemType {
   BASIC = 'BASIC',
   CONTACTS = 'CONTACTS',
   CAREER = 'CAREER'

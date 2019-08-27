@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {PersonMenuItemType} from '../../../../../module/person/menu-person-detail/model/person-menu-item-type';
+import {PersonItemType} from '../../../../../module/person/menu-person-detail/model/person-item-type';
 import {MenuItem} from '../../../../../module/common/item-line/model/menu-item';
 import {PersonService} from '../../service/person.service';
 import {BasePersonComponent} from '../../../model/base-person-component';
@@ -11,7 +11,7 @@ import {BasePersonComponent} from '../../../model/base-person-component';
 })
 export class AboutMeComponent extends BasePersonComponent implements OnInit {
 
-  public readonly personMenuItemTypeClass = PersonMenuItemType;
+  public readonly personItemTypeClass = PersonItemType;
   public items: MenuItem[];
 
   constructor(personService: PersonService) {
@@ -20,9 +20,9 @@ export class AboutMeComponent extends BasePersonComponent implements OnInit {
 
   public ngOnInit(): void {
     super.ngOnInit();
-    this.items = Object.keys(PersonMenuItemType).map(x => {
+    this.items = Object.keys(PersonItemType).map(x => {
       return {
-        translationLabel: `personMenuItemTypeEnum.${x}`,
+        translationLabel: `personItemTypeEnum.${x}`,
         data: x
       };
     });

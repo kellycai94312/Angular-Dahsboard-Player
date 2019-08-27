@@ -18,4 +18,5 @@ export class Person extends IdentifiedObject {
   legalRepresentativesPhone: string;
   athleteId: string;
   federationAthleteId: string;
+  description: string;
 }

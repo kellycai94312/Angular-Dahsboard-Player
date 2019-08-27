@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {MenuItem} from '../../../common/item-line/model/menu-item';
-import {PersonMenuItemType} from '../model/person-menu-item-type';
+import {PersonItemType} from '../model/person-item-type';
 
 @Component({
   selector: 'app-menu-person-detail',
@@ -23,9 +23,9 @@ export class MenuPersonDetailComponent<T extends MenuItem> implements OnInit {
       this._updateSelection(item);
     };
 
-    this.items = Object.keys(PersonMenuItemType).map(x => {
+    this.items = Object.keys(PersonItemType).map(x => {
       return {
-        translationLabel: `personMenuItemTypeEnum.${x}`,
+        translationLabel: `personItemTypeEnum.${x}`,
         data: x,
         action
       };

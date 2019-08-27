@@ -6,6 +6,7 @@ import {BasicPersonModule} from '../basic-person/basic-person.module';
 import {TranslateModule} from '@ngx-translate/core';
 import {MenuPersonDetailModule} from '../menu-person-detail/menu-person-detail.module';
 import {PersonHeadModule} from '../person-head/person-head.module';
+import {CareerPersonModule} from '../career-person/career-person.module';
 
 @NgModule({
   declarations: [PersonDetailComponent],
@@ -17,6 +18,7 @@ import {PersonHeadModule} from '../person-head/person-head.module';
     TranslateModule.forChild(),
     MenuPersonDetailModule,
     BasicPersonModule,
+    CareerPersonModule,
     PersonHeadModule
   ]
 })

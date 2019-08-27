@@ -1,0 +1,38 @@
+<div fxLayout="row"
+     fxLayout.lt-sm="column-reverse"
+     fxLayoutAlign="start start"
+     fxLayoutAlign.lt-sm="start stretch"
+     fxLayoutGap="10px"
+     class="base-container">
+  <mat-card fxFlex="grow"
+            fxLayout="column"
+            fxLayoutGap="10px">
+    <router-outlet (activate)="onRouterOutletActivate($event)"
+                   (deactivate)="onRouterOutletDeactivate($event)"></router-outlet>
+    <div fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="end start">
+      <button *ngIf="selectedComponent?.canRemove"
+              mat-raised-button
+              color="primary"
+              (click)="onRemove()">
+        {{'remove' | translate}}
+      </button>
+      <button *ngIf="selectedComponent?.canSave"
+              mat-raised-button
+              color="primary"
+              (click)="onSave()">
+        {{'save' | translate}}
+      </button>
+    </div>
+  </mat-card>
+  <mat-card fxFlex="30"
+            fxLayout="column">
+    <div *ngFor="let item of items"
+         class="item"
+         routerLinkActive="selected-item"
+         [routerLink]="item.data">
+      {{item.name | translate}}
+    </div>
+  </mat-card>
+</div>

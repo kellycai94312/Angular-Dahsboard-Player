@@ -162,7 +162,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   public async navigateToPersonSettings() {
-    await this._router.navigate(['/person/settings']);
+    await this._router.navigate(['/person', 'settings']);
   }
 
   public async signOut() {
