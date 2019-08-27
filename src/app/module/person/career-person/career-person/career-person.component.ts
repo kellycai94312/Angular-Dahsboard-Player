@@ -16,6 +16,8 @@ import {GroupPersonJob} from '../../../../data/remote/model/group/group-person-j
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
 import {PersonPrivacyEnum} from '../../../../data/remote/model/base/person-privacy-enum';
+import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import {NameWrapper} from '../../../../data/local/name-wrapper';
 
 @Component({
   selector: 'app-career-person',
@@ -30,11 +32,13 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
   public readonly formGroup = new FormGroup({});
   public groupNgxSelect: NgxSelect<Group>;
   public positionNgxSelect: NgxSelect<BasePosition>;
+  public privacyNgxSelect: NgxSelect<NameWrapper<PersonPrivacyEnum>>;
   private _groupPersonJob: GroupPersonJob;
   private _notDestroyed = true;
 
   constructor(private _groupApiService: GroupApiService,
               private _personApiService: PersonApiService,
+              private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
@@ -82,8 +86,17 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
           this.positionNgxSelect.control.setValue(this._groupPersonJob.position);
         }
 
+        this.privacyNgxSelect = new NgxSelect<NameWrapper<PersonPrivacyEnum>>();
+        this.privacyNgxSelect.labelTranslation = 'privacy';
+        this.privacyNgxSelect.display = 'name';
+        this.privacyNgxSelect.required = true;
+        this.privacyNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<PersonPrivacyEnum>(PersonPrivacyEnum, 'PersonPrivacyEnum');
+        this.privacyNgxSelect.control.setValue(this.privacyNgxSelect.items.find(x => x.data === this._groupPersonJob.personPrivacyEnum) || this.privacyNgxSelect.items[0]);
+        this.privacyNgxSelect.control.setValidators(Validators.required);
+
         this.formGroup.setControl('group', this.groupNgxSelect.control);
         this.formGroup.setControl('position', this.positionNgxSelect.control);
+        this.formGroup.setControl('privacy', this.privacyNgxSelect.control);
 
         this.groupNgxSelect.control.valueChanges
           .pipe(takeWhile(() => this._notDestroyed))
@@ -118,10 +131,10 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
   public async onSave(): Promise<boolean> {
     return this.appHelper.trySave(async () => {
       this._groupPersonJob = this._groupPersonJob || new GroupPersonJob();
-      this._groupPersonJob.personPrivacyEnum = this._groupPersonJob.personPrivacyEnum || PersonPrivacyEnum.PUBLIC;
 
       this._groupPersonJob.group = this.groupNgxSelect.control.value;
       this._groupPersonJob.position = this.positionNgxSelect.control.value;
+      this._groupPersonJob.personPrivacyEnum = this.privacyNgxSelect.control.value.data;
 
       this._groupPersonJob = await this._personApiService.updateGroupPersonJob(this.data, this._groupPersonJob).toPromise();
     });

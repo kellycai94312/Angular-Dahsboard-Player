@@ -856,5 +856,13 @@
     "VACANCIES": "Vacancies",
     "POSITIONS": "Positions",
     "INVITES": "Invites"
-  }
+  },
+  "personPrivacyEnum": {
+    "PUBLIC": "Public",
+    "HIDDEN": "Hidden",
+    "CONTACTS": "Contacts",
+    "GROUP_MANAGEMENT": "Group management",
+    "GROUP_PARTICIPANTS": "Group participants"
+  },
+  "privacy": "Privacy"
 }
