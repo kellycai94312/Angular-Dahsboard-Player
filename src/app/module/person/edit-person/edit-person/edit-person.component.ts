@@ -1,4 +1,4 @@
-import {Component, forwardRef, Inject, Input, OnDestroy} from '@angular/core';
+import {Component, ComponentFactoryResolver, forwardRef, Inject, Input, OnDestroy} from '@angular/core';
 import {Person} from '../../../../data/remote/model/person';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
@@ -23,16 +23,13 @@ import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {UtilService} from '../../../../services/util/util.service';
 import {User} from '../../../../data/remote/model/user';
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
-import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
-import {Position} from '../../../../data/remote/model/person-position/position';
-import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
-import {ListRequest} from '../../../../data/remote/request/list-request';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
-import {UserRole} from '../../../../data/remote/model/user-role';
 import {flatMap, map, takeWhile} from 'rxjs/operators';
-import {ContactPhone} from '../../../../data/remote/model/contact/contact-phone';
-import {ContactType} from '../../../../data/remote/model/contact/base/contact-type';
-import {ContactPrivacyEnum} from '../../../../data/remote/model/contact/base/contact-privacy-enum';
+import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
+import {GroupPositionItemComponent} from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
+import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
+import {PersonContact} from '../../../../data/remote/model/person/person-contact';
+import {PersonContactTypeEnum} from '../../../../data/remote/model/person/person-contact-type-enum';
+import {PersonPrivacyEnum} from '../../../../data/remote/model/base/person-privacy-enum';
 
 @Component({
   selector: 'app-edit-person',
@@ -68,11 +65,11 @@ export class EditPersonComponent implements OnDestroy {
   public documentIssuedByNgxInput: NgxInput;
 
   public groupPerson: GroupPerson;
-  public positions: Position[] = [];
+  public positions: BasePosition[] = [];
 
   private _personalDataProcessingDocument: Document;
   private _document: Document;
-  private _contactPhone = new ContactPhone();
+  private _contactPhone = new PersonContact();
   private _notDestroyed = true;
 
   constructor(private _translateObjectService: TranslateObjectService,
@@ -81,11 +78,15 @@ export class EditPersonComponent implements OnDestroy {
               private _templateModalService: TemplateModalService,
               private _personApiService: PersonApiService,
               private _appHelper: AppHelper,
+              private _groupApiService: GroupApiService,
               private _utilService: UtilService,
               private _modalBuilderService: ModalBuilderService,
               private _validationService: ValidationService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _participantRestApiService: ParticipantRestApiService,
               private _fileApiService: FileApiService) {
+    this._contactPhone.personContactTypeEnum = PersonContactTypeEnum.PHONE;
+    this._contactPhone.personPrivacyEnum = PersonPrivacyEnum.PUBLIC;
   }
 
   public ngOnDestroy(): void {
@@ -144,10 +145,11 @@ export class EditPersonComponent implements OnDestroy {
     this.contactPhoneNumberNgxInput = this._getNgxInput('contactPhoneNumber', '');
 
     if (!this._appHelper.isNewObject(person)) {
-      this._contactPhone = (await this._personApiService.getContacts(person).toPromise()).find(x => x.discriminator === ContactType.PHONE) || new ContactPhone();
+      this._contactPhone = (await this._personApiService.getPersonContacts(person).toPromise()).find((x) => x.personContactTypeEnum === PersonContactTypeEnum.PHONE) || new PersonContact();
       this.contactPhoneNumberNgxInput.control.setValue(this._contactPhone.value);
     }
-    this._contactPhone.contactPrivacyEnum = this._contactPhone.contactPrivacyEnum || ContactPrivacyEnum.GROUP_MANAGEMENT;
+    this._contactPhone.personPrivacyEnum = this._contactPhone.personPrivacyEnum || PersonPrivacyEnum.PUBLIC;
+    this._contactPhone.personContactTypeEnum = this._contactPhone.personContactTypeEnum || PersonContactTypeEnum.PHONE;
 
     this.formGroup.setControl('firstName', this.firstNgxInput.control);
     this.formGroup.setControl('lastName', this.lastNgxInput.control);
@@ -157,10 +159,8 @@ export class EditPersonComponent implements OnDestroy {
 
     if (group && !this._appHelper.isNewObject(person)) {
       this.groupPerson = await this._participantRestApiService.getGroupPerson({groupId: group.id, personId: person.id});
-      this.positions = (await this._participantRestApiService.getGroupPersonPositions({}, {unassigned: false}, {
-        groupId: group.id,
-        personId: person.id
-      })).list.map(x => x.position);
+      this.positions = (await this._groupApiService.getGroupPersonPositions(this.groupPerson, {unassigned: false, count: PropertyConstant.pageSizeMax}).toPromise())
+        .list.map(x => x.position);
     }
     await this.initializePersonalDataProcessingDocument();
   }
@@ -304,17 +304,11 @@ export class EditPersonComponent implements OnDestroy {
             // TODO: Save contact phone number contactPhoneNumberNgxInput
 
             if (this._appHelper.isNewObject(this.person)) {
-              return this._createPerson(this.person, this.positions);
+              return this._createPerson(this.person);
             }
             return this._personApiService.updatePerson(this.person)
               .pipe(
-                flatMap(person => {
-                  return from(this._participantRestApiService.updateGroupPersonPositions(new ListRequest(this.positions), {}, {
-                    groupId: this.group.id,
-                    personId: this.person.id
-                  }))
-                    .pipe(map(() => person));
-                })
+                flatMap(person => this._groupApiService.updateGroupPersonPositions(this.groupPerson, this.positions).pipe(map(() => person)))
               );
           } else {
             const dialog = this._templateModalService.showQuestionModal('documentDataIsNotUnique', modal => {
@@ -328,7 +322,7 @@ export class EditPersonComponent implements OnDestroy {
             return from(dialog).pipe(flatMap(() => NEVER));
           }
         }),
-        flatMap(person => this._personApiService.updateContacts(person, [this._contactPhone]).pipe(map(() => person))),
+        flatMap(person => this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person))),
         flatMap(person => {
           if (person) {
             this.person = person;
@@ -357,48 +351,34 @@ export class EditPersonComponent implements OnDestroy {
       );
   }
 
-  private _createPerson(person1: Person, positions: Position[]): Observable<Person> {
-    return this._personApiService.createPerson(person1)
+  private _createPerson(person: Person): Observable<Person> {
+    return this._personApiService.createPerson(person)
       .pipe(flatMap(value => {
-        let athleteUserRole: UserRole;
-        positions.forEach(position => {
-          const athletePosition = position.positionUserRoles.find(x => x.userRole.userRoleEnum === UserRoleEnum.ATHLETE);
-          if (athletePosition) {
-            athleteUserRole = athletePosition.userRole;
-          }
-        });
-
-        let updateUserRole$: Observable<any> = of(void 0);
-        if (athleteUserRole) {
-          updateUserRole$ = from(this._participantRestApiService.updateUserUserRoles({list: [athleteUserRole]}, {}, {userId: value.user.id}));
-        }
-        return updateUserRole$
-          .pipe(
-            flatMap(() => from(this._participantRestApiService.enrollPerson({personId: value.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))),
-            map(() => value)
-          );
+        return from(this._participantRestApiService.enrollPerson({personId: value.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))
+          .pipe(map(() => value));
       }));
   }
 
   public async onEditGroupPersonPositions(): Promise<void> {
-    const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async (query: GroupPersonPositionQuery) => {
-        return await this._participantRestApiService.getGroupVacancies({}, query, {groupId: this.group.id});
-      }, PreviewNamedObjectComponent,
+    const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async query => {
+        return await this._groupApiService.getGroupPositions(this.group, query).toPromise();
+      }, GroupPositionItemComponent,
       async (component, data) => {
-        component.data = data;
+        await component.initialize(data as any);
       },
       {
         minCount: 1,
         compare: (first, second) => {
           return first.id == second.id;
-        }
+        },
+        componentFactoryResolver: this._componentFactoryResolver
       });
     if (result.result) {
       this.positions = result.data;
     }
   }
 
-  public onRemovePosition(value: Position): void {
+  public onRemovePosition(value: BasePosition): void {
     this.positions.splice(this.positions.indexOf(value), 1);
   }
 

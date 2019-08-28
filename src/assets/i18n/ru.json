@@ -530,7 +530,7 @@
     "MEDICAL_EXAMINATION_VERSION_FINISH_DATE": "Изменено поле 'дата окончания' в медицинском обследовании",
     "MEDICAL_EXAMINATION_VERSION_ALLOWED": "Изменено поле 'разрешение' в медицинском обследовании",
     "MEDICAL_EXAMINATION_CREATE": "Создано медицинское обследование",
-    "MEDICAL_EXAMINATION_REMOVE": "Удалено медицинское обследовани",
+    "MEDICAL_EXAMINATION_REMOVE": "Удалено медицинское обследование",
     "PERSON_RANK_VERSION_DATE": "Изменено поле 'дата' в спортивный разряд",
     "PERSON_RANK_VERSION_NUMBER": "Изменено поле 'номер' в спортивный разряд",
     "PERSON_RANK_CREATE": "Создан спортивный разряд пользователя",
@@ -702,11 +702,6 @@
   "applications": "Приложения",
   "application": "Приложение",
   "selectAContactToStartAChat": "Выберите диалог для отправки сообщений!",
-  "contactTypeEnum": {
-    "EMAIL": "Электронная почта",
-    "PHONE": "Телефон",
-    "SKYPE": "Skype"
-  },
   "welcome": "Добро пожаловать",
   "createPassword": "Создайте пароль",
   "retypePassword": "Повторите ввод пароля",
@@ -787,8 +782,8 @@
     "PERSON_ADD": "{{sender}} добавил(a) пользователя {{person}} в событие {{event}}",
     "PERSON_DELETE": "{{sender}} удалил(a) пользователя {{person}} из события {{event}}",
     "PERSON_DELETE_SELF": "{{sender}} удалил(a) вас из события {{event}}",
-    "PERSON_APPROVE": "{{person}} подтвердил(a) участие в собитии {{event}}",
-    "PERSON_REFUSE": "{{person}} отклонил(а) участие в собитии {{event}}"
+    "PERSON_APPROVE": "{{person}} подтвердил(a) участие в событии {{event}}",
+    "PERSON_REFUSE": "{{person}} отклонил(а) участие в событии {{event}}"
   },
   "eventPollNotificationType": {
     "CREATE_EVENT_POLL": "Принять участие в опросе {{poll}}",
@@ -808,8 +803,8 @@
   },
   "groupConnectionNotificationType": {
     "CREATE_GROUP_CONNECTION_REQUEST": "{{group}} пригласила группу {{parentGroup}}",
-    "APPROVE_GROUP_CONNECTION_REQUEST": "{{group}} одобрил соединене с группой {{parentGroup}}",
-    "REJECT_GROUP_CONNECTION_REQUEST": "{{group}} отклонил соединене с группой {{parentGroup}}"
+    "APPROVE_GROUP_CONNECTION_REQUEST": "{{group}} одобрил соединение с группой {{parentGroup}}",
+    "REJECT_GROUP_CONNECTION_REQUEST": "{{group}} отклонил соединение с группой {{parentGroup}}"
   },
   "subgroupNotificationType": {
     "CREATE_SUBGROUP_TEMPLATE_GROUP": "{{sender}} применил шаблон {{template}} к группе {{group}}",
@@ -845,9 +840,35 @@
   },
   "aboutMe": "Обо мне",
   "publications": "Публикации",
-  "personMenuItemTypeEnum": {
+  "personItemTypeEnum": {
     "BASIC": "Основные данные",
     "CONTACTS": "Контакты",
     "CAREER": "Карьера"
-  }
+  },
+  "groupSettingsItemEnum": {
+    "BASIC": "Основная информация",
+    "REQUISITES": "Реквизиты",
+    "ADDRESS": "Адрес",
+    "VACANCIES": "Вакансии",
+    "POSITIONS": "Должности",
+    "INVITES": "Приглашения"
+  },
+  "personPrivacyEnum": {
+    "PUBLIC": "Все",
+    "HIDDEN": "Никто",
+    "CONTACTS": "Только мои контакты",
+    "GROUP_MANAGEMENT": "Только операторы и администраторы групп",
+    "GROUP_PARTICIPANTS": "Только участники групп, в которых состоит пользователь"
+  },
+  "privacy": "Приватность",
+  "personContactTypeEnum": {
+    "SKYPE": "Skype",
+    "EMAIL": "E-mail",
+    "PHONE": "Телефон",
+    "TELEGRAM": "Telegram",
+    "VIBER": "Viber",
+    "WHATS_APP": "Whats app",
+    "VK": "Vk"
+  },
+  "contactType": "Тип контакта"
 }

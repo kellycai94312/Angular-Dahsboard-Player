@@ -1,0 +1,14 @@
+<div *ngIf="group"
+     fxLayout="row"
+     fxLayoutGap="10px">
+  <div fxFlex="grow">
+    <app-group-position-item *ngFor="let item of vacancies"
+                             [data]="item"></app-group-position-item>
+  </div>
+  <div>
+    <button mat-icon-button
+            (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+    </button>
+  </div>
+</div>

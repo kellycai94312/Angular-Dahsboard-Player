@@ -2,9 +2,9 @@ import {Component, Input} from '@angular/core';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
 
 @Component({
   selector: 'app-group-person-item',
@@ -19,7 +19,7 @@ export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
   private _groupPersonPositions: GroupPersonPosition[] = [];
   public visibleGroupPersonPositions: boolean;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _groupApiService: GroupApiService,
               private _appHelper: AppHelper) {
     super();
   }
@@ -28,14 +28,7 @@ export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
     const result = super.initializeComponent(data);
     if (result && data.group) {
       return await this._appHelper.tryLoad(async () => {
-        this._groupPersonPositions = (await this._participantRestApiService.getGroupPersonPositions({},
-          {
-            unassigned: false,
-            count: PropertyConstant.pageSizeMax
-          }, {
-            groupId: data.group.id,
-            personId: data.person.id
-          })).list;
+        this._groupPersonPositions = (await this._groupApiService.getGroupPersonPositions(this.data, {unassigned: false, count: PropertyConstant.pageSizeMax}).toPromise()).list;
       });
     }
     return result;

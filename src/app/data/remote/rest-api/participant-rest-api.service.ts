@@ -55,7 +55,6 @@ import {ImageQuery} from './query/file/image-query';
 import {DocumentQuery} from './query/file/document-query';
 import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
-import {BaseContact} from '../model/contact/base/base-contact';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
 import {GroupPersonLog} from '../model/group/group-person-log';
@@ -67,7 +66,6 @@ import {ActivityQuery} from './query/activity-query';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {Tag} from '../model/tag';
 import {Rank} from '../model/rank';
-import {Position} from '../model/person-position/position';
 import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
 import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
 import {GroupTransition} from '../model/group/transition/group-transition';
@@ -79,8 +77,6 @@ import {VersionObjectRequest} from '../request/version-object-request';
 import {BaseMessageContent} from '../model/chat/message/base/base-message-content';
 import {Activity} from '../model/activity/activity';
 import {GroupInviteRequest} from '../request/group-invite-request';
-import {GroupPersonPosition} from '../model/group/position/group-person-position';
-import {GroupPersonPositionQuery} from './query/group-person-position-query';
 import {SubgroupTemplate} from '../model/group/subgroup/template/subgroup-template';
 import {SubgroupBookmark} from '../model/group/subgroup/subgroup-bookmark';
 import {SubgroupBookmarkQuery} from './query/subgroup-bookmark-query';
@@ -238,22 +234,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}'
   })
   removePerson: IRestMethod<{ personId: number }, Person>;
-
-  //#region Contact
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/person/{!personId}/contact'
-  })
-  getPersonContacts: IRestMethod<{ personId: number }, BaseContact[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/person/{!personId}/contact'
-  })
-  updatePersonContacts: IRestMethodStrict<ListRequest<BaseContact>, any, { personId: number }, BaseContact[]>;
-
-  //#endregion
 
   //#region Personal
 
@@ -624,12 +604,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!id}/currentGroupPerson',
-  })
-  getCurrentGroupPerson: IRestMethod<QueryParams, GroupPerson>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/group/{!groupId}/person/{!personId}',
   })
   getGroupPerson: IRestMethod<{ groupId: number, personId: number }, GroupPerson>;
@@ -690,18 +664,6 @@ export class ParticipantRestApiService extends Rest {
   })
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/position',
-  })
-  getGroupPersonPositions: IRestMethodStrict<any, GroupPersonPositionQuery, { groupId: number, personId: number }, PageContainer<GroupPersonPosition>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/position',
-  })
-  updateGroupPersonPositions: IRestMethodStrict<ListRequest<Position>, any, { groupId: number, personId: number }, GroupPersonPosition[]>;
-
   //#region Organization trainer
 
   @RestAction({
@@ -721,22 +683,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
   })
   updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
-
-  //#endregion
-
-  //#region Vacancy
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/vacancy',
-  })
-  getGroupVacancies: IRestMethodStrict<any, GroupPersonPositionQuery, { groupId: number }, PageContainer<Position>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/vacancy',
-  })
-  updateGroupVacancies: IRestMethodStrict<ListRequest<IdRequest>, GroupPersonPositionQuery, { groupId: number }, Position[]>;
 
   //#endregion
 

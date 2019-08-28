@@ -1,0 +1,20 @@
+<div fxLayout="row"
+     fxLayoutGap="10px"
+     fxLayoutAlign="start start">
+  <div fxFlex="grow"
+       fxLayout="column">
+    <ng-container *ngFor="let item of groupPositions">
+      <app-group-position-item *ngIf="!item.deleted"
+                               [canEdit]="true"
+                               [group]="group"
+                               [(data)]="item">
+      </app-group-position-item>
+    </ng-container>
+  </div>
+  <div>
+    <button mat-icon-button
+            (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

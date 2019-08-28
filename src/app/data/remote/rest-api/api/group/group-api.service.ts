@@ -23,6 +23,13 @@ import {GroupQuery} from '../../query/group-query';
 import {GroupNews} from '../../../model/group/news/group-news';
 import {EventDay} from '../../../bean/event/event-day';
 import {map} from 'rxjs/operators';
+import {GroupPosition} from '../../../model/person-position/group-position';
+import {PositionQuery} from '../position/model/position-query';
+import {BasePosition} from '../../../model/person-position/base-position';
+import {ListRequest} from '../../../request/list-request';
+import {GroupPersonPositionQuery} from '../../query/group-person-position-query';
+import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
+import {GroupPersonPosition} from '../../../model/group/position/group-person-position';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +43,44 @@ export class GroupApiService {
               private _utilService: UtilService) {
   }
 
+  //region Group
+
   public getGroups<T extends Group>(query?: GroupQuery): Observable<PageContainer<T>> {
     return this._apiService.getPageContainer(Group, this._basePath, query) as Observable<PageContainer<T>>;
   }
+
+  public createGroup<T extends Group>(value: T): Observable<T> {
+    return this._apiService.createValue(Group, this._basePath, value) as Observable<T>;
+  }
+
+  public updateGroup<T extends Group>(value: T): Observable<T> {
+    return this._apiService.updateValue(Group, `${this._basePath}/${value.id}`, value) as Observable<T>;
+  }
+
+  public saveGroup<T extends Group>(value: T): Observable<T> {
+    if (value.id) {
+      return this.updateGroup(value);
+    }
+    return this.createGroup(value);
+  }
+
+  //endregion
+
+  //region Group person
+
+  public getCurrentGroupPerson<T extends GroupPerson>(group: Group): Observable<T> {
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`).pipe(map(value => value.value)) as Observable<T>;
+  }
+
+  public getGroupPersonPositions(groupPerson: GroupPerson, query?: GroupPersonPositionQuery): Observable<PageContainer<GroupPersonPosition>> {
+    return this._apiService.getPageContainer(GroupPersonPosition, `${this._basePath}/${groupPerson.group.id}/person/${groupPerson.person.id}/position`, query);
+  }
+
+  public updateGroupPersonPositions(groupPerson: GroupPerson, values: BasePosition[]): Observable<GroupPersonPosition[]> {
+    return this._apiService.createValue(GroupPersonPosition, `${this._basePath}/${groupPerson.group.id}/person/${groupPerson.person.id}/position`, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<GroupPersonPosition[]>;
+  }
+
+  //endregion
 
   public getPersons<T extends GroupPerson>(group: Group,
                                            query: GroupPersonQuery): Observable<PageContainer<T>> {
@@ -104,7 +146,6 @@ export class GroupApiService {
   }
 
   //#endregion
-
 
   //#region SubgroupTemplate
 
@@ -175,6 +216,49 @@ export class GroupApiService {
   }
 
   //#endregion
+
+  //region Position
+
+  public getGroupPositions(group: Group, query: PositionQuery): Observable<PageContainer<GroupPosition>> {
+    return this._apiService.getPageContainer(GroupPosition, `${this._basePath}/${group.id}/position`);
+  }
+
+  public getGroupPosition(group: Group, groupPosition: GroupPosition): Observable<GroupPosition> {
+    return this._apiService.getValue(GroupPosition, `${this._basePath}/${group.id}/position/${groupPosition.id}`);
+  }
+
+  public createGroupPosition(group: Group, value: GroupPosition): Observable<GroupPosition> {
+    return this._apiService.createValue(GroupPosition, `${this._basePath}/${group.id}/position`, value) as Observable<GroupPosition>;
+  }
+
+  public updateGroupPosition(group: Group, value: GroupPosition): Observable<GroupPosition> {
+    return this._apiService.updateValue(GroupPosition, `${this._basePath}/${group.id}/position/${value.id}`, value) as Observable<GroupPosition>;
+  }
+
+  public saveGroupPosition(group: Group, value: GroupPosition): Observable<GroupPosition> {
+    if (value.id) {
+      return this.updateGroupPosition(group, value);
+    }
+    return this.createGroupPosition(group, value);
+  }
+
+  public removeGroupPosition(group: Group, groupPosition: GroupPosition): Observable<GroupPosition> {
+    return this._apiService.removeValue(GroupPosition, `${this._basePath}/${group.id}/position/${groupPosition.id}`) as Observable<GroupPosition>;
+  }
+
+  //endregion
+
+  //region Vacancies
+
+  public getGroupVacancies<T extends BasePosition>(group: Group, query?: GroupPersonPositionQuery): Observable<PageContainer<T>> {
+    return this._apiService.getPageContainer(BasePosition, `${this._basePath}/${group.id}/vacancy`, query) as Observable<PageContainer<T>>;
+  }
+
+  public updateGroupVacancies<T extends BasePosition>(group: Group, values: T[]): Observable<T[]> {
+    return this._apiService.createValue(BasePosition, `${this._basePath}/${group.id}/vacancy`, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<T[]>;
+  }
+
+  //endregion
 
   private _mapBaseGroupContract<T extends BaseGroupContract>(observable: Observable<T | T[]>): Observable<T | T[]> {
     return observable.pipe(map(value => this._utilService.plainDiscriminatorObjectToClass(BaseGroupContract, value))) as Observable<T | T[]>;

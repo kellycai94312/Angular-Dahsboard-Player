@@ -63,6 +63,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
   }
 
   async ngOnInit() {
+    super.ngOnInit();
     await this.updateItems();
   }
 

@@ -1,0 +1,30 @@
+<div fxLayout="row"
+     fxLayoutGap="10px"
+     fxLayoutAlign="start start">
+  <div fxFlex="grow"
+       fxLayout="column"
+       fxLayoutGap="10px">
+    <div *ngFor="let item of contacts"
+         fxLayout="row"
+         fxLayoutAlign="start center"
+         fxLayoutGap="10px">
+      <div fxFlex="grow"
+           fxLayout="column">
+        <label class="label">{{('personContactTypeEnum.' + item.personContactTypeEnum) | translate}}</label>
+        <p class="value">{{item.value}}</p>
+      </div>
+      <div *ngIf="canEdit">
+        <button mat-icon-button
+                (click)="onEdit(item)">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="canEdit">
+    <button mat-icon-button
+            (click)="onAdd()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+</div>

@@ -701,11 +701,6 @@
   "applications": "Applications",
   "application": "Application",
   "selectAContactToStartAChat": "Select a contact to start a chat!",
-  "contactTypeEnum": {
-    "EMAIL": "Email",
-    "PHONE": "Phone",
-    "SKYPE": "Skype"
-  },
   "welcome": "Welcome",
   "createPassword": "Create password",
   "retypePassword": "Retype password",
@@ -844,9 +839,35 @@
   },
   "aboutMe": "About me",
   "publications": "Publications",
-  "personMenuItemTypeEnum": {
+  "personItemTypeEnum": {
     "BASIC": "Basic",
     "CONTACTS": "Contacts",
     "CAREER": "Career"
-  }
+  },
+  "groupSettingsItemEnum": {
+    "BASIC": "Basic",
+    "REQUISITES": "Requisites",
+    "ADDRESS": "Address",
+    "VACANCIES": "Vacancies",
+    "POSITIONS": "Positions",
+    "INVITES": "Invites"
+  },
+  "personPrivacyEnum": {
+    "PUBLIC": "Public",
+    "HIDDEN": "Hidden",
+    "CONTACTS": "Contacts",
+    "GROUP_MANAGEMENT": "Group management",
+    "GROUP_PARTICIPANTS": "Group participants"
+  },
+  "privacy": "Privacy",
+  "personContactTypeEnum": {
+    "SKYPE": "Skype",
+    "EMAIL": "E-mail",
+    "PHONE": "Phone",
+    "TELEGRAM": "Telegram",
+    "VIBER": "Viber",
+    "WHATS_APP": "Whats app",
+    "VK": "Vk"
+  },
+  "contactType": "Contact type"
 }

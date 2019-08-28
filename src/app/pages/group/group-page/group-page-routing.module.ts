@@ -16,7 +16,8 @@ const routes: Routes = [
       {path: 'structure', loadChildren: './page/group-structure/group-structure.module#GroupStructureModule'},
       {path: 'schedule', loadChildren: './page/group-schedule/group-schedule.module#GroupScheduleModule'}
     ]
-  }
+  },
+  {path: 'settings', loadChildren: './group-settings/group-settings.module#GroupSettingsModule'}
 ];
 
 @NgModule({

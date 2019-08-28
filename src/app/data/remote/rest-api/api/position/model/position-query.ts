@@ -5,4 +5,5 @@ import {PositionLevelEnum} from '../../../../model/person-position/position-leve
 export class PositionQuery extends PageQuery {
   public positionEnum?: PositionEnum;
   public positionLevelEnum?: PositionLevelEnum;
+  public positionId?: number;
 }

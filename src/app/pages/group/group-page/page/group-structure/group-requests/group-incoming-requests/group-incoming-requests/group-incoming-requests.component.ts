@@ -32,6 +32,7 @@ export class GroupIncomingRequestsComponent extends BaseGroupComponent<Group> im
   }
 
   public async ngOnInit(): Promise<void> {
+    super.ngOnInit();
     await this.resetItems();
   }
 

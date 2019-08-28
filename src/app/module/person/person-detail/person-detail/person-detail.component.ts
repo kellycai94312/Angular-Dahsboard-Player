@@ -4,7 +4,7 @@ import {BaseComponent} from '../../../../data/local/component/base/base-componen
 import {Person} from '../../../../data/remote/model/person';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {PersonMenuItemType} from '../../menu-person-detail/model/person-menu-item-type';
+import {PersonItemType} from '../../menu-person-detail/model/person-item-type';
 import {PermissionService} from '../../../../shared/permission.service';
 import {takeWhile} from 'rxjs/operators';
 import {TemplateModalService} from '../../../../service/template-modal.service';
@@ -22,7 +22,7 @@ export class PersonDetailComponent extends BaseComponent<Person> implements OnIn
   @Input()
   public showHead = true;
 
-  public readonly personMenuItemTypeClass = PersonMenuItemType;
+  public readonly personItemTypeClass = PersonItemType;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public selectedMenuItem: MenuItem;

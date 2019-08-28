@@ -6,6 +6,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material';
 import {TranslateModule} from '@ngx-translate/core';
 import {BasicPersonModule} from '../../../../module/person/basic-person/basic-person.module';
+import {CareerPersonModule} from '../../../../module/person/career-person/career-person.module';
+import {PersonContactListModule} from '../../../../module/person/person-contact-list/person-contact-list.module';
 
 @NgModule({
   declarations: [AboutMeComponent],
@@ -15,7 +17,9 @@ import {BasicPersonModule} from '../../../../module/person/basic-person/basic-pe
     MatCardModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
-    BasicPersonModule
+    BasicPersonModule,
+    CareerPersonModule,
+    PersonContactListModule
   ]
 })
 export class AboutMeModule {

@@ -21,6 +21,9 @@ export class VerticalCardComponent<T extends any> extends BaseComponent<T> {
   public subtitle: string;
 
   @Input()
+  public text: string;
+
+  @Input()
   public actions: MenuItem[];
 
   public readonly imageTypeClass = ImageType;
