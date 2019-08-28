@@ -74,7 +74,11 @@
 }
 
 .content {
-  background-color: #32383e;
+  background-image: linear-gradient(to bottom, #2e3338, #3c434a);
+
+  .left-content {
+    background-image: radial-gradient(circle, #343b41, #2a2f34);
+  }
 
   .right-content {
     color: #fff;
@@ -82,7 +86,7 @@
 
     .selected-content {
       padding: 10px;
-      background-color: #272d32;
+      background-image: radial-gradient(circle, #343b41, #2a2f34);
     }
   }
 }
