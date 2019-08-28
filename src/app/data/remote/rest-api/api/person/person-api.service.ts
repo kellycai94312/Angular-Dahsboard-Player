@@ -9,14 +9,13 @@ import {PageQuery} from '../../page-query';
 import {MedicalExamination} from '../../../model/person/medical-examination';
 import {GroupNews} from '../../../model/group/news/group-news';
 import {PersonNews} from '../../../model/group/news/person-news';
-import {BaseContact} from '../../../model/contact/base/base-contact';
-import {ListRequest} from '../../../request/list-request';
 import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
 import {map} from 'rxjs/operators';
 import {Dialogue} from '../../../model/chat/conversation/dialogue';
 import {GroupPersonJob} from '../../../model/group/group-person-job';
 import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
 import {plainToClass} from 'class-transformer';
+import {PersonContact} from '../../../model/person/person-contact';
 
 @Injectable({
   providedIn: 'root'
@@ -136,12 +135,27 @@ export class PersonApiService {
 
   //#region Contact
 
-  public getContacts<T extends BaseContact>(person: Person): Observable<T[]> {
-    return this._apiService.getValues(BaseContact, `${this._basePath}/${person.id}/contact`) as Observable<T[]>;
+  public getPersonContacts(person: Person): Observable<PersonContact[]> {
+    return this._apiService.getValues(PersonContact, `${this._basePath}/${person.id}/contact`);
   }
 
-  public updateContacts<T extends BaseContact>(person: Person, contacts: T[]): Observable<T[]> {
-    return this._apiService.updateValue(BaseContact, `${this._basePath}/${person.id}/contact`, new ListRequest(contacts)) as Observable<T[]>;
+  public createContact(person: Person, value: PersonContact): Observable<PersonContact> {
+    return this._apiService.createValue(PersonContact, `${this._basePath}/${person.id}/contact`, value) as Observable<PersonContact>;
+  }
+
+  public updateContact(person: Person, value: PersonContact): Observable<PersonContact> {
+    return this._apiService.updateValue(PersonContact, `${this._basePath}/${person.id}/contact/${value.id}`, value) as Observable<PersonContact>;
+  }
+
+  public saveContact(person: Person, value: PersonContact): Observable<PersonContact> {
+    if (value.id) {
+      return this.updateContact(person, value);
+    }
+    return this.createContact(person, value);
+  }
+
+  public removeContact(person: Person, value: PersonContact): Observable<PersonContact> {
+    return this._apiService.removeValue(PersonContact, `${this._basePath}/${person.id}/contact/${value.id}`) as Observable<PersonContact>;
   }
 
   //#endregion

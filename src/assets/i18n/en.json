@@ -701,11 +701,6 @@
   "applications": "Applications",
   "application": "Application",
   "selectAContactToStartAChat": "Select a contact to start a chat!",
-  "contactTypeEnum": {
-    "EMAIL": "Email",
-    "PHONE": "Phone",
-    "SKYPE": "Skype"
-  },
   "welcome": "Welcome",
   "createPassword": "Create password",
   "retypePassword": "Retype password",
@@ -864,5 +859,15 @@
     "GROUP_MANAGEMENT": "Group management",
     "GROUP_PARTICIPANTS": "Group participants"
   },
-  "privacy": "Privacy"
+  "privacy": "Privacy",
+  "personContactTypeEnum": {
+    "SKYPE": "Skype",
+    "EMAIL": "E-mail",
+    "PHONE": "Phone",
+    "TELEGRAM": "Telegram",
+    "VIBER": "Viber",
+    "WHATS_APP": "Whats app",
+    "VK": "Vk"
+  },
+  "contactType": "Contact type"
 }

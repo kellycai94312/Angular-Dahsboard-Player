@@ -24,12 +24,12 @@ import {UtilService} from '../../../../services/util/util.service';
 import {User} from '../../../../data/remote/model/user';
 import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
 import {flatMap, map, takeWhile} from 'rxjs/operators';
-import {ContactPhone} from '../../../../data/remote/model/contact/contact-phone';
-import {ContactType} from '../../../../data/remote/model/contact/base/contact-type';
-import {ContactPrivacyEnum} from '../../../../data/remote/model/contact/base/contact-privacy-enum';
 import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
 import {GroupPositionItemComponent} from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
 import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
+import {PersonContact} from '../../../../data/remote/model/person/person-contact';
+import {PersonContactTypeEnum} from '../../../../data/remote/model/person/person-contact-type-enum';
+import {PersonPrivacyEnum} from '../../../../data/remote/model/base/person-privacy-enum';
 
 @Component({
   selector: 'app-edit-person',
@@ -69,7 +69,7 @@ export class EditPersonComponent implements OnDestroy {
 
   private _personalDataProcessingDocument: Document;
   private _document: Document;
-  private _contactPhone = new ContactPhone();
+  private _contactPhone = new PersonContact();
   private _notDestroyed = true;
 
   constructor(private _translateObjectService: TranslateObjectService,
@@ -85,6 +85,8 @@ export class EditPersonComponent implements OnDestroy {
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _participantRestApiService: ParticipantRestApiService,
               private _fileApiService: FileApiService) {
+    this._contactPhone.personContactTypeEnum = PersonContactTypeEnum.PHONE;
+    this._contactPhone.personPrivacyEnum = PersonPrivacyEnum.PUBLIC;
   }
 
   public ngOnDestroy(): void {
@@ -143,10 +145,11 @@ export class EditPersonComponent implements OnDestroy {
     this.contactPhoneNumberNgxInput = this._getNgxInput('contactPhoneNumber', '');
 
     if (!this._appHelper.isNewObject(person)) {
-      this._contactPhone = (await this._personApiService.getContacts(person).toPromise()).find(x => x.discriminator === ContactType.PHONE) || new ContactPhone();
+      this._contactPhone = (await this._personApiService.getPersonContacts(person).toPromise()).find((x) => x.personContactTypeEnum === PersonContactTypeEnum.PHONE) || new PersonContact();
       this.contactPhoneNumberNgxInput.control.setValue(this._contactPhone.value);
     }
-    this._contactPhone.contactPrivacyEnum = this._contactPhone.contactPrivacyEnum || ContactPrivacyEnum.GROUP_MANAGEMENT;
+    this._contactPhone.personPrivacyEnum = this._contactPhone.personPrivacyEnum || PersonPrivacyEnum.PUBLIC;
+    this._contactPhone.personContactTypeEnum = this._contactPhone.personContactTypeEnum || PersonContactTypeEnum.PHONE;
 
     this.formGroup.setControl('firstName', this.firstNgxInput.control);
     this.formGroup.setControl('lastName', this.lastNgxInput.control);
@@ -319,7 +322,7 @@ export class EditPersonComponent implements OnDestroy {
             return from(dialog).pipe(flatMap(() => NEVER));
           }
         }),
-        flatMap(person => this._personApiService.updateContacts(person, [this._contactPhone]).pipe(map(() => person))),
+        flatMap(person => this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person))),
         flatMap(person => {
           if (person) {
             this.person = person;

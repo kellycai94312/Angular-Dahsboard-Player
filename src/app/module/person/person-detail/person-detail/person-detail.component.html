@@ -23,6 +23,9 @@
         <app-career-person *ngSwitchCase="personItemTypeClass.CAREER"
                            [canEdit]="canEdit"
                            [data]="data"></app-career-person>
+        <app-person-contact-list *ngSwitchCase="personItemTypeClass.CONTACTS"
+                                 [canEdit]="canEdit"
+                                 [person]="data"></app-person-contact-list>
         <ng-container *ngSwitchDefault>
           {{'noData' | translate}}
         </ng-container>
