@@ -91,7 +91,12 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
         this.privacyNgxSelect.display = 'name';
         this.privacyNgxSelect.required = true;
         this.privacyNgxSelect.items = await this._translateObjectService.getTranslatedEnumCollection<PersonPrivacyEnum>(PersonPrivacyEnum, 'PersonPrivacyEnum');
-        this.privacyNgxSelect.control.setValue(this.privacyNgxSelect.items.find(x => x.data === this._groupPersonJob.personPrivacyEnum) || this.privacyNgxSelect.items[0]);
+
+        let personPrivacyEnum = this.privacyNgxSelect.items[0];
+        if (this._groupPersonJob) {
+          personPrivacyEnum = this.privacyNgxSelect.items.find(x => x.data === this._groupPersonJob.personPrivacyEnum);
+        }
+        this.privacyNgxSelect.control.setValue(personPrivacyEnum);
         this.privacyNgxSelect.control.setValidators(Validators.required);
 
         this.formGroup.setControl('group', this.groupNgxSelect.control);
@@ -113,10 +118,17 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
   }
 
   private async _updatePositions(group: Group): Promise<void> {
-    this.positionNgxSelect.items = (await this._groupApiService.getGroupPersonPositions({group, person: this.data} as any, {count: PropertyConstant.pageSizeMax}).toPromise())
-      .list.map(x => x.position);
-    if (this.canEdit) {
-      this.positionNgxSelect.control.enable();
+    if (group) {
+      this.positionNgxSelect.items = (await this._groupApiService.getGroupPersonPositions({
+        group,
+        person: this.data
+      } as any, {count: PropertyConstant.pageSizeMax}).toPromise()).list.map(x => x.position);
+
+      if (this.canEdit) {
+        this.positionNgxSelect.control.enable();
+      }
+    } else {
+      this.positionNgxSelect.items = [];
     }
   }
 
