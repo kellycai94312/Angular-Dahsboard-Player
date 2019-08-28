@@ -31,8 +31,6 @@ import {ExerciseResult} from '../bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
 import {Location} from '../model/location';
-import {NoteQuery} from './query/note-query';
-import {Note} from '../model/note/base/note';
 import {NamedQuery} from './named-query';
 import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
@@ -354,13 +352,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getPersonGroups: IRestMethodStrict<any, { personId: number, userRoleId: number }, GroupQuery, PageContainer<GroupPerson>>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/note',
-  })
-  getNotes: IRestMethod<NoteQuery, PageContainer<Note>>;
-
-
   //#region MeasureTemplate
 
   @RestAction({
@@ -447,12 +438,6 @@ export class ParticipantRestApiService extends Rest {
   })
   addTrainingVisible: IRestMethod<{ trainingId: number }, void>;
 
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/note',
-  })
-  addNote: IRestMethod<Note, Note>;
-
   //#region MeasureTemplate
 
   @RestAction({
@@ -478,12 +463,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/{!personId}'
   })
   updatePerson: IRestMethodStrict<Person, any, { personId: number }, Person>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/note/{!id}',
-  })
-  updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
 
   //#endregion
 

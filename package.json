@@ -1,6 +1,6 @@
 {
   "name": "sport-monitoring-web",
-  "version": "1.0.1-63",
+  "version": "1.0.1-64",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
