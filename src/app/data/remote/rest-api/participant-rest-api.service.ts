@@ -57,7 +57,6 @@ import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
-import {GroupPersonLog} from '../model/group/group-person-log';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
@@ -70,7 +69,6 @@ import {GroupPersonTransition} from '../model/group/transition/group-person-tran
 import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
 import {GroupTransition} from '../model/group/transition/group-transition';
 import {OrganizationType} from '../model/group/organization/organization-type';
-import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
@@ -664,28 +662,6 @@ export class ParticipantRestApiService extends Rest {
   })
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
-  //#region Organization trainer
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/organizationTrainer',
-  })
-  getOrganizationTrainers: IRestMethodStrict<any, { unassigned?: boolean }, { groupId: number }, OrganizationTrainer[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/organizationTrainer',
-  })
-  updateOrganizationTrainers: IRestMethodStrict<ListRequest<GroupPerson>, {}, { groupId: number }, OrganizationTrainer[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
-  })
-  updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
-
-  //#endregion
-
   //#region LeadTrainer
 
   @RestAction({
@@ -699,34 +675,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}/leadTrainer',
   })
   unsetGroupPersonLeadTrainer: IRestMethod<{ groupId: number, personId: number }, void>;
-
-  //#endregion
-
-  //#region GroupPersonLog
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/log',
-  })
-  getGroupPersonLogs: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/log/latest',
-  })
-  getLatestGroupPersonLog: IRestMethod<{ groupId: number, personId: number }, GroupPersonLog>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/log',
-  })
-  createGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number }, GroupPersonLog>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/person/{!personId}/log/{!groupPersonLogId}',
-  })
-  updateGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number, groupPersonLogId: number }, GroupPersonLog>;
 
   //#endregion
 
