@@ -31,8 +31,6 @@ import {ExerciseResult} from '../bean/exercise-result';
 import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
 import {Location} from '../model/location';
-import {NoteQuery} from './query/note-query';
-import {Note} from '../model/note/base/note';
 import {NamedQuery} from './named-query';
 import {PersonRank} from '../model/person-rank';
 import {Measure} from '../model/measure';
@@ -57,7 +55,6 @@ import {Image} from '../model/file/image/image';
 import {Document} from '../model/file/document/document';
 import {Requisites} from '../model/requisites';
 import {environment} from '../../../../environments/environment';
-import {GroupPersonLog} from '../model/group/group-person-log';
 import {StringWrapper} from '../bean/wrapper/string-wrapper';
 import {AthleteState} from '../model/person/athlete-state';
 import {PublicUserRole} from '../model/group/public-user-role';
@@ -70,7 +67,6 @@ import {GroupPersonTransition} from '../model/group/transition/group-person-tran
 import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
 import {GroupTransition} from '../model/group/transition/group-transition';
 import {OrganizationType} from '../model/group/organization/organization-type';
-import {OrganizationTrainer} from '../model/group/organization-trainer';
 import {GroupPersonQuery} from './query/group-person-query';
 import {VersionObject} from '../base/version/version-object';
 import {VersionObjectRequest} from '../request/version-object-request';
@@ -149,34 +145,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/userRole'
   })
   getUserRoles: IRestMethodStrict<any, { global?: boolean }, any, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!userId}/role'
-  })
-  getUserUserRoles: IRestMethod<{ userId: number }, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/user/{!userId}/role'
-  })
-  updateUserUserRoles: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { userId: number }, UserRole[]>;
-
-  //#region Base
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!userId}/baseRole'
-  })
-  getBaseUserRoleByUser: IRestMethod<{ userId: number }, UserRole>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/{!userId}/baseRole'
-  })
-  updateUserBaseUserRole: IRestMethodStrict<UserRole, any, { userId: number }, void>;
-
-  //#endregion
 
   //#endregion
 
@@ -356,13 +324,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getPersonGroups: IRestMethodStrict<any, { personId: number, userRoleId: number }, GroupQuery, PageContainer<GroupPerson>>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/note',
-  })
-  getNotes: IRestMethod<NoteQuery, PageContainer<Note>>;
-
-
   //#region MeasureTemplate
 
   @RestAction({
@@ -449,12 +410,6 @@ export class ParticipantRestApiService extends Rest {
   })
   addTrainingVisible: IRestMethod<{ trainingId: number }, void>;
 
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/note',
-  })
-  addNote: IRestMethod<Note, Note>;
-
   //#region MeasureTemplate
 
   @RestAction({
@@ -481,12 +436,6 @@ export class ParticipantRestApiService extends Rest {
   })
   updatePerson: IRestMethodStrict<Person, any, { personId: number }, Person>;
 
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/note/{!id}',
-  })
-  updateNote: IRestMethodStrict<Note, void, { id: number }, Note>;
-
   //#endregion
 
   //#region DELETE
@@ -496,12 +445,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/training/{!trainingId}/visible',
   })
   removeTrainingVisible: IRestMethod<{ trainingId: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/note/{!id}',
-  })
-  removeNote: IRestMethod<{ id: number }, void>;
 
   //#endregion
 
@@ -664,28 +607,6 @@ export class ParticipantRestApiService extends Rest {
   })
   postPersonNumber: IRestMethodStrict<{ number?: number }, any, { groupId: number, personId: number }, GroupPerson>;
 
-  //#region Organization trainer
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/organizationTrainer',
-  })
-  getOrganizationTrainers: IRestMethodStrict<any, { unassigned?: boolean }, { groupId: number }, OrganizationTrainer[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/organizationTrainer',
-  })
-  updateOrganizationTrainers: IRestMethodStrict<ListRequest<GroupPerson>, {}, { groupId: number }, OrganizationTrainer[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/organizationTrainer/{!organizationTrainerId}',
-  })
-  updateOrganizationTrainer: IRestMethodStrict<OrganizationTrainer, {}, { groupId: number, organizationTrainerId: number }, OrganizationTrainer>;
-
-  //#endregion
-
   //#region LeadTrainer
 
   @RestAction({
@@ -699,34 +620,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/group/{!groupId}/person/{!personId}/leadTrainer',
   })
   unsetGroupPersonLeadTrainer: IRestMethod<{ groupId: number, personId: number }, void>;
-
-  //#endregion
-
-  //#region GroupPersonLog
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/log',
-  })
-  getGroupPersonLogs: IRestMethodStrict<any, PageQuery, { groupId: number, personId: number }, PageContainer<GroupPersonLog>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!groupId}/person/{!personId}/log/latest',
-  })
-  getLatestGroupPersonLog: IRestMethod<{ groupId: number, personId: number }, GroupPersonLog>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/group/{!groupId}/person/{!personId}/log',
-  })
-  createGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number }, GroupPersonLog>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/group/{!groupId}/person/{!personId}/log/{!groupPersonLogId}',
-  })
-  updateGroupPersonLog: IRestMethodStrict<GroupPersonLog, any, { groupId: number, personId: number, groupPersonLogId: number }, GroupPersonLog>;
 
   //#endregion
 

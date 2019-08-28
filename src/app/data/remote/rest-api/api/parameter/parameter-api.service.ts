@@ -13,7 +13,9 @@ import {BaseUnit} from '../../../model/unit/base-unit';
 import {ParameterVersion} from '../../../model/parameter/parameter-version';
 import {UnitVersion} from '../../../model/unit/unit-version';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ParameterApiService {
 
   private readonly _basePath = `${environment.restUrl}/parameter`;

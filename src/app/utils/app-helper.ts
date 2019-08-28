@@ -19,7 +19,9 @@ import {PageQuery} from '../data/remote/rest-api/page-query';
 import {Person} from '../data/remote/model/person';
 
 // TODO: Rename to AppHelperService. Add tests
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AppHelper {
 
   constructor(private _datePipe: DatePipe,

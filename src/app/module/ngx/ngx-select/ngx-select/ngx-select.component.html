@@ -4,7 +4,7 @@
   <mat-select [required]="data.required"
               [formControl]="data.control"
               [multiple]="data.multiple"
-              [compareWith]="data.compare"
+              [compareWith]="preCompare"
               [placeholder]="data.placeholder">
     <mat-option *ngIf="!data.multiple && data.hasNone"
                 class="muted-text">{{'notSelected' | translate}}</mat-option>

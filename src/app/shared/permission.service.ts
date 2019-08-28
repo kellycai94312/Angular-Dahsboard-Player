@@ -2,16 +2,14 @@ import {Injectable} from '@angular/core';
 import {Person} from '../data/remote/model/person';
 import {UserRoleEnum} from '../data/remote/model/user-role-enum';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {Tag} from '../data/remote/model/tag';
-import {BaseExercise} from '../data/remote/model/exercise/base/base-exercise';
 import {AuthorizationService} from './authorization.service';
-import {BaseFile} from '../data/remote/model/file/base/base-file';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {UserRole} from '../data/remote/model/user-role';
 import {AppHelper} from '../utils/app-helper';
 import {Observable, of} from 'rxjs';
 import {flatMap} from 'rxjs/operators';
 import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
+import {UserApiService} from '../data/remote/rest-api/api/user/user-api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +18,7 @@ export class PermissionService {
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _appHelper: AppHelper,
+              private _userApiService: UserApiService,
               private _personApiService: PersonApiService,
               private _authorizationService: AuthorizationService) {
   }
@@ -37,52 +36,8 @@ export class PermissionService {
       }));
   }
 
-  public async canEditTag(data: Tag, person: Person): Promise<boolean> {
-    if (this.areYouCreator(data, person)) {
-      return true;
-    }
-
-    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public async canEditActivity<T extends BaseExercise>(data: T, person?: Person): Promise<boolean> {
-    person = await this.getDefaultPerson(person);
-    if (this.areYouCreator(data, person)) {
-      return true;
-    }
-
-    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public async canEditFile<T extends BaseFile>(data: T, person?: Person): Promise<boolean> {
-    person = await this.getDefaultPerson(person);
-    if (this.areYouCreator(data, person)) {
-      return true;
-    }
-
-    if (await this.hasAnyRole([UserRoleEnum.ADMIN], person)) {
-      return true;
-    }
-
-    return false;
-  }
-
-  public async hasRole(person: Person, userRoleEnum: UserRoleEnum): Promise<boolean> {
-    const userRoles = await this._participantRestApiService.getUserUserRoles({userId: person.user.id});
-    return userRoles.find(x => x.userRoleEnum === userRoleEnum) !== null;
-  }
-
-  public async hasAnyRole(userRoleEnums: UserRoleEnum[], person: Person = null): Promise<boolean> {
-    person = await this.getDefaultPerson(person);
-    const userRoles = await this._participantRestApiService.getUserUserRoles({userId: person.user.id});
+  public async hasAnyRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
+    const userRoles = await this._userApiService.getUserRoles().toPromise();
     return this.hasAnyRoles(userRoles, userRoleEnums);
   }
 
@@ -102,10 +57,6 @@ export class PermissionService {
       return true;
     }
     return false;
-  }
-
-  private async getDefaultPerson(person: Person): Promise<Person> {
-    return person || await this._appHelper.toPromise(this._authorizationService.personSubject);
   }
 
 }

@@ -21,7 +21,9 @@ import {Person} from '../../../../model/person';
 import {EventPersonTypeEnum} from '../../../../model/event/person/event-person-type-enum';
 import {BooleanWrapper} from '../../../../bean/wrapper/boolean-wrapper';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BaseEventApiService {
 
   private readonly _basePath = `${environment.restUrl}/baseEvent`;
@@ -31,9 +33,8 @@ export class BaseEventApiService {
   }
 
   public getEvents<T extends BaseEvent>(query: BaseEventQuery): Observable<PageContainer<T>> {
-    return this._apiService.get(this._basePath, this._apiService.getHttpParamsFromObject(query)).pipe(
-      map(x => plainToClassFromExist(new PageContainer<BaseEvent>(BaseEvent), x) as any)
-    );
+    console.log(query);
+    return this._apiService.getPageContainer(BaseEvent, this._basePath, query) as Observable<PageContainer<T>>;
   }
 
   public createEvent<T extends BaseEvent>(event: T): Observable<T> {

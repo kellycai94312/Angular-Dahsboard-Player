@@ -10,7 +10,9 @@ import {ListRequest} from '../../../request/list-request';
 import {IdRequest} from '../../../request/id-request';
 import {ApplicationVersion} from '../../../model/application/application-version';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class DeviceApiService {
 
   private readonly _basePath = `${environment.restUrl}/device`;

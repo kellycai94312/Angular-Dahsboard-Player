@@ -9,7 +9,6 @@ import { map, switchMap, catchError, tap, take, filter } from 'rxjs/operators';
 import { MailAppState } from 'app/main/apps/mail-ngrx/store/reducers';
 import * as fromStore from 'app/main/apps/mail-ngrx/store';
 import { getFiltersLoaded, getFoldersLoaded, getLabelsLoaded, getMailsLoaded } from 'app/main/apps/mail-ngrx/store/selectors';
-import { getRouterState } from 'app/store/reducers';
 
 @Injectable()
 export class ResolveGuard implements CanActivate
@@ -25,14 +24,6 @@ export class ResolveGuard implements CanActivate
         private _store: Store<MailAppState>
     )
     {
-        this._store
-            .pipe(select(getRouterState))
-            .subscribe(routerState => {
-                if ( routerState )
-                {
-                    this.routerState = routerState.state;
-                }
-            });
     }
 
     /**
