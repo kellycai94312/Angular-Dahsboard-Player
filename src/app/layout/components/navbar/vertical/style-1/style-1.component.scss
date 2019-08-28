@@ -210,3 +210,16 @@ navbar {
     }
   }
 }
+
+.subtext {
+  max-width: 250px;
+
+  .item {
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    white-space: pre;
+    text-align: center;
+  }
+}

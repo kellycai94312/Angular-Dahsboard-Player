@@ -29,6 +29,11 @@
   <div class="user" fxLayout="column" [ngClass]="fuseConfig.layout.navbar.secondaryBackground">
 
     <div class="h3 username">{{person?.lastName + ' ' + person?.firstName}}</div>
+    <div class="subtext">
+      <h5 class="h5 m-0 hint-text item">{{person?.groupPersonJob?.group?.name}}</h5>
+      <h5 class="h5 m-0 hint-text item">{{person?.groupPersonJob?.position?.name}}</h5>
+    </div>
+
     <div class="avatar-container" [ngClass]="fuseConfig.layout.navbar.primaryBackground">
       <img class="avatar"
            [src]="personLogoUrl"
