@@ -45,4 +45,11 @@ export class NgxSelectComponent {
     return item as any;
   }
 
+  public preCompare = (first: any, second: any): boolean => {
+    if (first && second) {
+      return this.data.compare(first, second);
+    }
+    return first === second;
+  }
+
 }

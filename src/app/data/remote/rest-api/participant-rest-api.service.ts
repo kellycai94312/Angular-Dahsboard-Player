@@ -146,34 +146,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getUserRoles: IRestMethodStrict<any, { global?: boolean }, any, UserRole[]>;
 
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!userId}/role'
-  })
-  getUserUserRoles: IRestMethod<{ userId: number }, UserRole[]>;
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/user/{!userId}/role'
-  })
-  updateUserUserRoles: IRestMethodStrict<ListRequest<IdentifiedObject>, any, { userId: number }, UserRole[]>;
-
-  //#region Base
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/user/{!userId}/baseRole'
-  })
-  getBaseUserRoleByUser: IRestMethod<{ userId: number }, UserRole>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/user/{!userId}/baseRole'
-  })
-  updateUserBaseUserRole: IRestMethodStrict<UserRole, any, { userId: number }, void>;
-
-  //#endregion
-
   //#endregion
 
   @RestAction({
@@ -473,12 +445,6 @@ export class ParticipantRestApiService extends Rest {
     path: '/person/training/{!trainingId}/visible',
   })
   removeTrainingVisible: IRestMethod<{ trainingId: number }, void>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/note/{!id}',
-  })
-  removeNote: IRestMethod<{ id: number }, void>;
 
   //#endregion
 

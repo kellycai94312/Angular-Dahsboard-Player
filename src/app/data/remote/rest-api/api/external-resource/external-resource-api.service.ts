@@ -5,7 +5,9 @@ import {Observable} from 'rxjs';
 import {ExternalResource} from '../../../model/external-resource';
 import {FileClass} from '../../../model/file/base/file-class';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ExternalResourceApiService {
 
   private readonly _basePath = `${environment.restUrl}/externalResource`;

@@ -7,8 +7,6 @@ import {LocalStorageService} from './local-storage.service';
 import {LayoutService} from './layout.service';
 import {Router} from '@angular/router';
 import {Person} from '../data/remote/model/person';
-import {UserRole} from '../data/remote/model/user-role';
-import {UserRoleEnum} from '../data/remote/model/user-role-enum';
 
 @Injectable()
 export class AuthorizationService {
@@ -70,20 +68,6 @@ export class AuthorizationService {
     } catch (e) {
     }
     return this.session;
-  }
-
-  public async getUserRoles(): Promise<UserRole[]> {
-    let userRoles: UserRole[] = [];
-    try {
-      userRoles = await this._participantRestApiService.getUserUserRoles({userId: this.session.user.id});
-    } catch (e) {
-    }
-    return userRoles;
-  }
-
-  public async hasUserRole(userRoleEnum: UserRoleEnum): Promise<boolean> {
-    const userRoles = await this.getUserRoles();
-    return userRoles.filter(userRole => userRole.userRoleEnum === userRoleEnum).length != 0;
   }
 
   public isAuthenticated(): boolean {

@@ -21,7 +21,9 @@ import {Person} from '../../../../model/person';
 import {EventPersonTypeEnum} from '../../../../model/event/person/event-person-type-enum';
 import {BooleanWrapper} from '../../../../bean/wrapper/boolean-wrapper';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class BaseEventApiService {
 
   private readonly _basePath = `${environment.restUrl}/baseEvent`;

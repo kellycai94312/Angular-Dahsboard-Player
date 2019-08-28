@@ -9,7 +9,9 @@ import {UnitQuery} from '../../query/unit/unit-query';
 import {BaseUnit} from '../../../model/unit/base-unit';
 import {BaseParameter} from '../../../model/parameter/base-parameter';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class UnitApiService {
 
   private readonly _basePath = `${environment.restUrl}/unit`;
