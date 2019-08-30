@@ -8,7 +8,6 @@ import {CookieModule} from 'ngx-cookie';
 import {StompRService} from '@stomp/ng2-stompjs';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
-
 import {AppComponent} from './app.component';
 import {AppRoutingModule} from './app-routing.module';
 import {ParticipantRestApiService} from './data/remote/rest-api/participant-rest-api.service';
@@ -42,7 +41,6 @@ import {fuseConfig} from './fuse-config';
 import {FuseModule} from '../@fuse/fuse.module';
 import {NgxSelectionModule} from './components/ngx-selection/ngx-selection.module';
 import {GroupItemModule} from './module/group/group-item/group-item.module';
-import {EditEventPollModule} from './module/event/edit-event-poll/edit-event-poll.module';
 import {EditBaseEventModule} from './module/event/edit-base-event/edit-base-event.module';
 import {EditFormulaModule} from './module/parameter/edit-formula/edit-formula.module';
 import {NgxContentModule} from './module/ngx/ngx-content/ngx-content.module';
@@ -93,7 +91,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     // TODO: Need for resolve entryComponent
     NgxSelectionModule,
     GroupItemModule,
-    EditEventPollModule,
     EditBaseEventModule,
     EditFormulaModule,
     NgxContentModule,

@@ -1,8 +1,10 @@
-<div fxLayout="column"
+<div *ngIf="data"
+     fxLayout="column"
      fxLayoutGap="10px">
   <new-ngx-input [data]="questionNgxInput"></new-ngx-input>
   <ngx-select [data]="answerTypeNgxSelect"></ngx-select>
-  <ngx-select *ngIf="answerTypeNgxSelect && answerTypeNgxSelect.control.value.data === answerTypeEnumClass.PARAMETERIZED_ANSWER"
-              [data]="parameterTypeNgxSelect"></ngx-select>
+  <!-- TODO: <ngx-select *ngIf="answerTypeNgxSelect && answerTypeNgxSelect.control.value.data === answerTypeEnumClass.PARAMETERIZED_ANSWER"-->
+  <!--              [data]="parameterTypeNgxSelect"></ngx-select>-->
   <mat-checkbox [(ngModel)]="data.required">{{'requiredQuestion' | translate}}</mat-checkbox>
+  <new-ngx-input [data]="orderNgxInput"></new-ngx-input>
 </div>

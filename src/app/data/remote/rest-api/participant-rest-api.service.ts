@@ -91,12 +91,11 @@ import {GroupConnectionRequest} from '../model/group/connection/group-connection
 import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
 import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
 import {ImageCropRequest} from '../request/image-crop-request';
-import {EventPoll} from '../model/training/poll/event-poll';
-import {AnswerTypeEnum} from '../model/training/poll/answer-type-enum';
-import {PollQuestion} from '../model/training/poll/poll-question';
-import {PollPerson} from '../model/training/poll/poll-person';
-import {PollQuestionAnswer} from '../model/training/poll/poll-question-answer';
-import {PollPersonAnswer} from '../model/training/poll/poll-person-answer';
+import {AnswerTypeEnum} from '../model/poll/answer-type-enum';
+import {PollQuestion} from '../model/poll/poll-question';
+import {PollPerson} from '../model/poll/poll-person';
+import {PollQuestionAnswer} from '../model/poll/poll-question-answer';
+import {PollPersonAnswer} from '../model/poll/poll-person-answer';
 import {Stage} from '../model/stage/stage';
 import {StageType} from '../model/stage/stage-type';
 
@@ -821,56 +820,7 @@ export class ParticipantRestApiService extends Rest {
 
   //#endregion
 
-  //#region Event event poll
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/baseTraining/{!eventId}/poll',
-    resultFactory: (item, options) => {
-      return plainToClass(EventPoll, item);
-    }
-  })
-  createEventPoll: IRestMethodStrict<EventPoll, any, { eventId: number }, EventPoll>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/baseTraining/{!eventId}/poll',
-    resultFactory: (item, options) => {
-      return plainToClass(EventPoll, item);
-    }
-  })
-  getEventPolls: IRestMethodStrict<any, { name?: string }, { eventId: number }, EventPoll[]>;
-
-  //#endregion
-
   //#region Event poll
-
-  @RestAction({
-    method: RestRequestMethod.Put,
-    path: '/eventPoll/{!eventPollId}',
-    resultFactory: (item, options) => {
-      return plainToClass(EventPoll, item);
-    }
-  })
-  updateEventPoll: IRestMethodStrict<EventPoll, any, { eventPollId: number }, EventPoll>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/eventPoll/{!eventPollId}/approve',
-    resultFactory: (item, options) => {
-      return plainToClass(EventPoll, item);
-    }
-  })
-  approveEventPoll: IRestMethodStrict<any, any, { eventPollId: number }, EventPoll>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/eventPoll/{!eventPollId}',
-    resultFactory: (item, options) => {
-      return plainToClass(EventPoll, item);
-    }
-  })
-  removeEventPoll: IRestMethod<{ eventPollId: number }, EventPoll>;
 
   //#region Poll question
 

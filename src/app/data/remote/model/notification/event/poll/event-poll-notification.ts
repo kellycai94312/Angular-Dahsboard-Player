@@ -1,6 +1,6 @@
 import {BaseNotification} from '../../base/base-notification';
 import {EventPollNotificationType} from './event-poll-notification-type';
-import {PollPerson} from '../../../training/poll/poll-person';
+import {PollPerson} from '../../../poll/poll-person';
 import {Type} from 'class-transformer';
 import {NotificationType} from '../../base/notification-type';
 

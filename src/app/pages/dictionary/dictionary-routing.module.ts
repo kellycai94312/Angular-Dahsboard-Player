@@ -36,6 +36,12 @@ const routes: Routes = [
     data: {
       breadcrumb: {nameKey: 'application'} as BreadcrumbItem
     }
+  },
+  {
+    path: 'poll', loadChildren: './polls/polls.module#PollsModule',
+    data: {
+      breadcrumb: {nameKey: 'poll'} as BreadcrumbItem
+    }
   }
 ];
 

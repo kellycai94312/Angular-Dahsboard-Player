@@ -69,7 +69,7 @@ export class NotificationService implements OnDestroy {
       key = `eventNotification.${notification.eventNotificationType}`;
       params = {sender, person, event, group};
     } else if (notification instanceof EventPollNotification) {
-      const poll = notification.pollPerson.eventPoll.name;
+      const poll = notification.pollPerson.appliedPoll.pollVersion.name;
 
       key = `eventPollNotificationType.${notification.eventPollNotificationType}`;
       params = {poll, person};

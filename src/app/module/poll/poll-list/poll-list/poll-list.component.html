@@ -1,0 +1,19 @@
+<app-item-list [canEdit]="canEdit"
+               [query]="query"
+               [itemDisplay]="itemDisplay"
+               [translationTitle]="translationTitle"
+               [compare]="compare"
+               [addItem]="addItem"
+               [fetchItems]="fetchItems">
+  <ng-template #itemTemplate
+               let-item
+               let-canEditItem="canEdit"
+               let-itemDisplay="itemDisplay">
+    <div *ngIf="!item.deleted"
+         (click)="clickItem.emit(item)">
+      <app-poll-item [(data)]="item"
+                     [canEdit]="canEditItem"
+                     [itemDisplay]="itemDisplay"></app-poll-item>
+    </div>
+  </ng-template>
+</app-item-list>

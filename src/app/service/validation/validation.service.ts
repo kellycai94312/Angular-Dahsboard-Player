@@ -11,6 +11,7 @@ export class ValidationService {
   public readonly numberPattern = '^\\d+$';
   public readonly nameMaxLength = 255;
   public readonly descriptionMaxLength = 7000;
+  public readonly integerValidationName = 'integer';
 
   public static readonly passwordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     return Validators.minLength(8)(control) || Validators.maxLength(255)(control);
@@ -33,6 +34,13 @@ export class ValidationService {
     };
   };
 
+  public static readonly integerValidator: ValidatorFn = (control: FormControl): ValidationErrors | null => {
+    if (control.value) {
+      return Number.isInteger(+control.value) ? void 0 : {integer: false};
+    }
+    return void 0;
+  };
+
   constructor(private _translateObjectService: TranslateObjectService) {
   }
 
@@ -51,6 +59,8 @@ export class ValidationService {
       return this._translateObjectService.getTranslation$('valuesNotMatch');
     } else if (formControl.hasError('email')) {
       return this._translateObjectService.getTranslation$('wrongEmailAddress');
+    } else if (formControl.hasError(this.integerValidationName)) {
+      return this._translateObjectService.getTranslation$('valueIsNotAnInteger');
     }
     return null;
   }
