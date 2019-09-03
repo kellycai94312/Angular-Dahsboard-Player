@@ -15,6 +15,7 @@ import {Poll} from '../../../../data/remote/model/poll/poll';
 import {PollApiService} from '../../../../data/remote/rest-api/api/poll/poll-api.service';
 import {AppliedPollApiService} from '../../../../data/remote/rest-api/api/applied-poll/applied-poll-api.service';
 import {PollVersionApiService} from '../../../../data/remote/rest-api/api/poll-version/poll-version-api.service';
+import {PollPersonAnswerResult} from '../../../../data/remote/bean/poll-person-answer-result';
 
 @Component({
   selector: 'app-poll-question-item',
@@ -60,6 +61,7 @@ export class PollQuestionItemComponent implements OnInit {
   private _pollPerson: PollPerson;
   private _pollPersonAnswers: PollPersonAnswer[] = [];
   private _canExecutePoll: boolean;
+  private _pollPersonAnswerResult: PollPersonAnswerResult[] = [];
 
   constructor(private _componentFactoryResolver: ComponentFactoryResolver,
               private _appHelper: AppHelper,
@@ -93,14 +95,14 @@ export class PollQuestionItemComponent implements OnInit {
     if (this.data.answerTypeEnum === AnswerTypeEnum.ONE_ANSWER || this.data.answerTypeEnum === AnswerTypeEnum.MULTIPLE_ANSWERS) {
       // TODO: Optimize remove items
       for (const item of this._pollPersonAnswers) {
-        // await this._participantRestApiService.removePollPersonAnswer({pollQuestionId: this.data.id, pollPersonAnswerId: item.id});
+        await this._appliedPollApiService.removePollPersonAnswer(this.pollPerson.appliedPoll, this.data, item).toPromise();
       }
 
       this._pollPersonAnswers = [];
       for (const item of this.personPollQuestionAnswers) {
         let pollPersonAnswer = new PollPersonAnswer();
         pollPersonAnswer.pollQuestionAnswer = item;
-        // pollPersonAnswer = await this._participantRestApiService.createPollPersonAnswer(pollPersonAnswer, {}, {pollQuestionId: this.data.id});
+        pollPersonAnswer = await this._appliedPollApiService.createPollPersonAnswer(this.pollPerson.appliedPoll, this.data, pollPersonAnswer).toPromise();
         this._pollPersonAnswers.push(pollPersonAnswer);
       }
     } else {
@@ -109,12 +111,7 @@ export class PollQuestionItemComponent implements OnInit {
         pollPersonAnswer = this._pollPersonAnswers[0];
       }
       pollPersonAnswer.value = this.answerNgxInput.control.value;
-      if (this._appHelper.isNewObject(pollPersonAnswer)) {
-        // pollPersonAnswer = await this._participantRestApiService.createPollPersonAnswer(pollPersonAnswer, {}, {pollQuestionId: this.data.id});
-      } else {
-        // pollPersonAnswer = await this._participantRestApiService.updatePollPersonAnswer(pollPersonAnswer, {}, {pollQuestionId: this.data.id, pollPersonAnswerId: pollPersonAnswer.id});
-      }
-
+      pollPersonAnswer = await this._appliedPollApiService.savePollPersonAnswer(this.pollPerson.appliedPoll, this.data, pollPersonAnswer).toPromise();
       this._pollPersonAnswers = [pollPersonAnswer];
     }
   }
@@ -147,16 +144,24 @@ export class PollQuestionItemComponent implements OnInit {
     return !!this.personPollQuestionAnswers.find(x => x.id == item.id);
   }
 
+  public getPollPersonAnswerResult(pollQuestionAnswer: PollQuestionAnswer): PollPersonAnswerResult | null {
+    return this._pollPersonAnswerResult.find(x => x.pollQuestionAnswer.id == pollQuestionAnswer.id);
+  }
+
   private async pollExecutionInitialize(pollPerson: PollPerson) {
     if (pollPerson) {
-      // this._pollPersonAnswers = await this._participantRestApiService.getPollPersonAnswers({pollQuestionId: this.data.id, personId: pollPerson.person.id});
-      // this.personPollQuestionAnswers = this._pollPersonAnswers.map(x => x.pollQuestionAnswer);
-      //
-      // if (this._pollPersonAnswers.length && (this.data.answerTypeEnum === AnswerTypeEnum.FREE_ANSWER || this.data.answerTypeEnum === AnswerTypeEnum.PARAMETERIZED_ANSWER)) {
-      //   this.answerNgxInput.control.setValue(this._pollPersonAnswers[0].value);
-      // }
+      this._pollPersonAnswers = await this._appliedPollApiService.getPollPersonAnswers(this.pollPerson.appliedPoll, this.data).toPromise();
+      this.personPollQuestionAnswers = this._pollPersonAnswers.map(x => x.pollQuestionAnswer);
+
+      if (this._pollPersonAnswers.length && (this.data.answerTypeEnum === AnswerTypeEnum.FREE_ANSWER || this.data.answerTypeEnum === AnswerTypeEnum.PARAMETERIZED_ANSWER)) {
+        this.answerNgxInput.control.setValue(this._pollPersonAnswers[0].value);
+      }
+      if (this.pollPerson.completed) {
+        this._pollPersonAnswerResult = await this._appliedPollApiService.getPollQuestionResult(this.pollPerson.appliedPoll, this.data).toPromise();
+      }
     } else {
       this._pollPersonAnswers = [];
+      this._pollPersonAnswerResult = [];
       this.personPollQuestionAnswers = [];
     }
   }
@@ -186,7 +191,7 @@ export class PollQuestionItemComponent implements OnInit {
     if (this.data.answerTypeEnum === AnswerTypeEnum.FREE_ANSWER || this.data.answerTypeEnum === AnswerTypeEnum.PARAMETERIZED_ANSWER) {
       this.pollQuestionAnswers = [new PollQuestionAnswer()];
     } else {
-      this.pollQuestionAnswers = await this._pollVersionApiService.getPollQuestionAnswers(this.poll, this.data).toPromise();
+      this.pollQuestionAnswers = await this._pollVersionApiService.getPollQuestionAnswers(this.pollPerson ? this.pollPerson.appliedPoll.pollVersion.id : this.poll.pollVersionId, this.data).toPromise();
     }
   }
 

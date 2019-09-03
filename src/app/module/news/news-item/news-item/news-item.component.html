@@ -20,5 +20,14 @@
          [innerHTML]="data.content | urlParser | async"></pre>
 
     <p class="date mt-2"><a routerLink="/person/{{data.person.id}}">{{data.person.lastName + ' ' + data.person.firstName}}</a> / {{data.created | date: propertyConstantClass.dateTimeFormat}}</p>
+
+    <div *ngIf="data.appliedPoll"
+         fxLayoutAlign="end end">
+      <button mat-raised-button
+              color="primary"
+              (click)="onExecutePoll()">
+        {{'poll' | translate}} - {{data.appliedPoll.pollVersion.name}}
+      </button>
+    </div>
   </mat-card-content>
 </mat-card>

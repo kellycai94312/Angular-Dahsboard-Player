@@ -142,7 +142,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   }
 
   private includeMaxValue(): boolean {
-    return !this.maxCount || this.selectedItems.length < this.maxCount;
+    return !this.maxCount || this.selectedItems.length <= this.maxCount;
   }
 
   private _selection(value: TModel, values: TModel[],

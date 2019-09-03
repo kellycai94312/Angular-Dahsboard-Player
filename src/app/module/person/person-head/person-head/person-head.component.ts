@@ -8,6 +8,8 @@ import {map} from 'rxjs/operators';
 import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
 import {Router} from '@angular/router';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
+import {MatIconRegistry} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-person-head',
@@ -36,18 +38,27 @@ export class PersonHeadComponent implements OnInit {
   constructor(private _fileApiService: FileApiService,
               private _router: Router,
               private _participantRestApiService: ParticipantRestApiService,
+              private _matIconRegistry: MatIconRegistry,
+              private _domSanitizer: DomSanitizer,
               private _personApiService: PersonApiService) {
+    this._matIconRegistry.addSvgIcon('personDelete', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/person_delete.svg'));
   }
 
   public async ngOnInit(): Promise<void> {
     this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.person.id})).value;
 
-    this.actions = [{
-      translationLabel: 'sendMessage', action: async item => {
+    this.actions = [
+      {
+        iconName: 'edit', action: async item => {
+          this.editPerson.emit();
+        }
+      },
+      {
+      iconName: 'message', action: async item => {
         await this.onSendMessage();
       }
     }, {
-      translationLabel: this.hasConnection ? 'removeContact' : 'addContact',
+      iconName: this.hasConnection ? 'personDelete' : 'person_add',
       action: async item => {
         this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.person.id})).value;
         if (this.hasConnection) {
@@ -55,7 +66,7 @@ export class PersonHeadComponent implements OnInit {
         } else {
           await this._participantRestApiService.createConnection({id: this.person.id});
         }
-        item.translationLabel = this.hasConnection ? 'removeContact' : 'addContact';
+        item.iconName = this.hasConnection ? 'personDelete' : 'person_add';
       }
     }];
   }

@@ -7,12 +7,14 @@
   <div fxLayout="row"
        fxLayoutGap="10px"
        fxLayoutAlign="end start">
-    <button mat-raised-button
+    <button *ngIf="canExecutePoll"
+            mat-raised-button
             color="primary"
             (click)="onFinishPoll()">
       {{'finishPoll' | translate}}
     </button>
-    <button mat-raised-button
+    <button *ngIf="canEdit"
+            mat-raised-button
             color="primary"
             (click)="onAddPollQuestion()">
       {{'addQuestion' | translate}}
@@ -25,4 +27,5 @@
                           [pollPerson]="pollPerson"
                           [canExecutePoll]="canExecutePoll"
                           (editPollQuestion)="onEditPollQuestion($event)"></app-poll-question-item>
+  <div *ngIf="pollPerson">{{('completedAPollPersonsParam' | translate:{count: pollPerson.appliedPoll.personsCount || 0})}}</div>
 </div>

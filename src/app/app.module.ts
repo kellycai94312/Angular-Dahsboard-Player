@@ -47,6 +47,8 @@ import {NgxContentModule} from './module/ngx/ngx-content/ngx-content.module';
 import {ItemDetailModule} from './module/common/item-detail/item-detail.module';
 import {ExternalResourceApiService} from './data/remote/rest-api/api/external-resource/external-resource-api.service';
 import {EditPersonModule} from './module/person/edit-person/edit-person.module';
+import {PollItemModule} from './module/poll/poll-item/poll-item.module';
+import {EditPollModule} from './module/poll/edit-poll/edit-poll.module';
 
 registerLocaleData(localeRu);
 
@@ -95,7 +97,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     EditFormulaModule,
     NgxContentModule,
     ItemDetailModule,
-    EditPersonModule
+    EditPersonModule,
+    PollItemModule,
+    EditPollModule
   ],
   providers: [
     ExternalResourceApiService,

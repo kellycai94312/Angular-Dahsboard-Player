@@ -877,5 +877,6 @@
   "pollType": "Тип опроса",
   "pollTypeEnum": {
     "PUBLIC_OPINION": "Общественное мнение"
-  }
+  },
+  "completedAPollPersonsParam": "Завершил(и) опрос {{count}} человек"
 }

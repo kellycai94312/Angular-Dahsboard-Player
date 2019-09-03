@@ -27,7 +27,7 @@ export class AppliedPollApiService {
   }
 
   public getCurrentPollPerson<T extends BaseAppliedPoll>(appliedPoll: T): Observable<PollPerson> {
-    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${appliedPoll.id}/currentPollPerson`).pipe(map(value => plainToClass(PollPerson, value)));
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${appliedPoll.id}/currentPollPerson`).pipe(map(value => plainToClass(PollPerson, value.value)));
   }
 
   public createPollPerson<T extends BaseAppliedPoll>(appliedPoll: T): Observable<PollPerson> {
@@ -52,8 +52,8 @@ export class AppliedPollApiService {
     return this._apiService.getValues(PollPersonAnswer, `${this._basePath}/${appliedPoll.id}/question/${pollQuestion.id}`);
   }
 
-  public getPollQuestionResult<T extends BaseAppliedPoll>(appliedPoll: T, pollQuestion: PollQuestion): Observable<PollPersonAnswerResult> {
-    return this._apiService.getValue(PollPersonAnswerResult, `${this._basePath}/${appliedPoll.id}/question/${pollQuestion.id}/result`);
+  public getPollQuestionResult<T extends BaseAppliedPoll>(appliedPoll: T, pollQuestion: PollQuestion): Observable<PollPersonAnswerResult[]> {
+    return this._apiService.getValues(PollPersonAnswerResult, `${this._basePath}/${appliedPoll.id}/question/${pollQuestion.id}/result`);
   }
 
   public createPollPersonAnswer<T extends BaseAppliedPoll>(appliedPoll: T, pollQuestion: PollQuestion, value: PollPersonAnswer): Observable<PollPersonAnswer> {

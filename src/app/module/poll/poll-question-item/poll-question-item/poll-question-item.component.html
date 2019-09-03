@@ -26,6 +26,10 @@
               <div fxLayout
                    fxLayoutAlign="space-between start">
                 <pre fxFlexAlign="center">{{item.name}}</pre>
+
+                <ng-container *ngIf="!canEdit && !canExecutePoll"
+                              [ngTemplateOutlet]="answerResultTemplate"
+                              [ngTemplateOutletContext]="{$implicit:getPollPersonAnswerResult(item)}"></ng-container>
                 <button *ngIf="canEdit"
                         mat-icon-button
                         (click)="onEditAnswer(item)">
@@ -48,6 +52,9 @@
             <div fxLayout
                  fxLayoutAlign="space-between start">
               <pre fxFlexAlign="center">{{item.name}}</pre>
+              <ng-container *ngIf="!canEdit && !canExecutePoll"
+                            [ngTemplateOutlet]="answerResultTemplate"
+                            [ngTemplateOutletContext]="{$implicit:getPollPersonAnswerResult(item)}"></ng-container>
               <button *ngIf="canEdit"
                       mat-icon-button
                       (click)="onEditAnswer(item)">
@@ -84,3 +91,8 @@
     <span>{{'addAnswer' | translate}}</span>
   </button>
 </mat-menu>
+
+<ng-template #answerResultTemplate
+             let-item>
+  <div *ngIf="item">{{item.personsCount}} ({{item.personsPercentage}}%)</div>
+</ng-template>

@@ -7,6 +7,7 @@ import {EditPollComponent} from '../../../module/poll/edit-poll/edit-poll/edit-p
 import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
 import {TextField} from '../../../module/common/item-detail/model/text-field';
 import {TranslateService} from '@ngx-translate/core';
+import {PollPerson} from '../../../data/remote/model/poll/poll-person';
 
 @Injectable({
   providedIn: 'root'
@@ -19,23 +20,26 @@ export class PollWindowService {
               private _componentFactoryResolver: ComponentFactoryResolver) {
   }
 
-  public async openEditPollWindow(poll: Poll): Promise<DialogResult<Poll>> {
+  public async openEditPollWindow(poll: Poll, pollPerson?: PollPerson): Promise<DialogResult<Poll>> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'poll';
     let editPollComponent: EditPollComponent;
     await modal.componentInstance.initializeBody(EditPollComponent, async component => {
       editPollComponent = component;
+      component.pollPerson = pollPerson;
 
       await component.initialize(this._utilService.clone(poll));
 
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
+      if (component.canEdit) {
+        modal.componentInstance.splitButtonItems = [
+          this._ngxModalService.saveSplitItemButton(async () => {
+            await this._ngxModalService.save(modal, component);
+          }),
+          this._ngxModalService.removeSplitItemButton(async () => {
+            await this._ngxModalService.remove(modal, component);
+          })
+        ];
+      }
     }, {componentFactoryResolver: this._componentFactoryResolver});
 
     return {result: await this._ngxModalService.awaitModalResult(modal), data: editPollComponent.data};
