@@ -12,6 +12,7 @@ import {MenuItem} from '../../../common/item-line/model/menu-item';
 import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
 import {PersonDetailComponent} from '../../person-detail/person-detail/person-detail.component';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
+import {Group} from '../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-person-item',
@@ -47,6 +48,9 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
 
   @Input()
   public clickableComponent = true;
+
+  @Input()
+  public group: Group;
 
   public actions: MenuItem[] = [];
   public hasConnection: boolean;
@@ -110,6 +114,7 @@ export class PersonItemComponent extends BaseComponent<Person> implements OnInit
     modal.componentInstance.title = `${this.data.lastName} ${this.data.firstName}`;
     modal.componentInstance.useContentPadding = false;
     await modal.componentInstance.initializeBody(PersonDetailComponent, async component => {
+      component.group = this.group;
       await component.initialize(this._appHelper.cloneObject(this.data));
       component.onNavigate = () => modal.close();
     }, {componentFactoryResolver: this._componentFactoryResolver});
