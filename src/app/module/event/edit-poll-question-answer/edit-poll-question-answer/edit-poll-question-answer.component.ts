@@ -1,12 +1,14 @@
 import {Component, Input} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {PollQuestionAnswer} from '../../../../data/remote/model/training/poll/poll-question-answer';
+import {PollQuestionAnswer} from '../../../../data/remote/model/poll/poll-question-answer';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {PollQuestion} from '../../../../data/remote/model/training/poll/poll-question';
+import {PollQuestion} from '../../../../data/remote/model/poll/poll-question';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
 import {Validators} from '@angular/forms';
+import {PollApiService} from '../../../../data/remote/rest-api/api/poll/poll-api.service';
+import {Poll} from '../../../../data/remote/model/poll/poll';
 
 @Component({
   selector: 'app-edit-poll-question-answer',
@@ -16,12 +18,17 @@ import {Validators} from '@angular/forms';
 export class EditPollQuestionAnswerComponent extends BaseEditComponent<PollQuestionAnswer> {
 
   @Input()
+  public poll: Poll;
+
+  @Input()
   public pollQuestion: PollQuestion;
 
   public answerNgxInput: NgxInput;
-  public pointsNgxInput: NgxInput;
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  // TODO: public pointsNgxInput: NgxInput;
+
+  constructor(private _pollApiService: PollApiService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
 
@@ -35,15 +42,12 @@ export class EditPollQuestionAnswerComponent extends BaseEditComponent<PollQuest
         this.answerNgxInput.type = NgxInputType.TEXTAREA;
         this.answerNgxInput.rows = 4;
         this.answerNgxInput.control.setValidators([Validators.required]);
+        this.answerNgxInput.control.setValue(data.name);
 
-        this.pointsNgxInput = new NgxInput();
-        this.pointsNgxInput.labelTranslation = 'points';
-        this.pointsNgxInput.control.setValidators([Validators.pattern('([0-9]|[1-8][0-9]|9[0-9]|100)')]);
-
-        if (!this.isNew) {
-          this.answerNgxInput.control.setValue(data.name);
-          this.pointsNgxInput.control.setValue(data.points);
-        }
+        // this.pointsNgxInput = new NgxInput();
+        // this.pointsNgxInput.labelTranslation = 'points';
+        // this.pointsNgxInput.control.setValidators([Validators.pattern('([0-9]|[1-8][0-9]|9[0-9]|100)')]);
+        // this.pointsNgxInput.control.setValue(data.points);
       });
     }
     return result;
@@ -51,20 +55,16 @@ export class EditPollQuestionAnswerComponent extends BaseEditComponent<PollQuest
 
   async onRemove(): Promise<boolean> {
     return await this.appHelper.tryRemove(async () => {
-      this.data = await this.participantRestApiService.removePollQuestionAnswer({pollQuestionId: this.pollQuestion.id, pollQuestionAnswerId: this.data.id});
+      this.data = await this._pollApiService.removePollQuestionAnswer(this.poll, this.pollQuestion, this.data).toPromise();
     });
   }
 
   async onSave(): Promise<boolean> {
     return await this.appHelper.trySave(async () => {
       this.data.name = this.answerNgxInput.control.value;
-      this.data.points = this.pointsNgxInput.control.value;
+      // this.data.points = this.pointsNgxInput.control.value;
 
-      if (this.isNew) {
-        this.data = await this.participantRestApiService.createPollQuestionAnswer(this.data, {}, {pollQuestionId: this.pollQuestion.id});
-      } else {
-        this.data = await this.participantRestApiService.updatePollQuestionAnswer(this.data, {}, {pollQuestionId: this.pollQuestion.id, pollQuestionAnswerId: this.data.id});
-      }
+      this.data = await this._pollApiService.savePollQuestionAnswer(this.poll, this.pollQuestion, this.data).toPromise();
     });
   }
 

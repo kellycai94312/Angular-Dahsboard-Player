@@ -1,7 +1,9 @@
 <div *ngIf="group"
      fxLayout="column"
      fxLayoutGap="10px">
-  <div fxLayout
+  <div fxLayout="row"
+       fxLayout.lt-sm="column"
+       fxLayoutAlign.lt-sm="center center"
        fxLayoutGap="10px"
        class="header">
     <ngx-image [canEdit]="canEdit"

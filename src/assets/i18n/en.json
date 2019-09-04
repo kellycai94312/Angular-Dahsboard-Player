@@ -651,6 +651,7 @@
   "points": "Points",
   "finishPoll": "Finish poll",
   "poll": "Poll",
+  "polls": "Polls",
   "youCantExecutePoll": "You aren't a participant in the event, therefore you cannot take a survey",
   "eventTypeEnum": {
     "EVENT": "Event",
@@ -869,5 +870,12 @@
     "WHATS_APP": "Whats app",
     "VK": "Vk"
   },
-  "contactType": "Contact type"
+  "contactType": "Contact type",
+  "order": "Order",
+  "valueIsNotAnInteger": "Value is not an integer",
+  "pollType": "Poll type",
+  "pollTypeEnum": {
+    "PUBLIC_OPINION": "Public opinion"
+  },
+  "completedAPollPersonsParam": "Completed a poll {{count}} person(s)"
 }

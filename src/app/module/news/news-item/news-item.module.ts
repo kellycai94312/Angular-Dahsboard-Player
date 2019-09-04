@@ -6,6 +6,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {UrlParserModule} from '../../../pipes/url-parser/url-parser.module';
 import {RouterModule} from '@angular/router';
 import {EditNewsModule} from '../edit-news/edit-news.module';
+import {TranslateModule} from '@ngx-translate/core';
 
 @NgModule({
   declarations: [NewsItemComponent],
@@ -16,6 +17,7 @@ import {EditNewsModule} from '../edit-news/edit-news.module';
     MatIconModule,
     MatCardModule,
     FlexLayoutModule,
+    TranslateModule.forChild(),
     RouterModule.forChild([]),
     UrlParserModule,
     EditNewsModule

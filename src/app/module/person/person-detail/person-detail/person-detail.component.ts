@@ -8,6 +8,7 @@ import {PersonItemType} from '../../menu-person-detail/model/person-item-type';
 import {PermissionService} from '../../../../shared/permission.service';
 import {takeWhile} from 'rxjs/operators';
 import {TemplateModalService} from '../../../../service/template-modal.service';
+import {Group} from '../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-person-detail',
@@ -21,6 +22,9 @@ export class PersonDetailComponent extends BaseComponent<Person> implements OnIn
 
   @Input()
   public showHead = true;
+
+  @Input()
+  public group: Group;
 
   public readonly personItemTypeClass = PersonItemType;
   public readonly imageTypeClass = ImageType;
@@ -51,7 +55,7 @@ export class PersonDetailComponent extends BaseComponent<Person> implements OnIn
   }
 
   public async onEditPerson(): Promise<void> {
-    const person = await this._templateModalService.openEditPersonWindow(this.data);
+    const person = await this._templateModalService.openEditPersonWindow(this.data, this.group);
     if (person) {
       this.data = person;
     }

@@ -1,5 +1,6 @@
 <div *ngIf="person"
      fxLayout="row"
+     fxLayout.lt-sm="column"
      fxLayoutGap="10px"
      class="header">
   <div fxLayout="column"
@@ -17,7 +18,8 @@
   </div>
   <div fxFlex="grow"
        fxLayout="column"
-       fxFlexAlign="center"
+       fxLayoutAlign="center start"
+       fxLayoutAlign.lt-sm="start start"
        (click)="onNavigate()">
     <h4>{{person?.lastName}}</h4>
     <h4>{{person?.firstName}}</h4>
@@ -25,19 +27,18 @@
   </div>
   <div fxLayout="column"
        fxLayoutAlign="space-between end">
-    <div>
-      <button mat-icon-button
-              (click)="editPerson.emit()">
-        <mat-icon>edit</mat-icon>
-      </button>
-    </div>
     <div fxLayout="row"
          fxLayoutGap="10px"
          fxLayoutAlign="end end"
          fxFlexAlign="end">
       <button *ngFor="let item of actions"
               mat-raised-button
-              (click)="item.action(item)">{{item.label || (item.translationLabel | translate)}}</button>
+              (click)="item.action(item)">
+        <mat-icon *ngIf="item.iconName !== 'personDelete'; else elseTemplate">{{item.iconName}}</mat-icon>
+        <ng-template #elseTemplate>
+          <mat-icon svgIcon="personDelete"></mat-icon>
+        </ng-template>
+      </button>
     </div>
   </div>
 </div>

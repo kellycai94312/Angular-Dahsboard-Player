@@ -22,7 +22,7 @@
         "section": "Основные данные",
         "country": "Страна",
         "region": "Регион",
-        "city": "Город"
+        "city": "Гороorderд"
       },
       "anthropometry": {
         "section": "Антропометрия",
@@ -652,6 +652,7 @@
   "points": "Очки",
   "finishPoll": "Завершить опрос",
   "poll": "Опрос",
+  "polls": "Опросы",
   "youCantExecutePoll": "Вы не являетесь участником события, поэтому Вы не можете пройти опрос",
   "eventTypeEnum": {
     "EVENT": "Другое",
@@ -870,5 +871,12 @@
     "WHATS_APP": "Whats app",
     "VK": "Vk"
   },
-  "contactType": "Тип контакта"
+  "contactType": "Тип контакта",
+  "order": "Порядок",
+  "valueIsNotAnInteger": "Значение не является целым числом",
+  "pollType": "Тип опроса",
+  "pollTypeEnum": {
+    "PUBLIC_OPINION": "Общественное мнение"
+  },
+  "completedAPollPersonsParam": "Завершил(и) опрос {{count}} человек"
 }

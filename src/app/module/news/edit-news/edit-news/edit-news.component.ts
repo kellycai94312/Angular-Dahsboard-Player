@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ComponentFactoryResolver} from '@angular/core';
 import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
 import {BaseNews} from '../../../../data/remote/model/group/news/base-news';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
@@ -7,11 +7,16 @@ import {PersonApiService} from '../../../../data/remote/rest-api/api/person/pers
 import {TranslateObjectService} from '../../../../shared/translate-object.service';
 import {NewsType} from '../../../../data/remote/model/group/news/news-type';
 import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {Validators} from '@angular/forms';
+import {FormGroup, Validators} from '@angular/forms';
 import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
 import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 import {PropertyConstant} from '../../../../data/local/property-constant';
+import {PollApiService} from '../../../../data/remote/rest-api/api/poll/poll-api.service';
+import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
+import {PollItemComponent} from '../../../poll/poll-item/poll-item/poll-item.component';
+import {NewsAppliedPoll} from '../../../../data/remote/model/poll/applied/news-applied-poll';
+import {AppliedPollApiService} from '../../../../data/remote/rest-api/api/applied-poll/applied-poll-api.service';
 
 @Component({
   selector: 'app-edit-news',
@@ -22,11 +27,16 @@ export class EditNewsComponent extends BaseEditComponent<BaseNews> {
 
   public readonly newsTypeClass = NewsType;
   public readonly newsTypeNgxSelect = new NgxSelect();
+  public readonly formGroup = new FormGroup({});
   public groupNgxSelect: NgxSelect;
   public titleNgxInput: NgxInput;
 
   constructor(private _personApiService: PersonApiService,
+              private _pollApiService: PollApiService,
               private _groupApiService: GroupApiService,
+              private _appliedPollApiService: AppliedPollApiService,
+              private _modalBuilderService: ModalBuilderService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _translateObjectService: TranslateObjectService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
@@ -71,6 +81,31 @@ export class EditNewsComponent extends BaseEditComponent<BaseNews> {
       });
     }
     return result;
+  }
+
+  public async onAddPoll(): Promise<void> {
+    await this.onSave();
+
+    const dialogResult = await this._modalBuilderService.showSelectionItemsModal([], async query => {
+      return this.appHelper.arrayToPageContainer(await this._pollApiService.getPolls().toPromise());
+    }, PollItemComponent, async (component, data) => {
+      await component.initialize(data);
+    }, {componentFactoryResolver: this._componentFactoryResolver, maxCount: 1});
+
+    if (dialogResult.result) {
+      if (this.data.appliedPoll) {
+        // TODO: Remove applied poll
+        // this.data.appliedPoll = await this._appliedPollApiService.re.rea(this.data.appliedPoll., newsAppliedPoll).toPromise();
+      }
+
+      const newsAppliedPoll = new NewsAppliedPoll();
+      newsAppliedPoll.news = this.data;
+      this.data.appliedPoll = await this._pollApiService.createAppliedPoll(dialogResult.data[0], newsAppliedPoll).toPromise();
+    }
+  }
+
+  public onRemovePoll(): void {
+    // TODO: Added implementation
   }
 
   async onRemove(): Promise<boolean> {

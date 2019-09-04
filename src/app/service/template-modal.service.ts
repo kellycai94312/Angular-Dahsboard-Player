@@ -19,7 +19,6 @@ import {ModalBuilderService} from './modal-builder/modal-builder.service';
 import {EditGroupComponent} from '../module/group/edit-group/edit-group/edit-group.component';
 import {UserRole} from '../data/remote/model/user-role';
 import {PreviewNamedObjectComponent} from '../components/named-object/preview-named-object/preview-named-object.component';
-import {Position} from '../data/remote/model/person-position/position';
 import {AuthorizationService} from '../shared/authorization.service';
 import {SubgroupGroup} from '../data/remote/model/group/subgroup/subgroup/subgroup-group';
 import {SubgroupTemplateGroupVersion} from '../data/remote/model/group/subgroup/template/subgroup-template-group-version';
@@ -29,8 +28,6 @@ import {GroupClusterRank} from '../data/remote/model/group/connection/group-clus
 import {NamedObjectComponent} from '../components/named-object/named-object/named-object.component';
 import {GroupCluster} from '../data/remote/model/group/connection/group-cluster';
 import {NgxCropImageComponent} from '../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
-import {EventPoll} from '../data/remote/model/training/poll/event-poll';
-import {EditEventPollComponent} from '../module/event/edit-event-poll/edit-event-poll/edit-event-poll.component';
 import {BaseEvent} from '../data/remote/model/event/base/base-event';
 import {EditBaseEventComponent} from '../module/event/edit-base-event/edit-base-event/edit-base-event.component';
 import {EventData} from '../module/event/edit-base-event/model/event-data';
@@ -417,69 +414,6 @@ export class TemplateModalService {
 
     const result = await this._ngxModalService.awaitModalResult(modal);
     return {result: result, data: editBaseEventComponent.data};
-  }
-
-  public async showEditEventPollModal(obj: BaseEvent): Promise<DialogResult<EventPoll>> {
-    const eventPolls = await this._participantRestApiService.getEventPolls({}, {}, {eventId: obj.id});
-    let eventPoll = new EventPoll();
-    if (eventPolls.length) {
-      eventPoll = eventPolls[0];
-    }
-
-    const modal = this._ngxModalService.open();
-    await this._modalBuilderService.updateModalTitle(modal, eventPoll);
-    let editEventPollComponent: EditEventPollComponent = null;
-    await modal.componentInstance.initializeBody(EditEventPollComponent, async component => {
-      editEventPollComponent = component;
-      component.event = obj;
-      await component.initialize(this._appHelper.cloneObject(eventPoll));
-      const canEdit = (): boolean => component.canEdit;
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'save',
-          callback: async data => {
-            await this._ngxModalService.save(modal, component);
-          },
-          visible: canEdit
-        },
-        {
-          nameKey: 'remove',
-          callback: async data => {
-            await this._ngxModalService.remove(modal, component);
-          },
-          visible: () => component.isCreatorPoll
-        },
-        {
-          nameKey: 'approve',
-          callback: async data => {
-            if (await component.onApprove()) {
-              modal.close();
-            }
-          },
-          visible: canEdit
-        },
-        {
-          nameKey: 'addQuestion',
-          callback: async data => {
-            await component.onAddPollQuestion();
-          },
-          visible: canEdit
-        },
-        {
-          nameKey: 'finishPoll',
-          callback: async data => {
-            if (await component.onFinishPoll()) {
-              modal.close();
-            }
-          },
-          visible: () => component.canExecutePoll
-        }
-      ];
-    });
-    return {
-      result: await this._ngxModalService.awaitModalResult(modal),
-      data: editEventPollComponent.data
-    };
   }
 
   //#endregion

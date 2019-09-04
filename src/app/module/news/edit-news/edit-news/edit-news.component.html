@@ -1,5 +1,6 @@
 <div *ngIf="data"
-     fxLayout="column">
+     fxLayout="column"
+     fxLayoutGap="10px">
   <ng-container *ngIf="isNew && !data.group">
     <ngx-select [data]="newsTypeNgxSelect"></ngx-select>
     <ngx-select *ngIf="newsTypeNgxSelect.control?.value?.data === newsTypeClass.GROUP_NEWS"
@@ -7,4 +8,25 @@
   </ng-container>
   <new-ngx-input [data]="titleNgxInput"></new-ngx-input>
   <ngx-html-editor [(data)]="data.content"></ngx-html-editor>
+  <div fxLayout="row"
+       fxLayoutGap="10px"
+       fxLayoutAlign="space-between start">
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <label>{{'poll' | translate}}</label>
+      <mat-chip-list *ngIf="data.appliedPoll">
+        <mat-chip [removable]="true"
+                  (removed)="onRemovePoll()">{{data.appliedPoll.pollVersion.name}}
+          <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+      </mat-chip-list>
+    </div>
+    <div>
+      <button mat-icon-button
+              [disabled]="formGroup.invalid"
+              (click)="onAddPoll()">
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </div>
 </div>
