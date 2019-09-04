@@ -1,6 +1,6 @@
 import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
 import {Message} from '../../../../data/remote/model/chat/message/message';
 import {MessageViewModel} from '../../../../data/local/view-model/conversation/message-view-model';
 import {Person} from '../../../../data/remote/model/person';
@@ -8,7 +8,7 @@ import {AuthorizationService} from '../../../../shared/authorization.service';
 import {Router} from '@angular/router';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
 import {AppHelper} from '../../../../utils/app-helper';
-import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
+import {ConversationType} from '../../../../data/remote/model/chat/conversation/base/conversation-type';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 
@@ -20,8 +20,8 @@ import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 export class MessageItemComponent implements OnInit, DoCheck {
 
   public readonly propertyConstantClass = PropertyConstant;
-  public readonly baseMessageContentTypeClass = BaseMessageContentType;
-  public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly baseMessageContentTypeClass = MessageContentType;
+  public readonly baseConversationTypeClass = ConversationType;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
 
@@ -71,7 +71,7 @@ export class MessageItemComponent implements OnInit, DoCheck {
     this.messageViewModel = new MessageViewModel(this.message);
     await this.messageViewModel.build();
 
-    if (this.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
+    if (this.message.content.discriminator == MessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
       this.updated = (this.message.content as MessageContent).updated;
     }
   }

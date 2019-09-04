@@ -1,4 +1,4 @@
-export enum BaseMessageContentType {
+export enum MessageContentType {
   MESSAGE_CONTENT = 'MESSAGE_CONTENT',
   SYSTEM_MESSAGE_CONTENT = 'SYSTEM_MESSAGE_CONTENT',
   EVENT_MESSAGE_CONTENT = 'EVENT_MESSAGE_CONTENT',

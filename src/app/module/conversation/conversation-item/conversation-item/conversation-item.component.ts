@@ -8,9 +8,9 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
 import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
-import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
+import {ConversationType} from '../../../../data/remote/model/chat/conversation/base/conversation-type';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
@@ -50,7 +50,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
           // Нет сообщений
           this.conversation = messageWrapper.participant.baseConversation;
           switch (this.conversation.discriminator) {
-            case BaseConversationType.CHAT:
+            case ConversationType.CHAT:
               this.conversationImageClazz = FileClass.CHAT;
               this.conversationImage = this.conversation;
               this.conversationName = (<Chat>this.conversation).name;
@@ -62,7 +62,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
           }
 
           switch (this.conversation.discriminator) {
-            case BaseConversationType.DIALOGUE:
+            case ConversationType.DIALOGUE:
               this.conversationImageClazz = FileClass.PERSON;
               if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
                 this.conversationImage = messageWrapper.message.receiver.person;
@@ -72,7 +72,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
                 this.conversationName = this._appHelper.getPersonFullName(messageWrapper.message.sender.person);
               }
               break;
-            case BaseConversationType.CHAT:
+            case ConversationType.CHAT:
               this.conversationImageClazz = FileClass.CHAT;
               this.conversationImage = this.conversation;
               this.conversationName = (<Chat>this.conversation).name;
@@ -82,7 +82,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
               break;
           }
 
-          if (messageWrapper.message.content.discriminator === BaseMessageContentType.MESSAGE_CONTENT && (messageWrapper.message.content as MessageContent).updated) {
+          if (messageWrapper.message.content.discriminator === MessageContentType.MESSAGE_CONTENT && (messageWrapper.message.content as MessageContent).updated) {
             this.updated = (messageWrapper.message.content as MessageContent).updated;
           }
         }

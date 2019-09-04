@@ -1,6 +1,6 @@
 import {Component, OnDestroy, ViewChild} from '@angular/core';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
-import {BaseConversationType} from '../../../../../data/remote/model/chat/conversation/base/base-conversation-type';
+import {ConversationType} from '../../../../../data/remote/model/chat/conversation/base/conversation-type';
 import {NgxVirtualScrollComponent} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {MessageContent} from '../../../../../data/remote/model/chat/message/message-content';
 import {Person} from '../../../../../data/remote/model/person';
@@ -19,9 +19,9 @@ import {AuthorizationService} from '../../../../../shared/authorization.service'
 import {TranslateService} from '@ngx-translate/core';
 import {MessageToastrService} from '../../../../../components/message-toastr/message-toastr.service';
 import {TemplateModalService} from '../../../../../service/template-modal.service';
-import {BaseMessageContentType} from '../../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../../data/remote/model/chat/message/base/message-content-type';
 import {SystemMessageContent} from '../../../../../data/remote/model/chat/message/system-message-content';
-import {SystemMessageContentType} from '../../../../../data/remote/model/chat/message/system-message-content-type';
+import {SystemMessageType} from '../../../../../data/remote/model/chat/message/system-message-type';
 import {Direction} from '../../../../../components/ngx-virtual-scroll/model/direction';
 import {Chat} from '../../../../../data/remote/model/chat/conversation/chat';
 import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/base/base-message-content';
@@ -40,7 +40,7 @@ import {ImageComponent} from '../../../../../components/image/image.component';
 export class ConversationPageComponent implements OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
-  public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly baseConversationTypeClass = ConversationType;
   public readonly ngxButtonTypeClass = NgxButtonType;
 
   @ViewChild('logo')
@@ -107,12 +107,12 @@ export class ConversationPageComponent implements OnDestroy {
         this._conversationService.readMessage(x);
       }
 
-      if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
+      if (x.message.content.discriminator === MessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
         switch ((x.message.content as SystemMessageContent).systemMessageType) {
-          case SystemMessageContentType.UPDATE_LOGO:
+          case SystemMessageType.UPDATE_LOGO:
             this.logo.refresh();
             break;
-          case SystemMessageContentType.UPDATE_NAME:
+          case SystemMessageType.UPDATE_NAME:
             this.conversation = x.message.content.baseConversation;
         }
       }
@@ -186,7 +186,7 @@ export class ConversationPageComponent implements OnDestroy {
       this._messageToastrService.clearToasts(this.conversation.id);
       this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: this._conversationId})).value;
       switch (this.conversation.discriminator) {
-        case BaseConversationType.DIALOGUE:
+        case ConversationType.DIALOGUE:
           // Get recipient
           const participantsContainer = await this._participantRestApiService.getParticipants({conversationId: this._conversationId});
           if (participantsContainer.size > 0) {
@@ -328,7 +328,7 @@ export class ConversationPageComponent implements OnDestroy {
 
   public updateCanEditMessage() {
     this.canEditMessage = this.selectedMessages.size() == 1
-      && this.selectedMessages.data.filter(message => message.content.discriminator === BaseMessageContentType.MESSAGE_CONTENT
+      && this.selectedMessages.data.filter(message => message.content.discriminator === MessageContentType.MESSAGE_CONTENT
         && message.sender.person.id == this.person.id).length == 1;
   }
 

@@ -1,12 +1,12 @@
 import {BaseMessageContent} from './base/base-message-content';
-import {BaseMessageContentType} from './base/base-message-content-type';
+import {MessageContentType} from './base/message-content-type';
 
 export class MessageContent extends BaseMessageContent {
-  content: string;
-  updated: Date;
+  public updated: Date;
+  public content: string;
 
   constructor() {
     super();
-    this.discriminator = BaseMessageContentType.MESSAGE_CONTENT;
+    this.discriminator = MessageContentType.MESSAGE_CONTENT;
   }
 }

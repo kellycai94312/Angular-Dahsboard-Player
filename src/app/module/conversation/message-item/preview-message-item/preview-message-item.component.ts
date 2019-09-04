@@ -1,6 +1,6 @@
 import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
 import {Message} from '../../../../data/remote/model/chat/message/message';
 import {MessageViewModel} from '../../../../data/local/view-model/conversation/message-view-model';
 import {Person} from '../../../../data/remote/model/person';
@@ -68,7 +68,7 @@ export class PreviewMessageItemComponent implements OnInit, DoCheck {
     this.messageViewModel = new MessageViewModel(this.message);
     await this.messageViewModel.build();
 
-    if (this.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
+    if (this.message.content.discriminator == MessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
       this.updated = (this.message.content as MessageContent).updated;
     }
   }

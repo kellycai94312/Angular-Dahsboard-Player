@@ -1,12 +1,16 @@
 import {BaseMessageContent} from './base/base-message-content';
-import {BaseMessageContentType} from './base/base-message-content-type';
+import {MessageContentType} from './base/message-content-type';
 import {BaseEvent} from '../../event/base/base-event';
+import {Type} from 'class-transformer';
 
-export class EventMessageContent<T extends BaseEvent> extends BaseMessageContent {
-  training: T;
+export class EventMessageContent extends BaseMessageContent {
+
+  @Type(() => BaseEvent)
+  public training: BaseEvent;
 
   constructor() {
     super();
-    this.discriminator = BaseMessageContentType.EVENT_MESSAGE_CONTENT;
+    this.discriminator = MessageContentType.EVENT_MESSAGE_CONTENT;
   }
+
 }

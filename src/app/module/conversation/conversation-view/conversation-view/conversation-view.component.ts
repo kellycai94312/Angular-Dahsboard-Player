@@ -1,6 +1,6 @@
 import {Component, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
-import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
+import {ConversationType} from '../../../../data/remote/model/chat/conversation/base/conversation-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {NgForm} from '@angular/forms';
@@ -19,9 +19,9 @@ import {MessageToastrService} from '../../../../components/message-toastr/messag
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
 import {SystemMessageContent} from '../../../../data/remote/model/chat/message/system-message-content';
-import {SystemMessageContentType} from '../../../../data/remote/model/chat/message/system-message-content-type';
+import {SystemMessageType} from '../../../../data/remote/model/chat/message/system-message-type';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
 import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
@@ -46,7 +46,7 @@ import {FuseMatSidenavHelperService} from '../../../../../@fuse/directives/fuse-
 export class ConversationViewComponent extends BaseComponent<BaseConversation> implements OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
-  public readonly baseConversationTypeClass = BaseConversationType;
+  public readonly baseConversationTypeClass = ConversationType;
   public readonly fileClass = FileClass;
   public readonly imageTypeClass = ImageType;
 
@@ -105,12 +105,12 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
           this._conversationService.readMessage(x);
         }
 
-        if (x.message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
+        if (x.message.content.discriminator === MessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
           switch ((x.message.content as SystemMessageContent).systemMessageType) {
-            case SystemMessageContentType.UPDATE_LOGO:
+            case SystemMessageType.UPDATE_LOGO:
               this.ngxImageComponent.refresh();
               break;
-            case SystemMessageContentType.UPDATE_NAME:
+            case SystemMessageType.UPDATE_NAME:
               this.data = x.message.content.baseConversation;
           }
         }
@@ -176,7 +176,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
         this._messageToastrService.clearToasts(data.id);
         this.enabled = (await this._participantRestApiService.getMessageNotificationsStatus({conversationId: data.id})).value;
         switch (data.discriminator) {
-          case BaseConversationType.DIALOGUE:
+          case ConversationType.DIALOGUE:
             // Get recipient
             const participantsContainer = await this._participantRestApiService.getParticipants({conversationId: data.id});
             if (participantsContainer.size > 0) {
@@ -319,7 +319,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
 
   public updateCanEditMessage() {
     this.canEditMessage = this.selectedMessages.size() == 1
-      && this.selectedMessages.data.filter(message => message.content.discriminator === BaseMessageContentType.MESSAGE_CONTENT
+      && this.selectedMessages.data.filter(message => message.content.discriminator === MessageContentType.MESSAGE_CONTENT
         && message.sender.person.id == this.person.id).length == 1;
   }
 
@@ -374,7 +374,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   }
 
   private getConversationName(val: BaseConversation, recipient: Participant): string {
-    if (val.discriminator === BaseConversationType.DIALOGUE && recipient.person) {
+    if (val.discriminator === ConversationType.DIALOGUE && recipient.person) {
       return this._appHelper.getPersonFullName(recipient.person);
     }
     return (val as Chat).name;

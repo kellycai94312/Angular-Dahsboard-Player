@@ -1,4 +1,4 @@
-export enum SystemMessageContentType {
+export enum SystemMessageType {
   CREATE_CHAT = 'CREATE_CHAT',
   UPDATE_NAME = 'UPDATE_NAME',
   UPDATE_LOGO = 'UPDATE_LOGO',
