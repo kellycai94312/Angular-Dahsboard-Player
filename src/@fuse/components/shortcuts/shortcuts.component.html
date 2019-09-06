@@ -92,7 +92,7 @@
                         </mat-icon>
 
                         <span class="h2 w-32 h-32 p-4 mr-8 secondary-text text-bold" fxLayout="row"
-                              fxLayoutAlign="center center" *ngIf="!navigationItem.icon">
+                              fxLayoutAlign="center center" *ngIf="!navigationItem.icon && navigationItem.title">
                             {{navigationItem.title.substr(0, 1).toUpperCase()}}
                         </span>
 

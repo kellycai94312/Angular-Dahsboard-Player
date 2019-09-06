@@ -877,5 +877,18 @@
   "pollTypeEnum": {
     "PUBLIC_OPINION": "Public opinion"
   },
-  "completedAPollPersonsParam": "Completed a poll {{count}} person(s)"
+  "completedAPollPersonsParam": "Completed a poll {{count}} person(s)",
+  "professionalProfile": "Professional profile",
+  "diary": "Notebook",
+  "notebook": "Notebook",
+  "bookmarks": "Bookmarks",
+  "targetsAndGoals": "Targets and goals",
+  "communities": "Communities",
+  "places": "Places",
+  "laborExchange": "Labor exchange",
+  "knowledgeBase": "Knowledge base",
+  "knowledgeCollections": "Knowledge collections",
+  "shops": "Shops",
+  "account": "Account",
+  "storage": "Storage"
 }

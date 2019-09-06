@@ -12,29 +12,91 @@ export const navigation: FuseNavigation[] = [
         id: 'dashboards',
         title: 'Dashboards',
         translate: 'myPage',
-        type: 'item',
+        type: 'collapsable',
         icon: 'dashboard',
-        url: '/dashboard'
+        children: [
+          {
+            id: 'news',
+            title: 'News',
+            translate: 'news',
+            type: 'item',
+            url: '/dashboard'
+          },
+          {
+            id: 'aboutMe',
+            title: 'About me',
+            translate: 'aboutMe',
+            type: 'item',
+            url: '/person'
+          },
+          {
+            id: 'professionalProfile',
+            title: 'professionalProfile',
+            translate: 'professionalProfile',
+            type: 'item',
+            url: '/professional-profile',
+            disabled: true
+          }
+        ]
       },
       {
-        id: 'persons',
-        title: 'Persons',
-        translate: 'persons.section',
-        type: 'item',
-        icon: 'person',
-        url: '/person'
+        id: 'diary',
+        translate: 'diary',
+        type: 'collapsable',
+        icon: 'note',
+        children: [
+          {
+            id: 'notebook',
+            translate: 'notebook',
+            type: 'item',
+            url: '/notebook',
+            disabled: true
+          },
+          {
+            id: 'bookmarks',
+            translate: 'bookmarks',
+            type: 'item',
+            url: '/bookmarks',
+            disabled: true
+          },
+          {
+            id: 'contacts',
+            translate: 'contacts',
+            type: 'item',
+            url: '/contacts',
+            disabled: true
+          },
+          {
+            id: 'targetsAndGoals',
+            translate: 'targetsAndGoals',
+            type: 'item',
+            url: '/targetsAndGoals',
+            disabled: true
+          },
+          {
+            id: 'communities',
+            translate: 'communities',
+            type: 'item',
+            url: '/group/my'
+          }, {
+            id: 'places',
+            translate: 'places',
+            type: 'item',
+            url: '/places',
+            disabled: true
+          }
+        ]
       },
       {
-        id: 'groups',
-        title: 'Groups',
-        translate: 'groups',
+        id: 'search',
+        translate: 'search',
         type: 'item',
-        icon: 'group',
-        url: '/group'
+        icon: 'search',
+        url: '/search',
+        disabled: true
       },
       {
         id: 'calendar',
-        title: 'Calendar',
         translate: 'organizer',
         type: 'item',
         icon: 'today',
@@ -42,27 +104,75 @@ export const navigation: FuseNavigation[] = [
       },
       {
         id: 'conversations',
-        title: 'Conversation',
         translate: 'messages.section',
         type: 'item',
         icon: 'chat',
         url: '/conversation'
       },
       {
-        id: 'notifications',
-        title: 'Notifications',
-        translate: 'notifications',
+        id: 'laborExchange',
+        translate: 'laborExchange',
         type: 'item',
-        icon: 'notifications',
-        url: '/notification'
+        icon: 'account_balance',
+        url: '/laborExchange',
+        disabled: true
       },
       {
-        id: 'dictionaries',
-        title: 'Dictionaries',
-        translate: 'libraries',
+        id: 'knowledgeBase',
+        translate: 'knowledgeBase',
+        type: 'collapsable',
+        icon: 'storage',
+        children: [
+          {
+            id: 'templates',
+            translate: 'templates',
+            type: 'item',
+            url: '/templates',
+            disabled: true
+          }, {
+            id: 'publications',
+            translate: 'publications',
+            type: 'item',
+            url: '/publications',
+            disabled: true
+          }, {
+            id: 'knowledgeCollections',
+            translate: 'knowledgeCollections',
+            type: 'item',
+            url: '/knowledgeCollections',
+            disabled: true
+          }, {
+            id: 'dictionaries',
+            title: 'Dictionaries',
+            translate: 'libraries',
+            type: 'item',
+            url: '/dictionary'
+          }
+        ]
+      },
+      {
+        id: 'shops',
+        translate: 'shops',
         type: 'item',
-        icon: 'library_books',
-        url: '/dictionary'
+        icon: 'shopping_cart',
+        url: '/shops',
+        disabled: true
+      },
+      {
+        id: 'account',
+        translate: 'account',
+        type: 'item',
+        icon: 'account_balance_wallet',
+        url: '/account',
+        disabled: true
+      },
+      {
+        id: 'storage',
+        translate: 'storage',
+        type: 'item',
+        icon: 'storage',
+        url: '/storage',
+        disabled: true
       }
     ]
   }
