@@ -1,7 +1,6 @@
-import {BaseMessageContent} from './base/base-message-content';
+import {BaseMessageContent, MessageContentType} from './base';
 import {SystemMessageType} from './system-message-type';
 import {Participant} from '../participant';
-import {MessageContentType} from './base/message-content-type';
 import {Type} from 'class-transformer';
 
 export class SystemMessageContent extends BaseMessageContent {

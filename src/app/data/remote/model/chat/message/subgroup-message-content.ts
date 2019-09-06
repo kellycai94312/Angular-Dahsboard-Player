@@ -1,5 +1,4 @@
-import {BaseMessageContent} from './base/base-message-content';
-import {MessageContentType} from './base/message-content-type';
+import {BaseMessageContent, MessageContentType} from './base';
 import {BaseSubgroupVersion} from '../../group/subgroup/version/base-subgroup-version';
 import {SubgroupTemplateGroupVersion} from '../../group/subgroup/template/subgroup-template-group-version';
 import {Type} from 'class-transformer';

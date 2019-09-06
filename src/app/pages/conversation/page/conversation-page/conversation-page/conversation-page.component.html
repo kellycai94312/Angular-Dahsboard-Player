@@ -75,7 +75,8 @@
           <div class="message-wrapper p-0" (click)="toggleSelectMessage(message)">
             <div class="d-flex flex-row justify-content-between">
               <app-message-item class="w-100"
-                                [message]="message"></app-message-item>
+                                [message]="message"
+                                [person]="person"></app-message-item>
             </div>
           </div>
         </ng-template>

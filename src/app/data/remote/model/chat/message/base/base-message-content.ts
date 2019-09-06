@@ -1,10 +1,8 @@
 import {IdentifiedObject} from '../../../../base/identified-object';
 import {MessageContentType} from './message-content-type';
-import {BaseConversation} from '../../conversation/base/base-conversation';
+import {BaseConversation, ConversationType} from '../../conversation/base';
 import {Type} from 'class-transformer';
-import {Chat} from '../../conversation/chat';
-import {ConversationType} from '../../conversation/base/conversation-type';
-import {Dialogue} from '../../conversation/dialogue';
+import {Chat, Dialogue} from '../../conversation';
 
 export class BaseMessageContent extends IdentifiedObject {
 

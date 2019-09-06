@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, forwardRef, Inject} from '@angular/core';
 import {BaseLibraryItem} from '../../../library/base-library-item/model/base-library-item';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {Poll} from '../../../../data/remote/model/poll/poll';
@@ -11,7 +11,10 @@ import {PollWindowService} from '../../../../services/windows/poll-window/poll-w
 })
 export class PollItemComponent extends BaseLibraryItem<Poll> {
 
-  constructor(private _pollWindowService: PollWindowService) {
+  constructor(
+    // TODO: PollWindowService can't inject without forwardRef()
+    @Inject(forwardRef(() => PollWindowService))
+    private _pollWindowService: PollWindowService) {
     super();
   }
 

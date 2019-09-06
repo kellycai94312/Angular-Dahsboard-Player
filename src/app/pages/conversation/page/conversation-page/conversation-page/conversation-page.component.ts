@@ -1,14 +1,12 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {IconEnum} from '../../../../../components/ngx-button/model/icon-enum';
-import {ConversationType} from '../../../../../data/remote/model/chat/conversation/base/conversation-type';
+import {BaseConversation, ConversationType} from '../../../../../data/remote/model/chat/conversation/base';
 import {NgxVirtualScrollComponent} from '../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {MessageContent} from '../../../../../data/remote/model/chat/message/message-content';
+import {Message, MessageContent, SystemMessageContent, SystemMessageType} from '../../../../../data/remote/model/chat/message';
 import {Person} from '../../../../../data/remote/model/person';
 import {PageQuery} from '../../../../../data/remote/rest-api/page-query';
-import {BaseConversation} from '../../../../../data/remote/model/chat/conversation/base/base-conversation';
-import {Participant} from '../../../../../data/remote/model/chat/participant';
+import {Participant} from '../../../../../data/remote/model/chat';
 import {HashSet} from '../../../../../data/local/hash-set';
-import {Message} from '../../../../../data/remote/model/chat/message/message';
 import {ISubscription} from 'rxjs-compat/Subscription';
 import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,12 +17,9 @@ import {AuthorizationService} from '../../../../../shared/authorization.service'
 import {TranslateService} from '@ngx-translate/core';
 import {MessageToastrService} from '../../../../../components/message-toastr/message-toastr.service';
 import {TemplateModalService} from '../../../../../service/template-modal.service';
-import {MessageContentType} from '../../../../../data/remote/model/chat/message/base/message-content-type';
-import {SystemMessageContent} from '../../../../../data/remote/model/chat/message/system-message-content';
-import {SystemMessageType} from '../../../../../data/remote/model/chat/message/system-message-type';
+import {BaseMessageContent, MessageContentType} from '../../../../../data/remote/model/chat/message/base';
 import {Direction} from '../../../../../components/ngx-virtual-scroll/model/direction';
-import {Chat} from '../../../../../data/remote/model/chat/conversation/chat';
-import {BaseMessageContent} from '../../../../../data/remote/model/chat/message/base/base-message-content';
+import {Chat} from '../../../../../data/remote/model/chat/conversation';
 import {NgxModalService} from '../../../../../components/ngx-modal/service/ngx-modal.service';
 import {ConfirmationRemovingMessageComponent} from '../../../../../module/conversation/confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
@@ -37,7 +32,7 @@ import {ImageComponent} from '../../../../../components/image/image.component';
   templateUrl: './conversation-page.component.html',
   styleUrls: ['./conversation-page.component.scss']
 })
-export class ConversationPageComponent implements OnDestroy {
+export class ConversationPageComponent implements OnInit, OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
   public readonly baseConversationTypeClass = ConversationType;
@@ -176,6 +171,10 @@ export class ConversationPageComponent implements OnDestroy {
         this.participantsTyping.splice(this.participantsTyping.indexOf(participant), 1);
       }, 1500);
     });
+  }
+
+  public async ngOnInit(): Promise<void> {
+    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
   }
 
   public async initialize(conversationId: number): Promise<boolean> {

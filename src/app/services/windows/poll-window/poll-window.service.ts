@@ -8,6 +8,11 @@ import {ItemDetailComponent} from '../../../module/common/item-detail/item-detai
 import {TextField} from '../../../module/common/item-detail/model/text-field';
 import {TranslateService} from '@ngx-translate/core';
 import {PollPerson} from '../../../data/remote/model/poll/poll-person';
+import {PollItemComponent} from '../../../module/poll/poll-item/poll-item/poll-item.component';
+import {PollApiService} from '../../../data/remote/rest-api/api/poll/poll-api.service';
+import {ModalBuilderService} from '../../../service/modal-builder/modal-builder.service';
+import {AppHelper} from '../../../utils/app-helper';
+import {NgxSelectionConfig} from '../../../components/ngx-selection/model/ngx-selection-config';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +21,10 @@ export class PollWindowService {
 
   constructor(private _ngxModalService: NgxModalService,
               private _utilService: UtilService,
+              private _pollApiService: PollApiService,
               private _translateService: TranslateService,
+              private _appHelper: AppHelper,
+              private _modalBuilderService: ModalBuilderService,
               private _componentFactoryResolver: ComponentFactoryResolver) {
   }
 
@@ -58,6 +66,14 @@ export class PollWindowService {
       ];
       await this._ngxModalService.awaitModalResult(model);
     });
+  }
+
+  public async openSelectionPollsWindow(polls: Poll[], config?: NgxSelectionConfig<Poll>): Promise<DialogResult<Poll[]>> {
+    return await this._modalBuilderService.showSelectionItemsModal(polls, async query => {
+      return this._appHelper.arrayToPageContainer(await this._pollApiService.getPolls().toPromise());
+    }, PollItemComponent, async (component, data) => {
+      await component.initialize(data);
+    }, config);
   }
 
 }

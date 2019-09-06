@@ -1,6 +1,5 @@
-import {BaseMessageContent} from './base/base-message-content';
+import {BaseMessageContent, MessageContentType} from './base';
 import {MessageContentAppliedPoll} from '../../poll/applied/message-content-applied-poll';
-import {MessageContentType} from './base/message-content-type';
 import {Type} from 'class-transformer';
 
 export class PollMessageContent extends BaseMessageContent {

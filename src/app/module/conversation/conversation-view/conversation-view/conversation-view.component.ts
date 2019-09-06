@@ -1,15 +1,13 @@
-import {Component, OnDestroy, ViewChild, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {IconEnum} from '../../../../components/ngx-button/model/icon-enum';
-import {ConversationType} from '../../../../data/remote/model/chat/conversation/base/conversation-type';
+import {BaseConversation, ConversationType} from '../../../../data/remote/model/chat/conversation/base';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {NgForm} from '@angular/forms';
-import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
+import {Message, MessageContent, SystemMessageContent, SystemMessageType} from '../../../../data/remote/model/chat/message';
 import {Person} from '../../../../data/remote/model/person';
-import {BaseConversation} from '../../../../data/remote/model/chat/conversation/base/base-conversation';
 import {HashSet} from '../../../../data/local/hash-set';
-import {Message} from '../../../../data/remote/model/chat/message/message';
-import {Participant} from '../../../../data/remote/model/chat/participant';
+import {Participant} from '../../../../data/remote/model/chat';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ConversationService} from '../../../../shared/conversation.service';
@@ -19,14 +17,11 @@ import {MessageToastrService} from '../../../../components/message-toastr/messag
 import {TemplateModalService} from '../../../../service/template-modal.service';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
 import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
-import {SystemMessageContent} from '../../../../data/remote/model/chat/message/system-message-content';
-import {SystemMessageType} from '../../../../data/remote/model/chat/message/system-message-type';
+import {BaseMessageContent, MessageContentType} from '../../../../data/remote/model/chat/message/base';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
+import {Chat, Dialogue} from '../../../../data/remote/model/chat/conversation';
 import {ConfirmationRemovingMessageComponent} from '../../confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
-import {BaseMessageContent} from '../../../../data/remote/model/chat/message/base/base-message-content';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
 import {Subject} from 'rxjs';
@@ -36,14 +31,19 @@ import {Router} from '@angular/router';
 import {ISelected} from '../../../../data/local/iselected';
 import {DialogResult} from '../../../../data/local/dialog-result';
 import {FuseMatSidenavHelperService} from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
+import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
+import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
+import {PollWindowService} from '../../../../services/windows/poll-window/poll-window.service';
+import {ConversationApiService} from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
+import {PollApiService} from '../../../../data/remote/rest-api/api/poll/poll-api.service';
+import {MessageContentAppliedPoll} from '../../../../data/remote/model/poll/applied/message-content-applied-poll';
 
 @Component({
   selector: 'app-conversation-view',
   templateUrl: './conversation-view.component.html',
-  styleUrls: ['./conversation-view.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./conversation-view.component.scss']
 })
-export class ConversationViewComponent extends BaseComponent<BaseConversation> implements OnDestroy {
+export class ConversationViewComponent extends BaseComponent<BaseConversation> implements OnInit, OnDestroy {
 
   public readonly iconEnumClass = IconEnum;
   public readonly baseConversationTypeClass = ConversationType;
@@ -67,8 +67,8 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public editedMessage: Message;
   public canEditMessage: boolean;
   public recipient: Participant;
-  public conversationName: string;
   public visibleEmojiPicker: boolean;
+  public messageNgxInput: NgxInput;
 
   private readonly _unsubscribeAll: Subject<void>;
 
@@ -76,7 +76,10 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   private _typingTimeout: any;
 
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _pollWindowService: PollWindowService,
+              private _pollApiService: PollApiService,
+              private _conversationApiService: ConversationApiService,
+              private _participantRestApiService: ParticipantRestApiService,
               private _fuseMatSidenavHelperService: FuseMatSidenavHelperService,
               private _appHelper: AppHelper,
               private _conversationService: ConversationService,
@@ -186,11 +189,29 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
           default:
             this.recipient = new Participant();
         }
-        this.conversationName = this.getConversationName(data, this.recipient);
+
+        this.messageNgxInput = new NgxInput();
+        this.messageNgxInput.type = NgxInputType.TEXTAREA;
+
         await this.ngxVirtualScrollComponent.reset();
       });
     }
     return result;
+  }
+
+  public get canEditChat(): boolean {
+    return this.data instanceof Chat && this.person && this.data.owner.id == this.person.user.id;
+  }
+
+  public get canQuitChat(): boolean {
+    return this.data instanceof Chat && this.person && this.data.owner.id != this.person.user.id;
+  }
+
+  public get conversationName(): string {
+    if (this.recipient && this.data instanceof Dialogue && this.recipient.person) {
+      return this._appHelper.getPersonFullName(this.recipient.person);
+    }
+    return (this.data as Chat).name;
   }
 
   ngOnDestroy(): void {
@@ -254,13 +275,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     }, 150);
   }
 
-  public async editChat() {
-    const dialogResult = await this._conversationModalService.showEditChat(this.data as Chat);
-    if (dialogResult.result) {
-      this._appHelper.updateObject(this.data, dialogResult.data);
-      this.ngxImageComponent.refresh();
-    }
-  }
 
   public toggleSelectMessage = (item: ISelected) => {
     if (item.selected) {
@@ -285,59 +299,12 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     this.updateCanEditMessage();
   }
 
-  public deleteSelectedMessages = async () => {
-    const messages: Message[] = this.selectedMessages.data;
-    const modal = this._ngxModalService.open();
-    modal.componentInstance.titleKey = 'deleteSelectedMessages';
-    await modal.componentInstance.initializeBody(ConfirmationRemovingMessageComponent, async component => {
-      component.conversation = this.data;
-      component.messages = messages;
-
-      modal.componentInstance.splitButtonItems = [
-        {
-          nameKey: 'apply',
-          callback: async () => {
-            if (await component.onRemove()) {
-              this.ngxVirtualScrollComponent.items = this.ngxVirtualScrollComponent.items.filter(item => !messages.includes(item));
-              this.selectedMessages.removeAll();
-              this.updateCanEditMessage();
-              modal.close();
-            }
-          }
-        }
-      ];
-    });
-  };
-
-  public async clearMessagesHistory() {
-    if (await this._templateModalService.showConfirmModal('areYouSure')) {
-      await this._participantRestApiService.removeAllMessages({conversationId: this.data.id});
-      this.ngxVirtualScrollComponent.items = [];
-      this.updateCanEditMessage();
-    }
-  }
-
   public updateCanEditMessage() {
     this.canEditMessage = this.selectedMessages.size() == 1
       && this.selectedMessages.data.filter(message => message.content.discriminator === MessageContentType.MESSAGE_CONTENT
         && message.sender.person.id == this.person.id).length == 1;
   }
 
-  public async quitChat() {
-    if (await this._templateModalService.showConfirmModal('areYouSure')) {
-      await this._participantRestApiService.quitChat({conversationId: this.data.id});
-      await this.navigateToConversations();
-    }
-  }
-
-  public async toggleNotifications() {
-    if (this.enabled) {
-      await this._participantRestApiService.disableMessageNotifications({conversationId: this.data.id});
-    } else {
-      await this._participantRestApiService.enableMessageNotifications({conversationId: this.data.id});
-    }
-    this.enabled = !this.enabled;
-  }
 
   public async onAttachFile() {
     await this.addEvent();
@@ -373,12 +340,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     await this._router.navigate(['/conversation']);
   }
 
-  private getConversationName(val: BaseConversation, recipient: Participant): string {
-    if (val.discriminator === ConversationType.DIALOGUE && recipient.person) {
-      return this._appHelper.getPersonFullName(recipient.person);
-    }
-    return (val as Chat).name;
-  }
 
   private async addEvent(): Promise<DialogResult<any>> {
     // TODO: Add event
@@ -391,5 +352,80 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     // return dialogResult;
     return {result: false};
   }
+
+  //region Conversation menu
+
+  public async onEditChat() {
+    const dialogResult = await this._conversationModalService.showEditChat(this.data as Chat);
+    if (dialogResult.result) {
+      this._appHelper.updateObject(this.data, dialogResult.data);
+      this.ngxImageComponent.refresh();
+    }
+  }
+
+  public async onDeleteSelectedMessages(): Promise<void> {
+    const messages: Message[] = this.selectedMessages.data;
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'deleteSelectedMessages';
+    await modal.componentInstance.initializeBody(ConfirmationRemovingMessageComponent, async component => {
+      component.conversation = this.data;
+      component.messages = messages;
+
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            if (await component.onRemove()) {
+              this.ngxVirtualScrollComponent.items = this.ngxVirtualScrollComponent.items.filter(item => !messages.includes(item));
+              this.selectedMessages.removeAll();
+              this.updateCanEditMessage();
+              modal.close();
+            }
+          }
+        }
+      ];
+    });
+  }
+
+  public async onToggleNotifications() {
+    if (this.enabled) {
+      await this._participantRestApiService.disableMessageNotifications({conversationId: this.data.id});
+    } else {
+      await this._participantRestApiService.enableMessageNotifications({conversationId: this.data.id});
+    }
+    this.enabled = !this.enabled;
+  }
+
+  public async onClearMessagesHistory() {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
+      await this._participantRestApiService.removeAllMessages({conversationId: this.data.id});
+      this.ngxVirtualScrollComponent.items = [];
+      this.updateCanEditMessage();
+    }
+  }
+
+  public async onQuitChat() {
+    if (await this._templateModalService.showConfirmModal('areYouSure')) {
+      await this._participantRestApiService.quitChat({conversationId: this.data.id});
+      await this.navigateToConversations();
+    }
+  }
+
+  //endregion
+
+  //region Attaching menu
+
+  public async onAttachPoll(): Promise<void> {
+    const dialogResult = await this._pollWindowService.openSelectionPollsWindow([], {maxCount: 1});
+    if (dialogResult.result) {
+      await this._pollApiService.createAppliedPoll(dialogResult.data[0], new MessageContentAppliedPoll()).toPromise();
+    }
+  }
+
+  public async onAttachEvent(): Promise<void> {
+
+  }
+
+  //endregion
 
 }

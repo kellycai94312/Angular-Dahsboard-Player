@@ -1,5 +1,4 @@
-import {BaseConversation} from './base/base-conversation';
-import {ConversationType} from './base/conversation-type';
+import {BaseConversation, ConversationType} from './base';
 
 export class Dialogue extends BaseConversation {
   constructor() {

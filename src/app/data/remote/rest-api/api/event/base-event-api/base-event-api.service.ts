@@ -33,7 +33,6 @@ export class BaseEventApiService {
   }
 
   public getEvents<T extends BaseEvent>(query: BaseEventQuery): Observable<PageContainer<T>> {
-    console.log(query);
     return this._apiService.getPageContainer(BaseEvent, this._basePath, query) as Observable<PageContainer<T>>;
   }
 

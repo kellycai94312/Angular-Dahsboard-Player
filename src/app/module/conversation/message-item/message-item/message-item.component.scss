@@ -1,100 +1,35 @@
-@import "../../../../styles/variables";
-@import "../../../../pages/conversation/chat/chat.theme";
+@import "../../../../styles/mixins";
 
-$participant-background-color: #f2f2f2;
-$participant-border-color: #e1e1e1;
-$person-background-color: #f2ffe6;
-$person-border-color: #ccff99;
-$person-check-mark-color: #78797f;
-$selected-background-color: #cceeff;
-$selected-border-color: $selected-background-color;
+@mixin message-content-theme($color, $sub-color, $background-color) {
+  background: $background-color;
+  border-radius: 6px;
+  padding: 0 4px;
+  color: $color;
 
-.message-row {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding-bottom: 24px;
-
-  .avatar {
-    margin: 0;
+  ::ng-deep {
+    pre {
+      color: $color !important;
+    }
   }
 
-  .bubble {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 100%;
-    border-bottom-left-radius: 20px;
-    padding: 12px 12px 13px;
-
-    .message {
-      white-space: pre-wrap;
-      line-height: 1.2;
+  .message-sub-content {
+    mat-icon {
+      @include mat-icon-size(18px);
     }
 
-    .time {
-      position: absolute;
-      text-transform: lowercase;
-      display: flex;
-      width: 100%;
-      font-size: 11px;
-      margin-top: 2px;
-      top: 100%;
-      left: 0;
-      white-space: nowrap;
+    .subtext {
+      font-size: 12px;
+      color: $sub-color;
     }
+  }
+}
 
+:host {
+  .my-message-content {
+    @include message-content-theme(#000, rgba(0, 0, 0, .54), #e0e0e0);
   }
 
-  &.contact {
-
-    .bubble {
-      border-radius: 5px 20px 20px 5px;
-    }
-
+  .message-content {
+    @include message-content-theme(#fff, rgba(255, 255, 255, .54), #3c4252);
   }
-
-  &.me {
-    padding-left: 40px;
-
-    .avatar {
-      order: 2;
-      margin: 0 0 0 16px;
-    }
-
-    .bubble {
-      margin-left: auto;
-
-      border-radius: 20px 5px 5px 20px;
-
-      .time {
-        justify-content: flex-end;
-        right: 0;
-      }
-    }
-
-  }
-
-  &.system {
-
-    .bubble {
-      margin: 0 auto;
-      padding: 3px 0;
-
-      .time {
-        margin: 0 auto;
-      }
-
-    }
-
-  }
-
-  &.contact + .me,
-  &.me + .contact {
-    padding-top: 20px;
-    margin-top: 20px;
-  }
-
 }

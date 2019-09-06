@@ -1,9 +1,8 @@
 import {IdentifiedObject} from '../../../base/identified-object';
 import {Participant} from '../participant';
-import {BaseMessageContent} from './base/base-message-content';
+import {BaseMessageContent, MessageContentType} from './base';
 import {Type} from 'class-transformer';
 import {MessageContent} from './message-content';
-import {MessageContentType} from './base/message-content-type';
 import {SystemMessageContent} from './system-message-content';
 import {EventMessageContent} from './event-message-content';
 import {SubgroupMessageContent} from './subgroup-message-content';

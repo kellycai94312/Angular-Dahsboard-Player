@@ -1,5 +1,4 @@
-import {BaseMessageContent} from './base/base-message-content';
-import {MessageContentType} from './base/message-content-type';
+import {BaseMessageContent, MessageContentType} from './base';
 import {BaseEvent} from '../../event/base/base-event';
 import {Type} from 'class-transformer';
 
