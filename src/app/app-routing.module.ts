@@ -20,11 +20,6 @@ const routes: Routes = [
     loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
   },
   {
-    path: 'dashboard',
-    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'event',
     loadChildren: './pages/events/events.module#EventsModule',
     canActivate: [AuthGuard]
@@ -45,6 +40,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'contact',
+    loadChildren: './pages/contacts/contacts.module#ContactsModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'conversation',
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard]
@@ -55,6 +55,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       breadcrumb: {nameKey: 'dictionaries'} as BreadcrumbItem
+    }
+  },
+  {
+    path: 'search',
+    loadChildren: './pages/search/search.module#SearchModule',
+    canActivate: [AuthGuard],
+    data: {
+      breadcrumb: {nameKey: 'search'} as BreadcrumbItem
     }
   },
   {

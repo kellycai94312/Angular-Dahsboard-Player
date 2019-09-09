@@ -20,7 +20,8 @@ export class PersonPageComponent extends BasePersonComponent implements OnInit {
     super(personService);
     this.tabs = [
       {translation: 'publications', link: 'publication'},
-      {translation: 'aboutMe', link: 'about-me'}
+      {translation: 'aboutMe', link: 'about-me'},
+      {translation: 'professionalProfile', link: 'professional-profile'}
     ];
   }
 

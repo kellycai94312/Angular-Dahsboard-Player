@@ -31,7 +31,7 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
   public ngOnInit(): void {
     super.ngOnInit();
     this.initializeGroupService(this._activatedRoute, this._router);
-    this.items = Object.keys(GroupSettingsItem).map(value => new NameWrapper(this._getPathByGroupSettingsItem(value as GroupSettingsItem), `groupSettingsItemEnum.${value}`));
+    this.items = Object.keys(GroupSettingsItem).filter(x => x !== GroupSettingsItem.ADDRESS && x !== GroupSettingsItem.INVITES).map(value => new NameWrapper(this._getPathByGroupSettingsItem(value as GroupSettingsItem), `groupSettingsItemEnum.${value}`));
   }
 
   public onRouterOutletActivate(value: any): void {

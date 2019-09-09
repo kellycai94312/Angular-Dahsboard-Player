@@ -130,10 +130,16 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(x => {
         this.unsubscribe();
       });
-    this._authorizationService.personSubject
+    this._authorizationService.person$
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(x => {
-          this._person = x;
+      .subscribe(value => {
+          this._person = value;
+          if (value) {
+            const myPageItem = navigation[0].children.find(x => x.id === 'myPage');
+            if (myPageItem) {
+              myPageItem.url = `/person/${value.id}/about-me`;
+            }
+          }
         }
       );
 

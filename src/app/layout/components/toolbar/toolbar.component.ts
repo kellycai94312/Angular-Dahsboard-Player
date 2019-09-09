@@ -13,6 +13,8 @@ import {FileClass} from '../../../data/remote/model/file/base/file-class';
 import {ImageType} from '../../../data/remote/model/file/image/image-type';
 import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
 import {Router} from '@angular/router';
+import {NotificationService} from '../../../shared/notification.service';
+import {NotificationApiService} from '../../../data/remote/rest-api/api/notification/notification-api.service';
 
 @Component({
   selector: 'toolbar',
@@ -30,6 +32,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   public person: Person;
   public personLogoUrl: string;
+  public notificationsNumber: number;
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -47,7 +50,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _translateService: TranslateService,
     private _authorizationService: AuthorizationService,
     private _participantRestApiService: ParticipantRestApiService,
-    private _router: Router
+    private _router: Router,
+    private _notificationApiService: NotificationApiService,
+    private _notificationService: NotificationService
   ) {
     // Set the defaults
     this.userStatusOptions = [
@@ -101,6 +106,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
           delete this.personLogoUrl;
         }
       });
+    this._notificationService.notification$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(value => {
+        this.notificationsNumber = value.unread;
+      });
   }
 
   // -----------------------------------------------------------------------------------------------------
@@ -111,6 +121,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
    * On init
    */
   ngOnInit(): void {
+    this._notificationApiService.getUnreadCount().subscribe(value => {
+      this.notificationsNumber = value;
+    });
     // Subscribe to the config changes
     this._fuseConfigService.config
       .pipe(takeUntil(this._unsubscribeAll))
@@ -151,14 +164,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   search(value): void {
     // Do your search here...
     console.log(value);
-  }
-
-  public async navigateToPersonProfile() {
-    // Reload children when on the same state /person/:id
-    if (this._router.url.indexOf('/person/') == 0) {
-      await this._router.navigate(['/person']);
-    }
-    await this._router.navigate(['/person', this._authorizationService.session.person.id]);
   }
 
   public async navigateToPersonSettings() {

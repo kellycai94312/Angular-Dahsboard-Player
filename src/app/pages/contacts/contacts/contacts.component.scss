@@ -1,0 +1,13 @@
+.item {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.selected-item {
+  color: #fff;
+  background: #039be5;
+}
+
+.disabled-item {
+  color: rgba(0, 0, 0, .54);
+}

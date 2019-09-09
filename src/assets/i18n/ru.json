@@ -878,5 +878,24 @@
   "pollTypeEnum": {
     "PUBLIC_OPINION": "Общественное мнение"
   },
-  "completedAPollPersonsParam": "Завершил(и) опрос {{count}} человек"
+  "completedAPollPersonsParam": "Завершил(и) опрос {{count}} человек",
+  "professionalProfile": "Профессиональный профиль",
+  "diary": "Записная книжка",
+  "notebook": "Блокнот",
+  "bookmarks": "Закладки",
+  "targetsAndGoals": "Цели и задачи",
+  "communities": "Сообщества",
+  "places": "Места",
+  "laborExchange": "Биржа труда",
+  "knowledgeBase": "База знаний",
+  "knowledgeCollections": "Коллекции знаний",
+  "shops": "Магазины",
+  "account": "Счет",
+  "storage": "Хранилище",
+  "contactItemEnum": {
+    "PERSONS": "Пользователи",
+    "GROUPS": "Сообщества",
+    "PLACES": "Места",
+    "EVENTS": "События"
+  }
 }

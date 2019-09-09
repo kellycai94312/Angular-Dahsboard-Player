@@ -7,6 +7,7 @@ import {Observable} from 'rxjs';
 import {PageContainer} from '../../../bean/page-container';
 import {IntegerWrapper} from '../../../bean/wrapper/integer-wrapper';
 import {DateWrapper} from '../../../bean/wrapper/date-wrapper';
+import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +23,8 @@ export class NotificationApiService {
     return this._apiService.getPageContainer(BaseNotification, this._basePath, query) as Observable<PageContainer<T>>;
   }
 
-  public getUnreadCount(): Observable<IntegerWrapper> {
-    return this._apiService.getValue(IntegerWrapper, `${this._basePath}/unread`);
+  public getUnreadCount(): Observable<number> {
+    return this._apiService.getValue(IntegerWrapper, `${this._basePath}/unread`).pipe(map(x => x.value));
   }
 
   public read(dateWrapper: DateWrapper): Observable<void> {
