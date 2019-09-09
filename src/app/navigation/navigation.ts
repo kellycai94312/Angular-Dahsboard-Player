@@ -9,35 +9,11 @@ export const navigation: FuseNavigation[] = [
     icon: 'apps',
     children: [
       {
-        id: 'dashboards',
-        title: 'Dashboards',
+        id: 'myPage',
         translate: 'myPage',
-        type: 'collapsable',
-        icon: 'dashboard',
-        children: [
-          {
-            id: 'news',
-            title: 'News',
-            translate: 'news',
-            type: 'item',
-            url: '/dashboard'
-          },
-          {
-            id: 'aboutMe',
-            title: 'About me',
-            translate: 'aboutMe',
-            type: 'item',
-            url: '/person'
-          },
-          {
-            id: 'professionalProfile',
-            title: 'professionalProfile',
-            translate: 'professionalProfile',
-            type: 'item',
-            url: '/professional-profile',
-            disabled: true
-          }
-        ]
+        type: 'item',
+        icon: 'person',
+        url: '/person'
       },
       {
         id: 'diary',

@@ -24,6 +24,12 @@
     </div>
 
     <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
+      <button mat-icon-button
+              routerLink="/notification">
+        <mat-icon matBadgeColor="accent"
+                  [matBadge]="notificationsNumber">notifications
+        </mat-icon>
+      </button>
 
       <button *ngIf="person"
               mat-button

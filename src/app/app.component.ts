@@ -132,15 +132,12 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     this._authorizationService.person$
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(x => {
-          this._person = x;
-          if (x) {
-            const dashboardsItem = navigation[0].children.find(x => x.id === 'dashboards');
-            if (dashboardsItem) {
-              const aboutMeItem = dashboardsItem.children.find(x => x.id === 'aboutMe');
-              if (aboutMeItem) {
-                aboutMeItem.url = `/person/${x.id}/about-me`;
-              }
+      .subscribe(value => {
+          this._person = value;
+          if (value) {
+            const myPageItem = navigation[0].children.find(x => x.id === 'myPage');
+            if (myPageItem) {
+              myPageItem.url = `/person/${value.id}/about-me`;
             }
           }
         }
