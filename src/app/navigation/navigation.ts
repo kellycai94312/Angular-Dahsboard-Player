@@ -53,6 +53,13 @@ export const navigation: FuseNavigation[] = [
             disabled: true
           },
           {
+            id: 'targetsAndGoals',
+            translate: 'targetsAndGoals',
+            type: 'item',
+            url: '/targetsAndGoals',
+            disabled: true
+          },
+          {
             id: 'bookmarks',
             translate: 'bookmarks',
             type: 'item',
@@ -63,21 +70,7 @@ export const navigation: FuseNavigation[] = [
             id: 'contacts',
             translate: 'contacts',
             type: 'item',
-            url: '/contacts',
-            disabled: true
-          },
-          {
-            id: 'targetsAndGoals',
-            translate: 'targetsAndGoals',
-            type: 'item',
-            url: '/targetsAndGoals',
-            disabled: true
-          }, {
-            id: 'places',
-            translate: 'places',
-            type: 'item',
-            url: '/places',
-            disabled: true
+            url: '/contact'
           }
         ]
       },

@@ -45,6 +45,11 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'contact',
+    loadChildren: './pages/contacts/contacts.module#ContactsModule',
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'conversation',
     loadChildren: './pages/conversation/base-conversation-page.module#BaseConversationPageModule',
     canActivate: [AuthGuard]

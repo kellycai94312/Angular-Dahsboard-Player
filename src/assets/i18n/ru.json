@@ -891,5 +891,11 @@
   "knowledgeCollections": "Коллекции знаний",
   "shops": "Магазины",
   "account": "Счет",
-  "storage": "Хранилище"
+  "storage": "Хранилище",
+  "contactItemEnum": {
+    "PERSONS": "Пользователи",
+    "GROUPS": "Сообщества",
+    "PLACES": "Места",
+    "EVENTS": "События"
+  }
 }

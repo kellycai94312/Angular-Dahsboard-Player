@@ -1,0 +1,5 @@
+<app-list-heading translationTitle="groups"
+                  (searchTextChange)="onSearchTextChange($event)"
+                  (itemDisplayChange)="onItemDisplayChange($event)"></app-list-heading>
+<app-groups-list [groupQuery]="groupQuery"
+                 [itemDisplay]="itemDisplay"></app-groups-list>

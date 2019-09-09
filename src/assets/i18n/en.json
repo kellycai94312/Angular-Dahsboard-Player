@@ -890,5 +890,11 @@
   "knowledgeCollections": "Knowledge collections",
   "shops": "Shops",
   "account": "Account",
-  "storage": "Storage"
+  "storage": "Storage",
+  "contactItemEnum": {
+    "PERSONS": "Persons",
+    "GROUPS": "Groups",
+    "PLACES": "Places",
+    "EVENTS": "Events"
+  }
 }
