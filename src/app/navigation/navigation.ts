@@ -72,12 +72,6 @@ export const navigation: FuseNavigation[] = [
             type: 'item',
             url: '/targetsAndGoals',
             disabled: true
-          },
-          {
-            id: 'communities',
-            translate: 'communities',
-            type: 'item',
-            url: '/group/my'
           }, {
             id: 'places',
             translate: 'places',
