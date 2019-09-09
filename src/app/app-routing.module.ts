@@ -58,6 +58,14 @@ const routes: Routes = [
     }
   },
   {
+    path: 'search',
+    loadChildren: './pages/search/search.module#SearchModule',
+    canActivate: [AuthGuard],
+    data: {
+      breadcrumb: {nameKey: 'search'} as BreadcrumbItem
+    }
+  },
+  {
     path: 'password',
     loadChildren: './pages/password-page/password-page.module#PasswordPageModule',
     canActivate: [AuthDenyGuard]

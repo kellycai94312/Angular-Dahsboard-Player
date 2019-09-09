@@ -6,7 +6,6 @@ const routes: Routes = [
   {
     path: '', component: BaseGroupPageComponent,
     children: [
-      {path: '', loadChildren: './groups-page/groups-page.module#GroupsPageModule'},
       {path: ':id', loadChildren: './group-page/group-page.module#GroupPageModule'}
     ]
   }

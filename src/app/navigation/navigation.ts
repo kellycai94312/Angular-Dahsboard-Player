@@ -90,10 +90,22 @@ export const navigation: FuseNavigation[] = [
       {
         id: 'search',
         translate: 'search',
-        type: 'item',
+        type: 'collapsable',
         icon: 'search',
-        url: '/search',
-        disabled: true
+        children: [
+          {
+            id: 'persons',
+            translate: 'persons.section',
+            type: 'item',
+            url: '/search/person'
+          },
+          {
+            id: 'groups',
+            translate: 'groups',
+            type: 'item',
+            url: '/search/group'
+          }
+        ]
       },
       {
         id: 'calendar',
