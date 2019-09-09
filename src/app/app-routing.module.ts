@@ -20,11 +20,6 @@ const routes: Routes = [
     loadChildren: './pages/sign-up/sign-up.module#SignUpModule'
   },
   {
-    path: 'dashboard',
-    loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
-    canActivate: [AuthGuard]
-  },
-  {
     path: 'event',
     loadChildren: './pages/events/events.module#EventsModule',
     canActivate: [AuthGuard]

@@ -8,7 +8,8 @@ const routes: Routes = [
     children: [
       {path: '', redirectTo: 'about-me', pathMatch: 'full'},
       {path: 'publication', loadChildren: './person-publications/person-publications.module#PersonPublicationsModule'},
-      {path: 'about-me', loadChildren: './about-me/about-me.module#AboutMeModule'}
+      {path: 'about-me', loadChildren: './about-me/about-me.module#AboutMeModule'},
+      {path: 'professional-profile', loadChildren: './professional-profile/professional-profile.module#ProfessionalProfileModule'}
     ]
   }
 ];

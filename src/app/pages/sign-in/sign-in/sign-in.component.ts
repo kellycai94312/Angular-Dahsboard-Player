@@ -76,7 +76,7 @@ export class SignInComponent implements OnInit, OnDestroy {
       const session = await this._authorizationService.logIn({email: this.emailNgxInput.control.value, password: this.passwordNgxInput.control.value});
       if (session) {
         if (session.person) {
-          await this._router.navigate(['/dashboard']);
+          await this._router.navigate([`/person/${session.person.id}`]);
         } else {
           await this._router.navigate(['/sign-up/person']);
         }

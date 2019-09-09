@@ -13,7 +13,7 @@ export class AuthDenyGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (this._authorizationService.session) {
       setTimeout(async () => {
-        await this._router.navigate(['/person']);
+        await this._router.navigate([`/person/${this._authorizationService.session.person.id}`]);
       });
       return false;
     }

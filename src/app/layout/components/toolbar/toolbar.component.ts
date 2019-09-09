@@ -166,14 +166,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     console.log(value);
   }
 
-  public async navigateToPersonProfile() {
-    // Reload children when on the same state /person/:id
-    if (this._router.url.indexOf('/person/') == 0) {
-      await this._router.navigate(['/person']);
-    }
-    await this._router.navigate(['/person', this._authorizationService.session.person.id]);
-  }
-
   public async navigateToPersonSettings() {
     await this._router.navigate(['/person', 'settings']);
   }
