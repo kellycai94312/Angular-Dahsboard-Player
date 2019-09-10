@@ -7,6 +7,8 @@ import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatIconModule} from '@angular/material';
 import {MessageContentItemModule} from '../message-content/message-content-item/message-content-item.module';
+import {UrlParserModule} from '../../../pipes/url-parser/url-parser.module';
+import {PollMessageContentItemModule} from '../message-content/poll-message-content-item/poll-message-content-item.module';
 
 // TODO: Refactoring
 @NgModule({
@@ -16,7 +18,9 @@ import {MessageContentItemModule} from '../message-content/message-content-item/
     FlexLayoutModule,
     NgxImageModule,
     MessageContentItemModule,
-    TranslateModule.forChild()
+    PollMessageContentItemModule,
+    TranslateModule.forChild(),
+    UrlParserModule
   ],
   declarations: [MessageItemComponent, PreviewMessageItemComponent],
   exports: [MessageItemComponent, PreviewMessageItemComponent]

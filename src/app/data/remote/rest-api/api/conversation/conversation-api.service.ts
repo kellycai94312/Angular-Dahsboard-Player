@@ -75,8 +75,8 @@ export class ConversationApiService {
 
   //region Participant
 
-  public getParticipants<T extends BaseConversation>(conversation: T, query?: ConversationQuery): Observable<PageContainer<Participant>> {
-    return this._apiService.getPageContainer(Participant, `${this._basePath}/${conversation.id}/participant`, query);
+  public getParticipants<T extends BaseConversation>(query?: ConversationQuery): Observable<PageContainer<Participant>> {
+    return this._apiService.getPageContainer(Participant, `${this._basePath}/participant`, query);
   }
 
   public updateParticipants<T extends BaseConversation>(conversation: T, persons: Person[]): Observable<Participant[]> {

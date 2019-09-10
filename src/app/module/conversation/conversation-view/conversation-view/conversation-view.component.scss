@@ -12,12 +12,21 @@
         .mat-form-field-infix {
           border: unset !important;
           border-top: unset !important;
+
+          textarea {
+            height: 22px !important;
+          }
         }
 
         .mat-form-field-underline {
           bottom: 0 !important;
         }
       }
+    }
+
+    .ngx-virtual-scroll-content {
+      min-height: unset !important;
+      max-height: unset !important;
     }
   }
 }
@@ -33,6 +42,11 @@ ngx-virtual-scroll {
   h5 {
     color: rgba(0, 0, 0, .54);
   }
+}
+
+.edit-label {
+  color: #039be5;
+  font-size: small;
 }
 
 // TODO: Remove it!

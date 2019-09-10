@@ -18,6 +18,7 @@ import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
     MatIconModule,
     MatButtonModule,
     MatDividerModule,
+    FlexLayoutModule,
     NgxInputModule,
     // TODO: Refactoring below!
 
@@ -29,7 +30,6 @@ import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
     MatToolbarModule,
     MatMenuModule,
     MatInputModule,
-    FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
     TranslateModule.forChild(),

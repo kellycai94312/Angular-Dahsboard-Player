@@ -31,14 +31,18 @@
                 (click)="onEditChat()">
           {{'settings' | translate}}
         </button>
-        <button *ngIf="selectedMessages.size()"
+        <button *ngIf="!selectionModel.isEmpty()"
                 mat-menu-item
                 (click)="onDeleteSelectedMessages()">
           {{'deleteSelectedMessages' | translate}}
         </button>
+        <button *ngIf="canEditMessage"
+                mat-menu-item
+                (click)="onEditMessage()">
+          {{'editMessage' | translate}}
+        </button>
         <button mat-menu-item
-                (click)="onToggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') |
-          translate}}
+                (click)="onToggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') | translate}}
         </button>
         <button mat-menu-item
                 (click)="onClearMessagesHistory()">{{'clearMessagesHistory' | translate}}
@@ -52,15 +56,15 @@
     </div>
   </div>
   <mat-divider></mat-divider>
-  <div fxLayout="grow"
+  <div fxFlex="grow"
        class="overflow-auto">
     <ngx-virtual-scroll class="px-1"
                         [getItems]="getItems"
                         [autoScroll]="true">
       <ng-template let-message>
-        <div (click)="toggleSelectMessage(message)"
-             class="py-1"
-             [ngClass]="{'selected': message.selected}">
+        <div class="py-1"
+             [ngClass]="{'selected': selectionModel.isSelected(message)}"
+             (click)="selectionModel.toggle(message)">
           <app-message-item [message]="message"
                             [person]="person"></app-message-item>
         </div>
@@ -69,36 +73,65 @@
   </div>
   <mat-divider></mat-divider>
   <div fxFlex="auto"
-       fxLayout="row"
-       fxLayoutAlign="start end"
+       fxLayout="column"
        fxLayoutGap="5px"
-       class="footer-content">
-    <div>
-      <button mat-icon-button
-              [matMenuTriggerFor]="attachingMenu">
-        <mat-icon>attach_file</mat-icon>
-      </button>
+       class="footer-content"
+       (keydown.enter)="onSendMessage()">
+    <div *ngIf="editedMessage"
+         fxLayout="row"
+         fxLayoutAlign="start start"
+         fxLayoutGap="5px">
+      <div>
+        <button mat-icon-button
+                color="accent"
+                [disableRipple]="true">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="grow"
+           fxLayout="column">
+        <label class="edit-label">{{'editMessage' | translate}}</label>
+        <div>{{editedMessage.content.content}}</div>
+      </div>
+      <div>
+        <button mat-icon-button
+                (click)="onCancelEditMessage()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="start end"
+         fxLayoutGap="5px">
+      <div>
+        <button mat-icon-button
+                [matMenuTriggerFor]="attachingMenu">
+          <mat-icon>attach_file</mat-icon>
+        </button>
 
-      <mat-menu #attachingMenu="matMenu">
-        <button mat-menu-item
-                (click)="onAttachPoll()">
-          {{'poll' | translate}}
+        <mat-menu #attachingMenu="matMenu">
+          <button mat-menu-item
+                  (click)="onAttachPoll()">
+            {{'poll' | translate}}
+          </button>
+          <button mat-menu-item
+                  [disabled]="true"
+                  (click)="onAttachEvent()">
+            {{'event' | translate}}
+          </button>
+        </mat-menu>
+      </div>
+      <div fxFlex="grow">
+        <new-ngx-input [data]="messageNgxInput"></new-ngx-input>
+      </div>
+      <div *ngIf="messageNgxInput">
+        <button mat-icon-button
+                color="primary"
+                [disabled]="!messageNgxInput.control?.value?.trim()"
+                (click)="onSendMessage()">
+          <mat-icon>send</mat-icon>
         </button>
-        <button mat-menu-item
-                (click)="onAttachEvent()">
-          {{'event' | translate}}
-        </button>
-      </mat-menu>
-    </div>
-    <div fxFlex="grow">
-      <new-ngx-input [data]="messageNgxInput"></new-ngx-input>
-    </div>
-    <div *ngIf="messageNgxInput">
-      <button mat-icon-button
-              color="primary"
-              [disabled]="!messageNgxInput.control.value">
-        <mat-icon>send</mat-icon>
-      </button>
+      </div>
     </div>
   </div>
 </div>

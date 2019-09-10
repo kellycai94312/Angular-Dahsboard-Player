@@ -896,5 +896,6 @@
     "GROUPS": "Groups",
     "PLACES": "Places",
     "EVENTS": "Events"
-  }
+  },
+  "executePoll": "Execute poll"
 }

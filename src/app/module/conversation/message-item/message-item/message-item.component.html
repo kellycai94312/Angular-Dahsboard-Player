@@ -14,6 +14,8 @@
     <div [ngSwitch]="message.content.discriminator">
       <app-message-content-item *ngSwitchCase="messageContentTypeClass.MESSAGE_CONTENT"
                                 [messageContent]="message.content"></app-message-content-item>
+      <app-poll-message-content-item *ngSwitchCase="messageContentTypeClass.POLL_MESSAGE_CONTENT"
+                                     [(data)]="message.content"></app-poll-message-content-item>
     </div>
     <div fxLayout="row"
          fxLayoutAlign="end center"
