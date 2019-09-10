@@ -3,7 +3,7 @@
 @mixin message-content-theme($color, $sub-color, $background-color) {
   background: $background-color;
   border-radius: 6px;
-  padding: 0 4px;
+  padding: 2px 4px;
   color: $color;
 
   ::ng-deep {

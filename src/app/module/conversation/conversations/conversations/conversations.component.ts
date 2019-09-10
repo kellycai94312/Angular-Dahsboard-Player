@@ -2,15 +2,15 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} fr
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ConversationService} from '../../../../shared/conversation.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ConversationWrapper} from '../../../../data/local/conversation-wrapper';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
+import {Chat} from '../../../../data/remote/model/chat/conversation';
 import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
 import {takeWhile} from 'rxjs/operators';
+import {ConversationApiService} from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
 
 @Component({
   selector: 'app-conversations',
@@ -36,7 +36,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   public query = new PageQuery();
   private _notDestroyed = true;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
+  constructor(private _conversationApiService: ConversationApiService,
               private _conversationService: ConversationService,
               private _conversationModalService: ConversationModalService,
               private _appHelper: AppHelper) {
@@ -127,7 +127,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
-    const pageContainer = await this._participantRestApiService.getActiveMessages(query);
+    const pageContainer = await this._conversationApiService.getActiveMessages(query).toPromise();
     return this._appHelper.pageContainerConverter(pageContainer, messageWrapper => new ConversationWrapper(messageWrapper));
   };
 

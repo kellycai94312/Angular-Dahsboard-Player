@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {MessageContentType} from '../../../../data/remote/model/chat/message/base';
 import {Message, MessageContent} from '../../../../data/remote/model/chat/message';
@@ -11,8 +11,7 @@ import {TranslateService} from '@ngx-translate/core';
 @Component({
   selector: 'app-message-item',
   templateUrl: './message-item.component.html',
-  styleUrls: ['./message-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./message-item.component.scss']
 })
 export class MessageItemComponent {
 

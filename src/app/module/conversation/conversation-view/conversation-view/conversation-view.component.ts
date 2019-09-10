@@ -180,7 +180,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   }
 
   public get conversationName(): string {
-    if (this.recipient && this.data instanceof Dialogue && this.recipient.person) {
+    if (this.data instanceof Dialogue && this.recipient && this.recipient.person) {
       return this._appHelper.getPersonFullName(this.recipient.person);
     }
     return (this.data as Chat).name;
@@ -193,6 +193,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
 
     this.messageNgxInput.type = NgxInputType.TEXTAREA;
     this.messageNgxInput.textareaAutosize = true;
+    delete this.messageNgxInput.getErrorMessage;
   }
 
   protected async initializeComponent(data: BaseConversation): Promise<boolean> {
@@ -200,7 +201,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     if (result) {
       return await this._appHelper.tryLoad(async () => {
         this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
-
         this._messageToastrService.clearToasts(data.id);
         this.enabled = await this._conversationApiService.getNotificationsStatus(this.data).toPromise();
         switch (data.discriminator) {
@@ -214,7 +214,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
           default:
             this.recipient = new Participant();
         }
-
 
         await this.ngxVirtualScrollComponent.reset();
       });
@@ -250,11 +249,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     }
     return pageContainer;
   };
-
-
-  public addNewRow() {
-    // TODO: Add new row
-  }
 
   public onTyping() {
     clearTimeout(this._typingTimeout);

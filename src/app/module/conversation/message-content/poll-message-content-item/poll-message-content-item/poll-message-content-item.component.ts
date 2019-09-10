@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import {BaseComponent} from '../../../../../data/local/component/base/base-component';
 import {PollMessageContent} from '../../../../../data/remote/model/chat/message';
 import {Poll} from '../../../../../data/remote/model/poll/poll';
@@ -7,8 +7,7 @@ import {PollWindowService} from '../../../../../services/windows/poll-window/pol
 @Component({
   selector: 'app-poll-message-content-item',
   templateUrl: './poll-message-content-item.component.html',
-  styleUrls: ['./poll-message-content-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./poll-message-content-item.component.scss']
 })
 export class PollMessageContentItemComponent extends BaseComponent <PollMessageContent> {
   constructor(private _pollWindowService: PollWindowService) {

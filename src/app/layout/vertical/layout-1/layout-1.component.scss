@@ -67,4 +67,5 @@ app-conversation-view {
 
 .conversation-content {
   box-shadow: -1px 0 2px 0 rgba(0, 0, 0, .25);
+  min-height: unset !important;
 }

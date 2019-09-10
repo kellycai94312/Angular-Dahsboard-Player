@@ -1,12 +1,3 @@
-<div *ngIf="data"
-     fxLayout="column"
-     fxLayoutGap="10px">
-  <h6>{{poll.name}}</h6>
-  <p *ngIf="poll.description">{{poll.description}}</p>
-  <div fxLayout="row"
-       fxLayoutAlign="end end">
-    <button mat-raised-button
-            color="primary"
-            (click)="onExecutePoll(); $event.stopPropagation()">{{'poll' | translate}}</button>
-  </div>
-</div>
+<button *ngIf="data"
+        mat-raised-button
+        (click)="onExecutePoll(); $event.stopPropagation()">{{'poll' | translate}} - {{poll.name}}</button>
