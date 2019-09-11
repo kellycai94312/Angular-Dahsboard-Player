@@ -4,6 +4,7 @@ import {debounceTime, takeWhile} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {MenuItem} from '../../item-line/model/menu-item';
 import {ItemDisplay} from '../../item-list/model/item-display';
+import {ListHeadingService} from '../services/list-heading.service';
 
 @Component({
   selector: 'app-list-heading',
@@ -17,6 +18,9 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
 
   @Input()
   public actions: MenuItem[] = [];
+
+  @Input()
+  public rightActions: MenuItem[] = [];
 
   @Input()
   public canSearch = true;
@@ -37,6 +41,9 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
   public itemDisplayAction: MenuItem;
   private _notDestroyed = true;
 
+  constructor(private _listHeadingService: ListHeadingService) {
+  }
+
   public ngOnInit(): void {
     const viewListIconName = 'view_list';
     const viewModuleIconName = 'view_module';
@@ -52,6 +59,7 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
           this.itemDisplay = ItemDisplay.LIST;
         }
         this.itemDisplayChange.emit(this.itemDisplay);
+        this._listHeadingService.updateItemDisplay(this.itemDisplay);
       }
     };
 
@@ -62,11 +70,12 @@ export class ListHeadingComponent implements OnInit, OnDestroy {
       )
       .subscribe(async (value) => {
         this.searchTextChange.emit(value);
+        this._listHeadingService.updateSearch(value);
       });
   }
 
   public ngOnDestroy(): void {
-    this._notDestroyed = false;
+    delete this._notDestroyed;
   }
 
 }

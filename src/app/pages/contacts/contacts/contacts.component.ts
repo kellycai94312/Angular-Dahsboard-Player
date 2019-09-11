@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 import {ContactItem} from '../model';
+import {MenuItem} from '../../../module/common/item-line/model/menu-item';
 
 @Component({
   selector: 'app-contacts',
@@ -10,9 +11,20 @@ import {ContactItem} from '../model';
 export class ContactsComponent implements OnInit {
 
   public items: NameWrapper<string>[] = [];
+  public visibleMenu: boolean;
+  public actions: MenuItem[];
 
   public ngOnInit() {
     this.items = Object.keys(ContactItem).map(value => new NameWrapper(this._getPathByContactItem(value as ContactItem), `contactItemEnum.${value}`));
+
+    this.actions = [
+      {
+        iconName: 'menu',
+        action: item => {
+          this.visibleMenu = !this.visibleMenu;
+        }
+      }
+    ];
   }
 
   private _getPathByContactItem(value: ContactItem) {

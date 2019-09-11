@@ -5,9 +5,11 @@ import {TranslateModule} from '@ngx-translate/core';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonModule, MatIconModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {ListHeadingService} from './services/list-heading.service';
 
 @NgModule({
   declarations: [ListHeadingComponent],
+  providers: [ListHeadingService],
   exports: [ListHeadingComponent],
   imports: [
     CommonModule,

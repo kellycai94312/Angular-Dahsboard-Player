@@ -2,17 +2,17 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ContactsRoutingModule} from './contacts-routing.module';
 import {ContactsComponent} from './contacts/contacts.component';
-import {MatCardModule} from '@angular/material/card';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
+import {ListHeadingModule} from '../../module/common/list-heading/list-heading.module';
 
 @NgModule({
   declarations: [ContactsComponent],
   imports: [
     CommonModule,
     ContactsRoutingModule,
-    MatCardModule,
     FlexLayoutModule,
+    ListHeadingModule,
     TranslateModule.forChild()
   ]
 })
