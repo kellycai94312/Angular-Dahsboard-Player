@@ -1,0 +1,3 @@
+<button *ngIf="data"
+        mat-raised-button
+        (click)="onExecutePoll(); $event.stopPropagation()">{{'poll' | translate}} <span *ngIf="data.appliedPoll">- {{data.appliedPoll.pollVersion.name}}</span></button>

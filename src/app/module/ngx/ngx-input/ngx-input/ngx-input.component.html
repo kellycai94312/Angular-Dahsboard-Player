@@ -13,6 +13,7 @@
     <textarea matInput
               autocomplete="off"
               placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
+              [matTextareaAutosize]="data.textareaAutosize"
               [required]="data.required"
               [rows]="data.rows"
               [formControl]="data.control"></textarea>

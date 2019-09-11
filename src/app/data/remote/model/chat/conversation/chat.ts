@@ -1,11 +1,17 @@
-import {BaseConversation} from './base/base-conversation';
-import {BaseConversationType} from './base/base-conversation-type';
+import {BaseConversation, ConversationType} from './base';
+import {BaseEvent} from '../../event/base/base-event';
+import {Type} from 'class-transformer';
 
 export class Chat extends BaseConversation {
+
   public name: string;
+
+  @Type(() => BaseEvent)
+  public event: BaseEvent;
 
   constructor() {
     super();
-    this.discriminator = BaseConversationType.CHAT;
+    this.discriminator = ConversationType.CHAT;
   }
+
 }

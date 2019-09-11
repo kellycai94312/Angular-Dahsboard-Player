@@ -1,6 +1,5 @@
-import {BaseMessageContent} from './base/base-message-content';
+import {BaseMessageContent, MessageContentType} from './base';
 import {MessageContentAppliedPoll} from '../../poll/applied/message-content-applied-poll';
-import {BaseMessageContentType} from './base/base-message-content-type';
 import {Type} from 'class-transformer';
 
 export class PollMessageContent extends BaseMessageContent {
@@ -10,7 +9,7 @@ export class PollMessageContent extends BaseMessageContent {
 
   constructor() {
     super();
-    this.discriminator = BaseMessageContentType.POLL_MESSAGE_CONTENT;
+    this.discriminator = MessageContentType.POLL_MESSAGE_CONTENT;
   }
 
 }

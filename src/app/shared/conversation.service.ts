@@ -4,11 +4,13 @@ import {ParticipantStompService} from '../data/remote/web-socket/participant-sto
 import {Subject} from 'rxjs';
 import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
 import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
-import {Participant} from '../data/remote/model/chat/participant';
-import {Message} from '../data/remote/model/chat/message/message';
+import {Participant} from '../data/remote/model/chat';
+import {Message} from '../data/remote/model/chat/message';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ConversationService implements OnDestroy {
 
   public readonly messageCreateHandle = new Subject<MessageWrapper>();

@@ -447,7 +447,7 @@ export class AppHelper {
 
   //#endregion
 
-  public getPersonFullName(person: Person) {
+  public getPersonFullName(person: Person): string {
     return `${person.lastName} ${person.firstName}`;
   }
 

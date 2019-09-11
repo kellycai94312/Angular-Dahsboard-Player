@@ -1,8 +1,23 @@
 import {IdentifiedObject} from '../../../../base/identified-object';
-import {BaseMessageContentType} from './base-message-content-type';
-import {BaseConversation} from '../../conversation/base/base-conversation';
+import {MessageContentType} from './message-content-type';
+import {BaseConversation, ConversationType} from '../../conversation/base';
+import {Type} from 'class-transformer';
+import {Chat, Dialogue} from '../../conversation';
 
 export class BaseMessageContent extends IdentifiedObject {
-  discriminator: BaseMessageContentType;
-  baseConversation: BaseConversation;
+
+  public discriminator: MessageContentType;
+
+  @Type(() => BaseConversation, {
+    discriminator: {
+      property: 'discriminator',
+      subTypes: [
+        {value: Chat, name: ConversationType.CHAT},
+        {value: Dialogue, name: ConversationType.DIALOGUE},
+      ],
+    },
+    keepDiscriminatorProperty: true
+  })
+  public baseConversation: BaseConversation;
+
 }

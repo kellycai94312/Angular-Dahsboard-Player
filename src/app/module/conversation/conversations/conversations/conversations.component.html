@@ -1,22 +1,21 @@
-<div *ngIf="visibleHeader"
-     class="d-flex p-2">
-  <div class="w-100">
-    <ngx-input placeholderKey="search"
-               [debounceTime]="propertyConstantClass.searchDebounceTime"
-               (valueChange)="onSearchTextChanged($event)"></ngx-input>
+<div fxLayout="column">
+  <div *ngIf="visibleHeader"
+       fxLayout="row"
+       fxLayoutGap="5px"
+       class="header">
+    <new-ngx-input [data]="searchNgxInput"></new-ngx-input>
+    <button mat-icon-button
+            (click)="onAddConversation()">
+      <mat-icon>add</mat-icon>
+    </button>
   </div>
-  <div class="ml-2">
-    <ngx-button nameKey="createChat"
-                [click]="onCreateChat"></ngx-button>
-  </div>
+  <ngx-virtual-scroll [getItems]="getItems"
+                      [query]="query"
+                      [windowScroll]="true">
+    <ng-template let-item>
+      <app-conversation-item [data]="item"
+                             [preview]="preview"
+                             (click)="onSelectedItem(item)"></app-conversation-item>
+    </ng-template>
+  </ngx-virtual-scroll>
 </div>
-
-<ngx-virtual-scroll [getItems]="getItems"
-                    [(query)]="query"
-                    [windowScroll]="true">
-  <ng-template let-item>
-    <app-conversation-item (click)="onSelectedItem(item)"
-                           [preview]="preview"
-                           [data]="item"></app-conversation-item>
-  </ng-template>
-</ngx-virtual-scroll>

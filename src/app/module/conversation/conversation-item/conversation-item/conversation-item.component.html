@@ -1,56 +1,39 @@
 <div *ngIf="data"
-     class="p-2"
-     [ngClass]="{'unread': data.messageWrapper.unread, 'preview': preview}">
-  <div fxFlex>
-    <div class="logo"
-         fxFlex="0 1 auto"
-         fxFlexAlign="start">
-      <ngx-image [object]="conversationImage"
-                 [type]="imageTypeClass.LOGO"
-                 [fileClass]="conversationImageClazz"
-                 [width]="40"
-                 [height]="40"
-                 [cropped]="true"></ngx-image>
-      <div *ngIf="preview && data.messageWrapper.unread"
-           class="unread-message-count accent">{{data.messageWrapper.unread}}</div>
+     fxLayout="row"
+     fxLayoutGap="5px"
+     fxLayoutAlign="start center"
+     class="content">
+  <ngx-image [object]="conversationImage"
+             [type]="imageTypeClass.LOGO"
+             [fileClass]="conversationImageClazz"
+             [width]="40"
+             [height]="40"
+             [cropped]="true"></ngx-image>
+  <div *ngIf="!preview"
+       fxFlex="grow"
+       fxLayout="column"
+       class="overflow-auto">
+    <div fxLayout="row"
+         fxLayoutGap="4px"
+         fxLayoutAlign="start center">
+      <div fxFlex="grow"
+           class="text-truncate conversation-head">
+        {{conversationName}}
+      </div>
+      <mat-icon class="message-state-icon">{{messageStateIcon}}</mat-icon>
+      <div class="message-date"
+           fxLayoutAlign="start center">
+        {{messageStateText}}
+      </div>
     </div>
-    <div *ngIf="!preview"
-         class="content ml-2"
-         fxLayout="row"
-         fxFlex>
-      <div fxFlex
-           fxLayout="column"
-           fxLayoutAlign="center start">
-        <div class="conversation-name text-truncate">{{conversationName}}</div>
-
-        <div class="message">
-          <div *ngIf="data.typingParticipants.length; else messageContent">
-            <div *ngIf="data.typingParticipants.length == 1; else multiTyping"
-                 class="text-lowercase">
-              {{data.typingParticipants[0].person.firstName}} {{'isTypingAMessage' | translate}}
-            </div>
-            <ng-template #multiTyping>
-              <div *ngFor="let item of data.typingParticipants">
-                {{item.person.firstName}},
-              </div>
-              <span class="text-lowercase"> {{'areTypingMessages' | translate}}</span>
-            </ng-template>
-          </div>
-          <ng-template #messageContent>
-            <app-preview-message-item [message]="data.messageWrapper.message"></app-preview-message-item>
-          </ng-template>
-        </div>
+    <div fxLayout="row"
+         fxLayoutGap="5px">
+      <div fxFlex="grow"
+           class="text-truncate">
+        <span *ngIf="messageFrom">{{messageFrom}}: </span>{{messageContent}}
       </div>
-
-      <div class="ml-2"
-           fxLayout="column"
-           fxLayoutAlign="start end">
-        <div class="message-date">
-          {{updated ? (('edited' | translate) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat)) : (data.messageWrapper.message.created | date: propertyConstantClass.dateTimeFormat)}}
-        </div>
-        <div *ngIf="data.messageWrapper.unread"
-             class="mt-2 unread-message-count accent">{{data.messageWrapper.unread}}</div>
-      </div>
+      <div *ngIf="data.messageWrapper.unread"
+           class="unread-number">{{data.messageWrapper.unread}}</div>
     </div>
   </div>
 </div>

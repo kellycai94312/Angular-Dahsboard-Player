@@ -6,6 +6,7 @@ import {map} from 'rxjs/operators';
 import {plainToClass, plainToClassFromExist} from 'class-transformer';
 import {PageContainer} from '../../../bean/page-container';
 import {IdentifiedObject} from '../../../base/identified-object';
+import {DiscriminatorPageContainer} from '../../../bean/discriminator-page-container';
 
 @Injectable({
   providedIn: 'root'
@@ -66,8 +67,16 @@ export class ApiService {
 
   public getPageContainer<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<PageContainer<T>> {
     return this.get(url, this.getHttpParamsFromObject(this._utilService.clone(query, {excludeNullable: true}))).pipe(
-      map(x => plainToClassFromExist(new PageContainer<T>(classObj), x) as any)
-    );
+      map((value: PageContainer<T>) => {
+          let obj = new PageContainer<T>(classObj);
+          if (value.list) {
+            if ((value.list[0] as any).discriminator) {
+              obj = new DiscriminatorPageContainer<T>(classObj) as any;
+            }
+          }
+          return plainToClassFromExist(obj, value) as any;
+        }
+      ));
   }
 
   public createValue<T>(classObj: Type<T>, url: string, value?: T | any): Observable<T | T[]> {

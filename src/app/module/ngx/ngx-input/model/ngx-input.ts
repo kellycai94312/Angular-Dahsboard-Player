@@ -19,4 +19,5 @@ export class NgxInput {
   public required?: boolean;
   public getErrorMessage?: (ngxInput: NgxInput) => Observable<string>;
   public ngxInputSuffix?: NgxInputSuffix;
+  public textareaAutosize?: boolean;
 }

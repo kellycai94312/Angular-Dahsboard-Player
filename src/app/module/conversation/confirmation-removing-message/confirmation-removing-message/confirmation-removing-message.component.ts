@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Message} from '../../../../data/remote/model/chat/message/message';
 import {AuthorizationService} from '../../../../shared/authorization.service';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ListRequest} from '../../../../data/remote/request/list-request';
@@ -34,7 +34,7 @@ export class ConfirmationRemovingMessageComponent implements OnInit {
   async ngOnInit() {
     const person = await this._appHelper.toPromise(this._authorizationService.personSubject);
     for (const message of this.messages) {
-      if (message.sender.person.id != person.id || message.read || message.content.discriminator === BaseMessageContentType.SYSTEM_MESSAGE_CONTENT) {
+      if (message.sender.person.id != person.id || message.read || message.content.discriminator === MessageContentType.SYSTEM_MESSAGE_CONTENT) {
         return;
       }
     }

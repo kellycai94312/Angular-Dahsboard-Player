@@ -1,72 +1,31 @@
-<div *ngIf="messageViewModel">
-
-  <div [ngSwitch]="message.content.discriminator">
-
-    <div *ngSwitchCase="baseMessageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
-         class="message-row system"
-         [ngClass]="{'selected' : message.selected}">
-      <div class="bubble">
-        <div class="message d-flex flex-column">
-          <div *ngIf="messageViewModel.body"
-               [innerHTML]="messageViewModel.body | urlParser | async"
-               (click)="onDataClick($event)">
-          </div>
-          <div
-            class="time secondary-text">{{message.content.created | date: propertyConstantClass.dateTimeFormat}}</div>
-        </div>
-      </div>
+<div *ngIf="message && person"
+     fxLayout="{{!isSystemMessage && myMessage ? 'row-reverse' : 'row'}}"
+     fxLayoutGap="5px">
+  <ngx-image *ngIf="!isSystemMessage && !(myMessage || isDialogue)"
+             [object]="message.sender.person"
+             [type]="imageTypeClass.LOGO"
+             [fileClass]="fileClassClass.PERSON"
+             [width]="40"
+             [height]="40"
+             [cropped]="true"></ngx-image>
+  <div fxFlex="initial"
+       fxLayout="column"
+       [ngClass]="!isSystemMessage && myMessage ? 'my-message-content' : 'message-content'">
+    <div [ngSwitch]="message.content.discriminator">
+      <app-message-content-item *ngSwitchCase="messageContentTypeClass.MESSAGE_CONTENT"
+                                [messageContent]="message.content"></app-message-content-item>
+      <app-system-message-content-item *ngSwitchCase="messageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
+                                       [(data)]="message"></app-system-message-content-item>
+      <app-poll-message-content-item *ngSwitchCase="messageContentTypeClass.POLL_MESSAGE_CONTENT"
+                                     [(data)]="message.content"></app-poll-message-content-item>
     </div>
-
-    <div *ngSwitchCase="baseMessageContentTypeClass.MESSAGE_CONTENT"
-         class="w-100">
-      <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
+    <div *ngIf="!isSystemMessage"
+         fxLayout="row"
+         fxLayoutAlign="end center"
+         fxLayoutGap="5px"
+         class="message-sub-content">
+      <div class="subtext">{{messageStateText}}</div>
+      <mat-icon>{{messageStateIcon}}</mat-icon>
     </div>
-
-    <div *ngSwitchCase="baseMessageContentTypeClass.EVENT_MESSAGE_CONTENT"
-         class="w-100">
-      <ng-container [ngTemplateOutlet]="messageContent"></ng-container>
-    </div>
-
   </div>
-
 </div>
-
-<ng-template #messageContent>
-
-  <div class="message-row" *ngIf="person"
-       [ngClass]="{'me': message.sender.person.id === person.id,
-                   'contact': message.sender.person.id !== person.id,
-                   'selected': message.selected}">
-
-    <ngx-image *ngIf="message.sender.person.id != person.id"
-               [object]="message.sender.person"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.PERSON"
-               [width]="40"
-               [height]="40"
-               [cropped]="true"></ngx-image>
-
-    <div class="bubble">
-      <div class="message d-flex flex-column">
-        <p
-          *ngIf="message.content.baseConversation.discriminator === baseConversationTypeClass.CHAT && message.sender.person.id !== person.id">
-          {{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
-        <pre [style.width]="'inherit'"
-             [innerHTML]="messageViewModel.body | urlParser: {'previewImage': true}  | async"
-             (click)="onDataClick($event)"></pre>
-      </div>
-      <div
-        class="time secondary-text">{{updated ? (('edited' | translate) + ' ' + (updated | date: propertyConstantClass.dateTimeFormat)) : (message.content.created | date: propertyConstantClass.dateTimeFormat)}}</div>
-      <div *ngIf="message.sender.person.id == person.id">
-        <i class="fa fa-check"
-           *ngIf="(!message.read && !message.sender.person && !person && message.sender.person.id == person.id) || !message.read; else readMessage"></i>
-        <ng-template #readMessage>
-          <svg-icon src="/assets/img/check-double-solid.svg"
-                    [svgStyle]="{'width.px': 14}"></svg-icon>
-        </ng-template>
-      </div>
-    </div>
-
-  </div>
-
-</ng-template>

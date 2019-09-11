@@ -1,132 +1,243 @@
 <div *ngIf="data"
-     class="conversation-view {{class}}"
-     fxFlex
+     fxFlexFill
      fxLayout="column">
-
-  <mat-toolbar class="conversation-header">
-
-    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">
-
-      <div fxLayout="row" fxLayoutAlign="start center">
-
-        <!-- RESPONSIVE CHATS BUTTON-->
-        <button mat-icon-button
-                fxHide.gt-md
-                class="responsive-chats-button mr-16"
-                aria-label="chats button"
-                (click)="onToggleConversations()">
-          <mat-icon>chat</mat-icon>
-        </button>
-        <!-- / RESPONSIVE CHATS BUTTON-->
-
-        <!-- CHAT CONTACT-->
-        <div class="chat-contact"
-             fxLayout="row"
-             fxLayoutAlign="start center"
-             fuseMatSidenavToggler="chat-right-sidenav" *ngIf="recipient">
-          <div *ngIf="data.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person"
-               class="avatar-wrapper">
-            <ngx-image #conversationLogo
-                       class="avatar"
-                       [object]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person : data"
-                       [type]="imageTypeClass.LOGO"
-                       [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
-                       [width]="40"
-                       [height]="40"></ngx-image>
-          </div>
-
-          <div class="chat-contact-name">{{conversationName}}</div>
-
-        </div>
-        <!-- / CHAT CONTACT-->
-      </div>
-
-      <div>
-        <button mat-icon-button [matMenuTriggerFor]="contactMenu" aria-label="more">
-          <mat-icon>more_vert</mat-icon>
-        </button>
-
-        <mat-menu #contactMenu="matMenu">
-          <button mat-menu-item
-                  *ngIf="data.discriminator === baseConversationTypeClass.CHAT && person && data.owner.id == person.user.id"
-                  (click)="editChat()">
-            {{'settings' | translate}}
-          </button>
-          <button *ngIf="selectedMessages.size()"
-                  mat-menu-item
-                  (click)="deleteSelectedMessages()">
-            {{'deleteSelectedMessages' | translate}}
-          </button>
-          <button mat-menu-item
-                  (click)="toggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') |
-            translate}}
-          </button>
-          <button mat-menu-item (click)="clearMessagesHistory()">{{'clearMessagesHistory' | translate}}
-          </button>
-          <button mat-menu-item (click)="quitChat()"
-                  *ngIf="data.discriminator == 'CHAT' && person && data.owner.id != person.user.id">
-            {{'quitChat' | translate}}
-          </button>
-        </mat-menu>
-      </div>
-
+  <div fxLayout="row"
+       fxLayoutGap="5px"
+       fxLayoutAlign="start center"
+       class="header-content">
+    <button mat-icon-button
+            fxHide.gt-md
+            (click)="onToggleConversations()">
+      <mat-icon>chat</mat-icon>
+    </button>
+    <div *ngIf="recipient && (data.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person)">
+      <ngx-image #conversationLogo
+                 [object]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person : data"
+                 [type]="imageTypeClass.LOGO"
+                 [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"
+                 [width]="40"
+                 [height]="40"></ngx-image>
     </div>
-  </mat-toolbar>
+    <h5 fxFlex="grow">{{conversationName}}</h5>
+    <div>
+      <button mat-icon-button
+              [matMenuTriggerFor]="conversationMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
 
-  <div class="conversation-content"
-       fxFlex="1 1 auto">
-    <ngx-virtual-scroll [getItems]="getItems"
+      <mat-menu #conversationMenu="matMenu">
+        <button *ngIf="canEditChat"
+                mat-menu-item
+                (click)="onEditChat()">
+          {{'settings' | translate}}
+        </button>
+        <button *ngIf="!selectionModel.isEmpty()"
+                mat-menu-item
+                (click)="onDeleteSelectedMessages()">
+          {{'deleteSelectedMessages' | translate}}
+        </button>
+        <button *ngIf="canEditMessage"
+                mat-menu-item
+                (click)="onEditMessage()">
+          {{'editMessage' | translate}}
+        </button>
+        <button mat-menu-item
+                (click)="onToggleNotifications()">{{(enabled ? 'disableNotifications' : 'enableNotifications') | translate}}
+        </button>
+        <button mat-menu-item
+                (click)="onClearMessagesHistory()">{{'clearMessagesHistory' | translate}}
+        </button>
+        <button *ngIf="canQuitChat"
+                mat-menu-item
+                (click)="onQuitChat()">
+          {{'quitChat' | translate}}
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+  <div fxFlex="grow"
+       class="overflow-auto">
+    <ngx-virtual-scroll class="px-1"
+                        [getItems]="getItems"
                         [autoScroll]="true">
       <ng-template let-message>
-        <div (click)="toggleSelectMessage(message)"
-             [ngClass]="{'selected': message.selected}">
-          <app-message-item [message]="message"></app-message-item>
+        <div class="py-1"
+             [ngClass]="{'selected': selectionModel.isSelected(message), 'system-message-position': isSystemMessage(message)}"
+             (click)="selectionModel.toggle(message)">
+          <app-message-item [message]="message"
+                            [person]="person"></app-message-item>
         </div>
       </ng-template>
     </ngx-virtual-scroll>
   </div>
-
-  <div class="conversation-footer"
-       fxFlex="0 0 auto"
-       fxLayout="column">
-    <emoji-mart *ngIf="visibleEmojiPicker"
-                (emojiClick)="onAddEmoji($event)"
-                set="emojione"></emoji-mart>
-
-    <div class="reply-form"
-         fxFlex="0 0 auto"
+  <mat-divider></mat-divider>
+  <div fxFlex="initial"
+       fxLayout="column"
+       fxLayoutGap="5px"
+       class="footer-content"
+       (keydown.enter)="onSendMessage()">
+    <div *ngIf="editedMessage"
          fxLayout="row"
-         fxLayoutAlign="center center">
-
-      <form #replyForm="ngForm"
-            (ngSubmit)="sendMessage()"
-            (keydown.enter)="sendMessage()"
-            fxFlex fxLayout="row"
-            fxLayoutAlign="start center">
-        <button class="attach-file-button"
-                mat-icon-button
-                type="button"
-                (click)="onAttachFile()">
-          <mat-icon class="secondary-text">attach_file</mat-icon>
+         fxLayoutAlign="start start"
+         fxLayoutGap="5px">
+      <div>
+        <button mat-icon-button
+                color="accent"
+                [disableRipple]="true">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+      <div fxFlex="grow"
+           fxLayout="column"
+           class="overflow-auto">
+        <label class="edit-label">{{'editMessage' | translate}}</label>
+        <p class="text-truncate">{{editedMessage.content.content}}</p>
+      </div>
+      <div>
+        <button mat-icon-button
+                (click)="onCancelEditMessage()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutAlign="start end"
+         fxLayoutGap="5px">
+      <div>
+        <button mat-icon-button
+                [matMenuTriggerFor]="attachingMenu">
+          <mat-icon>attach_file</mat-icon>
         </button>
 
-        <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">
-          <textarea matInput placeholder="{{'writeMessage' | translate}}"
-                    [(ngModel)]="messageContent.content" name="message" [rows]="1"
-                    [matAutosizeMaxRows]="10"
-                    [matTextareaAutosize]="true" (input)="onTyping()"></textarea>
-        </mat-form-field>
-
-        <button class="add-emoji-button"
-                mat-icon-button
-                type="button"
-                (click)="onToggleEmojiPicker()">
-          <mat-icon class="secondary-text">insert_emoticon</mat-icon>
+        <mat-menu #attachingMenu="matMenu">
+          <button mat-menu-item
+                  (click)="onAttachPoll()">
+            {{'poll' | translate}}
+          </button>
+          <button mat-menu-item
+                  [disabled]="true"
+                  (click)="onAttachEvent()">
+            {{'event' | translate}}
+          </button>
+        </mat-menu>
+      </div>
+      <div fxFlex="grow">
+        <new-ngx-input [data]="messageNgxInput"></new-ngx-input>
+      </div>
+      <div *ngIf="messageNgxInput">
+        <button mat-icon-button
+                color="primary"
+                [disabled]="!messageNgxInput.control?.value?.trim()"
+                (click)="onSendMessage()">
+          <mat-icon>send</mat-icon>
         </button>
-        <button class="send-message-button" mat-icon-button type="submit">
-          <mat-icon class="secondary-text">send</mat-icon>
-        </button>
-      </form>
+      </div>
     </div>
   </div>
 </div>
+
+<!--TODO: Remove it-->
+<!--<div *ngIf="data"-->
+<!--     class="conversation-view {{class}}"-->
+<!--     fxFlex-->
+<!--     fxLayout="column">-->
+
+<!--  <mat-toolbar class="conversation-header">-->
+
+<!--    <div fxFlex fxLayout="row" fxLayoutAlign="space-between center">-->
+
+<!--      <div fxLayout="row" fxLayoutAlign="start center">-->
+
+<!--        &lt;!&ndash; RESPONSIVE CHATS BUTTON&ndash;&gt;-->
+<!--        <button mat-icon-button-->
+<!--                fxHide.gt-md-->
+<!--                class="responsive-chats-button mr-16"-->
+<!--                aria-label="chats button"-->
+<!--                (click)="onToggleConversations()">-->
+<!--          <mat-icon>chat</mat-icon>-->
+<!--        </button>-->
+<!--        &lt;!&ndash; / RESPONSIVE CHATS BUTTON&ndash;&gt;-->
+
+<!--        &lt;!&ndash; CHAT CONTACT&ndash;&gt;-->
+<!--        <div class="chat-contact"-->
+<!--             fxLayout="row"-->
+<!--             fxLayoutAlign="start center"-->
+<!--             fuseMatSidenavToggler="chat-right-sidenav" *ngIf="recipient">-->
+<!--          <div *ngIf="data.discriminator !== baseConversationTypeClass.DIALOGUE || recipient.person"-->
+<!--               class="avatar-wrapper">-->
+<!--            <ngx-image #conversationLogo-->
+<!--                       class="avatar"-->
+<!--                       [object]="data.discriminator === baseConversationTypeClass.DIALOGUE ? recipient.person : data"-->
+<!--                       [type]="imageTypeClass.LOGO"-->
+<!--                       [fileClass]="data.discriminator === baseConversationTypeClass.DIALOGUE ? fileClass.PERSON : fileClass.CHAT"-->
+<!--                       [width]="40"-->
+<!--                       [height]="40"></ngx-image>-->
+<!--          </div>-->
+
+<!--          <div class="chat-contact-name">{{conversationName}}</div>-->
+
+<!--        </div>-->
+<!--        &lt;!&ndash; / CHAT CONTACT&ndash;&gt;-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </mat-toolbar>-->
+
+<!--  <div class="conversation-content"-->
+<!--       fxFlex="1 1 auto">-->
+<!--    <ngx-virtual-scroll [getItems]="getItems"-->
+<!--                        [autoScroll]="true">-->
+<!--      <ng-template let-message>-->
+<!--        <div (click)="toggleSelectMessage(message)"-->
+<!--             [ngClass]="{'selected': message.selected}">-->
+<!--          <app-message-item [message]="message"-->
+<!--                            [person]="person"></app-message-item>-->
+<!--        </div>-->
+<!--      </ng-template>-->
+<!--    </ngx-virtual-scroll>-->
+<!--  </div>-->
+
+<!--  <div class="conversation-footer"-->
+<!--       fxFlex="0 0 auto"-->
+<!--       fxLayout="column">-->
+<!--    <emoji-mart *ngIf="visibleEmojiPicker"-->
+<!--                (emojiClick)="onAddEmoji($event)"-->
+<!--                set="emojione"></emoji-mart>-->
+
+<!--    <div class="reply-form"-->
+<!--         fxFlex="0 0 auto"-->
+<!--         fxLayout="row"-->
+<!--         fxLayoutAlign="center center">-->
+
+<!--      <form #replyForm="ngForm"-->
+<!--            (ngSubmit)="sendMessage()"-->
+<!--            (keydown.enter)="sendMessage()"-->
+<!--            fxFlex fxLayout="row"-->
+<!--            fxLayoutAlign="start center">-->
+<!--        <button class="attach-file-button"-->
+<!--                mat-icon-button-->
+<!--                type="button"-->
+<!--                (click)="onAttachFile()">-->
+<!--          <mat-icon class="secondary-text">attach_file</mat-icon>-->
+<!--        </button>-->
+
+<!--        <mat-form-field class="message-text" fxFlex floatLabel="never" appearance="standard">-->
+<!--          <textarea matInput placeholder="{{'writeMessage' | translate}}"-->
+<!--                    [(ngModel)]="messageContent.content" name="message" [rows]="1"-->
+<!--                    [matAutosizeMaxRows]="10"-->
+<!--                    [matTextareaAutosize]="true" (input)="onTyping()"></textarea>-->
+<!--        </mat-form-field>-->
+
+<!--        <button class="add-emoji-button"-->
+<!--                mat-icon-button-->
+<!--                type="button"-->
+<!--                (click)="onToggleEmojiPicker()">-->
+<!--          <mat-icon class="secondary-text">insert_emoticon</mat-icon>-->
+<!--        </button>-->
+<!--        <button class="send-message-button" mat-icon-button type="submit">-->
+<!--          <mat-icon class="secondary-text">send</mat-icon>-->
+<!--        </button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->

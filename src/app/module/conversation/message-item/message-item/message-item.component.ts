@@ -1,79 +1,64 @@
-import {Component, DoCheck, Input, KeyValueDiffers, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {BaseMessageContentType} from '../../../../data/remote/model/chat/message/base/base-message-content-type';
-import {Message} from '../../../../data/remote/model/chat/message/message';
-import {MessageViewModel} from '../../../../data/local/view-model/conversation/message-view-model';
+import {MessageContentType} from '../../../../data/remote/model/chat/message/base';
+import {Message, MessageContent, SystemMessageContent} from '../../../../data/remote/model/chat/message';
 import {Person} from '../../../../data/remote/model/person';
-import {AuthorizationService} from '../../../../shared/authorization.service';
-import {Router} from '@angular/router';
-import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
 import {AppHelper} from '../../../../utils/app-helper';
-import {BaseConversationType} from '../../../../data/remote/model/chat/conversation/base/base-conversation-type';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
+import {TranslateService} from '@ngx-translate/core';
+import {Dialogue} from '../../../../data/remote/model/chat/conversation';
 
 @Component({
   selector: 'app-message-item',
   templateUrl: './message-item.component.html',
   styleUrls: ['./message-item.component.scss']
 })
-export class MessageItemComponent implements OnInit, DoCheck {
-
-  public readonly propertyConstantClass = PropertyConstant;
-  public readonly baseMessageContentTypeClass = BaseMessageContentType;
-  public readonly baseConversationTypeClass = BaseConversationType;
-  public readonly imageTypeClass = ImageType;
-  public readonly fileClassClass = FileClass;
-
-  @Input()
-  public class: string;
+export class MessageItemComponent {
 
   @Input()
   public message: Message;
 
-  public messageViewModel: MessageViewModel;
+  @Input()
   public person: Person;
-  public updated: Date;
-  private differ: any;
 
-  constructor(private _authorizationService: AuthorizationService,
-              private _router: Router,
-              private _appHelper: AppHelper,
-              differs: KeyValueDiffers) {
-    this.class = '';
-    this.differ = differs.find([]).create();
+  public readonly propertyConstantClass = PropertyConstant;
+  public readonly messageContentTypeClass = MessageContentType;
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
+
+  constructor(private _translateService: TranslateService,
+              private _appHelper: AppHelper) {
   }
 
-  async ngOnInit() {
-    this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
-    await this.buildMessage();
-  }
-
-  ngDoCheck(): void {
-    const changes = this.differ.diff(this.message);
-    if (changes) {
-      changes.forEachChangedItem(async (elt) => {
-        if (elt.key === 'content') {
-          await this.buildMessage();
-        }
-      });
+  public get messageStateText(): string {
+    let text = '';
+    let date = this.message.content.created;
+    if (this.message.content instanceof MessageContent && this.message.content.updated) {
+      text = `${this._translateService.instant('edited')} `;
+      date = this.message.content.updated;
     }
+    text += `${this._appHelper.dateByFormat(date, PropertyConstant.dateTimeFormat)}`;
+    return text;
   }
 
-  public async onDataClick(event: any) {
-    if (event.target.tagName.toLowerCase() === 'a') {
-      const link = event.target.getAttribute('link');
-      await this._router.navigate([link]);
+  public get messageStateIcon(): string {
+    if ((!this.message.read || (!(this.message.read && this.message.sender.person && this.person) && this.message.sender.person.id == this.person.id))) {
+      return 'done';
     }
+    return 'done_all';
   }
 
-  private async buildMessage() {
-    this.messageViewModel = new MessageViewModel(this.message);
-    await this.messageViewModel.build();
+  public get myMessage(): boolean {
+    return this.message.sender.person.id == this.person.id;
+  }
 
-    if (this.message.content.discriminator == BaseMessageContentType.MESSAGE_CONTENT && (this.message.content as MessageContent).updated != undefined) {
-      this.updated = (this.message.content as MessageContent).updated;
-    }
+  public get isDialogue(): boolean {
+    return this.message.content.baseConversation instanceof Dialogue;
+  }
+
+  public get isSystemMessage(): boolean {
+    return this.message.content instanceof SystemMessageContent;
   }
 
 }

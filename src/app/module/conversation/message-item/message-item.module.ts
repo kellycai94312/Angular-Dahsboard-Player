@@ -1,24 +1,27 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MessageItemComponent} from './message-item/message-item.component';
-import {AngularSvgIconModule} from 'angular-svg-icon';
-import {SafeHtmlModule} from '../../../pipes/safe-html/safe-html.module';
 import {TranslateModule} from '@ngx-translate/core';
-import {UrlParserModule} from '../../../pipes/url-parser/url-parser.module';
-import {PreviewMessageItemComponent} from './preview-message-item/preview-message-item.component';
 import {NgxImageModule} from '../../../components/ngx-image/ngx-image.module';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {MatIconModule} from '@angular/material';
+import {MessageContentItemModule} from '../message-content/message-content-item/message-content-item.module';
+import {PollMessageContentItemModule} from '../message-content/poll-message-content-item/poll-message-content-item.module';
+import {SystemMessageContentItemModule} from '../message-content/system-message-content-item/system-message-content-item.module';
 
 @NgModule({
+  declarations: [MessageItemComponent],
+  exports: [MessageItemComponent],
   imports: [
     CommonModule,
+    MatIconModule,
+    FlexLayoutModule,
+    TranslateModule.forChild(),
     NgxImageModule,
-    AngularSvgIconModule,
-    SafeHtmlModule,
-    UrlParserModule,
-    TranslateModule.forChild()
-  ],
-  declarations: [MessageItemComponent, PreviewMessageItemComponent],
-  exports: [MessageItemComponent, PreviewMessageItemComponent]
+    MessageContentItemModule,
+    SystemMessageContentItemModule,
+    PollMessageContentItemModule
+  ]
 })
 export class MessageItemModule {
 }
