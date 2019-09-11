@@ -897,5 +897,7 @@
     "PLACES": "Places",
     "EVENTS": "Events"
   },
-  "executePoll": "Execute poll"
+  "executePoll": "Execute poll",
+  "you": "You",
+  "attachedData": "Attached data"
 }

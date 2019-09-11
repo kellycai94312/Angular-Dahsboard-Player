@@ -9,8 +9,9 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 import {Chat} from '../../../../data/remote/model/chat/conversation';
 import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
 import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
-import {takeWhile} from 'rxjs/operators';
+import {debounceTime, takeWhile} from 'rxjs/operators';
 import {ConversationApiService} from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
+import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
 
 @Component({
   selector: 'app-conversations',
@@ -34,6 +35,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
   public readonly selectItemChange = new EventEmitter<ConversationWrapper>();
 
   public query = new PageQuery();
+  public searchNgxInput: NgxInput;
   private _notDestroyed = true;
 
   constructor(private _conversationApiService: ConversationApiService,
@@ -42,19 +44,31 @@ export class ConversationsComponent implements OnInit, OnDestroy {
               private _appHelper: AppHelper) {
   }
 
-  async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
+    this.searchNgxInput = new NgxInput();
+    this.searchNgxInput.labelTranslation = 'search';
+    this.searchNgxInput.control.valueChanges
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        debounceTime(PropertyConstant.searchDebounceTime)
+      )
+      .subscribe(async (value) => {
+        this.query.name = value;
+        await this.resetItems();
+      });
+
     this._conversationService.messageCreateHandle
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        this.updateItem(x);
+        this._updateItem(x);
       });
     this._conversationService.messageUpdateHandle
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        const messageWrapper = this.findMessageWrapper(x);
+        const messageWrapper = this._findMessageWrapper(x);
         if (messageWrapper) {
           x.unread = messageWrapper.unread;
-          this.updateItem(x);
+          this._updateItem(x);
         }
       });
     this._conversationService.messageReadHandle
@@ -71,14 +85,14 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     this._conversationService.messageDeleteHandle
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async x => {
-        const messageWrapper = this.findMessageWrapper(x);
+        const messageWrapper = this._findMessageWrapper(x);
         if (messageWrapper) {
           if (x.previousMessage) {
             const updatedMessageWrapper = Object.assign({}, x);
             updatedMessageWrapper.message = updatedMessageWrapper.previousMessage;
-            this.replaceItem(x, updatedMessageWrapper);
+            this._replaceItem(x, updatedMessageWrapper);
           } else {
-            this.removeItem(x);
+            this._removeItem(x);
           }
         }
       });
@@ -113,17 +127,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     await this.resetItems();
   }
 
-  ngOnDestroy(): void {
-    this._notDestroyed = false;
-  }
-
-  public async onSearchTextChanged(val: string) {
-    if (val) {
-      this.query.name = val;
-    } else {
-      delete this.query.name;
-    }
-    await this.resetItems();
+  public ngOnDestroy(): void {
+    delete this._notDestroyed;
   }
 
   public getItems: Function = async (direction: Direction, query: PageQuery) => {
@@ -131,11 +136,11 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     return this._appHelper.pageContainerConverter(pageContainer, messageWrapper => new ConversationWrapper(messageWrapper));
   };
 
-  public onCreateChat = async () => {
+  public async onAddConversation(): Promise<void> {
     if (await this._conversationModalService.showEditChat(new Chat())) {
       await this.resetItems();
     }
-  };
+  }
 
   public onSelectedItem(val: ConversationWrapper) {
     this.selectItemChange.emit(val);
@@ -147,31 +152,29 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateItem(messageWrapper: MessageWrapper): void {
-    this.removeItem(messageWrapper);
-    this.addItem(messageWrapper);
-  }
-
-  private replaceItem(src: MessageWrapper, dst: MessageWrapper): void {
-    this.removeItem(src);
-    this.addItem(dst);
-  }
-
-  private addItem(messageWrapper: MessageWrapper) {
+  private _addItem(messageWrapper: MessageWrapper) {
     this.ngxVirtualScrollComponent.items.unshift(new ConversationWrapper(messageWrapper));
   }
 
-  private removeItem(messageWrapper: MessageWrapper): void {
-    const items: Array<ConversationWrapper> = this.ngxVirtualScrollComponent.items;
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].messageWrapper.message.content.baseConversation.id == messageWrapper.message.content.baseConversation.id) {
-        items.splice(i, 1);
-        return;
-      }
+  private _updateItem(messageWrapper: MessageWrapper): void {
+    this._removeItem(messageWrapper);
+    this._addItem(messageWrapper);
+  }
+
+  private _replaceItem(src: MessageWrapper, dst: MessageWrapper): void {
+    this._removeItem(src);
+    this._addItem(dst);
+  }
+
+  private _removeItem(messageWrapper: MessageWrapper): void {
+    const items: ConversationWrapper[] = this.ngxVirtualScrollComponent.items;
+    const itemIndex = items.findIndex(x => x.messageWrapper.message.content.baseConversation.id == messageWrapper.message.content.baseConversation.id);
+    if (itemIndex > -1) {
+      items.splice(itemIndex, 1);
     }
   }
 
-  private findMessageWrapper(x: MessageWrapper): MessageWrapper {
+  private _findMessageWrapper(x: MessageWrapper): MessageWrapper {
     const conversationWrappers: ConversationWrapper[] = this.ngxVirtualScrollComponent.items
       .filter(conversationWrapper => !conversationWrapper.messageWrapper.empty
         && conversationWrapper.messageWrapper.message.content.baseConversation.id == x.message.content.baseConversation.id);
@@ -184,7 +187,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         return messageWrapper;
       }
     }
-    return null;
+    return void 0;
   }
 
 }

@@ -898,5 +898,7 @@
     "PLACES": "Места",
     "EVENTS": "События"
   },
-  "executePoll": "Пройти опрос"
+  "executePoll": "Пройти опрос",
+  "you": "Вы",
+  "attachedData": "Прикрепленные данные"
 }

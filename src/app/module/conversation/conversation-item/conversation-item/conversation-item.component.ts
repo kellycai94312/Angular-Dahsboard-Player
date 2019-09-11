@@ -1,19 +1,15 @@
 import {Component, Input} from '@angular/core';
 import {ConversationWrapper} from '../../../../data/local/conversation-wrapper';
-import {BaseConversation} from '../../../../data/remote/model/chat/conversation/base/base-conversation';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {Person} from '../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {MessageContentType} from '../../../../data/remote/model/chat/message/base/message-content-type';
-import {MessageContent} from '../../../../data/remote/model/chat/message/message-content';
-import {ConversationType} from '../../../../data/remote/model/chat/conversation/base/conversation-type';
-import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
+import {MessageContent} from '../../../../data/remote/model/chat/message';
+import {Chat, Dialogue} from '../../../../data/remote/model/chat/conversation';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-conversation-item',
@@ -22,69 +18,77 @@ import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 })
 export class ConversationItemComponent extends BaseComponent<ConversationWrapper> {
 
-  public readonly imageTypeClass = ImageType;
-  public readonly propertyConstantClass = PropertyConstant;
-
   @Input()
   public preview: boolean;
 
-  public conversation: BaseConversation;
+  public readonly imageTypeClass = ImageType;
   public conversationImageClazz: FileClass;
   public conversationImage: IdentifiedObject;
   public conversationName: string;
-  public senderPerson: Person;
-  public updated: Date;
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _appHelper: AppHelper,
+  constructor(private _appHelper: AppHelper,
+              private _translateService: TranslateService,
               private _authorizationService: AuthorizationService) {
     super();
+  }
+
+  public get messageStateText(): string {
+    let text = '';
+    const message = this.data.messageWrapper.message;
+    let date = message.content.created;
+    if (message.content instanceof MessageContent && message.content.updated) {
+      text = `${this._translateService.instant('edited')} `;
+      date = message.content.updated;
+    }
+    text += `${this._appHelper.dateByFormat(date, PropertyConstant.dateTimeFormat)}`;
+    return text;
+  }
+
+  public get messageContent(): string {
+    const content = this.data.messageWrapper.message.content;
+    if (content instanceof MessageContent) {
+      return content.content;
+    }
+    return this._translateService.instant('attachedData');
+  }
+
+  public get messageStateIcon(): string {
+    return this.data.messageWrapper.unread ? 'done' : 'done_all';
+  }
+
+  public get messageFrom(): string {
+    const message = this.data.messageWrapper.message;
+    const isYouSender = message.sender.person.id == this._authorizationService.session.person.id;
+    if (message.content.baseConversation instanceof Dialogue) {
+      if (isYouSender) {
+        return this._translateService.instant('you');
+      }
+    } else {
+      return this._appHelper.getPersonFullName(message.sender.person);
+    }
+    return void 0;
   }
 
   protected async initializeComponent(data: ConversationWrapper): Promise<boolean> {
     const result = await super.initializeComponent(data);
     if (result) {
       return await this._appHelper.tryLoad(async () => {
-        const messageWrapper = this.data.messageWrapper;
-        if (messageWrapper.empty) {
-          // Нет сообщений
-          this.conversation = messageWrapper.participant.baseConversation;
-          switch (this.conversation.discriminator) {
-            case ConversationType.CHAT:
-              this.conversationImageClazz = FileClass.CHAT;
-              this.conversationImage = this.conversation;
-              this.conversationName = (<Chat>this.conversation).name;
-          }
-        } else {
-          this.conversation = messageWrapper.message.content.baseConversation;
-          if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
-            this.senderPerson = messageWrapper.message.sender.person;
-          }
+        const conversation = data.messageWrapper.message.content.baseConversation;
+        if (conversation instanceof Dialogue) {
+          this.conversationImageClazz = FileClass.PERSON;
 
-          switch (this.conversation.discriminator) {
-            case ConversationType.DIALOGUE:
-              this.conversationImageClazz = FileClass.PERSON;
-              if (this._authorizationService.session.person.id == messageWrapper.message.sender.person.id) {
-                this.conversationImage = messageWrapper.message.receiver.person;
-                this.conversationName = this._appHelper.getPersonFullName(messageWrapper.message.receiver.person);
-              } else {
-                this.conversationImage = messageWrapper.message.sender.person;
-                this.conversationName = this._appHelper.getPersonFullName(messageWrapper.message.sender.person);
-              }
-              break;
-            case ConversationType.CHAT:
-              this.conversationImageClazz = FileClass.CHAT;
-              this.conversationImage = this.conversation;
-              this.conversationName = (<Chat>this.conversation).name;
-              if (!this.senderPerson) {
-                this.senderPerson = messageWrapper.message.sender.person;
-              }
-              break;
+          if (!data.messageWrapper.empty) {
+            let person = data.messageWrapper.message.sender.person;
+            if (this._authorizationService.session.person.id == data.messageWrapper.message.sender.person.id) {
+              person = data.messageWrapper.message.receiver.person;
+            }
+            this.conversationImage = person;
+            this.conversationName = this._appHelper.getPersonFullName(person);
           }
-
-          if (messageWrapper.message.content.discriminator === MessageContentType.MESSAGE_CONTENT && (messageWrapper.message.content as MessageContent).updated) {
-            this.updated = (messageWrapper.message.content as MessageContent).updated;
-          }
+        } else if (conversation instanceof Chat) {
+          this.conversationImageClazz = FileClass.CHAT;
+          this.conversationImage = conversation;
+          this.conversationName = conversation.name;
         }
       });
     }
