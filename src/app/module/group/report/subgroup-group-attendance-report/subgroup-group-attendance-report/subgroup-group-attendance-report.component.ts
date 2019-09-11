@@ -10,6 +10,7 @@ import {Observable, of} from 'rxjs';
 import {flatMap, map} from 'rxjs/operators';
 import {NgxDate} from '../../../../ngx/ngx-date/model/ngx-date';
 import {Person} from '../../../../../data/remote/model/person';
+import {Group} from '../../../../../data/remote/model/group/base/group';
 
 @Component({
   selector: 'app-subgroup-group-attendance-report',
@@ -20,6 +21,9 @@ export class SubgroupGroupAttendanceReportComponent implements OnInit {
 
   @Input()
   public subgroupGroup: SubgroupGroup;
+
+  @Input()
+  public group: Group;
 
   public headNgxSelect: NgxSelect;
   public specialistNgxSelect: NgxSelect;
@@ -63,6 +67,7 @@ export class SubgroupGroupAttendanceReportComponent implements OnInit {
   public onGetReport(): void {
     const url = this._subgroupGroupApiService.getSubgroupGroupAttendanceReport(
       this.subgroupGroup,
+      this.group,
       this.headNgxSelect.control.value,
       this.staffNgxSelect.control.value,
       this.specialistNgxSelect.control.value,

@@ -13,6 +13,7 @@ import {IdRequest} from '../../../request/id-request';
 import {UtilService} from '../../../../../services/util/util.service';
 import {Person} from '../../../model/person';
 import {AppHelper} from '../../../../../utils/app-helper';
+import {Group} from '../../../model/group/base/group';
 
 @Injectable({
   providedIn: 'root'
@@ -51,11 +52,12 @@ export class SubgroupGroupApiService {
   }
 
   public getSubgroupGroupAttendanceReport(subgroupGroup: SubgroupGroup,
+                                          group: Group,
                                           headPerson: Person,
                                           executorPerson: Person,
                                           specialistPerson: Person,
                                           date: Date): string {
-    const query = {headPersonId: headPerson.id, executorPersonId: executorPerson.id, specialistPersonId: specialistPerson.id, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
+    const query = {groupId: group.id, headPersonId: headPerson.id, executorPersonId: executorPerson.id, specialistPersonId: specialistPerson.id, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
     return `${this._basePath}/${subgroupGroup.id}/attendance?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
   }
 
