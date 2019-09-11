@@ -1,7 +1,7 @@
 <div *ngIf="message && person"
-     fxLayout="{{myMessage ? 'row-reverse' : 'row'}}"
+     fxLayout="{{!isSystemMessage && myMessage ? 'row-reverse' : 'row'}}"
      fxLayoutGap="5px">
-  <ngx-image *ngIf="message.sender.person.id != person.id"
+  <ngx-image *ngIf="!isSystemMessage && !(myMessage || isDialogue)"
              [object]="message.sender.person"
              [type]="imageTypeClass.LOGO"
              [fileClass]="fileClassClass.PERSON"
@@ -10,14 +10,17 @@
              [cropped]="true"></ngx-image>
   <div fxFlex="initial"
        fxLayout="column"
-       [ngClass]="myMessage ? 'my-message-content' : 'message-content'">
+       [ngClass]="!isSystemMessage && myMessage ? 'my-message-content' : 'message-content'">
     <div [ngSwitch]="message.content.discriminator">
       <app-message-content-item *ngSwitchCase="messageContentTypeClass.MESSAGE_CONTENT"
                                 [messageContent]="message.content"></app-message-content-item>
+      <app-system-message-content-item *ngSwitchCase="messageContentTypeClass.SYSTEM_MESSAGE_CONTENT"
+                                       [(data)]="message"></app-system-message-content-item>
       <app-poll-message-content-item *ngSwitchCase="messageContentTypeClass.POLL_MESSAGE_CONTENT"
                                      [(data)]="message.content"></app-poll-message-content-item>
     </div>
-    <div fxLayout="row"
+    <div *ngIf="!isSystemMessage"
+         fxLayout="row"
          fxLayoutAlign="end center"
          fxLayoutGap="5px"
          class="message-sub-content">

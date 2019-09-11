@@ -205,13 +205,13 @@
   "score": "Счет",
   "access": "Доступ",
   "showPrevious": "Показать предыдущий",
-  "conversationSystemMessage": {
-    "createChat": "{{sender}} создал беседу",
-    "updateName": "{{sender}} обновил наименование беседы",
-    "updateLogo": "{{sender}} обновил фотографию беседы",
-    "addParticipant": "{{sender}} добавил {{person}}",
-    "deleteParticipant": "{{sender}} удалил {{person}}",
-    "quitParticipant": "{{sender}} покинул беседу"
+  "systemMessageTypeEnum": {
+    "CREATE_CHAT": "{{sender}} создал беседу",
+    "UPDATE_NAME": "{{sender}} обновил наименование беседы",
+    "UPDATE_LOGO": "{{sender}} обновил фотографию беседы",
+    "ADD_PARTICIPANT": "{{sender}} добавил {{person}}",
+    "DELETE_PARTICIPANT": "{{sender}} удалил {{person}}",
+    "QUIT_PARTICIPANT": "{{sender}} покинул беседу"
   },
   "approve": "Подтвердить",
   "disapprove": "Отклонить",

@@ -232,6 +232,10 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     await this.initializeComponent(val);
   }
 
+  public isSystemMessage(message: Message): boolean {
+    return message.content instanceof SystemMessageContent;
+  }
+
   public getItems = async (direction: Direction, query: PageQuery) => {
     const pageContainer = await this._conversationApiService.getMessages(this.data, query).toPromise();
 

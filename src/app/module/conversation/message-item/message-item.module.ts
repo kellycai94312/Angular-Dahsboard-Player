@@ -7,6 +7,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatIconModule} from '@angular/material';
 import {MessageContentItemModule} from '../message-content/message-content-item/message-content-item.module';
 import {PollMessageContentItemModule} from '../message-content/poll-message-content-item/poll-message-content-item.module';
+import {SystemMessageContentItemModule} from '../message-content/system-message-content-item/system-message-content-item.module';
 
 @NgModule({
   declarations: [MessageItemComponent],
@@ -18,6 +19,7 @@ import {PollMessageContentItemModule} from '../message-content/poll-message-cont
     TranslateModule.forChild(),
     NgxImageModule,
     MessageContentItemModule,
+    SystemMessageContentItemModule,
     PollMessageContentItemModule
   ]
 })

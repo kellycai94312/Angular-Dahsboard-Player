@@ -40,6 +40,14 @@ ngx-virtual-scroll {
   }
 }
 
+.system-message-position {
+  flex-direction: column;
+  box-sizing: border-box;
+  display: flex;
+  place-content: center;
+  align-items: center;
+}
+
 .edit-label {
   color: #039be5;
   font-size: small;

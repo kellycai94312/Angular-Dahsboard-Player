@@ -1,12 +1,13 @@
 import {Component, Input} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {MessageContentType} from '../../../../data/remote/model/chat/message/base';
-import {Message, MessageContent} from '../../../../data/remote/model/chat/message';
+import {Message, MessageContent, SystemMessageContent} from '../../../../data/remote/model/chat/message';
 import {Person} from '../../../../data/remote/model/person';
 import {AppHelper} from '../../../../utils/app-helper';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 import {TranslateService} from '@ngx-translate/core';
+import {Dialogue} from '../../../../data/remote/model/chat/conversation';
 
 @Component({
   selector: 'app-message-item',
@@ -50,6 +51,14 @@ export class MessageItemComponent {
 
   public get myMessage(): boolean {
     return this.message.sender.person.id == this.person.id;
+  }
+
+  public get isDialogue(): boolean {
+    return this.message.content.baseConversation instanceof Dialogue;
+  }
+
+  public get isSystemMessage(): boolean {
+    return this.message.content instanceof SystemMessageContent;
   }
 
 }

@@ -204,13 +204,13 @@
   "score": "Score",
   "access": "Access",
   "showPrevious": "Show previous",
-  "conversationSystemMessage": {
-    "createChat": "{{sender}} created chat",
-    "updateName": "{{sender}} updated chat name",
-    "updateLogo": "{{sender}} updated chat logo",
-    "addParticipant": "{{sender}} added {{person}}",
-    "deleteParticipant": "{{sender}} removed {{person}}",
-    "quitParticipant": "{{sender}} quit chat"
+  "systemMessageTypeEnum": {
+    "CREATE_CHAT": "{{sender}} created chat",
+    "UPDATE_NAME": "{{sender}} updated chat name",
+    "UPDATE_LOGO": "{{sender}} updated chat logo",
+    "ADD_PARTICIPANT": "{{sender}} added {{person}}",
+    "DELETE_PARTICIPANT": "{{sender}} removed {{person}}",
+    "QUIT_PARTICIPANT": "{{sender}} quit chat"
   },
   "approve": "Approve",
   "disapprove": "Disapprove",

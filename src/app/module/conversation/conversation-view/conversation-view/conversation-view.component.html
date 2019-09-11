@@ -63,7 +63,7 @@
                         [autoScroll]="true">
       <ng-template let-message>
         <div class="py-1"
-             [ngClass]="{'selected': selectionModel.isSelected(message)}"
+             [ngClass]="{'selected': selectionModel.isSelected(message), 'system-message-position': isSystemMessage(message)}"
              (click)="selectionModel.toggle(message)">
           <app-message-item [message]="message"
                             [person]="person"></app-message-item>

@@ -5,11 +5,12 @@ import {AppHelper} from '../../../../utils/app-helper';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {ImageType} from '../../../../data/remote/model/file/image/image-type';
 import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {MessageContent} from '../../../../data/remote/model/chat/message';
+import {MessageContent, SystemMessageContent} from '../../../../data/remote/model/chat/message';
 import {Chat, Dialogue} from '../../../../data/remote/model/chat/conversation';
 import {PropertyConstant} from '../../../../data/local/property-constant';
 import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
 import {TranslateService} from '@ngx-translate/core';
+import {ConversationUtilService} from '../../../../services/conversation-util/conversation-util.service';
 
 @Component({
   selector: 'app-conversation-item',
@@ -28,6 +29,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
 
   constructor(private _appHelper: AppHelper,
               private _translateService: TranslateService,
+              private _conversationUtilService: ConversationUtilService,
               private _authorizationService: AuthorizationService) {
     super();
   }
@@ -48,6 +50,8 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
     const content = this.data.messageWrapper.message.content;
     if (content instanceof MessageContent) {
       return content.content;
+    } else if (content instanceof SystemMessageContent) {
+      return this._conversationUtilService.getSystemMessageContent(this.data.messageWrapper.message, true);
     }
     return this._translateService.instant('attachedData');
   }
@@ -63,7 +67,7 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
       if (isYouSender) {
         return this._translateService.instant('you');
       }
-    } else {
+    } else if (!(message.content instanceof SystemMessageContent)) {
       return this._appHelper.getPersonFullName(message.sender.person);
     }
     return void 0;
