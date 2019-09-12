@@ -18,7 +18,7 @@
 
                     <a mat-icon-button matTooltip="{{shortcutItem.translate | translate}}" [routerLink]="shortcutItem.url">
                         <mat-icon class="secondary-text" *ngIf="shortcutItem.icon">{{shortcutItem.icon}}</mat-icon>
-                        <span *ngIf="!shortcutItem.icon" class="h2 secondary-text text-bold">
+                        <span *ngIf="!shortcutItem.icon && shortcutItem.title" class="h2 secondary-text text-bold">
                             {{shortcutItem.title.substr(0, 1).toUpperCase()}}
                         </span>
                     </a>

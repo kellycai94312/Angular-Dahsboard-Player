@@ -30,11 +30,16 @@
              placeholder="{{'search' | translate}}">
     </div>
   </div>
-  <div *ngIf="canChangeItemDisplay"
+  <div *ngIf="canChangeItemDisplay || rightActions.length"
        fxFlex
        fxLayout
        fxLayoutAlign="end center">
-    <button *ngIf="itemDisplayAction"
+    <button *ngFor="let item of rightActions"
+            mat-icon-button
+            (click)="item.action(item)">
+      <mat-icon>{{item.iconName}}</mat-icon>
+    </button>
+    <button *ngIf="itemDisplayAction && canChangeItemDisplay"
             mat-icon-button
             (click)="itemDisplayAction.action(itemDisplayAction)">
       <mat-icon>{{itemDisplayAction.iconName}}</mat-icon>

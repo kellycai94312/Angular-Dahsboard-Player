@@ -207,6 +207,7 @@ export class SubgroupReportComponent implements OnInit {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'report';
     await modal.componentInstance.initializeBody(SubgroupGroupAttendanceReportComponent, async component => {
+      component.group = this.group;
       component.subgroupGroup = this.subgroupGroup;
     }, {componentFactoryResolver: this._componentFactoryResolver});
   }

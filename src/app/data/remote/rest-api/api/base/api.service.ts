@@ -69,7 +69,7 @@ export class ApiService {
     return this.get(url, this.getHttpParamsFromObject(this._utilService.clone(query, {excludeNullable: true}))).pipe(
       map((value: PageContainer<T>) => {
           let obj = new PageContainer<T>(classObj);
-          if (value.list) {
+          if (value.list.length) {
             if ((value.list[0] as any).discriminator) {
               obj = new DiscriminatorPageContainer<T>(classObj) as any;
             }
