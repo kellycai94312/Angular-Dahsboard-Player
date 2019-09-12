@@ -13,10 +13,16 @@
     <div class="menu-list">
       <div *ngFor="let item of items"
            class="item"
-           [routerLinkActive]="item.data ? 'selected-item' : ''"
-           [ngClass]="{'disabled-item': !item.data}"
-           [routerLink]="item.data">
-        {{item.name | translate}}
+           fxLayout="row"
+           fxLayoutGap="5px"
+           fxLayoutAlign="start center"
+           matRipple
+           [matRippleDisabled]="!item.data.link"
+           [routerLinkActive]="item.data.link ? 'selected-item' : ''"
+           [ngClass]="{'disabled-item': !item.data.link}"
+           [routerLink]="item.data.link">
+        <mat-icon>{{item.data.iconName}}</mat-icon>
+        <span>{{item.name | translate}}</span>
       </div>
     </div>
   </div>

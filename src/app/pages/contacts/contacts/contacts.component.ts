@@ -10,8 +10,8 @@ import {MenuItem} from '../../../module/common/item-line/model/menu-item';
 })
 export class ContactsComponent implements OnInit {
 
-  public items: NameWrapper<string>[] = [];
-  public visibleMenu: boolean;
+  public items: NameWrapper<MenuData>[] = [];
+  public visibleMenu = true;
   public actions: MenuItem[];
 
   public ngOnInit() {
@@ -27,18 +27,25 @@ export class ContactsComponent implements OnInit {
     ];
   }
 
-  private _getPathByContactItem(value: ContactItem) {
+  private _getPathByContactItem(value: ContactItem): MenuData {
     switch (value) {
       case ContactItem.PERSONS:
-        return 'person';
+        return {link: 'person', iconName: 'person'};
       case ContactItem.GROUPS:
-        return 'group';
+        return {link: 'group', iconName: 'group'};
       case ContactItem.PLACES:
-      // return 'place';
+        return {link: void 0, iconName: 'room'};
+      // return {link: 'place', iconName: 'room'};
       case ContactItem.EVENTS:
-      // return 'event';
+        return {link: void 0, iconName: 'event'};
+      // return {link: 'event', iconName: 'event'};
     }
     return void 0;
   }
 
+}
+
+class MenuData {
+  public link: string;
+  public iconName: string;
 }

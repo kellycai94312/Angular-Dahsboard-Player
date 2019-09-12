@@ -1,6 +1,18 @@
+@import "../../../styles/mixins";
+
 .item {
-  padding: 5px;
+  mat-icon {
+    @include mat-icon-size(18px);
+  }
+
+  padding: 0 12px 0 24px;
+  height: 40px;
+  border-radius: 20px 0 0 20px;
   cursor: pointer;
+
+  &:hover:not(.selected-item):not(.disabled-item) {
+    background: rgba(0, 0, 0, .04);
+  }
 }
 
 .selected-item {
@@ -9,6 +21,7 @@
 }
 
 .disabled-item {
+  @extend .item;
   color: rgba(0, 0, 0, .54);
 }
 
