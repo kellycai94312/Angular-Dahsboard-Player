@@ -6,6 +6,7 @@ import {MatButtonModule, MatCardModule} from '@angular/material';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {TranslateModule} from '@ngx-translate/core';
 import {NgxImageModule} from '../../../../components/ngx-image/ngx-image.module';
+import {GroupMenuModule} from '../../../../module/group/group-menu/group-menu.module';
 
 @NgModule({
   declarations: [GroupSettingsComponent],
@@ -16,7 +17,8 @@ import {NgxImageModule} from '../../../../components/ngx-image/ngx-image.module'
     MatButtonModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
-    NgxImageModule
+    NgxImageModule,
+    GroupMenuModule
   ]
 })
 export class GroupSettingsModule {

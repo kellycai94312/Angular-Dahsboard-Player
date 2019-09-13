@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -17,15 +17,16 @@ import {SplitButtonItem} from '../../../../components/ngx-split-button/bean/spli
 import {BaseGroupComponent} from '../../../../data/local/component/group/base-group-component';
 import {AuthorizationService} from '../../../../shared/authorization.service';
 import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
-import {map} from 'rxjs/operators';
+import {map, takeWhile} from 'rxjs/operators';
 import {IdRequest} from '../../../../data/remote/request/id-request';
+import {ToolbarService} from '../../../../layout/components/toolbar/services/toolbar.service';
 
 @Component({
   selector: 'app-group-page',
   templateUrl: './group-page.component.html',
   styleUrls: ['./group-page.component.scss']
 })
-export class GroupPageComponent extends BaseGroupComponent<Group> implements OnInit {
+export class GroupPageComponent extends BaseGroupComponent<Group> implements OnInit, OnDestroy {
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly groupTypeEnumClass = GroupTypeEnum;
@@ -34,6 +35,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   public readonly fileClassClass = FileClass;
   public readonly tabs: NgxTab[];
   public readonly splitButtonsItems: SplitButtonItem[];
+  public visibleGroupMenu: boolean;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _activatedRoute: ActivatedRoute,
@@ -42,6 +44,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
               private _router: Router,
               private _templateModalService: TemplateModalService,
               private _permissionService: PermissionService,
+              private _toolbarService: ToolbarService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
 
@@ -152,10 +155,22 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   public async ngOnInit() {
     super.ngOnInit();
     this.initializeGroupService(this._activatedRoute, this._router);
+
+    this._toolbarService.visibleGroupMenu$
+      .pipe(takeWhile(() => this.notDestroyed))
+      .subscribe(value => {
+        this.visibleGroupMenu = value;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    super.ngOnDestroy();
+    this._toolbarService.updateGroup(void 0);
   }
 
   async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
+    this._toolbarService.updateGroup(group);
   }
 
   public onEditSettings = async () => {

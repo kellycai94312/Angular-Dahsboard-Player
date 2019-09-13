@@ -4,6 +4,7 @@ export interface FuseNavigationItem {
   type: 'item' | 'group' | 'collapsable';
   translate?: string;
   icon?: string;
+  svgIcon?: string;
   hidden?: boolean;
   url?: string;
   classes?: string;

@@ -111,7 +111,7 @@ export class FuseShortcutsComponent implements OnInit, OnDestroy {
     this.searching = true;
 
     this.filteredNavigationItems = this.navigationItems.filter((navigationItem) => {
-      return navigationItem.title.toLowerCase().includes(value);
+      return navigationItem.title && navigationItem.title.toLowerCase().includes(value);
     });
   }
 

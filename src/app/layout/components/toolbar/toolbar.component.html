@@ -11,6 +11,14 @@
 
       <div class="toolbar-separator" *ngIf="!hiddenNavbar && !rightNavbar" fxHide.gt-md></div>
 
+      <div *ngIf="selectedGroup"
+           class="px-8 px-md-8">
+        <button mat-raised-button
+                (click)="onToggleVisibilityMenu()">
+          {{'groupMenu' | translate}}
+        </button>
+      </div>
+
       <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNavbar">
         <div class="logo ml-16">
           <img class="logo-icon" src="assets/img/athlete-readiness-logo.png">
@@ -20,7 +28,6 @@
       <div class="px-8 px-md-16">
         <fuse-shortcuts [navigation]="navigation"></fuse-shortcuts>
       </div>
-
     </div>
 
     <div class="" fxFlex="0 1 auto" fxLayout="row" fxLayoutAlign="start center">
@@ -44,7 +51,12 @@
       </button>
 
       <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
-
+        <button *ngFor="let item of groups"
+                mat-menu-item
+                (click)="onNavigateToGroup(item)">
+          <mat-icon>group</mat-icon>
+          <span>{{item.name}}</span>
+        </button>
         <button mat-menu-item
                 (click)="navigateToPersonSettings()">
           <mat-icon>settings</mat-icon>
