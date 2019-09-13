@@ -899,5 +899,7 @@
   },
   "executePoll": "Execute poll",
   "you": "You",
-  "attachedData": "Attached data"
+  "attachedData": "Attached data",
+  "groupMenu": "Group menu",
+  "special": "Special"
 }

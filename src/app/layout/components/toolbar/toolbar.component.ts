@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {TranslateService} from '@ngx-translate/core';
 
 import {FuseConfigService} from '@fuse/services/config.service';
@@ -15,6 +15,9 @@ import {ParticipantRestApiService} from '../../../data/remote/rest-api/participa
 import {Router} from '@angular/router';
 import {NotificationService} from '../../../shared/notification.service';
 import {NotificationApiService} from '../../../data/remote/rest-api/api/notification/notification-api.service';
+import {Group} from '../../../data/remote/model/group/base/group';
+import {GroupApiService} from '../../../data/remote/rest-api/api/group/group-api.service';
+import {ToolbarService} from './services/toolbar.service';
 
 @Component({
   selector: 'toolbar',
@@ -33,6 +36,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   public person: Person;
   public personLogoUrl: string;
   public notificationsNumber: number;
+  public groups: Group[] = [];
+  public selectedGroup: Group;
+  public visibleGroupMenu: boolean;
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -52,6 +58,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _participantRestApiService: ParticipantRestApiService,
     private _router: Router,
     private _notificationApiService: NotificationApiService,
+    private _groupApiService: GroupApiService,
+    private _toolbarService: ToolbarService,
     private _notificationService: NotificationService
   ) {
     // Set the defaults
@@ -102,14 +110,26 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             height: 40,
             cropped: true
           }, true);
+          this._groupApiService.getGroups({canEdit: true})
+            .pipe(take(1))
+            .subscribe(value => {
+              this.groups = value.list;
+            });
         } else {
           delete this.personLogoUrl;
+          this.groups = [];
         }
       });
     this._notificationService.notification$
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe(value => {
         this.notificationsNumber = value.unread;
+      });
+
+    this._toolbarService.group$
+      .pipe(takeUntil(this._unsubscribeAll))
+      .subscribe(value => {
+        this.selectedGroup = value;
       });
   }
 
@@ -164,6 +184,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   search(value): void {
     // Do your search here...
     console.log(value);
+  }
+
+  public onToggleVisibilityMenu(): void {
+    this.visibleGroupMenu = !this.visibleGroupMenu;
+    this._toolbarService.updateVisibleGroupMenu(this.visibleGroupMenu);
+  }
+
+  public async onNavigateToGroup(group: Group) {
+    await this._router.navigate(['/group', group.id]);
   }
 
   public async navigateToPersonSettings() {

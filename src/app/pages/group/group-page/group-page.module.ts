@@ -13,6 +13,7 @@ import {NgxTabsModule} from '../../../module/ngx/ngx-tabs/ngx-tabs.module';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {GroupService} from './service/group.service';
 import {GroupPositionItemModule} from '../../../module/group/group-position/group-position-item/group-position-item.module';
+import {GroupMenuModule} from '../../../module/group/group-menu/group-menu.module';
 
 @NgModule({
   imports: [
@@ -27,7 +28,8 @@ import {GroupPositionItemModule} from '../../../module/group/group-position/grou
     GroupPersonPositionItemModule,
     GroupPersonItemModule,
     GroupPositionItemModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    GroupMenuModule
   ],
   declarations: [GroupPageComponent],
   providers: [GroupService]
