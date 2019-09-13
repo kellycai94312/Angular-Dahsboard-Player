@@ -3,13 +3,6 @@
   <div fxFlex fxFill fxLayout="row" fxLayoutAlign="start center">
 
     <div fxFlex="1 0 auto" fxLayout="row" fxLayoutAlign="start center">
-      <div *ngIf="selectedGroup"
-           class="px-8 px-md-8">
-        <button mat-raised-button
-                (click)="onToggleVisibilityMenu()">
-          {{'groupMenu' | translate}}
-        </button>
-      </div>
 
       <button mat-icon-button class="navbar-toggle-button"
               *ngIf="!hiddenNavbar && !rightNavbar" (click)="toggleSidebarOpen('navbar')" fxHide.gt-md>
@@ -17,6 +10,14 @@
       </button>
 
       <div class="toolbar-separator" *ngIf="!hiddenNavbar && !rightNavbar" fxHide.gt-md></div>
+
+      <div *ngIf="selectedGroup"
+           class="px-8 px-md-8">
+        <button mat-raised-button
+                (click)="onToggleVisibilityMenu()">
+          {{'groupMenu' | translate}}
+        </button>
+      </div>
 
       <div fxLayout="row" fxLayoutAlign="start center" *ngIf="horizontalNavbar">
         <div class="logo ml-16">

@@ -901,5 +901,17 @@
   "you": "You",
   "attachedData": "Attached data",
   "groupMenu": "Group menu",
-  "special": "Special"
+  "special": "Special",
+  "personnelManagement": "Personnel Management",
+  "competencyManagement": "Competency management",
+  "staffRecruitment": "Staff recruitment",
+  "projectOffice": "Project office",
+  "projectManagement": "Project management",
+  "hierarchyManagement": "Hierarchy management",
+  "projectChat": "Project chat",
+  "analytics": "Analytics",
+  "showcase": "Showcase",
+  "briefcase": "Briefcase",
+  "finance": "Finance",
+  "groupRepository": "Group repository"
 }

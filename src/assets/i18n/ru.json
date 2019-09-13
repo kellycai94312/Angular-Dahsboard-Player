@@ -902,5 +902,17 @@
   "you": "Вы",
   "attachedData": "Прикрепленные данные",
   "groupMenu": "Меню группы",
-  "special": "Специальные"
+  "special": "Специальные",
+  "personnelManagement": "Управление персоналом",
+  "competencyManagement": "Управление компетенциями",
+  "staffRecruitment": "Подбор персонала",
+  "projectOffice": "Проектный офис",
+  "projectManagement": "Управление проектами",
+  "hierarchyManagement": "Управление иерархиями",
+  "projectChat": "Проектный чат",
+  "analytics": "Аналитика",
+  "showcase": "Витрина",
+  "briefcase": "Портфель",
+  "finance": "Финансы",
+  "groupRepository": "Хранилище группы"
 }
