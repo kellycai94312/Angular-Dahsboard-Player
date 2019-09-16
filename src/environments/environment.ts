@@ -1,9 +1,9 @@
-import {EnvironmentType} from './environment-type';
-import {IEnvironment} from './ienvironment';
+import { EnvironmentType } from './environment-type';
+import { IEnvironment } from './ienvironment';
 
 export const environment: IEnvironment = {
   production: false,
-  version: '1.1.1-13',
+  version: '1.1.1-15',
   type: EnvironmentType.LOCAL,
   host: 'localhost:8082',
   restUrl: 'http://localhost:8082',

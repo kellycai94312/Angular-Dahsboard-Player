@@ -11,7 +11,7 @@ $font-weight: normal;
     }
 
     ::ng-deep .mat-tab-links {
-      height: inherit !important;
+      height: 100% !important;
 
       .mat-tab-link {
         font-weight: $font-weight;

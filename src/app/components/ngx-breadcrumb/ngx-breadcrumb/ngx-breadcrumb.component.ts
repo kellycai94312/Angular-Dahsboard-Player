@@ -1,9 +1,9 @@
-import {Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {BreadcrumbItem} from '../bean/breadcrumb-item';
-import {AppHelper} from '../../../utils/app-helper';
-import {Unsubscribable} from 'rxjs/src/internal/types';
-import {distinctUntilChanged, filter} from 'rxjs/operators';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Unsubscribable } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { AppHelper } from '../../../utils/app-helper';
+import { BreadcrumbItem } from '../bean/breadcrumb-item';
 
 @Component({
   selector: 'ngx-breadcrumb',

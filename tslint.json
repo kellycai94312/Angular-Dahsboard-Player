@@ -12,7 +12,7 @@
     ],
     "member-access": [
       true,
-      "no-public"
+      "check-parameter-property"
     ],
     "member-ordering": [
       true,
@@ -28,11 +28,7 @@
       }
     ],
     "unified-signatures": true,
-    "prefer-function-over-method": [
-      true,
-      "allow-public",
-      "allow-protected"
-    ],
+    "prefer-function-over-method": false,
     "no-unbound-method": [
       true,
       "ignore-static"
@@ -188,6 +184,7 @@
       "allow-mix",
       "allow-rhs"
     ],
+    "object-literal-sort-keys": false,
     "prefer-while": true,
     "prefer-for-of": true,
     "forin": true,
