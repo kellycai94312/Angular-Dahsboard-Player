@@ -22,7 +22,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstantClass = PropertyConstant;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

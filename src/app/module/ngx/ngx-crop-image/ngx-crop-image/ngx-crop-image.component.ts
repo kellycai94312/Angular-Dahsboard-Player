@@ -17,10 +17,10 @@ import {ImageFormat} from '../../../../data/local/image-format';
 })
 export class NgxCropImageComponent {
 
-  @ViewChild(ImageCropperComponent)
+  @ViewChild(ImageCropperComponent, { static: false })
   public imageCropperComponent: ImageCropperComponent;
 
-  @ViewChild('fileInputElement')
+  @ViewChild('fileInputElement', { static: false })
   public fileInput: ElementRef;
 
   @Input()

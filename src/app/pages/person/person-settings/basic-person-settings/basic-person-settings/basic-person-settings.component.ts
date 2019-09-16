@@ -12,7 +12,7 @@ import {BasicPersonComponent} from '../../../../../module/person/basic-person/ba
 })
 export class BasicPersonSettingsComponent extends BasePersonSettingsComponent {
 
-  @ViewChild(BasicPersonComponent)
+  @ViewChild(BasicPersonComponent, { static: false })
   public component: BaseEditComponent<Person>;
 
   constructor(authorizationService: AuthorizationService) {

@@ -20,7 +20,7 @@ import {skipWhile, takeWhile} from 'rxjs/operators';
 })
 export class GroupOutcomingRequestsComponent extends BaseGroupComponent<Group> implements OnInit {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   public readonly propertyConstantClass = PropertyConstant;

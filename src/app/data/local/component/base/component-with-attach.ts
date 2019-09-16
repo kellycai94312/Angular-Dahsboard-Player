@@ -11,7 +11,7 @@ import {ClientError} from '../../error/client-error';
 
 export abstract class ComponentWithAttach<T extends IdentifiedObject> extends BaseEditComponent<T> implements OnDestroy {
 
-  @ViewChild(AttachFileComponent)
+  @ViewChild(AttachFileComponent, { static: false })
   public attachFileComponent: AttachFileComponent<Document>;
 
   public readonly changeWatcher: ChangeWatcher;

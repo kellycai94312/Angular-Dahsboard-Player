@@ -10,7 +10,7 @@ import {ItemDisplay} from '../../../../module/common/item-list/model/item-displa
 })
 export class PersonsComponent {
 
-  @ViewChild(PersonsListComponent)
+  @ViewChild(PersonsListComponent, { static: false })
   public _personsListComponent: PersonsListComponent;
 
   public readonly personQuery: PersonQuery;

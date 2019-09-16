@@ -28,7 +28,7 @@ import {NgxModalService} from '../../../../../../../../components/ngx-modal/serv
 })
 export class TemplatesSubgroupsPageComponent implements OnInit {
 
-  @ViewChild(SubgroupsTreesComponent)
+  @ViewChild(SubgroupsTreesComponent, { static: false })
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
   public group: Group;

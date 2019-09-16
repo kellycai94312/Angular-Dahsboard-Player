@@ -9,7 +9,7 @@ import {AnthropometryQuery} from '../../../../data/remote/rest-api/query/anthrop
 import {PersonAnthropometry} from '../../../../data/remote/model/person-anthropometry';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
-import {ISubscription} from 'rxjs-compat/Subscription';
+import {Unsubscribable} from 'rxjs';
 
 // @Component({
 //   selector: 'app-anthropometry-history',
@@ -24,7 +24,7 @@ export class AnthropometryHistoryComponent implements OnInit, OnDestroy {
   public isNumber: boolean;
   public precision: number;
 
-  private readonly _paramsSubscription: ISubscription;
+  private readonly _paramsSubscription: Unsubscribable;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,

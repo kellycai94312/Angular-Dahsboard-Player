@@ -11,7 +11,7 @@ import {NgxModalConfiguration} from '../bean/ngx-modal-configuration';
 })
 export class NgxModalComponent {
 
-  @ViewChild('contentTemplate', {read: ViewContainerRef})
+  @ViewChild('contentTemplate', {static: true, read: ViewContainerRef})
   public contentViewContainerRef: ViewContainerRef;
 
   @Input()
@@ -66,7 +66,7 @@ export class NgxModalComponent {
     this.contentViewContainerRef.clear();
 
     const componentRef = this.contentViewContainerRef.createComponent(componentFactory);
-    (<any>componentRef.instance as INgxContent).modal = this.modal;
+    (<any> componentRef.instance as INgxContent).modal = this.modal;
     // TODO: Use interface for the call this field
     componentRef.instance._manualInit = true;
     await initialize(componentRef.instance);

@@ -19,7 +19,7 @@ import {IdentifiedObject} from '../../../data/remote/base/identified-object';
 })
 export class DictionariesComponent extends BaseItemList<Dictionary, PageQuery> {
 
-  @ViewChild(ItemListComponent)
+  @ViewChild(ItemListComponent, { static: false })
   public itemListComponent: ItemListComponent<BaseParameter, ParameterQuery>;
 
   @Input()

@@ -27,7 +27,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
   public readonly groupTypeEnumClass = GroupTypeEnum;
   public readonly selectionTypeClass = SelectionType;
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   public readonly splitButtonsItems: SplitButtonItem[];

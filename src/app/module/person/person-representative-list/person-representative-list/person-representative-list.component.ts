@@ -23,7 +23,7 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 })
 export class PersonRepresentativeListComponent {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

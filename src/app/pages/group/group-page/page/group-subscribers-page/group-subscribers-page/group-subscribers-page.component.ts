@@ -15,7 +15,7 @@ import {GroupPersonState} from '../../../../../../data/remote/model/group/group-
 })
 export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
 
-  @ViewChild(GroupPersonsListComponent)
+  @ViewChild(GroupPersonsListComponent, { static: false })
   public groupPersonsListComponent: GroupPersonsListComponent;
 
   public query: GroupPersonQuery;

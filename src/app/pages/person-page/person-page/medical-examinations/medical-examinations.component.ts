@@ -22,7 +22,7 @@ export class MedicalExaminationsComponent implements OnInit {
 
   public propertyConstant = PropertyConstant;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public allowEdit: boolean;

@@ -13,7 +13,7 @@ import {zip} from 'rxjs';
 })
 export class PersonsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(PersonsListComponent)
+  @ViewChild(PersonsListComponent, { static: false })
   public _personsListComponent: PersonsListComponent;
 
   public readonly personQuery: PersonQuery;

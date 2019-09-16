@@ -7,13 +7,13 @@ import {ConversationWrapper} from '../../../../../../data/local/conversation-wra
 import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../../../utils/app-helper';
 import {NgxVirtualScrollComponent} from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {ConversationService} from '../../../../../../shared/conversation.service';
 import {MessageWrapper} from '../../../../../../data/remote/bean/wrapper/message-wrapper';
 import {PropertyConstant} from '../../../../../../data/local/property-constant';
 import {Chat} from '../../../../../../data/remote/model/chat/conversation/chat';
 import {ConversationModalService} from '../../../../service/conversation-modal/conversation-modal.service';
 import {ChatService} from '../../../chat.service';
+import {Unsubscribable} from 'rxjs';
 
 @Component({
   selector: 'chat-chats-sidenav',
@@ -27,14 +27,14 @@ export class ChatChatsSidenavComponent implements OnInit {
   public readonly propertyConstantClass = PropertyConstant;
   public query: PageQuery;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  private readonly _messageCreateSubscription: ISubscription;
-  private readonly _messageUpdateSubscription: ISubscription;
-  private readonly _messageReadSubscription: ISubscription;
-  private readonly _messageDeleteSubscription: ISubscription;
-  private readonly _typingSubscription: ISubscription;
+  private readonly _messageCreateSubscription: Unsubscribable;
+  private readonly _messageUpdateSubscription: Unsubscribable;
+  private readonly _messageReadSubscription: Unsubscribable;
+  private readonly _messageDeleteSubscription: Unsubscribable;
+  private readonly _typingSubscription: Unsubscribable;
 
   constructor(private _authorizationService: AuthorizationService,
               private _participantRestApiService: ParticipantRestApiService,

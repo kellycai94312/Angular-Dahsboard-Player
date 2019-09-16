@@ -48,10 +48,10 @@ export class StructureSubgroupsPageComponent implements OnInit {
   public readonly propertyConstantClass = PropertyConstant;
   public readonly selectionTypeClass = SelectionType;
 
-  @ViewChild(SubgroupsTreesComponent)
+  @ViewChild(SubgroupsTreesComponent, { static: false })
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   public selectedNode: FlatNode;

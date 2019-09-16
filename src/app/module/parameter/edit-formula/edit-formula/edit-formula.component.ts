@@ -19,7 +19,7 @@ import {ParameterVersion} from '../../../../data/remote/model/parameter/paramete
 })
 export class EditFormulaComponent extends BaseEditComponent<BaseParameter> {
 
-  @ViewChild(ParameterListComponent)
+  @ViewChild(ParameterListComponent, { static: false })
   public parameterListComponent: ParameterListComponent;
 
   public readonly mathOperations: NameWrapper<string>[];

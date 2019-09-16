@@ -1,19 +1,17 @@
-import {AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation} from '@angular/core';
-import {NgForm} from '@angular/forms';
-import {HttpClient} from '@angular/common/http';
-
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-
-import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
-import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
-import {ChatPanelService} from 'app/layout/components/chat-panel/chat-panel.service';
-import {ConversationWrapper} from '../../../data/local/conversation-wrapper';
+import { HttpClient } from '@angular/common/http';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
+import { ChatPanelService } from 'app/layout/components/chat-panel/chat-panel.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ConversationWrapper } from '../../../data/local/conversation-wrapper';
 
 @Component({
   selector: 'chat-panel',
-  templateUrl: './chat-panel.component.html',
   styleUrls: ['./chat-panel.component.scss'],
+  templateUrl: './chat-panel.component.html',
   encapsulation: ViewEncapsulation.None
 })
 export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -23,12 +21,12 @@ export class ChatPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   chat: any;
   sidebarFolded: boolean;
 
-  @ViewChild('replyForm')
+  @ViewChild('replyForm', {static: false})
   set replyForm(content: NgForm) {
     this._replyForm = content;
   }
 
-  @ViewChild('replyInput')
+  @ViewChild('replyInput', {static: false})
   set replyInput(content: ElementRef) {
     this._replyInput = content;
   }

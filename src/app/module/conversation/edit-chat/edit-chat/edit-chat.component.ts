@@ -27,10 +27,10 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
 
-  @ViewChild(NgxImageComponent)
+  @ViewChild(NgxImageComponent, { static: false })
   public _ngxImageComponent: NgxImageComponent;
 
-  @ViewChild(NgxSelectionComponent)
+  @ViewChild(NgxSelectionComponent, { static: false })
   public _ngxSelectionComponent: NgxSelectionComponent<PersonItemComponent, ConversationQuery, Person>;
 
   constructor(private _router: Router,

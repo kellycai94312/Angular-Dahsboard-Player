@@ -17,7 +17,7 @@ export class ChangeNotificationsComponent {
   public readonly propertyConstantClass = PropertyConstant;
   public readonly versionActionTypeClass = VersionActionType;
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,

@@ -20,7 +20,7 @@ import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-gri
 })
 export class EditSubgroupTemplateComponent extends BaseEditComponent<SubgroupTemplate> {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   private tableConfigurations: PageContainer<TableRow>;

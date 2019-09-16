@@ -24,7 +24,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
 
   public readonly ngxButtonTypeClass = NgxButtonType;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public readonly splitButtonsItems: SplitButtonItem[];

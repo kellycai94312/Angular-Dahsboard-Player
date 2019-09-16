@@ -5,7 +5,7 @@ import {BaseEditComponent} from '../../../../../data/local/component/base/base-e
 
 export abstract class BaseGroupSettingsComponent<T extends Group> extends BaseGroupComponent<T> {
 
-  @ViewChild(BaseEditComponent)
+  @ViewChild(BaseEditComponent, { static: false })
   public abstract component: BaseEditComponent<T>;
 
   public allowSave: boolean;

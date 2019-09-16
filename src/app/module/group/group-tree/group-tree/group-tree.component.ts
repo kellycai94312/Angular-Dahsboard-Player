@@ -17,7 +17,7 @@ import {Group} from '../../../../data/remote/model/group/base/group';
 })
 export class GroupTreeComponent implements OnInit, OnDestroy {
 
-  @ContentChild('itemTemplate')
+  @ContentChild('itemTemplate', { static: false })
   public itemTemplate: TemplateRef<any>;
 
   @Input()

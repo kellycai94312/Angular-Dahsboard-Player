@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {NgxInputType} from '../model/ngx-input-type';
-import {Subject} from 'rxjs';
-import {ISubscription} from 'rxjs-compat/Subscription';
+import {Subject, Unsubscribable} from 'rxjs';
 import {AppHelper} from '../../../utils/app-helper';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
@@ -59,7 +58,7 @@ export class NgxInputComponent implements OnInit, OnDestroy {
   public touched: boolean;
   public innerValue: string;
 
-  private _inputKeyUpSubscription: ISubscription;
+  private _inputKeyUpSubscription: Unsubscribable;
 
   constructor(private _appHelper: AppHelper) {
     this.valueChange = new EventEmitter<string>();

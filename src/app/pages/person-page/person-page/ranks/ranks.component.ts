@@ -19,7 +19,7 @@ export class RanksComponent implements OnInit {
   @Input()
   public personId: number;
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   public readonly propertyConstant = PropertyConstant;

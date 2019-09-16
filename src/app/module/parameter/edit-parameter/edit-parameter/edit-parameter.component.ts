@@ -29,7 +29,7 @@ import {FileClass} from '../../../../data/remote/model/file/base/file-class';
 })
 export class EditParameterComponent extends BaseEditComponent<BaseParameter> implements OnInit {
 
-  @ViewChild(MediaLibraryComponent)
+  @ViewChild(MediaLibraryComponent, { static: false })
   public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly dictionaryTypeClass = DictionaryType;

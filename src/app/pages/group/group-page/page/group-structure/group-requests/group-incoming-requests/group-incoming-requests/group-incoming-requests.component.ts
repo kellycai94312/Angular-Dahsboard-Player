@@ -19,7 +19,7 @@ import {GroupConnectionRequestType} from '../../../../../../../../data/remote/be
 })
 export class GroupIncomingRequestsComponent extends BaseGroupComponent<Group> implements OnInit {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   public readonly propertyConstantClass = PropertyConstant;

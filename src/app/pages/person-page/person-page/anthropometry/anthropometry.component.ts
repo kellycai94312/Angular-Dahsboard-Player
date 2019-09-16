@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {PersonAnthropometry} from '../../../../data/remote/model/person-anthropometry';
 import {ListRequest} from '../../../../data/remote/request/list-request';
 import {PersonService} from '../../../person/person-page/service/person.service';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {SportType} from '../../../../data/remote/model/sport-type';
 import {AppHelper} from '../../../../utils/app-helper';
+import {Unsubscribable} from 'rxjs';
 
 // @Component({
 //   selector: 'app-anthropometry',
@@ -17,7 +17,7 @@ export class AnthropometryComponent implements OnInit, OnDestroy {
   public anthropometry: PersonAnthropometry[];
   public canEdit: boolean;
 
-  private readonly _sportTypeSubscription: ISubscription;
+  private readonly _sportTypeSubscription: Unsubscribable;
 
   constructor(private _personService: PersonService,
               private _participantRestApiService: ParticipantRestApiService,

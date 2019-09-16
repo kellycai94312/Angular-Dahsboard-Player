@@ -15,7 +15,7 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 })
 export class GroupPersonsListComponent {
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

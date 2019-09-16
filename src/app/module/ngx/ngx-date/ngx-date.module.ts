@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NgxDateComponent} from './ngx-date/ngx-date.component';
-import {Md2DatepickerModule, Md2Module} from 'md2';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TranslateModule} from '@ngx-translate/core';
+import {Md2DatepickerModule, Md2Module} from 'angular-md2';
 
 @NgModule({
   declarations: [NgxDateComponent],

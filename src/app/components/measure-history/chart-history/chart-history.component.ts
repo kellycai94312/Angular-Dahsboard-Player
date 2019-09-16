@@ -11,7 +11,7 @@ import {Data} from 'plotly.js';
 })
 export class ChartHistoryComponent implements OnInit {
 
-  @ViewChild('chart')
+  @ViewChild('chart', { static: false })
   public el: ElementRef;
 
   @Input()

@@ -23,7 +23,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public readonly pageSize: number;
   public canEdit: boolean;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public groupTypeEnums: NameWrapper<GroupTypeEnum>[];

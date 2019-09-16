@@ -1,5 +1,16 @@
-import {merge as observableMerge} from 'rxjs';
-import {AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnDestroy, OnInit, Output, QueryList, ViewEncapsulation} from '@angular/core';
+import {merge as observableMerge, Unsubscribable} from 'rxjs';
+import {
+  AfterViewInit,
+  Component,
+  ContentChildren,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  QueryList,
+  ViewEncapsulation
+} from '@angular/core';
 import {PageQuery} from '../../../data/remote/rest-api/page-query';
 import {PageContainer} from '../../../data/remote/bean/page-container';
 import {Direction} from '../../ngx-virtual-scroll/model/direction';
@@ -9,7 +20,6 @@ import {NgxVirtualScroll} from '../../ngx-virtual-scroll/bean/ngx-virtual-scroll
 import {AppHelper} from '../../../utils/app-helper';
 import {Sort} from '../../../data/remote/rest-api/sort';
 import {mergeAll} from 'rxjs/operators';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {NameWrapper} from '../../../data/local/name-wrapper';
 
 @Component({
@@ -66,7 +76,7 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   public autoInit: boolean;
 
   private readonly _sorts: NameWrapper<Sort>[];
-  private _sortSubscription: ISubscription;
+  private _sortSubscription: Unsubscribable;
 
   constructor(private appHelper: AppHelper) {
     super(appHelper);

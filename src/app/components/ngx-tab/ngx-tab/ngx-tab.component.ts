@@ -1,9 +1,8 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Tab} from '../../../data/local/tab';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../../../utils/app-helper';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Unsubscribable} from 'rxjs';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {Mutex} from '../../../data/local/mutex';
 
@@ -26,10 +25,10 @@ export class NgxTabComponent implements OnInit, OnDestroy {
   public selectedTab: Tab;
 
   private readonly _routerEventSubject: BehaviorSubject<NavigationEnd>;
-  private readonly _routerSubscription: ISubscription;
+  private readonly _routerSubscription: Unsubscribable;
   private readonly _mutex: Mutex;
-  private _queryParamsSubscription: ISubscription;
-  private _routerEventSubscription: ISubscription;
+  private _queryParamsSubscription: Unsubscribable;
+  private _routerEventSubscription: Unsubscribable;
 
   constructor(private _router: Router,
               private _activatedRoute: ActivatedRoute,

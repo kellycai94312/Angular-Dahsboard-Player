@@ -47,13 +47,13 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public readonly fileClass = FileClass;
   public readonly imageTypeClass = ImageType;
 
-  @ViewChild('conversationLogo')
+  @ViewChild('conversationLogo', { static: false })
   public ngxImageComponent: NgxImageComponent;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  @ViewChild('replyForm')
+  @ViewChild('replyForm', { static: false })
   public replyForm: NgForm;
 
   public messageContent: MessageContent;

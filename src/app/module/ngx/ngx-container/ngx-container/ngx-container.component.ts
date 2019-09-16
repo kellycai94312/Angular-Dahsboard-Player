@@ -10,10 +10,10 @@ import {map, switchMap, takeUntil, takeWhile} from 'rxjs/operators';
 })
 export class NgxContainerComponent implements OnInit, OnDestroy {
 
-  @ViewChild('container')
+  @ViewChild('container', { static: false })
   public containerElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('splitter')
+  @ViewChild('splitter', { static: false })
   public splitterElementRef: ElementRef<HTMLElement>;
 
   @Input()

@@ -23,7 +23,7 @@ import {MediaLibraryComponent} from '../../../library/media-library/media-librar
 })
 export class EditUnitComponent extends BaseEditComponent<BaseUnit> implements OnInit {
 
-  @ViewChild(MediaLibraryComponent)
+  @ViewChild(MediaLibraryComponent, { static: false })
   public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly dictionaryTypeClass = DictionaryType;
