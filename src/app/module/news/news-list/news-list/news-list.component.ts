@@ -19,7 +19,7 @@ import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 })
 export class NewsListComponent implements OnInit {
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

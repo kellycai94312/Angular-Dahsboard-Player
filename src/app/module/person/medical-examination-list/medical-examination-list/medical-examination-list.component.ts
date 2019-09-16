@@ -21,7 +21,7 @@ import {EditMedicalExaminationComponent} from '../../edit-medical-examination/ed
 })
 export class MedicalExaminationListComponent {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

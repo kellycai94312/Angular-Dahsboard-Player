@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
-import {fromEvent} from 'rxjs';
-import {map, switchMap, takeUntil, takeWhile} from 'rxjs/operators';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
+import { fromEvent } from 'rxjs';
+import { map, switchMap, takeUntil, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-container',
@@ -10,10 +10,10 @@ import {map, switchMap, takeUntil, takeWhile} from 'rxjs/operators';
 })
 export class NgxContainerComponent implements OnInit, OnDestroy {
 
-  @ViewChild('container')
+  @ViewChild('container', {static: true})
   public containerElementRef: ElementRef<HTMLElement>;
 
-  @ViewChild('splitter')
+  @ViewChild('splitter', {static: true})
   public splitterElementRef: ElementRef<HTMLElement>;
 
   @Input()

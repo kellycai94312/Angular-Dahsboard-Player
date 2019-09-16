@@ -21,7 +21,7 @@ import {GroupContractType} from '../../../../data/remote/model/group/contract/gr
 })
 export class GroupContractListComponent {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

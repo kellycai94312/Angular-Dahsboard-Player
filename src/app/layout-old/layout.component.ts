@@ -1,10 +1,10 @@
 import {Component, OnDestroy} from '@angular/core';
 import {LayoutService} from '../shared/layout.service';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../utils/app-helper';
 import {IEnvironment} from '../../environments/ienvironment';
 import {environment} from '../../environments/environment';
 import {EnvironmentType} from '../../environments/environment-type';
+import {Unsubscribable} from 'rxjs';
 
 @Component({
   selector: 'app-layout',
@@ -18,8 +18,8 @@ export class LayoutComponent implements OnDestroy {
   public hidden: boolean;
   public dark: boolean;
 
-  private readonly _hiddenSubscription: ISubscription;
-  private readonly _darkSubscription: ISubscription;
+  private readonly _hiddenSubscription: Unsubscribable;
+  private readonly _darkSubscription: Unsubscribable;
 
   constructor(private _layoutService: LayoutService,
               private _appHelper: AppHelper) {

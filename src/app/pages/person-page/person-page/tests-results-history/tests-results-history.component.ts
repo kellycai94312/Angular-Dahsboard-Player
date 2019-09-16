@@ -9,7 +9,7 @@ import {PersonService} from '../../../person/person-page/service/person.service'
 import {ExerciseMeasure} from '../../../../data/remote/model/exercise/exercise-measure';
 import {UnitTypeEnum} from '../../../../data/remote/misc/unit-type-enum';
 import {RoundPipe} from '../../../../pipes/round.pipe';
-import {ISubscription} from 'rxjs-compat/Subscription';
+import {Unsubscribable} from 'rxjs';
 
 // @Component({
 //   selector: 'app-tests-results-history',
@@ -23,7 +23,7 @@ export class TestsResultsHistoryComponent implements OnInit, OnDestroy {
   public isNumber: boolean;
   public precision: number;
 
-  private readonly _paramsSubscription: ISubscription;
+  private readonly _paramsSubscription: Unsubscribable;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _route: ActivatedRoute,

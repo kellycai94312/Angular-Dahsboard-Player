@@ -26,7 +26,7 @@ export class NgxTreeComponent<T extends FlatNode> {
   @Input()
   public dataSource: TreeDataSource<T>;
 
-  @ContentChild('nodeTemplate')
+  @ContentChild('nodeTemplate', { static: false })
   public nodeTemplate: TemplateRef<any>;
 
   @Input()

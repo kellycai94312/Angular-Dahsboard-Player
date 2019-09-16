@@ -26,7 +26,7 @@ import {DeviceWindowService} from '../../../../services/windows/device-window/de
 })
 export class EditDeviceComponent extends BaseEditComponent<Device> implements OnInit {
 
-  @ViewChild(MediaLibraryComponent)
+  @ViewChild(MediaLibraryComponent, { static: false })
   public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly imageTypeClass = ImageType;

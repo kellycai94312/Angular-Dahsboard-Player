@@ -18,7 +18,7 @@ import {Direction} from '../../../../components/ngx-virtual-scroll/model/directi
 // })
 export class TestsResultsComponent implements OnInit {
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public isEditAllow: boolean;

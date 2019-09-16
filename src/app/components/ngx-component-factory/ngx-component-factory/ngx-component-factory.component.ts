@@ -8,7 +8,7 @@ import {INgxComponentFactory} from '../model/ingx-component-factory';
 })
 export class NgxComponentFactoryComponent<TComponent extends any, TModel extends any> implements INgxComponentFactory<TComponent, TModel>, OnInit {
 
-  @ViewChild('contentTemplate', {read: ViewContainerRef})
+  @ViewChild('contentTemplate', {static: true, read: ViewContainerRef})
   public contentViewContainerRef: ViewContainerRef;
 
   @Input()

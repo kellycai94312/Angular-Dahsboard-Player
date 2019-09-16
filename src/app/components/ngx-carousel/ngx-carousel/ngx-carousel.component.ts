@@ -20,7 +20,7 @@ import {TemplateModalService} from '../../../service/template-modal.service';
 })
 export class NgxCarouselComponent implements OnInit {
 
-  @ViewChild('fileInput')
+  @ViewChild('fileInput', { static: false })
   public fileInputElementRef: ElementRef;
 
   @Input()

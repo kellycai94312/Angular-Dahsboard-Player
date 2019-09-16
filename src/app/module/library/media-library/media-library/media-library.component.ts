@@ -12,7 +12,7 @@ import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-
 })
 export class MediaLibraryComponent {
 
-  @ViewChild(NgxImageComponent)
+  @ViewChild(NgxImageComponent, { static: false })
   public ngxImageComponent: NgxImageComponent;
 
   @Input()

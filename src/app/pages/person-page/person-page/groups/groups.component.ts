@@ -1,17 +1,17 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PersonService} from '../../../person/person-page/service/person.service';
-import {UserRole} from '../../../../data/remote/model/user-role';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {ISubscription} from 'rxjs/src/Subscription';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
-import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
+import { OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ISubscription } from 'rxjs-compat/Subscription';
+import { Direction } from '../../../../components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { NameWrapper } from '../../../../data/local/name-wrapper';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { GroupTypeEnum } from '../../../../data/remote/model/group/base/group-type-enum';
+import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import { UserRole } from '../../../../data/remote/model/user-role';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { PersonService } from '../../../person/person-page/service/person.service';
 
 // @Component({
 //   selector: 'app-groups',
@@ -23,7 +23,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
   public readonly pageSize: number;
   public canEdit: boolean;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public groupTypeEnums: NameWrapper<GroupTypeEnum>[];

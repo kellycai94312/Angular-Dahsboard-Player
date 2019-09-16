@@ -16,7 +16,7 @@ import {AppHelper} from '../../utils/app-helper';
 })
 export class NavBarComponent implements OnInit, OnDestroy {
 
-  @ViewChild('logo')
+  @ViewChild('logo', { static: false })
   public logo: ImageComponent;
 
   public readonly menuItems: MenuItem[];

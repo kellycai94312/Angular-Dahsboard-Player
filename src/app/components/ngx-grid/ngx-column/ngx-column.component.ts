@@ -14,7 +14,7 @@ export class NgxColumnComponent {
     return this._contentChild;
   }
 
-  @ContentChild(TemplateRef)
+  @ContentChild(TemplateRef, { static: false })
   set contentChild(value: TemplateRef<any>) {
     this._contentChild = value;
     if (!this.templateRef && this._contentChild) {

@@ -9,7 +9,7 @@ import {PropertyConstant} from '../../../data/local/property-constant';
 
 export class NgxVirtualScroll {
 
-  @ViewChild(NgxScrollDirective)
+  @ViewChild(NgxScrollDirective, { static: false })
   public ngxScrollDirective: NgxScrollDirective;
 
   @Input()

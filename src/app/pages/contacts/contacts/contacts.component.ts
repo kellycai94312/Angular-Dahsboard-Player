@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {NameWrapper} from '../../../data/local/name-wrapper';
-import {ContactItem} from '../model';
-import {MenuItem} from '../../../module/common/item-line/model/menu-item';
+import { Component, OnInit } from '@angular/core';
+import { NameWrapper } from '../../../data/local/name-wrapper';
+import { MenuItem } from '../../../module/common/item-line/model/menu-item';
+import { ContactItem } from '../model';
 
 @Component({
   selector: 'app-contacts',
@@ -10,11 +10,11 @@ import {MenuItem} from '../../../module/common/item-line/model/menu-item';
 })
 export class ContactsComponent implements OnInit {
 
-  public items: NameWrapper<MenuData>[] = [];
+  public items: Array<NameWrapper<MenuData>> = [];
   public visibleMenu = true;
-  public actions: MenuItem[];
+  public actions: Array<MenuItem>;
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.items = Object.keys(ContactItem).map(value => new NameWrapper(this._getPathByContactItem(value as ContactItem), `contactItemEnum.${value}`));
 
     this.actions = [
@@ -39,8 +39,9 @@ export class ContactsComponent implements OnInit {
       case ContactItem.EVENTS:
         return {link: void 0, iconName: 'event'};
       // return {link: 'event', iconName: 'event'};
+      default:
+        return void 0;
     }
-    return void 0;
   }
 
 }

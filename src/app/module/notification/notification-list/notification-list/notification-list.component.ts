@@ -17,7 +17,7 @@ import {EMPTY, Observable} from 'rxjs';
 })
 export class NotificationListComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   private _readBeforeDate: Date;

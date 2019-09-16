@@ -1,10 +1,9 @@
-import {distinctUntilChanged} from 'rxjs/operators/distinctUntilChanged';
-import {filter} from 'rxjs/operators/filter';
-import {Component, OnDestroy} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
-import {BreadcrumbItem} from '../bean/breadcrumb-item';
-import {AppHelper} from '../../../utils/app-helper';
-import {ISubscription} from 'rxjs-compat/Subscription';
+import { Component, OnDestroy } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Unsubscribable } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { AppHelper } from '../../../utils/app-helper';
+import { BreadcrumbItem } from '../bean/breadcrumb-item';
 
 @Component({
   selector: 'ngx-breadcrumb',
@@ -16,7 +15,7 @@ export class NgxBreadcrumbComponent implements OnDestroy {
   public enabled: boolean;
   public breadcrumbItems: BreadcrumbItem[];
 
-  private readonly _routerEventsSubscription: ISubscription;
+  private readonly _routerEventsSubscription: Unsubscribable;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,

@@ -21,7 +21,7 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 })
 export class SubgroupPersonListComponent implements OnChanges, AfterViewInit {
 
-  @ViewChild(NgxGridComponent)
+  @ViewChild(NgxGridComponent, { static: false })
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

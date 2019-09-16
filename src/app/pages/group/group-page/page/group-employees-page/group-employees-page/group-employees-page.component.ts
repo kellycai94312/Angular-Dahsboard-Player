@@ -20,7 +20,7 @@ import {takeWhile} from 'rxjs/operators';
 })
 export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
 
-  @ViewChild(GroupPersonsListComponent)
+  @ViewChild(GroupPersonsListComponent, { static: false })
   public groupPersonsListComponent: GroupPersonsListComponent;
 
   public query: GroupPersonQuery;

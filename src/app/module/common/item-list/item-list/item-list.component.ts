@@ -14,10 +14,10 @@ import {MenuItem} from '../../item-line/model/menu-item';
 })
 export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQuery> extends BaseItemList<TModel, Q> implements OnInit {
 
-  @ContentChild('itemTemplate')
+  @ContentChild('itemTemplate', { static: false })
   public itemTemplate: TemplateRef<any>;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public readonly itemDisplayClass = ItemDisplay;

@@ -13,7 +13,7 @@ import {BaseEditComponent} from '../../../../../../data/local/component/base/bas
 })
 export class BasicGroupSettingsComponent extends BaseGroupSettingsComponent<Group> {
 
-  @ViewChild(EditGroupComponent)
+  @ViewChild(EditGroupComponent, { static: false })
   public component: BaseEditComponent<Group>;
 
   constructor(groupService: GroupService, appHelper: AppHelper) {

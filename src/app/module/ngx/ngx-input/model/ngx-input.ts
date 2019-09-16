@@ -1,9 +1,9 @@
-import {FormControl} from '@angular/forms';
-import {Observable} from 'rxjs';
-import {MatFormFieldAppearance} from '@angular/material/typings/form-field';
-import {NgxInputType} from './ngx-input-type';
-import {FloatLabelType} from '@angular/material';
-import {NgxInputSuffix} from './ngx-input-suffix';
+import { FormControl } from '@angular/forms';
+import { FloatLabelType } from '@angular/material';
+import { MatFormFieldAppearance } from '@angular/material/typings/form-field';
+import { Observable } from 'rxjs';
+import { NgxInputSuffix } from './ngx-input-suffix';
+import { NgxInputType } from './ngx-input-type';
 
 export class NgxInput {
   public appearance: MatFormFieldAppearance = 'legacy';

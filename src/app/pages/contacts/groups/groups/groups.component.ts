@@ -13,7 +13,7 @@ import {zip} from 'rxjs';
 })
 export class GroupsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(GroupsListComponent)
+  @ViewChild(GroupsListComponent, { static: false })
   public _groupsListComponent: GroupsListComponent;
 
   public readonly groupQuery: GroupQuery;

@@ -6,7 +6,7 @@ import {takeWhile} from 'rxjs/operators';
 
 export abstract class BasePersonSettingsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(BaseEditComponent)
+  @ViewChild(BaseEditComponent, { static: false })
   public abstract component: BaseEditComponent<Person>;
 
   public person: Person;

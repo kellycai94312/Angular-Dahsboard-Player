@@ -12,7 +12,7 @@ import {AuthorizationService} from '../../../../../shared/authorization.service'
 })
 export class CareerPersonSettingsComponent extends BasePersonSettingsComponent {
 
-  @ViewChild(CareerPersonComponent)
+  @ViewChild(CareerPersonComponent, { static: false })
   public component: BaseEditComponent<Person>;
 
   constructor(authorizationService: AuthorizationService) {

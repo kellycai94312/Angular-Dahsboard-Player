@@ -1,16 +1,15 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {NameWrapper} from '../data/local/name-wrapper';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {AppHelper} from '../utils/app-helper';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Unsubscribable} from 'rxjs';
 import {Locale} from '../data/remote/misc/locale';
 
 @Injectable()
 export class TranslateObjectService implements OnDestroy {
 
   public readonly langSubject: BehaviorSubject<string>;
-  private readonly _langChangSubscription: ISubscription;
+  private readonly _langChangSubscription: Unsubscribable;
 
   constructor(private _translateService: TranslateService,
               private _appHelper: AppHelper) {

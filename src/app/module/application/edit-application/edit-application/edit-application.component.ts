@@ -26,7 +26,7 @@ import {ApplicationWindowService} from '../../../../services/windows/application
 })
 export class EditApplicationComponent extends BaseEditComponent<Application> implements OnInit {
 
-  @ViewChild(MediaLibraryComponent)
+  @ViewChild(MediaLibraryComponent, { static: false })
   public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly imageTypeClass = ImageType;

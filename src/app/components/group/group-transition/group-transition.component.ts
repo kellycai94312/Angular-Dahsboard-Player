@@ -36,7 +36,7 @@ import {PersonTransitionModalConfig} from '../../../service/template-modal.servi
 })
 export class GroupTransitionComponent implements OnDestroy {
 
-  @ViewChild(AttachFileComponent)
+  @ViewChild(AttachFileComponent, { static: false })
   public attachFileComponent: AttachFileComponent<Document>;
 
   @Input()

@@ -10,7 +10,7 @@ import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
 })
 export class GroupsComponent {
 
-  @ViewChild(GroupsListComponent)
+  @ViewChild(GroupsListComponent, { static: false })
   public _groupsListComponent: GroupsListComponent;
 
   public readonly groupQuery: GroupQuery;

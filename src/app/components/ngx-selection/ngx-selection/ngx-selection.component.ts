@@ -17,7 +17,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   public readonly propertyConstant = PropertyConstant;
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

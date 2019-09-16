@@ -1,12 +1,11 @@
 import {ComponentFactoryResolver, Injectable, OnDestroy} from '@angular/core';
 import {Group} from '../../../../data/remote/model/group/base/group';
-import {Observable, Subject} from 'rxjs';
+import {Observable, Subject, Unsubscribable} from 'rxjs';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {GroupPerson} from '../../../../data/remote/model/group/group-person';
 import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
 import {PermissionService} from '../../../../shared/permission.service';
 import {AppHelper} from '../../../../utils/app-helper';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
 import {shareReplay} from 'rxjs/operators';
 import {PropertyConstant} from '../../../../data/local/property-constant';
@@ -35,7 +34,7 @@ export class GroupService implements OnDestroy {
   }
 
   private readonly _groupSubject: Subject<Group>;
-  private readonly _groupSubscription: ISubscription;
+  private readonly _groupSubscription: Unsubscribable;
   private readonly _groupPersonSubject: Subject<GroupPerson>;
   private readonly _updateDataSubject = new Subject<any>();
 

@@ -18,7 +18,7 @@ import {ItemDisplay} from '../../../common/item-list/model/item-display';
 })
 export class GroupsListComponent implements OnInit {
 
-  @ViewChild(NgxVirtualScrollComponent)
+  @ViewChild(NgxVirtualScrollComponent, { static: false })
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

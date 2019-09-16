@@ -2,7 +2,6 @@ import {DatePipe} from '@angular/common';
 import {Injectable} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';
 import {ToastrService} from 'ngx-toastr';
-import {ISubscription} from 'rxjs-compat/Subscription';
 import {PageContainer} from '../data/remote/bean/page-container';
 import {IdentifiedObject} from '../data/remote/base/identified-object';
 import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
@@ -14,7 +13,7 @@ import {ListRequest} from '../data/remote/request/list-request';
 import {IdRequest} from '../data/remote/request/id-request';
 import {Period} from '../data/local/period';
 import {PropertyConstant} from '../data/local/property-constant';
-import {Observable} from 'rxjs';
+import {Observable, Unsubscribable} from 'rxjs';
 import {PageQuery} from '../data/remote/rest-api/page-query';
 import {Person} from '../data/remote/model/person';
 
@@ -204,7 +203,7 @@ export class AppHelper {
     return <T>JSON.parse(JSON.stringify(obj));
   }
 
-  public unsubscribe(obj: ISubscription) {
+  public unsubscribe(obj: Unsubscribable) {
     if (!this.isUndefinedOrNull(obj)) {
       obj.unsubscribe();
     }

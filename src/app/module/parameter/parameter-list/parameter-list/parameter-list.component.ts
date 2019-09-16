@@ -19,7 +19,7 @@ import {ItemDisplay} from '../../../common/item-list/model/item-display';
 })
 export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuery> {
 
-  @ViewChild(ItemListComponent)
+  @ViewChild(ItemListComponent, { static: false })
   public itemListComponent: ItemListComponent<BaseParameter, ParameterQuery>;
 
   @Input()

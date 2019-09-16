@@ -9,7 +9,7 @@ import {AppHelper} from '../../../utils/app-helper';
 })
 export class NgxVirtualScrollComponent extends NgxVirtualScroll {
 
-  @ContentChild(TemplateRef)
+  @ContentChild(TemplateRef, { static: false })
   public templateRef: TemplateRef<any>;
 
   constructor(appHelper: AppHelper) {
