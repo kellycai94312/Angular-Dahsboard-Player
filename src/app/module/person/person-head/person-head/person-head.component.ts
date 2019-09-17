@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Person} from '../../../../data/remote/model/person';
-import {MenuItem} from '../../../common/item-line/model/menu-item';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {FileApiService} from '../../../../data/remote/rest-api/api/file/file-api.service';
-import {map, takeWhile} from 'rxjs/operators';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
-import {Router} from '@angular/router';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {MatIconRegistry} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
-import {AuthorizationService} from '../../../../shared/authorization.service';
-import {PermissionService} from '../../../../shared/permission.service';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+import { map, takeWhile } from 'rxjs/operators';
+import { FileClass } from '../../../../data/remote/model/file/base/file-class';
+import { ImageType } from '../../../../data/remote/model/file/image/image-type';
+import { Person } from '../../../../data/remote/model/person';
+import { FileApiService } from '../../../../data/remote/rest-api/api/file/file-api.service';
+import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { AuthorizationService } from '../../../../shared/authorization.service';
+import { PermissionService } from '../../../../shared/permission.service';
+import { MenuItem } from '../../../common/item-line/model/menu-item';
 
 @Component({
   selector: 'app-person-head',
@@ -62,7 +62,7 @@ export class PersonHeadComponent implements OnInit, OnDestroy {
         this.actions = [];
         if (this.canEditPerson && canEditPerson) {
           this.actions.push({
-            iconName: 'edit', action: async item => {
+            iconName: 'edit', action: item => {
               this.editPerson.emit();
             }
           });
@@ -74,7 +74,8 @@ export class PersonHeadComponent implements OnInit, OnDestroy {
               iconName: 'message', action: async item => {
                 await this.onSendMessage();
               }
-            }, {
+            },
+            {
               iconName: this.hasConnection ? 'personDelete' : 'person_add',
               action: async item => {
                 this.hasConnection = (await this._participantRestApiService.hasConnection({id: this.person.id})).value;
