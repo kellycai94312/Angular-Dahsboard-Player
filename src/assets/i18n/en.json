@@ -913,5 +913,16 @@
   "showcase": "Showcase",
   "briefcase": "Briefcase",
   "finance": "Finance",
-  "groupRepository": "Group repository"
+  "groupRepository": "Group repository",
+  "address": "Address",
+  "contactPersons": "Contact persons",
+  "schedule": "Schedule",
+  "groupItemTypeEnum": {
+    "BASIC": "Basic",
+    "CONTACTS": "Contacts",
+    "ADDRESS": "Address",
+    "CONTACT_PERSONS": "Contact persons",
+    "SHOWCASE": "Showcase",
+    "SCHEDULE": "Schedule"
+  }
 }

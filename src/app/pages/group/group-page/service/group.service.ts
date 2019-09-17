@@ -1,26 +1,26 @@
-import {ComponentFactoryResolver, Injectable, OnDestroy} from '@angular/core';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {Observable, Subject, Unsubscribable} from 'rxjs';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
-import {PermissionService} from '../../../../shared/permission.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {GroupPersonState} from '../../../../data/remote/model/group/group-person-state';
-import {shareReplay} from 'rxjs/operators';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {UserRole} from '../../../../data/remote/model/user-role';
-import {DialogResult} from '../../../../data/local/dialog-result';
-import {GroupPersonPositionQuery} from '../../../../data/remote/rest-api/query/group-person-position-query';
-import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
-import {GroupPersonItemComponent} from '../../../../module/group/group-person-item/group-person-item/group-person-item.component';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {GroupPositionItemComponent} from '../../../../module/group/group-position/group-position-item/group-position-item/group-position-item.component';
-import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
-import {Position} from '../../../../data/remote/model/person-position/position';
+import { ComponentFactoryResolver, Injectable, OnDestroy } from '@angular/core';
+import { Observable, Subject, Unsubscribable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
+import { DialogResult } from '../../../../data/local/dialog-result';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { PageContainer } from '../../../../data/remote/bean/page-container';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import { GroupPersonState } from '../../../../data/remote/model/group/group-person-state';
+import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
+import { Position } from '../../../../data/remote/model/person-position/position';
+import { UserRole } from '../../../../data/remote/model/user-role';
+import { UserRoleEnum } from '../../../../data/remote/model/user-role-enum';
+import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { GroupPersonPositionQuery } from '../../../../data/remote/rest-api/query/group-person-position-query';
+import { GroupPersonQuery } from '../../../../data/remote/rest-api/query/group-person-query';
+import { GroupPersonItemComponent } from '../../../../module/group/group-person-item/group-person-item/group-person-item.component';
+import { GroupPositionItemComponent } from '../../../../module/group/group-position/group-position-item/group-position-item/group-position-item.component';
+import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
+import { PermissionService } from '../../../../shared/permission.service';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -69,14 +69,14 @@ export class GroupService implements OnDestroy {
 
   private async initializeGroupPerson(group: Group): Promise<void> {
     const groupPerson = await this._groupApiService.getCurrentGroupPerson(group).toPromise();
-    await this.updateGroupPerson(groupPerson);
+    this.updateGroupPerson(groupPerson);
   }
 
-  public async updateGroup(group: Group) {
+  public updateGroup(group: Group): void {
     this._groupSubject.next(group);
   }
 
-  public async updateGroupPerson(groupPerson: GroupPerson) {
+  public updateGroupPerson(groupPerson: GroupPerson): void {
     this._groupPersonSubject.next(groupPerson);
   }
 

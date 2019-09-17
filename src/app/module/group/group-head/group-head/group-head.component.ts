@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
@@ -12,7 +12,6 @@ import { Organization } from '../../../../data/remote/model/group/organization/o
 import { PreparationGroup } from '../../../../data/remote/model/group/preparation/preparation-group';
 import { Team } from '../../../../data/remote/model/group/team/team';
 import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
-import { GroupService } from '../../../../pages/group/group-page/service/group.service';
 import { GroupWindowService } from '../../../../services/windows/group-window/group-window.service';
 import { PermissionService } from '../../../../shared/permission.service';
 import { MenuItem } from '../../../common/item-line/model/menu-item';
@@ -40,6 +39,12 @@ export class GroupHeadComponent {
   @Input()
   public canEdit: boolean;
 
+  @Output()
+  public readonly navigate = new EventEmitter();
+
+  @Output()
+  public readonly changeGroupPerson = new EventEmitter<GroupPerson>();
+
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public actions: MenuItem[] = [];
@@ -49,8 +54,7 @@ export class GroupHeadComponent {
               private _permissionService: PermissionService,
               private _router: Router,
               private _groupWindowService: GroupWindowService,
-              private _groupApiService: GroupApiService,
-              private _groupService: GroupService) {
+              private _groupApiService: GroupApiService) {
   }
 
   public get groupPerson(): GroupPerson {
@@ -85,6 +89,11 @@ export class GroupHeadComponent {
     await this._router.navigate(['/group', this.group.id, 'settings']);
   }
 
+  public async onNavigate(): Promise<void> {
+    this.navigate.emit();
+    await this._router.navigate(['/group', this.group.id]);
+  }
+
   private _updateGroupActions(): void {
     this.actions = [];
     const isOwner = this._groupPerson && this._permissionService.areYouCreator(this.group, this._groupPerson.person);
@@ -114,9 +123,7 @@ export class GroupHeadComponent {
             const result = await this._groupWindowService.showSelectionGroupVacanciesModal(this.group, false, []);
             if (result.result) {
               const groupPerson = await this._groupApiService.joinGroup(this.group, result.data).toPromise();
-              if (this._groupService) {
-                await this._groupService.updateGroupPerson(groupPerson);
-              }
+              this.changeGroupPerson.emit(groupPerson);
             }
           }
         },
@@ -124,9 +131,7 @@ export class GroupHeadComponent {
           translationLabel: 'subscribe',
           action: async () => {
             const groupPerson = await this._groupApiService.followGroup(this.group).toPromise();
-            if (this._groupService) {
-              await this._groupService.updateGroupPerson(groupPerson);
-            }
+            this.changeGroupPerson.emit(groupPerson);
           }
         }
       ]);
@@ -135,10 +140,8 @@ export class GroupHeadComponent {
 
   private _leaveGroup(group: Group): Observable<null> {
     return this._groupApiService.leaveGroup(group)
-      .pipe(tap(async () => {
-        if (this._groupService) {
-          await this._groupService.updateGroupPerson(void 0);
-        }
+      .pipe(tap(() => {
+        this.changeGroupPerson.emit(void 0);
       }));
   }
 

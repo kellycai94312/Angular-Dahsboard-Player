@@ -1,22 +1,23 @@
-import {Component, OnDestroy} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {GroupTypeEnum} from '../../../../data/remote/model/group/base/group-type-enum';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {Router} from '@angular/router';
-import {LocalStorageService} from '../../../../shared/local-storage.service';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {PermissionService} from '../../../../shared/permission.service';
-import {UserRoleEnum} from '../../../../data/remote/model/user-role-enum';
-import {OrganizationTypeEnum} from '../../../../data/remote/model/group/organization/organization-type-enum';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {Validators} from '@angular/forms';
-import {takeWhile} from 'rxjs/operators';
-import {Organization} from '../../../../data/remote/model/group/organization/organization';
-import {Team} from '../../../../data/remote/model/group/team/team';
+import { Component, OnDestroy } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { takeWhile } from 'rxjs/operators';
+import { BaseEditComponent } from '../../../../data/local/component/base/base-edit-component';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupTypeEnum } from '../../../../data/remote/model/group/base/group-type-enum';
+import { Organization } from '../../../../data/remote/model/group/organization/organization';
+import { OrganizationTypeEnum } from '../../../../data/remote/model/group/organization/organization-type-enum';
+import { Team } from '../../../../data/remote/model/group/team/team';
+import { UserRoleEnum } from '../../../../data/remote/model/user-role-enum';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { LocalStorageService } from '../../../../shared/local-storage.service';
+import { PermissionService } from '../../../../shared/permission.service';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-group',
@@ -27,6 +28,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
 
   public readonly groupTypeEnum = GroupTypeEnum;
   public readonly nameNgxInput = new NgxInput();
+  public readonly descriptionNgxInput = new NgxInput();
   public readonly typeNgxSelect = new NgxSelect();
   public readonly organizationTypeNgxSelect = new NgxSelect();
   public readonly sportTypeNgxSelect = new NgxSelect();
@@ -51,11 +53,15 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     await super.initializeComponent(data);
     data.visible = data.visible || true;
 
-    return await this.appHelper.tryLoad(async () => {
+    return this.appHelper.tryLoad(async () => {
       this.nameNgxInput.labelTranslation = 'name';
       this.nameNgxInput.required = true;
       this.nameNgxInput.control.setValidators(Validators.required);
       this.nameNgxInput.control.setValue(data.name);
+
+      this.descriptionNgxInput.labelTranslation = 'description';
+      this.descriptionNgxInput.type = NgxInputType.TEXTAREA;
+      this.descriptionNgxInput.control.setValue(data.description);
 
       this.typeNgxSelect.labelTranslation = 'type';
       this.typeNgxSelect.display = 'name';
@@ -115,8 +121,9 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     });
   }
 
-  async onSave(): Promise<boolean> {
+  public async onSave(): Promise<boolean> {
     this.data.name = this.nameNgxInput.control.value;
+    this.data.description = this.descriptionNgxInput.control.value;
     this.data.discriminator = this.typeNgxSelect.control.value.data;
     (this.data as Organization).organizationType = this.organizationTypeNgxSelect.control.value;
     (this.data as Team).sportType = this.sportTypeNgxSelect.control.value;
@@ -124,7 +131,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     (this.data as Team).stage = this.stageNgxSelect.control.value;
     (this.data as Team).stageYear = this.stageYearNgxInput.control.value;
 
-    return await this.appHelper.trySave(async () => {
+    return this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);
       if (isNew) {
         this.appHelper.updateObject(this.data, await this.participantRestApiService.createGroup(this.data));
@@ -138,7 +145,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     });
   }
 
-  async onRemove(): Promise<boolean> {
+  public async onRemove(): Promise<boolean> {
     return undefined;
   }
 

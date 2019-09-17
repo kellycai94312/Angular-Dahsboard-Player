@@ -1,10 +1,10 @@
-import {PersonPrivacyObject} from '../base/person-privacy-object';
-import {Group} from './base/group';
-import {Type} from 'class-transformer';
-import {BasePosition} from '../person-position/base-position';
-import {PositionType} from '../person-position/position-type';
-import {GroupPosition} from '../person-position/group-position';
-import {Position} from '../person-position/position';
+import { Type } from 'class-transformer';
+import { PersonPrivacyObject } from '../base/person-privacy-object';
+import { BasePosition } from '../person-position/base-position';
+import { GroupPosition } from '../person-position/group-position';
+import { Position } from '../person-position/position';
+import { PositionType } from '../person-position/position-type';
+import { Group } from './base/group';
 
 export class GroupPersonJob extends PersonPrivacyObject {
 
@@ -17,7 +17,7 @@ export class GroupPersonJob extends PersonPrivacyObject {
       subTypes: [
         {value: GroupPosition, name: PositionType.GROUP_POSITION},
         {value: Position, name: PositionType.POSITION}
-      ],
+      ]
     },
     keepDiscriminatorProperty: true
   })

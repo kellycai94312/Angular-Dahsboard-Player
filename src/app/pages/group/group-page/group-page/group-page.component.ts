@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map, takeWhile } from 'rxjs/operators';
 import { BaseGroupComponent } from '../../../../data/local/component/group/base-group-component';
 import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupPerson } from '../../../../data/remote/model/group/group-person';
 import { ToolbarService } from '../../../../layout/components/toolbar/services/toolbar.service';
 import { NgxTab } from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
 import { AppHelper } from '../../../../utils/app-helper';
@@ -20,6 +21,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
+              private _groupService: GroupService,
               private _toolbarService: ToolbarService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
@@ -77,6 +79,10 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
   public async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
     this._toolbarService.updateGroup(group);
+  }
+
+  public onChangeGroupPerson(groupPerson: GroupPerson): void {
+    this._groupService.updateGroupPerson(groupPerson);
   }
 
 }

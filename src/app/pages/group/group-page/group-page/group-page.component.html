@@ -9,7 +9,8 @@
        fxLayout="column">
     <app-group-head [canEdit]="canEdit"
                     [group]="group"
-                    [groupPerson]="groupPerson"></app-group-head>
+                    [groupPerson]="groupPerson"
+                    (changeGroupPerson)="onChangeGroupPerson($event)"></app-group-head>
 
     <ngx-tabs [tabs]="tabs"></ngx-tabs>
   </div>

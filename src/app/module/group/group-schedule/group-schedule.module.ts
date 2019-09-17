@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { GroupScheduleModule as GroupSchedule } from '../../../../../module/group/group-schedule/group-schedule.module';
-import { GroupScheduleRoutingModule } from './group-schedule-routing.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule, MatIconModule } from '@angular/material';
 import { GroupScheduleComponent } from './group-schedule/group-schedule.component';
 
 @NgModule({
   declarations: [GroupScheduleComponent],
+  exports: [GroupScheduleComponent],
   imports: [
     CommonModule,
-    GroupScheduleRoutingModule,
-    GroupSchedule
+    MatIconModule,
+    MatButtonModule,
+    FlexLayoutModule
   ]
 })
 export class GroupScheduleModule {

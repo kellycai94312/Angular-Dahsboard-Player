@@ -11,9 +11,10 @@
              [type]="imageTypeClass.LOGO"
              [cropImage]="true"
              [fileClass]="fileClassClass.GROUP"
-             [allowFullScreen]="false"></ngx-image>
+             [allowFullScreen]="false"
+             (click)="onNavigate()"></ngx-image>
   <div>
-    <h4>{{group.name}}</h4>
+    <h4 (click)="onNavigate()">{{group.name}}</h4>
     <p *ngFor="let item of groupDescription">
       {{item}}
     </p>
