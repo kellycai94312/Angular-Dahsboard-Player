@@ -266,3 +266,14 @@ button::-moz-focus-inner {
 .base-container {
   padding: 10px;
 }
+
+.circle {
+  background-clip: padding-box;
+  border-radius: 50% !important;
+  background-size: cover;
+  background-position: center center;
+}
+
+.img-circle {
+  @extend .circle;
+}
