@@ -1,35 +1,36 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../environments/environment';
-import {ApiService} from '../base/api.service';
-import {Group} from '../../../model/group/base/group';
-import {GroupCluster} from '../../../model/group/connection/group-cluster';
-import {Observable} from 'rxjs';
-import {ClusterGroupPosition} from './model/cluster-group-position';
-import {PositionLevelEnum} from '../../../model/person-position/position-level-enum';
-import {UtilService} from '../../../../../services/util/util.service';
-import {Person} from '../../../model/person';
-import {BaseGroupContract} from '../../../model/group/contract/base-group-contract';
-import {ReportExtension} from '../../../bean/report-extension';
-import {IdRequest} from '../../../request/id-request';
-import {PersonRepresentative} from '../../../model/person/person-representative';
-import {GroupPerson} from '../../../model/group/group-person';
-import {PageContainer} from '../../../bean/page-container';
-import {GroupPersonQuery} from '../../query/group-person-query';
-import {HttpClient} from '@angular/common/http';
-import {SubgroupTemplate} from '../../../model/group/subgroup/template/subgroup-template';
-import {PageQuery} from '../../page-query';
-import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subgroup-template-group';
-import {GroupQuery} from '../../query/group-query';
-import {GroupNews} from '../../../model/group/news/group-news';
-import {EventDay} from '../../../bean/event/event-day';
-import {map} from 'rxjs/operators';
-import {GroupPosition} from '../../../model/person-position/group-position';
-import {PositionQuery} from '../position/model/position-query';
-import {BasePosition} from '../../../model/person-position/base-position';
-import {ListRequest} from '../../../request/list-request';
-import {GroupPersonPositionQuery} from '../../query/group-person-position-query';
-import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
-import {GroupPersonPosition} from '../../../model/group/position/group-person-position';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { plainToClass } from 'class-transformer';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
+import { UtilService } from '../../../../../services/util/util.service';
+import { EventDay } from '../../../bean/event/event-day';
+import { PageContainer } from '../../../bean/page-container';
+import { ReportExtension } from '../../../bean/report-extension';
+import { SingleAttributeWrapper } from '../../../bean/wrapper/single-attribute-wrapper';
+import { Group } from '../../../model/group/base/group';
+import { GroupCluster } from '../../../model/group/connection/group-cluster';
+import { BaseGroupContract } from '../../../model/group/contract/base-group-contract';
+import { GroupPerson } from '../../../model/group/group-person';
+import { GroupNews } from '../../../model/group/news/group-news';
+import { GroupPersonPosition } from '../../../model/group/position/group-person-position';
+import { SubgroupTemplate } from '../../../model/group/subgroup/template/subgroup-template';
+import { SubgroupTemplateGroup } from '../../../model/group/subgroup/template/subgroup-template-group';
+import { Person } from '../../../model/person';
+import { BasePosition } from '../../../model/person-position/base-position';
+import { GroupPosition } from '../../../model/person-position/group-position';
+import { PositionLevelEnum } from '../../../model/person-position/position-level-enum';
+import { PersonRepresentative } from '../../../model/person/person-representative';
+import { IdRequest } from '../../../request/id-request';
+import { ListRequest } from '../../../request/list-request';
+import { PageQuery } from '../../page-query';
+import { GroupPersonPositionQuery } from '../../query/group-person-position-query';
+import { GroupPersonQuery } from '../../query/group-person-query';
+import { GroupQuery } from '../../query/group-query';
+import { ApiService } from '../base/api.service';
+import { PositionQuery } from '../position/model/position-query';
+import { ClusterGroupPosition } from './model/cluster-group-position';
 
 @Injectable({
   providedIn: 'root'
@@ -68,8 +69,25 @@ export class GroupApiService {
 
   //region Group person
 
-  public getCurrentGroupPerson<T extends GroupPerson>(group: Group): Observable<T> {
-    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`).pipe(map(value => value.value)) as Observable<T>;
+  public getCurrentGroupPerson<T extends Group>(group: T): Observable<GroupPerson> {
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`)
+      .pipe(map(value => plainToClass(GroupPerson, value.value)));
+  }
+
+  public getGroupPerson<T extends Group>(group: T, person: Person): Observable<GroupPerson> {
+    return this._apiService.getValue(GroupPerson, `${this._basePath}/${group.id}/person/${person.id}`);
+  }
+
+  public joinGroup<T extends Group, P extends BasePosition>(group: T, positions: P[]): Observable<GroupPerson> {
+    return this._apiService.createValue(GroupPerson, `${this._basePath}/${group.id}/join`, new ListRequest(positions.map(x => new IdRequest(x.id)))) as Observable<GroupPerson>;
+  }
+
+  public followGroup<T extends Group>(group: T): Observable<GroupPerson> {
+    return this._apiService.createValue(GroupPerson, `${this._basePath}/${group.id}/follow`) as Observable<GroupPerson>;
+  }
+
+  public leaveGroup<T extends Group>(group: T): Observable<null> {
+    return this._apiService.removeValue(void 0, `${this._basePath}/${group.id}/join`) as Observable<null>;
   }
 
   public getGroupPersonPositions(groupPerson: GroupPerson, query?: GroupPersonPositionQuery): Observable<PageContainer<GroupPersonPosition>> {

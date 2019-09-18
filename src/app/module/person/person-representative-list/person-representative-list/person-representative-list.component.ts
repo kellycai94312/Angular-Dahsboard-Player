@@ -1,20 +1,20 @@
-import {Component, Input, ViewChild} from '@angular/core';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {Person} from '../../../../data/remote/model/person';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {UtilService} from '../../../../services/util/util.service';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {TemplateModalService} from '../../../../service/template-modal.service';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {PreviewNamedObjectComponent} from '../../../../components/named-object/preview-named-object/preview-named-object.component';
-import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
-import {PositionEnum} from '../../../../data/remote/model/person-position/position-enum';
-import {map} from 'rxjs/operators';
-import {IdRequest} from '../../../../data/remote/request/id-request';
+import { Component, Input, ViewChild } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { PreviewNamedObjectComponent } from '../../../../components/named-object/preview-named-object/preview-named-object.component';
+import { NgxGridComponent } from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import { NgxModalService } from '../../../../components/ngx-modal/service/ngx-modal.service';
+import { PageContainer } from '../../../../data/remote/bean/page-container';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { Person } from '../../../../data/remote/model/person';
+import { PositionEnum } from '../../../../data/remote/model/person-position/position-enum';
+import { IdRequest } from '../../../../data/remote/request/id-request';
+import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
+import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
+import { TemplateModalService } from '../../../../service/template-modal.service';
+import { UtilService } from '../../../../services/util/util.service';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-person-representative-list',
@@ -23,7 +23,7 @@ import {IdRequest} from '../../../../data/remote/request/id-request';
 })
 export class PersonRepresentativeListComponent {
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, { static: true })
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

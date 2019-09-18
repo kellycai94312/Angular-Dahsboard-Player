@@ -914,5 +914,16 @@
   "showcase": "Витрина",
   "briefcase": "Портфель",
   "finance": "Финансы",
-  "groupRepository": "Хранилище группы"
+  "groupRepository": "Хранилище группы",
+  "address": "Адрес",
+  "contactPersons": "Контактные лица",
+  "schedule": "Расписание",
+  "groupItemTypeEnum": {
+    "BASIC": "Основная информация",
+    "CONTACTS": "Контакты",
+    "ADDRESS": "Адрес",
+    "CONTACT_PERSONS": "Контактные лица",
+    "SHOWCASE": "Витрина",
+    "SCHEDULE": "Расписание"
+  }
 }

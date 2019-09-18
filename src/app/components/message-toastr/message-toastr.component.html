@@ -5,11 +5,11 @@
   </button>
 </div>
 <div class="d-flex flex-row message-wrapper" (click)="onDataClick($event)">
-  <app-image [type]="'LOGO'"
-             [clazz]="'PERSON'"
-             [id]="message.sender.person.id"
-             [dimension]="'W80xH80'"
-             [format]="'CIRCLE'"></app-image>
+<!--  TODO: <app-image [type]="'LOGO'"-->
+<!--             [clazz]="'PERSON'"-->
+<!--             [id]="message.sender.person.id"-->
+<!--             [dimension]="'W80xH80'"-->
+<!--             [format]="'CIRCLE'"></app-image>-->
   <div class="d-flex flex-column ml-1 message">
     <p class="sender">{{message.sender.person.firstName}} {{message.sender.person.lastName}}</p>
     <p class="content" [innerHTML]="messageViewModel.body | urlParser | async"></p>

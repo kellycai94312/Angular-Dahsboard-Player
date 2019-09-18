@@ -6,48 +6,11 @@
     <app-group-menu></app-group-menu>
   </div>
   <div fxFlex="grow"
-       fxLayout="column"
-       fxLayoutGap="10px">
-    <div fxLayout="row"
-         fxLayout.lt-sm="column"
-         fxLayoutAlign.lt-sm="center center"
-         fxLayoutGap="10px"
-         class="header">
-      <ngx-image [canEdit]="canEdit"
-                 [width]="130"
-                 [height]="130"
-                 [object]="group"
-                 [type]="imageTypeClass.LOGO"
-                 [cropImage]="true"
-                 [fileClass]="fileClassClass.GROUP"
-                 [allowFullScreen]="false"></ngx-image>
-
-      <div>
-        <h4>{{group.name}}</h4>
-        <p>{{'groupType' | translate }} - {{('groupTypeEnum.' + group.discriminator) | translate}}</p>
-        <p *ngIf="group?.organizationType?.name">{{'organizationType' | translate }} - {{group?.organizationType?.name}}</p>
-        <p *ngIf="(group.discriminator === groupTypeEnumClass.TEAM || group.discriminator === groupTypeEnumClass.PREPARATION_GROUP) && group.sportType">{{'sportType' | translate }} - {{group.sportType.name}}</p>
-        <div *ngIf="group.discriminator === groupTypeEnumClass.TEAM">
-          <p *ngIf="group.teamType">{{'teamType' | translate }} - {{group.teamType.name}}</p>
-          <p *ngIf="group.league">{{'league' | translate }} - {{group.league.name}}</p>
-          <p *ngIf="group.ageGroup">{{'ageGroup' | translate }} - {{group.ageGroup.name}}</p>
-        </div>
-      </div>
-
-      <div fxFlex
-           fxLayout
-           fxLayoutAlign="end start"
-           fxLayoutGap="10px">
-        <ngx-split-button title="{{ groupPerson ?(('groupPersonStateEnum.' + groupPerson.state) | translate) : ' '}}"
-                          [placementRight]="true"
-                          [items]="splitButtonsItems"></ngx-split-button>
-
-        <ngx-button *ngIf="canEdit"
-                    class="ml-2"
-                    [icon]="iconEnumClass.EDIT"
-                    [click]="onEditSettings"></ngx-button>
-      </div>
-    </div>
+       fxLayout="column">
+    <app-group-head [canEdit]="canEdit"
+                    [group]="group"
+                    [groupPerson]="groupPerson"
+                    (changeGroupPerson)="onChangeGroupPerson($event)"></app-group-head>
 
     <ngx-tabs [tabs]="tabs"></ngx-tabs>
   </div>

@@ -1,23 +1,21 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
-import {Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
-import {TranslateService} from '@ngx-translate/core';
-
-import {FuseConfigService} from '@fuse/services/config.service';
-import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
-
-import {navigation} from 'app/navigation/navigation';
-import {AuthorizationService} from '../../../shared/authorization.service';
-import {Person} from '../../../data/remote/model/person';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {ImageType} from '../../../data/remote/model/file/image/image-type';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {Router} from '@angular/router';
-import {NotificationService} from '../../../shared/notification.service';
-import {NotificationApiService} from '../../../data/remote/rest-api/api/notification/notification-api.service';
-import {Group} from '../../../data/remote/model/group/base/group';
-import {GroupApiService} from '../../../data/remote/rest-api/api/group/group-api.service';
-import {ToolbarService} from './services/toolbar.service';
+import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Router } from '@angular/router';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { FuseConfigService } from '@fuse/services/config.service';
+import { TranslateService } from '@ngx-translate/core';
+import { navigation } from 'app/navigation/navigation';
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
+import { FileClass } from '../../../data/remote/model/file/base/file-class';
+import { ImageType } from '../../../data/remote/model/file/image/image-type';
+import { Group } from '../../../data/remote/model/group/base/group';
+import { Person } from '../../../data/remote/model/person';
+import { GroupApiService } from '../../../data/remote/rest-api/api/group/group-api.service';
+import { NotificationApiService } from '../../../data/remote/rest-api/api/notification/notification-api.service';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { AuthorizationService } from '../../../shared/authorization.service';
+import { NotificationService } from '../../../shared/notification.service';
+import { ToolbarService } from './services/toolbar.service';
 
 @Component({
   selector: 'toolbar',

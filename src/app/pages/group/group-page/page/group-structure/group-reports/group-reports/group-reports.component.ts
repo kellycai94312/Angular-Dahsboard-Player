@@ -1,21 +1,21 @@
-import {Component, ComponentFactoryResolver, OnInit} from '@angular/core';
-import {BaseGroupComponent} from '../../../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../../../service/group.service';
-import {AppHelper} from '../../../../../../../utils/app-helper';
-import {NgxSelect} from '../../../../../../../module/ngx/ngx-select/model/ngx-select';
-import {ParticipantRestApiService} from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {map, takeWhile} from 'rxjs/operators';
-import {FlatNode} from '../../../../../../../module/ngx/ngx-tree/model/flat-node';
-import {GroupClusterApiService} from '../../../../../../../data/remote/rest-api/api/group-cluster/group-cluster-api.service';
-import {PositionLevelEnum} from '../../../../../../../data/remote/model/person-position/position-level-enum';
-import {TranslateObjectService} from '../../../../../../../shared/translate-object.service';
-import {GroupApiService} from '../../../../../../../data/remote/rest-api/api/group/group-api.service';
-import {Observable, of} from 'rxjs';
-import {ClusterGroupPosition} from '../../../../../../../data/remote/rest-api/api/group/model/cluster-group-position';
-import {GroupCluster} from '../../../../../../../data/remote/model/group/connection/group-cluster';
-import {NgxModalService} from '../../../../../../../components/ngx-modal/service/ngx-modal.service';
-import {GroupWorkTimeReportComponent} from '../../../../../../../module/group/report/group-work-time-report/group-work-time-report/group-work-time-report.component';
+import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map, takeWhile } from 'rxjs/operators';
+import { NgxModalService } from '../../../../../../../components/ngx-modal/service/ngx-modal.service';
+import { BaseGroupComponent } from '../../../../../../../data/local/component/group/base-group-component';
+import { Group } from '../../../../../../../data/remote/model/group/base/group';
+import { GroupCluster } from '../../../../../../../data/remote/model/group/connection/group-cluster';
+import { PositionLevelEnum } from '../../../../../../../data/remote/model/person-position/position-level-enum';
+import { GroupClusterApiService } from '../../../../../../../data/remote/rest-api/api/group-cluster/group-cluster-api.service';
+import { GroupApiService } from '../../../../../../../data/remote/rest-api/api/group/group-api.service';
+import { ClusterGroupPosition } from '../../../../../../../data/remote/rest-api/api/group/model/cluster-group-position';
+import { ParticipantRestApiService } from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { GroupWorkTimeReportComponent } from '../../../../../../../module/group/report/group-work-time-report/group-work-time-report/group-work-time-report.component';
+import { NgxSelect } from '../../../../../../../module/ngx/ngx-select/model/ngx-select';
+import { FlatNode } from '../../../../../../../module/ngx/ngx-tree/model/flat-node';
+import { TranslateObjectService } from '../../../../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../../../../utils/app-helper';
+import { GroupService } from '../../../../service/group.service';
 
 @Component({
   selector: 'app-group-reports',
@@ -89,7 +89,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
     this._groupCluster = value;
   }
 
-  public onSelectedNode(node: FlatNode) {
+  public onSelectedNode(node: FlatNode): void {
     this.selectedNode = node;
 
     this._updateGroupPositions();
@@ -144,6 +144,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
           return true;
         }));
     }
+
     return of(false);
   }
 

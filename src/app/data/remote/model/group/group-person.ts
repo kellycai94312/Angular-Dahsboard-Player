@@ -1,23 +1,44 @@
-import {IdentifiedObject} from '../../base/identified-object';
-import {Group} from './base/group';
-import {Person} from '../person';
-import {SportRole} from '../sport-role';
-import {StageType} from '../stage/stage-type';
-import {PersonRank} from '../person-rank';
-import {GroupTransition} from './transition/group-transition';
-import {GroupPersonState} from './group-person-state';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../base/identified-object';
+import { Person } from '../person';
+import { PersonRank } from '../person-rank';
+import { SportRole } from '../sport-role';
+import { StageType } from '../stage/stage-type';
+import { Group } from './base/group';
+import { GroupPersonState } from './group-person-state';
+import { GroupTransition } from './transition/group-transition';
 
 export class GroupPerson extends IdentifiedObject {
-  group: Group;
-  person: Person;
-  mentor: GroupPerson;
-  sportRole: SportRole;
-  number: number;
-  leadTrainer: boolean;
-  stageType: StageType;
-  state: GroupPersonState;
 
-  // transient
-  personRank: PersonRank;
-  groupTransition: GroupTransition;
+  @Type(() => Group)
+  public group: Group;
+
+  @Type(() => Person)
+  public person: Person;
+
+  @Type(() => Group)
+  public mentor: GroupPerson;
+
+  @Type(() => SportRole)
+  public sportRole: SportRole;
+
+  @Type(() => StageType)
+  public stageType: StageType;
+
+  public number?: number;
+  public state: GroupPersonState;
+  public leadTrainer: boolean;
+
+  //region Transient
+
+  @Type(() => PersonRank)
+  public personRank: PersonRank;
+
+  @Type(() => GroupTransition)
+  public groupTransition: GroupTransition;
+
+  public canEdit?: boolean;
+
+  //endregion
+
 }

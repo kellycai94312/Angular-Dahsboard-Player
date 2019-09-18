@@ -1,0 +1,41 @@
+<div *ngIf="group">
+  <div fxFlexFill
+       fxLayout="row"
+       fxLayoutGap="10px"
+       class="content">
+    <div fxFlex="30"
+         class="left-content">
+      <mat-list *ngIf="menuItems?.length">
+        <mat-list-item *ngFor="let item of menuItems"
+                       matRipple
+                       class="item"
+                       [matRippleDisabled]="item.disabled"
+                       [ngClass]="{'selected-item': item === selectedMenuItem, 'disabled-item': item.disabled}"
+                       (click)="onSelectMenuItem(item)">
+          <div>{{item.labelTranslation | translate}}</div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+    <div fxFlex
+         fxLayout="column"
+         fxLayoutGap="10px"
+         class="right-content">
+      <app-group-head [group]="group"
+                      [groupPerson]="groupPerson"
+                      (navigate)="onNavigate()"
+                      (changeGroupPerson)="onChangeGroupPerson($event)"></app-group-head>
+      <div [ngSwitch]="selectedMenuItem?.data"
+           class="selected-content">
+        <pre *ngSwitchCase="groupItemTypeClass.BASIC">
+          {{group.description}}
+        </pre>
+        <app-group-schedule *ngSwitchCase="groupItemTypeClass.SCHEDULE"
+                            [canEdit]="groupPerson?.canEdit"
+                            [group]="group"></app-group-schedule>
+        <ng-container *ngSwitchDefault>
+          {{'noData' | translate}}
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>
