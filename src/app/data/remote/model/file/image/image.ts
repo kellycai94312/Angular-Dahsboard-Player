@@ -1,15 +1,18 @@
-import {BaseFile} from '../base/base-file';
-import {ImageType} from './image-type';
-import {FileType} from '../base/file-type';
+import { Type } from 'class-transformer';
+import { FileType, ResourceFile } from '../base';
+import { ImageType } from './image-type';
 
-export class Image extends BaseFile {
+export class Image extends ResourceFile {
 
-  type: ImageType;
-  croppedImage: Image;
-  x1?: number;
-  y1?: number;
-  x2?: number;
-  y2?: number;
+  public type: ImageType;
+
+  @Type(() => Image)
+  public croppedImage?: Image;
+
+  public x1?: number;
+  public y1?: number;
+  public x2?: number;
+  public y2?: number;
 
   constructor() {
     super();

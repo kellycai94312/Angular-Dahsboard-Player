@@ -1,15 +1,14 @@
-import {Component, Input} from '@angular/core';
-import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
-import {PersonRank} from '../../../../data/remote/model/person-rank';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Person} from '../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ComponentWithAttach } from '../../../../data/local/component/base/component-with-attach';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { Person } from '../../../../data/remote/model/person';
+import { PersonRank } from '../../../../data/remote/model/person-rank';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-person-rank',
@@ -30,12 +29,12 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
 
-    this.document.clazz = FileClass.PERSON_RANK;
-    this.documentQuery.clazz = FileClass.PERSON_RANK;
+    // this.document.clazz = FileClass.PERSON_RANK;
+    // this.documentQuery.clazz = FileClass.PERSON_RANK;
   }
 
   async initialize(obj: PersonRank): Promise<boolean> {
-    return await this.appHelper.tryLoad(async () => {
+    return this.appHelper.tryLoad(async () => {
       await super.initialize(obj);
       this.rankNgxSelect.labelTranslation = 'rank';
       this.rankNgxSelect.required = true;
@@ -65,8 +64,6 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
       this._formGroup.setControl('sportType', this.sportTypeNgxSelect.control);
       this._formGroup.setControl('documentNumber', this.documentNumberNgxInput.control);
       this._formGroup.setControl('date', this.dateNgxDate.control);
-
-      await this.attachFileComponent.initialize();
     });
   }
 
@@ -79,7 +76,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
   async onSave(): Promise<boolean> {
     this.updateData();
 
-    if (!this.changeWatcher.hasChanges() && !this.attachFileComponent.hasChanges()) {
+    if (!this.changeWatcher.hasChanges()) {
       return true;
     }
 
@@ -87,7 +84,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
       return false;
     }
 
-    return await this.appHelper.trySave(async () => {
+    return this.appHelper.trySave(async () => {
       if (this.changeWatcher.hasChanges()) {
         if (this.appHelper.isNewObject(this.data)) {
           this.appHelper.updateObject(this.data, await this.participantRestApiService.createPersonRank(this.data, {}, {
@@ -101,11 +98,6 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
         }
         this.document.number = this.data.number;
         this.document.date = this.data.date;
-      }
-
-      if (this.attachFileComponent.hasChanges()) {
-        this.document.objectId = this.data.id;
-        await this.attachFileComponent.updateFile();
       }
     });
   }

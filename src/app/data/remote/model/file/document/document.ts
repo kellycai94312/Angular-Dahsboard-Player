@@ -1,17 +1,16 @@
-import {BaseFile} from '../base/base-file';
-import {DocumentType} from './document-type';
-import {FileType} from '../base/file-type';
+import { BaseFile } from '../base/base-file';
+import { DocumentType } from './document-type';
 
+// TODO: Remove it!
 export class Document extends BaseFile {
-  type: DocumentType;
-  series: number;
-  number: number;
-  date: Date;
-  issuedBy?: string;
-  validityInDays?: number;
+  public type: DocumentType;
+  public series: number;
+  public number: number;
+  public date: Date;
+  public issuedBy?: string;
+  public validityInDays?: number;
 
   constructor() {
     super();
-    this.discriminator = FileType.DOCUMENT;
   }
 }

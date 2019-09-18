@@ -1,97 +1,111 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod, RestResponseBodyType } from 'rest-core';
-import { environment } from '../../../../environments/environment';
-import { IdentifiedObject } from '../base/identified-object';
-import { VersionObject } from '../base/version/version-object';
-import { ExerciseResult } from '../bean/exercise-result';
-import { PageContainer } from '../bean/page-container';
-import { SportTypePerson } from '../bean/sport-type-person';
-import { BooleanWrapper } from '../bean/wrapper/boolean-wrapper';
-import { DateWrapper } from '../bean/wrapper/date-wrapper';
-import { IntegerWrapper } from '../bean/wrapper/integer-wrapper';
-import { MessageWrapper } from '../bean/wrapper/message-wrapper';
-import { StringWrapper } from '../bean/wrapper/string-wrapper';
-import { Activity } from '../model/activity/activity';
-import { Address } from '../model/address';
-import { AgeGroup } from '../model/age-group';
-import { Auth } from '../model/auth';
-import { Participant } from '../model/chat';
-import { Chat } from '../model/chat/conversation';
-import { BaseConversation } from '../model/chat/conversation/base';
-import { Message } from '../model/chat/message';
-import { BaseMessageContent } from '../model/chat/message/base';
-import { City } from '../model/city';
-import { Country } from '../model/country';
-import { BaseExercise } from '../model/exercise/base/base-exercise';
-import { ExerciseMeasure } from '../model/exercise/exercise-measure';
-import { BaseFile } from '../model/file/base/base-file';
-import { Document } from '../model/file/document/document';
-import { Image } from '../model/file/image/image';
-import { GroupPerson } from '../model/group';
-import { Group } from '../model/group/base';
-import { GroupCluster, GroupClusterRank, GroupConnection, GroupConnectionRequest } from '../model/group/connection';
-import { OrganizationType } from '../model/group/organization/organization-type';
-import { SubgroupPersonType } from '../model/group/subgroup/person/subgroup-person-type';
-import { SubgroupTemplatePersonType } from '../model/group/subgroup/person/subgroup-template-person-type';
-import { SubgroupBookmark } from '../model/group/subgroup/subgroup-bookmark';
-import { Subgroup } from '../model/group/subgroup/subgroup/subgroup';
-import { SubgroupGroup } from '../model/group/subgroup/subgroup/subgroup-group';
-import { SubgroupTemplate } from '../model/group/subgroup/template/subgroup-template';
-import { SubgroupTemplateGroup } from '../model/group/subgroup/template/subgroup-template-group';
-import { SubgroupTemplateGroupVersion } from '../model/group/subgroup/template/subgroup-template-group-version';
-import { SubgroupTemplateVersion } from '../model/group/subgroup/template/subgroup-template-version';
-import { League, TeamType } from '../model/group/team';
-import { GroupPersonTransition, GroupTransition } from '../model/group/transition';
-import { Location } from '../model/location';
-import { Measure } from '../model/measure';
-import { Person } from '../model/person';
-import { PersonAnthropometry } from '../model/person-anthropometry';
-import { PersonRank } from '../model/person-rank';
-import { AthleteState } from '../model/person/athlete-state';
-import { AnswerTypeEnum } from '../model/poll/answer-type-enum';
-import { PollPerson } from '../model/poll/poll-person';
-import { PollPersonAnswer } from '../model/poll/poll-person-answer';
-import { PollQuestion } from '../model/poll/poll-question';
-import { PollQuestionAnswer } from '../model/poll/poll-question-answer';
-import { Rank } from '../model/rank';
-import { PersonRefereeCategory } from '../model/referee-category/person-referee-category';
-import { Region } from '../model/region';
-import { Requisites } from '../model/requisites';
-import { Session } from '../model/session';
-import { SportRole } from '../model/sport-role';
-import { SportType } from '../model/sport-type';
-import { Stage } from '../model/stage/stage';
-import { StageType } from '../model/stage/stage-type';
-import { Tag } from '../model/tag';
-import { ExerciseExecMeasureValue } from '../model/training/exercise-exec-measure-value';
-import { User } from '../model/user';
-import { UserRole } from '../model/user-role';
-import { VerificationRequest } from '../model/verification-request';
-import { ChatRequest } from '../request/chat-request';
-import { EmailRequest } from '../request/email-request';
-import { GroupInviteRequest } from '../request/group-invite-request';
-import { GroupPersonsTransferRequest } from '../request/group-persons-transfer-request';
-import { IdRequest } from '../request/id-request';
-import { ImageCropRequest } from '../request/image-crop-request';
-import { ListRequest } from '../request/list-request';
-import { VersionObjectRequest } from '../request/version-object-request';
-import { NamedQuery } from './named-query';
-import { PageQuery } from './page-query';
-import { QueryParams } from './query-params';
-import { ActivityQuery } from './query/activity-query';
-import { AnthropometryQuery } from './query/anthropometry-query';
-import { ConversationQuery } from './query/conversation-query';
-import { DocumentQuery } from './query/file/document-query';
-import { ImageQuery } from './query/file/image-query';
-import { GroupPersonQuery } from './query/group-person-query';
-import { GroupQuery } from './query/group-query';
-import { GroupClusterQuery } from './query/group/group-cluster-query';
-import { GroupConnectionRequestQuery } from './query/group/group-connection-request-query';
-import { MeasureTemplateQuery } from './query/measure-template-query';
-import { PersonQuery } from './query/person-query';
-import { SubgroupBookmarkQuery } from './query/subgroup-bookmark-query';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {plainToClass, plainToClassFromExist} from 'class-transformer';
+import {
+  IRestMethod,
+  IRestMethodStrict,
+  Rest,
+  RestAction,
+  RestHandler,
+  RestParams,
+  RestRequestMethod,
+  RestResponseBodyType
+} from 'rest-core';
+import {environment} from '../../../../environments/environment';
+import {IdentifiedObject} from '../base/identified-object';
+import {AbstractVersionObject} from '../base/version/abstract-version-object';
+import {ExerciseResult} from '../bean/exercise-result';
+import {PageContainer} from '../bean/page-container';
+import {SportTypePerson} from '../bean/sport-type-person';
+import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
+import {DateWrapper} from '../bean/wrapper/date-wrapper';
+import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
+import {MessageWrapper} from '../bean/wrapper/message-wrapper';
+import {StringWrapper} from '../bean/wrapper/string-wrapper';
+import {Activity} from '../model/activity/activity';
+import {Address} from '../model/address';
+import {AgeGroup} from '../model/age-group';
+import {Auth} from '../model/auth';
+import {BaseConversation} from '../model/chat/conversation/base/base-conversation';
+import {Chat} from '../model/chat/conversation/chat';
+import {BaseMessageContent} from '../model/chat/message/base/base-message-content';
+import {Message} from '../model/chat/message/message';
+import {Participant} from '../model/chat/participant';
+import {City} from '../model/city';
+import {Country} from '../model/country';
+import {BaseExercise} from '../model/exercise/base/base-exercise';
+import {ExerciseMeasure} from '../model/exercise/exercise-measure';
+import {BaseFile} from '../model/file/base/base-file';
+import {Document} from '../model/file/document/document';
+import {Image} from '../model/file/image/image';
+import {Group} from '../model/group/base/group';
+import {GroupCluster} from '../model/group/connection/group-cluster';
+import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
+import {GroupConnection} from '../model/group/connection/group-connection';
+import {GroupConnectionRequest} from '../model/group/connection/group-connection-request';
+import {GroupPerson} from '../model/group/group-person';
+import {OrganizationType} from '../model/group/organization/organization-type';
+import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
+import {SubgroupTemplatePersonType} from '../model/group/subgroup/person/subgroup-template-person-type';
+import {SubgroupBookmark} from '../model/group/subgroup/subgroup-bookmark';
+import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
+import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupTemplate} from '../model/group/subgroup/template/subgroup-template';
+import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
+import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
+import {SubgroupTemplateVersion} from '../model/group/subgroup/template/subgroup-template-version';
+import {League} from '../model/group/team/league';
+import {TeamType} from '../model/group/team/team-type';
+import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
+import {GroupTransition} from '../model/group/transition/group-transition';
+import {Location} from '../model/location';
+import {Measure} from '../model/measure';
+import {Person} from '../model/person';
+import {PersonAnthropometry} from '../model/person-anthropometry';
+import {PersonRank} from '../model/person-rank';
+import {AthleteState} from '../model/person/athlete-state';
+import {AnswerTypeEnum} from '../model/poll/answer-type-enum';
+import {PollPerson} from '../model/poll/poll-person';
+import {PollPersonAnswer} from '../model/poll/poll-person-answer';
+import {PollQuestion} from '../model/poll/poll-question';
+import {PollQuestionAnswer} from '../model/poll/poll-question-answer';
+import {Rank} from '../model/rank';
+import {PersonRefereeCategory} from '../model/referee-category/person-referee-category';
+import {Region} from '../model/region';
+import {Requisites} from '../model/requisites';
+import {Session} from '../model/session';
+import {SportRole} from '../model/sport-role';
+import {SportType} from '../model/sport-type';
+import {Stage} from '../model/stage/stage';
+import {StageType} from '../model/stage/stage-type';
+import {Tag} from '../model/tag';
+import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
+import {User} from '../model/user';
+import {UserRole} from '../model/user-role';
+import {VerificationRequest} from '../model/verification-request';
+import {ChatRequest} from '../request/chat-request';
+import {EmailRequest} from '../request/email-request';
+import {GroupInviteRequest} from '../request/group-invite-request';
+import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
+import {IdRequest} from '../request/id-request';
+import {ImageCropRequest} from '../request/image-crop-request';
+import {ListRequest} from '../request/list-request';
+import {VersionObjectRequest} from '../request/version-object-request';
+import {NamedQuery} from './named-query';
+import {PageQuery} from './page-query';
+import {QueryParams} from './query-params';
+import {ActivityQuery} from './query/activity-query';
+import {AnthropometryQuery} from './query/anthropometry-query';
+import {ConversationQuery} from './query/conversation-query';
+import {DocumentQuery} from './query/file/document-query';
+import {ImageQuery} from './query/file/image-query';
+import {GroupPersonQuery} from './query/group-person-query';
+import {GroupQuery} from './query/group-query';
+import {GroupClusterQuery} from './query/group/group-cluster-query';
+import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
+import {MeasureTemplateQuery} from './query/measure-template-query';
+import {PersonQuery} from './query/person-query';
+import {SubgroupBookmarkQuery} from './query/subgroup-bookmark-query';
 
 @Injectable({
   providedIn: 'root'
@@ -748,19 +762,19 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/versionObject'
   })
-  getVersionObjects: IRestMethod<PageQuery, PageContainer<VersionObject>>;
+  getVersionObjects: IRestMethod<PageQuery, PageContainer<AbstractVersionObject>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/versionObject'
   })
-  approveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
+  approveVersionObject: IRestMethod<VersionObjectRequest, AbstractVersionObject>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/versionObject'
   })
-  disapproveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
+  disapproveVersionObject: IRestMethod<VersionObjectRequest, AbstractVersionObject>;
 
   //#endregion
 

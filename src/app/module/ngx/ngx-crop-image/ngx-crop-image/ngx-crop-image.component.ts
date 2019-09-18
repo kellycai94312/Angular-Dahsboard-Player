@@ -1,14 +1,14 @@
-import {Component, ElementRef, Input, ViewChild} from '@angular/core';
-import {CropperPosition, ImageCroppedEvent, ImageCropperComponent} from 'ngx-image-cropper';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {Image} from '../../../../data/remote/model/file/image/image';
-import {ImageCropRequest} from '../../../../data/remote/request/image-crop-request';
-import {Observable, Observer} from 'rxjs';
-import {ImageQuery} from '../../../../data/remote/rest-api/query/file/image-query';
-import {ImageFormat} from '../../../../data/local/image-format';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { CropperPosition, ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { Observable, Observer } from 'rxjs';
+import { ImageFormat } from '../../../../data/local/image-format';
+import { FileClass } from '../../../../data/remote/model/file/base/file-class';
+import { Image } from '../../../../data/remote/model/file/image/image';
+import { ImageType } from '../../../../data/remote/model/file/image/image-type';
+import { ImageCropRequest } from '../../../../data/remote/request/image-crop-request';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { ImageQuery } from '../../../../data/remote/rest-api/query/file/image-query';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-ngx-edit-image',
@@ -51,8 +51,8 @@ export class NgxCropImageComponent {
                           imageBase64?: any,
                           imagePosition?: CropperPosition,
                           file?: File): Promise<boolean> {
-    return await this._appHelper.tryLoad(async () => {
-      this.objectId = image.objectId;
+    return this._appHelper.tryLoad(async () => {
+      // this.objectId = image.objectId;
 
       this._type = image.type;
       this._croppedImageType = image.type;
@@ -134,10 +134,10 @@ export class NgxCropImageComponent {
   }
 
   public async onSave(): Promise<boolean> {
-    return await this._appHelper.trySave(async () => {
+    return this._appHelper.trySave(async () => {
       if (!this._image || !this._image.id) {
         this._image = new Image();
-        this._image.objectId = this.objectId;
+        // this._image.objectId = this.objectId;
         this._image.type = this._type;
         this._image.clazz = this._fileClass;
 

@@ -1,12 +1,20 @@
-import {FileClass} from './file-class';
-import {FileType} from './file-type';
-import {Resource} from '../resource';
-import {VersionObject} from '../../../base/version/version-object';
+import { Type } from 'class-transformer';
+import { NamedObject } from '../../../base';
+import { Person } from '../../person';
+import { FileObject } from '../object';
+import { FileClass } from './file-class';
+import { FileType } from './file-type';
 
-export class BaseFile extends VersionObject {
+export class BaseFile extends NamedObject {
+
   public discriminator: FileType;
   public clazz: FileClass;
-  public objectId: number;
   public orderId?: number;
-  public resource?: Resource;
+
+  @Type(() => Person)
+  public person?: Person;
+
+  @Type(() => FileObject)
+  public ownerFileObject?: FileObject<any>;
+
 }

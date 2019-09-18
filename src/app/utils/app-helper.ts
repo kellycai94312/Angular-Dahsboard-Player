@@ -1,21 +1,19 @@
-import {DatePipe} from '@angular/common';
-import {Injectable} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {ToastrService} from 'ngx-toastr';
-import {PageContainer} from '../data/remote/bean/page-container';
-import {IdentifiedObject} from '../data/remote/base/identified-object';
-import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {ClientError} from '../data/local/error/client-error';
-import {FileClass} from '../data/remote/model/file/base/file-class';
-import {ExerciseType} from '../data/remote/model/exercise/base/exercise-type';
-import {environment} from '../../environments/environment';
-import {ListRequest} from '../data/remote/request/list-request';
-import {IdRequest} from '../data/remote/request/id-request';
-import {Period} from '../data/local/period';
-import {PropertyConstant} from '../data/local/property-constant';
-import {Observable, Unsubscribable} from 'rxjs';
-import {PageQuery} from '../data/remote/rest-api/page-query';
-import {Person} from '../data/remote/model/person';
+import { DatePipe } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { ToastrService } from 'ngx-toastr';
+import { Observable, Unsubscribable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { ClientError } from '../data/local/error/client-error';
+import { Period } from '../data/local/period';
+import { PropertyConstant } from '../data/local/property-constant';
+import { IdentifiedObject } from '../data/remote/base/identified-object';
+import { PageContainer } from '../data/remote/bean/page-container';
+import { Person } from '../data/remote/model/person';
+import { IdRequest } from '../data/remote/request/id-request';
+import { ListRequest } from '../data/remote/request/list-request';
+import { PageQuery } from '../data/remote/rest-api/page-query';
+import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
 
 // TODO: Rename to AppHelperService. Add tests
 @Injectable({
@@ -235,16 +233,6 @@ export class AppHelper {
       case 'string':
         return `${rgb.r};${rgb.g};${rgb.b}`;
     }
-  }
-
-  public exerciseTypeToFileClass(val: ExerciseType): FileClass {
-    switch (val) {
-      case ExerciseType.TEST:
-        return FileClass.TEST;
-      case ExerciseType.EXERCISE:
-        return FileClass.EXERCISE;
-    }
-    return null;
   }
 
   public getYouTubeIdFromUrl(url: string): string | boolean {

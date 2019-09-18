@@ -1,14 +1,13 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {EditMedicalExaminationComponent} from './edit-medical-examination/edit-medical-examination.component';
-import {AttachFileModule} from '../../../components/attach-file/attach-file.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
-import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
-import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
-import {MatCheckboxModule} from '@angular/material';
-import {FormsModule} from '@angular/forms';
-import {TranslateModule} from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+import { MatCheckboxModule } from '@angular/material';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxDateModule } from '../../ngx/ngx-date/ngx-date.module';
+import { NgxInputModule } from '../../ngx/ngx-input/ngx-input.module';
+import { NgxSelectModule } from '../../ngx/ngx-select/ngx-select.module';
+import { EditMedicalExaminationComponent } from './edit-medical-examination/edit-medical-examination.component';
 
 @NgModule({
   declarations: [EditMedicalExaminationComponent],
@@ -22,7 +21,6 @@ import {TranslateModule} from '@ngx-translate/core';
     NgxInputModule,
     NgxDateModule,
     NgxSelectModule,
-    AttachFileModule,
     FormsModule
   ]
 })

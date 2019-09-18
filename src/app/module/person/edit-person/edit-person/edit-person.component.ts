@@ -1,35 +1,35 @@
-import {Component, ComponentFactoryResolver, forwardRef, Inject, Input, OnDestroy} from '@angular/core';
-import {Person} from '../../../../data/remote/model/person';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {SexEnum} from '../../../../data/remote/misc/sex-enum';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {Document} from '../../../../data/remote/model/file/document/document';
-import {DocumentType} from '../../../../data/remote/model/file/document/document-type';
-import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
-import {ValidationService} from '../../../../service/validation/validation.service';
-import {FileApiService} from '../../../../data/remote/rest-api/api/file/file-api.service';
-import {TemplateModalService} from '../../../../service/template-modal.service';
-import {EMPTY, from, merge, NEVER, Observable, of} from 'rxjs';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {UtilService} from '../../../../services/util/util.service';
-import {User} from '../../../../data/remote/model/user';
-import {ModalBuilderService} from '../../../../service/modal-builder/modal-builder.service';
-import {flatMap, map, takeWhile} from 'rxjs/operators';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {GroupPositionItemComponent} from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
-import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
-import {PersonContact} from '../../../../data/remote/model/person/person-contact';
-import {PersonContactTypeEnum} from '../../../../data/remote/model/person/person-contact-type-enum';
-import {PersonPrivacyEnum} from '../../../../data/remote/model/base/person-privacy-enum';
+import { Component, ComponentFactoryResolver, forwardRef, Inject, Input, OnDestroy } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { EMPTY, from, merge, NEVER, Observable, of } from 'rxjs';
+import { flatMap, map, takeWhile } from 'rxjs/operators';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { SexEnum } from '../../../../data/remote/misc/sex-enum';
+import { PersonPrivacyEnum } from '../../../../data/remote/model/base/person-privacy-enum';
+import { FileClass } from '../../../../data/remote/model/file/base/file-class';
+import { Document } from '../../../../data/remote/model/file/document/document';
+import { DocumentType } from '../../../../data/remote/model/file/document/document-type';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import { Person } from '../../../../data/remote/model/person';
+import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
+import { PersonContact } from '../../../../data/remote/model/person/person-contact';
+import { PersonContactTypeEnum } from '../../../../data/remote/model/person/person-contact-type-enum';
+import { User } from '../../../../data/remote/model/user';
+import { FileApiService } from '../../../../data/remote/rest-api/api/file/file-api.service';
+import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
+import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
+import { TemplateModalService } from '../../../../service/template-modal.service';
+import { ValidationService } from '../../../../service/validation/validation.service';
+import { UtilService } from '../../../../services/util/util.service';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { GroupPositionItemComponent } from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-person',
@@ -167,7 +167,7 @@ export class EditPersonComponent implements OnDestroy {
 
   private async initializePersonalDataProcessingDocument(): Promise<void> {
     this._personalDataProcessingDocument = new Document();
-    this._personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
+    // this._personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
     this._personalDataProcessingDocument.type = DocumentType.ORDER;
     if (!this._appHelper.isNewObject(this.person)) {
       try {
@@ -329,7 +329,7 @@ export class EditPersonComponent implements OnDestroy {
 
             let personalDataProcessingDocument$ = of(void 0);
             if (addOrUpdatePersonalDataProcessingDocument) {
-              this._personalDataProcessingDocument.objectId = person.id;
+              // this._personalDataProcessingDocument.objectId = person.id;
               this._personalDataProcessingDocument.number = this.personalDataProcessingNumberNgxInput.control.value;
               this._personalDataProcessingDocument.date = this._appHelper.getGmtDate(this.personalDataProcessingDateNgxDate.control.value);
 
@@ -338,7 +338,7 @@ export class EditPersonComponent implements OnDestroy {
 
             let document$ = of(void 0);
             if (addOrUpdateDocument) {
-              this._document.objectId = person.id;
+              // this._document.objectId = person.id;
               document$ = this._fileApiService.saveFile(this._document);
             }
             return merge(personalDataProcessingDocument$, document$);

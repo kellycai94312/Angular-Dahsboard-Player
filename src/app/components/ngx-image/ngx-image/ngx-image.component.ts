@@ -1,17 +1,18 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {ImageFormat} from '../../../data/local/image-format';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {ImageType} from '../../../data/remote/model/file/image/image-type';
-import {AppHelper} from '../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {Image} from '../../../data/remote/model/file/image/image';
-import {NgxModalService} from '../../ngx-modal/service/ngx-modal.service';
-import {IdentifiedObject} from '../../../data/remote/base/identified-object';
-import {ImageQuery} from '../../../data/remote/rest-api/query/file/image-query';
-import {TemplateModalService} from '../../../service/template-modal.service';
-import {NgxCropImageComponent} from '../../../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
-import {CropperPosition} from 'ngx-image-cropper';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { CropperPosition } from 'ngx-image-cropper';
+import { ImageFormat } from '../../../data/local/image-format';
+import { IdentifiedObject } from '../../../data/remote/base/identified-object';
+import { FileClass } from '../../../data/remote/model/file/base/file-class';
+import { Image } from '../../../data/remote/model/file/image/image';
+import { ImageType } from '../../../data/remote/model/file/image/image-type';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { ImageQuery } from '../../../data/remote/rest-api/query/file/image-query';
+import { NgxCropImageComponent } from '../../../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
+import { TemplateModalService } from '../../../service/template-modal.service';
+import { AppHelper } from '../../../utils/app-helper';
+import { NgxModalService } from '../../ngx-modal/service/ngx-modal.service';
 
+// TODO: Fix this component!
 @Component({
   selector: 'ngx-image',
   templateUrl: './ngx-image.component.html',
@@ -133,10 +134,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
         return;
       }
 
-      return await this._appHelper.trySave(async () => {
+      return this._appHelper.trySave(async () => {
         const image = new Image();
         image.clazz = this.fileClass;
-        image.objectId = this.object.id;
+        // image.objectId = this.object.id;
         image.type = this.type;
         await this._participantRestApiService.uploadFile(image, file);
 
@@ -209,7 +210,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
       let imagePosition: CropperPosition;
       let file: File;
       let image = new Image();
-      image.objectId = this.object.id;
+      // image.objectId = this.object.id;
       image.clazz = this.fileClass;
       image.type = this.type;
 

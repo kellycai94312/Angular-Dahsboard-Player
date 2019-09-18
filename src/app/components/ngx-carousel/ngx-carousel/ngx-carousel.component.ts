@@ -119,7 +119,7 @@ export class NgxCarouselComponent implements OnInit {
 
   public async onAddImage(): Promise<void> {
     const image = new Image();
-    image.objectId = this.object.id;
+    // image.objectId = this.object.id;
     image.type = ImageType.GALLERY;
     image.clazz = this.fileClass;
 
