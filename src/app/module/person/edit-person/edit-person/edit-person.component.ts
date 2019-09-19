@@ -5,7 +5,6 @@ import { flatMap, map, takeWhile } from 'rxjs/operators';
 import { PropertyConstant } from '../../../../data/local/property-constant';
 import { SexEnum } from '../../../../data/remote/misc/sex-enum';
 import { PersonPrivacyEnum } from '../../../../data/remote/model/base/person-privacy-enum';
-import { FileClass } from '../../../../data/remote/model/file/base/file-class';
 import { Document } from '../../../../data/remote/model/file/document/document';
 import { DocumentType } from '../../../../data/remote/model/file/document/document-type';
 import { Group } from '../../../../data/remote/model/group/base/group';
@@ -169,23 +168,24 @@ export class EditPersonComponent implements OnDestroy {
     this._personalDataProcessingDocument = new Document();
     // this._personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
     this._personalDataProcessingDocument.type = DocumentType.ORDER;
-    if (!this._appHelper.isNewObject(this.person)) {
-      try {
-        const documentPageContainer = await this._fileApiService
-          .getDocuments(
-            {
-              clazz: this._personalDataProcessingDocument.clazz,
-              count: 1,
-              objectId: this.person.id,
-              type: this._personalDataProcessingDocument.type
-            })
-          .toPromise();
-        if (documentPageContainer.list.length) {
-          this._personalDataProcessingDocument = documentPageContainer.list[0];
-        }
-      } catch (e) {
-      }
-    }
+    // TODO:
+    // if (!this._appHelper.isNewObject(this.person)) {
+    //   try {
+    //     const documentPageContainer = await this._fileApiService
+    //       .getDocuments(
+    //         {
+    //           clazz: this._personalDataProcessingDocument.clazz,
+    //           count: 1,
+    //           objectId: this.person.id,
+    //           type: this._personalDataProcessingDocument.type
+    //         })
+    //       .toPromise();
+    //     if (documentPageContainer.list.length) {
+    //       this._personalDataProcessingDocument = documentPageContainer.list[0];
+    //     }
+    //   } catch (e) {
+    //   }
+    // }
     this.personalDataProcessingNumberNgxInput = this._getNgxInput('number', (this._personalDataProcessingDocument.number || '') as string, true);
 
     this.personalDataProcessingDateNgxDate = new NgxDate();
@@ -203,24 +203,24 @@ export class EditPersonComponent implements OnDestroy {
 
     this._document = new Document();
     this._document.type = age >= 14 ? DocumentType.PASSPORT : DocumentType.BIRTH_CERTIFICATE;
-    this._document.clazz = FileClass.PERSON;
-    if (!this._appHelper.isNewObject(person)) {
-      try {
-        const documentPageContainer = await this._fileApiService
-          .getDocuments(
-            {
-              clazz: this._document.clazz,
-              count: 1,
-              objectId: person.id,
-              type: this._document.type
-            })
-          .toPromise();
-        if (documentPageContainer.list.length) {
-          this._document = documentPageContainer.list[0];
-        }
-      } catch (e) {
-      }
-    }
+    // this._document.clazz = FileClass.PERSON;
+    // if (!this._appHelper.isNewObject(person)) {
+    //   try {
+    //     const documentPageContainer = await this._fileApiService
+    //       .getDocuments(
+    //         {
+    //           clazz: this._document.clazz,
+    //           count: 1,
+    //           objectId: person.id,
+    //           type: this._document.type
+    //         })
+    //       .toPromise();
+    //     if (documentPageContainer.list.length) {
+    //       this._document = documentPageContainer.list[0];
+    //     }
+    //   } catch (e) {
+    //   }
+    // }
 
     this.documentTypeNgxSelect = new NgxSelect();
     this.documentTypeNgxSelect.labelTranslation = 'documentType';
@@ -333,13 +333,13 @@ export class EditPersonComponent implements OnDestroy {
               this._personalDataProcessingDocument.number = this.personalDataProcessingNumberNgxInput.control.value;
               this._personalDataProcessingDocument.date = this._appHelper.getGmtDate(this.personalDataProcessingDateNgxDate.control.value);
 
-              personalDataProcessingDocument$ = this._fileApiService.saveFile(this._personalDataProcessingDocument);
+              // personalDataProcessingDocument$ = this._fileApiService.saveFile(this._personalDataProcessingDocument);
             }
 
             let document$ = of(void 0);
             if (addOrUpdateDocument) {
               // this._document.objectId = person.id;
-              document$ = this._fileApiService.saveFile(this._document);
+              // document$ = this._fileApiService.saveFile(this._document);
             }
             return merge(personalDataProcessingDocument$, document$);
           }
@@ -361,7 +361,7 @@ export class EditPersonComponent implements OnDestroy {
 
   public async onEditGroupPersonPositions(): Promise<void> {
     const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async query => {
-        return await this._groupApiService.getGroupPositions(this.group, query).toPromise();
+        return this._groupApiService.getGroupPositions(this.group, query).toPromise();
       }, GroupPositionItemComponent,
       async (component, data) => {
         await component.initialize(data as any);

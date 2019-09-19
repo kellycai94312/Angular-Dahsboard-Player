@@ -7,12 +7,12 @@ import { navigation } from 'app/navigation/navigation';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { FileClass } from '../../../data/remote/model/file/base/file-class';
-import { ImageType } from '../../../data/remote/model/file/image/image-type';
+import { ImageType } from '../../../data/remote/model/file/image';
 import { Group } from '../../../data/remote/model/group/base/group';
 import { Person } from '../../../data/remote/model/person';
+import { FileApiService } from '../../../data/remote/rest-api/api/file/file-api.service';
 import { GroupApiService } from '../../../data/remote/rest-api/api/group/group-api.service';
 import { NotificationApiService } from '../../../data/remote/rest-api/api/notification/notification-api.service';
-import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { AuthorizationService } from '../../../shared/authorization.service';
 import { NotificationService } from '../../../shared/notification.service';
 import { ToolbarService } from './services/toolbar.service';
@@ -53,7 +53,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _fuseSidebarService: FuseSidebarService,
     private _translateService: TranslateService,
     private _authorizationService: AuthorizationService,
-    private _participantRestApiService: ParticipantRestApiService,
+    private _fileApiService: FileApiService,
     private _router: Router,
     private _notificationApiService: NotificationApiService,
     private _groupApiService: GroupApiService,
@@ -100,14 +100,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       .subscribe(val => {
         this.person = val;
         if (val) {
-          this.personLogoUrl = this._participantRestApiService.getUrlImage({
-            clazz: FileClass.PERSON,
-            type: ImageType.LOGO,
-            objectId: val.id,
-            width: 40,
-            height: 40,
-            cropped: true
-          }, true);
+          this.personLogoUrl = this._fileApiService.getImageUrl(FileClass.PERSON, val, {type: ImageType.LOGO, width: 40, height: 40, cropped: true});
           this._groupApiService.getGroups({canEdit: true})
             .pipe(take(1))
             .subscribe(value => {

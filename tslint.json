@@ -256,7 +256,7 @@
     "space-within-parens": 0,
     "import-spacing": true,
     "no-trailing-whitespace": true,
-    "newline-before-return": true,
+    "newline-before-return": false,
     "newline-per-chained-call": false,
     "one-line": [
       true,

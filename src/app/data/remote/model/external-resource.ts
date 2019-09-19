@@ -1,5 +1,5 @@
-import {IdentifiedObject} from '../base/identified-object';
-import {FileClass} from './file/base/file-class';
+import { IdentifiedObject } from '../base';
+import { FileClass } from './file/base';
 
 export class ExternalResource extends IdentifiedObject {
   public clazz: FileClass;

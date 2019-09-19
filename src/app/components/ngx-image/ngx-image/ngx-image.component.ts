@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CropperPosition } from 'ngx-image-cropper';
 import { ImageFormat } from '../../../data/local/image-format';
-import { IdentifiedObject } from '../../../data/remote/base/identified-object';
-import { FileClass } from '../../../data/remote/model/file/base/file-class';
-import { Image } from '../../../data/remote/model/file/image/image';
-import { ImageType } from '../../../data/remote/model/file/image/image-type';
+import { IdentifiedObject } from '../../../data/remote/base';
+import { FileClass } from '../../../data/remote/model/file/base';
+import { Image, ImageType } from '../../../data/remote/model/file/image';
+import { FileObject } from '../../../data/remote/model/file/object';
+import { FileApiService } from '../../../data/remote/rest-api/api/file/file-api.service';
+import { ImageQuery } from '../../../data/remote/rest-api/api/file/model/image-query';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
-import { ImageQuery } from '../../../data/remote/rest-api/query/file/image-query';
 import { NgxCropImageComponent } from '../../../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
 import { TemplateModalService } from '../../../service/template-modal.service';
 import { AppHelper } from '../../../utils/app-helper';
@@ -66,7 +67,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   public cropImage: boolean;
 
   @Input()
-  public image: Image;
+  public fileObject: FileObject;
 
   @Input()
   public url: string;
@@ -88,6 +89,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
   constructor(private _appHelper: AppHelper,
               private _participantRestApiService: ParticipantRestApiService,
               private _elementRef: ElementRef,
+              private _fileApiService: FileApiService,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _changeDetectorRef: ChangeDetectorRef,
@@ -95,7 +97,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
               private _ngxModalService: NgxModalService) {
   }
 
-  async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     this._parentElementRef = this._elementRef.nativeElement.parentElement;
     await this._appHelper.delay();
     this._initialized = true;
@@ -103,13 +105,13 @@ export class NgxImageComponent implements OnInit, OnChanges {
     this.refresh();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  public ngOnChanges(changes: SimpleChanges): void {
     if (this._initialized) {
       this.refresh();
     }
   }
 
-  public async onImageChange(fileList: FileList) {
+  public async onImageChange(fileList: FileList): Promise<void> {
     if (fileList.length > 0) {
       this._tempFile = fileList[0];
       if (this.autoSave && !await this.save(this._tempFile)) {
@@ -120,10 +122,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
     }
   }
 
-  public async save(file: File = null, notify: boolean = true): Promise<boolean> {
+  public async save(file?: File, notify = true): Promise<boolean> {
     if (this.cropImage) {
       if (!this.autoSave && this._tempNgxCropImageComponent) {
-        this._tempNgxCropImageComponent.objectId = this.object.id;
+        this._tempNgxCropImageComponent.object = this.object;
         await this._tempNgxCropImageComponent.onSave();
         this.imageChange.emit();
         this.refresh();
@@ -135,18 +137,20 @@ export class NgxImageComponent implements OnInit, OnChanges {
       }
 
       return this._appHelper.trySave(async () => {
+        const fileObject = this._fileApiService.getFileObjectByFileClass(this.fileClass);
         const image = new Image();
-        image.clazz = this.fileClass;
-        // image.objectId = this.object.id;
         image.type = this.type;
-        await this._participantRestApiService.uploadFile(image, file);
+        fileObject.file = image;
+        fileObject.object = this.object;
 
-        this._tempFile = null;
+        await this._fileApiService.createFile(fileObject, file).toPromise();
+
+        delete this._tempFile;
       }, notify);
     }
   }
 
-  public refresh() {
+  public refresh(): void {
     this._ngZone.runOutsideAngular(() => {
       const width = this.width || this._parentElementRef.clientWidth;
       const height = this.height || this._parentElementRef.clientHeight;
@@ -156,11 +160,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
       if (this._tempFile) {
         url = URL.createObjectURL(this._tempFile);
       } else {
-        const imageQuery: ImageQuery = {
-          clazz: this.fileClass,
-          type: this.type,
-          objectId: this.object.id || 0,
-        };
+        const imageQuery: ImageQuery = {type: this.type};
 
         if (!this._appHelper.isUndefinedOrNull(width)) {
           imageQuery.width = width;
@@ -168,14 +168,14 @@ export class NgxImageComponent implements OnInit, OnChanges {
         if (!this._appHelper.isUndefinedOrNull(height)) {
           imageQuery.height = height;
         }
-        if (this.image) {
-          let image = this.image;
-          if (this.cropped && this.image.croppedImage) {
-            image = this.image.croppedImage;
+        if (this.fileObject) {
+          let image = this.fileObject.file as Image;
+          if (this.cropped && image.croppedImage) {
+            image = image.croppedImage;
           }
-          url = `${this._participantRestApiService.getUrlByImage(image, imageQuery)}&date=${Date.now()}`;
+          url = `${this._fileApiService.getImageByIdUrl(image, imageQuery)}&date=${Date.now()}`;
         } else {
-          url = `${this._participantRestApiService.getUrlImage(imageQuery)}&date=${Date.now()}`;
+          url = `${this._fileApiService.getImageUrl(this.fileClass, this.object, imageQuery)}&date=${Date.now()}`;
         }
         if (this.cropped) {
           url += '&cropped=true';
@@ -194,10 +194,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
     });
   }
 
-  public async onShowImage() {
+  public async onShowImage(): Promise<void> {
     if (this.allowFullScreen) {
-      if (this.image) {
-        await this._ngxModalService.showFullImage(this.image);
+      if (this.fileObject) {
+        await this._ngxModalService.showFullImage(this.fileObject.file as Image);
       } else {
         await this._ngxModalService.showFullImage(this.object.id || 0, this.type, this.fileClass);
       }
@@ -209,19 +209,21 @@ export class NgxImageComponent implements OnInit, OnChanges {
       let imageBase64;
       let imagePosition: CropperPosition;
       let file: File;
-      let image = new Image();
-      // image.objectId = this.object.id;
-      image.clazz = this.fileClass;
+
+      let fileObject = this._fileApiService.getFileObjectByFileClass(this.fileClass);
+      const image = new Image();
       image.type = this.type;
+      fileObject.file = image;
+      fileObject.object = this.object;
 
       if (this._tempNgxCropImageComponent) {
         imageBase64 = this._tempNgxCropImageComponent.imageBase64;
         imagePosition = this._tempNgxCropImageComponent.imagePosition;
         file = this._tempNgxCropImageComponent.file;
       } else {
-        const images = (await this._participantRestApiService.getImages({clazz: this.fileClass, objectId: this.object.id, type: this.type, count: 1})).list;
+        const images = (await this._fileApiService.getFilePage(this.fileClass, this.object, {imageType: this.type, count: 1}).toPromise()).list;
         if (images.length) {
-          image = images[0];
+          fileObject = images[0];
           if (image.croppedImage) {
             imagePosition = {
               x1: image.croppedImage.x1,
@@ -233,7 +235,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
         }
       }
 
-      const dialogResult = await this._templateModalService.showCropImageModal(this.image || image, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave, this.aspectRatio);
+      const dialogResult = await this._templateModalService.showCropImageModal(this.fileObject || fileObject, this.format, imageBase64, imagePosition, file, {componentFactoryResolver: this._componentFactoryResolver}, this.autoSave, this.aspectRatio);
       if (dialogResult.result) {
         if (!this.autoSave) {
           this._ngZone.runOutsideAngular(() => {
