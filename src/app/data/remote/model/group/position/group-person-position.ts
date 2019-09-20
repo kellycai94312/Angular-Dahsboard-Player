@@ -1,10 +1,10 @@
-import {IdentifiedObject} from '../../../base/identified-object';
-import {GroupPersonPositionStateEnum} from './group-person-position-state-enum';
-import {Type} from 'class-transformer';
-import {BasePosition} from '../../person-position/base-position';
-import {GroupPosition} from '../../person-position/group-position';
-import {PositionType} from '../../person-position/position-type';
-import {Position} from '../../person-position/position';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { BasePosition } from '../../person-position/base-position';
+import { GroupPosition } from '../../person-position/group-position';
+import { Position } from '../../person-position/position';
+import { PositionType } from '../../person-position/position-type';
+import { GroupPersonPositionStateEnum } from './group-person-position-state-enum';
 
 export class GroupPersonPosition extends IdentifiedObject {
 
@@ -14,7 +14,7 @@ export class GroupPersonPosition extends IdentifiedObject {
       subTypes: [
         {value: GroupPosition, name: PositionType.GROUP_POSITION},
         {value: Position, name: PositionType.POSITION}
-      ],
+      ]
     },
     keepDiscriminatorProperty: true
   })

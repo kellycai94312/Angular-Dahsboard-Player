@@ -1,7 +1,7 @@
-import {NewsType} from './news-type';
-import {BaseNews} from './base-news';
-import {Group} from '../base/group';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { Group } from '../base';
+import { BaseNews } from './base-news';
+import { NewsType } from './news-type';
 
 export class GroupNews extends BaseNews {
 

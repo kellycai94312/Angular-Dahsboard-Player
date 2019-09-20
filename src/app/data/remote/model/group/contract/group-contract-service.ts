@@ -1,5 +1,5 @@
-import {BaseGroupContract} from './base-group-contract';
-import {GroupContractType} from './group-contract-type';
+import { BaseGroupContract } from './base-group-contract';
+import { GroupContractType } from './group-contract-type';
 
 export class GroupContractService extends BaseGroupContract {
   public workPlace: string;

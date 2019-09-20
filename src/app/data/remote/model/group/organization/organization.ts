@@ -1,9 +1,8 @@
-import {Group} from '../base/group';
-import {OrganizationType} from './organization-type';
-import {GroupTypeEnum} from '../base/group-type-enum';
+import { Group, GroupTypeEnum } from '../base';
+import { OrganizationType } from './organization-type';
 
 export class Organization extends Group {
-  organizationType: OrganizationType;
+  public organizationType: OrganizationType;
 
   constructor() {
     super();

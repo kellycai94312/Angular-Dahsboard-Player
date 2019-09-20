@@ -1,5 +1,5 @@
-import {BaseNews} from './base-news';
-import {NewsType} from './news-type';
+import { BaseNews } from './base-news';
+import { NewsType } from './news-type';
 
 export class PersonNews extends BaseNews {
   constructor() {

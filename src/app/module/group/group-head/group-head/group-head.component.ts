@@ -5,12 +5,10 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { FileClass } from '../../../../data/remote/model/file/base/file-class';
 import { ImageType } from '../../../../data/remote/model/file/image/image-type';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { GroupPersonState } from '../../../../data/remote/model/group/group-person-state';
+import { GroupPerson, GroupPersonState } from '../../../../data/remote/model/group';
+import { Group } from '../../../../data/remote/model/group/base';
 import { Organization } from '../../../../data/remote/model/group/organization/organization';
-import { PreparationGroup } from '../../../../data/remote/model/group/preparation/preparation-group';
-import { Team } from '../../../../data/remote/model/group/team/team';
+import { Team } from '../../../../data/remote/model/group/team';
 import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
 import { GroupWindowService } from '../../../../services/windows/group-window/group-window.service';
 import { PermissionService } from '../../../../shared/permission.service';
@@ -78,8 +76,6 @@ export class GroupHeadComponent {
       if (this.group.ageGroup) {
         items.push(`${this._translateService.instant('ageGroup')} - ${this.group.ageGroup.name}`);
       }
-    } else if (this.group instanceof PreparationGroup && this.group.sportType) {
-      items.push(`${this._translateService.instant('sportType')} - ${this.group.sportType.name}`);
     }
 
     return items;

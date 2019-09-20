@@ -1,14 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {GroupCluster} from '../../../../../../../data/remote/model/group/connection/group-cluster';
-import {BaseGroupComponent} from '../../../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../../../service/group.service';
-import {AppHelper} from '../../../../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {PropertyConstant} from '../../../../../../../data/local/property-constant';
-import {GroupClusterRank} from '../../../../../../../data/remote/model/group/connection/group-cluster-rank';
-import {TemplateModalService} from '../../../../../../../service/template-modal.service';
-import {IdRequest} from '../../../../../../../data/remote/request/id-request';
+import { Component, OnInit } from '@angular/core';
+import { BaseGroupComponent } from '../../../../../../../data/local/component/group/base-group-component';
+import { PropertyConstant } from '../../../../../../../data/local/property-constant';
+import { Group } from '../../../../../../../data/remote/model/group/base';
+import { GroupCluster, GroupClusterRank } from '../../../../../../../data/remote/model/group/connection';
+import { IdRequest } from '../../../../../../../data/remote/request/id-request';
+import { ParticipantRestApiService } from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { TemplateModalService } from '../../../../../../../service/template-modal.service';
+import { AppHelper } from '../../../../../../../utils/app-helper';
+import { GroupService } from '../../../../service/group.service';
 
 @Component({
   selector: 'app-group-clusters',
@@ -43,7 +42,9 @@ export class GroupClustersComponent extends BaseGroupComponent<Group> implements
 
   public async onAddGroupClusterRank(groupCluster: GroupCluster) {
     await this.appHelper.tryAction('addedNewRank', 'error', async () => {
-      const groupClusterRank = await this._participantRestApiService.createGroupClusterRank(new GroupClusterRank(groupCluster), {}, {groupClusterId: groupCluster.id});
+      let groupClusterRank = new GroupClusterRank();
+      groupClusterRank.cluster = groupCluster;
+      groupClusterRank = await this._participantRestApiService.createGroupClusterRank(groupClusterRank, {}, {groupClusterId: groupCluster.id});
       this.groupClusterMap.get(groupCluster).set(groupClusterRank, []);
     });
   }

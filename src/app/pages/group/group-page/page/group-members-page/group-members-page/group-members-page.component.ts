@@ -1,20 +1,19 @@
-import {Component, ComponentFactoryResolver, ViewChild} from '@angular/core';
-import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
-import {GroupTypeEnum} from '../../../../../../data/remote/model/group/base/group-type-enum';
-import {UserRoleEnum} from '../../../../../../data/remote/model/user-role-enum';
-import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../../service/group.service';
-import {AppHelper} from '../../../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupPerson} from '../../../../../../data/remote/model/group/group-person';
-import {PersonQuery} from '../../../../../../data/remote/rest-api/query/person-query';
-import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {TemplateModalService} from '../../../../../../service/template-modal.service';
-import {NgxGridComponent} from '../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {BaseGroupComponent} from '../../../../../../data/local/component/group/base-group-component';
-import {SelectionType} from '../../../../../../components/ngx-grid/bean/selection-type';
-import {PersonTransitionType} from '../../../../../../data/remote/model/group/transition/person-transition-type';
-import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
+import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core';
+import { SelectionType } from '../../../../../../components/ngx-grid/bean/selection-type';
+import { NgxGridComponent } from '../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import { SplitButtonItem } from '../../../../../../components/ngx-split-button/bean/split-button-item';
+import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
+import { PropertyConstant } from '../../../../../../data/local/property-constant';
+import { GroupPerson } from '../../../../../../data/remote/model/group';
+import { Group, GroupTypeEnum } from '../../../../../../data/remote/model/group/base';
+import { PersonTransitionType } from '../../../../../../data/remote/model/group/transition';
+import { UserRoleEnum } from '../../../../../../data/remote/model/user-role-enum';
+import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { GroupPersonQuery } from '../../../../../../data/remote/rest-api/query/group-person-query';
+import { PersonQuery } from '../../../../../../data/remote/rest-api/query/person-query';
+import { TemplateModalService } from '../../../../../../service/template-modal.service';
+import { AppHelper } from '../../../../../../utils/app-helper';
+import { GroupService } from '../../../service/group.service';
 
 @Component({
   selector: 'app-group-members-page',
@@ -47,19 +46,19 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     this.splitButtonsItems = [
       this.groupTransitionModalSplitButtonItem(PersonTransitionType.EXPEL),
       this.groupTransitionModalSplitButtonItem(PersonTransitionType.TRANSFER, () => {
-        return this.group && (this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP || this.group.discriminator === GroupTypeEnum.TEAM);
+        return this.group && this.group.discriminator === GroupTypeEnum.TEAM;
       })
     ];
   }
 
-  async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
+  public async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     await this.resetItems();
   }
 
   public fetchItems = async (query: GroupPersonQuery) => {
     query.id = this.group.id;
-    if (this.group.discriminator === GroupTypeEnum.TEAM || this.group.discriminator === GroupTypeEnum.PREPARATION_GROUP) {
+    if (this.group.discriminator === GroupTypeEnum.TEAM) {
       query.userRoleEnum = UserRoleEnum.ATHLETE;
     }
     const pageContainer = await this._participantRestApiService.getGroupPersonsByGroup(query);
@@ -77,8 +76,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
   public onEditGroupPerson = async (obj: GroupPerson) => {
   };
 
-
-  public async onSortChange(val: string) {
+  public async onSortChange(val: string): Promise<void> {
     if (val) {
       this.personQuery.sort = val;
     } else {
@@ -87,7 +85,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     await this.resetItems();
   }
 
-  public onSelectedItemsChange(items: GroupPerson[]) {
+  public onSelectedItemsChange(items: GroupPerson[]): void {
     this.selectedGroupPersons = items;
   }
 
@@ -103,7 +101,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
     };
   }
 
-  private async resetItems() {
+  private async resetItems(): Promise<void> {
     await this.appHelper.delay();
     await this.ngxGridComponent.reset();
     this.groupService.refreshMembers.next();

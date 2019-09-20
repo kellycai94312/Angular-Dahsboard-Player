@@ -4,7 +4,7 @@ import { BasePosition } from '../person-position/base-position';
 import { GroupPosition } from '../person-position/group-position';
 import { Position } from '../person-position/position';
 import { PositionType } from '../person-position/position-type';
-import { Group } from './base/group';
+import { Group } from './base';
 
 export class GroupPersonJob extends PersonPrivacyObject {
 

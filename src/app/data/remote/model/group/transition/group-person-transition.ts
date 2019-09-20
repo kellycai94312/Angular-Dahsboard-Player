@@ -1,8 +1,14 @@
-import {GroupTransition} from './group-transition';
-import {Person} from '../../person';
-import {VersionObject} from '../../../base/version/version-object';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { Person } from '../../person';
+import { GroupTransition } from './group-transition';
 
-export class GroupPersonTransition extends VersionObject {
-  groupTransition: GroupTransition;
-  person: Person;
+export class GroupPersonTransition extends IdentifiedObject {
+
+  @Type(() => GroupTransition)
+  public groupTransition: GroupTransition;
+
+  @Type(() => Person)
+  public person: Person;
+
 }

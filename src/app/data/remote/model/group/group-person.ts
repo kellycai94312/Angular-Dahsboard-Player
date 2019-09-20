@@ -4,9 +4,9 @@ import { Person } from '../person';
 import { PersonRank } from '../person-rank';
 import { SportRole } from '../sport-role';
 import { StageType } from '../stage/stage-type';
-import { Group } from './base/group';
+import { Group } from './base';
 import { GroupPersonState } from './group-person-state';
-import { GroupTransition } from './transition/group-transition';
+import { GroupTransition } from './transition';
 
 export class GroupPerson extends IdentifiedObject {
 
@@ -17,13 +17,13 @@ export class GroupPerson extends IdentifiedObject {
   public person: Person;
 
   @Type(() => Group)
-  public mentor: GroupPerson;
+  public mentor?: GroupPerson;
 
   @Type(() => SportRole)
-  public sportRole: SportRole;
+  public sportRole?: SportRole;
 
   @Type(() => StageType)
-  public stageType: StageType;
+  public stageType?: StageType;
 
   public number?: number;
   public state: GroupPersonState;
@@ -32,10 +32,10 @@ export class GroupPerson extends IdentifiedObject {
   //region Transient
 
   @Type(() => PersonRank)
-  public personRank: PersonRank;
+  public personRank?: PersonRank;
 
   @Type(() => GroupTransition)
-  public groupTransition: GroupTransition;
+  public groupTransition?: GroupTransition;
 
   public canEdit?: boolean;
 

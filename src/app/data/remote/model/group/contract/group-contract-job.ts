@@ -1,10 +1,10 @@
-import {BaseGroupContract} from './base-group-contract';
-import {TariffRateEnum} from './tariff-rate-enum';
-import {GroupContractType} from './group-contract-type';
+import { BaseGroupContract } from './base-group-contract';
+import { GroupContractType } from './group-contract-type';
+import { TariffRateEnum } from './tariff-rate-enum';
 
 export class GroupContractJob extends BaseGroupContract {
   public tariffRateEnum: TariffRateEnum;
-  public dailyRate: number;
+  public dailyRate?: number;
 
   constructor() {
     super();
