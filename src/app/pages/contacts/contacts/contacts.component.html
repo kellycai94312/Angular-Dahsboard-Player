@@ -2,8 +2,9 @@
      fxLayout="row">
   <div fxFlex="grow"
        fxLayout="column">
-    <app-list-heading [rightActions]="actions"></app-list-heading>
-    <router-outlet></router-outlet>
+    <app-list-heading [actions]="actions"
+                      [rightActions]="rightActions"></app-list-heading>
+    <router-outlet (activate)="onActiveRouterOutlet($event)"></router-outlet>
   </div>
   <div *ngIf="visibleMenu"
        fxFlex="20"
