@@ -1,5 +1,6 @@
-import {EnvironmentType} from './environment-type';
+import { EnvironmentType } from './environment-type';
 
+// tslint:disable-next-line:interface-name
 export interface IEnvironment {
   production: boolean;
   version: string;
