@@ -4,19 +4,19 @@ import { Person } from '../person';
 import { PersonRank } from '../person-rank';
 import { SportRole } from '../sport-role';
 import { StageType } from '../stage/stage-type';
-import { Group } from './base';
+import { Group, GROUP_TYPE_OPTIONS } from './base';
 import { GroupPersonState } from './group-person-state';
 import { GroupTransition } from './transition';
 
 export class GroupPerson extends IdentifiedObject {
 
-  @Type(() => Group)
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
   public group: Group;
 
   @Type(() => Person)
   public person: Person;
 
-  @Type(() => Group)
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
   public mentor?: GroupPerson;
 
   @Type(() => SportRole)

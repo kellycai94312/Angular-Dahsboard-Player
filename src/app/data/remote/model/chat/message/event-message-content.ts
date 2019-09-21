@@ -1,10 +1,10 @@
-import {BaseMessageContent, MessageContentType} from './base';
-import {BaseEvent} from '../../event/base/base-event';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { BaseEvent, EVENT_TYPE_OPTIONS } from '../../event/base';
+import { BaseMessageContent, MessageContentType } from './base';
 
 export class EventMessageContent extends BaseMessageContent {
 
-  @Type(() => BaseEvent)
+  @Type(() => BaseEvent, EVENT_TYPE_OPTIONS)
   public training: BaseEvent;
 
   constructor() {

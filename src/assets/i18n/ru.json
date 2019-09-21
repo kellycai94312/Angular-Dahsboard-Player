@@ -501,7 +501,8 @@
     "COMMUNITY": "Сообщество",
     "ORGANIZATION": "Организация",
     "AGENCY": "Агентство",
-    "PREPARATION_GROUP": "Группа подготовки"
+    "LOCATION": "Объект",
+    "INTERVAL_GROUP": "Мероприятие"
   },
   "contactPhoneNumber": "Контактный номер телефона",
   "parentGroup": "Родительская группа",

@@ -1,9 +1,10 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {EditGroupComponent} from './edit-group/edit-group.component';
-import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
-import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxDateModule } from '../../ngx/ngx-date/ngx-date.module';
+import { NgxInputModule } from '../../ngx/ngx-input/ngx-input.module';
+import { NgxSelectModule } from '../../ngx/ngx-select/ngx-select.module';
+import { EditGroupComponent } from './edit-group/edit-group.component';
 
 @NgModule({
   declarations: [EditGroupComponent],
@@ -13,7 +14,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
     CommonModule,
     FlexLayoutModule,
     NgxInputModule,
-    NgxSelectModule
+    NgxSelectModule,
+    NgxDateModule
   ]
 })
 export class EditGroupModule {

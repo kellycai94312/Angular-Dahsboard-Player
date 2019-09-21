@@ -1,11 +1,11 @@
-import {BaseAppliedPoll} from './base/base-applied-poll';
-import {BaseEvent} from '../../event/base/base-event';
-import {AppliedPollType} from './base/applied-poll-type';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { BaseEvent, EVENT_TYPE_OPTIONS } from '../../event/base';
+import { AppliedPollType } from './base/applied-poll-type';
+import { BaseAppliedPoll } from './base/base-applied-poll';
 
 export class EventAppliedPoll extends BaseAppliedPoll {
 
-  @Type(() => BaseEvent)
+  @Type(() => BaseEvent, EVENT_TYPE_OPTIONS)
   public event: BaseEvent;
 
   constructor() {

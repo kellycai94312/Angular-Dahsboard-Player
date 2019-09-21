@@ -1,20 +1,21 @@
 import { Component, OnDestroy } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeWhile } from 'rxjs/operators';
 import { BaseEditComponent } from '../../../../data/local/component/base/base-edit-component';
 import { PropertyConstant } from '../../../../data/local/property-constant';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupTypeEnum } from '../../../../data/remote/model/group/base/group-type-enum';
+import { Group, GroupTypeEnum } from '../../../../data/remote/model/group/base';
+import { IntervalGroup } from '../../../../data/remote/model/group/interval';
 import { Organization } from '../../../../data/remote/model/group/organization/organization';
 import { OrganizationTypeEnum } from '../../../../data/remote/model/group/organization/organization-type-enum';
-import { Team } from '../../../../data/remote/model/group/team/team';
+import { Team } from '../../../../data/remote/model/group/team';
 import { UserRoleEnum } from '../../../../data/remote/model/user-role-enum';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { LocalStorageService } from '../../../../shared/local-storage.service';
 import { PermissionService } from '../../../../shared/permission.service';
 import { TranslateObjectService } from '../../../../shared/translate-object.service';
 import { AppHelper } from '../../../../utils/app-helper';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
 import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
 import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
 import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
@@ -35,18 +36,21 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
   public readonly teamTypeNgxSelect = new NgxSelect();
   public readonly stageNgxSelect = new NgxSelect();
   public readonly stageYearNgxInput = new NgxInput();
+  public readonly startNgxDate = new NgxDate();
+  public readonly finishNgxDate = new NgxDate();
   private _notDestroyed = true;
 
   constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper,
               private _router: Router,
               private _localStorageService: LocalStorageService,
+              private _appHelper: AppHelper,
               private _permissionService: PermissionService,
               private _translateObjectService: TranslateObjectService) {
     super(participantRestApiService, appHelper);
   }
 
   public ngOnDestroy(): void {
-    this._notDestroyed = false;
+    delete this._notDestroyed;
   }
 
   protected async initializeComponent(data: Group): Promise<boolean> {
@@ -66,9 +70,9 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
       this.typeNgxSelect.labelTranslation = 'type';
       this.typeNgxSelect.display = 'name';
       this.typeNgxSelect.required = true;
-      this.typeNgxSelect.items = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum')).filter(x => x.data === GroupTypeEnum.ORGANIZATION);
+      this.typeNgxSelect.items = (await this._translateObjectService.getTranslatedEnumCollection<GroupTypeEnum>(GroupTypeEnum, 'GroupTypeEnum'));
       this.typeNgxSelect.control.setValidators(Validators.required);
-      data.discriminator = data.discriminator || this.typeNgxSelect.items[0].data;
+      data.discriminator = data.discriminator || this.typeNgxSelect.items.find(x => x.data === GroupTypeEnum.ORGANIZATION).data;
       this.typeNgxSelect.control.setValue(data.discriminator ? this.typeNgxSelect.items.find(x => x.data === data.discriminator) : this.typeNgxSelect.items[0].data);
 
       this.typeNgxSelect.control.valueChanges
@@ -118,6 +122,16 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
       this.stageYearNgxInput.required = true;
       this.stageYearNgxInput.control.setValidators(Validators.required);
       this.stageYearNgxInput.control.setValue((data as Team).stageYear);
+
+      this.startNgxDate.placeholderTranslation = 'startDate';
+      this.startNgxDate.format = PropertyConstant.dateFormat;
+      this.startNgxDate.required = true;
+      this.startNgxDate.control = new FormControl((data as IntervalGroup).startDate, [Validators.required]);
+
+      this.finishNgxDate.placeholderTranslation = 'finishDate';
+      this.finishNgxDate.format = PropertyConstant.dateFormat;
+      this.finishNgxDate.required = true;
+      this.finishNgxDate.control = new FormControl((data as IntervalGroup).finishDate, [Validators.required]);
     });
   }
 
@@ -130,6 +144,8 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
     (this.data as Team).teamType = this.teamTypeNgxSelect.control.value;
     (this.data as Team).stage = this.stageNgxSelect.control.value;
     (this.data as Team).stageYear = this.stageYearNgxInput.control.value;
+    (this.data as IntervalGroup).startDate = this._appHelper.getGmtDate(this.startNgxDate.control.value);
+    (this.data as IntervalGroup).finishDate = this._appHelper.getGmtDate(this.finishNgxDate.control.value);
 
     return this.appHelper.trySave(async () => {
       const isNew = this.appHelper.isNewObject(this.data);
