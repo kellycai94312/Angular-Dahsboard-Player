@@ -1,10 +1,14 @@
-import {IdentifiedObject} from '../../../base/identified-object';
-import {GroupClusterRank} from './group-cluster-rank';
-import {Group} from '../base/group';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { Group, GROUP_TYPE_OPTIONS } from '../base';
+import { GroupClusterRank } from './group-cluster-rank';
 
 export class GroupClusterRankConnection extends IdentifiedObject {
-  constructor(public groupClusterRank?: GroupClusterRank,
-              public group?: Group) {
-    super();
-  }
+
+  @Type(() => GroupClusterRank)
+  public groupClusterRank: GroupClusterRank;
+
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
+  public group: Group;
+
 }

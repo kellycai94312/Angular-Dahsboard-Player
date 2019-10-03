@@ -12,4 +12,8 @@
     <ngx-select [data]="stageNgxSelect"></ngx-select>
     <new-ngx-input [data]="stageYearNgxInput"></new-ngx-input>
   </ng-container>
+  <ng-container *ngIf="data.discriminator === groupTypeEnum.INTERVAL_GROUP">
+    <ngx-date [data]="startNgxDate"></ngx-date>
+    <ngx-date [data]="finishNgxDate"></ngx-date>
+  </ng-container>
 </div>

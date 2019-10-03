@@ -1,8 +1,8 @@
-import {IdentifiedObject} from '../../../base/identified-object';
-import {NewsType} from './news-type';
-import {Person} from '../../person';
-import {NewsAppliedPoll} from '../../poll/applied/news-applied-poll';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { Person } from '../../person';
+import { NewsAppliedPoll } from '../../poll/applied/news-applied-poll';
+import { NewsType } from './news-type';
 
 export class BaseNews extends IdentifiedObject {
 

@@ -1,17 +1,18 @@
-import {NamedObject} from '../../../base/named-object';
-import {Address} from '../../address';
-import {GroupTypeEnum} from './group-type-enum';
-import {Activity} from '../../activity/activity';
-import {Type} from 'class-transformer';
-import {Person} from '../../person';
-import {PlainAddress} from '../../address/plain-address';
+import { Type } from 'class-transformer';
+import { NamedObject } from '../../../base/named-object';
+import { Activity } from '../../activity/activity';
+import { BaseAddress } from '../../address/base/base-address';
+import { PlainAddress } from '../../address/plain-address';
+import { Person } from '../../person';
+import { GroupPersonState } from '../group-person-state';
+import { GroupTypeEnum } from './group-type-enum';
 
 export class Group extends NamedObject {
 
   public discriminator: GroupTypeEnum;
 
-  @Type(type => Address)
-  public address?: Address;
+  @Type(type => BaseAddress)
+  public address?: BaseAddress;
 
   @Type(type => PlainAddress)
   public legalAddress?: PlainAddress;
@@ -36,5 +37,13 @@ export class Group extends NamedObject {
   public account?: string;
   public bik?: string;
   public kbk?: string;
+
+  //region Transient
+
+  public groupPersonState?: GroupPersonState;
+  public dataOperator?: boolean;
+  public bookmarked?: boolean;
+
+  //endregion
 
 }

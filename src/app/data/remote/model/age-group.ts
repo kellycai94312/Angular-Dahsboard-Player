@@ -1,4 +1,4 @@
-import {RangeObject} from '../base/range-object';
+import { RangeObject } from '../base/range-object';
 
 export class AgeGroup extends RangeObject {
 }

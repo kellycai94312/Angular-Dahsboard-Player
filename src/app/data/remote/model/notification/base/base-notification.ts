@@ -1,8 +1,8 @@
-import {IdentifiedObject} from '../../../base/identified-object';
-import {Person} from '../../person';
-import {Group} from '../../group/base/group';
-import {NotificationType} from './notification-type';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { Group, GROUP_TYPE_OPTIONS } from '../../group/base';
+import { Person } from '../../person';
+import { NotificationType } from './notification-type';
 
 export class BaseNotification extends IdentifiedObject {
 
@@ -17,7 +17,7 @@ export class BaseNotification extends IdentifiedObject {
   @Type(() => Person)
   public person: Person;
 
-  @Type(() => Group)
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
   public group: Group;
 
   public read: boolean;

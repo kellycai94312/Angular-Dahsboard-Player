@@ -1,13 +1,24 @@
-import {IdentifiedObject} from '../../../base/identified-object';
-import {Group} from '../base/group';
-import {PersonTransitionType} from './person-transition-type';
-import {Document} from '../../file/document/document';
+import { Type } from 'class-transformer';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { Document } from '../../file/document/document';
+import { Group, GROUP_TYPE_OPTIONS } from '../base';
+import { PersonTransitionType } from './person-transition-type';
 
 export class GroupTransition extends IdentifiedObject {
-  groupJoin: Group;
-  groupLeave: Group;
-  type: PersonTransitionType;
 
-  // transient
-  documents: Document[];
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
+  public groupJoin: Group;
+
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
+  public groupLeave: Group;
+
+  public type: PersonTransitionType;
+
+  //region Transient
+
+  @Type(() => Document)
+  public documents: Document[];
+
+  //endregion
+
 }

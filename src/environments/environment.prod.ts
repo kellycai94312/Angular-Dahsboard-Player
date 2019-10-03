@@ -3,9 +3,9 @@ import { IEnvironment } from './ienvironment';
 
 export const environment: IEnvironment = {
   production: true,
-  version: '1.1.1-18',
+  version: '1.1.1-26',
   type: EnvironmentType.PRODUCTION,
   host: 'api.ar.zone',
   restUrl: 'https://api.ar.zone/sp/v2',
-  wsUrl: 'https://api.ar.zone/sp/v2/ws',
+  wsUrl: 'https://api.ar.zone/sp/v2/ws'
 };

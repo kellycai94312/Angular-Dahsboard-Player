@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { NameWrapper } from '../../../data/local/name-wrapper';
+import { Group } from '../../../data/remote/model/group/base';
 import { MenuItem } from '../../../module/common/item-line/model/menu-item';
+import { TemplateModalService } from '../../../service/template-modal.service';
+import { GroupsComponent } from '../groups/groups/groups.component';
 import { ContactItem } from '../model';
 
 @Component({
@@ -13,11 +16,15 @@ export class ContactsComponent implements OnInit {
   public items: Array<NameWrapper<MenuData>> = [];
   public visibleMenu = true;
   public actions: Array<MenuItem>;
+  public rightActions: Array<MenuItem>;
+
+  constructor(private _templateModalService: TemplateModalService) {
+  }
 
   public ngOnInit(): void {
     this.items = Object.keys(ContactItem).map(value => new NameWrapper(this._getPathByContactItem(value as ContactItem), `contactItemEnum.${value}`));
 
-    this.actions = [
+    this.rightActions = [
       {
         iconName: 'menu',
         action: item => {
@@ -25,6 +32,21 @@ export class ContactsComponent implements OnInit {
         }
       }
     ];
+  }
+
+  public onActiveRouterOutlet(value: any): void {
+    if (value instanceof GroupsComponent) {
+      this.actions = [
+        {
+          iconName: 'add',
+          action: async () => {
+            await this._templateModalService.showEditGroupModal(new Group());
+          }
+        }
+      ];
+    } else {
+      this.actions = [];
+    }
   }
 
   private _getPathByContactItem(value: ContactItem): MenuData {

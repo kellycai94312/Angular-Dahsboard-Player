@@ -1,20 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarEventTitleFormatter, CalendarView, DAYS_OF_WEEK} from 'angular-calendar';
-import {TranslateService} from '@ngx-translate/core';
-import {UtilService} from '../../../../services/util/util.service';
-import {endOfDay, endOfMonth, endOfWeek, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek} from 'date-fns';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {AppHelper} from '../../../../utils/app-helper';
-import {Observable, Subject} from 'rxjs';
-import {TemplateModalService} from '../../../../service/template-modal.service';
-import {CustomDateFormatter} from '../model/custom-date-formatter';
-import {BaseEventApiService} from '../../../../data/remote/rest-api/api/event/base-event-api/base-event-api.service';
-import {BaseEvent} from '../../../../data/remote/model/event/base/base-event';
-import {EventType} from '../../../../data/remote/model/event/base/event-type';
-import {CustomEventTitleFormatter} from '../model/custom-event-title-formatter';
-import {takeWhile} from 'rxjs/operators';
-import {EventUtilService} from '../../../../services/event-util/event-util.service';
-import {BaseEventQuery} from '../../../../data/remote/rest-api/query/event/base-event-query';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { CalendarDateFormatter, CalendarEvent, CalendarEventTimesChangedEvent, CalendarEventTitleFormatter, CalendarView, DAYS_OF_WEEK } from 'angular-calendar';
+import { endOfDay, endOfMonth, endOfWeek, isSameDay, isSameMonth, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
+import { Observable, Subject } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { BaseEvent } from '../../../../data/remote/model/event/base/base-event';
+import { EventType } from '../../../../data/remote/model/event/base/event-type';
+import { IntervalGroup } from '../../../../data/remote/model/group/interval';
+import { BaseEventApiService } from '../../../../data/remote/rest-api/api/event/base-event-api/base-event-api.service';
+import { BaseEventQuery } from '../../../../data/remote/rest-api/query/event/base-event-query';
+import { TemplateModalService } from '../../../../service/template-modal.service';
+import { EventUtilService } from '../../../../services/event-util/event-util.service';
+import { UtilService } from '../../../../services/util/util.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { CustomDateFormatter } from '../model/custom-date-formatter';
+import { CustomEventTitleFormatter } from '../model/custom-event-title-formatter';
 
 @Component({
   selector: 'app-calendar',
@@ -148,6 +149,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   public async onAddEvent(): Promise<void> {
     await this.addEvent(new Date());
+  }
+
+  public async onAddIntervalGroup(): Promise<void> {
+    await this._templateModalService.showEditGroupModal(new IntervalGroup());
   }
 
   public async onQueryChange(query: BaseEventQuery): Promise<void> {

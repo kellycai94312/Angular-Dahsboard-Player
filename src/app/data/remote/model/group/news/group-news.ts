@@ -1,11 +1,11 @@
-import {NewsType} from './news-type';
-import {BaseNews} from './base-news';
-import {Group} from '../base/group';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { Group, GROUP_TYPE_OPTIONS } from '../base';
+import { BaseNews } from './base-news';
+import { NewsType } from './news-type';
 
 export class GroupNews extends BaseNews {
 
-  @Type(() => Group)
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
   public group: Group;
 
   constructor() {

@@ -1,10 +1,10 @@
-import {Group} from '../../../../model/group/base/group';
-import {Type} from 'class-transformer';
-import {Person} from '../../../../model/person';
+import { Type } from 'class-transformer';
+import { Group, GROUP_TYPE_OPTIONS } from '../../../../model/group/base';
+import { Person } from '../../../../model/person';
 
 export class ClusterGroupPosition {
 
-  @Type(() => Group)
+  @Type(() => Group, GROUP_TYPE_OPTIONS)
   public groups: Group[];
 
   @Type(() => Person)

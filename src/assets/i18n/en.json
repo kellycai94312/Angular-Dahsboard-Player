@@ -501,7 +501,8 @@
     "COMMUNITY": "Community",
     "ORGANIZATION": "Organization",
     "AGENCY": "Agency",
-    "PREPARATION_GROUP": "Preparation group"
+    "LOCATION": "Location",
+    "INTERVAL_GROUP": "Interval group"
   },
   "contactPhoneNumber": "Contact phone number",
   "parentGroup": "Parent group",
