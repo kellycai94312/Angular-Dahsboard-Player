@@ -16,7 +16,7 @@ import { AppHelper } from '../../../../utils/app-helper';
 })
 export class NgxCropImageComponent {
 
-  @ViewChild(ImageCropperComponent, { static: false })
+  @ViewChild(ImageCropperComponent, {static: false})
   public imageCropperComponent: ImageCropperComponent;
 
   @ViewChild('fileInputElement', {static: true})
@@ -49,26 +49,27 @@ export class NgxCropImageComponent {
                           imageBase64?: any,
                           imagePosition?: CropperPosition,
                           file?: File): Promise<boolean> {
-    this.object = fileObject.object;
-
-    const image = fileObject.file as Image;
-    this._type = image.type;
-    this._croppedImageType = image.type;
-    this._fileClass = fileObject.fileClass;
-    this.format = format;
-    this.imageBase64 = imageBase64;
-    this.imagePosition = imagePosition;
-    this.file = file;
-
-    if (!imageBase64 && fileObject.id) {
-      this._image = fileObject;
-
-      const urlImage = this._fileApiService.getImageUrl(this._fileClass, this.object, {type: this._type, cropped: false});
-      this.imageBase64 = await this._fileApiService.getDataUrl(urlImage);
-    }
-
     return this._appHelper.tryLoad(async () => {
+      this.object = fileObject.object;
 
+      const image = fileObject.file as Image;
+      this._type = image.type;
+      this._croppedImageType = image.type;
+      this._fileClass = fileObject.fileClass;
+      this.format = format;
+      this.imageBase64 = imageBase64;
+      this.imagePosition = imagePosition;
+      this.file = file;
+
+      if (!imageBase64 && fileObject.id) {
+        this._image = fileObject;
+
+        const urlImage = this._fileApiService.getImageUrl(this._fileClass, this.object, {
+          type: this._type,
+          cropped: false
+        });
+        this.imageBase64 = await this._fileApiService.getDataUrl(urlImage);
+      }
     });
   }
 
@@ -78,7 +79,10 @@ export class NgxCropImageComponent {
   public async onCropperReady(): Promise<void> {
     let croppedImagePosition = this.imagePosition;
     if (!croppedImagePosition && this.object) {
-      const fileObject = (await this._fileApiService.getFilePage(this._fileClass, this.object, {imageType: this._croppedImageType, count: 1}).toPromise()).list;
+      const fileObject = (await this._fileApiService.getFilePage(this._fileClass, this.object, {
+        imageType: this._croppedImageType,
+        count: 1
+      }).toPromise()).list;
       if (fileObject.length) {
         const croppedImage = (fileObject[0].file as Image).croppedImage;
         croppedImagePosition = {

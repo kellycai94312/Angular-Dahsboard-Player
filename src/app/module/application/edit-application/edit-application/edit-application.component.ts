@@ -1,23 +1,27 @@
-import {Component, ComponentFactoryResolver, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {MediaLibraryComponent} from '../../../library/media-library/media-library/media-library.component';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {ExternalResource} from '../../../../data/remote/model/external-resource';
-import {ExternalResourceApiService} from '../../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
-import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {Validators} from '@angular/forms';
-import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
-import {ParameterVersion} from '../../../../data/remote/model/parameter/parameter-version';
-import {ApplicationApiService} from '../../../../data/remote/rest-api/api/application/application-api.service';
-import {Application} from '../../../../data/remote/model/application/application';
-import {ListRequest} from '../../../../data/remote/request/list-request';
-import {IdRequest} from '../../../../data/remote/request/id-request';
-import {DeviceVersion} from '../../../../data/remote/model/device/device-version';
-import {ApplicationWindowService} from '../../../../services/windows/application-window/application-window.service';
+import { Component, ComponentFactoryResolver, forwardRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { BaseEditComponent } from '../../../../data/local/component/base/base-edit-component';
+import { Application } from '../../../../data/remote/model/application/application';
+import { DeviceVersion } from '../../../../data/remote/model/device/device-version';
+import {
+  ExternalResource,
+  ExternalResourceApplication,
+  ExternalResourceClass
+} from '../../../../data/remote/model/external-resource';
+import { FileClass } from '../../../../data/remote/model/file/base';
+import { ImageType } from '../../../../data/remote/model/file/image';
+import { ParameterVersion } from '../../../../data/remote/model/parameter/parameter-version';
+import { IdRequest } from '../../../../data/remote/request/id-request';
+import { ListRequest } from '../../../../data/remote/request/list-request';
+import { ApplicationApiService } from '../../../../data/remote/rest-api/api/application/application-api.service';
+import { ExternalResourceApiService } from '../../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { ApplicationWindowService } from '../../../../services/windows/application-window/application-window.service';
+import { ParameterWindowService } from '../../../../services/windows/parameter-window/parameter-window.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { MediaLibraryComponent } from '../../../library/media-library/media-library/media-library.component';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
 
 @Component({
   selector: 'app-edit-application',
@@ -26,7 +30,7 @@ import {ApplicationWindowService} from '../../../../services/windows/application
 })
 export class EditApplicationComponent extends BaseEditComponent<Application> implements OnInit {
 
-  @ViewChild(MediaLibraryComponent, { static: false })
+  @ViewChild(MediaLibraryComponent, {static: false})
   public mediaLibraryComponent: MediaLibraryComponent;
 
   public readonly imageTypeClass = ImageType;
@@ -36,6 +40,7 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
   public readonly descriptionNgxInput = new NgxInput();
   public readonly manufacturerUrlNgxInput = new NgxInput();
   public readonly videoUrlNgxInput = new NgxInput();
+  private readonly _externalResourceClass = ExternalResourceClass.APPLICATION;
   private _urlExternalResource: ExternalResource;
 
   constructor(private _applicationApiService: ApplicationApiService,
@@ -52,7 +57,7 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
   protected async initializeComponent(application: Application): Promise<boolean> {
     const result = await super.initializeComponent(application);
     if (result) {
-      return await this.appHelper.tryLoad(async () => {
+      return this.appHelper.tryLoad(async () => {
         this.nameNgxInput.labelTranslation = 'name';
         this.nameNgxInput.required = true;
         this.nameNgxInput.control.setValue(application.name);
@@ -73,7 +78,7 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
         this.videoUrlNgxInput.labelTranslation = 'videoUrl';
 
         if (!this.isNew) {
-          const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.APPLICATION, objectId: application.id}).toPromise();
+          const externalResources = await this._externalResourceApiService.getExternalResources(this._externalResourceClass, application).toPromise();
           if (externalResources.length) {
             this._urlExternalResource = externalResources[0];
             this.videoUrlNgxInput.control.setValue(this._urlExternalResource.url);
@@ -87,19 +92,19 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
     return result;
   }
 
-  async onRemove(): Promise<boolean> {
-    return await this.appHelper.tryRemove(async () => {
+  public async onRemove(): Promise<boolean> {
+    return this.appHelper.tryRemove(async () => {
       this.data = await this._applicationApiService.removeApplication(this.data).toPromise();
     });
   }
 
-  async onSave(): Promise<boolean> {
+  public async onSave(): Promise<boolean> {
     this.data.name = this.nameNgxInput.control.value;
     this.data.shortName = this.shortNameNgxInput.control.value;
     this.data.description = this.descriptionNgxInput.control.value;
     this.data.manufacturerResource = this.manufacturerUrlNgxInput.control.value;
 
-    return await this.appHelper.trySave(async () => {
+    return this.appHelper.trySave(async () => {
       const data = await this._applicationApiService.saveApplication(this.data).toPromise();
       const parameterVersions = await this._applicationApiService.updateApplicationParameters(data, new ListRequest<IdRequest>(this.data.parameterVersions.map(x => new IdRequest(x.id)))).toPromise();
       const deviceVersions = await this._applicationApiService.updateApplicationDevices(data, new ListRequest<IdRequest>(this.data.deviceVersions.map(x => new IdRequest(x.id)))).toPromise();
@@ -108,16 +113,12 @@ export class EditApplicationComponent extends BaseEditComponent<Application> imp
       this.data.deviceVersions = deviceVersions;
 
       if (this._urlExternalResource && !this.videoUrlNgxInput.control.value) {
-        await this._externalResourceApiService.removeExternalResource(this._urlExternalResource).toPromise();
+        await this._externalResourceApiService.removeExternalResource(this._externalResourceClass, data, this._urlExternalResource).toPromise();
       } else if (this.videoUrlNgxInput.control.value) {
-        if (!this._urlExternalResource) {
-          this._urlExternalResource = new ExternalResource();
-          this._urlExternalResource.objectId = this.data.id;
-          this._urlExternalResource.clazz = FileClass.DEVICE;
-        }
+        this._urlExternalResource = this._urlExternalResource || new ExternalResourceApplication();
         this._urlExternalResource.url = this.videoUrlNgxInput.control.value;
 
-        await this._externalResourceApiService.saveExternalResource(this._urlExternalResource).toPromise();
+        await this._externalResourceApiService.saveExternalResource(this._externalResourceClass, data, this._urlExternalResource).toPromise();
       }
 
       this.mediaLibraryComponent.ngxImageComponent.object = this.data;

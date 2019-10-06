@@ -1,0 +1,7 @@
+export enum ExternalResourceClass {
+  APPLICATION = 'APPLICATION',
+  DEVICE = 'DEVICE',
+  GROUP_PRODUCT = 'GROUP_PRODUCT',
+  PARAMETER = 'PARAMETER',
+  UNIT = 'UNIT'
+}

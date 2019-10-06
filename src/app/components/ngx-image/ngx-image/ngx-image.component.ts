@@ -19,7 +19,7 @@ import { FileClass } from '../../../data/remote/model/file/base';
 import { Image, ImageType } from '../../../data/remote/model/file/image';
 import { FileObject } from '../../../data/remote/model/file/object';
 import { FileApiService } from '../../../data/remote/rest-api/api/file/file-api.service';
-import { ImageQuery } from '../../../data/remote/rest-api/api/file/model/image-query';
+import { ImageQuery } from '../../../data/remote/rest-api/api/file/model';
 import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
 import { NgxCropImageComponent } from '../../../module/ngx/ngx-crop-image/ngx-crop-image/ngx-crop-image.component';
 import { TemplateModalService } from '../../../service/template-modal.service';
@@ -173,14 +173,12 @@ export class NgxImageComponent implements OnInit, OnChanges {
       if (this._tempFile) {
         url = URL.createObjectURL(this._tempFile);
       } else {
-        const imageQuery: ImageQuery = {type: this.type};
+        const imageQuery: ImageQuery = {
+          type: this.type,
+          width,
+          height
+        };
 
-        if (!this._appHelper.isUndefinedOrNull(width)) {
-          imageQuery.width = width;
-        }
-        if (!this._appHelper.isUndefinedOrNull(height)) {
-          imageQuery.height = height;
-        }
         if (this.fileObject) {
           let image = this.fileObject.file as Image;
           if (this.cropped && image.croppedImage) {
@@ -189,9 +187,9 @@ export class NgxImageComponent implements OnInit, OnChanges {
           url = `${this._fileApiService.getImageByIdUrl(this.fileClass, this.object, image, imageQuery)}&date=${Date.now()}`;
         } else {
           url = `${this._fileApiService.getImageUrl(this.fileClass, this.object, imageQuery)}&date=${Date.now()}`;
-        }
-        if (this.cropped) {
-          url += '&cropped=true';
+          if (this.cropped) {
+            url += '&cropped=true';
+          }
         }
       }
 
