@@ -1,4 +1,17 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, NgZone, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  EventEmitter,
+  Input,
+  NgZone,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import { CropperPosition } from 'ngx-image-cropper';
 import { ImageFormat } from '../../../data/local/image-format';
 import { IdentifiedObject } from '../../../data/remote/base';
@@ -173,7 +186,7 @@ export class NgxImageComponent implements OnInit, OnChanges {
           if (this.cropped && image.croppedImage) {
             image = image.croppedImage;
           }
-          url = `${this._fileApiService.getImageByIdUrl(image, imageQuery)}&date=${Date.now()}`;
+          url = `${this._fileApiService.getImageByIdUrl(this.fileClass, this.object, image, imageQuery)}&date=${Date.now()}`;
         } else {
           url = `${this._fileApiService.getImageUrl(this.fileClass, this.object, imageQuery)}&date=${Date.now()}`;
         }
@@ -221,7 +234,10 @@ export class NgxImageComponent implements OnInit, OnChanges {
         imagePosition = this._tempNgxCropImageComponent.imagePosition;
         file = this._tempNgxCropImageComponent.file;
       } else {
-        const images = (await this._fileApiService.getFilePage(this.fileClass, this.object, {imageType: this.type, count: 1}).toPromise()).list;
+        const images = (await this._fileApiService.getFilePage(this.fileClass, this.object, {
+          imageType: this.type,
+          count: 1
+        }).toPromise()).list;
         if (images.length) {
           fileObject = images[0];
           if (image.croppedImage) {

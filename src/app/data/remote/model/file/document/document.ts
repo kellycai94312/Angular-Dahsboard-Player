@@ -1,4 +1,4 @@
-import { BaseFile } from '../base/base-file';
+import { BaseFile } from '../base';
 import { DocumentType } from './document-type';
 
 // TODO: Remove it!

@@ -1,4 +1,4 @@
-import { AbstractVersionObject } from '../../../base/version/abstract-version-object';
+import { AbstractVersionObject } from '../../../base/version';
 import { DocumentType } from './document-type';
 
 export class DocumentVersion extends AbstractVersionObject {

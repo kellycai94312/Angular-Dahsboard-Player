@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { NamedObject } from '../../../base/named-object';
+import { NamedObject } from '../../../base';
 import { Activity } from '../../activity/activity';
 import { BaseAddress } from '../../address/base/base-address';
 import { PlainAddress } from '../../address/plain-address';

@@ -1,6 +1,6 @@
 import { Exclude, Type } from 'class-transformer';
-import { EVENT_SUBTYPES } from '../model/event/base/event-subtypes';
-import { GROUP_SUBTYPES } from '../model/group/base/group-subtypes';
+import { EVENT_SUBTYPES } from '../model/event/base';
+import { GROUP_SUBTYPES } from '../model/group/base';
 import { GroupContractJob, GroupContractService, GroupContractType } from '../model/group/contract';
 import { NotificationType } from '../model/notification/base/notification-type';
 import { EventNotification } from '../model/notification/event/event-notification';

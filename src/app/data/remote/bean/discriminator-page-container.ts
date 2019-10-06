@@ -1,8 +1,16 @@
 import { Exclude, Type } from 'class-transformer';
 import { Chat, ConversationType, Dialogue } from '../model/chat/conversation';
-import { EventMessageContent, FileMessageContent, MessageContent, MessageContentType, PollMessageContent, SubgroupMessageContent, SystemMessageContent } from '../model/chat/message';
-import { EVENT_SUBTYPES } from '../model/event/base/event-subtypes';
-import { GROUP_SUBTYPES } from '../model/group/base/group-subtypes';
+import {
+  EventMessageContent,
+  FileMessageContent,
+  MessageContent,
+  MessageContentType,
+  PollMessageContent,
+  SubgroupMessageContent,
+  SystemMessageContent
+} from '../model/chat/message';
+import { EVENT_SUBTYPES } from '../model/event/base';
+import { GROUP_SUBTYPES } from '../model/group/base';
 import { NotificationType } from '../model/notification/base/notification-type';
 import { EventNotification } from '../model/notification/event/event-notification';
 import { EventPollNotification } from '../model/notification/event/poll/event-poll-notification';

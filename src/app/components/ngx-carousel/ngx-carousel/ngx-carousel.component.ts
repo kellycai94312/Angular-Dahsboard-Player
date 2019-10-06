@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, NgZone, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Input,
+  NgZone,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import { ImageFormat } from '../../../data/local/image-format';
 import { NameWrapper } from '../../../data/local/name-wrapper';
 import { PropertyConstant } from '../../../data/local/property-constant';
@@ -33,9 +42,6 @@ export class NgxCarouselComponent implements OnInit {
   public canEdit: boolean;
 
   @Input()
-  public width = 360;
-
-  @Input()
   public height = 300;
 
   public readonly imageTypeClass = ImageType;
@@ -62,9 +68,12 @@ export class NgxCarouselComponent implements OnInit {
     this._ngZone.runOutsideAngular(() => {
       delete this.currentImage;
 
-      this._fileApiService.getFilePage(this.fileClass, this.object, {imageType: ImageType.GALLERY, count: PropertyConstant.pageSizeMax})
+      this._fileApiService.getFilePage(this.fileClass, this.object, {
+        imageType: ImageType.GALLERY,
+        count: PropertyConstant.pageSizeMax
+      })
         .subscribe(values => {
-          this.images = values.list.map(value => new NameWrapper<FileObject>(value, this._fileApiService.getImageByIdUrl(value.file as Image)));
+          this.images = values.list.map(value => new NameWrapper<FileObject>(value, this._fileApiService.getImageByIdUrl(this.fileClass, this.object, value.file as Image)));
 
           if (this.images.length && !this.currentImage) {
             this.currentImage = this.images[0];

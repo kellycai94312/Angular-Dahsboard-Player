@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IdentifiedObject } from '../../../base/identified-object';
+import { IdentifiedObject } from '../../../base';
 import { Group, GROUP_TYPE_OPTIONS } from '../base';
 import { GroupClusterRank } from './group-cluster-rank';
 

@@ -68,9 +68,11 @@ export class FileApiService {
     return url;
   }
 
-  public getImageByIdUrl(image: Image,
+  public getImageByIdUrl(fileClass: FileClass,
+                         object: IdentifiedObject,
+                         image: Image,
                          query?: { width?: number, height?: number }): string {
-    const url = `${this._basePath}/${image.ownerFileObject.fileClass}/${image.id}/download/image`;
+    const url = `${this._basePath}/${fileClass}/${object.id}/download/image/${image.id}`;
     const httpParams = this._apiService.getHttpParamsFromObject(query);
     if (httpParams) {
       return `${url}?${httpParams.toString()}`;

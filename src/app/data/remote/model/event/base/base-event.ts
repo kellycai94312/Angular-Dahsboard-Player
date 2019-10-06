@@ -1,4 +1,4 @@
-import { NamedObject } from '../../../base/named-object';
+import { NamedObject } from '../../../base';
 import { EventStateEnum } from './event-state-enum';
 import { EventType } from './event-type';
 

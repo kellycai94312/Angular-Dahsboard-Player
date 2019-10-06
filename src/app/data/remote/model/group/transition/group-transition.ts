@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IdentifiedObject } from '../../../base/identified-object';
+import { IdentifiedObject } from '../../../base';
 import { Document } from '../../file/document/document';
 import { Group, GROUP_TYPE_OPTIONS } from '../base';
 import { PersonTransitionType } from './person-transition-type';
