@@ -1,97 +1,98 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { plainToClass, plainToClassFromExist } from 'class-transformer';
-import { IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod, RestResponseBodyType } from 'rest-core';
-import { environment } from '../../../../environments/environment';
-import { IdentifiedObject } from '../base/identified-object';
-import { VersionObject } from '../base/version/version-object';
-import { ExerciseResult } from '../bean/exercise-result';
-import { PageContainer } from '../bean/page-container';
-import { SportTypePerson } from '../bean/sport-type-person';
-import { BooleanWrapper } from '../bean/wrapper/boolean-wrapper';
-import { DateWrapper } from '../bean/wrapper/date-wrapper';
-import { IntegerWrapper } from '../bean/wrapper/integer-wrapper';
-import { MessageWrapper } from '../bean/wrapper/message-wrapper';
-import { StringWrapper } from '../bean/wrapper/string-wrapper';
-import { Activity } from '../model/activity/activity';
-import { Address } from '../model/address';
-import { AgeGroup } from '../model/age-group';
-import { Auth } from '../model/auth';
-import { Participant } from '../model/chat';
-import { Chat } from '../model/chat/conversation';
-import { BaseConversation } from '../model/chat/conversation/base';
-import { Message } from '../model/chat/message';
-import { BaseMessageContent } from '../model/chat/message/base';
-import { City } from '../model/city';
-import { Country } from '../model/country';
-import { BaseExercise } from '../model/exercise/base/base-exercise';
-import { ExerciseMeasure } from '../model/exercise/exercise-measure';
-import { BaseFile } from '../model/file/base/base-file';
-import { Document } from '../model/file/document/document';
-import { Image } from '../model/file/image/image';
-import { GroupPerson } from '../model/group';
-import { Group } from '../model/group/base';
-import { GroupCluster, GroupClusterRank, GroupConnection, GroupConnectionRequest } from '../model/group/connection';
-import { OrganizationType } from '../model/group/organization/organization-type';
-import { SubgroupPersonType } from '../model/group/subgroup/person/subgroup-person-type';
-import { SubgroupTemplatePersonType } from '../model/group/subgroup/person/subgroup-template-person-type';
-import { SubgroupBookmark } from '../model/group/subgroup/subgroup-bookmark';
-import { Subgroup } from '../model/group/subgroup/subgroup/subgroup';
-import { SubgroupGroup } from '../model/group/subgroup/subgroup/subgroup-group';
-import { SubgroupTemplate } from '../model/group/subgroup/template/subgroup-template';
-import { SubgroupTemplateGroup } from '../model/group/subgroup/template/subgroup-template-group';
-import { SubgroupTemplateGroupVersion } from '../model/group/subgroup/template/subgroup-template-group-version';
-import { SubgroupTemplateVersion } from '../model/group/subgroup/template/subgroup-template-version';
-import { League, TeamType } from '../model/group/team';
-import { GroupPersonTransition, GroupTransition } from '../model/group/transition';
-import { Location } from '../model/location';
-import { Measure } from '../model/measure';
-import { Person } from '../model/person';
-import { PersonAnthropometry } from '../model/person-anthropometry';
-import { PersonRank } from '../model/person-rank';
-import { AthleteState } from '../model/person/athlete-state';
-import { AnswerTypeEnum } from '../model/poll/answer-type-enum';
-import { PollPerson } from '../model/poll/poll-person';
-import { PollPersonAnswer } from '../model/poll/poll-person-answer';
-import { PollQuestion } from '../model/poll/poll-question';
-import { PollQuestionAnswer } from '../model/poll/poll-question-answer';
-import { Rank } from '../model/rank';
-import { PersonRefereeCategory } from '../model/referee-category/person-referee-category';
-import { Region } from '../model/region';
-import { Requisites } from '../model/requisites';
-import { Session } from '../model/session';
-import { SportRole } from '../model/sport-role';
-import { SportType } from '../model/sport-type';
-import { Stage } from '../model/stage/stage';
-import { StageType } from '../model/stage/stage-type';
-import { Tag } from '../model/tag';
-import { ExerciseExecMeasureValue } from '../model/training/exercise-exec-measure-value';
-import { User } from '../model/user';
-import { UserRole } from '../model/user-role';
-import { VerificationRequest } from '../model/verification-request';
-import { ChatRequest } from '../request/chat-request';
-import { EmailRequest } from '../request/email-request';
-import { GroupInviteRequest } from '../request/group-invite-request';
-import { GroupPersonsTransferRequest } from '../request/group-persons-transfer-request';
-import { IdRequest } from '../request/id-request';
-import { ImageCropRequest } from '../request/image-crop-request';
-import { ListRequest } from '../request/list-request';
-import { VersionObjectRequest } from '../request/version-object-request';
-import { NamedQuery } from './named-query';
-import { PageQuery } from './page-query';
-import { QueryParams } from './query-params';
-import { ActivityQuery } from './query/activity-query';
-import { AnthropometryQuery } from './query/anthropometry-query';
-import { ConversationQuery } from './query/conversation-query';
-import { DocumentQuery } from './query/file/document-query';
-import { ImageQuery } from './query/file/image-query';
-import { GroupPersonQuery } from './query/group-person-query';
-import { GroupQuery } from './query/group-query';
-import { GroupClusterQuery } from './query/group/group-cluster-query';
-import { GroupConnectionRequestQuery } from './query/group/group-connection-request-query';
-import { MeasureTemplateQuery } from './query/measure-template-query';
-import { PersonQuery } from './query/person-query';
-import { SubgroupBookmarkQuery } from './query/subgroup-bookmark-query';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {plainToClass, plainToClassFromExist} from 'class-transformer';
+import {IRestMethod, IRestMethodStrict, Rest, RestAction, RestHandler, RestParams, RestRequestMethod} from 'rest-core';
+import {environment} from '../../../../environments/environment';
+import {IdentifiedObject} from '../base';
+import {AbstractVersionObject} from '../base/version';
+import {ExerciseResult} from '../bean/exercise-result';
+import {PageContainer} from '../bean/page-container';
+import {SportTypePerson} from '../bean/sport-type-person';
+import {BooleanWrapper} from '../bean/wrapper/boolean-wrapper';
+import {DateWrapper} from '../bean/wrapper/date-wrapper';
+import {IntegerWrapper} from '../bean/wrapper/integer-wrapper';
+import {MessageWrapper} from '../bean/wrapper/message-wrapper';
+import {StringWrapper} from '../bean/wrapper/string-wrapper';
+import {Activity} from '../model/activity/activity';
+import {Address} from '../model/address';
+import {AgeGroup} from '../model/age-group';
+import {Auth} from '../model/auth';
+import {Participant} from '../model/chat';
+import {Chat} from '../model/chat/conversation';
+import {BaseConversation} from '../model/chat/conversation/base';
+import {Message} from '../model/chat/message';
+import {BaseMessageContent} from '../model/chat/message/base';
+import {City} from '../model/city';
+import {Country} from '../model/country';
+import {BaseExercise} from '../model/exercise/base/base-exercise';
+import {ExerciseMeasure} from '../model/exercise/exercise-measure';
+import {Document} from '../model/file/document/document';
+import {Group} from '../model/group/base/group';
+import {GroupCluster} from '../model/group/connection/group-cluster';
+import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
+import {GroupConnection} from '../model/group/connection/group-connection';
+import {GroupConnectionRequest} from '../model/group/connection/group-connection-request';
+import {GroupPerson} from '../model/group/group-person';
+import {OrganizationType} from '../model/group/organization/organization-type';
+import {SubgroupPersonType} from '../model/group/subgroup/person/subgroup-person-type';
+import {SubgroupTemplatePersonType} from '../model/group/subgroup/person/subgroup-template-person-type';
+import {SubgroupBookmark} from '../model/group/subgroup/subgroup-bookmark';
+import {Subgroup} from '../model/group/subgroup/subgroup/subgroup';
+import {SubgroupGroup} from '../model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupTemplate} from '../model/group/subgroup/template/subgroup-template';
+import {SubgroupTemplateGroup} from '../model/group/subgroup/template/subgroup-template-group';
+import {SubgroupTemplateGroupVersion} from '../model/group/subgroup/template/subgroup-template-group-version';
+import {SubgroupTemplateVersion} from '../model/group/subgroup/template/subgroup-template-version';
+import {League} from '../model/group/team/league';
+import {TeamType} from '../model/group/team/team-type';
+import {GroupPersonTransition} from '../model/group/transition/group-person-transition';
+import {GroupTransition} from '../model/group/transition/group-transition';
+import {Location} from '../model/location';
+import {Measure} from '../model/measure';
+import {Person} from '../model/person';
+import {PersonAnthropometry} from '../model/person-anthropometry';
+import {PersonRank} from '../model/person-rank';
+import {AthleteState} from '../model/person/athlete-state';
+import {AnswerTypeEnum} from '../model/poll/answer-type-enum';
+import {PollPerson} from '../model/poll/poll-person';
+import {PollPersonAnswer} from '../model/poll/poll-person-answer';
+import {PollQuestion} from '../model/poll/poll-question';
+import {PollQuestionAnswer} from '../model/poll/poll-question-answer';
+import {Rank} from '../model/rank';
+import {PersonRefereeCategory} from '../model/referee-category/person-referee-category';
+import {Region} from '../model/region';
+import {Requisites} from '../model/requisites';
+import {Session} from '../model/session';
+import {SportRole} from '../model/sport-role';
+import {SportType} from '../model/sport-type';
+import {Stage} from '../model/stage/stage';
+import {StageType} from '../model/stage/stage-type';
+import {Tag} from '../model/tag';
+import {ExerciseExecMeasureValue} from '../model/training/exercise-exec-measure-value';
+import {User} from '../model/user';
+import {UserRole} from '../model/user-role';
+import {VerificationRequest} from '../model/verification-request';
+import {ChatRequest} from '../request/chat-request';
+import {EmailRequest} from '../request/email-request';
+import {GroupInviteRequest} from '../request/group-invite-request';
+import {GroupPersonsTransferRequest} from '../request/group-persons-transfer-request';
+import {IdRequest} from '../request/id-request';
+import {ListRequest} from '../request/list-request';
+import {VersionObjectRequest} from '../request/version-object-request';
+import {NamedQuery} from './named-query';
+import {PageQuery} from './page-query';
+import {QueryParams} from './query-params';
+import {ActivityQuery} from './query/activity-query';
+import {AnthropometryQuery} from './query/anthropometry-query';
+import {ConversationQuery} from './query/conversation-query';
+import {DocumentQuery} from './query/file/document-query';
+import {GroupPersonQuery} from './query/group-person-query';
+import {GroupQuery} from './query/group-query';
+import {GroupClusterQuery} from './query/group/group-cluster-query';
+import {GroupConnectionRequestQuery} from './query/group/group-connection-request-query';
+import {MeasureTemplateQuery} from './query/measure-template-query';
+import {PersonQuery} from './query/person-query';
+import {SubgroupBookmarkQuery} from './query/subgroup-bookmark-query';
 
 @Injectable({
   providedIn: 'root'
@@ -696,49 +697,15 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/download/image',
-    responseBodyType: RestResponseBodyType.Blob
-  })
-  downloadImage: IRestMethod<ImageQuery, any>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/file/download/document'
   })
   downloadDocument: IRestMethod<DocumentQuery, void>;
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/file/image'
-  })
-  getImages: IRestMethod<ImageQuery, PageContainer<Image>>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/file/document'
   })
   getDocuments: IRestMethod<DocumentQuery, PageContainer<Document>>;
-
-  @RestAction({
-    method: RestRequestMethod.Post,
-    path: '/file/{!imageId}/crop',
-    resultFactory: (item, options) => {
-      return plainToClass(Image, item);
-    }
-  })
-  cropImage: IRestMethodStrict<ImageCropRequest, any, { imageId: number }, Image>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/file/{!fileId}'
-  })
-  removeFile: IRestMethod<{ fileId: number }, BaseFile>;
-
-  @RestAction({
-    method: RestRequestMethod.Delete,
-    path: '/file/{!fileId}/resource'
-  })
-  removeFileResource: IRestMethod<{ fileId: number }, BaseFile>;
 
   //#endregion
 
@@ -748,19 +715,19 @@ export class ParticipantRestApiService extends Rest {
     method: RestRequestMethod.Get,
     path: '/versionObject'
   })
-  getVersionObjects: IRestMethod<PageQuery, PageContainer<VersionObject>>;
+  getVersionObjects: IRestMethod<PageQuery, PageContainer<AbstractVersionObject>>;
 
   @RestAction({
     method: RestRequestMethod.Post,
     path: '/versionObject'
   })
-  approveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
+  approveVersionObject: IRestMethod<VersionObjectRequest, AbstractVersionObject>;
 
   @RestAction({
     method: RestRequestMethod.Delete,
     path: '/versionObject'
   })
-  disapproveVersionObject: IRestMethod<VersionObjectRequest, VersionObject>;
+  disapproveVersionObject: IRestMethod<VersionObjectRequest, AbstractVersionObject>;
 
   //#endregion
 
@@ -1853,13 +1820,6 @@ export class ParticipantRestApiService extends Rest {
   })
   getLocations: IRestMethod<QueryParams, PageContainer<Location>>;
 
-  // TODO: Use this method instead getGroupPersonsByGroup when will fixed this issue: https://github.com/troyanskiy/ngx-resource-core/issues/39
-  // @RestAction({
-  //   method: RestRequestMethod.Get,
-  //   path: '/group/{!id}/person',
-  // })
-  // getGroupPersonsByGroup: IRestMethod<GroupPersonQuery, PageContainer<GroupPerson>>;
-
   public async getGroupPersonsByGroup(query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> {
     let queryStr = '';
     const keys = Object.keys(query).filter(x => x !== 'id');
@@ -1877,91 +1837,12 @@ export class ParticipantRestApiService extends Rest {
     return <PageContainer<GroupPerson>>(await this.http.get(`${environment.restUrl}/group/${query.id}/person${queryStr}`, {withCredentials: true}).toPromise());
   }
 
-  uploadFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
-    const formData = new FormData();
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-
-    if (file) {
-      formData.append('file', file, file.name);
-    }
-    return this.http.post<T>(`${environment.restUrl}/file`, formData, {withCredentials: true}).toPromise();
-  }
-
-  updateFile<T extends BaseFile>(baseFile: T, file: File = null): Promise<T> {
-    const formData = new FormData();
-    if (file) {
-      formData.append('file', file, file.name);
-    }
-    formData.append('requestObj', new Blob([JSON.stringify(baseFile)], {type: 'application/json'}));
-    return this.http.put<T>(`${environment.restUrl}/file/${baseFile.id}`, formData, {withCredentials: true}).toPromise();
-  }
-
-  getFileUrl(documentQuery: DocumentQuery): string {
-    if (!documentQuery) {
-      return '';
-    }
-    let url = `${environment.restUrl}/file/download/document?clazz=${documentQuery.clazz}&objectId=${documentQuery.objectId}`;
-    if (documentQuery.type) {
-      url += `&type=${documentQuery.type}`;
-    }
-    return url;
-  }
-
   getDocument(documentId: number): string {
     if (!documentId) {
       return null;
     }
 
     return `${environment.restUrl}/file/download/document/${documentId}`;
-  }
-
-  getUrlImage(query: ImageQuery, noCache: boolean = false): string {
-    let url = `${environment.restUrl}/file/download/image?clazz=${query.clazz}&objectId=${query.objectId}&type=${query.type}`;
-    if (query.width) {
-      url += `&width=${query.width}`;
-    }
-
-    if (query.height) {
-      url += `&height=${query.height}`;
-    }
-
-    if (query.cropped) {
-      url += `&cropped=${query.cropped}`;
-    }
-
-    if (noCache) {
-      url += `&date=${Date.now()}`;
-    }
-
-    return url;
-  }
-
-  getUrlByImage(image: Image, query: { width?: number, height?: number } = {}, noCache: boolean = false): string {
-    let url = `${environment.restUrl}/file/download/image/${image.id}?`;
-    if (query.width) {
-      url += `&width=${query.width}`;
-    }
-
-    if (query.height) {
-      url += `&height=${query.height}`;
-    }
-
-    if (noCache) {
-      url += `&date=${Date.now()}`;
-    }
-
-    return url;
-  }
-
-  async getDataUrl(url: string): Promise<any> {
-    return await fetch(url, {credentials: 'include', cache: 'no-cache'})
-      .then(response => response.blob())
-      .then(blob => new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.onerror = reject;
-        reader.readAsDataURL(blob);
-      }));
   }
 
 }

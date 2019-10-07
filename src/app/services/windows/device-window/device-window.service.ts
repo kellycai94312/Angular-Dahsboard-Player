@@ -1,30 +1,31 @@
-import {ComponentFactoryResolver, Injectable} from '@angular/core';
-import {NgxModalService} from '../../../components/ngx-modal/service/ngx-modal.service';
-import {UtilService} from '../../util/util.service';
-import {DialogResult} from '../../../data/local/dialog-result';
-import {EditDeviceComponent} from '../../../module/device/edit-device/edit-device/edit-device.component';
-import {Device} from '../../../data/remote/model/device/device';
-import {BaseParameter} from '../../../data/remote/model/parameter/base-parameter';
-import {NgxSelectionConfig} from '../../../components/ngx-selection/model/ngx-selection-config';
-import {ParameterItemComponent} from '../../../module/parameter/parameter-item/parameter-item/parameter-item.component';
-import {ModalBuilderService} from '../../../service/modal-builder/modal-builder.service';
-import {DeviceApiService} from '../../../data/remote/rest-api/api/device/device-api.service';
-import {AppHelper} from '../../../utils/app-helper';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {ItemDetailComponent} from '../../../module/common/item-detail/item-detail/item-detail.component';
-import {TextField} from '../../../module/common/item-detail/model/text-field';
-import {ChipsField} from '../../../module/common/item-detail/model/chips-field';
-import {ImageField} from '../../../module/common/item-detail/model/image-field';
-import {ImageType} from '../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {ImageFormat} from '../../../data/local/image-format';
-import {CarouselField} from '../../../module/common/item-detail/model/carousel-field';
-import {UrlField} from '../../../module/common/item-detail/model/url-field';
-import {ExternalResourceApiService} from '../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
-import {VideoField} from '../../../module/common/item-detail/model/video-field';
-import {Application} from '../../../data/remote/model/application/application';
-import {ApplicationItemComponent} from '../../../module/application/application-item/application-item/application-item.component';
-import {ApplicationApiService} from '../../../data/remote/rest-api/api/application/application-api.service';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
+import { NgxModalService } from '../../../components/ngx-modal/service/ngx-modal.service';
+import { NgxSelectionConfig } from '../../../components/ngx-selection/model/ngx-selection-config';
+import { DialogResult } from '../../../data/local/dialog-result';
+import { ImageFormat } from '../../../data/local/image-format';
+import { Application } from '../../../data/remote/model/application/application';
+import { Device } from '../../../data/remote/model/device/device';
+import { ExternalResourceClass } from '../../../data/remote/model/external-resource';
+import { FileClass } from '../../../data/remote/model/file/base';
+import { ImageType } from '../../../data/remote/model/file/image';
+import { BaseParameter } from '../../../data/remote/model/parameter/base-parameter';
+import { ApplicationApiService } from '../../../data/remote/rest-api/api/application/application-api.service';
+import { DeviceApiService } from '../../../data/remote/rest-api/api/device/device-api.service';
+import { ExternalResourceApiService } from '../../../data/remote/rest-api/api/external-resource/external-resource-api.service';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import { ApplicationItemComponent } from '../../../module/application/application-item/application-item/application-item.component';
+import { ItemDetailComponent } from '../../../module/common/item-detail/item-detail/item-detail.component';
+import { CarouselField } from '../../../module/common/item-detail/model/carousel-field';
+import { ChipsField } from '../../../module/common/item-detail/model/chips-field';
+import { ImageField } from '../../../module/common/item-detail/model/image-field';
+import { TextField } from '../../../module/common/item-detail/model/text-field';
+import { UrlField } from '../../../module/common/item-detail/model/url-field';
+import { VideoField } from '../../../module/common/item-detail/model/video-field';
+import { EditDeviceComponent } from '../../../module/device/edit-device/edit-device/edit-device.component';
+import { ParameterItemComponent } from '../../../module/parameter/parameter-item/parameter-item/parameter-item.component';
+import { ModalBuilderService } from '../../../service/modal-builder/modal-builder.service';
+import { AppHelper } from '../../../utils/app-helper';
+import { UtilService } from '../../util/util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +98,7 @@ export class DeviceWindowService {
         new CarouselField(device, FileClass.DEVICE, '')
       ];
 
-      const externalResources = await this._externalResourceApiService.getExternalResources({clazz: FileClass.DEVICE, objectId: device.id}).toPromise();
+      const externalResources = await this._externalResourceApiService.getExternalResources(ExternalResourceClass.DEVICE, device).toPromise();
       if (externalResources.length && externalResources[0].url) {
         component.rightFields.push(new VideoField('', externalResources[0].url));
       }
@@ -106,9 +107,8 @@ export class DeviceWindowService {
   }
 
   public async openEditApplications<T extends Application>(parameters: T[], config: NgxSelectionConfig<T>): Promise<DialogResult<T[]>> {
-    return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: PageQuery) => {
-      return await this._applicationApiService.getApplications(query).toPromise();
-    }, ApplicationItemComponent, async (component, data) => {
+    return await this._modalBuilderService.showSelectionItemsModal(parameters, async (query: PageQuery) =>
+      this._applicationApiService.getApplications(query).toPromise(), ApplicationItemComponent, async (component, data) => {
       component.canEdit = false;
       await component.initialize(data);
     }, config) as DialogResult<T[]>;

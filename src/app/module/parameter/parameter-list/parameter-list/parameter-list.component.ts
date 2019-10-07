@@ -1,15 +1,16 @@
-import {Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {BaseParameter} from '../../../../data/remote/model/parameter/base-parameter';
-import {ParameterApiService} from '../../../../data/remote/rest-api/api/parameter/parameter-api.service';
-import {ParameterWindowService} from '../../../../services/windows/parameter-window/parameter-window.service';
-import {ParameterQuery} from '../../../../data/remote/rest-api/query/parameter/parameter-query';
-import {BaseItemList} from '../../../common/item-list/model/base-item-list';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {DialogResult} from '../../../../data/local/dialog-result';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {ItemListComponent} from '../../../common/item-list/item-list/item-list.component';
-import {ItemDisplay} from '../../../common/item-list/model/item-display';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Direction } from '../../../../components/ngx-virtual-scroll/model/direction';
+import { DialogResult } from '../../../../data/local/dialog-result';
+import { PageContainer } from '../../../../data/remote/bean/page-container';
+import { BaseParameter } from '../../../../data/remote/model/parameter/base-parameter';
+import { ParameterApiService } from '../../../../data/remote/rest-api/api/parameter/parameter-api.service';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { ParameterQuery } from '../../../../data/remote/rest-api/query/parameter/parameter-query';
+import { LibraryPermissionService } from '../../../../services/permissions/library/library-permission.service';
+import { ParameterWindowService } from '../../../../services/windows/parameter-window/parameter-window.service';
+import { ItemListComponent } from '../../../common/item-list/item-list/item-list.component';
+import { BaseItemList } from '../../../common/item-list/model/base-item-list';
+import { ItemDisplay } from '../../../common/item-list/model/item-display';
 
 @Component({
   selector: 'app-parameter-list',
@@ -17,9 +18,9 @@ import {ItemDisplay} from '../../../common/item-list/model/item-display';
   styleUrls: ['./parameter-list.component.scss'],
   providers: [ParameterApiService]
 })
-export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuery> {
+export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuery> implements OnInit, OnDestroy {
 
-  @ViewChild(ItemListComponent, { static: false })
+  @ViewChild(ItemListComponent, {static: false})
   public itemListComponent: ItemListComponent<BaseParameter, ParameterQuery>;
 
   @Input()
@@ -28,15 +29,15 @@ export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuer
   @Output()
   public readonly clickItem = new EventEmitter<BaseParameter>();
 
-  constructor(private _parameterApiService: ParameterApiService,
+  private _notDestroyed = true;
+
+  constructor(private _libraryPermissionService: LibraryPermissionService,
+              private _parameterApiService: ParameterApiService,
               private _parameterWindowService: ParameterWindowService) {
     super();
     this.translationTitle = 'parameters';
     this.query = new PageQuery();
     this.itemDisplay = ItemDisplay.LIST;
-    this.addItem = async (): Promise<DialogResult<BaseParameter>> => {
-      return await this._parameterWindowService.openEditParameter(new BaseParameter());
-    };
     this.fetchItems = async (direction: Direction, query: ParameterQuery): Promise<PageContainer<BaseParameter>> => {
       const pageContainer = await this._parameterApiService.getParameters(query).toPromise();
       if (this.filter) {
@@ -44,6 +45,18 @@ export class ParameterListComponent extends BaseItemList<BaseParameter, PageQuer
       }
       return pageContainer;
     };
+  }
+
+  public ngOnInit(): void {
+    this._libraryPermissionService.canAddLibraryItem().subscribe(value => {
+      if (value) {
+        this.addItem = async (): Promise<DialogResult<BaseParameter>> => this._parameterWindowService.openEditParameter(new BaseParameter());
+      }
+    });
+  }
+
+  public ngOnDestroy(): void {
+    delete this._notDestroyed;
   }
 
 }

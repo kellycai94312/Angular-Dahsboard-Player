@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IdentifiedObject } from '../../base/identified-object';
+import { IdentifiedObject } from '../../base';
 import { Person } from '../person';
 import { PersonRank } from '../person-rank';
 import { SportRole } from '../sport-role';

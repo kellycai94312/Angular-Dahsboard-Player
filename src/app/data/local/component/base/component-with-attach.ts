@@ -1,18 +1,14 @@
-import {IdentifiedObject} from '../../../remote/base/identified-object';
-import {BaseEditComponent} from './base-edit-component';
-import {OnDestroy, ViewChild} from '@angular/core';
-import {AttachFileComponent} from '../../../../components/attach-file/attach-file/attach-file.component';
-import {Document} from '../../../remote/model/file/document/document';
-import {DocumentQuery} from '../../../remote/rest-api/query/file/document-query';
-import {ChangeWatcher} from '../../util/change-watcher';
-import {ParticipantRestApiService} from '../../../remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ClientError} from '../../error/client-error';
+import { OnDestroy } from '@angular/core';
+import { AppHelper } from '../../../../utils/app-helper';
+import { IdentifiedObject } from '../../../remote/base';
+import { Document } from '../../../remote/model/file/document/document';
+import { ParticipantRestApiService } from '../../../remote/rest-api/participant-rest-api.service';
+import { DocumentQuery } from '../../../remote/rest-api/query/file/document-query';
+import { ClientError } from '../../error/client-error';
+import { ChangeWatcher } from '../../util/change-watcher';
+import { BaseEditComponent } from './base-edit-component';
 
 export abstract class ComponentWithAttach<T extends IdentifiedObject> extends BaseEditComponent<T> implements OnDestroy {
-
-  @ViewChild(AttachFileComponent, { static: false })
-  public attachFileComponent: AttachFileComponent<Document>;
 
   public readonly changeWatcher: ChangeWatcher;
   public readonly dataName: string;
@@ -38,7 +34,7 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
         throw new ClientError('loadDataError');
       }
 
-      this.document.objectId = obj.id;
+      // this.document.objectId = obj.id;
       this.documentQuery.objectId = obj.id;
       this.changeWatcher.addOrUpdate(this.dataName, this.data);
     });
@@ -46,7 +42,7 @@ export abstract class ComponentWithAttach<T extends IdentifiedObject> extends Ba
 
   public initializeTempFile(document: Document) {
     this.document = document;
-    this.document.objectId = this.data.id;
+    // this.document.objectId = this.data.id;
     this.documentQuery.objectId = this.data.id;
   }
 

@@ -15,7 +15,7 @@ import { ImageFormat } from '../data/local/image-format';
 import { NameWrapper } from '../data/local/name-wrapper';
 import { BaseEvent } from '../data/remote/model/event/base/base-event';
 import { EventStateEnum } from '../data/remote/model/event/base/event-state-enum';
-import { Image } from '../data/remote/model/file/image/image';
+import { FileObject } from '../data/remote/model/file/object';
 import { Group } from '../data/remote/model/group/base/group';
 import { GroupCluster } from '../data/remote/model/group/connection/group-cluster';
 import { GroupClusterRank } from '../data/remote/model/group/connection/group-cluster-rank';
@@ -313,20 +313,20 @@ export class TemplateModalService {
   }
 
   public async showSelectionUserRolesModal(items: UserRole[]): Promise<DialogResult<UserRole[]>> {
-    return await this._modalBuilderService.showSelectionItemsModal(items, async query => {
+    return this._modalBuilderService.showSelectionItemsModal(items, async query => {
       return this._appHelper.arrayToPageContainer(await this._participantRestApiService.getUserRoles({}, {global: true}, {}));
     }, PreviewNamedObjectComponent, async (component, data) => {
       component.data = data;
     });
   }
 
-  public async showCropImageModal(image: Image,
+  public async showCropImageModal(fileObject: FileObject,
                                   format: ImageFormat,
                                   imageBase64?: any,
                                   imagePosition?: CropperPosition,
                                   file?: File,
                                   config?: NgxModalConfiguration,
-                                  autoSave: boolean = true,
+                                  autoSave = true,
                                   aspectRatio?: number): Promise<DialogResult<NgxCropImageComponent>> {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'edit';
@@ -335,7 +335,7 @@ export class TemplateModalService {
     await modal.componentInstance.initializeBody(NgxCropImageComponent, async component => {
       ngxCropImageComponent = component;
       component.aspectRatio = aspectRatio || 1;
-      await component.initialize(image, format, imageBase64, imagePosition, file);
+      await component.initialize(fileObject, format, imageBase64, imagePosition, file);
 
       modal.componentInstance.splitButtonItems = [
         {

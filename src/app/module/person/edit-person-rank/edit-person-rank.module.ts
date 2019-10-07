@@ -1,11 +1,10 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {EditPersonRankComponent} from './edit-person-rank/edit-person-rank.component';
-import {AttachFileModule} from '../../../components/attach-file/attach-file.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {NgxSelectModule} from '../../ngx/ngx-select/ngx-select.module';
-import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
-import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxDateModule } from '../../ngx/ngx-date/ngx-date.module';
+import { NgxInputModule } from '../../ngx/ngx-input/ngx-input.module';
+import { NgxSelectModule } from '../../ngx/ngx-select/ngx-select.module';
+import { EditPersonRankComponent } from './edit-person-rank/edit-person-rank.component';
 
 @NgModule({
   imports: [
@@ -13,8 +12,7 @@ import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
     FlexLayoutModule,
     NgxSelectModule,
     NgxInputModule,
-    NgxDateModule,
-    AttachFileModule
+    NgxDateModule
   ],
   declarations: [EditPersonRankComponent],
   entryComponents: [EditPersonRankComponent],

@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { map, takeWhile } from 'rxjs/operators';
-import { FileClass } from '../../../../data/remote/model/file/base/file-class';
-import { ImageType } from '../../../../data/remote/model/file/image/image-type';
+import { filter, take, takeWhile } from 'rxjs/operators';
+import { FileClass } from '../../../../data/remote/model/file/base';
+import { ImageType } from '../../../../data/remote/model/file/image';
 import { Person } from '../../../../data/remote/model/person';
 import { FileApiService } from '../../../../data/remote/rest-api/api/file/file-api.service';
 import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
@@ -96,27 +96,21 @@ export class PersonHeadComponent implements OnInit, OnDestroy {
     delete this._notDestroyed;
   }
 
-  public async onSendMessage() {
+  public onSendMessage(): void {
     this._personApiService.getDialogue(this.person).subscribe(async value => {
       await this._router.navigate(['/conversation', value.id]);
     });
-  };
+  }
 
   public onLogoChange(): void {
-    this._fileApiService.getImages({clazz: FileClass.PERSON, objectId: this.person.id, type: ImageType.LOGO, count: 1})
-      .pipe(map(value => {
-          if (value.list) {
-            // TODO: Update image
-            // const image = (await this._participantRestApiService.getImages()).list[0];
-            // this.personService.logoHandler.next(image);
-            // const person = await this._appHelper.toPromise(this._authorizationService.personSubject.asObservable());
-            // if (person.id == this.personService.personViewModel.data.id) {
-            //   // TODO: Need to refresh image
-            //   this._authorizationService.personSubject.next(this.personViewModel.data);
-            // }
-          }
-        })
-      );
+    this._authorizationService.person$
+      .pipe(
+        take(1),
+        filter(x => x && (x.id == this.person.id))
+      )
+      .subscribe(value => {
+        this._authorizationService.personSubject.next(value);
+      });
   }
 
   public async onNavigate(): Promise<void> {

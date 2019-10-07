@@ -4,11 +4,11 @@ import { BasePosition } from '../person-position/base-position';
 import { GroupPosition } from '../person-position/group-position';
 import { Position } from '../person-position/position';
 import { PositionType } from '../person-position/position-type';
-import { Group, GROUP_TYPE_OPTIONS } from './base';
+import { Group } from './base';
 
 export class GroupPersonJob extends PersonPrivacyObject {
 
-  @Type(() => Group, GROUP_TYPE_OPTIONS)
+  // TODO: Fixed error: Cannot access 'Group' before initialization @Type(() => Group, GROUP_TYPE_OPTIONS)
   public group: Group;
 
   @Type(() => BasePosition, {

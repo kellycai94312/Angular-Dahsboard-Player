@@ -1,16 +1,15 @@
-import {Component, Input} from '@angular/core';
-import {ComponentWithAttach} from '../../../../data/local/component/base/component-with-attach';
-import {MedicalExamination} from '../../../../data/remote/model/person/medical-examination';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Person} from '../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { Component, Input } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ComponentWithAttach } from '../../../../data/local/component/base/component-with-attach';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { Person } from '../../../../data/remote/model/person';
+import { MedicalExamination } from '../../../../data/remote/model/person/medical-examination';
+import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-medical-examination',
@@ -33,9 +32,9 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
   constructor(private _personApiService: PersonApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
-
-    this.document.clazz = FileClass.MEDICAL_EXAMINATION;
-    this.documentQuery.clazz = FileClass.MEDICAL_EXAMINATION;
+    // TODO:
+    // this.document.clazz = FileClass.MEDICAL_EXAMINATION;
+    // this.documentQuery.clazz = FileClass.MEDICAL_EXAMINATION;
   }
 
   async initialize(obj: MedicalExamination): Promise<boolean> {
@@ -70,14 +69,14 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
       this.formGroup.setControl('startDate', this.startDateNgxDate.control);
       this.formGroup.setControl('finishDate', this.finishDateNgxDate.control);
 
-      await this.attachFileComponent.initialize();
+      // await this.attachFileComponent.initialize();
     });
   }
 
   async onSave(): Promise<boolean> {
-    if (!this.changeWatcher.hasChanges() && !this.attachFileComponent.hasChanges()) {
-      return true;
-    }
+    // if (!this.changeWatcher.hasChanges() && !this.attachFileComponent.hasChanges()) {
+    //   return true;
+    // }
 
     if (!(await this.validWithNotify())) {
       return false;
@@ -93,10 +92,10 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
       this.document.number = this.data.number;
       this.document.date = this.data.startDate;
 
-      if (this.attachFileComponent.hasChanges()) {
-        this.document.objectId = this.data.id;
-        await this.attachFileComponent.updateFile();
-      }
+      // if (this.attachFileComponent.hasChanges()) {
+      //   this.document.objectId = this.data.id;
+      //   await this.attachFileComponent.updateFile();
+      // }
     });
   }
 

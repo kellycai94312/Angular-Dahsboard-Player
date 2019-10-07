@@ -1,8 +1,8 @@
-import {VersionObject} from '../../base/version/version-object';
+import { AbstractVersionObject } from '../../base/version/abstract-version-object';
 
-export class MedicalExaminationVersion extends VersionObject {
-  number: number;
-  startDate: Date;
-  finishDate: Date;
-  allowed: boolean;
+export class MedicalExaminationVersion extends AbstractVersionObject {
+  public number: number;
+  public startDate: Date;
+  public finishDate: Date;
+  public allowed: boolean;
 }

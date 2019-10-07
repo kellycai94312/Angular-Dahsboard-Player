@@ -1,33 +1,31 @@
-import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {PersonTransitionType} from '../../../data/remote/model/group/transition/person-transition-type';
-import {AttachFileComponent} from '../../attach-file/attach-file/attach-file.component';
-import {Document} from '../../../data/remote/model/file/document/document';
-import {Group} from '../../../data/remote/model/group/base/group';
-import {Person} from '../../../data/remote/model/person';
-import {AppHelper} from '../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../data/remote/rest-api/participant-rest-api.service';
-import {DocumentType} from '../../../data/remote/model/file/document/document-type';
-import {FileClass} from '../../../data/remote/model/file/base/file-class';
-import {GroupTransition} from '../../../data/remote/model/group/transition/group-transition';
-import {ListRequest} from '../../../data/remote/request/list-request';
-import {SubgroupGroup} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {SubgroupTransition} from '../../../data/remote/model/group/subgroup/subgroup/subgroup-transition';
-import {SubgroupPerson} from '../../../data/remote/model/group/subgroup/person/subgroup-person';
-import {SubgroupPersonTypeEnum} from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
-import {SubgroupTemplateGroup} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
-import {TranslateObjectService} from '../../../shared/translate-object.service';
-import {SubgroupVersion} from '../../../data/remote/model/group/subgroup/version/subgroup-version';
-import {NgxInput} from '../../../module/ngx/ngx-input/model/ngx-input';
-import {NgxDate} from '../../../module/ngx/ngx-date/model/ngx-date';
-import {FormControl, Validators} from '@angular/forms';
-import {SubgroupGroupApiService} from '../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {NgxSelect} from '../../../module/ngx/ngx-select/model/ngx-select';
-import {GroupApiService} from '../../../data/remote/rest-api/api/group/group-api.service';
-import {takeWhile, tap} from 'rxjs/operators';
-import {SubgroupTemplateGroupVersionApiService} from '../../../data/remote/rest-api/api/subgroup-template-group-version/subgroup-template-group-version-api.service';
-import {SubgroupTemplateGroupVersion} from '../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
-import {PersonTransitionModalConfig} from '../../../service/template-modal.service';
+import { Component, Input, OnDestroy } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { takeWhile, tap } from 'rxjs/operators';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { Document } from '../../../data/remote/model/file/document/document';
+import { DocumentType } from '../../../data/remote/model/file/document/document-type';
+import { Group } from '../../../data/remote/model/group/base/group';
+import { SubgroupPerson } from '../../../data/remote/model/group/subgroup/person/subgroup-person';
+import { SubgroupPersonTypeEnum } from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import { SubgroupGroup } from '../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupTransition } from '../../../data/remote/model/group/subgroup/subgroup/subgroup-transition';
+import { SubgroupTemplateGroup } from '../../../data/remote/model/group/subgroup/template/subgroup-template-group';
+import { SubgroupTemplateGroupVersion } from '../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import { SubgroupVersion } from '../../../data/remote/model/group/subgroup/version/subgroup-version';
+import { GroupTransition } from '../../../data/remote/model/group/transition/group-transition';
+import { PersonTransitionType } from '../../../data/remote/model/group/transition/person-transition-type';
+import { Person } from '../../../data/remote/model/person';
+import { ListRequest } from '../../../data/remote/request/list-request';
+import { GroupApiService } from '../../../data/remote/rest-api/api/group/group-api.service';
+import { SubgroupGroupApiService } from '../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { SubgroupTemplateGroupVersionApiService } from '../../../data/remote/rest-api/api/subgroup-template-group-version/subgroup-template-group-version-api.service';
+import { ParticipantRestApiService } from '../../../data/remote/rest-api/participant-rest-api.service';
+import { NgxDate } from '../../../module/ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../module/ngx/ngx-input/model/ngx-input';
+import { NgxSelect } from '../../../module/ngx/ngx-select/model/ngx-select';
+import { PersonTransitionModalConfig } from '../../../service/template-modal.service';
+import { TranslateObjectService } from '../../../shared/translate-object.service';
+import { AppHelper } from '../../../utils/app-helper';
 
 @Component({
   selector: 'app-group-transition',
@@ -35,9 +33,6 @@ import {PersonTransitionModalConfig} from '../../../service/template-modal.servi
   styleUrls: ['./group-transition.component.scss']
 })
 export class GroupTransitionComponent implements OnDestroy {
-
-  @ViewChild(AttachFileComponent, { static: false })
-  public attachFileComponent: AttachFileComponent<Document>;
 
   @Input()
   public groupTransitionType: PersonTransitionType;
@@ -77,7 +72,7 @@ export class GroupTransitionComponent implements OnDestroy {
   public async initialize(groupPersonTransitionType: PersonTransitionType,
                           group: Group,
                           persons: Person[],
-                          personTransitionModalConfig?: PersonTransitionModalConfig) {
+                          personTransitionModalConfig?: PersonTransitionModalConfig): Promise<void> {
     this.groupTransitionType = groupPersonTransitionType;
     this.group = group;
     this.persons = persons;
@@ -141,7 +136,7 @@ export class GroupTransitionComponent implements OnDestroy {
     this.document.number = this.documentNumberNgxInput.control.value;
     this.document.date = this._appHelper.getGmtDate(this.documentDateNgxDate.control.value);
 
-    return await this._appHelper.trySave(async () => {
+    return this._appHelper.trySave(async () => {
       const personIds = this.persons.map(x => x.id);
       const subgroupPersonTypeEnum = this.subgroupPersonTypeNgxSelect.control.value.data as SubgroupPersonTypeEnum;
       const subgroupGroup = this.subgroupGroupNgxSelect.control.value as SubgroupGroup;
@@ -151,41 +146,31 @@ export class GroupTransitionComponent implements OnDestroy {
         case PersonTransitionType.TRANSFER:
           let subgroupPersons: SubgroupPerson[];
           if (this._personTransitionModalConfig && this._personTransitionModalConfig.subgroupGroup) {
-            subgroupPersons = await this._subgroupGroupApiService.transferSubgroupPersons(this._personTransitionModalConfig.subgroupGroup, {
-              subgroupGroupId: subgroupGroup.id,
-              personIds: personIds
-            }).toPromise();
+            subgroupPersons = await this._subgroupGroupApiService.transferSubgroupPersons(this._personTransitionModalConfig.subgroupGroup, {subgroupGroupId: subgroupGroup.id, personIds}).toPromise();
           } else {
-            subgroupPersons = await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {
-              personIds: personIds,
-              subgroupPersonTypeEnum: subgroupPersonTypeEnum
-            }).toPromise();
+            subgroupPersons = await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {personIds, subgroupPersonTypeEnum}).toPromise();
           }
 
           transition = subgroupPersons[0].subgroupTransition;
-          this.document.clazz = FileClass.SUBGROUP_TRANSITION;
+          // this.document.clazz = FileClass.SUBGROUP_TRANSITION;
           break;
         case PersonTransitionType.EXPEL:
-          this.document.clazz = FileClass.GROUP_TRANSITION;
+          // this.document.clazz = FileClass.GROUP_TRANSITION;
           transition = (await this._participantRestApiService.expelPersonsFromGroup(new ListRequest(this.persons), {}, {groupId: this.group.id}))[0].groupTransition;
           break;
         case PersonTransitionType.ENROLL_IN_SUBGROUP:
-          this.document.clazz = FileClass.SUBGROUP_TRANSITION;
+          // this.document.clazz = FileClass.SUBGROUP_TRANSITION;
 
-          transition = (await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {
-            personIds: personIds,
-            subgroupPersonTypeEnum: subgroupPersonTypeEnum
-          }).toPromise())[0].subgroupTransition;
+          transition = (await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {personIds, subgroupPersonTypeEnum}).toPromise())[0].subgroupTransition;
           break;
         case PersonTransitionType.EXPEL_FROM_SUBGROUP:
-          this.document.clazz = FileClass.SUBGROUP_TRANSITION;
+          // this.document.clazz = FileClass.SUBGROUP_TRANSITION;
 
           transition = (await this._subgroupGroupApiService.removeSubgroupPersons(this._personTransitionModalConfig.subgroupGroup, this._personTransitionModalConfig.subgroupPerson).toPromise())[0].subgroupTransition;
           break;
       }
 
-      this.document.objectId = transition.id;
-      await this.attachFileComponent.updateFile();
+      // this.document.objectId = transition.id;
     });
   };
 

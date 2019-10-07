@@ -1,19 +1,18 @@
-import {Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {NavigationEnd, Router} from '@angular/router';
-import {Subject} from 'rxjs';
-import {delay, filter, take, takeUntil} from 'rxjs/operators';
-
-import {FuseConfigService} from '@fuse/services/config.service';
-import {FuseNavigationService} from '@fuse/components/navigation/navigation.service';
-import {FusePerfectScrollbarDirective} from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
-import {FuseSidebarService} from '@fuse/components/sidebar/sidebar.service';
-import {IEnvironment} from '../../../../../../environments/ienvironment';
-import {environment} from '../../../../../../environments/environment';
-import {AuthorizationService} from '../../../../../shared/authorization.service';
-import {FileClass} from '../../../../../data/remote/model/file/base/file-class';
-import {ImageType} from '../../../../../data/remote/model/file/image/image-type';
-import {Person} from '../../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
+import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
+import { FusePerfectScrollbarDirective } from '@fuse/directives/fuse-perfect-scrollbar/fuse-perfect-scrollbar.directive';
+import { FuseConfigService } from '@fuse/services/config.service';
+import { Subject } from 'rxjs';
+import { delay, filter, take, takeUntil } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
+import { IEnvironment } from '../../../../../../environments/ienvironment';
+import { FileClass } from '../../../../../data/remote/model/file/base';
+import { ImageType } from '../../../../../data/remote/model/file/image';
+import { Person } from '../../../../../data/remote/model/person';
+import { FileApiService } from '../../../../../data/remote/rest-api/api/file/file-api.service';
+import { AuthorizationService } from '../../../../../shared/authorization.service';
 
 @Component({
   selector: 'navbar-vertical-style-1',
@@ -34,22 +33,13 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
   private _fusePerfectScrollbar: FusePerfectScrollbarDirective;
   private _unsubscribeAll: Subject<any>;
 
-  /**
-   * Constructor
-   *
-   * @param {FuseConfigService} _fuseConfigService
-   * @param {FuseNavigationService} _fuseNavigationService
-   * @param {FuseSidebarService} _fuseSidebarService
-   * @param {Router} _router
-   * @param _authorizationService
-   */
   constructor(
     private _fuseConfigService: FuseConfigService,
     private _fuseNavigationService: FuseNavigationService,
     private _fuseSidebarService: FuseSidebarService,
     private _router: Router,
     private _authorizationService: AuthorizationService,
-    private _participantRestApiService: ParticipantRestApiService
+    private _fileApiService: FileApiService
   ) {
     this.environment = environment;
     this._unsubscribeAll = new Subject();
@@ -60,14 +50,12 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
       .subscribe(val => {
         this.person = val;
         if (val) {
-          this.personLogoUrl = this._participantRestApiService.getUrlImage({
-            clazz: FileClass.PERSON,
+          this.personLogoUrl = `${this._fileApiService.getImageUrl(FileClass.PERSON, val, {
             type: ImageType.LOGO,
-            objectId: val.id,
             width: 72,
             height: 72,
             cropped: true
-          }, true);
+          })}&date=${Date.now()}`;
         } else {
           delete this.personLogoUrl;
         }
