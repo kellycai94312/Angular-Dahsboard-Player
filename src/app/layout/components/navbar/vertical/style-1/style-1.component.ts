@@ -50,7 +50,12 @@ export class NavbarVerticalStyle1Component implements OnInit, OnDestroy {
       .subscribe(val => {
         this.person = val;
         if (val) {
-          this.personLogoUrl = this._fileApiService.getImageUrl(FileClass.PERSON, val, {type: ImageType.LOGO, width: 72, height: 72, cropped: true});
+          this.personLogoUrl = `${this._fileApiService.getImageUrl(FileClass.PERSON, val, {
+            type: ImageType.LOGO,
+            width: 72,
+            height: 72,
+            cropped: true
+          })}&date=${Date.now()}`;
         } else {
           delete this.personLogoUrl;
         }

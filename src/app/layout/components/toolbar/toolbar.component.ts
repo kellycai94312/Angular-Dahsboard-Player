@@ -100,7 +100,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
       .subscribe(val => {
         this.person = val;
         if (val) {
-          this.personLogoUrl = this._fileApiService.getImageUrl(FileClass.PERSON, val, {type: ImageType.LOGO, width: 40, height: 40, cropped: true});
+          this.personLogoUrl = `${this._fileApiService.getImageUrl(FileClass.PERSON, val, {
+            type: ImageType.LOGO,
+            width: 40,
+            height: 40,
+            cropped: true
+          })}&date=${Date.now()}`;
           this._groupApiService.getGroups({canEdit: true})
             .pipe(take(1))
             .subscribe(value => {

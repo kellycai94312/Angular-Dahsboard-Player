@@ -1,12 +1,12 @@
-import {Injectable, Injector} from '@angular/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {Session} from '../data/remote/model/session';
-import {Auth} from '../data/remote/model/auth';
-import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {LocalStorageService} from './local-storage.service';
-import {LayoutService} from './layout.service';
-import {Router} from '@angular/router';
-import {Person} from '../data/remote/model/person';
+import { Injectable, Injector } from '@angular/core';
+import { Router } from '@angular/router';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Auth } from '../data/remote/model/auth';
+import { Person } from '../data/remote/model/person';
+import { Session } from '../data/remote/model/session';
+import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
+import { LayoutService } from './layout.service';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable()
 export class AuthorizationService {
@@ -27,7 +27,7 @@ export class AuthorizationService {
               private _injector: Injector) {
   }
 
-  public async initialize() {
+  public async initialize(): Promise<void> {
     await this.checkSession();
   }
 
@@ -44,7 +44,7 @@ export class AuthorizationService {
     return this.session;
   }
 
-  public async logOut(withNavigate: boolean = true): Promise<void> {
+  public async logOut(withNavigate = true): Promise<void> {
     this.session = null;
     this.personSubject.next(null);
     this.handleLogOut.next(true);
@@ -71,10 +71,7 @@ export class AuthorizationService {
   }
 
   public isAuthenticated(): boolean {
-    if (this.session) {
-      return true;
-    }
-    return false;
+    return !!this.session;
   }
 
   private async checkSession(): Promise<void> {

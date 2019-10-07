@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { MatIconRegistry } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { takeWhile } from 'rxjs/operators';
+import { filter, take, takeWhile } from 'rxjs/operators';
 import { FileClass } from '../../../../data/remote/model/file/base';
 import { ImageType } from '../../../../data/remote/model/file/image';
 import { Person } from '../../../../data/remote/model/person';
@@ -96,14 +96,21 @@ export class PersonHeadComponent implements OnInit, OnDestroy {
     delete this._notDestroyed;
   }
 
-  public async onSendMessage() {
+  public onSendMessage(): void {
     this._personApiService.getDialogue(this.person).subscribe(async value => {
       await this._router.navigate(['/conversation', value.id]);
     });
-  };
+  }
 
   public onLogoChange(): void {
-    // TODO: Need to refresh image authorized person
+    this._authorizationService.person$
+      .pipe(
+        take(1),
+        filter(x => x && (x.id == this.person.id))
+      )
+      .subscribe(value => {
+        this._authorizationService.personSubject.next(value);
+      });
   }
 
   public async onNavigate(): Promise<void> {
