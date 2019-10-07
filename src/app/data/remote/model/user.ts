@@ -1,10 +1,11 @@
-import {IdentifiedObject} from '../base/identified-object';
-import {Locale} from '../misc/locale';
+import { IdentifiedObject } from '../base';
+import { Locale } from '../misc/locale';
 
 export class User extends IdentifiedObject {
-  email: string;
-  password: string;
-  locale: Locale;
-  enabled: boolean;
-  verified: boolean;
+  public email: string;
+  public password?: string;
+  public enabled?: boolean;
+  public sessionLife?: number;
+  public locale: Locale;
+  public verified?: boolean;
 }

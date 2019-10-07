@@ -1,10 +1,10 @@
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {Input} from '@angular/core';
-import {DialogResult} from '../../../../data/local/dialog-result';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {ItemDisplay} from './item-display';
+import { Input } from '@angular/core';
+import { Direction } from '../../../../components/ngx-virtual-scroll/model/direction';
+import { DialogResult } from '../../../../data/local/dialog-result';
+import { IdentifiedObject } from '../../../../data/remote/base';
+import { PageContainer } from '../../../../data/remote/bean/page-container';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { ItemDisplay } from './item-display';
 
 export class BaseItemList<TModel extends IdentifiedObject, Q extends PageQuery> {
 

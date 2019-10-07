@@ -1,11 +1,11 @@
-import {Component, ContentChild, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {BaseItemList} from '../model/base-item-list';
-import {ItemDisplay} from '../model/item-display';
-import {MenuItem} from '../../item-line/model/menu-item';
+import { Component, ContentChild, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { NgxVirtualScrollComponent } from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { IdentifiedObject } from '../../../../data/remote/base';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { AppHelper } from '../../../../utils/app-helper';
+import { MenuItem } from '../../item-line/model/menu-item';
+import { BaseItemList } from '../model/base-item-list';
+import { ItemDisplay } from '../model/item-display';
 
 @Component({
   selector: 'app-item-list',
@@ -14,10 +14,10 @@ import {MenuItem} from '../../item-line/model/menu-item';
 })
 export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQuery> extends BaseItemList<TModel, Q> implements OnInit {
 
-  @ContentChild('itemTemplate', { static: false })
+  @ContentChild('itemTemplate', {static: false})
   public itemTemplate: TemplateRef<any>;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public readonly itemDisplayClass = ItemDisplay;
@@ -27,10 +27,10 @@ export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQu
     super();
   }
 
-  async ngOnInit() {
+  public async ngOnInit(): Promise<void> {
     await this._updateItems();
 
-    if (this.canEdit) {
+    if (this.addItem) {
       this.actions.push({
         iconName: 'add',
         action: async () => {
@@ -45,7 +45,7 @@ export class ItemListComponent<TModel extends IdentifiedObject, Q extends PageQu
     await this._updateItems();
   }
 
-  public async onItemDisplayChange(value: ItemDisplay): Promise<void> {
+  public onItemDisplayChange(value: ItemDisplay): void {
     this.itemDisplay = value;
   }
 

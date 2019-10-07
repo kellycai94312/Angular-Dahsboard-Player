@@ -1,15 +1,15 @@
-import {Injectable} from '@angular/core';
-import {Person} from '../data/remote/model/person';
-import {UserRoleEnum} from '../data/remote/model/user-role-enum';
-import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
-import {AuthorizationService} from './authorization.service';
-import {IdentifiedObject} from '../data/remote/base/identified-object';
-import {UserRole} from '../data/remote/model/user-role';
-import {AppHelper} from '../utils/app-helper';
-import {Observable, of} from 'rxjs';
-import {flatMap} from 'rxjs/operators';
-import {PersonApiService} from '../data/remote/rest-api/api/person/person-api.service';
-import {UserApiService} from '../data/remote/rest-api/api/user/user-api.service';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { IdentifiedObject } from '../data/remote/base/identified-object';
+import { Person } from '../data/remote/model/person';
+import { UserRole } from '../data/remote/model/user-role';
+import { UserRoleEnum } from '../data/remote/model/user-role-enum';
+import { PersonApiService } from '../data/remote/rest-api/api/person/person-api.service';
+import { UserApiService } from '../data/remote/rest-api/api/user/user-api.service';
+import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
+import { AppHelper } from '../utils/app-helper';
+import { AuthorizationService } from './authorization.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,9 +36,8 @@ export class PermissionService {
       }));
   }
 
-  public async hasAnyRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
-    const userRoles = await this._userApiService.getUserRoles().toPromise();
-    return this.hasAnyRoles(userRoles, userRoleEnums);
+  public hasAnyRole(userRoleEnums: UserRoleEnum[]): Observable<boolean> {
+    return this._userApiService.getUserRoles().pipe(map(userRoles => this.hasAnyRoles(userRoles, userRoleEnums)));
   }
 
   public hasAnyRoles(source: UserRole[], target: UserRoleEnum[]): boolean {
@@ -53,10 +52,7 @@ export class PermissionService {
   }
 
   public areYouCreator<T extends IdentifiedObject>(data: T, person: Person): boolean {
-    if (data.owner && data.owner.id == person.user.id) {
-      return true;
-    }
-    return false;
+    return data.owner && data.owner.id == person.user.id;
   }
 
 }

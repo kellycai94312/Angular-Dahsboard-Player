@@ -82,7 +82,7 @@ export class EditGroupComponent extends BaseEditComponent<Group> implements OnDe
         });
 
       let organizationTypes = await this.participantRestApiService.getOrganizationTypes();
-      if (!await this._permissionService.hasAnyRole([UserRoleEnum.OPERATOR])) {
+      if (!await this._permissionService.hasAnyRole([UserRoleEnum.OPERATOR]).toPromise()) {
         organizationTypes = organizationTypes.filter(x =>
           x.organizationTypeEnum === OrganizationTypeEnum.SECTION ||
           x.organizationTypeEnum === OrganizationTypeEnum.CLUB ||
