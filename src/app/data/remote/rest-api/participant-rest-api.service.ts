@@ -446,15 +446,6 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Get,
-    path: '/group/{!id}',
-    resultFactory: (item, options) => {
-      return plainToClass(Group, item);
-    }
-  })
-  getGroup: IRestMethod<QueryParams, Group>;
-
-  @RestAction({
-    method: RestRequestMethod.Get,
     path: '/group',
     resultFactory: (item, options) => {
       return plainToClassFromExist(new PageContainer<Group>(Group), item);

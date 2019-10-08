@@ -1,29 +1,29 @@
 import { Component, ComponentFactoryResolver, forwardRef, Inject, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { SexEnum } from 'app/data/remote/misc/sex-enum';
+import { PersonPrivacyEnum } from 'app/data/remote/model/base/person-privacy-enum';
+import { Document } from 'app/data/remote/model/file/document/document';
+import { DocumentType } from 'app/data/remote/model/file/document/document-type';
+import { GroupPerson } from 'app/data/remote/model/group';
+import { Group } from 'app/data/remote/model/group/base';
+import { Person } from 'app/data/remote/model/person';
+import { BasePosition } from 'app/data/remote/model/person-position/base-position';
+import { PersonContact } from 'app/data/remote/model/person/person-contact';
+import { PersonContactTypeEnum } from 'app/data/remote/model/person/person-contact-type-enum';
+import { User } from 'app/data/remote/model/user';
+import { FileApiService } from 'app/data/remote/rest-api/api/file/file-api.service';
+import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
+import { PersonApiService } from 'app/data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { ValidationService } from 'app/service/validation/validation.service';
+import { UtilService } from 'app/services/util/util.service';
+import { TranslateObjectService } from 'app/shared/translate-object.service';
+import { AppHelper } from 'app/utils/app-helper';
 import { EMPTY, from, merge, NEVER, Observable, of } from 'rxjs';
 import { flatMap, map, takeWhile } from 'rxjs/operators';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { SexEnum } from '../../../../data/remote/misc/sex-enum';
-import { PersonPrivacyEnum } from '../../../../data/remote/model/base/person-privacy-enum';
-import { Document } from '../../../../data/remote/model/file/document/document';
-import { DocumentType } from '../../../../data/remote/model/file/document/document-type';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { Person } from '../../../../data/remote/model/person';
-import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
-import { PersonContact } from '../../../../data/remote/model/person/person-contact';
-import { PersonContactTypeEnum } from '../../../../data/remote/model/person/person-contact-type-enum';
-import { User } from '../../../../data/remote/model/user';
-import { FileApiService } from '../../../../data/remote/rest-api/api/file/file-api.service';
-import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
-import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
-import { TemplateModalService } from '../../../../service/template-modal.service';
-import { ValidationService } from '../../../../service/validation/validation.service';
-import { UtilService } from '../../../../services/util/util.service';
-import { TranslateObjectService } from '../../../../shared/translate-object.service';
-import { AppHelper } from '../../../../utils/app-helper';
 import { GroupPositionItemComponent } from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
 import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
 import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
@@ -158,7 +158,10 @@ export class EditPersonComponent implements OnDestroy {
 
     if (group && !this._appHelper.isNewObject(person)) {
       this.groupPerson = await this._participantRestApiService.getGroupPerson({groupId: group.id, personId: person.id});
-      this.positions = (await this._groupApiService.getGroupPersonPositions(this.groupPerson, {unassigned: false, count: PropertyConstant.pageSizeMax}).toPromise())
+      this.positions = (await this._groupApiService.getGroupPersonPositions(this.groupPerson, {
+        unassigned: false,
+        count: PropertyConstant.pageSizeMax
+      }).toPromise())
         .list.map(x => x.position);
     }
     await this.initializePersonalDataProcessingDocument();
@@ -322,7 +325,16 @@ export class EditPersonComponent implements OnDestroy {
             return from(dialog).pipe(flatMap(() => NEVER));
           }
         }),
-        flatMap(person => this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person))),
+        flatMap(person => {
+          if (this._contactPhone) {
+            if (this._contactPhone.value) {
+              return this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person));
+            } else if (!this._contactPhone.isNew) {
+              return this._personApiService.removeContact(person, this._contactPhone).pipe(map(() => person));
+            }
+          }
+          return of(person);
+        }),
         flatMap(person => {
           if (person) {
             this.person = person;
@@ -354,7 +366,10 @@ export class EditPersonComponent implements OnDestroy {
   private _createPerson(person: Person): Observable<Person> {
     return this._personApiService.createPerson(person)
       .pipe(flatMap(value => {
-        return from(this._participantRestApiService.enrollPerson({personId: value.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))
+        return from(this._participantRestApiService.enrollPerson({
+          personId: value.id,
+          positionIds: this.positions.map(x => x.id)
+        }, {}, {groupId: this.group.id}))
           .pipe(map(() => value));
       }));
   }

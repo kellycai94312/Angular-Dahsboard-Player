@@ -1,3 +1,4 @@
+import { JsonSubType } from 'class-transformer';
 import { Competition } from '../competition';
 import { Diet } from '../diet';
 import { Education } from '../education';
@@ -9,7 +10,7 @@ import { Testing } from '../testing';
 import { Training } from '../training';
 import { EventType } from './event-type';
 
-export const EVENT_SUBTYPES = [
+export const EVENT_SUBTYPES: JsonSubType[] = [
   {value: Event, name: EventType.EVENT},
   {value: Training, name: EventType.TRAINING},
   {value: Testing, name: EventType.TESTING},

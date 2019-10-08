@@ -1,0 +1,4 @@
+<app-subgroups-trees *ngIf="group"
+                     [getChildren]="getChildren"
+                     [getNodeName]="getNodeName"
+                     (selectedNodeChange)="onSelectedNode($event)"></app-subgroups-trees>

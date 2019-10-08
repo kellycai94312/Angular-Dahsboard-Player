@@ -50,6 +50,10 @@ export class GroupApiService {
     return this._apiService.getPageContainer(Group, this._basePath, query) as Observable<PageContainer<T>>;
   }
 
+  public getGroup<T extends Group>(groupId: number): Observable<T> {
+    return this._apiService.getValue(Group, `${this._basePath}/${groupId}`) as Observable<T>;
+  }
+
   public createGroup<T extends Group>(value: T): Observable<T> {
     return this._apiService.createValue(Group, this._basePath, value) as Observable<T>;
   }

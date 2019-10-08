@@ -1,3 +1,5 @@
+import { SubgroupGroup } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { Type } from 'class-transformer';
 import { BaseGroupContract } from './base-group-contract';
 import { GroupContractType } from './group-contract-type';
 
@@ -16,8 +18,11 @@ export class GroupContractService extends BaseGroupContract {
   public classDuration: number;
   // Адрес регистрации
   public registrationAddress: string;
+
   // Кружок/секция
-  public section: string;
+  @Type(() => SubgroupGroup)
+  public subgroupGroup: SubgroupGroup;
+
   // Руководитель/специалист
   public head: string;
 

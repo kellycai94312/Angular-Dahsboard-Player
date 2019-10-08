@@ -1,4 +1,6 @@
-export const GROUP_SUBTYPES = [
+import { JsonSubType } from 'class-transformer';
+
+export const GROUP_SUBTYPES: JsonSubType[] = [
   // TODO: Fix typization
   // {value: Team, name: GroupTypeEnum.TEAM},
   // {value: Community, name: GroupTypeEnum.COMMUNITY},

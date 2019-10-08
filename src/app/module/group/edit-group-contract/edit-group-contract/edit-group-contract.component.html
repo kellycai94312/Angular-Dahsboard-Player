@@ -13,8 +13,22 @@
     <ng-container *ngIf="data.discriminator === groupContractTypeClass.SERVICE">
       <new-ngx-input [data]="workPlaceNgxInput"></new-ngx-input>
       <new-ngx-input [data]="courseNgxInput"></new-ngx-input>
-      <mat-checkbox [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
+      <mat-checkbox
+        [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
       <new-ngx-input [data]="sectionNgxInput"></new-ngx-input>
+      <div>
+        <label>{{'groupContractService.section' | translate}}</label>
+        <div fxLayout="row"
+             fxLayoutGap="10px">
+          <div fxFlex="grow">{{data?.subgroupGroup?.subgroupVersion?.name}}</div>
+          <div>
+            <button mat-icon-button
+                    (click)="onEditSubgroupGroup()">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
       <new-ngx-input [data]="headNgxInput"></new-ngx-input>
       <new-ngx-input *ngIf="getGroupContractService(data).paidService"
                      [data]="pricePerMonthNgxInput"></new-ngx-input>

@@ -1,23 +1,28 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {GroupContractType} from '../../../../data/remote/model/group/contract/group-contract-type';
-import {FormControl, ValidatorFn, Validators} from '@angular/forms';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {BaseGroupContract} from '../../../../data/remote/model/group/contract/base-group-contract';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {Person} from '../../../../data/remote/model/person';
-import {GroupContractService} from '../../../../data/remote/model/group/contract/group-contract-service';
-import {ValidationService} from '../../../../service/validation/validation.service';
-import {GroupContractJob} from '../../../../data/remote/model/group/contract/group-contract-job';
-import {TariffRateEnum} from '../../../../data/remote/model/group/contract/tariff-rate-enum';
-import {takeWhile} from 'rxjs/operators';
+import { Component, ComponentFactoryResolver, Input, OnInit } from '@angular/core';
+import { FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
+import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { Group } from 'app/data/remote/model/group/base';
+import {
+  BaseGroupContract,
+  GroupContractJob,
+  GroupContractService,
+  GroupContractType,
+  TariffRateEnum
+} from 'app/data/remote/model/group/contract';
+import { SubgroupGroup } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { Person } from 'app/data/remote/model/person';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { GroupSubgroupsTreeComponent } from 'app/module/group/group-subgroups-tree/group-subgroups-tree/group-subgroups-tree.component';
+import { ValidationService } from 'app/service/validation/validation.service';
+import { TranslateObjectService } from 'app/shared/translate-object.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { takeWhile } from 'rxjs/operators';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-group-contract',
@@ -58,6 +63,8 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
   constructor(private _translateObjectService: TranslateObjectService,
               private _groupApiService: GroupApiService,
               private _validationService: ValidationService,
+              private _ngxModalService: NgxModalService,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
@@ -94,22 +101,41 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     return true;
   }
 
-  async onSave(): Promise<boolean> {
-    return await this.appHelper.trySave(async () => {
+  public async onSave(): Promise<boolean> {
+    return this.appHelper.trySave(async () => {
       this._updateObject();
 
       this.data = await this._groupApiService.saveGroupContract(this.data, this.group, this.person).toPromise();
     });
   }
 
-  async onRemove(): Promise<boolean> {
-    return await this.appHelper.tryRemove(async () => {
+  public async onRemove(): Promise<boolean> {
+    return this.appHelper.tryRemove(async () => {
       this.data = await this._groupApiService.removeGroupContract(this.data, this.group, this.person).toPromise();
     });
   }
 
   public getGroupContractService(groupContract: BaseGroupContract): GroupContractService {
     return groupContract as GroupContractService;
+  }
+
+  public async onEditSubgroupGroup(): Promise<void> {
+    const modal = this._ngxModalService.open();
+    modal.componentInstance.titleKey = 'subgroups';
+    await modal.componentInstance.initializeBody(GroupSubgroupsTreeComponent, async component => {
+      component.group = this.group;
+      modal.componentInstance.splitButtonItems = [
+        {
+          nameKey: 'apply',
+          callback: async () => {
+            if (component.selectedNode.data instanceof SubgroupGroup) {
+              (this.data as GroupContractService).subgroupGroup = component.selectedNode.data;
+            }
+            modal.close();
+          }
+        }
+      ];
+    }, {componentFactoryResolver: this._componentFactoryResolver});
   }
 
   private _getNgxInput(labelTranslation: string, value: string | number, required = false, isNumber = false): NgxInput {
@@ -143,7 +169,6 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     if (data instanceof GroupContractService) {
       this.workPlaceNgxInput = this._getNgxInput('groupContractService.workPlace', data.workPlace, true);
       this.courseNgxInput = this._getNgxInput('groupContractService.course', data.course, true);
-      this.sectionNgxInput = this._getNgxInput('groupContractService.section', data.section, true);
       this.headNgxInput = this._getNgxInput('groupContractService.head', data.head, true);
       this.pricePerMonthNgxInput = this._getNgxInput('groupContractService.pricePerMonth', data.pricePerMonth, true, true);
       this.classesPerMonthNgxInput = this._getNgxInput('groupContractService.classesPerMonth', data.classesPerMonth, true, true);
@@ -174,7 +199,6 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     if (this.data instanceof GroupContractService) {
       this.data.workPlace = this.workPlaceNgxInput.control.value;
       this.data.course = this.courseNgxInput.control.value;
-      this.data.section = this.sectionNgxInput.control.value;
       this.data.head = this.headNgxInput.control.value;
       this.data.pricePerMonth = this.pricePerMonthNgxInput.control.value;
       this.data.classesPerMonth = this.classesPerMonthNgxInput.control.value;

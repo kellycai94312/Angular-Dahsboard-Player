@@ -9,10 +9,7 @@ import { Position } from 'app/data/remote/model/person-position/position';
 import { UserRole } from 'app/data/remote/model/user-role';
 import { UserRoleEnum } from 'app/data/remote/model/user-role-enum';
 import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
-import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { GroupPersonPositionQuery } from 'app/data/remote/rest-api/query/group-person-position-query';
-import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
-import { GroupPersonItemComponent } from 'app/module/group/group-person-item/group-person-item/group-person-item.component';
 import { GroupPositionItemComponent } from 'app/module/group/group-position/group-position-item/group-position-item/group-position-item.component';
 import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
 import { PermissionService } from 'app/shared/permission.service';
@@ -37,8 +34,7 @@ export class GroupService implements OnDestroy {
   private readonly _groupPersonSubject: Subject<GroupPerson>;
   private readonly _updateDataSubject = new Subject<any>();
 
-  constructor(private _participantRestApiService: ParticipantRestApiService,
-              private _permissionService: PermissionService,
+  constructor(private _permissionService: PermissionService,
               private _translateObjectService: TranslateObjectService,
               private _groupApiService: GroupApiService,
               private _modalBuilderService: ModalBuilderService,
@@ -61,7 +57,7 @@ export class GroupService implements OnDestroy {
 
   public async initialize(groupId: number): Promise<boolean> {
     return this._appHelper.tryLoad(async () => {
-      const group = await this._participantRestApiService.getGroup({id: groupId});
+      const group = await this._groupApiService.getGroup(groupId).toPromise();
       this._groupSubject.next(group);
     });
   }
@@ -101,20 +97,6 @@ export class GroupService implements OnDestroy {
         },
         title: `${await this._translateObjectService.getTranslation('vacancies')} | ${await this._translateObjectService.getTranslation('selection')}`,
         minCount: 1
-      }
-    );
-  }
-
-  public async showSelectionGroupPersonsModal(items: GroupPerson[], groupPersonQuery: GroupPersonQuery): Promise<DialogResult<GroupPerson[]>> {
-    return await this._modalBuilderService.showSelectionItemsModal(items, async (query: GroupPersonQuery) => {
-        return await this._participantRestApiService.getGroupPersonsByGroup(this._appHelper.updatePageQuery(query, groupPersonQuery));
-      }, GroupPersonItemComponent, async (component, data) => {
-        await component.initialize(data);
-      },
-      {
-        title: `${await this._translateObjectService.getTranslation('persons.section')} | ${await this._translateObjectService.getTranslation('selection')}`,
-        componentFactoryResolver: this._componentFactoryResolver,
-        compare: (first, second) => first.person.id == second.person.id
       }
     );
   }
