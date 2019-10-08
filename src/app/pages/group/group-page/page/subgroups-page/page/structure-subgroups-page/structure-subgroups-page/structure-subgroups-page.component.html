@@ -16,7 +16,7 @@
 
     <ngx-split-button [items]="splitButtonItems"></ngx-split-button>
     <app-subgroup-person-list [group]="group"
-                              [canEdit]="canEdit"
+                              [canEdit]="canEditPerson"
                               [subgroupGroup]="getPersonModalConfig()?.subgroupGroup"
                               (selectedItemsChange)="onSelectedItemsChange($event)"></app-subgroup-person-list>
   </div>

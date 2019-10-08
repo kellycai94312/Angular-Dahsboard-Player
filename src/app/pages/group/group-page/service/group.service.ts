@@ -1,26 +1,25 @@
 import { ComponentFactoryResolver, Injectable, OnDestroy } from '@angular/core';
+import { DialogResult } from 'app/data/local/dialog-result';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { GroupPerson, GroupPersonState } from 'app/data/remote/model/group';
+import { Group } from 'app/data/remote/model/group/base';
+import { BasePosition } from 'app/data/remote/model/person-position/base-position';
+import { Position } from 'app/data/remote/model/person-position/position';
+import { UserRole } from 'app/data/remote/model/user-role';
+import { UserRoleEnum } from 'app/data/remote/model/user-role-enum';
+import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { GroupPersonPositionQuery } from 'app/data/remote/rest-api/query/group-person-position-query';
+import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
+import { GroupPersonItemComponent } from 'app/module/group/group-person-item/group-person-item/group-person-item.component';
+import { GroupPositionItemComponent } from 'app/module/group/group-position/group-position-item/group-position-item/group-position-item.component';
+import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
+import { PermissionService } from 'app/shared/permission.service';
+import { TranslateObjectService } from 'app/shared/translate-object.service';
+import { AppHelper } from 'app/utils/app-helper';
 import { Observable, Subject, Unsubscribable } from 'rxjs';
 import { shareReplay } from 'rxjs/operators';
-import { DialogResult } from '../../../../data/local/dialog-result';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { PageContainer } from '../../../../data/remote/bean/page-container';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { GroupPersonState } from '../../../../data/remote/model/group/group-person-state';
-import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
-import { Position } from '../../../../data/remote/model/person-position/position';
-import { UserRole } from '../../../../data/remote/model/user-role';
-import { UserRoleEnum } from '../../../../data/remote/model/user-role-enum';
-import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { GroupPersonPositionQuery } from '../../../../data/remote/rest-api/query/group-person-position-query';
-import { GroupPersonQuery } from '../../../../data/remote/rest-api/query/group-person-query';
-import { GroupPersonItemComponent } from '../../../../module/group/group-person-item/group-person-item/group-person-item.component';
-import { GroupPositionItemComponent } from '../../../../module/group/group-position/group-position-item/group-position-item/group-position-item.component';
-import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
-import { PermissionService } from '../../../../shared/permission.service';
-import { TranslateObjectService } from '../../../../shared/translate-object.service';
-import { AppHelper } from '../../../../utils/app-helper';
 
 @Injectable()
 export class GroupService implements OnDestroy {
@@ -56,12 +55,12 @@ export class GroupService implements OnDestroy {
     this.refreshMembers = new Subject<void>();
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this._appHelper.unsubscribe(this._groupSubscription);
   }
 
   public async initialize(groupId: number): Promise<boolean> {
-    return await this._appHelper.tryLoad(async () => {
+    return this._appHelper.tryLoad(async () => {
       const group = await this._participantRestApiService.getGroup({id: groupId});
       this._groupSubject.next(group);
     });
@@ -135,11 +134,19 @@ export class GroupService implements OnDestroy {
   }
 
   public async canShowTemplatesSubgroups(): Promise<boolean> {
-    return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
 
   public async canEditNews(): Promise<boolean> {
     return this.canEditByAnyUserRole([UserRoleEnum.ADMIN]);
+  }
+
+  public async canViewAdministrationTool(): Promise<boolean> {
+    const group = await this._appHelper.toPromise(this.group$);
+    if (group && group.dataOperator) {
+      return true;
+    }
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
 
   public async areYouGroupCreator(): Promise<boolean> {

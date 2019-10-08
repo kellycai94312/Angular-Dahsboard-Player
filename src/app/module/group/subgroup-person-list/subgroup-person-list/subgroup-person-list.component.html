@@ -2,7 +2,7 @@
           [fetchItems]="fetchItems"
           [edit]="onEdit"
           [add]="onAdd"
-          [selectionType]="selectionTypeClass.MULTIPLE"
+          [selectionType]="!canEdit || selectionTypeClass.MULTIPLE"
           [canEdit]="canEdit"
           (selectedItemsChange)="selectedItemsChange.emit($event)">
   <ngx-column nameKey="lastName">

@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FuseNavigation} from '../../../../../@fuse/types';
-import {ToolbarService} from '../../../../layout/components/toolbar/services/toolbar.service';
-import {takeWhile} from 'rxjs/operators';
-import {MatIconRegistry} from '@angular/material/icon';
-import {DomSanitizer} from '@angular/platform-browser';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
+import { takeWhile } from 'rxjs/operators';
+import { FuseNavigation } from '../../../../../@fuse/types';
 
 @Component({
   selector: 'app-group-menu',
@@ -24,6 +24,7 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
     this._matIconRegistry.addSvgIcon('vacancies', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/vacancies.svg'));
     this._matIconRegistry.addSvgIcon('staff-recruitment', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/staff-recruitment.svg'));
     this._matIconRegistry.addSvgIcon('subgroups-structure', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/subgroups-structure.svg'));
+    this._matIconRegistry.addSvgIcon('request', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/request.svg'));
     this._matIconRegistry.addSvgIcon('project-office', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/project-office.svg'));
     this._matIconRegistry.addSvgIcon('hierarchy-management', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/hierarchy-management.svg'));
     this._matIconRegistry.addSvgIcon('analytics', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/analytics.svg'));
@@ -34,7 +35,7 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
     this._matIconRegistry.addSvgIcon('group-repository', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/group-repository.svg'));
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this._toolbarService.group$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(value => {
@@ -97,6 +98,13 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                       type: 'item',
                       svgIcon: 'subgroups-structure',
                       url: `/group/${value.id}/subgroup`
+                    },
+                    {
+                      id: 'requests',
+                      translate: 'requests',
+                      type: 'item',
+                      svgIcon: 'request',
+                      url: `/group/${value.id}/request`
                     }
                   ]
                 },

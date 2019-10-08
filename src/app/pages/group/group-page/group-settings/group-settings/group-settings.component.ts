@@ -1,21 +1,22 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {NameWrapper} from '../../../../../data/local/name-wrapper';
-import {GroupSettingsItem} from '../model/group-settings-item';
-import {BaseGroupComponent} from '../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../service/group.service';
-import {AppHelper} from '../../../../../utils/app-helper';
-import {ActivatedRoute, Router} from '@angular/router';
-import {ImageType} from '../../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../../data/remote/model/file/base/file-class';
-import {BaseGroupSettingsComponent} from '../model/base-group-settings-component';
-import {ToolbarService} from '../../../../../layout/components/toolbar/services/toolbar.service';
-import {takeWhile} from 'rxjs/operators';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { NameWrapper } from 'app/data/local/name-wrapper';
+import { FileClass } from 'app/data/remote/model/file/base';
+import { ImageType } from 'app/data/remote/model/file/image';
+import { Group } from 'app/data/remote/model/group/base';
+import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { takeWhile } from 'rxjs/operators';
+import { GroupService } from '../../service/group.service';
+import { BaseGroupSettingsComponent } from '../model/base-group-settings-component';
+import { GroupSettingsItem } from '../model/group-settings-item';
 
 @Component({
   selector: 'app-group-settings',
   templateUrl: './group-settings.component.html',
-  styleUrls: ['./group-settings.component.scss']
+  styleUrls: ['./group-settings.component.scss'],
+  providers: [GroupService]
 })
 export class GroupSettingsComponent extends BaseGroupComponent<Group> implements OnInit, OnDestroy {
 
@@ -51,7 +52,12 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
 
   public async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
-    this._toolbarService.updateGroup(group);
+    const canViewAdministrationTool = await this.groupService.canViewAdministrationTool();
+    if (canViewAdministrationTool) {
+      this._toolbarService.updateGroup(group);
+    } else {
+      delete this.visibleGroupMenu;
+    }
   }
 
   public onRouterOutletActivate(value: any): void {
@@ -66,7 +72,7 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
     await this.selectedComponent.onSave();
   }
 
-  private _getPathByGroupSettingsItem(value: GroupSettingsItem) {
+  private _getPathByGroupSettingsItem(value: GroupSettingsItem): string {
     switch (value) {
       case GroupSettingsItem.REQUISITES:
         return 'requisite';
