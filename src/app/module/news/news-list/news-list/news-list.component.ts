@@ -1,16 +1,13 @@
-import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@angular/core';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {Person} from '../../../../data/remote/model/person';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {UtilService} from '../../../../services/util/util.service';
-import {BaseNews} from '../../../../data/remote/model/group/news/base-news';
-import {NewsWindowService} from '../../../../services/windows/news-window/news-window.service';
-import {PersonNews} from '../../../../data/remote/model/group/news/person-news';
-import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
+import { Component, ComponentFactoryResolver, Input, OnInit, ViewChild } from '@angular/core';
+import { Direction } from 'app/components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from 'app/components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { Group } from 'app/data/remote/model/group/base';
+import { BaseNews, GroupNews, PersonNews } from 'app/data/remote/model/group/news';
+import { Person } from 'app/data/remote/model/person';
+import { GroupApiService, PersonApiService } from 'app/data/remote/rest-api/api';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { UtilService } from 'app/services/util/util.service';
+import { NewsWindowService } from 'app/services/windows/news-window/news-window.service';
 
 @Component({
   selector: 'app-news-list',
@@ -19,7 +16,7 @@ import {GroupNews} from '../../../../data/remote/model/group/news/group-news';
 })
 export class NewsListComponent implements OnInit {
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: true})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

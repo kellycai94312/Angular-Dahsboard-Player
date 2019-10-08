@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {BaseGroupComponent} from '../../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../../service/group.service';
-import {AppHelper} from '../../../../../../utils/app-helper';
+import { Component } from '@angular/core';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { Group } from 'app/data/remote/model/group/base';
+import { AppHelper } from 'app/utils/app-helper';
+import { GroupService } from '../../../service/group.service';
 
 @Component({
   selector: 'app-group-news-page',
