@@ -1,20 +1,23 @@
-import {Component, forwardRef, Inject, OnInit, ViewChild} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {Chat} from '../../../../data/remote/model/chat/conversation/chat';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {NgxSelectionComponent} from '../../../../components/ngx-selection/ngx-selection/ngx-selection.component';
-import {PersonItemComponent} from '../../../person/person-item/person-item/person-item.component';
-import {ConversationQuery} from '../../../../data/remote/rest-api/query/conversation-query';
-import {Person} from '../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {IdRequest} from '../../../../data/remote/request/id-request';
-import {ClientError} from '../../../../data/local/error/client-error';
-import {Router} from '@angular/router';
-import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
-import {TemplateModalService} from '../../../../service/template-modal.service';
+import { Component, forwardRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgxImageComponent } from 'app/components/ngx-image/ngx-image/ngx-image.component';
+import { NgxSelectionComponent } from 'app/components/ngx-selection/ngx-selection/ngx-selection.component';
+import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
+import { ClientError } from 'app/data/local/error/client-error';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { Chat } from 'app/data/remote/model/chat';
+import { FileClass } from 'app/data/remote/model/file/base';
+import { ImageType } from 'app/data/remote/model/file/image';
+import { Person } from 'app/data/remote/model/person';
+import { IdRequest } from 'app/data/remote/request/id-request';
+import { ConversationApiService } from 'app/data/remote/rest-api/api';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { ConversationQuery } from 'app/data/remote/rest-api/query/conversation-query';
+import { NgxInput } from 'app/module/ngx/ngx-input/model/ngx-input';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { PersonItemComponent } from '../../../person/person-item/person-item/person-item.component';
 
 @Component({
   selector: 'app-edit-chat',
@@ -27,13 +30,16 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
 
-  @ViewChild(NgxImageComponent, { static: false })
+  @ViewChild(NgxImageComponent, {static: false})
   public _ngxImageComponent: NgxImageComponent;
 
-  @ViewChild(NgxSelectionComponent, { static: false })
+  @ViewChild(NgxSelectionComponent, {static: true})
   public _ngxSelectionComponent: NgxSelectionComponent<PersonItemComponent, ConversationQuery, Person>;
 
+  public nameNgxInput: NgxInput;
+
   constructor(private _router: Router,
+              private _conversationApiService: ConversationApiService,
               // TODO: TemplateModalService can't inject without forwardRef()
               @Inject(forwardRef(() => TemplateModalService))
               private _templateModalService: TemplateModalService,
@@ -41,17 +47,29 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
     super(participantRestApiService, appHelper);
   }
 
-  async initialize(obj: Chat): Promise<boolean> {
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+  }
+
+  public async initialize(obj: Chat): Promise<boolean> {
     const result = await super.initialize(obj);
     if (result) {
-      return await this.appHelper.tryLoad(async () => {
+      return this.appHelper.tryLoad(async () => {
         let selectedItems: Person[] = [];
         if (!this.appHelper.isNewObject(this.data)) {
-          selectedItems = (await this.participantRestApiService.getParticipants({
+          selectedItems = (await this._conversationApiService.getParticipants({
             conversationId: this.data.id,
             unassigned: false
-          })).list.map(x => x.person);
+          }).toPromise()).list.map(x => x.person);
         }
+
+        this.nameNgxInput = new NgxInput();
+        this.nameNgxInput.labelTranslation = 'name';
+        this.nameNgxInput.required = true;
+        this.nameNgxInput.control.setValidators(Validators.required);
+        this.nameNgxInput.control.setValue(obj.name);
+
         this._ngxSelectionComponent.minCount = 1;
         await this._ngxSelectionComponent.initialize(PersonItemComponent,
           async (component, data) => {
@@ -59,56 +77,44 @@ export class EditChatComponent extends BaseEditComponent<Chat> implements OnInit
           },
           async (query: ConversationQuery) => {
             query.unassigned = true;
-            const pageContainer = await this.participantRestApiService.getParticipants(query);
-            return this.appHelper.pageContainerConverter(pageContainer, original => {
-              return original.person;
-            });
+            const pageContainer = await this._conversationApiService.getParticipants(query).toPromise();
+            return this.appHelper.pageContainerConverter(pageContainer, original => original.person);
           }, selectedItems);
       });
     }
     return result;
   }
 
-  async onRemove(): Promise<boolean> {
+  public async onRemove(): Promise<boolean> {
     if (!await this._templateModalService.showConfirmModal('areYouSure')) {
       return;
     }
-    return await this.appHelper.tryRemove(async () => {
-      await this.participantRestApiService.deleteChat({conversationId: this.data.id});
+    return this.appHelper.tryRemove(async () => {
+      await this._conversationApiService.removeChat(this.data).toPromise();
     });
   }
 
-  async onSave(): Promise<boolean> {
-    return await this.appHelper.trySave(async () => {
+  public async onSave(): Promise<boolean> {
+    return this.appHelper.trySave(async () => {
       if (this._ngxSelectionComponent.selectedItems.length > 0) {
+        this.data.name = this.nameNgxInput.control.value;
+
         if (this.appHelper.isNewObject(this.data)) {
-          const chat = await this.participantRestApiService.createChat({
+          this.data = await this._conversationApiService.createChat({
             name: this.data.name,
             personIds: this._ngxSelectionComponent.selectedItems.map(person => new IdRequest(person.id))
-          });
-          this.appHelper.updateObject(this.data, chat);
+          }).toPromise();
         } else {
-          const chat = await this.participantRestApiService.updateChat(this.data, {}, {conversationId: this.data.id});
-          this.appHelper.updateObject(this.data, chat);
-          await this.participantRestApiService.updateParticipants({list: this._ngxSelectionComponent.selectedItems.map(person => new IdRequest(person.id))}, {}, {conversationId: this.data.id});
+          this.data = await this._conversationApiService.updateChat(this.data).toPromise();
+          await this._conversationApiService.updateParticipants(this.data, this._ngxSelectionComponent.selectedItems).toPromise();
         }
-        await this._ngxImageComponent.save(null, false);
+        if (this._ngxImageComponent) {
+          await this._ngxImageComponent.save(void 0, false);
+        }
       } else {
         throw new ClientError('chatMustContainOneParticipant');
       }
     });
-  }
-
-  public async navigateToBase(): Promise<void> {
-    await this._router.navigate(['/conversation']);
-  }
-
-  public async navigateToChat(): Promise<boolean> {
-    if (this.data && this.data.id) {
-      await this._router.navigate(['/conversation', this.data.id]);
-      return true;
-    }
-    return false;
   }
 
 }

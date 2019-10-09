@@ -1,22 +1,22 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../environments/environment';
-import {ApiService} from '../base/api.service';
-import {Observable} from 'rxjs';
-import {BaseConversation} from '../../../model/chat/conversation/base';
-import {BaseMessageContent} from '../../../model/chat/message/base';
-import {Message, MessageContent} from '../../../model/chat/message';
-import {PageQuery} from '../../page-query';
-import {MessageWrapper} from '../../../bean/wrapper/message-wrapper';
-import {PageContainer} from '../../../bean/page-container';
-import {IntegerWrapper} from '../../../bean/wrapper/integer-wrapper';
-import {map} from 'rxjs/operators';
-import {ListRequest} from '../../../request/list-request';
-import {IdRequest} from '../../../request/id-request';
-import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
-import {Chat, Participant} from '../../../model/chat';
-import {ConversationQuery} from '../../query/conversation-query';
-import {Person} from '../../../model/person';
-import {ChatRequest} from '../../../request/chat-request';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
+import { PageContainer } from '../../../bean/page-container';
+import { BooleanWrapper } from '../../../bean/wrapper/boolean-wrapper';
+import { IntegerWrapper } from '../../../bean/wrapper/integer-wrapper';
+import { MessageWrapper } from '../../../bean/wrapper/message-wrapper';
+import { Chat, Participant } from '../../../model/chat';
+import { BaseConversation } from '../../../model/chat/conversation/base';
+import { Message, MessageContent } from '../../../model/chat/message';
+import { BaseMessageContent } from '../../../model/chat/message/base';
+import { Person } from '../../../model/person';
+import { ChatRequest } from '../../../request/chat-request';
+import { IdRequest } from '../../../request/id-request';
+import { ListRequest } from '../../../request/list-request';
+import { PageQuery } from '../../page-query';
+import { ConversationQuery } from '../../query/conversation-query';
+import { ApiService } from '../base/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,6 @@ export class ConversationApiService {
   public getConversation<T extends BaseConversation>(conversationId: number): Observable<T> {
     return this._apiService.getValue(BaseConversation, `${this._basePath}/${conversationId}`) as Observable<T>;
   }
-
 
   public createMessage<T extends BaseConversation, TValue extends BaseMessageContent>(conversation: T, value: TValue): Observable<Message> {
     return this._apiService.createValue(Message, `${this._basePath}/${conversation.id}/messageContent`, value) as Observable<Message>;
@@ -91,16 +90,16 @@ export class ConversationApiService {
     return this._apiService.createValue(Chat, this._basePath, value) as Observable<Chat>;
   }
 
-  public updateChat<T extends BaseConversation>(conversation: T, value: Chat): Observable<Chat> {
-    return this._apiService.updateValue(Chat, `${this._basePath}/${conversation.id}`, value) as Observable<Chat>;
+  public updateChat(value: Chat): Observable<Chat> {
+    return this._apiService.updateValue(Chat, `${this._basePath}/${value.id}`, value) as Observable<Chat>;
   }
 
   public quitChat<T extends BaseConversation>(conversation: T): Observable<null> {
-    return this._apiService.removeValue(null, `${this._basePath}/${conversation.id}/quit`) as Observable<null>;
+    return this._apiService.removeValue(void 0, `${this._basePath}/${conversation.id}/quit`) as Observable<null>;
   }
 
   public removeChat<T extends BaseConversation>(conversation: T): Observable<null> {
-    return this._apiService.removeValue(null, `${this._basePath}/${conversation.id}`) as Observable<null>;
+    return this._apiService.removeValue(void 0, `${this._basePath}/${conversation.id}`) as Observable<null>;
   }
 
   //endregion
