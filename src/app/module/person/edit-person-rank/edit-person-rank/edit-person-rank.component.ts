@@ -96,7 +96,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
             personRankId: this.data.id
           }));
         }
-        this.document.number = this.data.number;
+        this.document.number = '' + this.data.number;
         this.document.date = this.data.date;
       }
     });

@@ -2,8 +2,8 @@ import { Component, Input, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { takeWhile, tap } from 'rxjs/operators';
 import { PropertyConstant } from '../../../data/local/property-constant';
-import { Document } from '../../../data/remote/model/file/document/document';
-import { DocumentType } from '../../../data/remote/model/file/document/document-type';
+import { Document } from '../../../data/remote/model/document/document';
+import { DocumentType } from '../../../data/remote/model/document/document-type';
 import { Group } from '../../../data/remote/model/group/base/group';
 import { SubgroupPerson } from '../../../data/remote/model/group/subgroup/person/subgroup-person';
 import { SubgroupPersonTypeEnum } from '../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
@@ -146,9 +146,15 @@ export class GroupTransitionComponent implements OnDestroy {
         case PersonTransitionType.TRANSFER:
           let subgroupPersons: SubgroupPerson[];
           if (this._personTransitionModalConfig && this._personTransitionModalConfig.subgroupGroup) {
-            subgroupPersons = await this._subgroupGroupApiService.transferSubgroupPersons(this._personTransitionModalConfig.subgroupGroup, {subgroupGroupId: subgroupGroup.id, personIds}).toPromise();
+            subgroupPersons = await this._subgroupGroupApiService.transferSubgroupPersons(this._personTransitionModalConfig.subgroupGroup, {
+              subgroupGroupId: subgroupGroup.id,
+              personIds
+            }).toPromise();
           } else {
-            subgroupPersons = await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {personIds, subgroupPersonTypeEnum}).toPromise();
+            subgroupPersons = await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {
+              personIds,
+              subgroupPersonTypeEnum
+            }).toPromise();
           }
 
           transition = subgroupPersons[0].subgroupTransition;
@@ -161,7 +167,10 @@ export class GroupTransitionComponent implements OnDestroy {
         case PersonTransitionType.ENROLL_IN_SUBGROUP:
           // this.document.clazz = FileClass.SUBGROUP_TRANSITION;
 
-          transition = (await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {personIds, subgroupPersonTypeEnum}).toPromise())[0].subgroupTransition;
+          transition = (await this._subgroupGroupApiService.createSubgroupPersons(subgroupGroup, {
+            personIds,
+            subgroupPersonTypeEnum
+          }).toPromise())[0].subgroupTransition;
           break;
         case PersonTransitionType.EXPEL_FROM_SUBGROUP:
           // this.document.clazz = FileClass.SUBGROUP_TRANSITION;

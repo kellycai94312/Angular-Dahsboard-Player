@@ -89,7 +89,7 @@ export class EditMedicalExaminationComponent extends ComponentWithAttach<Medical
     return await this.appHelper.trySave(async () => {
       this.data = await this._personApiService.saveMedicalExamination(this.person, this.data).toPromise();
 
-      this.document.number = this.data.number;
+      this.document.number = '' + this.data.number;
       this.document.date = this.data.startDate;
 
       // if (this.attachFileComponent.hasChanges()) {

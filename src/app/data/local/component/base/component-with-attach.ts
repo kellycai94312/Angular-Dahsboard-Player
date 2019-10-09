@@ -1,7 +1,7 @@
 import { OnDestroy } from '@angular/core';
 import { AppHelper } from '../../../../utils/app-helper';
 import { IdentifiedObject } from '../../../remote/base';
-import { Document } from '../../../remote/model/file/document/document';
+import { Document } from '../../../remote/model/document/document';
 import { ParticipantRestApiService } from '../../../remote/rest-api/participant-rest-api.service';
 import { DocumentQuery } from '../../../remote/rest-api/query/file/document-query';
 import { ClientError } from '../../error/client-error';
