@@ -1,4 +1,6 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatIconRegistry } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { FuseConfigService } from '@fuse/services/config.service';
@@ -58,7 +60,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _notificationApiService: NotificationApiService,
     private _groupApiService: GroupApiService,
     private _toolbarService: ToolbarService,
-    private _notificationService: NotificationService
+    private _notificationService: NotificationService,
+    private _matIconRegistry: MatIconRegistry,
+    private _domSanitizer: DomSanitizer
   ) {
     // Set the defaults
     this.userStatusOptions = [
@@ -88,6 +92,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
         'color': '#616161'
       }
     ];
+    this._matIconRegistry.addSvgIcon('events-today', this._domSanitizer.bypassSecurityTrustResourceUrl('assets/img/events-today.svg'));
 
     this.navigation = navigation;
 
