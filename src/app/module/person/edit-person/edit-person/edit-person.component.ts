@@ -1,29 +1,31 @@
 import { Component, ComponentFactoryResolver, forwardRef, Inject, Input, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { SexEnum } from 'app/data/remote/misc/sex-enum';
+import { PersonPrivacyEnum } from 'app/data/remote/model/base/person-privacy-enum';
+import { Document } from 'app/data/remote/model/document/document';
+import { DocumentClass } from 'app/data/remote/model/document/document-class';
+import { DocumentType } from 'app/data/remote/model/document/document-type';
+import { GroupPerson } from 'app/data/remote/model/group';
+import { Group } from 'app/data/remote/model/group/base';
+import { Person } from 'app/data/remote/model/person';
+import { BasePosition } from 'app/data/remote/model/person-position/base-position';
+import { PersonContact } from 'app/data/remote/model/person/person-contact';
+import { PersonContactTypeEnum } from 'app/data/remote/model/person/person-contact-type-enum';
+import { User } from 'app/data/remote/model/user';
+import { DocumentApiService } from 'app/data/remote/rest-api/api/document/document-api.service';
+import { FileApiService } from 'app/data/remote/rest-api/api/file/file-api.service';
+import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
+import { PersonApiService } from 'app/data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { ValidationService } from 'app/service/validation/validation.service';
+import { UtilService } from 'app/services/util/util.service';
+import { TranslateObjectService } from 'app/shared/translate-object.service';
+import { AppHelper } from 'app/utils/app-helper';
 import { EMPTY, from, merge, NEVER, Observable, of } from 'rxjs';
 import { flatMap, map, takeWhile } from 'rxjs/operators';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { SexEnum } from '../../../../data/remote/misc/sex-enum';
-import { PersonPrivacyEnum } from '../../../../data/remote/model/base/person-privacy-enum';
-import { Document } from '../../../../data/remote/model/file/document/document';
-import { DocumentType } from '../../../../data/remote/model/file/document/document-type';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { Person } from '../../../../data/remote/model/person';
-import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
-import { PersonContact } from '../../../../data/remote/model/person/person-contact';
-import { PersonContactTypeEnum } from '../../../../data/remote/model/person/person-contact-type-enum';
-import { User } from '../../../../data/remote/model/user';
-import { FileApiService } from '../../../../data/remote/rest-api/api/file/file-api.service';
-import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
-import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
-import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
-import { ModalBuilderService } from '../../../../service/modal-builder/modal-builder.service';
-import { TemplateModalService } from '../../../../service/template-modal.service';
-import { ValidationService } from '../../../../service/validation/validation.service';
-import { UtilService } from '../../../../services/util/util.service';
-import { TranslateObjectService } from '../../../../shared/translate-object.service';
-import { AppHelper } from '../../../../utils/app-helper';
 import { GroupPositionItemComponent } from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
 import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
 import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
@@ -83,6 +85,7 @@ export class EditPersonComponent implements OnDestroy {
               private _validationService: ValidationService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _participantRestApiService: ParticipantRestApiService,
+              private _documentApiService: DocumentApiService,
               private _fileApiService: FileApiService) {
     this._contactPhone.personContactTypeEnum = PersonContactTypeEnum.PHONE;
     this._contactPhone.personPrivacyEnum = PersonPrivacyEnum.PUBLIC;
@@ -158,7 +161,10 @@ export class EditPersonComponent implements OnDestroy {
 
     if (group && !this._appHelper.isNewObject(person)) {
       this.groupPerson = await this._participantRestApiService.getGroupPerson({groupId: group.id, personId: person.id});
-      this.positions = (await this._groupApiService.getGroupPersonPositions(this.groupPerson, {unassigned: false, count: PropertyConstant.pageSizeMax}).toPromise())
+      this.positions = (await this._groupApiService.getGroupPersonPositions(this.groupPerson, {
+        unassigned: false,
+        count: PropertyConstant.pageSizeMax
+      }).toPromise())
         .list.map(x => x.position);
     }
     await this.initializePersonalDataProcessingDocument();
@@ -166,26 +172,26 @@ export class EditPersonComponent implements OnDestroy {
 
   private async initializePersonalDataProcessingDocument(): Promise<void> {
     this._personalDataProcessingDocument = new Document();
-    // this._personalDataProcessingDocument.clazz = FileClass.PERSONAL_DATA_PROCESSING;
+    this._personalDataProcessingDocument.clazz = DocumentClass.PERSONAL_DATA_PROCESSING;
     this._personalDataProcessingDocument.type = DocumentType.ORDER;
-    // TODO:
-    // if (!this._appHelper.isNewObject(this.person)) {
-    //   try {
-    //     const documentPageContainer = await this._fileApiService
-    //       .getDocuments(
-    //         {
-    //           clazz: this._personalDataProcessingDocument.clazz,
-    //           count: 1,
-    //           objectId: this.person.id,
-    //           type: this._personalDataProcessingDocument.type
-    //         })
-    //       .toPromise();
-    //     if (documentPageContainer.list.length) {
-    //       this._personalDataProcessingDocument = documentPageContainer.list[0];
-    //     }
-    //   } catch (e) {
-    //   }
-    // }
+
+    if (!this._appHelper.isNewObject(this.person)) {
+      try {
+        const documentPageContainer = await this._documentApiService
+          .getDocumentPage(
+            {
+              clazz: this._personalDataProcessingDocument.clazz,
+              count: 1,
+              objectId: this.person.id,
+              documentType: this._personalDataProcessingDocument.type
+            })
+          .toPromise();
+        if (documentPageContainer.list.length) {
+          this._personalDataProcessingDocument = documentPageContainer.list[0];
+        }
+      } catch (e) {
+      }
+    }
     this.personalDataProcessingNumberNgxInput = this._getNgxInput('number', (this._personalDataProcessingDocument.number || '') as string, true);
 
     this.personalDataProcessingDateNgxDate = new NgxDate();
@@ -198,29 +204,29 @@ export class EditPersonComponent implements OnDestroy {
     this.personalDataProcessingDocumentFormGroup.setControl('date', this.personalDataProcessingDateNgxDate.control);
   }
 
-  private async initializeDocument(person: Person) {
+  private async initializeDocument(person: Person): Promise<void> {
     const age = this._utilService.getAge(new Date(this.person.birthDate));
 
     this._document = new Document();
     this._document.type = age >= 14 ? DocumentType.PASSPORT : DocumentType.BIRTH_CERTIFICATE;
-    // this._document.clazz = FileClass.PERSON;
-    // if (!this._appHelper.isNewObject(person)) {
-    //   try {
-    //     const documentPageContainer = await this._fileApiService
-    //       .getDocuments(
-    //         {
-    //           clazz: this._document.clazz,
-    //           count: 1,
-    //           objectId: person.id,
-    //           type: this._document.type
-    //         })
-    //       .toPromise();
-    //     if (documentPageContainer.list.length) {
-    //       this._document = documentPageContainer.list[0];
-    //     }
-    //   } catch (e) {
-    //   }
-    // }
+    this._document.clazz = DocumentClass.PERSON_PASSPORT;
+    if (!this._appHelper.isNewObject(person)) {
+      try {
+        const documentPageContainer = await this._documentApiService
+          .getDocumentPage(
+            {
+              clazz: this._document.clazz,
+              count: 1,
+              objectId: person.id,
+              documentType: this._document.type
+            })
+          .toPromise();
+        if (documentPageContainer.list.length) {
+          this._document = documentPageContainer.list[0];
+        }
+      } catch (e) {
+      }
+    }
 
     this.documentTypeNgxSelect = new NgxSelect();
     this.documentTypeNgxSelect.labelTranslation = 'documentType';
@@ -278,16 +284,15 @@ export class EditPersonComponent implements OnDestroy {
           if (value) {
             this.documentFormGroup.updateValueAndValidity();
             if (this.documentFormGroup.valid) {
-              return this._fileApiService.getDocumentAvailable(this._document, this._document.series, this._document.number, this._document.type as any).pipe(map(value1 => value1.value));
+              return this._documentApiService.getDocumentAvailable(this._document);
             } else {
-              const dialog = this._templateModalService.showQuestionModal('documentDataIsIncorrect', modal => {
-                return [{
+              const dialog = this._templateModalService.showQuestionModal('documentDataIsIncorrect', modal =>
+                [{
                   nameKey: 'apply',
                   callback: async () => {
                     modal.close(true);
                   }
-                }];
-              });
+                }]);
               return from(dialog).pipe(flatMap(() => NEVER));
             }
           }
@@ -322,39 +327,49 @@ export class EditPersonComponent implements OnDestroy {
             return from(dialog).pipe(flatMap(() => NEVER));
           }
         }),
-        flatMap(person => this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person))),
+        flatMap(person => {
+          if (this._contactPhone) {
+            if (this._contactPhone.value) {
+              return this._personApiService.saveContact(person, this._contactPhone).pipe(map(() => person));
+            } else if (!this._contactPhone.isNew) {
+              return this._personApiService.removeContact(person, this._contactPhone).pipe(map(() => person));
+            }
+          }
+          return of(person);
+        }),
         flatMap(person => {
           if (person) {
             this.person = person;
 
             let personalDataProcessingDocument$ = of(void 0);
             if (addOrUpdatePersonalDataProcessingDocument) {
-              // this._personalDataProcessingDocument.objectId = person.id;
+              this._personalDataProcessingDocument.objectId = person.id;
               this._personalDataProcessingDocument.number = this.personalDataProcessingNumberNgxInput.control.value;
               this._personalDataProcessingDocument.date = this._appHelper.getGmtDate(this.personalDataProcessingDateNgxDate.control.value);
 
-              // personalDataProcessingDocument$ = this._fileApiService.saveFile(this._personalDataProcessingDocument);
+              personalDataProcessingDocument$ = this._documentApiService.saveDocument(this._personalDataProcessingDocument);
             }
 
             let document$ = of(void 0);
             if (addOrUpdateDocument) {
-              // this._document.objectId = person.id;
-              // document$ = this._fileApiService.saveFile(this._document);
+              this._document.objectId = person.id;
+              document$ = this._documentApiService.saveDocument(this._document);
             }
             return merge(personalDataProcessingDocument$, document$);
           }
           return EMPTY;
         }),
-        flatMap(value => {
-          return of(true);
-        })
+        flatMap(value => of(true))
       );
   }
 
   private _createPerson(person: Person): Observable<Person> {
     return this._personApiService.createPerson(person)
       .pipe(flatMap(value => {
-        return from(this._participantRestApiService.enrollPerson({personId: value.id, positionIds: this.positions.map(x => x.id)}, {}, {groupId: this.group.id}))
+        return from(this._participantRestApiService.enrollPerson({
+          personId: value.id,
+          positionIds: this.positions.map(x => x.id)
+        }, {}, {groupId: this.group.id}))
           .pipe(map(() => value));
       }));
   }

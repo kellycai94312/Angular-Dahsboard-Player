@@ -1,5 +1,5 @@
-import {Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {Direction} from '../model/direction';
+import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Direction } from '../model/direction';
 
 @Directive({
   selector: '[ngxScroll]'
@@ -41,11 +41,6 @@ export class NgxScrollDirective implements OnInit, OnDestroy {
 
   @HostListener('scroll')
   public onScrollHostListener(): void {
-    this.onScroll();
-  }
-
-  @HostListener('window:scroll')
-  public onWindowScrollHostListener(): void {
     this.onScroll();
   }
 
@@ -105,31 +100,18 @@ export class NgxScrollDirective implements OnInit, OnDestroy {
       scrollToOptions.behavior = 'smooth';
     }
 
-    if (this.windowScroll) {
-      window.scrollTo(scrollToOptions);
-    } else {
-      (this._elementRef.nativeElement as HTMLElement).scrollTo(scrollToOptions);
-    }
+    (this._elementRef.nativeElement as HTMLElement).scrollTo(scrollToOptions);
   }
 
   public getHeight(): number {
-    if (this.windowScroll) {
-      return document.documentElement.scrollHeight;
-    }
     return this._elementRef.nativeElement.scrollHeight;
   }
 
   public getScrollYPosition(): number {
-    if (this.windowScroll) {
-      return document.documentElement.scrollTop;
-    }
     return this._elementRef.nativeElement.scrollTop;
   }
 
   public getViewPortHeight(): number {
-    if (this.windowScroll) {
-      return document.documentElement.clientHeight;
-    }
     return this._elementRef.nativeElement.clientHeight;
   }
 

@@ -1,18 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { map, takeWhile } from 'rxjs/operators';
-import { BaseGroupComponent } from '../../../../data/local/component/group/base-group-component';
-import { Group } from '../../../../data/remote/model/group/base/group';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
-import { ToolbarService } from '../../../../layout/components/toolbar/services/toolbar.service';
-import { NgxTab } from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
-import { AppHelper } from '../../../../utils/app-helper';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { GroupPerson } from 'app/data/remote/model/group';
+import { Group } from 'app/data/remote/model/group/base';
+import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
+import { NgxTab } from 'app/module/ngx/ngx-tabs/model/ngx-tab';
+import { AppHelper } from 'app/utils/app-helper';
+import { takeWhile } from 'rxjs/operators';
 import { GroupService } from '../service/group.service';
 
 @Component({
   selector: 'app-group-page',
   templateUrl: './group-page.component.html',
-  styleUrls: ['./group-page.component.scss']
+  styleUrls: ['./group-page.component.scss'],
+  providers: [GroupService]
 })
 export class GroupPageComponent extends BaseGroupComponent<Group> implements OnInit, OnDestroy {
 
@@ -35,24 +36,24 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
         translation: 'employees',
         link: 'employee'
       },
-      {
-        translation: 'subgroups',
-        link: 'subgroup',
-        hidden$: this.canEditSubject.pipe(map(value => !value))
-      },
+      // {
+      //   translation: 'subgroups',
+      //   link: 'subgroup',
+      //   hidden$: this.canEditSubject.pipe(map(value => !value))
+      // },
       {
         translation: 'subscribers',
         link: 'subscriber'
       },
-      {
-        translation: 'requests',
-        link: 'request',
-        hidden$: this.canEditSubject.pipe(map(value => !value))
-      },
-      {
-        translation: 'structure',
-        link: 'structure'
-      },
+      // {
+      //   translation: 'requests',
+      //   link: 'request',
+      //   hidden$: this.canEditSubject.pipe(map(value => !value))
+      // },
+      // {
+      //   translation: 'structure',
+      //   link: 'structure'
+      // },
       {
         translation: 'timetableOfClasses',
         link: 'schedule'
@@ -73,12 +74,18 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
 
   public ngOnDestroy(): void {
     super.ngOnDestroy();
+
     this._toolbarService.updateGroup(void 0);
   }
 
   public async initializeGroup(group: Group): Promise<void> {
     await super.initializeGroup(group);
-    this._toolbarService.updateGroup(group);
+    const canViewAdministrationTool = await this._groupService.canViewAdministrationTool();
+    if (canViewAdministrationTool) {
+      this._toolbarService.updateGroup(group);
+    } else {
+      delete this.visibleGroupMenu;
+    }
   }
 
   public onChangeGroupPerson(groupPerson: GroupPerson): void {

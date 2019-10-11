@@ -1,6 +1,6 @@
 import {OnInit, ViewChild} from '@angular/core';
 import {PropertyConstant} from '../../../../data/local/property-constant';
-import {Document} from '../../../../data/remote/model/file/document/document';
+import {Document} from '../../../../data/remote/model/document/document';
 import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
 import {AppHelper} from '../../../../utils/app-helper';
 import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';

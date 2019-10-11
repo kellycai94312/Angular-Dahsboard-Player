@@ -85,7 +85,12 @@
       "check-parameters"
     ],
     "no-unnecessary-initializer": true,
-    "no-implicit-dependencies": true,
+    "no-implicit-dependencies": [
+      true,
+      [
+        "app"
+      ]
+    ],
     "no-import-side-effect": [
       true,
       {

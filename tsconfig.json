@@ -15,6 +15,9 @@
       "node_modules/@types"
     ],
     "paths": {
+      "app/*": [
+        "app/*"
+      ],
       "@fuse": [
         "@fuse/"
       ]

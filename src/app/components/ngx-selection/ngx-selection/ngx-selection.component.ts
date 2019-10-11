@@ -1,12 +1,12 @@
-import {Component, ComponentFactoryResolver, Input, Type, ViewChild} from '@angular/core';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../data/remote/bean/page-container';
-import {Direction} from '../../ngx-virtual-scroll/model/direction';
-import {NgxVirtualScrollComponent} from '../../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {AppHelper} from '../../../utils/app-helper';
-import {PropertyConstant} from '../../../data/local/property-constant';
-import {Observable} from 'rxjs';
-import {NgxSelect} from '../../../module/ngx/ngx-select/model/ngx-select';
+import { Component, ComponentFactoryResolver, Input, Type, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PropertyConstant } from '../../../data/local/property-constant';
+import { PageContainer } from '../../../data/remote/bean/page-container';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import { NgxSelect } from '../../../module/ngx/ngx-select/model/ngx-select';
+import { AppHelper } from '../../../utils/app-helper';
+import { Direction } from '../../ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 
 @Component({
   selector: 'ngx-selection',
@@ -17,7 +17,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
 
   public readonly propertyConstant = PropertyConstant;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: true})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
@@ -69,7 +69,7 @@ export class NgxSelectionComponent<TComponent extends any, TQuery extends PageQu
   constructor(private _appHelper: AppHelper) {
     this.class = '';
     this.canEdit = true;
-    this.query = <TQuery>{};
+    this.query = <TQuery> {};
     this.compare = (first, second) => {
       return first.id == second.id;
     };

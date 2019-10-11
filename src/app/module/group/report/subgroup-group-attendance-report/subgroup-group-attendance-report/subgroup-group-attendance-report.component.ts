@@ -1,16 +1,16 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SubgroupGroupApiService} from '../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {NgxSelect} from '../../../../ngx/ngx-select/model/ngx-select';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {PositionLevelEnum} from '../../../../../data/remote/model/person-position/position-level-enum';
-import {GroupApiService} from '../../../../../data/remote/rest-api/api/group/group-api.service';
-import {SubgroupGroup} from '../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {PropertyConstant} from '../../../../../data/local/property-constant';
-import {Observable, of} from 'rxjs';
-import {flatMap, map} from 'rxjs/operators';
-import {NgxDate} from '../../../../ngx/ngx-date/model/ngx-date';
-import {Person} from '../../../../../data/remote/model/person';
-import {Group} from '../../../../../data/remote/model/group/base/group';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Observable, of } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { PropertyConstant } from '../../../../../data/local/property-constant';
+import { Group } from '../../../../../data/remote/model/group/base/group';
+import { SubgroupGroup } from '../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { Person } from '../../../../../data/remote/model/person';
+import { PositionLevelEnum } from '../../../../../data/remote/model/person-position/position-level-enum';
+import { GroupApiService } from '../../../../../data/remote/rest-api/api/group/group-api.service';
+import { SubgroupGroupApiService } from '../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { NgxDate } from '../../../../ngx/ngx-date/model/ngx-date';
+import { NgxSelect } from '../../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-subgroup-group-attendance-report',
@@ -35,7 +35,7 @@ export class SubgroupGroupAttendanceReportComponent implements OnInit {
               private _groupApiService: GroupApiService) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.dateNgxDate = new NgxDate();
     this.dateNgxDate.placeholderTranslation = 'date';
     this.dateNgxDate.format = PropertyConstant.dateFormat;
@@ -86,7 +86,10 @@ export class SubgroupGroupAttendanceReportComponent implements OnInit {
 
     return of(ngxSelect)
       .pipe(
-        flatMap(() => this._groupApiService.getPersons(this.subgroupGroup.subgroupGroupItem.subgroupTemplateGroup.group, {positionLevelEnum, count: PropertyConstant.pageSizeMax})),
+        flatMap(() => this._groupApiService.getPersons(this.group, {
+          positionLevelEnum,
+          count: PropertyConstant.pageSizeMax
+        })),
         map(items => {
           ngxSelect.items = items.list.map(x => x.person);
           return ngxSelect;

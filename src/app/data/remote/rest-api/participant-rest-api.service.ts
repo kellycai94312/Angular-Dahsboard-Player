@@ -26,7 +26,7 @@ import {City} from '../model/city';
 import {Country} from '../model/country';
 import {BaseExercise} from '../model/exercise/base/base-exercise';
 import {ExerciseMeasure} from '../model/exercise/exercise-measure';
-import {Document} from '../model/file/document/document';
+import {Document} from '../model/document/document';
 import {Group} from '../model/group/base/group';
 import {GroupCluster} from '../model/group/connection/group-cluster';
 import {GroupClusterRank} from '../model/group/connection/group-cluster-rank';
@@ -443,15 +443,6 @@ export class ParticipantRestApiService extends Rest {
   //#endregion
 
   //#region Group
-
-  @RestAction({
-    method: RestRequestMethod.Get,
-    path: '/group/{!id}',
-    resultFactory: (item, options) => {
-      return plainToClass(Group, item);
-    }
-  })
-  getGroup: IRestMethod<QueryParams, Group>;
 
   @RestAction({
     method: RestRequestMethod.Get,

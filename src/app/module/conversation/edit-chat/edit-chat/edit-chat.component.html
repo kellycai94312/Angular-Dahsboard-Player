@@ -1,6 +1,9 @@
-<div class="d-flex">
-  <div class="mr-2">
-    <ngx-image [object]="data"
+<div fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <ngx-image *ngIf="data.id"
+               [object]="data"
                [width]="80"
                [height]="80"
                [type]="imageTypeClass.LOGO"
@@ -8,11 +11,7 @@
                [autoSave]="false"
                [cropImage]="true"
                [canEdit]="data.id"></ngx-image>
+    <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
   </div>
-  <div class="my-auto w-100">
-    <label>{{'name' | translate}}</label>
-    <ngx-input placeholderKey="{{('new' | translate) + ' ' + ('chat' | translate)}}"
-               [(value)]="data.name"></ngx-input>
-  </div>
+  <ngx-selection></ngx-selection>
 </div>
-<ngx-selection class="mt-2"></ngx-selection>

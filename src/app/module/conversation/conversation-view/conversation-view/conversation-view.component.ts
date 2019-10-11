@@ -1,37 +1,42 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {BaseConversation, ConversationType} from '../../../../data/remote/model/chat/conversation/base';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {NgForm} from '@angular/forms';
-import {Message, MessageContent, MessageContentType, PollMessageContent, SystemMessageContent, SystemMessageType} from '../../../../data/remote/model/chat/message';
-import {Person} from '../../../../data/remote/model/person';
-import {Participant} from '../../../../data/remote/model/chat';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ConversationService} from '../../../../shared/conversation.service';
-import {ParticipantStompService} from '../../../../data/remote/web-socket/participant-stomp.service';
-import {AuthorizationService} from '../../../../shared/authorization.service';
-import {MessageToastrService} from '../../../../components/message-toastr/message-toastr.service';
-import {TemplateModalService} from '../../../../service/template-modal.service';
-import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {Chat, Dialogue} from '../../../../data/remote/model/chat/conversation';
-import {ConfirmationRemovingMessageComponent} from '../../confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {NgxImageComponent} from '../../../../components/ngx-image/ngx-image/ngx-image.component';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {Router} from '@angular/router';
-import {FuseMatSidenavHelperService} from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {NgxInputType} from '../../../ngx/ngx-input/model/ngx-input-type';
-import {PollWindowService} from '../../../../services/windows/poll-window/poll-window.service';
-import {ConversationApiService} from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
-import {PollApiService} from '../../../../data/remote/rest-api/api/poll/poll-api.service';
-import {MessageContentAppliedPoll} from '../../../../data/remote/model/poll/applied/message-content-applied-poll';
-import {SelectionModel} from '@angular/cdk/collections';
+import { SelectionModel } from '@angular/cdk/collections';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { MessageToastrService } from 'app/components/message-toastr/message-toastr.service';
+import { takeWhile } from 'rxjs/operators';
+import { FuseMatSidenavHelperService } from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
+import { NgxImageComponent } from '../../../../components/ngx-image/ngx-image/ngx-image.component';
+import { NgxModalService } from '../../../../components/ngx-modal/service/ngx-modal.service';
+import { Direction } from '../../../../components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { BaseComponent } from '../../../../data/local/component/base/base-component';
+import { Participant } from '../../../../data/remote/model/chat';
+import { Chat, Dialogue } from '../../../../data/remote/model/chat/conversation';
+import { BaseConversation, ConversationType } from '../../../../data/remote/model/chat/conversation/base';
+import {
+  Message,
+  MessageContent,
+  MessageContentType,
+  PollMessageContent,
+  SystemMessageContent,
+  SystemMessageType
+} from '../../../../data/remote/model/chat/message';
+import { FileClass } from '../../../../data/remote/model/file/base/file-class';
+import { ImageType } from '../../../../data/remote/model/file/image/image-type';
+import { Person } from '../../../../data/remote/model/person';
+import { MessageContentAppliedPoll } from '../../../../data/remote/model/poll/applied/message-content-applied-poll';
+import { ConversationApiService } from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
+import { PollApiService } from '../../../../data/remote/rest-api/api/poll/poll-api.service';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { ParticipantStompService } from '../../../../data/remote/web-socket/participant-stomp.service';
+import { ConversationModalService } from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
+import { TemplateModalService } from '../../../../service/template-modal.service';
+import { PollWindowService } from '../../../../services/windows/poll-window/poll-window.service';
+import { AuthorizationService } from '../../../../shared/authorization.service';
+import { ConversationService } from '../../../../shared/conversation.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
+import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
+import { ConfirmationRemovingMessageComponent } from '../../confirmation-removing-message/confirmation-removing-message/confirmation-removing-message.component';
 
 @Component({
   selector: 'app-conversation-view',
@@ -47,27 +52,20 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public readonly fileClass = FileClass;
   public readonly imageTypeClass = ImageType;
 
-  @ViewChild('conversationLogo', { static: false })
+  @ViewChild('conversationLogo', {static: false})
   public ngxImageComponent: NgxImageComponent;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
-  @ViewChild('replyForm', { static: false })
-  public replyForm: NgForm;
-
-  public messageContent: MessageContent;
+  public messageContent = new MessageContent();
   public person: Person;
   public enabled: boolean;
   public editedMessage: Message;
   public recipient: Participant;
   public visibleEmojiPicker: boolean;
-
-  private readonly _unsubscribeAll: Subject<void>;
-
-  private _maxMessageDate: Date;
   private _typingTimeout: any;
-
+  private _notDestroyed = true;
 
   constructor(private _pollWindowService: PollWindowService,
               private _pollApiService: PollApiService,
@@ -83,82 +81,6 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
               private _router: Router,
               private _ngxModalService: NgxModalService) {
     super();
-    this._unsubscribeAll = new Subject<void>();
-    this.messageContent = new MessageContent();
-    this._maxMessageDate = new Date();
-
-    this._conversationService.messageCreateHandle
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(async x => {
-        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
-          return;
-        }
-
-        if (x.message.sender.person.id != this.person.id) {
-          this.readMessageFrom(x.message.created);
-          this._conversationService.readMessage(x);
-        }
-
-        if (x.message.content.discriminator === MessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
-          switch ((x.message.content as SystemMessageContent).systemMessageType) {
-            case SystemMessageType.UPDATE_LOGO:
-              this.ngxImageComponent.refresh();
-              break;
-            case SystemMessageType.UPDATE_NAME:
-              this.data = x.message.content.baseConversation;
-          }
-        }
-
-        await this.ngxVirtualScrollComponent.addItem(x.message);
-      });
-    this._conversationService.messageUpdateHandle
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(x => {
-        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
-          return;
-        }
-
-        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
-        // TODO: Optimize read message algorithm!
-        for (let i = 0; i < items.length; i++) {
-          if (items[i].content.id == x.message.content.id) {
-            items[i] = x.message;
-            break;
-          }
-        }
-      });
-    this._conversationService.messageDeleteHandle
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(x => {
-        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
-          return;
-        }
-
-        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
-        // TODO: Optimize read message algorithm!
-        for (let i = 0; i < items.length; i++) {
-          if (items[i].content.id == x.message.content.id) {
-            items.splice(i, 1);
-            break;
-          }
-        }
-      });
-    this._conversationService.messageReadHandle
-      .pipe(takeUntil(this._unsubscribeAll))
-      .subscribe(x => {
-        if (x.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
-          return;
-        }
-
-        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
-        // TODO: Optimize read message algorithm!
-        for (let i = 0; i < items.length; i++) {
-          const item = items[i];
-          if (!item.read && item.content.created <= x.content.created) {
-            item.read = true;
-          }
-        }
-      });
   }
 
   //region Getter and setters
@@ -191,15 +113,92 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public async ngOnInit(): Promise<void> {
     await super.ngOnInit();
 
+    this._conversationService.messageCreateHandle
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(async x => {
+        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
+          return;
+        }
+
+        if (x.message.sender.person.id != this.person.id) {
+          this.readMessageFrom(x.message.created);
+          this._conversationService.readMessage(x);
+        }
+
+        if (x.message.content.discriminator === MessageContentType.SYSTEM_MESSAGE_CONTENT && x.message.sender.person.id != this.person.id) { // Exclude update duplication
+          switch ((x.message.content as SystemMessageContent).systemMessageType) {
+            case SystemMessageType.UPDATE_LOGO:
+              this.ngxImageComponent.refresh();
+              break;
+            case SystemMessageType.UPDATE_NAME:
+              this.data = x.message.content.baseConversation;
+          }
+        }
+
+        await this.ngxVirtualScrollComponent.addItem(x.message);
+      });
+    this._conversationService.messageUpdateHandle
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(x => {
+        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
+          return;
+        }
+
+        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+        // TODO: Optimize read message algorithm!
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].content.id == x.message.content.id) {
+            items[i] = x.message;
+            break;
+          }
+        }
+      });
+    this._conversationService.messageDeleteHandle
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(x => {
+        if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
+          return;
+        }
+
+        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+        // TODO: Optimize read message algorithm!
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].content.id == x.message.content.id) {
+            items.splice(i, 1);
+            break;
+          }
+        }
+      });
+    this._conversationService.messageReadHandle
+      .pipe(takeWhile(() => this._notDestroyed))
+      .subscribe(x => {
+        if (x.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
+          return;
+        }
+
+        const items: Array<Message> = this.ngxVirtualScrollComponent.items;
+        // TODO: Optimize read message algorithm!
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (!item.read && item.content.created <= x.content.created) {
+            item.read = true;
+          }
+        }
+      });
+
     this.messageNgxInput.type = NgxInputType.TEXTAREA;
     this.messageNgxInput.textareaAutosize = true;
     delete this.messageNgxInput.getErrorMessage;
   }
 
+  public ngOnDestroy(): void {
+    delete this._notDestroyed;
+  }
+
   protected async initializeComponent(data: BaseConversation): Promise<boolean> {
     const result = await super.initializeComponent(data);
     if (result) {
-      return await this._appHelper.tryLoad(async () => {
+      return this._appHelper.tryLoad(async () => {
         this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
         this._messageToastrService.clearToasts(data.id);
         this.enabled = await this._conversationApiService.getNotificationsStatus(this.data).toPromise();
@@ -221,13 +220,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     return result;
   }
 
-
-  ngOnDestroy(): void {
-    this._unsubscribeAll.next();
-    this._unsubscribeAll.complete();
-  }
-
-  protected async onSetData(val: BaseConversation) {
+  protected async onSetData(val: BaseConversation): Promise<void> {
     super.onSetData(val);
     await this.initializeComponent(val);
   }

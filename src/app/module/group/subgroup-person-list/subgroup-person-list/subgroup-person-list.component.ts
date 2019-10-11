@@ -1,18 +1,28 @@
-import {AfterViewInit, Component, ComponentFactoryResolver, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {ObjectWrapper} from '../../../../data/local/object-wrapper';
-import {SubgroupPersonQuery} from '../../../../data/remote/rest-api/query/subgroup-person-query';
-import {SubgroupPersonTypeEnum} from '../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {AppHelper} from '../../../../utils/app-helper';
-import {SubgroupGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {SubgroupGroup} from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {SelectionType} from '../../../../components/ngx-grid/bean/selection-type';
-import {Person} from '../../../../data/remote/model/person';
-import {TemplateModalService} from '../../../../service/template-modal.service';
+import {
+  AfterViewInit,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  ViewChild
+} from '@angular/core';
+import { SelectionType } from 'app/components/ngx-grid/bean/selection-type';
+import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { ObjectWrapper } from 'app/data/local/object-wrapper';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { Group } from 'app/data/remote/model/group/base';
+import { SubgroupPersonTypeEnum } from 'app/data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import { SubgroupGroup } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { Person } from 'app/data/remote/model/person';
+import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
+import { SubgroupGroupApiService } from 'app/data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { SubgroupPersonQuery } from 'app/data/remote/rest-api/query/subgroup-person-query';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
   selector: 'app-subgroup-person-list',
@@ -21,7 +31,7 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 })
 export class SubgroupPersonListComponent implements OnChanges, AfterViewInit {
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, {static: false})
   public ngxGridComponent: NgxGridComponent;
 
   @Input()
@@ -61,11 +71,10 @@ export class SubgroupPersonListComponent implements OnChanges, AfterViewInit {
       subgroupPersonQuery.subgroupPersonTypeEnum = SubgroupPersonTypeEnum.PARTICIPANT;
 
       const pageContainer = await this._subgroupGroupApiService.getSubgroupPersons(this.subgroupGroup, subgroupPersonQuery).toPromise();
-      return await this._appHelper.pageContainerConverter(pageContainer, obj => new ObjectWrapper(obj, obj.person));
-    } else {
-      const pageContainer = await this._groupApiService.getPersons(this.group, query).toPromise();
-      return await this._appHelper.pageContainerConverter(pageContainer, obj => new ObjectWrapper(obj, obj.person));
+      return this._appHelper.pageContainerConverter(pageContainer, obj => new ObjectWrapper(obj, obj.person));
     }
+    const pageContainer = await this._groupApiService.getPersons(this.group, query).toPromise();
+    return this._appHelper.pageContainerConverter(pageContainer, obj => new ObjectWrapper(obj, obj.person));
   };
 
   public onAdd = async () => {

@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import { plainToClass, serialize } from 'class-transformer';
+import { serialize } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { UtilService } from '../../../../../services/util/util.service';
 import { IdentifiedObject } from '../../../base';
 import { PageContainer } from '../../../bean/page-container';
-import { BooleanWrapper } from '../../../bean/wrapper/boolean-wrapper';
 import { SingleAttributeWrapper } from '../../../bean/wrapper/single-attribute-wrapper';
 import { FileClass } from '../../../model/file/base';
-import { Document } from '../../../model/file/document/document';
-import { DocumentType } from '../../../model/file/document/document-type';
 import { File as ServerFile } from '../../../model/file/file';
 import { Image } from '../../../model/file/image';
 import {
@@ -30,7 +27,6 @@ import {
   FileSportType,
   FileUnit
 } from '../../../model/file/object';
-import { DocumentQuery } from '../../query/file/document-query';
 import { ApiService } from '../base/api.service';
 import { FileQuery, ImageCropRequest, ImageQuery } from './model';
 
@@ -86,11 +82,11 @@ export class FileApiService {
   }
 
   public createFile<T extends FileObject>(value: T, file?: File): Observable<T> {
-    return this._apiService.createValue(FileObject, this._basePath, this._getFileFormData(value, file)) as Observable<T>;
+    return this._apiService.createValue(FileObject, this._basePath, this.getFileFormData(value, file)) as Observable<T>;
   }
 
   public updateFile<T extends FileObject>(value: T, file?: File): Observable<T> {
-    return this._apiService.updateValue(FileObject, `${this._basePath}/${value.fileClass}/${value.object.id}/${value.id}`, this._getFileFormData(value, file)) as Observable<T>;
+    return this._apiService.updateValue(FileObject, `${this._basePath}/${value.fileClass}/${value.object.id}/${value.id}`, this.getFileFormData(value, file)) as Observable<T>;
   }
 
   public saveFile<T extends FileObject>(value: T, file?: File): Observable<T> {
@@ -107,30 +103,6 @@ export class FileApiService {
   public cropImage(image: Image, value: ImageCropRequest): Observable<Image> {
     return this._apiService.createValue(Image, `${this._basePath}/${image.ownerFileObject.fileClass}/${image.ownerFileObject.object.id}/${image.id}/crop`, value) as Observable<Image>;
   }
-
-  //region TODO: Remove this content
-
-  public getDocuments(query: DocumentQuery): Observable<PageContainer<Document>> {
-    return this._apiService.getPageContainer(Document, `${this._basePath}/document`, query);
-  }
-
-  public getDocumentAvailable(document: Document,
-                              documentSeries: number,
-                              documentNumber: number,
-                              documentType: DocumentType.PASSPORT | DocumentType.BIRTH_CERTIFICATE): Observable<BooleanWrapper> {
-    return this._apiService.get(`${this._basePath}/document/available`, this._apiService.getHttpParamsFromObject(this._utilService.clone({
-        documentId: document.id || void 0,
-        series: documentSeries,
-        number: documentNumber,
-        documentType
-      }, {excludeNullable: true}))
-    )
-      .pipe(
-        map(x => plainToClass(BooleanWrapper, x))
-      );
-  }
-
-  //endregion
 
   public getFileObjectByFileClass(fileClass: FileClass): FileObject<any> | undefined {
     switch (fileClass) {
@@ -178,13 +150,12 @@ export class FileApiService {
       }));
   }
 
-  private _getFileFormData<T extends FileObject>(value: T, file: File): FormData {
+  public getFileFormData<T extends any>(value: T, file: File): FormData {
     const formData = new FormData();
     if (file) {
       formData.append('file', file, file.name);
     }
     formData.append('requestObj', new Blob([serialize(value)], {type: 'application/json'}));
-
     return formData;
   }
 

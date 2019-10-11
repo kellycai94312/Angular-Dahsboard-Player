@@ -1,41 +1,41 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {flatMap, map, takeWhile} from 'rxjs/operators';
-import {GroupService} from '../../../../../service/group.service';
-import {Group} from '../../../../../../../../data/remote/model/group/base/group';
-import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {ContextMenuItem} from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
-import {AppHelper} from '../../../../../../../../utils/app-helper';
-import {SubgroupsTreesComponent} from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
-import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
-import {ObjectWrapper} from '../../../../../../../../data/local/object-wrapper';
-import {SubgroupGroup} from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {NgxGridComponent} from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
-import {PersonModalConfig, TemplateModalService} from '../../../../../../../../service/template-modal.service';
-import {Person} from '../../../../../../../../data/remote/model/person';
-import {SubgroupPersonQuery} from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
-import {SubgroupPersonTypeEnum} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
-import {SubgroupModalService} from '../../../service/subgroup-modal.service';
-import {SelectionType} from '../../../../../../../../components/ngx-grid/bean/selection-type';
-import {SplitButtonItem} from '../../../../../../../../components/ngx-split-button/bean/split-button-item';
-import {PersonTransitionType} from '../../../../../../../../data/remote/model/group/transition/person-transition-type';
-import {NgxModalService} from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
-import {SubgroupTemplatePersonType} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
-import {SubgroupPerson} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person';
-import {SubgroupTemplateGroupVersion} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
-import {SubgroupPersonInterface} from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-interface';
-import {FlatNode} from '../../../../../../../../module/ngx/ngx-tree/model/flat-node';
-import {from, Observable, of} from 'rxjs';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { from, Observable, of } from 'rxjs';
 import 'rxjs-compat/add/observable/of';
-import {TranslateObjectService} from '../../../../../../../../shared/translate-object.service';
-import {RootSubgroupGroup} from '../model/root-subgroup-group';
-import {EventUtilService} from '../../../../../../../../services/event-util/event-util.service';
-import {EventType} from '../../../../../../../../data/remote/model/event/base/event-type';
-import {EventData} from '../../../../../../../../module/event/edit-base-event/model/event-data';
-import {SubgroupGroupApiService} from '../../../../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {GroupApiService} from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
-import {SubgroupReportComponent} from '../../../../../../../../module/group/subgroup-report/subgroup-report/subgroup-report.component';
-import {SubgroupTemplate} from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template';
+import { flatMap, map, takeWhile } from 'rxjs/operators';
+import { SelectionType } from '../../../../../../../../components/ngx-grid/bean/selection-type';
+import { NgxGridComponent } from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
+import { NgxModalService } from '../../../../../../../../components/ngx-modal/service/ngx-modal.service';
+import { SplitButtonItem } from '../../../../../../../../components/ngx-split-button/bean/split-button-item';
+import { ObjectWrapper } from '../../../../../../../../data/local/object-wrapper';
+import { PropertyConstant } from '../../../../../../../../data/local/property-constant';
+import { PageContainer } from '../../../../../../../../data/remote/bean/page-container';
+import { EventType } from '../../../../../../../../data/remote/model/event/base/event-type';
+import { Group } from '../../../../../../../../data/remote/model/group/base/group';
+import { SubgroupPerson } from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person';
+import { SubgroupPersonInterface } from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-interface';
+import { SubgroupPersonTypeEnum } from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-person-type-enum';
+import { SubgroupTemplatePersonType } from '../../../../../../../../data/remote/model/group/subgroup/person/subgroup-template-person-type';
+import { SubgroupGroup } from '../../../../../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupTemplate } from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template';
+import { SubgroupTemplateGroupVersion } from '../../../../../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import { PersonTransitionType } from '../../../../../../../../data/remote/model/group/transition/person-transition-type';
+import { Person } from '../../../../../../../../data/remote/model/person';
+import { GroupApiService } from '../../../../../../../../data/remote/rest-api/api/group/group-api.service';
+import { SubgroupGroupApiService } from '../../../../../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { ParticipantRestApiService } from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { SubgroupPersonQuery } from '../../../../../../../../data/remote/rest-api/query/subgroup-person-query';
+import { EventData } from '../../../../../../../../module/event/edit-base-event/model/event-data';
+import { SubgroupReportComponent } from '../../../../../../../../module/group/subgroup-report/subgroup-report/subgroup-report.component';
+import { ContextMenuItem } from '../../../../../../../../module/group/subgroups-trees/model/context-menu-item';
+import { SubgroupsTreesComponent } from '../../../../../../../../module/group/subgroups-trees/subgroups-trees/subgroups-trees.component';
+import { FlatNode } from '../../../../../../../../module/ngx/ngx-tree/model/flat-node';
+import { PersonModalConfig, TemplateModalService } from '../../../../../../../../service/template-modal.service';
+import { EventUtilService } from '../../../../../../../../services/event-util/event-util.service';
+import { TranslateObjectService } from '../../../../../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../../../../../utils/app-helper';
+import { GroupService } from '../../../../../service/group.service';
+import { SubgroupModalService } from '../../../service/subgroup-modal.service';
+import { RootSubgroupGroup } from '../model/root-subgroup-group';
 
 @Component({
   selector: 'app-structure-subgroups-page',
@@ -48,15 +48,16 @@ export class StructureSubgroupsPageComponent implements OnInit {
   public readonly propertyConstantClass = PropertyConstant;
   public readonly selectionTypeClass = SelectionType;
 
-  @ViewChild(SubgroupsTreesComponent, { static: false })
+  @ViewChild(SubgroupsTreesComponent, {static: false})
   public subgroupsTreesComponent: SubgroupsTreesComponent;
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, {static: false})
   public ngxGridComponent: NgxGridComponent;
 
   public selectedNode: FlatNode;
   public group: Group;
-  public canEdit = true;
+  public canEdit: boolean;
+  public canEditPerson: boolean;
   public selectedItems: ObjectWrapper[] = [];
   public splitButtonItems: SplitButtonItem[] = [];
   public subgroupPersonInterface: SubgroupPersonInterface;
@@ -65,7 +66,6 @@ export class StructureSubgroupsPageComponent implements OnInit {
   public leadSubgroupPerson: SubgroupPerson;
   public secondarySubgroupPerson: SubgroupPerson;
   private _notDestroyed = true;
-  private _canEdit = false;
   private _rootSubgroupName: string;
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
@@ -83,7 +83,10 @@ export class StructureSubgroupsPageComponent implements OnInit {
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async val => {
         this.group = val;
-        this._canEdit = await this._groupService.canShowTemplatesSubgroups();
+        if (val) {
+          this.canEditPerson = val.dataOperator;
+        }
+        this.canEdit = await this._groupService.canShowTemplatesSubgroups();
       });
   }
 
@@ -287,12 +290,20 @@ export class StructureSubgroupsPageComponent implements OnInit {
         this.leadPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.LEAD);
         this.secondaryPersonType = subgroupTemplatePersonTypes.find(x => x.subgroupPersonType.subgroupPersonTypeEnum === SubgroupPersonTypeEnum.SECONDARY);
 
-        const leadSubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.LEAD, count: 1, unassigned: false}, config.subgroupGroup);
+        const leadSubgroupPersonPageContainer = await this.getSubgroupPersons({
+          subgroupPersonTypeEnum: SubgroupPersonTypeEnum.LEAD,
+          count: 1,
+          unassigned: false
+        }, config.subgroupGroup);
         if (leadSubgroupPersonPageContainer.list) {
           this.leadSubgroupPerson = leadSubgroupPersonPageContainer.list[0];
         }
 
-        const secondarySubgroupPersonPageContainer = await this.getSubgroupPersons({subgroupPersonTypeEnum: SubgroupPersonTypeEnum.SECONDARY, count: 1, unassigned: false}, config.subgroupGroup);
+        const secondarySubgroupPersonPageContainer = await this.getSubgroupPersons({
+          subgroupPersonTypeEnum: SubgroupPersonTypeEnum.SECONDARY,
+          count: 1,
+          unassigned: false
+        }, config.subgroupGroup);
         if (secondarySubgroupPersonPageContainer.list) {
           this.secondarySubgroupPerson = secondarySubgroupPersonPageContainer.list[0];
         }
@@ -322,7 +333,12 @@ export class StructureSubgroupsPageComponent implements OnInit {
       subgroupGroup = this.selectedNode.data;
       subgroupTemplateGroupVersion = this.selectedNode.data.subgroupTemplateGroupVersion;
     }
-    return {group: this.group, subgroupGroup, subgroupTemplateGroupVersion, subgroupPerson: this.selectedItems.map(x => x.original)};
+    return {
+      group: this.group,
+      subgroupGroup,
+      subgroupTemplateGroupVersion,
+      subgroupPerson: this.selectedItems.map(x => x.original)
+    };
   }
 
   private async getSubgroupPersons(query: SubgroupPersonQuery, subgroupGroup: SubgroupGroup): Promise<PageContainer<SubgroupPerson>> {

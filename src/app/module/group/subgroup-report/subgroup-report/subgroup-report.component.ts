@@ -39,6 +39,9 @@ export class SubgroupReportComponent implements OnInit {
   @Input()
   public group: Group;
 
+  @Input()
+  public currentGroup: Group;
+
   public readonly nodeConfigurations = [
     new NodeConfiguration('leaf'),
     new NodeConfiguration('nested', (index, nodeData: FlatNode) => {
@@ -207,7 +210,7 @@ export class SubgroupReportComponent implements OnInit {
     const modal = this._ngxModalService.open();
     modal.componentInstance.titleKey = 'report';
     await modal.componentInstance.initializeBody(SubgroupGroupAttendanceReportComponent, async component => {
-      component.group = this.group;
+      component.group = this.currentGroup;
       component.subgroupGroup = this.subgroupGroup;
     }, {componentFactoryResolver: this._componentFactoryResolver});
   }
