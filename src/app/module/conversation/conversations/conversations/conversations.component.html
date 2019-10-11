@@ -13,9 +13,11 @@
                       [query]="query"
                       [windowScroll]="true">
     <ng-template let-item>
-      <app-conversation-item [data]="item"
-                             [preview]="preview"
-                             (click)="onSelectedItem(item)"></app-conversation-item>
+      <div [ngClass]="{'selected-item': selectedItem === item}">
+        <app-conversation-item [data]="item"
+                               [preview]="preview"
+                               (click)="onSelectedItem(item)"></app-conversation-item>
+      </div>
     </ng-template>
   </ngx-virtual-scroll>
 </div>

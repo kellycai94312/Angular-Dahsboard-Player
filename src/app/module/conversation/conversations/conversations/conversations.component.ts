@@ -1,17 +1,17 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild} from '@angular/core';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {ConversationService} from '../../../../shared/conversation.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ConversationWrapper} from '../../../../data/local/conversation-wrapper';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {Chat} from '../../../../data/remote/model/chat/conversation';
-import {MessageWrapper} from '../../../../data/remote/bean/wrapper/message-wrapper';
-import {ConversationModalService} from '../../../../pages/conversation/service/conversation-modal/conversation-modal.service';
-import {debounceTime, takeWhile} from 'rxjs/operators';
-import {ConversationApiService} from '../../../../data/remote/rest-api/api/conversation/conversation-api.service';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Direction } from 'app/components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from 'app/components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { ConversationWrapper } from 'app/data/local/conversation-wrapper';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { MessageWrapper } from 'app/data/remote/bean/wrapper/message-wrapper';
+import { Chat } from 'app/data/remote/model/chat';
+import { ConversationApiService } from 'app/data/remote/rest-api/api';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { NgxInput } from 'app/module/ngx/ngx-input';
+import { ConversationModalService } from 'app/pages/conversation/service/conversation-modal/conversation-modal.service';
+import { ConversationService } from 'app/shared/conversation.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { debounceTime, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-conversations',
@@ -22,7 +22,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
   public readonly propertyConstantClass = PropertyConstant;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()
@@ -30,6 +30,9 @@ export class ConversationsComponent implements OnInit, OnDestroy {
 
   @Input()
   public visibleHeader: boolean;
+
+  @Input()
+  public selectedItem: ConversationWrapper;
 
   @Output()
   public readonly selectItemChange = new EventEmitter<ConversationWrapper>();
@@ -142,7 +145,8 @@ export class ConversationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectedItem(val: ConversationWrapper) {
+  public onSelectedItem(val: ConversationWrapper): void {
+    this.selectedItem = val;
     this.selectItemChange.emit(val);
   }
 
