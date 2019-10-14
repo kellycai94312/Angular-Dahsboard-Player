@@ -1,3 +1,4 @@
 <app-conversation-item *ngIf="conversationWrapper"
                        [showUnreadMessagesIndicator]="false"
-                       [(data)]="conversationWrapper"></app-conversation-item>
+                       [(data)]="conversationWrapper"
+                       (click)="onDataClick()"></app-conversation-item>
