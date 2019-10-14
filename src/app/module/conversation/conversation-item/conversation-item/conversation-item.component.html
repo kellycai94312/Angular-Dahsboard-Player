@@ -32,7 +32,7 @@
            class="text-truncate">
         <span *ngIf="messageFrom">{{messageFrom}}: </span>{{messageContent}}
       </div>
-      <div *ngIf="data.messageWrapper.unread"
+      <div *ngIf="showUnreadMessagesIndicator && data.messageWrapper.unread"
            class="unread-number">{{data.messageWrapper.unread}}</div>
     </div>
   </div>

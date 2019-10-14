@@ -1,11 +1,13 @@
-import {Injectable} from '@angular/core';
-import {StompConfig, StompRService} from '@stomp/ng2-stompjs';
-import {Message} from '@stomp/stompjs';
-import {Observable} from 'rxjs';
-import {ConversationReadRequest} from '../request/conversation-read-request';
+import { Injectable } from '@angular/core';
+import { StompConfig, StompRService } from '@stomp/ng2-stompjs';
+import { Message } from '@stomp/stompjs';
+import { plainToClass } from 'class-transformer';
+import { ClassType } from 'class-transformer/ClassTransformer';
+import { Observable } from 'rxjs';
 import * as SockJS from 'sockjs-client';
-import {environment} from '../../../../environments/environment';
-import {IdRequest} from '../request/id-request';
+import { environment } from '../../../../environments/environment';
+import { ConversationReadRequest } from '../request/conversation-read-request';
+import { IdRequest } from '../request/id-request';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +37,7 @@ export class ParticipantStompService {
     }
   }
 
-  public disconnect() {
+  public disconnect(): void {
     if (this._stompService.connected()) {
       this._stompService.disconnect();
     }
@@ -44,7 +46,7 @@ export class ParticipantStompService {
   //#region Notification
 
   public subscribeNotification(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/notification`);
+    return this._subscribe(`${this.baseQuery}/notification`);
   }
 
   //#endregion
@@ -52,44 +54,48 @@ export class ParticipantStompService {
   //#region Conversation
 
   public subscribeConversationCreate(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/create`);
+    return this._subscribe(`${this.baseQuery}/conversation/create`);
   }
 
   public subscribeConversationUpdate(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/update`);
+    return this._subscribe(`${this.baseQuery}/conversation/update`);
   }
 
   public subscribeConversationDelete(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/delete`);
+    return this._subscribe(`${this.baseQuery}/conversation/delete`);
   }
 
   public subscribeConversationRead(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/read`);
+    return this._subscribe(`${this.baseQuery}/conversation/read`);
   }
 
   public subscribeConversationTyping(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/typing`);
+    return this._subscribe(`${this.baseQuery}/conversation/typing`);
   }
 
   public publishConversationTyping(conversationId: IdRequest): void {
-    this.publish('/ws/conversation/typing', JSON.stringify(conversationId));
+    this._publish('/ws/conversation/typing', JSON.stringify(conversationId));
   }
 
   public subscribeError(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/error`);
+    return this._subscribe(`${this.baseQuery}/error`);
   }
 
   public subscribeConversationUnreadTotal(): Observable<Message> {
-    return this.subscribe(`${this.baseQuery}/conversation/unread/total`);
+    return this._subscribe(`${this.baseQuery}/conversation/unread/total`);
   }
 
   public publishConversationRead(conversationReadRequest: ConversationReadRequest): void {
-    this.publish('/ws/conversation/read', JSON.stringify(conversationReadRequest));
+    this._publish('/ws/conversation/read', JSON.stringify(conversationReadRequest));
   }
 
   //#endregion
 
-  private publish(queueName: string, message: string): boolean {
+  public messageToObject<T>(cls: ClassType<T>, message: Message): T {
+    return plainToClass(cls, JSON.parse(message.body));
+  }
+
+  private _publish(queueName: string, message: string): boolean {
     try {
       this._stompService.publish(queueName, message);
       return true;
@@ -98,16 +104,8 @@ export class ParticipantStompService {
     return false;
   }
 
-  private subscribe(queueName: string): Observable<Message> {
-    try {
-      return this._stompService.subscribe(queueName);
-    } catch (e) {
-    }
-    return null;
-  }
-
-  public messageToObject<T>(message: Message): T {
-    return JSON.parse(message.body) as T;
+  private _subscribe(queueName: string): Observable<Message> {
+    return this._stompService.subscribe(queueName);
   }
 
 }

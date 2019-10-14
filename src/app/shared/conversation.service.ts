@@ -1,131 +1,147 @@
-import {map, takeWhile} from 'rxjs/operators';
-import {Injectable, OnDestroy} from '@angular/core';
-import {ParticipantStompService} from '../data/remote/web-socket/participant-stomp.service';
-import {Subject} from 'rxjs';
-import {MessageWrapper} from '../data/remote/bean/wrapper/message-wrapper';
-import {IntegerWrapper} from '../data/remote/bean/wrapper/integer-wrapper';
-import {Participant} from '../data/remote/model/chat';
-import {Message} from '../data/remote/model/chat/message';
-import {ParticipantRestApiService} from '../data/remote/rest-api/participant-rest-api.service';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Message } from 'app/data/remote/model/chat';
+import { Observable, Subject } from 'rxjs';
+import { map, takeWhile } from 'rxjs/operators';
+import { IntegerWrapper } from '../data/remote/bean/wrapper/integer-wrapper';
+import { MessageWrapper } from '../data/remote/bean/wrapper/message-wrapper';
+import { Participant } from '../data/remote/model/chat';
+import { ParticipantRestApiService } from '../data/remote/rest-api/participant-rest-api.service';
+import { ParticipantStompService } from '../data/remote/web-socket/participant-stomp.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConversationService implements OnDestroy {
 
-  public readonly messageCreateHandle = new Subject<MessageWrapper>();
-  public readonly messageUpdateHandle = new Subject<MessageWrapper>();
-  public readonly messageDeleteHandle = new Subject<MessageWrapper>();
-  public readonly messageReadHandle = new Subject<Message>();
-  public readonly unreadTotalHandle = new Subject<IntegerWrapper>();
-  public readonly typingHandle = new Subject<Participant>();
-  public readonly errorHandle = new Subject<any>();
+  private readonly _messageCreateSubject = new Subject<MessageWrapper>();
+  private readonly _messageUpdateSubject = new Subject<MessageWrapper>();
+  private readonly _messageDeleteSubject = new Subject<MessageWrapper>();
+  private readonly _messageReadSubject = new Subject<Message>();
+  private readonly _unreadTotalSubject = new Subject<number>();
+  private readonly _typingSubject = new Subject<Participant>();
+  private readonly _errorSubject = new Subject<any>();
   private _notDestroyed = true;
 
   constructor(private _participantStompService: ParticipantStompService,
               private _participantRestApiService: ParticipantRestApiService) {
   }
 
-  ngOnDestroy(): void {
+  //region Getters
+
+  public get messageCreate$(): Observable<MessageWrapper> {
+    return this._messageCreateSubject.asObservable();
+  }
+
+  public get messageUpdate$(): Observable<MessageWrapper> {
+    return this._messageUpdateSubject.asObservable();
+  }
+
+  public get messageDelete$(): Observable<MessageWrapper> {
+    return this._messageDeleteSubject.asObservable();
+  }
+
+  public get messageRead$(): Observable<Message> {
+    return this._messageReadSubject.asObservable();
+  }
+
+  public get unreadTotal$(): Observable<number> {
+    return this._unreadTotalSubject.asObservable();
+  }
+
+  public get typing$(): Observable<Participant> {
+    return this._typingSubject.asObservable();
+  }
+
+  public get error$(): Observable<any> {
+    return this._errorSubject.asObservable();
+  }
+
+  //endregion
+
+  public ngOnDestroy(): void {
     this.unsubscribe();
   }
 
-  public messageCreateSubscribe() {
-    this._participantStompService.subscribeConversationCreate()
-      .pipe(
-        takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
-      )
-      .subscribe(async message => this.messageCreateHandle.next(message));
+  public subscribe(): void {
+    this._notDestroyed = true;
+
+    this._errorSubscribe();
+
+    this._messageCreateSubscribe();
+    this._messageUpdateSubscribe();
+    this._messageDeleteSubscribe();
+    this._messageReadSubscribe();
+    this._unreadTotalSubscribe();
+    this._typingSubscribe();
   }
 
-  public messageUpdateSubscribe() {
-    this._participantStompService.subscribeConversationUpdate()
-      .pipe(
-        takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
-      )
-      .subscribe(async message => {
-        this.messageUpdateHandle.next(message);
-      });
+  public unsubscribe(): void {
+    delete this._notDestroyed;
   }
 
-  public messageDeleteSubscribe() {
-    this._participantStompService.subscribeConversationDelete()
-      .pipe(
-        takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<MessageWrapper>(message))
-      )
-      .subscribe(async message => {
-        this.messageDeleteHandle.next(message);
-      });
-  }
-
-  public messageReadSubscribe() {
-    this._participantStompService.subscribeConversationRead()
-      .pipe(
-        takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<Message>(message))
-      )
-      .subscribe(async message => {
-        this.messageReadHandle.next(message);
-      });
-  }
-
-  public readMessage(messageWrapper: MessageWrapper) {
+  public readMessage(messageWrapper: MessageWrapper): void {
     messageWrapper.message.read = true;
     delete messageWrapper.unread;
   }
 
-  public async getUnreadTotalMessages(): Promise<number> {
-    return (await this._participantRestApiService.getUnreadTotalMessages()).value;
+  private _messageCreateSubscribe(): void {
+    this._participantStompService.subscribeConversationCreate()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        map(message => this._participantStompService.messageToObject(MessageWrapper, message))
+      )
+      .subscribe(value => this._messageCreateSubject.next(value));
   }
 
-  private unreadTotalSubscribe() {
+  private _messageUpdateSubscribe(): void {
+    this._participantStompService.subscribeConversationUpdate()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        map(message => this._participantStompService.messageToObject<MessageWrapper>(MessageWrapper, message))
+      )
+      .subscribe(value => this._messageUpdateSubject.next(value));
+  }
+
+  private _messageDeleteSubscribe(): void {
+    this._participantStompService.subscribeConversationDelete()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        map(message => this._participantStompService.messageToObject<MessageWrapper>(MessageWrapper, message))
+      )
+      .subscribe(value => this._messageDeleteSubject.next(value));
+  }
+
+  private _messageReadSubscribe(): void {
+    this._participantStompService.subscribeConversationRead()
+      .pipe(
+        takeWhile(() => this._notDestroyed),
+        map(message => this._participantStompService.messageToObject<Message>(Message, message))
+      )
+      .subscribe(value => this._messageReadSubject.next(value));
+  }
+
+  private _unreadTotalSubscribe(): void {
     this._participantStompService.subscribeConversationUnreadTotal()
       .pipe(
         takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<IntegerWrapper>(message))
+        map(message => this._participantStompService.messageToObject<IntegerWrapper>(IntegerWrapper, message))
       )
-      .subscribe(async message => {
-        this.unreadTotalHandle.next(message);
-      });
+      .subscribe(value => this._unreadTotalSubject.next(value.value));
   }
 
-  private typingSubscribe() {
+  private _typingSubscribe(): void {
     this._participantStompService.subscribeConversationTyping()
       .pipe(
         takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<Participant>(message))
+        map(message => this._participantStompService.messageToObject<Participant>(Participant, message))
       )
-      .subscribe(async message => {
-        this.typingHandle.next(message);
-      });
+      .subscribe(value => this._typingSubject.next(value));
   }
 
-  private errorSubscribe() {
+  private _errorSubscribe(): void {
     this._participantStompService.subscribeError()
       .pipe(takeWhile(() => this._notDestroyed))
-      .subscribe(async message => {
-        this.errorHandle.next(message);
-      });
-  }
-
-  public subscribe() {
-    this._notDestroyed = true;
-
-    this.errorSubscribe();
-
-    this.messageCreateSubscribe();
-    this.messageUpdateSubscribe();
-    this.messageDeleteSubscribe();
-    this.messageReadSubscribe();
-    this.unreadTotalSubscribe();
-    this.typingSubscribe();
-  }
-
-  public unsubscribe() {
-    this._notDestroyed = false;
+      .subscribe(value => this._errorSubject.next(value));
   }
 
 }

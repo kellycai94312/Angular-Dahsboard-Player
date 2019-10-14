@@ -1,19 +1,19 @@
-import {map, takeWhile} from 'rxjs/operators';
-import {Injectable, OnDestroy} from '@angular/core';
-import {NotificationWrapper} from '../data/remote/bean/wrapper/notification-wrapper';
-import {Observable, Subject} from 'rxjs';
-import {ParticipantStompService} from '../data/remote/web-socket/participant-stomp.service';
-import {EventNotification} from '../data/remote/model/notification/event/event-notification';
-import {EventPollNotification} from '../data/remote/model/notification/event/poll/event-poll-notification';
-import {GroupNotification} from '../data/remote/model/notification/group/group-notification';
-import {GroupConnectionNotification} from '../data/remote/model/notification/group/connection/group-connection-notification';
-import {SubgroupNotification} from '../data/remote/model/notification/subgroup/subgroup-notification';
-import {Person} from '../data/remote/model/person';
-import {Group} from '../data/remote/model/group/base/group';
-import {TranslateService} from '@ngx-translate/core';
-import {BaseNotification} from '../data/remote/model/notification/base/base-notification';
-import {GroupConnectionTypeEnum} from '../data/remote/model/group/connection/group-connection-type-enum';
-import {Router} from '@angular/router';
+import { Injectable, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable, Subject } from 'rxjs';
+import { map, takeWhile } from 'rxjs/operators';
+import { NotificationWrapper } from '../data/remote/bean/wrapper/notification-wrapper';
+import { Group } from '../data/remote/model/group/base/group';
+import { GroupConnectionTypeEnum } from '../data/remote/model/group/connection/group-connection-type-enum';
+import { BaseNotification } from '../data/remote/model/notification/base/base-notification';
+import { EventNotification } from '../data/remote/model/notification/event/event-notification';
+import { EventPollNotification } from '../data/remote/model/notification/event/poll/event-poll-notification';
+import { GroupConnectionNotification } from '../data/remote/model/notification/group/connection/group-connection-notification';
+import { GroupNotification } from '../data/remote/model/notification/group/group-notification';
+import { SubgroupNotification } from '../data/remote/model/notification/subgroup/subgroup-notification';
+import { Person } from '../data/remote/model/person';
+import { ParticipantStompService } from '../data/remote/web-socket/participant-stomp.service';
 
 @Injectable({
   providedIn: 'root'
@@ -36,20 +36,18 @@ export class NotificationService implements OnDestroy {
     this.unsubscribe();
   }
 
-  public subscribe() {
+  public subscribe(): void {
     this._notDestroyed = true;
 
     this._participantStompService.subscribeNotification()
       .pipe(
         takeWhile(() => this._notDestroyed),
-        map(message => this._participantStompService.messageToObject<NotificationWrapper>(message))
+        map(message => this._participantStompService.messageToObject(NotificationWrapper, message))
       )
-      .subscribe(async value => {
-        this._notificationSubject.next(value);
-      });
+      .subscribe(value => this._notificationSubject.next(value));
   }
 
-  public unsubscribe() {
+  public unsubscribe(): void {
     delete this._notDestroyed;
   }
 

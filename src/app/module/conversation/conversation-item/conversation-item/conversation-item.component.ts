@@ -1,16 +1,16 @@
-import {Component, Input} from '@angular/core';
-import {ConversationWrapper} from '../../../../data/local/conversation-wrapper';
-import {FileClass} from '../../../../data/remote/model/file/base/file-class';
-import {AppHelper} from '../../../../utils/app-helper';
-import {AuthorizationService} from '../../../../shared/authorization.service';
-import {ImageType} from '../../../../data/remote/model/file/image/image-type';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {MessageContent, SystemMessageContent} from '../../../../data/remote/model/chat/message';
-import {Chat, Dialogue} from '../../../../data/remote/model/chat/conversation';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {IdentifiedObject} from '../../../../data/remote/base/identified-object';
-import {TranslateService} from '@ngx-translate/core';
-import {ConversationUtilService} from '../../../../services/conversation-util/conversation-util.service';
+import { Component, Input } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+import { BaseComponent } from '../../../../data/local/component/base/base-component';
+import { ConversationWrapper } from '../../../../data/local/conversation-wrapper';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { IdentifiedObject } from '../../../../data/remote/base/identified-object';
+import { Chat, Dialogue } from '../../../../data/remote/model/chat/conversation';
+import { MessageContent, SystemMessageContent } from '../../../../data/remote/model/chat/message';
+import { FileClass } from '../../../../data/remote/model/file/base/file-class';
+import { ImageType } from '../../../../data/remote/model/file/image/image-type';
+import { ConversationUtilService } from '../../../../services/conversation-util/conversation-util.service';
+import { AuthorizationService } from '../../../../shared/authorization.service';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-conversation-item',
@@ -21,6 +21,9 @@ export class ConversationItemComponent extends BaseComponent<ConversationWrapper
 
   @Input()
   public preview: boolean;
+
+  @Input()
+  public showUnreadMessagesIndicator = true;
 
   public readonly imageTypeClass = ImageType;
   public conversationImageClazz: FileClass;

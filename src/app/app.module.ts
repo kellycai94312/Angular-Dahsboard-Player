@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { StompRService } from '@stomp/ng2-stompjs';
+import { MessageNotificationItemModule } from 'app/module/conversation/message-notification-item/message-notification-item.module';
 import { CookieModule } from 'ngx-cookie';
 import { ToastrModule } from 'ngx-toastr';
 import { RestModule } from 'rest-ngx';
@@ -15,7 +16,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GroupModule } from './components/group/group.module';
 import { HtmlContentModule } from './components/html-content/html-content.module';
-import { MessageToastrModule } from './components/message-toastr/message-toastr.module';
 import { NamedObjectModule } from './components/named-object/named-object.module';
 import { NgxModalModule } from './components/ngx-modal/ngx-modal.module';
 import { NgxSelectionModule } from './components/ngx-selection/ngx-selection.module';
@@ -82,7 +82,6 @@ export function HttpLoaderFactory(http: HttpClient) {
     RoundPipeModule.forRoot(),
     NgxModalModule,
     LayoutModule,
-    MessageToastrModule,
     HtmlContentModule,
     GroupModule,
     EventPersonItemModule,
@@ -98,7 +97,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     ItemDetailModule,
     EditPersonModule,
     PollItemModule,
-    EditPollModule
+    EditPollModule,
+
+    //region EntryComponents
+    MessageNotificationItemModule
+    //endregion
   ],
   providers: [
     ExternalResourceApiService,
@@ -120,7 +123,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     CanDeactivateGuard,
     {
       provide: APP_INITIALIZER,
-      useFactory: (as: AuthorizationService) => function () {
+      useFactory: (as: AuthorizationService) => function() {
         return as.initialize();
       },
       deps: [AuthorizationService],

@@ -1,26 +1,26 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {TranslateService} from '@ngx-translate/core';
-import {LocalStorageService} from './shared/local-storage.service';
-import {ToastrService} from 'ngx-toastr';
-import {AuthorizationService} from './shared/authorization.service';
-import {Locale} from './data/remote/misc/locale';
-import {NotificationService} from './shared/notification.service';
-import {ConversationService} from './shared/conversation.service';
-import {ParticipantStompService} from './data/remote/web-socket/participant-stomp.service';
-import {MessageToastrService} from './components/message-toastr/message-toastr.service';
-import {NavigationEnd, Router} from '@angular/router';
-import {AssetsService} from './data/remote/rest-api/assets.service';
-import {takeWhile} from 'rxjs/operators';
-import {FuseConfigService} from '../@fuse/services/config.service';
-import {DOCUMENT} from '@angular/common';
-import {FuseNavigationService} from '../@fuse/components/navigation/navigation.service';
-import {Platform} from '@angular/cdk/platform';
-import {navigation} from './navigation/navigation';
-import {LayoutService} from './shared/layout.service';
-import {Person} from './data/remote/model/person';
-import {ChatPanelService} from './layout/components/chat-panel/chat-panel.service';
-import {environment} from '../environments/environment';
-import {EnvironmentType} from '../environments/environment-type';
+import { Platform } from '@angular/cdk/platform';
+import { DOCUMENT } from '@angular/common';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { MessageNotificationService } from 'app/services/message-notification/message-notification.service';
+import { ToastrService } from 'ngx-toastr';
+import { takeWhile } from 'rxjs/operators';
+import { FuseNavigationService } from '../@fuse/components/navigation/navigation.service';
+import { FuseConfigService } from '../@fuse/services/config.service';
+import { environment } from '../environments/environment';
+import { EnvironmentType } from '../environments/environment-type';
+import { Locale } from './data/remote/misc/locale';
+import { Person } from './data/remote/model/person';
+import { AssetsService } from './data/remote/rest-api/assets.service';
+import { ParticipantStompService } from './data/remote/web-socket/participant-stomp.service';
+import { ChatPanelService } from './layout/components/chat-panel/chat-panel.service';
+import { navigation } from './navigation/navigation';
+import { AuthorizationService } from './shared/authorization.service';
+import { ConversationService } from './shared/conversation.service';
+import { LayoutService } from './shared/layout.service';
+import { LocalStorageService } from './shared/local-storage.service';
+import { NotificationService } from './shared/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -44,9 +44,9 @@ export class AppComponent implements OnInit, OnDestroy {
               private _toastrService: ToastrService,
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
-              private _messageToastrService: MessageToastrService,
               private _layoutService: LayoutService,
               private _router: Router,
+              private _messageNotificationService: MessageNotificationService,
               private _chatPanelService: ChatPanelService,
               private _assetsService: AssetsService) {
     this.fuseInitialization();
@@ -73,15 +73,15 @@ export class AppComponent implements OnInit, OnDestroy {
         });
       });
 
-    this._conversationService.messageCreateHandle
+    this._conversationService.messageCreate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(val => {
-        if (this._messageToastrService.canShowMessageNotification(val.message)) {
+        if (this._messageNotificationService.canShowMessageNotification(val)) {
           const canShowNotificationInQuickConversation = this._chatPanelService.selectedConversation &&
             (val.message.content.baseConversation.id != this._chatPanelService.selectedConversation.messageWrapper.message.content.baseConversation.id);
           const showAndAddToast = () => {
             if (canShowNotificationInQuickConversation == null || canShowNotificationInQuickConversation) {
-              this._messageToastrService.showAndAddToast(this._toastrService, val.message);
+              this._messageNotificationService.addAndShowNotification(val);
             }
           };
           const urlTree = this._router.parseUrl(this._router.url);
@@ -102,22 +102,22 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       });
 
-    this._conversationService.messageUpdateHandle
+    this._conversationService.messageUpdate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async x => {
-        await this._messageToastrService.updateToast(x.message);
+        await this._messageNotificationService.updateToast(x);
       });
 
-    this._conversationService.messageDeleteHandle
+    this._conversationService.messageDelete$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        this._messageToastrService.deleteToast(x.message);
+        this._messageNotificationService.deleteToast(x);
       });
 
-    this._conversationService.unreadTotalHandle
+    this._conversationService.unreadTotal$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
-        this.updateBadge('conversations', x.value);
+        this.updateBadge('conversations', x);
       });
 
     this._authorizationService.handleLogIn

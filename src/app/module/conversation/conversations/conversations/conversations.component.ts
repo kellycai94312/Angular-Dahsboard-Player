@@ -60,12 +60,12 @@ export class ConversationsComponent implements OnInit, OnDestroy {
         await this.resetItems();
       });
 
-    this._conversationService.messageCreateHandle
+    this._conversationService.messageCreate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         this._updateItem(x);
       });
-    this._conversationService.messageUpdateHandle
+    this._conversationService.messageUpdate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         const messageWrapper = this._findMessageWrapper(x);
@@ -74,7 +74,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           this._updateItem(x);
         }
       });
-    this._conversationService.messageReadHandle
+    this._conversationService.messageRead$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         const items: Array<ConversationWrapper> = this.ngxVirtualScrollComponent.items;
@@ -85,7 +85,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           }
         }
       });
-    this._conversationService.messageDeleteHandle
+    this._conversationService.messageDelete$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async x => {
         const messageWrapper = this._findMessageWrapper(x);
@@ -99,7 +99,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           }
         }
       });
-    this._conversationService.typingHandle
+    this._conversationService.typing$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async participant => {
         const conversationWrappers: ConversationWrapper[] = this.ngxVirtualScrollComponent.items
@@ -121,7 +121,7 @@ export class ConversationsComponent implements OnInit, OnDestroy {
           }, 1500);
         }
       });
-    this._conversationService.unreadTotalHandle
+    this._conversationService.unreadTotal$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async () => {
         await this.resetItems();
