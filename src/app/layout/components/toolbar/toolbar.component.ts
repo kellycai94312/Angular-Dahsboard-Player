@@ -6,6 +6,7 @@ import { FuseSidebarService } from '@fuse/components/sidebar/sidebar.service';
 import { FuseConfigService } from '@fuse/services/config.service';
 import { TranslateService } from '@ngx-translate/core';
 import { navigation } from 'app/navigation/navigation';
+import { TemplateModalService } from 'app/service/template-modal.service';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { FileClass } from '../../../data/remote/model/file/base/file-class';
@@ -33,12 +34,15 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   navigation: any;
   userStatusOptions: any[];
 
+  public readonly imageTypeClass = ImageType;
+  public readonly fileClassClass = FileClass;
   public person: Person;
   public personLogoUrl: string;
   public notificationsNumber: number;
   public groups: Group[] = [];
   public selectedGroup: Group;
   public visibleGroupMenu: boolean;
+  public canShowMoreGroups: boolean;
 
   // Private
   private _unsubscribeAll: Subject<any>;
@@ -62,7 +66,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     private _toolbarService: ToolbarService,
     private _notificationService: NotificationService,
     private _matIconRegistry: MatIconRegistry,
-    private _domSanitizer: DomSanitizer
+    private _domSanitizer: DomSanitizer,
+    private _templateModalService: TemplateModalService
   ) {
     // Set the defaults
     this.userStatusOptions = [
@@ -115,6 +120,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
             .pipe(take(1))
             .subscribe(value => {
               this.groups = value.list;
+              delete this.canShowMoreGroups;
+              if (value.list.length > 4) {
+                this.groups.length = 4;
+                this.canShowMoreGroups = true;
+              }
             });
         } else {
           delete this.personLogoUrl;
@@ -194,6 +204,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   public async onNavigateToGroup(group: Group) {
     await this._router.navigate(['/group', group.id]);
+  }
+
+  public async onShowMoreGroups(): Promise<void> {
+    await this._templateModalService.showSelectionGroupsModal([], {canEdit: true}, {maxCount: 1});
   }
 
   public async navigateToPersonSettings() {

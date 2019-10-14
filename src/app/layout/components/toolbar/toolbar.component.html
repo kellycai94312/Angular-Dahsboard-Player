@@ -51,23 +51,42 @@
       </button>
 
       <mat-menu #userMenu="matMenu" [overlapTrigger]="false">
+        <mat-divider></mat-divider>
+        <h1 class="menu-group-item">{{'communities' | translate}}</h1>
+        <mat-divider></mat-divider>
         <button *ngFor="let item of groups"
                 mat-menu-item
+                fxLayout="row"
+                fxLayoutGap="16px"
+                fxLayoutAlign="start center"
                 (click)="onNavigateToGroup(item)">
-          <mat-icon>group</mat-icon>
-          <span>{{item.name}}</span>
+          <ngx-image [width]="24"
+                     [height]="24"
+                     [object]="item"
+                     [type]="imageTypeClass.LOGO"
+                     [cropImage]="true"
+                     [fileClass]="fileClassClass.GROUP"></ngx-image>
+          <span class="text-truncate">{{item.name}}</span>
         </button>
+        <button mat-menu-item
+                class="show-more-button"
+                (click)="onShowMoreGroups()">
+          <span>{{'showMore' | translate}}...</span>
+        </button>
+        <mat-divider></mat-divider>
+        <h1 class="menu-group-item">{{'accountPerson' | translate}}</h1>
+        <mat-divider></mat-divider>
         <button mat-menu-item
                 (click)="navigateToPersonSettings()">
           <mat-icon>settings</mat-icon>
           <span>{{'settings' | translate}}</span>
         </button>
+        <mat-divider></mat-divider>
         <button mat-menu-item
                 (click)="signOut()">
           <mat-icon>exit_to_app</mat-icon>
           <span>{{'signOut' | translate}}</span>
         </button>
-
       </mat-menu>
 
       <div class="toolbar-separator" fxHide.gt-md></div>
