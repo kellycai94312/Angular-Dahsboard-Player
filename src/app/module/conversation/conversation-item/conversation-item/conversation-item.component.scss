@@ -2,28 +2,33 @@
 
 $color-muted-text: rgba(0, 0, 0, .54);
 
-.content {
-  padding: 5px 10px;
+:host {
+  width: 100%;
 
-  .conversation-head {
-    font-weight: 600;
-  }
+  .content {
+    padding: 5px 10px;
+    width: inherit;
 
-  .message-date {
-    font-size: 12px;
-    color: $color-muted-text;
-    white-space: nowrap;
-  }
+    .conversation-head {
+      font-weight: 600;
+    }
 
-  .message-state-icon {
-    @include mat-icon-size(18px);
-    color: $color-muted-text;
-  }
+    .message-date {
+      font-size: 12px;
+      color: $color-muted-text;
+      white-space: nowrap;
+    }
 
-  .unread-number {
-    background: #039be5;
-    color: #fff;
-    padding: 0 6px;
-    border-radius: 10px;
+    .message-state-icon {
+      @include mat-icon-size(18px);
+      color: $color-muted-text;
+    }
+
+    .unread-number {
+      background: #039be5;
+      color: #fff;
+      padding: 0 6px;
+      border-radius: 10px;
+    }
   }
 }

@@ -1,19 +1,19 @@
-import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
-import {AuthorizationService} from '../../../../../../shared/authorization.service';
-import {Person} from '../../../../../../data/remote/model/person';
-import {Direction} from '../../../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../../../data/remote/rest-api/page-query';
-import {ConversationWrapper} from '../../../../../../data/local/conversation-wrapper';
-import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../../../utils/app-helper';
-import {NgxVirtualScrollComponent} from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {ConversationService} from '../../../../../../shared/conversation.service';
-import {MessageWrapper} from '../../../../../../data/remote/bean/wrapper/message-wrapper';
-import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {Chat} from '../../../../../../data/remote/model/chat/conversation/chat';
-import {ConversationModalService} from '../../../../service/conversation-modal/conversation-modal.service';
-import {ChatService} from '../../../chat.service';
-import {Unsubscribable} from 'rxjs';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Unsubscribable } from 'rxjs';
+import { Direction } from '../../../../../../components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { ConversationWrapper } from '../../../../../../data/local/conversation-wrapper';
+import { PropertyConstant } from '../../../../../../data/local/property-constant';
+import { MessageWrapper } from '../../../../../../data/remote/bean/wrapper/message-wrapper';
+import { Chat } from '../../../../../../data/remote/model/chat/conversation/chat';
+import { Person } from '../../../../../../data/remote/model/person';
+import { PageQuery } from '../../../../../../data/remote/rest-api/page-query';
+import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { AuthorizationService } from '../../../../../../shared/authorization.service';
+import { ConversationService } from '../../../../../../shared/conversation.service';
+import { AppHelper } from '../../../../../../utils/app-helper';
+import { ConversationModalService } from '../../../../service/conversation-modal/conversation-modal.service';
+import { ChatService } from '../../../chat.service';
 
 @Component({
   selector: 'chat-chats-sidenav',
@@ -27,7 +27,7 @@ export class ChatChatsSidenavComponent implements OnInit {
   public readonly propertyConstantClass = PropertyConstant;
   public query: PageQuery;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   private readonly _messageCreateSubscription: Unsubscribable;
@@ -44,14 +44,14 @@ export class ChatChatsSidenavComponent implements OnInit {
               private _appHelper: AppHelper) {
     this.query = new PageQuery();
 
-    this._messageCreateSubscription = this._conversationService.messageCreateHandle.subscribe(x => {
+    this._messageCreateSubscription = this._conversationService.messageCreate$.subscribe(x => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
       this.updateItem(x);
     });
 
-    this._messageUpdateSubscription = this._conversationService.messageUpdateHandle.subscribe(x => {
+    this._messageUpdateSubscription = this._conversationService.messageUpdate$.subscribe(x => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
@@ -62,7 +62,7 @@ export class ChatChatsSidenavComponent implements OnInit {
       }
     });
 
-    this._messageReadSubscription = this._conversationService.messageReadHandle.subscribe(x => {
+    this._messageReadSubscription = this._conversationService.messageRead$.subscribe(x => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
@@ -76,7 +76,7 @@ export class ChatChatsSidenavComponent implements OnInit {
       }
     });
 
-    this._messageDeleteSubscription = this._conversationService.messageDeleteHandle.subscribe(async x => {
+    this._messageDeleteSubscription = this._conversationService.messageDelete$.subscribe(async x => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }
@@ -92,7 +92,7 @@ export class ChatChatsSidenavComponent implements OnInit {
       }
     });
 
-    this._typingSubscription = this._conversationService.typingHandle.subscribe(async participant => {
+    this._typingSubscription = this._conversationService.typing$.subscribe(async participant => {
       if (!this.ngxVirtualScrollComponent) {
         return;
       }

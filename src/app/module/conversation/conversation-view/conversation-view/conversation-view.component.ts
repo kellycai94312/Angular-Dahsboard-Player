@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { MessageToastrService } from 'app/components/message-toastr/message-toastr.service';
+import { MessageNotificationService } from 'app/services/message-notification/message-notification.service';
 import { takeWhile } from 'rxjs/operators';
 import { FuseMatSidenavHelperService } from '../../../../../@fuse/directives/fuse-mat-sidenav/fuse-mat-sidenav.service';
 import { NgxImageComponent } from '../../../../components/ngx-image/ngx-image/ngx-image.component';
@@ -75,7 +75,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
               private _conversationService: ConversationService,
               private _participantStompService: ParticipantStompService,
               private _authorizationService: AuthorizationService,
-              private _messageToastrService: MessageToastrService,
+              private _messageNotificationService: MessageNotificationService,
               private _templateModalService: TemplateModalService,
               private _conversationModalService: ConversationModalService,
               private _router: Router,
@@ -113,7 +113,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
   public async ngOnInit(): Promise<void> {
     await super.ngOnInit();
 
-    this._conversationService.messageCreateHandle
+    this._conversationService.messageCreate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(async x => {
         if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
@@ -137,7 +137,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
 
         await this.ngxVirtualScrollComponent.addItem(x.message);
       });
-    this._conversationService.messageUpdateHandle
+    this._conversationService.messageUpdate$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
@@ -153,7 +153,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
           }
         }
       });
-    this._conversationService.messageDeleteHandle
+    this._conversationService.messageDelete$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         if (x.message.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
@@ -169,7 +169,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
           }
         }
       });
-    this._conversationService.messageReadHandle
+    this._conversationService.messageRead$
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(x => {
         if (x.content.baseConversation.id != this.data.id || !this.ngxVirtualScrollComponent) {
@@ -200,7 +200,7 @@ export class ConversationViewComponent extends BaseComponent<BaseConversation> i
     if (result) {
       return this._appHelper.tryLoad(async () => {
         this.person = await this._appHelper.toPromise(this._authorizationService.personSubject);
-        this._messageToastrService.clearToasts(data.id);
+        this._messageNotificationService.clearToasts(data.id);
         this.enabled = await this._conversationApiService.getNotificationsStatus(this.data).toPromise();
         switch (data.discriminator) {
           case ConversationType.DIALOGUE:
