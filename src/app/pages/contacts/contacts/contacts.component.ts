@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { NameWrapper } from '../../../data/local/name-wrapper';
-import { Group } from '../../../data/remote/model/group/base';
-import { MenuItem } from '../../../module/common/item-line/model/menu-item';
-import { TemplateModalService } from '../../../service/template-modal.service';
-import { GroupsComponent } from '../groups/groups/groups.component';
 import { ContactItem } from '../model';
 
 @Component({
@@ -14,38 +10,17 @@ import { ContactItem } from '../model';
 export class ContactsComponent implements OnInit {
 
   public items: Array<NameWrapper<MenuData>> = [];
-  public visibleMenu = true;
-  public actions: Array<MenuItem>;
-  public rightActions: Array<MenuItem>;
-
-  constructor(private _templateModalService: TemplateModalService) {
-  }
+  public menuSize = '46px';
 
   public ngOnInit(): void {
     this.items = Object.keys(ContactItem).map(value => new NameWrapper(this._getPathByContactItem(value as ContactItem), `contactItemEnum.${value}`));
-
-    this.rightActions = [
-      {
-        iconName: 'menu',
-        action: item => {
-          this.visibleMenu = !this.visibleMenu;
-        }
-      }
-    ];
   }
 
-  public onActiveRouterOutlet(value: any): void {
-    if (value instanceof GroupsComponent) {
-      this.actions = [
-        {
-          iconName: 'add',
-          action: async () => {
-            await this._templateModalService.showEditGroupModal(new Group());
-          }
-        }
-      ];
+  public onToggleMenuVisibility(): void {
+    if (this.menuSize === '46px') {
+      this.menuSize = '20%';
     } else {
-      this.actions = [];
+      this.menuSize = '46px';
     }
   }
 

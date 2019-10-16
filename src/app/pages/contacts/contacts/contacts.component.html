@@ -2,15 +2,23 @@
      fxLayout="row">
   <div fxFlex="grow"
        fxLayout="column">
-    <app-list-heading [actions]="actions"
-                      [rightActions]="rightActions"></app-list-heading>
-    <router-outlet (activate)="onActiveRouterOutlet($event)"></router-outlet>
+    <app-list-heading></app-list-heading>
+    <div fxFlexFill
+         class="content">
+      <router-outlet></router-outlet>
+    </div>
   </div>
-  <div *ngIf="visibleMenu"
-       fxFlex="20"
-       fxLayout="column"
-       class="menu">
-    <div class="menu-head"></div>
+  <div fxLayout="column"
+       class="menu"
+       [style.width]="menuSize">
+    <div class="menu-head"
+         fxLayout="row"
+         fxLayoutAlign="center center">
+      <button mat-icon-button
+              (click)="onToggleMenuVisibility()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
     <div class="menu-list">
       <div *ngFor="let item of items"
            class="item"

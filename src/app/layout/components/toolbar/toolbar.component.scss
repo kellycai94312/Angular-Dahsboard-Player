@@ -1,10 +1,15 @@
 @import "src/@fuse/scss/fuse";
+@import "src/app/styles/mixins";
 
 .menu-group-item {
   background: rgba(0, 0, 0, 0.05);
   font-size: 18px;
   padding: 8px 18px;
   margin: 0;
+}
+
+.events-today {
+  @include mat-icon-size(32px);
 }
 
 .show-more-button {
