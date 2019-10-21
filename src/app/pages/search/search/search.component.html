@@ -1,1 +1,34 @@
-<router-outlet></router-outlet>
+<div fxFlexFill
+     fxLayout="row">
+  <div fxFlex="grow"
+       class="content">
+    <router-outlet></router-outlet>
+  </div>
+  <div fxLayout="column"
+       class="menu"
+       [style.width]="menuSize">
+    <div class="menu-head"
+         fxLayout="row"
+         fxLayoutAlign="center center">
+      <button mat-icon-button
+              (click)="onToggleMenuVisibility()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+    <div class="menu-list">
+      <div *ngFor="let item of items"
+           class="item"
+           fxLayout="row"
+           fxLayoutGap="5px"
+           fxLayoutAlign="start center"
+           matRipple
+           [matRippleDisabled]="!item.link"
+           [routerLinkActive]="item.link ? 'selected-item' : ''"
+           [ngClass]="{'disabled-item': !item.link}"
+           [routerLink]="item.link">
+        <mat-icon>{{item.iconName}}</mat-icon>
+        <span>{{item.name | translate}}</span>
+      </div>
+    </div>
+  </div>
+</div>

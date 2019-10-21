@@ -46,7 +46,7 @@ export const navigation: FuseNavigation[] = [
             id: 'contacts',
             translate: 'contacts',
             type: 'item',
-            url: '/contact'
+            url: '/contact/person'
           }
         ]
       },

@@ -1,4 +1,4 @@
-import { Component, ComponentFactoryResolver, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { Direction } from 'app/components/ngx-virtual-scroll/model/direction';
 import { NgxVirtualScrollComponent } from 'app/components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
 import { Group } from 'app/data/remote/model/group/base';
@@ -14,7 +14,7 @@ import { NewsWindowService } from 'app/services/windows/news-window/news-window.
   templateUrl: './news-list.component.html',
   styleUrls: ['./news-list.component.scss']
 })
-export class NewsListComponent implements OnInit {
+export class NewsListComponent implements OnInit, OnChanges {
 
   @ViewChild(NgxVirtualScrollComponent, {static: true})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
@@ -31,8 +31,14 @@ export class NewsListComponent implements OnInit {
   constructor(private _groupApiService: GroupApiService,
               private _personApiService: PersonApiService,
               private _utilService: UtilService,
-              public _componentFactoryResolver: ComponentFactoryResolver,
+              private _componentFactoryResolver: ComponentFactoryResolver,
               private _newsWindowService: NewsWindowService) {
+  }
+
+  public async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (this.ngxVirtualScrollComponent && changes.group && !changes.group.firstChange) {
+      await this.ngxVirtualScrollComponent.reset();
+    }
   }
 
   public async ngOnInit(): Promise<void> {
@@ -54,11 +60,11 @@ export class NewsListComponent implements OnInit {
 
   public fetchItems = async (direction: Direction, pageQuery: PageQuery) => {
     if (this.group) {
-      return await this._groupApiService.getGroupNews(this.group, pageQuery).toPromise();
+      return this._groupApiService.getGroupNews(this.group, pageQuery).toPromise();
     } else if (this.person) {
-      return await this._personApiService.getPersonNews(this.person, pageQuery).toPromise();
+      return this._personApiService.getPersonNews(this.person, pageQuery).toPromise();
     }
-    return await this._personApiService.getGroupNews(pageQuery).toPromise();
+    return this._personApiService.getGroupNews(pageQuery).toPromise();
   };
 
 }
