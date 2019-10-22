@@ -1,4 +1,4 @@
-import {EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 export abstract class BaseComponent<T> implements OnInit {
 
@@ -27,7 +27,7 @@ export abstract class BaseComponent<T> implements OnInit {
     this.class = '';
   }
 
-  async ngOnInit(): Promise<void> {
+  public async ngOnInit(): Promise<void> {
     if (!this._manualInit) {
       await this.initializeComponent(this.data);
     }

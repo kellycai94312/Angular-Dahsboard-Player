@@ -927,5 +927,8 @@
     "SHOWCASE": "Витрина",
     "SCHEDULE": "Расписание"
   },
-  "accountPerson": "Учетная запись"
+  "accountPerson": "Учетная запись",
+  "organizationName": "Название организации",
+  "createAPersonalAccountArZone": "Создать личный кабинет AR.ZONE",
+  "viewStatementText": "Посмотреть текст заявления"
 }

@@ -1,0 +1,47 @@
+<div *ngIf="data"
+     fxLayout="column">
+  <h4>Название группы</h4>
+  <div *ngIf="personType === personTypeClass.LEGAL_ENTITY">
+    <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
+  </div>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+  </div>
+  <div *ngIf="personType !== personTypeClass.LEGAL_ENTITY"
+       fxLayout="row"
+       fxLayoutGap="10px">
+    <ngx-date fxFlex
+              [data]="birthDateNgxDate"></ngx-date>
+    <ngx-select fxFlex
+                [data]="sexNgxSelect"></ngx-select>
+    <ngx-select fxFlex
+                [data]="educationNgxSelect"></ngx-select>
+  </div>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="phoneNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="emailNgxInput"></new-ngx-input>
+  </div>
+  <div fxLayout="column"
+       fxLayoutGap="20px"
+       fxLayoutAlign="center center">
+    <div fxLayout="column"
+         fxLayoutGap="5px">
+      <mat-checkbox>{{'personalDataProcessingContract' | translate}}</mat-checkbox>
+      <mat-checkbox>{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <button mat-raised-button
+              class="text-uppercase"
+              color="primary"
+              (click)="onSend()">{{'send' | translate}}</button>
+      <button mat-raised-button
+              class="text-uppercase"
+              (click)="onViewStatementText()">{{'viewStatementText' | translate}}</button>
+    </div>
+  </div>
+</div>
