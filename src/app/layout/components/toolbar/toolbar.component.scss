@@ -10,6 +10,7 @@
 
 .events-today {
   @include mat-icon-size(32px);
+  line-height: 0 !important;
 }
 
 .show-more-button {

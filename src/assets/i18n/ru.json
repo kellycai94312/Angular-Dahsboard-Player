@@ -930,5 +930,7 @@
   "accountPerson": "Учетная запись",
   "organizationName": "Название организации",
   "createAPersonalAccountArZone": "Создать личный кабинет AR.ZONE",
-  "viewStatementText": "Посмотреть текст заявления"
+  "viewStatementText": "Посмотреть текст заявления",
+  "personalProfile": "Личный профиль",
+  "groupTools": "Инструменты группы"
 }

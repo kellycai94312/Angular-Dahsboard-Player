@@ -929,5 +929,7 @@
   "accountPerson": "Account",
   "organizationName": "Organization name",
   "createAPersonalAccountArZone": "Create a personal account AR.ZONE",
-  "viewStatementText": "View statement text"
+  "viewStatementText": "View statement text",
+  "personalProfile": "Personal profile",
+  "groupTools": "Group tools"
 }
