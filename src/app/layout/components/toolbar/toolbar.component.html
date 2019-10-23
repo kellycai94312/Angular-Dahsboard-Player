@@ -12,8 +12,10 @@
       <div class="toolbar-separator" *ngIf="!hiddenNavbar && !rightNavbar" fxHide.gt-md></div>
 
       <div *ngIf="selectedGroup"
+           fxFlexAlign="end"
            class="px-8 px-md-8">
         <button mat-raised-button
+                class="group-tools"
                 (click)="onToggleVisibilityMenu()">
           {{'groupTools' | translate}}
         </button>

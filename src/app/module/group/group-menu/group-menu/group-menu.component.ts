@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
-import { takeWhile } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { FuseNavigation } from '../../../../../@fuse/types';
 
 @Component({
@@ -13,7 +14,7 @@ import { FuseNavigation } from '../../../../../@fuse/types';
 export class GroupMenuComponent implements OnInit, OnDestroy {
 
   public navigation: FuseNavigation[];
-  private _notDestroyed = true;
+  private readonly _destroyComponentSubject = new Subject();
 
   constructor(private _toolbarService: ToolbarService,
               private _matIconRegistry: MatIconRegistry,
@@ -37,7 +38,7 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this._toolbarService.group$
-      .pipe(takeWhile(() => this._notDestroyed))
+      .pipe(takeUntil(this._destroyComponentSubject))
       .subscribe(value => {
         if (value) {
           this.navigation = [
@@ -195,7 +196,8 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    delete this._notDestroyed;
+    this._destroyComponentSubject.next();
+    this._destroyComponentSubject.complete();
   }
 
 }
