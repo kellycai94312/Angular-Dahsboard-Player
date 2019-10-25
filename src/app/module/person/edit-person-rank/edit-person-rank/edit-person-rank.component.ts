@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { RankApiService } from 'app/data/remote/rest-api/api/rank/rank-api.service';
 import { ComponentWithAttach } from '../../../../data/local/component/base/component-with-attach';
 import { PropertyConstant } from '../../../../data/local/property-constant';
 import { Person } from '../../../../data/remote/model/person';
-import { PersonRank } from '../../../../data/remote/model/person-rank';
+import { PersonRank } from '../../../../data/remote/model/person/rank/person-rank';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
 import { AppHelper } from '../../../../utils/app-helper';
 import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
@@ -26,7 +27,8 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
   public readonly dateNgxDate = new NgxDate();
   private readonly _formGroup = new FormGroup({});
 
-  constructor(participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
+  constructor(private _rankApiService: RankApiService,
+              participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
 
     // this.document.clazz = FileClass.PERSON_RANK;
@@ -39,7 +41,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
       this.rankNgxSelect.labelTranslation = 'rank';
       this.rankNgxSelect.required = true;
       this.rankNgxSelect.display = 'name';
-      this.rankNgxSelect.items = await this.participantRestApiService.getRanks();
+      this.rankNgxSelect.items = await this._rankApiService.getRanks().toPromise();
       this.rankNgxSelect.control.setValidators(Validators.required);
       this.rankNgxSelect.control.setValue(obj.rank ? this.rankNgxSelect.items.find(x => x.id == obj.rank.id) : this.rankNgxSelect.items[0]);
 

@@ -1,10 +1,10 @@
-import {Component, Input} from '@angular/core';
-import {BaseComponent} from '../../../../data/local/component/base/base-component';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {GroupPersonPosition} from '../../../../data/remote/model/group/position/group-person-position';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
+import { Component, Input } from '@angular/core';
+import { BaseComponent } from 'app/data/local/component/base/base-component';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { GroupPerson } from 'app/data/remote/model/group/person';
+import { GroupPersonPosition } from 'app/data/remote/model/group/position';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
   selector: 'app-group-person-item',
@@ -27,8 +27,11 @@ export class GroupPersonItemComponent extends BaseComponent<GroupPerson> {
   async initializeComponent(data: GroupPerson): Promise<boolean> {
     const result = super.initializeComponent(data);
     if (result && data.group) {
-      return await this._appHelper.tryLoad(async () => {
-        this._groupPersonPositions = (await this._groupApiService.getGroupPersonPositions(this.data, {unassigned: false, count: PropertyConstant.pageSizeMax}).toPromise()).list;
+      return this._appHelper.tryLoad(async () => {
+        this._groupPersonPositions = (await this._groupApiService.getGroupPersonPositions(this.data, {
+          unassigned: false,
+          count: PropertyConstant.pageSizeMax
+        }).toPromise()).list;
       });
     }
     return result;

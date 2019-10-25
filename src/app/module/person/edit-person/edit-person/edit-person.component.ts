@@ -6,8 +6,8 @@ import { PersonPrivacyEnum } from 'app/data/remote/model/base/person-privacy-enu
 import { Document } from 'app/data/remote/model/document/document';
 import { DocumentClass } from 'app/data/remote/model/document/document-class';
 import { DocumentType } from 'app/data/remote/model/document/document-type';
-import { GroupPerson } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
+import { GroupPerson } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { BasePosition } from 'app/data/remote/model/person-position/base-position';
 import { PersonContact } from 'app/data/remote/model/person/person-contact';
@@ -18,6 +18,9 @@ import { FileApiService } from 'app/data/remote/rest-api/api/file/file-api.servi
 import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
 import { PersonApiService } from 'app/data/remote/rest-api/api/person/person-api.service';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
+import { NgxInput, NgxInputType } from 'app/module/ngx/ngx-input';
+import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
 import { TemplateModalService } from 'app/service/template-modal.service';
 import { ValidationService } from 'app/service/validation/validation.service';
@@ -27,10 +30,6 @@ import { AppHelper } from 'app/utils/app-helper';
 import { EMPTY, from, merge, NEVER, Observable, of } from 'rxjs';
 import { flatMap, map, takeWhile } from 'rxjs/operators';
 import { GroupPositionItemComponent } from '../../../group/group-position/group-position-item/group-position-item/group-position-item.component';
-import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
-import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
-import { NgxInputType } from '../../../ngx/ngx-input/model/ngx-input-type';
-import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-edit-person',

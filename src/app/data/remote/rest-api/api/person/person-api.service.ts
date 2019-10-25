@@ -1,21 +1,20 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../environments/environment';
-import {ApiService} from '../base/api.service';
-import {Observable} from 'rxjs';
-import {PageContainer} from '../../../bean/page-container';
-import {Person} from '../../../model/person';
-import {PersonQuery} from '../../query/person-query';
-import {PageQuery} from '../../page-query';
-import {MedicalExamination} from '../../../model/person/medical-examination';
-import {GroupNews} from '../../../model/group/news/group-news';
-import {PersonNews} from '../../../model/group/news/person-news';
-import {BooleanWrapper} from '../../../bean/wrapper/boolean-wrapper';
-import {map} from 'rxjs/operators';
-import {Dialogue} from '../../../model/chat/conversation/dialogue';
-import {GroupPersonJob} from '../../../model/group/group-person-job';
-import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
-import {plainToClass} from 'class-transformer';
-import {PersonContact} from '../../../model/person/person-contact';
+import { Injectable } from '@angular/core';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { BooleanWrapper } from 'app/data/remote/bean/wrapper/boolean-wrapper';
+import { SingleAttributeWrapper } from 'app/data/remote/bean/wrapper/single-attribute-wrapper';
+import { Dialogue } from 'app/data/remote/model/chat';
+import { GroupNews, PersonNews } from 'app/data/remote/model/group/news';
+import { GroupPersonJob } from 'app/data/remote/model/group/person';
+import { Person } from 'app/data/remote/model/person';
+import { MedicalExamination } from 'app/data/remote/model/person/medical-examination';
+import { PersonContact } from 'app/data/remote/model/person/person-contact';
+import { ApiService } from 'app/data/remote/rest-api/api';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { PersonQuery } from 'app/data/remote/rest-api/query/person-query';
+import { plainToClass } from 'class-transformer';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

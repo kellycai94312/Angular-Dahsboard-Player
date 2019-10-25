@@ -1,17 +1,17 @@
-import {Group} from '../../../remote/model/group/base/group';
-import {OnDestroy, OnInit} from '@angular/core';
-import {GroupService} from '../../../../pages/group/group-page/service/group.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {GroupPerson} from '../../../remote/model/group/group-person';
-import {takeWhile} from 'rxjs/operators';
-import {BehaviorSubject} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
+import { OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Group } from 'app/data/remote/model/group/base';
+import { BaseGroupPerson } from 'app/data/remote/model/group/person';
+import { GroupService } from 'app/pages/group/group-page/service/group.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { BehaviorSubject } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
 
 export abstract class BaseGroupComponent<T extends Group> implements OnInit, OnDestroy {
 
   public readonly canEditSubject = new BehaviorSubject(false);
   public group: T;
-  public groupPerson: GroupPerson;
+  public groupPerson: BaseGroupPerson;
   public canEdit: boolean;
   public isOwner: boolean;
   protected notDestroyed = true;
@@ -53,7 +53,7 @@ export abstract class BaseGroupComponent<T extends Group> implements OnInit, OnD
     this.group = group;
   }
 
-  public async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
+  public async initializeGroupPerson(groupPerson: BaseGroupPerson): Promise<void> {
     this.groupPerson = groupPerson;
     this.canEdit = await this.groupService.canEditGroup();
     this.canEditSubject.next(this.canEdit);

@@ -1,23 +1,23 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {BaseEditComponent} from '../../../../data/local/component/base/base-edit-component';
-import {Person} from '../../../../data/remote/model/person';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {FormGroup, Validators} from '@angular/forms';
-import {takeWhile} from 'rxjs/operators';
-import {Position} from '../../../../data/remote/model/person-position/position';
-import {PositionType} from '../../../../data/remote/model/person-position/position-type';
-import {GroupPosition} from '../../../../data/remote/model/person-position/group-position';
-import {PersonApiService} from '../../../../data/remote/rest-api/api/person/person-api.service';
-import {GroupPersonJob} from '../../../../data/remote/model/group/group-person-job';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {BasePosition} from '../../../../data/remote/model/person-position/base-position';
-import {PersonPrivacyEnum} from '../../../../data/remote/model/base/person-privacy-enum';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {NameWrapper} from '../../../../data/local/name-wrapper';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
+import { takeWhile } from 'rxjs/operators';
+import { BaseEditComponent } from '../../../../data/local/component/base/base-edit-component';
+import { NameWrapper } from '../../../../data/local/name-wrapper';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { PersonPrivacyEnum } from '../../../../data/remote/model/base/person-privacy-enum';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { GroupPersonJob } from '../../../../data/remote/model/group/person/group-person-job';
+import { Person } from '../../../../data/remote/model/person';
+import { BasePosition } from '../../../../data/remote/model/person-position/base-position';
+import { GroupPosition } from '../../../../data/remote/model/person-position/group-position';
+import { Position } from '../../../../data/remote/model/person-position/position';
+import { PositionType } from '../../../../data/remote/model/person-position/position-type';
+import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
+import { PersonApiService } from '../../../../data/remote/rest-api/api/person/person-api.service';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
 
 @Component({
   selector: 'app-career-person',
@@ -58,7 +58,10 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
         this.groupNgxSelect.display = 'name';
         this.groupNgxSelect.required = true;
         this.groupNgxSelect.compare = (first, second) => first.id == second.id;
-        this.groupNgxSelect.items = (await this._groupApiService.getGroups({count: PropertyConstant.pageSizeMax, all: false}).toPromise()).list;
+        this.groupNgxSelect.items = (await this._groupApiService.getGroups({
+          count: PropertyConstant.pageSizeMax,
+          all: false
+        }).toPromise()).list;
         this.groupNgxSelect.control.setValidators(Validators.required);
 
         this.positionNgxSelect = new NgxSelect<BasePosition>();

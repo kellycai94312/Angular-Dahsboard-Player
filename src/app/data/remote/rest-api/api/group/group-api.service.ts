@@ -1,5 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
+import { GroupConnectionRequestType } from 'app/data/remote/bean/group-connection-request-type';
+import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import {
+  BaseGroupConnectionRequest,
+  GroupCluster,
+  GroupConnectionRequestClaim
+} from 'app/data/remote/model/group/connection';
+import { BaseGroupContract } from 'app/data/remote/model/group/contract';
+import { GroupNews } from 'app/data/remote/model/group/news';
+import { BaseGroupPerson, GroupPerson, GroupPersonClaim } from 'app/data/remote/model/group/person';
+import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { plainToClass } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -10,11 +22,6 @@ import { PageContainer } from '../../../bean/page-container';
 import { ReportExtension } from '../../../bean/report-extension';
 import { SingleAttributeWrapper } from '../../../bean/wrapper/single-attribute-wrapper';
 import { Group } from '../../../model/group/base/group';
-import { GroupCluster } from '../../../model/group/connection/group-cluster';
-import { BaseGroupContract } from '../../../model/group/contract/base-group-contract';
-import { GroupPerson } from '../../../model/group/group-person';
-import { GroupNews } from '../../../model/group/news/group-news';
-import { GroupPersonPosition } from '../../../model/group/position/group-person-position';
 import { SubgroupTemplate } from '../../../model/group/subgroup/template/subgroup-template';
 import { SubgroupTemplateGroup } from '../../../model/group/subgroup/template/subgroup-template-group';
 import { Person } from '../../../model/person';
@@ -54,6 +61,10 @@ export class GroupApiService {
     return this._apiService.getValue(Group, `${this._basePath}/${groupId}`) as Observable<T>;
   }
 
+  public getGroupByInn<T extends Group>(inn: string): Observable<T> {
+    return this._apiService.getValue(Group, `${this._basePath}/inn/${inn}`) as Observable<T>;
+  }
+
   public createGroup<T extends Group>(value: T): Observable<T> {
     return this._apiService.createValue(Group, this._basePath, value) as Observable<T>;
   }
@@ -73,17 +84,25 @@ export class GroupApiService {
 
   //region Group person
 
-  public getCurrentGroupPerson<T extends Group>(group: T): Observable<GroupPerson> {
+  public getCurrentGroupPerson<T extends BaseGroupPerson>(group: Group): Observable<T> {
     return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`)
-      .pipe(map(value => plainToClass(GroupPerson, value.value)));
+      .pipe(map(value => plainToClass(BaseGroupPerson, value.value) as T));
   }
 
   public getGroupPerson<T extends Group>(group: T, person: Person): Observable<GroupPerson> {
     return this._apiService.getValue(GroupPerson, `${this._basePath}/${group.id}/person/${person.id}`);
   }
 
-  public joinGroup<T extends Group, P extends BasePosition>(group: T, positions: P[]): Observable<GroupPerson> {
-    return this._apiService.createValue(GroupPerson, `${this._basePath}/${group.id}/join`, new ListRequest(positions.map(x => new IdRequest(x.id)))) as Observable<GroupPerson>;
+  public joinGroup<T extends Group, P extends BasePosition>(group: T, positions: P[]): Observable<BaseGroupPerson> {
+    return this._apiService.createValue(BaseGroupPerson, `${this._basePath}/${group.id}/join`, new ListRequest(positions.map(x => new IdRequest(x.id)))) as Observable<BaseGroupPerson>;
+  }
+
+  public createGroupPersonClaim<T extends Group>(group: T, value: GroupPersonClaimRequest): Observable<GroupPersonClaim> {
+    return this._apiService.createValue(GroupPersonClaim, `${this._basePath}/${group.id}/claim/person`, value) as Observable<GroupPersonClaim>;
+  }
+
+  public createGroupConnectionRequestClaim<T extends Group>(group: T, value: GroupClaimRequest): Observable<GroupConnectionRequestClaim> {
+    return this._apiService.createValue(GroupConnectionRequestClaim, `${this._basePath}/${group.id}/claim/group`, value) as Observable<GroupConnectionRequestClaim>;
   }
 
   public followGroup<T extends Group>(group: T): Observable<GroupPerson> {
@@ -104,9 +123,9 @@ export class GroupApiService {
 
   //endregion
 
-  public getPersons<T extends GroupPerson>(group: Group,
-                                           query: GroupPersonQuery): Observable<PageContainer<T>> {
-    return this._apiService.getPageContainer(GroupPerson, `${this._basePath}/${group.id}/person`, query) as Observable<PageContainer<T>>;
+  public getPersons<T extends BaseGroupPerson>(group: Group,
+                                               query: GroupPersonQuery): Observable<PageContainer<T>> {
+    return this._apiService.getPageContainer(BaseGroupPerson, `${this._basePath}/${group.id}/person`, query) as Observable<PageContainer<T>>;
   }
 
   //#region Contract
@@ -223,6 +242,10 @@ export class GroupApiService {
   }
 
   //#endregion
+
+  public getGroupConnectionRequests(group: Group, query?: { type?: GroupConnectionRequestType } & PageQuery): Observable<PageContainer<BaseGroupConnectionRequest>> {
+    return this._apiService.getPageContainer(BaseGroupConnectionRequest, `${this._basePath}/${group.id}/connectionRequest`, query) as Observable<PageContainer<BaseGroupConnectionRequest>>;
+  }
 
   public getClusterGroupPositions(group: Group,
                                   groupCluster: GroupCluster,

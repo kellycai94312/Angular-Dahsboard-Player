@@ -1,6 +1,6 @@
+import { IdentifiedObject } from 'app/data/remote/base';
+import { GroupPerson } from 'app/data/remote/model/group/person';
 import { Type } from 'class-transformer';
-import { IdentifiedObject } from '../../../base/identified-object';
-import { GroupPerson } from '../group-person';
 import { GroupContractType } from './group-contract-type';
 
 export class BaseGroupContract extends IdentifiedObject {

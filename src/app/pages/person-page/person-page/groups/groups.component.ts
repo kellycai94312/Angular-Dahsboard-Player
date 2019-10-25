@@ -5,7 +5,7 @@ import { NgxVirtualScrollComponent } from '../../../../components/ngx-virtual-sc
 import { NameWrapper } from '../../../../data/local/name-wrapper';
 import { PropertyConstant } from '../../../../data/local/property-constant';
 import { GroupTypeEnum } from '../../../../data/remote/model/group/base/group-type-enum';
-import { GroupPerson } from '../../../../data/remote/model/group/group-person';
+import { GroupPerson } from '../../../../data/remote/model/group/person/group-person';
 import { UserRole } from '../../../../data/remote/model/user-role';
 import { PageQuery } from '../../../../data/remote/rest-api/page-query';
 import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';

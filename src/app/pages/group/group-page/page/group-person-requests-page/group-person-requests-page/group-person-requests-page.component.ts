@@ -1,19 +1,19 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {BaseGroupComponent} from '../../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {NgxButtonType} from '../../../../../../components/ngx-button/model/ngx-button-type';
-import {NgxVirtualScrollComponent} from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
-import {ParticipantRestApiService} from '../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {NgxModalService} from '../../../../../../components/ngx-modal/service/ngx-modal.service';
-import {GroupService} from '../../../service/group.service';
-import {AppHelper} from '../../../../../../utils/app-helper';
-import {GroupQuery} from '../../../../../../data/remote/rest-api/query/group-query';
-import {PropertyConstant} from '../../../../../../data/local/property-constant';
-import {Direction} from '../../../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../../../data/remote/rest-api/page-query';
-import {SplitButtonItem} from '../../../../../../components/ngx-split-button/bean/split-button-item';
-import {GroupPersonState} from '../../../../../../data/remote/model/group/group-person-state';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgxButtonType } from '../../../../../../components/ngx-button/model/ngx-button-type';
+import { NgxModalService } from '../../../../../../components/ngx-modal/service/ngx-modal.service';
+import { SplitButtonItem } from '../../../../../../components/ngx-split-button/bean/split-button-item';
+import { Direction } from '../../../../../../components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
+import { PropertyConstant } from '../../../../../../data/local/property-constant';
+import { Group } from '../../../../../../data/remote/model/group/base/group';
+import { GroupPersonState } from '../../../../../../data/remote/model/group/person/group-person-state';
+import { PageQuery } from '../../../../../../data/remote/rest-api/page-query';
+import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
+import { GroupPersonQuery } from '../../../../../../data/remote/rest-api/query/group-person-query';
+import { GroupQuery } from '../../../../../../data/remote/rest-api/query/group-query';
+import { AppHelper } from '../../../../../../utils/app-helper';
+import { GroupService } from '../../../service/group.service';
 
 @Component({
   selector: 'app-group-person-requests-page',
@@ -24,7 +24,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
 
   public readonly ngxButtonTypeClass = NgxButtonType;
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: true})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   public readonly splitButtonsItems: SplitButtonItem[];
@@ -38,14 +38,17 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
     this.groupPersonQuery.name = '';
     this.groupPersonQuery.from = 0;
     this.groupPersonQuery.count = PropertyConstant.pageSize;
-    this.groupPersonQuery.state = GroupPersonState.JOIN_REQUEST;
+    this.groupPersonQuery.groupPersonState = GroupPersonState.JOIN_REQUEST;
 
     this.splitButtonsItems = [
       {
         nameKey: 'approve',
         callback: async (item: SplitButtonItem) => {
           await this.appHelper.trySave(async () => {
-            await this._participantRestApiService.putApprovePersonInGroup({id: this.group.id, personId: item.data.person.id});
+            await this._participantRestApiService.putApprovePersonInGroup({
+              id: this.group.id,
+              personId: item.data.person.id
+            });
             this.appHelper.removeItem(this.ngxVirtualScrollComponent.items, item.data);
           });
         }
@@ -54,7 +57,10 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
         nameKey: 'refuse',
         callback: async (item: SplitButtonItem) => {
           await this.appHelper.trySave(async () => {
-            await this._participantRestApiService.deleteApprovePersonInGroup({id: this.group.id, personId: item.data.person.id});
+            await this._participantRestApiService.deleteApprovePersonInGroup({
+              id: this.group.id,
+              personId: item.data.person.id
+            });
             this.appHelper.removeItem(this.ngxVirtualScrollComponent.items, item.data);
           });
         }
@@ -75,7 +81,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
     return await this._participantRestApiService.getGroupPersonsByGroup(pageQuery);
   };
 
-  private async updateItems() {
+  private async updateItems(): Promise<void> {
     await this.appHelper.delay();
     await this.ngxVirtualScrollComponent.reset();
   }

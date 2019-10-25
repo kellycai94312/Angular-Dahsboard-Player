@@ -1,10 +1,10 @@
-import {IdentifiedObject} from '../../../../base/identified-object';
-import {Person} from '../../../person';
-import {SubgroupGroup} from '../subgroup/subgroup-group';
-import {PersonRank} from '../../../person-rank';
-import {StageType} from '../../../stage/stage-type';
-import {SubgroupTransition} from '../subgroup/subgroup-transition';
-import {SubgroupTemplatePersonType} from './subgroup-template-person-type';
+import { IdentifiedObject } from 'app/data/remote/base';
+import { SubgroupGroup } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupTransition } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-transition';
+import { Person } from 'app/data/remote/model/person';
+import { PersonRank } from 'app/data/remote/model/person/rank/person-rank';
+import { StageType } from 'app/data/remote/model/stage/stage-type';
+import { SubgroupTemplatePersonType } from './subgroup-template-person-type';
 
 /*пользователь подгруппы*/
 export class SubgroupPerson extends IdentifiedObject {

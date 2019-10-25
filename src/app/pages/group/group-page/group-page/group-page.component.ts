@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
-import { GroupPerson } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
+import { BaseGroupPerson } from 'app/data/remote/model/group/person';
 import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
 import { NgxTab } from 'app/module/ngx/ngx-tabs/model/ngx-tab';
 import { AppHelper } from 'app/utils/app-helper';
@@ -88,7 +88,7 @@ export class GroupPageComponent extends BaseGroupComponent<Group> implements OnI
     }
   }
 
-  public onChangeGroupPerson(groupPerson: GroupPerson): void {
+  public onChangeGroupPerson(groupPerson: BaseGroupPerson): void {
     this._groupService.updateGroupPerson(groupPerson);
   }
 

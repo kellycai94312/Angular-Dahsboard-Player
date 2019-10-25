@@ -1,10 +1,10 @@
-import {SexEnum} from '../misc/sex-enum';
-import {Address} from './address';
-import {IdentifiedObject} from '../base/identified-object';
-import {User} from './user';
-import {AthleteState} from './person/athlete-state';
-import {GroupPersonJob} from './group/group-person-job';
-import {Type} from 'class-transformer';
+import { IdentifiedObject } from 'app/data/remote/base';
+import { SexEnum } from 'app/data/remote/misc/sex-enum';
+import { GroupPersonJob } from 'app/data/remote/model/group/person/group-person-job';
+import { AthleteState } from 'app/data/remote/model/person/athlete-state';
+import { Type } from 'class-transformer';
+import { Address } from './address';
+import { User } from './user';
 
 export class Person extends IdentifiedObject {
 

@@ -1,21 +1,21 @@
 import { Component, ComponentFactoryResolver, OnInit } from '@angular/core';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { Group } from 'app/data/remote/model/group/base';
+import { GroupCluster } from 'app/data/remote/model/group/connection';
+import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
+import { GroupApiService, GroupClusterApiService } from 'app/data/remote/rest-api/api';
+import { ClusterGroupPosition } from 'app/data/remote/rest-api/api/group/model/cluster-group-position';
+import { RankApiService } from 'app/data/remote/rest-api/api/rank/rank-api.service';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { GroupWorkTimeReportComponent } from 'app/module/group/report/group-work-time-report/group-work-time-report/group-work-time-report.component';
+import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
+import { FlatNode } from 'app/module/ngx/ngx-tree/model/flat-node';
+import { GroupService } from 'app/pages/group/group-page/service/group.service';
+import { TranslateObjectService } from 'app/shared/translate-object.service';
+import { AppHelper } from 'app/utils/app-helper';
 import { Observable, of } from 'rxjs';
 import { map, takeWhile } from 'rxjs/operators';
-import { NgxModalService } from '../../../../../../../components/ngx-modal/service/ngx-modal.service';
-import { BaseGroupComponent } from '../../../../../../../data/local/component/group/base-group-component';
-import { Group } from '../../../../../../../data/remote/model/group/base/group';
-import { GroupCluster } from '../../../../../../../data/remote/model/group/connection/group-cluster';
-import { PositionLevelEnum } from '../../../../../../../data/remote/model/person-position/position-level-enum';
-import { GroupClusterApiService } from '../../../../../../../data/remote/rest-api/api/group-cluster/group-cluster-api.service';
-import { GroupApiService } from '../../../../../../../data/remote/rest-api/api/group/group-api.service';
-import { ClusterGroupPosition } from '../../../../../../../data/remote/rest-api/api/group/model/cluster-group-position';
-import { ParticipantRestApiService } from '../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import { GroupWorkTimeReportComponent } from '../../../../../../../module/group/report/group-work-time-report/group-work-time-report/group-work-time-report.component';
-import { NgxSelect } from '../../../../../../../module/ngx/ngx-select/model/ngx-select';
-import { FlatNode } from '../../../../../../../module/ngx/ngx-tree/model/flat-node';
-import { TranslateObjectService } from '../../../../../../../shared/translate-object.service';
-import { AppHelper } from '../../../../../../../utils/app-helper';
-import { GroupService } from '../../../../service/group.service';
 
 @Component({
   selector: 'app-group-reports',
@@ -35,6 +35,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
 
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _groupClusterApiService: GroupClusterApiService,
+              private _rankApiService: RankApiService,
               private _groupApiService: GroupApiService,
               private _ngxModalService: NgxModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
@@ -77,7 +78,7 @@ export class GroupReportsComponent extends BaseGroupComponent<Group> implements 
     this.rankNgxSelect.labelTranslation = 'rank';
     this.rankNgxSelect.display = 'name';
     this.rankNgxSelect.hasNone = true;
-    this.rankNgxSelect.items = await this._participantRestApiService.getRanks();
+    this.rankNgxSelect.items = await this._rankApiService.getRanks().toPromise();
     this.rankNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this.notDestroyed))
       .subscribe(() => {

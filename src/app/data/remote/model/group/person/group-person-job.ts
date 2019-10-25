@@ -1,10 +1,10 @@
+import { PersonPrivacyObject } from 'app/data/remote/model/base/person-privacy-object';
+import { Group } from 'app/data/remote/model/group/base';
+import { BasePosition } from 'app/data/remote/model/person-position/base-position';
+import { GroupPosition } from 'app/data/remote/model/person-position/group-position';
+import { Position } from 'app/data/remote/model/person-position/position';
+import { PositionType } from 'app/data/remote/model/person-position/position-type';
 import { Type } from 'class-transformer';
-import { PersonPrivacyObject } from '../base/person-privacy-object';
-import { BasePosition } from '../person-position/base-position';
-import { GroupPosition } from '../person-position/group-position';
-import { Position } from '../person-position/position';
-import { PositionType } from '../person-position/position-type';
-import { Group } from './base';
 
 export class GroupPersonJob extends PersonPrivacyObject {
 
