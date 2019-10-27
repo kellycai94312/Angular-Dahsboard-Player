@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {TranslateObjectService} from '../../shared/translate-object.service';
-import {Observable} from 'rxjs';
-import {AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { TranslateObjectService } from '../../shared/translate-object.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +20,9 @@ export class ValidationService {
   public static readonly emailValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
     if (control.value) {
       const matches = control.value.match(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
-      return matches ? null : {email: true};
+      return matches ? void 0 : {email: true};
     }
-    return null;
+    return void 0;
   };
 
   public static readonly compareValidator = (target: AbstractControl): ValidatorFn => {
@@ -36,7 +36,7 @@ export class ValidationService {
 
   public static readonly integerValidator: ValidatorFn = (control: FormControl): ValidationErrors | null => {
     if (control.value) {
-      return Number.isInteger(+control.value) ? void 0 : {integer: false};
+      return Number.isInteger(+control.value) ? void 0 : {integer: true};
     }
     return void 0;
   };
@@ -62,16 +62,16 @@ export class ValidationService {
     } else if (formControl.hasError(this.integerValidationName)) {
       return this._translateObjectService.getTranslation$('valueIsNotAnInteger');
     }
-    return null;
+    return void 0;
   }
 
-  public getBirthDateMin() {
+  public getBirthDateMin(): Date {
     const date = new Date();
     date.setFullYear(date.getFullYear() - 125);
     return date;
   }
 
-  public getBirthDateMax() {
+  public getBirthDateMax(): Date {
     const date = new Date();
     date.setFullYear(date.getFullYear() - 3);
     return date;

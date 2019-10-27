@@ -6,7 +6,5 @@ export class GroupClaimRequest extends ClaimRequest {
   public organization: Organization;
   public head: Person;
   public headEmail: string;
-  public groupPhone: string;
-  public groupEmail: string;
   public clusterId?: number;
 }

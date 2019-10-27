@@ -1,4 +1,10 @@
-<app-logo-card>
-  <app-group-person-request [personType]="personType"
-                            [(data)]="person"></app-group-person-request>
-</app-logo-card>
+<div fxFlexFill
+     fxLayout="column"
+     fxLayoutAlign="center center">
+  <mat-card class="mat-elevation-z24">
+    <app-group-person-request *ngIf="group"
+                              [group]="group"
+                              [personType]="personType"
+                              [(data)]="claimRequest"></app-group-person-request>
+  </mat-card>
+</div>

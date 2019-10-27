@@ -932,5 +932,9 @@
   "createAPersonalAccountArZone": "Создать личный кабинет AR.ZONE",
   "viewStatementText": "Посмотреть текст заявления",
   "personalProfile": "Личный профиль",
-  "groupTools": "Инструменты группы"
+  "groupTools": "Инструменты группы",
+  "organizationPhone": "Телефон организации",
+  "organizationEmail": "Еmail организации",
+  "headPersonPhone": "Телефон руководителя",
+  "headPersonEmail": "Еmail руководителя"
 }
