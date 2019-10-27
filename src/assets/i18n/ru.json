@@ -936,5 +936,6 @@
   "organizationPhone": "Телефон организации",
   "organizationEmail": "Еmail организации",
   "headPersonPhone": "Телефон руководителя",
-  "headPersonEmail": "Еmail руководителя"
+  "headPersonEmail": "Еmail руководителя",
+  "claim": "Заявка"
 }

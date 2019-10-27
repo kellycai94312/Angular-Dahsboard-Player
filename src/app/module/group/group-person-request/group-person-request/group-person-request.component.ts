@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HtmlContentComponent } from 'app/components/html-content/html-content/html-content.component';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { ClaimRequest } from 'app/data/remote/bean/claim-request';
@@ -33,12 +35,19 @@ import { AppHelper } from 'app/utils/app-helper';
 })
 export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest> {
 
+  @ViewChild('individualPersonClaimTemplate', {static: true})
+  public individualPersonClaimTemplate: TemplateRef<any>;
+
+  @ViewChild('legalEntityClaimTemplate', {static: true})
+  public legalEntityClaimTemplate: TemplateRef<any>;
+
   @Input()
   public group: Group;
 
   @Input()
   public personType: PersonType;
 
+  public readonly propertyConstantClass = PropertyConstant;
   public readonly personTypeClass = PersonType;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
@@ -58,6 +67,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
               private _translateObjectService: TranslateObjectService,
               private _router: Router,
               private _groupApiService: GroupApiService,
+              private _ngxModalService: NgxModalService,
               private _organizationTypeApiService: OrganizationTypeApiService,
               private _educationTypeApiService: EducationTypeApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
@@ -188,8 +198,31 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     }
   }
 
-  public onViewStatementText(): void {
+  public async onViewStatementText(): Promise<void> {
+    const modal = this._ngxModalService.open({size: 'lg', backdrop: true, centered: true});
+    modal.componentInstance.titleKey = 'claim';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
 
+      if (this.data instanceof GroupPersonClaimRequest) {
+        component.containerRef.createEmbeddedView(this.individualPersonClaimTemplate, {
+          $implicit: {
+            lastName: this.lastNgxInput.control.value,
+            firstName: this.firstNgxInput.control.value,
+            patronymic: this.patronymicNgxInput.control.value,
+            birthDate: this.birthDateNgxDate.control.value
+          }
+        });
+      } else if (this.data instanceof GroupClaimRequest) {
+        component.containerRef.createEmbeddedView(this.legalEntityClaimTemplate, {
+          $implicit: {
+            lastName: this.lastNgxInput.control.value,
+            firstName: this.firstNgxInput.control.value,
+            patronymic: this.patronymicNgxInput.control.value,
+            organizationName: this.organizationNameNgxInput.control.value
+          }
+        });
+      }
+    });
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {

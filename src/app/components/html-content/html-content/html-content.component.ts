@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 
 @Component({
   selector: 'app-html-content',
@@ -6,6 +6,9 @@ import {Component, Input} from '@angular/core';
   styleUrls: ['./html-content.component.scss']
 })
 export class HtmlContentComponent {
+
+  @ViewChild('container', {static: true, read: ViewContainerRef})
+  public containerRef: ViewContainerRef;
 
   @Input()
   public html: string;

@@ -63,7 +63,37 @@
               (click)="onSend()">{{'send' | translate}}</button>
       <button mat-raised-button
               class="text-uppercase"
+              [disabled]="formGroup.invalid"
               (click)="onViewStatementText()">{{'viewStatementText' | translate}}</button>
     </div>
   </div>
 </div>
+
+<ng-template #individualPersonClaimTemplate
+             let-item>
+  <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
+  <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
+    спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
+  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
+  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
+    федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
+  <p><br/> Я, __<em><u>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}
+    {{item.birthDate | date:'d-MM-y'}} г.р. </u></em>, прошу принять меня в члены Общественной организации &laquo;Региональная
+    спортивная
+    федерация дзюдо Санкт-Петербурга&raquo;. Обязуюсь соблюдать Устав организации, официальные правила и другие
+    официальные нормативно-правовые акты, содействовать деятельности Федерации и развитию вида спорта дзюдо.</p>
+</ng-template>
+
+<ng-template #legalEntityClaimTemplate
+             let-item>
+  <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
+  <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
+  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
+  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
+  <p><em><u>{{item.organizationName}}</u></em>, заявляя о намерении вступить в Общественную Организацию &laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;, подтверждает свое согласие действовать в соответствии с Уставом Федерации и локальными актами Федерации, исполнять решения Конференции Федерации, Президиума Федерации и других руководящих органов и должностных лиц Федерации, своевременно сообщать об изменении сведений, предоставленных в Федерацию, признает компетенцию Спортивного Арбитражного Суда при Автономной некоммерческой организации &laquo;Спортивная Арбитражная Палата&raquo;, по разрешению споров гражданско-правового характера, которые возникли или могут возникнуть при осуществлении членами Федерации своей деятельности.</p>
+  <p><strong>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}</strong></p>
+</ng-template>
