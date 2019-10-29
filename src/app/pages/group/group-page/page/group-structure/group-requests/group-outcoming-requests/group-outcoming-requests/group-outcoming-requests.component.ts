@@ -1,17 +1,18 @@
-import {Component, ComponentFactoryResolver, OnInit, ViewChild} from '@angular/core';
-import {PropertyConstant} from '../../../../../../../../data/local/property-constant';
-import {Group} from '../../../../../../../../data/remote/model/group/base/group';
-import {GroupService} from '../../../../../service/group.service';
-import {BaseGroupComponent} from '../../../../../../../../data/local/component/group/base-group-component';
-import {AppHelper} from '../../../../../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../../../../../data/remote/rest-api/participant-rest-api.service';
-import {PageContainer} from '../../../../../../../../data/remote/bean/page-container';
-import {GroupConnectionRequest} from '../../../../../../../../data/remote/model/group/connection/group-connection-request';
-import {NgxGridComponent} from '../../../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {TemplateModalService} from '../../../../../../../../service/template-modal.service';
-import {GroupConnectionRequestQuery} from '../../../../../../../../data/remote/rest-api/query/group/group-connection-request-query';
-import {GroupConnectionRequestType} from '../../../../../../../../data/remote/bean/group-connection-request-type';
-import {skipWhile, takeWhile} from 'rxjs/operators';
+import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { GroupConnectionRequestType } from 'app/data/remote/bean/group-connection-request-type';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { Group } from 'app/data/remote/model/group/base';
+import { GroupConnectionRequest } from 'app/data/remote/model/group/connection';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { GroupConnectionRequestQuery } from 'app/data/remote/rest-api/query/group/group-connection-request-query';
+import { GroupService } from 'app/pages/group/group-page/service/group.service';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { skipWhile, takeWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-outcoming-requests',
@@ -20,7 +21,7 @@ import {skipWhile, takeWhile} from 'rxjs/operators';
 })
 export class GroupOutcomingRequestsComponent extends BaseGroupComponent<Group> implements OnInit {
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, {static: false})
   public ngxGridComponent: NgxGridComponent;
 
   public readonly propertyConstantClass = PropertyConstant;
@@ -28,6 +29,7 @@ export class GroupOutcomingRequestsComponent extends BaseGroupComponent<Group> i
   constructor(private _participantRestApiService: ParticipantRestApiService,
               private _templateModalService: TemplateModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
+              private _groupApiService: GroupApiService,
               groupService: GroupService, appHelper: AppHelper) {
     super(groupService, appHelper);
   }
@@ -52,7 +54,7 @@ export class GroupOutcomingRequestsComponent extends BaseGroupComponent<Group> i
 
   public fetchItems = async (query: GroupConnectionRequestQuery): Promise<PageContainer<GroupConnectionRequest>> => {
     query.type = GroupConnectionRequestType.OUTCOMING;
-    return await this._participantRestApiService.getGroupConnectionRequests({}, query, {groupId: this.group.id});
+    return this._groupApiService.getGroupConnectionRequests(this.group, query).toPromise();
   };
 
   public onEdit = async (item: any) => {

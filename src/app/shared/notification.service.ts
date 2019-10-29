@@ -1,11 +1,11 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { Group } from 'app/data/remote/model/group/base';
+import { GroupConnectionRequest, GroupConnectionTypeEnum } from 'app/data/remote/model/group/connection';
 import { Observable, Subject } from 'rxjs';
 import { map, takeWhile } from 'rxjs/operators';
 import { NotificationWrapper } from '../data/remote/bean/wrapper/notification-wrapper';
-import { Group } from '../data/remote/model/group/base/group';
-import { GroupConnectionTypeEnum } from '../data/remote/model/group/connection/group-connection-type-enum';
 import { BaseNotification } from '../data/remote/model/notification/base/base-notification';
 import { EventNotification } from '../data/remote/model/notification/event/event-notification';
 import { EventPollNotification } from '../data/remote/model/notification/event/poll/event-poll-notification';
@@ -89,7 +89,8 @@ export class NotificationService implements OnDestroy {
       let innerGroup: string;
       let parentGroup: string;
 
-      if (notification.groupConnectionRequest.groupConnectionTypeEnum === GroupConnectionTypeEnum.REQUEST) {
+      // TODO: Fix notifications!
+      if (notification.groupConnectionRequest instanceof GroupConnectionRequest && notification.groupConnectionRequest.groupConnectionTypeEnum === GroupConnectionTypeEnum.REQUEST) {
         innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
         parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
       } else {

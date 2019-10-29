@@ -1,4 +1,4 @@
-import {FuseNavigation} from '@fuse/types';
+import { FuseNavigation } from '@fuse/types';
 
 export const navigation: FuseNavigation[] = [
   {
@@ -53,22 +53,9 @@ export const navigation: FuseNavigation[] = [
       {
         id: 'search',
         translate: 'search',
-        type: 'collapsable',
+        type: 'item',
         icon: 'search',
-        children: [
-          {
-            id: 'persons',
-            translate: 'persons.section',
-            type: 'item',
-            url: '/search/person'
-          },
-          {
-            id: 'groups',
-            translate: 'groups',
-            type: 'item',
-            url: '/search/group'
-          }
-        ]
+        url: '/search'
       },
       {
         id: 'calendar',

@@ -10,6 +10,15 @@
 
 .events-today {
   @include mat-icon-size(32px);
+  line-height: 0 !important;
+}
+
+.group-tools {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  font-weight: normal;
+  color: white !important;
+  background-color: #039be5 !important;
 }
 
 .show-more-button {

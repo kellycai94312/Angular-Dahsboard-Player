@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {PersonService} from '../service/person.service';
-import {ActivatedRoute} from '@angular/router';
-import {NgxTab} from '../../../../module/ngx/ngx-tabs/model/ngx-tab';
-import {BasePersonComponent} from '../../model/base-person-component';
-import {takeWhile} from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { NgxTab } from 'app/module/ngx/ngx-tabs/model/ngx-tab';
+import { takeWhile } from 'rxjs/operators';
+import { BasePersonComponent } from '../../model/base-person-component';
+import { PersonService } from '../service/person.service';
 
 @Component({
   selector: 'app-person-page',
@@ -20,8 +20,8 @@ export class PersonPageComponent extends BasePersonComponent implements OnInit {
     super(personService);
     this.tabs = [
       {translation: 'publications', link: 'publication'},
-      {translation: 'aboutMe', link: 'about-me'},
-      {translation: 'professionalProfile', link: 'professional-profile'}
+      {translation: 'personalProfile', link: 'about-me'}
+      // TODO: {translation: 'professionalProfile', link: 'professional-profile'}
     ];
   }
 

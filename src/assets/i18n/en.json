@@ -926,5 +926,14 @@
     "SHOWCASE": "Showcase",
     "SCHEDULE": "Schedule"
   },
-  "accountPerson": "Account"
+  "accountPerson": "Account",
+  "organizationName": "Organization name",
+  "createAPersonalAccountArZone": "Create a personal account AR.ZONE",
+  "viewStatementText": "View statement text",
+  "personalProfile": "Personal profile",
+  "groupTools": "Group tools",
+  "organizationPhone": "Organization phone",
+  "organizationEmail": "Organization email",
+  "headPersonPhone": "Head phone",
+  "claim": "Claim"
 }

@@ -1,0 +1,99 @@
+<div *ngIf="data"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout="column"
+       fxLayoutGap="10px"
+       fxLayoutAlign="start center">
+    <ngx-image [width]="128"
+               [height]="128"
+               [object]="group"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.GROUP"></ngx-image>
+    <div fxLayout="column">
+      <h4>{{group?.name}}</h4>
+      <p *ngIf="group?.description"
+         class="description">{{group?.description}}</p>
+    </div>
+  </div>
+
+  <div fxLayout="column">
+    <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
+      <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
+      <ngx-select [data]="organizationTypeNgxSelect"></ngx-select>
+    </ng-container>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <ngx-date fxFlex
+                [data]="birthDateNgxDate"></ngx-date>
+      <ngx-select fxFlex
+                  [data]="sexNgxSelect"></ngx-select>
+      <ngx-select *ngIf="personType !== personTypeClass.LEGAL_ENTITY"
+                  fxFlex
+                  [data]="educationNgxSelect"></ngx-select>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <new-ngx-input fxFlex
+                     [data]="phoneNgxInput"></new-ngx-input>
+      <new-ngx-input fxFlex
+                     [data]="emailNgxInput"></new-ngx-input>
+    </div>
+  </div>
+
+  <div fxLayout="column"
+       fxLayoutGap="20px"
+       fxLayoutAlign="center center">
+    <div fxLayout="column"
+         fxLayoutGap="5px">
+      <mat-checkbox #personalDataProcessingContractCheckbox>{{'personalDataProcessingContract' | translate}}</mat-checkbox>
+      <mat-checkbox [(ngModel)]="createPersonalAccount">{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <button mat-raised-button
+              class="text-uppercase"
+              color="primary"
+              [disabled]="!(formGroup.valid && personalDataProcessingContractCheckbox.checked)"
+              (click)="onSend()">{{'send' | translate}}</button>
+      <button mat-raised-button
+              class="text-uppercase"
+              [disabled]="formGroup.invalid"
+              (click)="onViewStatementText()">{{'viewStatementText' | translate}}</button>
+    </div>
+  </div>
+</div>
+
+<ng-template #individualPersonClaimTemplate
+             let-item>
+  <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
+  <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
+    спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
+  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
+  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
+    федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
+  <p><br/> Я, __<em><u>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}
+    {{item.birthDate | date:'d-MM-y'}} г.р. </u></em>, прошу принять меня в члены Общественной организации &laquo;Региональная
+    спортивная
+    федерация дзюдо Санкт-Петербурга&raquo;. Обязуюсь соблюдать Устав организации, официальные правила и другие
+    официальные нормативно-правовые акты, содействовать деятельности Федерации и развитию вида спорта дзюдо.</p>
+</ng-template>
+
+<ng-template #legalEntityClaimTemplate
+             let-item>
+  <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
+  <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
+  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
+  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
+  <p><em><u>{{item.organizationName}}</u></em>, заявляя о намерении вступить в Общественную Организацию &laquo;Региональная спортивная федерация дзюдо Санкт-Петербурга&raquo;, подтверждает свое согласие действовать в соответствии с Уставом Федерации и локальными актами Федерации, исполнять решения Конференции Федерации, Президиума Федерации и других руководящих органов и должностных лиц Федерации, своевременно сообщать об изменении сведений, предоставленных в Федерацию, признает компетенцию Спортивного Арбитражного Суда при Автономной некоммерческой организации &laquo;Спортивная Арбитражная Палата&raquo;, по разрешению споров гражданско-правового характера, которые возникли или могут возникнуть при осуществлении членами Федерации своей деятельности.</p>
+  <p><strong>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}</strong></p>
+</ng-template>

@@ -1,12 +1,16 @@
-import {BaseNotification} from '../base/base-notification';
-import {GroupNotificationType} from './group-notification-type';
-import {NotificationType} from '../base/notification-type';
-import {GroupPersonPosition} from '../../group/position/group-person-position';
-import {Type} from 'class-transformer';
+import { BaseGroupPerson, GROUP_PERSON_TYPE_OPTIONS } from 'app/data/remote/model/group/person';
+import { GroupPersonPosition } from 'app/data/remote/model/group/position';
+import { BaseNotification } from 'app/data/remote/model/notification/base/base-notification';
+import { NotificationType } from 'app/data/remote/model/notification/base/notification-type';
+import { Type } from 'class-transformer';
+import { GroupNotificationType } from './group-notification-type';
 
 export class GroupNotification extends BaseNotification {
 
   public groupNotificationType: GroupNotificationType;
+
+  @Type(() => BaseGroupPerson, GROUP_PERSON_TYPE_OPTIONS)
+  private groupPerson: BaseGroupPerson;
 
   //region Transient
 

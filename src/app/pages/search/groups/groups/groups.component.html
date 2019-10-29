@@ -1,6 +1,11 @@
-<app-list-heading translationTitle="groups"
-                  [actions]="actions"
-                  (searchTextChange)="onSearchTextChange($event)"
-                  (itemDisplayChange)="onItemDisplayChange($event)"></app-list-heading>
-<app-groups-list [groupQuery]="groupQuery"
-                 [itemDisplay]="itemDisplay"></app-groups-list>
+<div fxFill
+     fxLayout="column">
+  <app-list-heading translationTitle="groups"
+                    [actions]="actions"
+                    (searchTextChange)="onSearchTextChange($event)"
+                    (itemDisplayChange)="onItemDisplayChange($event)"></app-list-heading>
+  <app-groups-list fxFlex="grow"
+                   class="overflow-auto"
+                   [groupQuery]="groupQuery"
+                   [itemDisplay]="itemDisplay"></app-groups-list>
+</div>

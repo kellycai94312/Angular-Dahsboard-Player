@@ -1,15 +1,16 @@
-import {BaseNotification} from '../../base/base-notification';
-import {NotificationType} from '../../base/notification-type';
-import {GroupConnectionNotificationType} from './group-connection-notification-type';
-import {Type} from 'class-transformer';
-import {GroupConnectionRequest} from '../../../group/connection/group-connection-request';
+import { BaseGroupConnectionRequest } from 'app/data/remote/model/group/connection/base-group-connection-request';
+import { GROUP_CONNECTION_REQUEST_TYPE_OPTIONS } from 'app/data/remote/model/group/connection/group-connection-request-type-options';
+import { BaseNotification } from 'app/data/remote/model/notification/base/base-notification';
+import { NotificationType } from 'app/data/remote/model/notification/base/notification-type';
+import { Type } from 'class-transformer';
+import { GroupConnectionNotificationType } from './group-connection-notification-type';
 
 export class GroupConnectionNotification extends BaseNotification {
 
   public groupConnectionNotificationType: GroupConnectionNotificationType;
 
-  @Type(() => GroupConnectionRequest)
-  public groupConnectionRequest?: GroupConnectionRequest;
+  @Type(() => BaseGroupConnectionRequest, GROUP_CONNECTION_REQUEST_TYPE_OPTIONS)
+  public groupConnectionRequest?: BaseGroupConnectionRequest;
 
   constructor() {
     super();

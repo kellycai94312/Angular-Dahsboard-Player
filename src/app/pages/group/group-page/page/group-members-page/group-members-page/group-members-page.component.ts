@@ -1,10 +1,10 @@
 import { Component, ComponentFactoryResolver, ViewChild } from '@angular/core';
+import { GroupPerson } from 'app/data/remote/model/group/person';
 import { SelectionType } from '../../../../../../components/ngx-grid/bean/selection-type';
 import { NgxGridComponent } from '../../../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
 import { SplitButtonItem } from '../../../../../../components/ngx-split-button/bean/split-button-item';
 import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
 import { PropertyConstant } from '../../../../../../data/local/property-constant';
-import { GroupPerson } from '../../../../../../data/remote/model/group';
 import { Group, GroupTypeEnum } from '../../../../../../data/remote/model/group/base';
 import { PersonTransitionType } from '../../../../../../data/remote/model/group/transition';
 import { UserRoleEnum } from '../../../../../../data/remote/model/user-role-enum';
@@ -26,7 +26,7 @@ export class GroupMembersPageComponent extends BaseGroupComponent<Group> {
   public readonly groupTypeEnumClass = GroupTypeEnum;
   public readonly selectionTypeClass = SelectionType;
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, {static: false})
   public ngxGridComponent: NgxGridComponent;
 
   public readonly splitButtonsItems: SplitButtonItem[];

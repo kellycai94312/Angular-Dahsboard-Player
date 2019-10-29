@@ -31,7 +31,7 @@ import { AppHelper } from 'app/utils/app-helper';
 })
 export class SubgroupPersonListComponent implements OnChanges, AfterViewInit {
 
-  @ViewChild(NgxGridComponent, {static: false})
+  @ViewChild(NgxGridComponent, {static: true})
   public ngxGridComponent: NgxGridComponent;
 
   @Input()

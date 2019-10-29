@@ -1,8 +1,8 @@
-import {OnInit} from '@angular/core';
-import {AppHelper} from '../../../../utils/app-helper';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {PersonService} from '../../../person/person-page/service/person.service';
+import { OnInit } from '@angular/core';
+import { GroupPerson } from '../../../../data/remote/model/group/person/group-person';
+import { ParticipantRestApiService } from '../../../../data/remote/rest-api/participant-rest-api.service';
+import { AppHelper } from '../../../../utils/app-helper';
+import { PersonService } from '../../../person/person-page/service/person.service';
 
 // @Component({
 //   selector: 'app-my-groups',

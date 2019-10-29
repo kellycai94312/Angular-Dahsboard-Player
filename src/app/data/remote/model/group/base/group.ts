@@ -4,7 +4,7 @@ import { Activity } from '../../activity/activity';
 import { BaseAddress } from '../../address/base/base-address';
 import { PlainAddress } from '../../address/plain-address';
 import { Person } from '../../person';
-import { GroupPersonState } from '../group-person-state';
+import { GroupPersonState } from '../person/group-person-state';
 import { GroupTypeEnum } from './group-type-enum';
 
 export class Group extends NamedObject {
@@ -37,6 +37,7 @@ export class Group extends NamedObject {
   public account?: string;
   public bik?: string;
   public kbk?: string;
+  public email?: string;
 
   //region Transient
 

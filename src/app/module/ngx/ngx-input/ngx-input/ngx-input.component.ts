@@ -1,8 +1,7 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {NgxInput} from '../model/ngx-input';
-import {ValidationService} from '../../../../service/validation/validation.service';
-import {NgxInputType} from '../model/ngx-input-type';
-import {Validators} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ValidationService } from '../../../../service/validation/validation.service';
+import { NgxInput } from '../model/ngx-input';
+import { NgxInputType } from '../model/ngx-input-type';
 
 @Component({
   selector: 'new-ngx-input',
@@ -33,11 +32,8 @@ export class NgxInputComponent {
       return;
     }
 
-    ngxInput.control.setValidators([Validators.maxLength(ngxInput.type === NgxInputType.TEXTAREA ? this._validationService.descriptionMaxLength : this._validationService.nameMaxLength)]);
     if (!ngxInput.getErrorMessage) {
-      ngxInput.getErrorMessage = () => {
-        return this._validationService.getError(ngxInput.control);
-      };
+      ngxInput.getErrorMessage = () => this._validationService.getError(ngxInput.control);
     }
   }
 

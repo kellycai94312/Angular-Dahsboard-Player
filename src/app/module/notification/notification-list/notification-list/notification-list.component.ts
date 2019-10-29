@@ -1,14 +1,14 @@
-import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
-import {NotificationApiService} from '../../../../data/remote/rest-api/api/notification/notification-api.service';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {BaseNotification} from '../../../../data/remote/model/notification/base/base-notification';
-import {AppHelper} from '../../../../utils/app-helper';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {NotificationService} from '../../../../shared/notification.service';
-import {takeWhile} from 'rxjs/operators';
-import {EMPTY, Observable} from 'rxjs';
+import { AfterViewInit, Component, OnDestroy, ViewChild } from '@angular/core';
+import { EMPTY, Observable } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { Direction } from '../../../../components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { PageContainer } from '../../../../data/remote/bean/page-container';
+import { BaseNotification } from '../../../../data/remote/model/notification/base/base-notification';
+import { NotificationApiService } from '../../../../data/remote/rest-api/api/notification/notification-api.service';
+import { PageQuery } from '../../../../data/remote/rest-api/page-query';
+import { NotificationService } from '../../../../shared/notification.service';
+import { AppHelper } from '../../../../utils/app-helper';
 
 @Component({
   selector: 'app-notification-list',
@@ -17,7 +17,7 @@ import {EMPTY, Observable} from 'rxjs';
 })
 export class NotificationListComponent implements AfterViewInit, OnDestroy {
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   private _readBeforeDate: Date;
@@ -46,12 +46,10 @@ export class NotificationListComponent implements AfterViewInit, OnDestroy {
   public fetchItems = async (direction: Direction, query: PageQuery): Promise<PageContainer<BaseNotification>> => {
     const pageContainer = await this._notificationApiService.getNotifications(query).toPromise();
     const readBeforeDate = new Date(pageContainer.list
-      .filter(x => x.read)
       .map(x => new Date(x.created).getTime())
       .reduce((previousValue, currentValue) => Math.max(previousValue, currentValue)));
 
     await this._updateReadNotifications(readBeforeDate).toPromise();
-
     return pageContainer;
   };
 

@@ -1,8 +1,8 @@
-import {PageQuery} from '../../page-query';
-import {GroupTypeEnum} from '../../../model/group/base/group-type-enum';
-import {UserRoleEnum} from '../../../model/user-role-enum';
-import {StageEnum} from '../../../model/stage/stage-enum';
-import {GroupPersonState} from '../../../model/group/group-person-state';
+import { GroupTypeEnum } from 'app/data/remote/model/group/base';
+import { GroupPersonState } from 'app/data/remote/model/group/person';
+import { StageEnum } from 'app/data/remote/model/stage/stage-enum';
+import { UserRoleEnum } from 'app/data/remote/model/user-role-enum';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
 
 export class EventGroupQuery extends PageQuery {
   groupTypeEnum?: GroupTypeEnum;

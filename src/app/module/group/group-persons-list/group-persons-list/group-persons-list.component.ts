@@ -1,12 +1,12 @@
-import {Component, ComponentFactoryResolver, Input, ViewChild} from '@angular/core';
-import {Direction} from '../../../../components/ngx-virtual-scroll/model/direction';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {NgxVirtualScrollComponent} from '../../../../components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {GroupPersonQuery} from '../../../../data/remote/rest-api/query/group-person-query';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {TemplateModalService} from '../../../../service/template-modal.service';
+import { Component, ComponentFactoryResolver, Input, ViewChild } from '@angular/core';
+import { Direction } from 'app/components/ngx-virtual-scroll/model/direction';
+import { NgxVirtualScrollComponent } from 'app/components/ngx-virtual-scroll/ngx-virtual-scroll/ngx-virtual-scroll.component';
+import { GroupPerson } from 'app/data/remote/model/group/person';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
+import { TemplateModalService } from 'app/service/template-modal.service';
+import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
   selector: 'app-group-persons-list',
@@ -15,7 +15,7 @@ import {TemplateModalService} from '../../../../service/template-modal.service';
 })
 export class GroupPersonsListComponent {
 
-  @ViewChild(NgxVirtualScrollComponent, { static: false })
+  @ViewChild(NgxVirtualScrollComponent, {static: false})
   public ngxVirtualScrollComponent: NgxVirtualScrollComponent;
 
   @Input()

@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { FileClass } from 'app/data/remote/model/file/base';
+import { ImageType } from 'app/data/remote/model/file/image';
+import { Group } from 'app/data/remote/model/group/base';
+import { IntervalGroup } from 'app/data/remote/model/group/interval';
+import { Organization } from 'app/data/remote/model/group/organization';
+import { BaseGroupPerson, GroupPerson, GroupPersonState } from 'app/data/remote/model/group/person';
+import { Team } from 'app/data/remote/model/group/team';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { MenuItem } from 'app/module/common/item-line/model/menu-item';
+import { GroupWindowService } from 'app/services/windows/group-window/group-window.service';
+import { PermissionService } from 'app/shared/permission.service';
+import { AppHelper } from 'app/utils/app-helper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { FileClass } from '../../../../data/remote/model/file/base/file-class';
-import { ImageType } from '../../../../data/remote/model/file/image/image-type';
-import { GroupPerson, GroupPersonState } from '../../../../data/remote/model/group';
-import { Group } from '../../../../data/remote/model/group/base';
-import { IntervalGroup } from '../../../../data/remote/model/group/interval';
-import { Organization } from '../../../../data/remote/model/group/organization/organization';
-import { Team } from '../../../../data/remote/model/group/team';
-import { GroupApiService } from '../../../../data/remote/rest-api/api/group/group-api.service';
-import { GroupWindowService } from '../../../../services/windows/group-window/group-window.service';
-import { PermissionService } from '../../../../shared/permission.service';
-import { AppHelper } from '../../../../utils/app-helper';
-import { MenuItem } from '../../../common/item-line/model/menu-item';
 
 @Component({
   selector: 'app-group-head',
@@ -29,7 +29,7 @@ export class GroupHeadComponent {
   public group: Group;
 
   @Input()
-  public set groupPerson(value: GroupPerson) {
+  public set groupPerson(value: BaseGroupPerson) {
     this._groupPerson = value;
     this._updateGroupActions();
   }
@@ -44,12 +44,12 @@ export class GroupHeadComponent {
   public readonly navigate = new EventEmitter();
 
   @Output()
-  public readonly changeGroupPerson = new EventEmitter<GroupPerson>();
+  public readonly changeGroupPerson = new EventEmitter<BaseGroupPerson>();
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public actions: MenuItem[] = [];
-  private _groupPerson: GroupPerson;
+  private _groupPerson: BaseGroupPerson;
 
   constructor(private _translateService: TranslateService,
               private _permissionService: PermissionService,
@@ -59,7 +59,7 @@ export class GroupHeadComponent {
               private _groupApiService: GroupApiService) {
   }
 
-  public get groupPerson(): GroupPerson {
+  public get groupPerson(): BaseGroupPerson {
     return this._groupPerson;
   }
 
@@ -102,20 +102,22 @@ export class GroupHeadComponent {
     const isOwner = this._groupPerson && this._permissionService.areYouCreator(this.group, this._groupPerson.person);
     if (this._groupPerson) {
       if (!isOwner) {
-        if (this._groupPerson.state !== GroupPersonState.FOLLOWING) {
-          this.actions.push({
-            translationLabel: 'leave',
-            action: item => {
-              this._leaveGroup(this.group).subscribe();
-            }
-          });
-        } else if (this._groupPerson.state === GroupPersonState.FOLLOWING) {
-          this.actions.push({
-            translationLabel: 'unsubscribe',
-            action: item => {
-              this._leaveGroup(this.group).subscribe();
-            }
-          });
+        if (this._groupPerson instanceof GroupPerson) {
+          if (this._groupPerson.state !== GroupPersonState.FOLLOWING) {
+            this.actions.push({
+              translationLabel: 'leave',
+              action: item => {
+                this._leaveGroup(this.group).subscribe();
+              }
+            });
+          } else if (this._groupPerson.state === GroupPersonState.FOLLOWING) {
+            this.actions.push({
+              translationLabel: 'unsubscribe',
+              action: item => {
+                this._leaveGroup(this.group).subscribe();
+              }
+            });
+          }
         }
       }
     } else {

@@ -2,10 +2,12 @@ import { ComponentFactoryResolver, Injectable, OnDestroy } from '@angular/core';
 import { DialogResult } from 'app/data/local/dialog-result';
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { PageContainer } from 'app/data/remote/bean/page-container';
-import { GroupPerson, GroupPersonState } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
+import { BaseGroupPerson, GroupPerson, GroupPersonState } from 'app/data/remote/model/group/person';
 import { BasePosition } from 'app/data/remote/model/person-position/base-position';
+import { GroupPosition } from 'app/data/remote/model/person-position/group-position';
 import { Position } from 'app/data/remote/model/person-position/position';
+import { PositionUserRole } from 'app/data/remote/model/person-position/position-user-role';
 import { UserRole } from 'app/data/remote/model/user-role';
 import { UserRoleEnum } from 'app/data/remote/model/user-role-enum';
 import { GroupApiService } from 'app/data/remote/rest-api/api/group/group-api.service';
@@ -22,7 +24,7 @@ import { shareReplay } from 'rxjs/operators';
 export class GroupService implements OnDestroy {
 
   public readonly group$: Observable<Group>;
-  public readonly groupPerson$: Observable<GroupPerson>;
+  public readonly groupPerson$: Observable<BaseGroupPerson>;
   public refreshMembers: Subject<void>;
 
   get updateData$(): Observable<any> {
@@ -31,7 +33,7 @@ export class GroupService implements OnDestroy {
 
   private readonly _groupSubject: Subject<Group>;
   private readonly _groupSubscription: Unsubscribable;
-  private readonly _groupPersonSubject: Subject<GroupPerson>;
+  private readonly _groupPersonSubject: Subject<BaseGroupPerson>;
   private readonly _updateDataSubject = new Subject<any>();
 
   constructor(private _permissionService: PermissionService,
@@ -46,7 +48,7 @@ export class GroupService implements OnDestroy {
       await this.initializeGroupPerson(val);
     });
 
-    this._groupPersonSubject = new Subject<GroupPerson>();
+    this._groupPersonSubject = new Subject<BaseGroupPerson>();
     this.groupPerson$ = this._groupPersonSubject.asObservable().pipe(shareReplay(1));
     this.refreshMembers = new Subject<void>();
   }
@@ -71,22 +73,22 @@ export class GroupService implements OnDestroy {
     this._groupSubject.next(group);
   }
 
-  public updateGroupPerson(groupPerson: GroupPerson): void {
+  public updateGroupPerson(groupPerson: BaseGroupPerson): void {
     this._groupPersonSubject.next(groupPerson);
   }
 
   public async showSelectionGroupVacanciesModal(group: Group,
                                                 unassigned: boolean,
                                                 items: BasePosition[]): Promise<DialogResult<BasePosition[]>> {
-    return await this.showSelectionGroupPersonPositions(items, async (query: GroupPersonPositionQuery) => {
+    return this.showSelectionGroupPersonPositions(items, async (query: GroupPersonPositionQuery) => {
       query.unassigned = unassigned;
-      return await this._groupApiService.getGroupVacancies(group, query).toPromise();
+      return this._groupApiService.getGroupVacancies(group, query).toPromise();
     });
   }
 
   private async showSelectionGroupPersonPositions(items: BasePosition[],
                                                   fetchItems: (query: GroupPersonPositionQuery) => Promise<PageContainer<BasePosition>>): Promise<DialogResult<BasePosition[]>> {
-    return await this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPositionItemComponent,
+    return this._modalBuilderService.showSelectionItemsModal(items, fetchItems, GroupPositionItemComponent,
       async (component, data) => {
         await component.initialize(data);
       },
@@ -108,11 +110,11 @@ export class GroupService implements OnDestroy {
   //#region Permission
 
   public async canEditGroup(): Promise<boolean> {
-    return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR]);
   }
 
   public async canEditSubgroup(): Promise<boolean> {
-    return await this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.TRAINER]);
+    return this.canEditByAnyUserRole([UserRoleEnum.ADMIN, UserRoleEnum.OPERATOR, UserRoleEnum.TRAINER]);
   }
 
   public async canShowTemplatesSubgroups(): Promise<boolean> {
@@ -141,7 +143,7 @@ export class GroupService implements OnDestroy {
 
   private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
     const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
-    if (groupPerson) {
+    if (groupPerson instanceof GroupPerson) {
       if (groupPerson.state !== GroupPersonState.APPROVED) {
         return false;
       }
@@ -149,11 +151,17 @@ export class GroupService implements OnDestroy {
       const positions = (await this._groupApiService.getGroupPersonPositions(groupPerson, {
         unassigned: false,
         count: PropertyConstant.pageSizeMax
-      }).toPromise()).list.map(x => x.position as any as Position);
+      }).toPromise()).list.map(x => x.position);
 
       let userRoles: UserRole[] = [];
       for (const item of positions) {
-        const result = this._appHelper.except(item.positionUserRoles.map(x => x.userRole), userRoles);
+        let positionUserRoles: PositionUserRole[] = [];
+        if (item instanceof GroupPosition) {
+          positionUserRoles = item.relevantPosition.positionUserRoles;
+        } else if (item instanceof Position) {
+          positionUserRoles = item.positionUserRoles;
+        }
+        const result = this._appHelper.except(positionUserRoles.map(x => x.userRole), userRoles);
         if (result.length) {
           userRoles = userRoles.concat(result);
         }

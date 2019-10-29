@@ -1,12 +1,11 @@
-import {Component, ViewChild} from '@angular/core';
-import {BaseGroupComponent} from '../../../../../../data/local/component/group/base-group-component';
-import {Group} from '../../../../../../data/remote/model/group/base/group';
-import {GroupPersonsListComponent} from '../../../../../../module/group/group-persons-list/group-persons-list/group-persons-list.component';
-import {GroupPersonQuery} from '../../../../../../data/remote/rest-api/query/group-person-query';
-import {GroupService} from '../../../service/group.service';
-import {AppHelper} from '../../../../../../utils/app-helper';
-import {GroupPerson} from '../../../../../../data/remote/model/group/group-person';
-import {GroupPersonState} from '../../../../../../data/remote/model/group/group-person-state';
+import { Component, ViewChild } from '@angular/core';
+import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
+import { Group } from 'app/data/remote/model/group/base';
+import { GroupPerson, GroupPersonState } from 'app/data/remote/model/group/person';
+import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
+import { GroupService } from 'app/pages/group/group-page/service/group.service';
+import { AppHelper } from 'app/utils/app-helper';
+import { GroupPersonsListComponent } from '../../../../../../module/group/group-persons-list/group-persons-list/group-persons-list.component';
 
 @Component({
   selector: 'app-group-subscribers-page',
@@ -15,7 +14,7 @@ import {GroupPersonState} from '../../../../../../data/remote/model/group/group-
 })
 export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
 
-  @ViewChild(GroupPersonsListComponent, { static: false })
+  @ViewChild(GroupPersonsListComponent, {static: false})
   public groupPersonsListComponent: GroupPersonsListComponent;
 
   public query: GroupPersonQuery;
@@ -28,7 +27,7 @@ export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
   async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
-    this.query.state = GroupPersonState.FOLLOWING;
+    this.query.groupPersonState = GroupPersonState.FOLLOWING;
     await this.groupPersonsListComponent.updateItems();
   }
 

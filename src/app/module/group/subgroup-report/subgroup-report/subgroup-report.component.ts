@@ -1,30 +1,30 @@
-import {Component, ComponentFactoryResolver, Input, OnInit} from '@angular/core';
-import {NgxSelect} from '../../../ngx/ngx-select/model/ngx-select';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {PositionLevelEnum} from '../../../../data/remote/model/person-position/position-level-enum';
-import {filter, flatMap, map, takeWhile} from 'rxjs/operators';
-import {TranslateObjectService} from '../../../../shared/translate-object.service';
-import {PositionApiService} from '../../../../data/remote/rest-api/api/position/position-api.service';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {ParticipantRestApiService} from '../../../../data/remote/rest-api/participant-rest-api.service';
-import {NodeConfiguration} from '../../../ngx/ngx-tree/model/node-configuration';
-import {FlatNode} from '../../../ngx/ngx-tree/model/flat-node';
-import {DynamicDataSource} from '../../../ngx/ngx-tree/utils/dynamic-data-source';
-import {SubgroupTemplateApiService} from '../../../../data/remote/rest-api/api/subgroup-template/subgroup-template-api.service';
-import {SubgroupTemplate} from '../../../../data/remote/model/group/subgroup/template/subgroup-template';
-import {SubgroupTemplateGroupVersionApiService} from '../../../../data/remote/rest-api/api/subgroup-template-group-version/subgroup-template-group-version-api.service';
-import {SubgroupTemplateGroup} from '../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
-import {SubgroupTemplateGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-template-group/subgroup-template-group-api.service';
-import {SubgroupTemplateGroupVersion} from '../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
-import {SubgroupGroup} from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {SubgroupTemplateGroupVersionPersonPosition} from '../../../../data/remote/bean/subgroup-template-group-version-person-position';
-import {SubgroupTemplateGroupVersionQuery} from '../../../../data/remote/rest-api/api/subgroup-template-group-version/model/subgroup-template-group-version-query';
-import {RootSubgroupGroup} from '../../../../pages/group/group-page/page/subgroups-page/page/structure-subgroups-page/model/root-subgroup-group';
-import {from} from 'rxjs';
-import {SubgroupVersion} from '../../../../data/remote/model/group/subgroup/version/subgroup-version';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {SubgroupGroupReceiptComponent} from '../../subgroup-group-receipt/subgroup-group-receipt/subgroup-group-receipt.component';
-import {SubgroupGroupAttendanceReportComponent} from '../../report/subgroup-group-attendance-report/subgroup-group-attendance-report/subgroup-group-attendance-report.component';
+import { Component, ComponentFactoryResolver, Input, OnInit } from '@angular/core';
+import { RankApiService } from 'app/data/remote/rest-api/api/rank/rank-api.service';
+import { from } from 'rxjs';
+import { filter, flatMap, map, takeWhile } from 'rxjs/operators';
+import { NgxModalService } from '../../../../components/ngx-modal/service/ngx-modal.service';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { SubgroupTemplateGroupVersionPersonPosition } from '../../../../data/remote/bean/subgroup-template-group-version-person-position';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { SubgroupGroup } from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupTemplate } from '../../../../data/remote/model/group/subgroup/template/subgroup-template';
+import { SubgroupTemplateGroup } from '../../../../data/remote/model/group/subgroup/template/subgroup-template-group';
+import { SubgroupTemplateGroupVersion } from '../../../../data/remote/model/group/subgroup/template/subgroup-template-group-version';
+import { SubgroupVersion } from '../../../../data/remote/model/group/subgroup/version/subgroup-version';
+import { PositionLevelEnum } from '../../../../data/remote/model/person-position/position-level-enum';
+import { PositionApiService } from '../../../../data/remote/rest-api/api/position/position-api.service';
+import { SubgroupTemplateGroupVersionQuery } from '../../../../data/remote/rest-api/api/subgroup-template-group-version/model/subgroup-template-group-version-query';
+import { SubgroupTemplateGroupVersionApiService } from '../../../../data/remote/rest-api/api/subgroup-template-group-version/subgroup-template-group-version-api.service';
+import { SubgroupTemplateGroupApiService } from '../../../../data/remote/rest-api/api/subgroup-template-group/subgroup-template-group-api.service';
+import { SubgroupTemplateApiService } from '../../../../data/remote/rest-api/api/subgroup-template/subgroup-template-api.service';
+import { RootSubgroupGroup } from '../../../../pages/group/group-page/page/subgroups-page/page/structure-subgroups-page/model/root-subgroup-group';
+import { TranslateObjectService } from '../../../../shared/translate-object.service';
+import { NgxSelect } from '../../../ngx/ngx-select/model/ngx-select';
+import { FlatNode } from '../../../ngx/ngx-tree/model/flat-node';
+import { NodeConfiguration } from '../../../ngx/ngx-tree/model/node-configuration';
+import { DynamicDataSource } from '../../../ngx/ngx-tree/utils/dynamic-data-source';
+import { SubgroupGroupAttendanceReportComponent } from '../../report/subgroup-group-attendance-report/subgroup-group-attendance-report/subgroup-group-attendance-report.component';
+import { SubgroupGroupReceiptComponent } from '../../subgroup-group-receipt/subgroup-group-receipt/subgroup-group-receipt.component';
 
 @Component({
   selector: 'app-subgroup-report',
@@ -58,7 +58,7 @@ export class SubgroupReportComponent implements OnInit {
   private _notDestroyed = true;
 
   constructor(private _translateObjectService: TranslateObjectService,
-              private _participantRestApiService: ParticipantRestApiService,
+              private _rankApiService: RankApiService,
               private _ngxModalService: NgxModalService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _subgroupTemplateApiService: SubgroupTemplateApiService,
@@ -108,7 +108,10 @@ export class SubgroupReportComponent implements OnInit {
     this.positionLevelNgxSelect.control.valueChanges
       .pipe(
         takeWhile(() => this._notDestroyed),
-        flatMap(value => this._positionApiService.getPositions({positionLevelEnum: value ? value.data : void 0, count: PropertyConstant.pageSizeMax}))
+        flatMap(value => this._positionApiService.getPositions({
+          positionLevelEnum: value ? value.data : void 0,
+          count: PropertyConstant.pageSizeMax
+        }))
       )
       .subscribe((value) => {
         this.positionNgxSelect.items = value.list;
@@ -129,7 +132,7 @@ export class SubgroupReportComponent implements OnInit {
     this.rankNgxSelect.labelTranslation = 'rank';
     this.rankNgxSelect.display = 'name';
     this.rankNgxSelect.hasNone = true;
-    this.rankNgxSelect.items = await this._participantRestApiService.getRanks();
+    this.rankNgxSelect.items = await this._rankApiService.getRanks().toPromise();
     this.rankNgxSelect.control.valueChanges
       .pipe(takeWhile(() => this._notDestroyed))
       .subscribe(() => {

@@ -1,6 +1,6 @@
-import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {NgxSelect} from '../model/ngx-select';
-import {ValidationService} from '../../../../service/validation/validation.service';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ValidationService } from 'app/service/validation/validation.service';
+import { NgxSelect } from '../model/ngx-select';
 
 @Component({
   selector: 'ngx-select',
@@ -17,6 +17,7 @@ export class NgxSelectComponent {
   @Input()
   set data(value: NgxSelect) {
     this._data = value;
+    this.initialize(value);
   }
 
   private _data: NgxSelect;
@@ -30,9 +31,7 @@ export class NgxSelectComponent {
     }
 
     if (!ngxSelect.getErrorMessage) {
-      ngxSelect.getErrorMessage = () => {
-        return this._validationService.getError(ngxSelect.control);
-      };
+      ngxSelect.getErrorMessage = () => this._validationService.getError(ngxSelect.control);
     }
   }
 
@@ -50,6 +49,6 @@ export class NgxSelectComponent {
       return this.data.compare(first, second);
     }
     return first === second;
-  }
+  };
 
 }

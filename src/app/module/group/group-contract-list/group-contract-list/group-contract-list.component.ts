@@ -1,18 +1,16 @@
-import {Component, Input, ViewChild} from '@angular/core';
-import {GroupPerson} from '../../../../data/remote/model/group/group-person';
-import {NgxModalService} from '../../../../components/ngx-modal/service/ngx-modal.service';
-import {EditGroupContractComponent} from '../../edit-group-contract/edit-group-contract/edit-group-contract.component';
-import {UtilService} from '../../../../services/util/util.service';
-import {BaseGroupContract} from '../../../../data/remote/model/group/contract/base-group-contract';
-import {GroupContractService} from '../../../../data/remote/model/group/contract/group-contract-service';
-import {PageQuery} from '../../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../../data/remote/bean/page-container';
-import {GroupApiService} from '../../../../data/remote/rest-api/api/group/group-api.service';
-import {AppHelper} from '../../../../utils/app-helper';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {NgxGridComponent} from '../../../../components/ngx-grid/ngx-grid/ngx-grid.component';
-import {ReportExtension} from '../../../../data/remote/bean/report-extension';
-import {GroupContractType} from '../../../../data/remote/model/group/contract/group-contract-type';
+import { Component, Input, ViewChild } from '@angular/core';
+import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { ReportExtension } from 'app/data/remote/bean/report-extension';
+import { BaseGroupContract, GroupContractService, GroupContractType } from 'app/data/remote/model/group/contract';
+import { GroupPerson } from 'app/data/remote/model/group/person';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { EditGroupContractComponent } from 'app/module/group/edit-group-contract/edit-group-contract/edit-group-contract.component';
+import { UtilService } from 'app/services/util/util.service';
+import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
   selector: 'app-group-contract-list',
@@ -21,7 +19,7 @@ import {GroupContractType} from '../../../../data/remote/model/group/contract/gr
 })
 export class GroupContractListComponent {
 
-  @ViewChild(NgxGridComponent, { static: false })
+  @ViewChild(NgxGridComponent, {static: false})
   public ngxGridComponent: NgxGridComponent;
 
   @Input()
