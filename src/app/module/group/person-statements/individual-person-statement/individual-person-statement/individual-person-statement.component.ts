@@ -1,19 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PreviewNamedObjectComponent } from 'app/components/named-object/preview-named-object/preview-named-object.component';
+import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
+import { DialogResult } from 'app/data/local/dialog-result';
 import { PropertyConstant } from 'app/data/local/property-constant';
+import { PageContainer } from 'app/data/remote/bean/page-container';
 import { Country } from 'app/data/remote/model/address/linked/country';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import { Document } from 'app/data/remote/model/document/document';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
+import {
+  BaseGroupPersonClaimState,
+  GroupPersonClaimRank,
+  GroupPersonClaimStatus
+} from 'app/data/remote/model/group/person/state';
 import { Person } from 'app/data/remote/model/person';
 import { Position } from 'app/data/remote/model/person-position/position';
 import { GroupApiService, PositionApiService } from 'app/data/remote/rest-api/api';
 import { CountryApiService } from 'app/data/remote/rest-api/api/country/country-api.service';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { EditGroupPersonClaimStateComponent } from 'app/module/group/edit-group-person-claim-state/edit-group-person-claim-state/edit-group-person-claim-state.component';
 import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
@@ -28,8 +39,12 @@ import { AppHelper } from 'app/utils/app-helper';
 })
 export class IndividualPersonStatementComponent extends BaseEditComponent<IndividualPersonStatement> {
 
+  @ViewChild(NgxGridComponent, {static: true})
+  public ngxGridComponent: NgxGridComponent;
+
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
+  public readonly propertyConstantClass = PropertyConstant;
 
   public person: Person;
 
@@ -54,6 +69,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
               private _countryApiService: CountryApiService,
               private _groupApiService: GroupApiService,
               private _router: Router,
+              private _ngxModalService: NgxModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
   }
@@ -132,6 +148,112 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
       this.positions = result.data;
     }
   }
+
+  public fetchItems = async (query: PageQuery): Promise<PageContainer<any>> => {
+    if (this.data.person) {
+      const items = await this._groupApiService.getGroupPersonClaimStates(this.data.group, this.data.person).toPromise();
+      return this.appHelper.arrayToPageContainer(items);
+    }
+    return void 0;
+  };
+  public addNewRow = async () => {
+    const result = await this._showEditGroupPersonClaimStateComponent(new GroupPersonClaimStatus());
+    if (result.result) {
+      this.ngxGridComponent.items.push(result.data);
+    }
+  };
+
+  public editTable = async (baseGroupPersonClaimState: BaseGroupPersonClaimState) => {
+    const result = await this._showEditGroupPersonClaimStateComponent(baseGroupPersonClaimState);
+    if (result.result) {
+      const itemIndex = this.ngxGridComponent.items.findIndex((x: BaseGroupPersonClaimState) => x.id === result.data.id);
+      if (itemIndex > -1) {
+        if (result.data.deleted) {
+          this.ngxGridComponent.items.splice(itemIndex, 1);
+        } else {
+          this.ngxGridComponent.items[itemIndex] = result.data;
+        }
+      }
+    }
+  };
+
+  private async _showEditGroupPersonClaimStateComponent(baseGroupPersonClaimState: BaseGroupPersonClaimState): Promise<DialogResult<BaseGroupPersonClaimState>> {
+    const modal = this._ngxModalService.open();
+
+    let editGroupPersonClaimStateComponent: EditGroupPersonClaimStateComponent;
+    await modal.componentInstance.initializeBody(EditGroupPersonClaimStateComponent, async component => {
+      editGroupPersonClaimStateComponent = component;
+      await component.initialize(baseGroupPersonClaimState);
+
+      modal.componentInstance.splitButtonItems = [
+        this._ngxModalService.saveSplitItemButton(async () => {
+          await this._ngxModalService.save(modal, component);
+        }),
+        this._ngxModalService.removeSplitItemButton(async () => {
+          await this._ngxModalService.remove(modal, component);
+        })
+      ];
+    });
+    const result = await this._ngxModalService.awaitModalResult(modal);
+    return {result, data: editGroupPersonClaimStateComponent.data};
+  }
+
+  //region Table map
+  public getStatus(baseGroupPersonClaimState: BaseGroupPersonClaimState): string {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank) {
+      return baseGroupPersonClaimState.personRank.rank.claimState.name;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus) {
+      return baseGroupPersonClaimState.claimState.name;
+    }
+    return void 0;
+  }
+
+  public getName(baseGroupPersonClaimState: BaseGroupPersonClaimState): string {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank) {
+      return baseGroupPersonClaimState.personRank.rank.name;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus) {
+      return baseGroupPersonClaimState.name;
+    }
+    return void 0;
+  }
+
+  public getSportTypeName(baseGroupPersonClaimState: BaseGroupPersonClaimState): string {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank && baseGroupPersonClaimState.personRank.sportType) {
+      return baseGroupPersonClaimState.personRank.sportType.name;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus && baseGroupPersonClaimState.sportType) {
+      return baseGroupPersonClaimState.sportType.name;
+    }
+    return void 0;
+  }
+
+  public getNumber(baseGroupPersonClaimState: BaseGroupPersonClaimState): string {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank) {
+      return baseGroupPersonClaimState.personRank.number;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus) {
+      return baseGroupPersonClaimState.number;
+    }
+    return void 0;
+  }
+
+  public getIssuedBy(baseGroupPersonClaimState: BaseGroupPersonClaimState): string {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank) {
+      return baseGroupPersonClaimState.personRank.issuedBy;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus) {
+      return baseGroupPersonClaimState.issuedBy;
+    }
+    return void 0;
+  }
+
+  public getIssuedAt(baseGroupPersonClaimState: BaseGroupPersonClaimState): Date {
+    if (baseGroupPersonClaimState instanceof GroupPersonClaimRank && baseGroupPersonClaimState.personRank) {
+      return baseGroupPersonClaimState.personRank.issuedAt;
+    } else if (baseGroupPersonClaimState instanceof GroupPersonClaimStatus) {
+      return baseGroupPersonClaimState.issuedAt;
+    }
+    return void 0;
+  }
+
+  //endregion
 
   private _buildData(): void {
     this.data.groupPersonClaimRequest.passport.series = this.documentSeriesNgxInput.control.value;

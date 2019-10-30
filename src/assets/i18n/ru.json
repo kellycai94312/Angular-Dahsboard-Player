@@ -937,5 +937,7 @@
   "organizationEmail": "Еmail организации",
   "headPersonPhone": "Телефон руководителя",
   "headPersonEmail": "Еmail руководителя",
-  "claim": "Заявка"
+  "claim": "Заявка",
+  "issuedAt": "Когда выдан",
+  "status": "Статус"
 }

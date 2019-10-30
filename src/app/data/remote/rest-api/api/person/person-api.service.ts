@@ -8,6 +8,7 @@ import { GroupPersonJob } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { MedicalExamination } from 'app/data/remote/model/person/medical-examination';
 import { PersonContact } from 'app/data/remote/model/person/person-contact';
+import { PersonRank } from 'app/data/remote/model/person/rank/person-rank';
 import { ApiService } from 'app/data/remote/rest-api/api';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { PersonQuery } from 'app/data/remote/rest-api/query/person-query';
@@ -158,6 +159,33 @@ export class PersonApiService {
   }
 
   //#endregion
+
+  //region Person rank
+
+  public getPersonRanks(person: Person): Observable<PersonRank[]> {
+    return this._apiService.getValues(PersonRank, `${this._basePath}/${person.id}/rank`) as Observable<PersonRank[]>;
+  }
+
+  public createPersonRank(person: Person, value: PersonRank): Observable<PersonRank> {
+    return this._apiService.createValue(PersonRank, `${this._basePath}/${person.id}/rank`, value) as Observable<PersonRank>;
+  }
+
+  public updatePersonRank(person: Person, value: PersonRank): Observable<PersonRank> {
+    return this._apiService.createValue(PersonRank, `${this._basePath}/${person.id}/rank/${value.id}`, value) as Observable<PersonRank>;
+  }
+
+  public savePersonRank(person: Person, value: PersonRank): Observable<PersonRank> {
+    if (value.id) {
+      return this.updatePersonRank(person, value);
+    }
+    return this.createPersonRank(person, value);
+  }
+
+  public deletePersonRank(person: Person, value: PersonRank): Observable<PersonRank> {
+    return this._apiService.removeValue(PersonRank, `${this._basePath}/${person.id}/rank/${value.id}`) as Observable<PersonRank>;
+  }
+
+  //endregion
 
   //#region Dialogue
 

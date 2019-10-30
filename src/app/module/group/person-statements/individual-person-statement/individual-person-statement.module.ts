@@ -6,6 +6,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { NgxGridModule } from 'app/components/ngx-grid/ngx-grid.module';
 import { NgxImageModule } from 'app/components/ngx-image';
 import { ChipListModule } from 'app/module/common/chip-list/chip-list.module';
+import { EditGroupPersonClaimStateModule } from 'app/module/group/edit-group-person-claim-state/edit-group-person-claim-state.module';
 import { NgxDateModule } from 'app/module/ngx/ngx-date/ngx-date.module';
 import { NgxInputModule } from 'app/module/ngx/ngx-input';
 import { NgxSelectModule } from 'app/module/ngx/ngx-select/ngx-select.module';
@@ -26,7 +27,8 @@ import { IndividualPersonStatementComponent } from './individual-person-statemen
     NgxSelectModule,
     NgxDateModule,
     NgxGridModule,
-    ChipListModule
+    ChipListModule,
+    EditGroupPersonClaimStateModule
   ]
 })
 export class IndividualPersonStatementModule {

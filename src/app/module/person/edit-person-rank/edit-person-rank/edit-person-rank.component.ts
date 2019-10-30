@@ -60,7 +60,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
       this.dateNgxDate.placeholderTranslation = 'date';
       this.dateNgxDate.required = true;
       this.dateNgxDate.format = PropertyConstant.dateFormat;
-      this.dateNgxDate.control = new FormControl(obj.date, [Validators.required]);
+      this.dateNgxDate.control = new FormControl(obj.issuedAt, [Validators.required]);
 
       this._formGroup.setControl('rank', this.rankNgxSelect.control);
       this._formGroup.setControl('sportType', this.sportTypeNgxSelect.control);
@@ -99,7 +99,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
           }));
         }
         this.document.number = '' + this.data.number;
-        this.document.date = this.data.date;
+        this.document.date = this.data.issuedAt;
       }
     });
   }
@@ -110,7 +110,7 @@ export class EditPersonRankComponent extends ComponentWithAttach<PersonRank> {
     this.data.rank = this.rankNgxSelect.control.value;
     this.data.sportType = this.sportTypeNgxSelect.control.value;
     this.data.number = this.documentNumberNgxInput.control.value;
-    this.data.date = this.appHelper.getGmtDate(this.dateNgxDate.control.value);
+    this.data.issuedAt = this.appHelper.getGmtDate(this.dateNgxDate.control.value);
   }
 
   valid(): boolean {

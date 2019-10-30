@@ -935,5 +935,7 @@
   "organizationPhone": "Organization phone",
   "organizationEmail": "Organization email",
   "headPersonPhone": "Head phone",
-  "claim": "Claim"
+  "claim": "Claim",
+  "issuedAt": "Issued at",
+  "status": "Status"
 }

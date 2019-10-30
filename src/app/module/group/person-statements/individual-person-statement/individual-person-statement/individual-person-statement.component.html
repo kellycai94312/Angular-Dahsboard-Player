@@ -48,6 +48,42 @@
              [(selectedItems)]="positions"
              (edit)="onEditPositions()"></chip-list>
 
+  <ngx-grid [canEdit]="true"
+            [fetchItems]="fetchItems"
+            [edit]="editTable"
+            [add]="addNewRow">
+    <ngx-column nameKey="status">
+      <ng-template let-item>
+        {{getStatus(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="name">
+      <ng-template let-item>
+        {{getName(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="sportType">
+      <ng-template let-item>
+        {{getSportTypeName(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="number">
+      <ng-template let-item>
+        {{getNumber(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="issuedBy">
+      <ng-template let-item>
+        {{getIssuedBy(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="issuedAt">
+      <ng-template let-item>
+        {{getIssuedAt(item) | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+
   <div fxLayout="row"
        fxLayoutGap="10px">
     <button mat-raised-button

@@ -13,6 +13,7 @@ export class GroupPersonClaimStatus extends BaseGroupPersonClaimState {
   public sportType: SportType;
 
   public number: string;
+  public name: string;
   public issuedBy: string;
 
   @Type(() => Date)
