@@ -12,6 +12,7 @@ export class DocumentVersion extends AbstractVersionObject {
   public validityInDays?: number;
   public issuedBy?: string;
   public birthplace?: string;
+  public verified?: boolean;
 
   @Type(() => Country)
   public citizenship?: Country;

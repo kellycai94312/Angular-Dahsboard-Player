@@ -124,8 +124,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.emailNgxInput.control.setValidators(emailValidators);
         } else if (data instanceof GroupClaimRequest) {
           data.organization = data.organization || new Organization();
-          data.head = data.head || new Person();
-          person = data.head;
+          data.creator = data.creator || new Person();
+          person = data.creator;
 
           this.organizationNameNgxInput = this._getNgxInput('organizationName', data.organization.name, true);
 
@@ -141,7 +141,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.phoneNgxInput = this._getNgxInput('headPersonPhone', person.phoneNumber, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
-          this.emailNgxInput = this._getNgxInput('headPersonEmail', data.headEmail, true);
+          this.emailNgxInput = this._getNgxInput('headPersonEmail', data.creatorEmail, true);
           this.emailNgxInput.control.setValidators(emailValidators);
         }
 
@@ -170,10 +170,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     } else if (this.data instanceof GroupClaimRequest) {
       this.data.organization.name = this.organizationNameNgxInput.control.value;
       this.data.organization.organizationType = this.organizationTypeNgxSelect.control.value;
-      this.data.head.phoneNumber = this.phoneNgxInput.control.value;
-      this.data.headEmail = this.emailNgxInput.control.value;
+      this.data.creator.phoneNumber = this.phoneNgxInput.control.value;
+      this.data.creatorEmail = this.emailNgxInput.control.value;
 
-      person = this.data.head;
+      person = this.data.creator;
 
       person.birthDate = person.birthDate || new Date('1970');
       person.sex = person.sex || SexEnum.MALE;

@@ -9,10 +9,13 @@ export class GroupPersonClaim extends BaseGroupPerson {
   @Type(() => EducationType)
   public educationType?: EducationType;
 
-  public state: GroupPersonClaimState;
+  public claimState: GroupPersonClaimState;
 
   public email: string;
   public phone: string;
+
+  @Type(() => Date)
+  public certificateIssuedDate: Date;
 
   constructor() {
     super();

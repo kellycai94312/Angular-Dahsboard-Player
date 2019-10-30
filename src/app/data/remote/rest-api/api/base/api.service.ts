@@ -1,12 +1,12 @@
-import {Injectable, Type} from '@angular/core';
-import {Observable} from 'rxjs';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {UtilService} from '../../../../../services/util/util.service';
-import {map} from 'rxjs/operators';
-import {plainToClass, plainToClassFromExist} from 'class-transformer';
-import {PageContainer} from '../../../bean/page-container';
-import {IdentifiedObject} from '../../../base/identified-object';
-import {DiscriminatorPageContainer} from '../../../bean/discriminator-page-container';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Injectable, Type } from '@angular/core';
+import { plainToClass, plainToClassFromExist } from 'class-transformer';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { UtilService } from '../../../../../services/util/util.service';
+import { IdentifiedObject } from '../../../base/identified-object';
+import { DiscriminatorPageContainer } from '../../../bean/discriminator-page-container';
+import { PageContainer } from '../../../bean/page-container';
 
 @Injectable({
   providedIn: 'root'
@@ -85,7 +85,7 @@ export class ApiService {
     );
   }
 
-  public updateValue<T>(classObj: Type<T>, url: string, value: T | any): Observable<T | T[]> {
+  public updateValue<T>(classObj: Type<T>, url: string, value?: T | any): Observable<T | T[]> {
     return this.put(url, value).pipe(
       map(x => plainToClass(classObj, x) as any)
     );

@@ -4,7 +4,11 @@ import { Person } from 'app/data/remote/model/person';
 
 export class GroupClaimRequest extends ClaimRequest {
   public organization: Organization;
-  public head: Person;
-  public headEmail: string;
+  public creator: Person;
+  public creatorEmail: string;
+  public headFullName: string;
+  public deputyHeadFullName: string;
+  public headPhone: string;
+  public deputyHeadPhone: string;
   public clusterId?: number;
 }
