@@ -1,11 +1,11 @@
 <div fxLayout="column">
   <div fxLayout="row"
        fxLayoutAlign="center center">
-    <ngx-image [width]="128"
-               [height]="128"
-               [object]="person"
-               [type]="imageTypeClass.LOGO"
-               [fileClass]="fileClassClass.PERSON"></ngx-image>
+    <!--TODO:<ngx-image [width]="128"-->
+    <!--               [height]="128"-->
+    <!--               [object]="person"-->
+    <!--               [type]="imageTypeClass.LOGO"-->
+    <!--               [fileClass]="fileClassClass.PERSON"></ngx-image>-->
   </div>
   <div>
     <label class="label">{{'identityDocument' | translate}}</label>
@@ -22,8 +22,8 @@
   </div>
   <div fxLayout="row"
        fxLayoutGap="10px">
-    <new-ngx-input [data]="documentNatalPlaceNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="documentNationalityNgxInput"></new-ngx-input>
+    <ngx-select [data]="documentCitizenshipNgxSelect"></ngx-select>
+    <new-ngx-input [data]="documentBirthplaceNgxInput"></new-ngx-input>
   </div>
   <div>
     <label class="label">{{'Место жительства' | translate}}</label>
@@ -36,5 +36,22 @@
     <new-ngx-input [data]="houseAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="blockAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="literAddressNgxInput"></new-ngx-input>
+  </div>
+
+  <div>
+    <label class="label">{{'Дополнительные данные' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
+  <new-ngx-input [data]="jobPlaceNgxInput"></new-ngx-input>
+  <chip-list labelTranslation="personPositions"
+             display="name"
+             [(selectedItems)]="positions"
+             (edit)="onEditPositions()"></chip-list>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <button mat-raised-button
+            [disabled]="formGroup.invalid"
+            (click)="onCreateClaim()">{{'Создать анкету' | translate}}</button>
   </div>
 </div>

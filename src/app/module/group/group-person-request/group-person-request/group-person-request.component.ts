@@ -21,6 +21,7 @@ import { EducationTypeApiService } from 'app/data/remote/rest-api/api/education-
 import { OrganizationTypeApiService } from 'app/data/remote/rest-api/api/organization-type/organization-type-api.service';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
+import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
@@ -62,6 +63,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
   public createPersonalAccount: boolean;
+  public firstStepCompleted: boolean;
+  public individualPersonStatement: IndividualPersonStatement;
 
   constructor(private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
@@ -91,7 +94,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.educationNgxSelect.items = await this._educationTypeApiService.getEducationTypes().toPromise();
           this.educationNgxSelect.required = true;
           this.educationNgxSelect.display = 'name';
-          this.educationNgxSelect.compare = (first, second) => first.id == second.id;
+          this.educationNgxSelect.compare = (first, second) => first.id === second.id;
           this.educationNgxSelect.control.setValidators(Validators.required);
           if (data.groupPersonClaim.educationType) {
             this.sexNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonClaim.educationType.id));
@@ -158,6 +161,29 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   }
 
   public async onSave(): Promise<boolean> {
+    this._buildData();
+
+    return this.appHelper.trySave(async () => {
+      if (this.data instanceof GroupPersonClaimRequest) {
+        await this._groupApiService.createGroupPersonClaim(this.group, this.data as any).toPromise();
+      } else if (this.data instanceof GroupClaimRequest) {
+        await this._groupApiService.createGroupConnectionRequestClaim(this.group, this.data as any).toPromise();
+      }
+    });
+  }
+
+  public async onApply(): Promise<void> {
+    if (this.data instanceof GroupPersonClaimRequest) {
+      this.individualPersonStatement = new IndividualPersonStatement();
+      this.individualPersonStatement.group = this.group;
+      this.individualPersonStatement.groupPersonClaimRequest = this.data;
+    } else if (this.data instanceof GroupClaimRequest) {
+      // TODO:
+    }
+    this.firstStepCompleted = true;
+  }
+
+  private _buildData(): void {
     this.data.createPersonalAccount = this.createPersonalAccount;
     let person: Person;
     if (this.data instanceof GroupPersonClaimRequest) {
@@ -182,20 +208,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     person.firstName = this.firstNgxInput.control.value;
     person.lastName = this.lastNgxInput.control.value;
     person.patronymic = this.patronymicNgxInput.control.value;
-
-    return this.appHelper.trySave(async () => {
-      if (this.data instanceof GroupPersonClaimRequest) {
-        await this._groupApiService.createGroupPersonClaim(this.group, this.data as any).toPromise();
-      } else if (this.data instanceof GroupClaimRequest) {
-        await this._groupApiService.createGroupConnectionRequestClaim(this.group, this.data as any).toPromise();
-      }
-    });
-  }
-
-  public async onSend(): Promise<void> {
-    if (await this.onSave()) {
-      await this._router.navigate(['/sign-in']);
-    }
   }
 
   public async onViewStatementText(): Promise<void> {

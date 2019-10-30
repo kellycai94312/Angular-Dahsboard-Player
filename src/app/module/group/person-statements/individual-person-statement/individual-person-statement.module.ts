@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDividerModule } from '@angular/material';
+import { MatButtonModule, MatDividerModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxGridModule } from 'app/components/ngx-grid/ngx-grid.module';
 import { NgxImageModule } from 'app/components/ngx-image';
+import { ChipListModule } from 'app/module/common/chip-list/chip-list.module';
 import { NgxDateModule } from 'app/module/ngx/ngx-date/ngx-date.module';
 import { NgxInputModule } from 'app/module/ngx/ngx-input';
 import { NgxSelectModule } from 'app/module/ngx/ngx-select/ngx-select.module';
@@ -17,13 +18,15 @@ import { IndividualPersonStatementComponent } from './individual-person-statemen
   imports: [
     CommonModule,
     MatDividerModule,
+    MatButtonModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
     NgxImageModule,
     NgxInputModule,
     NgxSelectModule,
     NgxDateModule,
-    NgxGridModule
+    NgxGridModule,
+    ChipListModule
   ]
 })
 export class IndividualPersonStatementModule {
