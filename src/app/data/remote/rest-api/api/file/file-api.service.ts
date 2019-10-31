@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { serialize } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -155,7 +154,8 @@ export class FileApiService {
     if (file) {
       formData.append('file', file, file.name);
     }
-    formData.append('requestObj', new Blob([serialize(value)], {type: 'application/json'}));
+    // TODO: Use serialize method
+    formData.append('requestObj', new Blob([JSON.stringify(value)], {type: 'application/json'}));
     return formData;
   }
 

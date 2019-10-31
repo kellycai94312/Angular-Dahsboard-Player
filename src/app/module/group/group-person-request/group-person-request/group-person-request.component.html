@@ -1,22 +1,22 @@
 <div *ngIf="data"
      fxLayout="column"
      fxLayoutGap="10px">
-  <ng-container *ngIf="!firstStepCompleted; else nextStepTemplate">
-    <div fxLayout="column"
-         fxLayoutGap="10px"
-         fxLayoutAlign="start center">
-      <ngx-image [width]="128"
-                 [height]="128"
-                 [object]="group"
-                 [type]="imageTypeClass.LOGO"
-                 [fileClass]="fileClassClass.GROUP"></ngx-image>
-      <div fxLayout="column">
-        <h4>{{group?.name}}</h4>
-        <p *ngIf="group?.description"
-           class="description">{{group?.description}}</p>
-      </div>
+  <div fxLayout="column"
+       fxLayoutGap="10px"
+       fxLayoutAlign="start center">
+    <ngx-image [width]="128"
+               [height]="128"
+               [object]="group"
+               [type]="imageTypeClass.LOGO"
+               [fileClass]="fileClassClass.GROUP"></ngx-image>
+    <div fxLayout="column">
+      <h4>{{group?.name}}</h4>
+      <p *ngIf="group?.description"
+         class="description">{{group?.description}}</p>
     </div>
+  </div>
 
+  <ng-container *ngIf="!firstStepCompleted; else nextStepTemplate">
     <div fxLayout="column">
       <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
         <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>

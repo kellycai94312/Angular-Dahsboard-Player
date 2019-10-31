@@ -173,6 +173,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   }
 
   public async onApply(): Promise<void> {
+    this._buildData();
+
     if (this.data instanceof GroupPersonClaimRequest) {
       this.individualPersonStatement = new IndividualPersonStatement();
       this.individualPersonStatement.group = this.group;

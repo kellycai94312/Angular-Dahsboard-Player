@@ -121,6 +121,12 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   }
 
   async onSave(): Promise<boolean> {
+    if (!this.person && this.data.groupPersonClaimRequest.states) {
+      for (let i = 0; i < this.data.groupPersonClaimRequest.states.length; i++) {
+        delete this.data.groupPersonClaimRequest.states[i].id;
+      }
+      this.data.groupPersonClaimRequest.states = this.data.groupPersonClaimRequest.states.filter(x => !x.deleted);
+    }
     await this._groupApiService.createGroupPersonClaim(this.data.group, this.data.groupPersonClaimRequest as any).toPromise();
 
     return this.appHelper.trySave(async () => {
@@ -271,6 +277,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
     this.data.groupPersonClaimRequest.groupPersonClaim.workplace = this.jobPlaceNgxInput.control.value;
     this.data.groupPersonClaimRequest.positionIds = this.positions.map(x => x.id);
+    this.data.groupPersonClaimRequest.states = this.ngxGridComponent.items;
   }
 
   private _getNgxSelect(labelTranslation: string, required = false): NgxSelect {
