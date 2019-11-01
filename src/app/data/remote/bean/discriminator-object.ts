@@ -1,3 +1,8 @@
+import { FILE_SUBTYPES } from 'app/data/remote/model/file/base/file-subtypes';
+import { GROUP_CONNECTION_REQUEST_SUBTYPES } from 'app/data/remote/model/group/connection';
+import { GROUP_PERSON_SUBTYPES } from 'app/data/remote/model/group/person';
+import { GROUP_PERSON_CLAIM_STATE_SUBTYPES } from 'app/data/remote/model/group/person/state';
+import { RANK_SUBTYPES } from 'app/data/remote/model/rank';
 import { Exclude, Type } from 'class-transformer';
 import { EVENT_SUBTYPES } from '../model/event/base';
 import { GROUP_SUBTYPES } from '../model/group/base';
@@ -17,6 +22,12 @@ export class DiscriminatorObject {
       property: 'discriminator',
       subTypes: [
         ...EVENT_SUBTYPES,
+        ...GROUP_PERSON_CLAIM_STATE_SUBTYPES,
+        ...GROUP_CONNECTION_REQUEST_SUBTYPES,
+        ...GROUP_PERSON_SUBTYPES,
+        ...RANK_SUBTYPES,
+        ...GROUP_SUBTYPES,
+        ...FILE_SUBTYPES,
         //region Notification
         {value: GroupNotification, name: NotificationType.GROUP},
         {value: SubgroupNotification, name: NotificationType.SUBGROUP},
@@ -28,7 +39,6 @@ export class DiscriminatorObject {
         {value: GroupContractService, name: GroupContractType.SERVICE},
         {value: GroupContractJob, name: GroupContractType.JOB},
         //endregion
-        ...GROUP_SUBTYPES
       ]
     },
     keepDiscriminatorProperty: true

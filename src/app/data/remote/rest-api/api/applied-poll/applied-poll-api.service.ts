@@ -1,16 +1,15 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../environments/environment';
-import {ApiService} from '../base/api.service';
-import {BaseAppliedPoll} from '../../../model/poll/applied/base/base-applied-poll';
-import {Observable} from 'rxjs';
-import {PollPerson} from '../../../model/poll/poll-person';
-import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
-import {map} from 'rxjs/operators';
-import {plainToClass} from 'class-transformer';
-import {IntegerWrapper} from '../../../bean/wrapper/integer-wrapper';
-import {PollPersonAnswer} from '../../../model/poll/poll-person-answer';
-import {PollQuestion} from '../../../model/poll/poll-question';
-import {PollPersonAnswerResult} from '../../../bean/poll-person-answer-result';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../../../../environments/environment';
+import { PollPersonAnswerResult } from '../../../bean/poll-person-answer-result';
+import { IntegerWrapper } from '../../../bean/wrapper/integer-wrapper';
+import { SingleAttributeWrapper } from '../../../bean/wrapper/single-attribute-wrapper';
+import { BaseAppliedPoll } from '../../../model/poll/applied/base/base-applied-poll';
+import { PollPerson } from '../../../model/poll/poll-person';
+import { PollPersonAnswer } from '../../../model/poll/poll-person-answer';
+import { PollQuestion } from '../../../model/poll/poll-question';
+import { ApiService } from '../base/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +26,7 @@ export class AppliedPollApiService {
   }
 
   public getCurrentPollPerson<T extends BaseAppliedPoll>(appliedPoll: T): Observable<PollPerson> {
-    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${appliedPoll.id}/currentPollPerson`).pipe(map(value => plainToClass(PollPerson, value.value)));
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${appliedPoll.id}/currentPollPerson`).pipe(map(value => this._apiService.mapObject(PollPerson, value.value) as PollPerson));
   }
 
   public createPollPerson<T extends BaseAppliedPoll>(appliedPoll: T): Observable<PollPerson> {

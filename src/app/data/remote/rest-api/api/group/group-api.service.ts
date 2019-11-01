@@ -16,7 +16,6 @@ import { BaseGroupPerson, GroupPerson, GroupPersonClaim } from 'app/data/remote/
 import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/state';
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { FileApiService } from 'app/data/remote/rest-api/api';
-import { plainToClass } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -91,7 +90,7 @@ export class GroupApiService {
 
   public getCurrentGroupPerson<T extends BaseGroupPerson>(group: Group): Observable<T> {
     return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`)
-      .pipe(map(value => plainToClass(BaseGroupPerson, value.value) as T));
+      .pipe(map(value => this._apiService.mapObject(BaseGroupPerson, value.value) as T));
   }
 
   public getGroupPerson<T extends Group>(group: T, person: Person): Observable<GroupPerson> {

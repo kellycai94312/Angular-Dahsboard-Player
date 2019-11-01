@@ -53,16 +53,31 @@ export class ApiService {
     return httpParams;
   }
 
+  public mapObject<T>(classObj: Type<T>, obj: T): T {
+    if (obj && (obj as any).discriminator) {
+      return this._utilService.plainDiscriminatorObjectToClass(classObj, obj);
+    }
+    return plainToClass(classObj, obj);
+  }
+
   //#region CRUD
 
   public getValue<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<T> {
     return this.get(url, this.getHttpParamsFromObject(query)).pipe(
-      map(x => plainToClass(classObj, x) as any)
+      map(x => this.mapObject(classObj, x))
     );
   }
 
   public getValues<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<T[]> {
-    return this.getValue(classObj, url, query) as any;
+    return this.get(url, this.getHttpParamsFromObject(query)).pipe(
+      map((values: T[]) => {
+        const items: T[] = [];
+        for (let i = 0; i < values.length; i++) {
+          items.push(this.mapObject(classObj, values[i]));
+        }
+        return items;
+      })
+    );
   }
 
   public getPageContainer<T, Q extends object>(classObj: Type<T>, url: string, query?: Q): Observable<PageContainer<T>> {
@@ -81,13 +96,13 @@ export class ApiService {
 
   public createValue<T>(classObj: Type<T>, url: string, value?: T | any): Observable<T | T[]> {
     return this.post(url, value).pipe(
-      map(x => plainToClass(classObj, x) as any)
+      map(x => this.mapObject(classObj, x))
     );
   }
 
   public updateValue<T>(classObj: Type<T>, url: string, value?: T | any): Observable<T | T[]> {
     return this.put(url, value).pipe(
-      map(x => plainToClass(classObj, x) as any)
+      map(x => this.mapObject(classObj, x))
     );
   }
 
@@ -105,7 +120,7 @@ export class ApiService {
       (options as any).body = this._utilService.clone(body);
     }
     return this._httpClient.delete<T>(url, options).pipe(
-      map(x => plainToClass(classObj, x) as T)
+      map(x => this.mapObject(classObj, x))
     );
   }
 

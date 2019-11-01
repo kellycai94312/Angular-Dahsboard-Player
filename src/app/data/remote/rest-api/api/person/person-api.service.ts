@@ -12,7 +12,6 @@ import { PersonRank } from 'app/data/remote/model/person/rank/person-rank';
 import { ApiService } from 'app/data/remote/rest-api/api';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { PersonQuery } from 'app/data/remote/rest-api/query/person-query';
-import { plainToClass } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -198,7 +197,7 @@ export class PersonApiService {
   //region Group person job
 
   public getGroupPersonJob(person: Person): Observable<GroupPersonJob> {
-    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${person.id}/job`).pipe(map(value => plainToClass(GroupPersonJob, value.value)));
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${person.id}/job`).pipe(map(value => this._apiService.mapObject(GroupPersonJob, value.value) as GroupPersonJob));
   }
 
   public updateGroupPersonJob(person: Person, value: GroupPersonJob): Observable<GroupPersonJob> {
