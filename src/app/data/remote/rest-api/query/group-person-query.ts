@@ -9,8 +9,8 @@ export class GroupPersonQuery extends PageQuery {
   public id?: number;
   public unassigned?: boolean;
   public groupPersonType?: GroupPersonType;
-  public groupPersonState?: GroupPersonState;
-  public groupPersonClaimState?: GroupPersonClaimState;
+  public state?: GroupPersonState;
+  public claimState?: GroupPersonClaimState;
   public connected?: boolean;
   public positionLevelEnum?: PositionLevelEnum;
   public positionEnum?: PositionEnum;

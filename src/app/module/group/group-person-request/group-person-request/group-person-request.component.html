@@ -51,7 +51,10 @@
          fxLayoutAlign="center center">
       <div fxLayout="column"
            fxLayoutGap="5px">
-        <mat-checkbox #personalDataProcessingContractCheckbox>{{'personalDataProcessingContract' | translate}}</mat-checkbox>
+        <mat-checkbox #personalDataProcessingContractCheckbox>
+          <a href="assets/documents/consent_for_personal_data_processing.pdf"
+             target="_blank">{{'personalDataProcessingContract' | translate}}</a>
+        </mat-checkbox>
         <mat-checkbox [(ngModel)]="createPersonalAccount">{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
       </div>
       <div fxLayout="row"

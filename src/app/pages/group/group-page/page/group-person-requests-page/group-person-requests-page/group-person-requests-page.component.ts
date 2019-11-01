@@ -38,7 +38,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
     this.groupPersonQuery.name = '';
     this.groupPersonQuery.from = 0;
     this.groupPersonQuery.count = PropertyConstant.pageSize;
-    this.groupPersonQuery.groupPersonState = GroupPersonState.JOIN_REQUEST;
+    this.groupPersonQuery.state = GroupPersonState.JOIN_REQUEST;
 
     this.splitButtonsItems = [
       {
