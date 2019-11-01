@@ -44,11 +44,6 @@
     <mat-divider></mat-divider>
   </div>
   <new-ngx-input [data]="jobPlaceNgxInput"></new-ngx-input>
-  <chip-list labelTranslation="personPositions"
-             display="name"
-             [(selectedItems)]="positions"
-             (edit)="onEditPositions()"></chip-list>
-
   <ngx-grid [canEdit]="true"
             [fetchItems]="fetchItems"
             [edit]="editTable"

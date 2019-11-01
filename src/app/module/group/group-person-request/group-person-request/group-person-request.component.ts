@@ -91,12 +91,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           person = data.groupPersonClaim.person;
 
           this.educationNgxSelect = new NgxSelect<EducationType>();
-          this.educationNgxSelect.labelTranslation = 'education';
+          this.educationNgxSelect.labelTranslation = 'Образование';
           this.educationNgxSelect.items = await this._educationTypeApiService.getEducationTypes().toPromise();
-          this.educationNgxSelect.required = true;
           this.educationNgxSelect.display = 'name';
           this.educationNgxSelect.compare = (first, second) => first.id === second.id;
-          this.educationNgxSelect.control.setValidators(Validators.required);
           if (data.groupPersonClaim.educationType) {
             this.sexNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonClaim.educationType.id));
           }

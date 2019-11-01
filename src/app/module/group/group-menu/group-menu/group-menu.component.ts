@@ -124,7 +124,7 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                     // },
                     {
                       id: 'hierarchyManagement',
-                      translate: 'Структуру кластеров',
+                      translate: 'Структура кластеров',
                       type: 'item',
                       svgIcon: 'hierarchy-management',
                       url: `/group/${value.id}/structure/cluster`

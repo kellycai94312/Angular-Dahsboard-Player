@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PreviewNamedObjectComponent } from 'app/components/named-object/preview-named-object/preview-named-object.component';
 import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
@@ -19,7 +18,6 @@ import {
   GroupPersonClaimStatus
 } from 'app/data/remote/model/group/person/state';
 import { Person } from 'app/data/remote/model/person';
-import { Position } from 'app/data/remote/model/person-position/position';
 import { GroupApiService, PositionApiService } from 'app/data/remote/rest-api/api';
 import { CountryApiService } from 'app/data/remote/rest-api/api/country/country-api.service';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
@@ -62,7 +60,6 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   public literAddressNgxInput: NgxInput;
 
   public jobPlaceNgxInput: NgxInput;
-  public positions: Position[] = [];
 
   constructor(private _positionApiService: PositionApiService,
               private _modalBuilderService: ModalBuilderService,
@@ -80,12 +77,12 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     return this.appHelper.tryLoad(async () => {
       data.groupPersonClaimRequest.passport = new Document();
       data.groupPersonClaimRequest.passport.citizenship = data.groupPersonClaimRequest.passport.citizenship || new Country();
-      this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series, true);
-      this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number, true);
-      this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date, true);
-      this.documentIssuedByNgxInput = this._getNgxInput('Кем выдан', data.groupPersonClaimRequest.passport.issuedBy, true);
-      this.documentBirthplaceNgxInput = this._getNgxInput('Место рождения', data.groupPersonClaimRequest.passport.birthplace, true);
-      this.documentCitizenshipNgxSelect = this._getNgxSelect('Гражданство', true);
+      this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series);
+      this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number);
+      this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date);
+      this.documentIssuedByNgxInput = this._getNgxInput('Кем выдан', data.groupPersonClaimRequest.passport.issuedBy);
+      this.documentBirthplaceNgxInput = this._getNgxInput('Место рождения', data.groupPersonClaimRequest.passport.birthplace);
+      this.documentCitizenshipNgxSelect = this._getNgxSelect('Гражданство');
       this.documentCitizenshipNgxSelect.items = (await this._countryApiService.getCountries({count: PropertyConstant.pageSizeMax}).toPromise()).list;
       this.documentCitizenshipNgxSelect.compare = (first, second) => first.id === second.id;
       this.documentCitizenshipNgxSelect.control.setValue(data.groupPersonClaimRequest.passport.citizenship);
@@ -98,9 +95,9 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   private _initializeAddress(data: IndividualPersonStatement): void {
     data.groupPersonClaimRequest.address = data.groupPersonClaimRequest.address || new PlainAddress();
 
-    this.cityAddressNgxInput = this._getNgxInput('city', data.groupPersonClaimRequest.address.city, true);
-    this.streetAddressNgxInput = this._getNgxInput('street', data.groupPersonClaimRequest.address.street, true);
-    this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequest.address.house, true);
+    this.cityAddressNgxInput = this._getNgxInput('city', data.groupPersonClaimRequest.address.city);
+    this.streetAddressNgxInput = this._getNgxInput('street', data.groupPersonClaimRequest.address.street);
+    this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequest.address.house);
     this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequest.address.block);
     this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequest.address.liter);
   }
@@ -137,21 +134,6 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this._buildData();
     if (await this.onSave()) {
       await this._router.navigate(['/sign-in']);
-    }
-  }
-
-  public async onEditPositions(): Promise<void> {
-    const result = await this._modalBuilderService.showSelectionItemsModal(this.positions, async query => this._positionApiService.getPositions(query).toPromise()
-      , PreviewNamedObjectComponent,
-      async (component, data) => {
-        component.data = data;
-      },
-      {
-        minCount: 1,
-        compare: (first, second) => first.id == second.id
-      });
-    if (result.result) {
-      this.positions = result.data;
     }
   }
 
@@ -268,6 +250,10 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequest.passport.issuedBy = this.documentIssuedByNgxInput.control.value;
     this.data.groupPersonClaimRequest.passport.birthplace = this.documentBirthplaceNgxInput.control.value;
     this.data.groupPersonClaimRequest.passport.citizenship = this.documentCitizenshipNgxSelect.control.value;
+    const passport = this.data.groupPersonClaimRequest.passport;
+    if (passport.series && passport.number && passport.date && passport.issuedBy && passport.birthplace && passport.citizenship) {
+      delete this.data.groupPersonClaimRequest.passport;
+    }
 
     this.data.groupPersonClaimRequest.address.city = this.cityAddressNgxInput.control.value;
     this.data.groupPersonClaimRequest.address.street = this.streetAddressNgxInput.control.value;
@@ -276,16 +262,15 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequest.address.liter = this.literAddressNgxInput.control.value;
 
     this.data.groupPersonClaimRequest.groupPersonClaim.workplace = this.jobPlaceNgxInput.control.value;
-    this.data.groupPersonClaimRequest.positionIds = this.positions.map(x => x.id);
     this.data.groupPersonClaimRequest.states = this.ngxGridComponent.items;
   }
 
   private _getNgxSelect(labelTranslation: string, required = false): NgxSelect {
     const ngxInput = new NgxSelect();
     ngxInput.labelTranslation = labelTranslation;
-    ngxInput.required = required;
     ngxInput.display = 'name';
     if (required) {
+      ngxInput.required = required;
       ngxInput.control.setValidators(Validators.required);
     }
     this.formGroup.setControl(labelTranslation, ngxInput.control);

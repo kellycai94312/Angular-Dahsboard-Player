@@ -95,8 +95,8 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     organization.address = organization.address || new PlainAddress();
 
     this.nameGroupNgxInput = this._getNgxInput('name', organization.name, true);
-    this.fullNameGroupNgxInput = this._getNgxInput('Полное наименование организации', organization.fullName, true);
-    this.companyTypeNgxSelect = this._utilService.getNgxSelect('Форма собственности', true);
+    this.fullNameGroupNgxInput = this._getNgxInput('Полное наименование организации', organization.fullName);
+    this.companyTypeNgxSelect = this._utilService.getNgxSelect('Форма собственности');
     this.companyTypeNgxSelect.items = await this._companyTypeApiService.getCompanyTypes().toPromise();
     this.companyTypeNgxSelect.display = 'name';
     this.companyTypeNgxSelect.control.setValue(organization.companyType);
@@ -214,11 +214,12 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
     const ngxInput = new NgxInput();
     ngxInput.labelTranslation = labelTranslation;
-    ngxInput.required = required;
     ngxInput.control.setValue(value);
     if (required) {
+      ngxInput.required = required;
       ngxInput.control.setValidators(Validators.required);
     }
+    this.formGroup.setControl(labelTranslation, ngxInput.control);
     return ngxInput;
   }
 
