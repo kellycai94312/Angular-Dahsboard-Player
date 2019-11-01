@@ -13,8 +13,6 @@ export class Person extends IdentifiedObject {
   public birthDate: Date;
   public sex: SexEnum;
   public countryCode: string;
-  public phoneNumber: string;
-
   public user: User;
   public athleteState: AthleteState;
   public legalRepresentativesPhone: string;

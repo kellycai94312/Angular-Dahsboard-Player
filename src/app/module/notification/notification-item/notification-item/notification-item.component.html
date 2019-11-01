@@ -16,6 +16,9 @@
               (click)="onApprove()">{{'approve' | translate}}</button>
       <button mat-raised-button
               (click)="onRefuse()">{{'refuse' | translate}}</button>
+      <button *ngIf="canEditGroupConnectionRequestClaim"
+              mat-raised-button
+              (click)="onEdit()">{{'Просмотр анкеты' | translate}}</button>
     </div>
     <ng-template #elseContent>
       {{(data.approved ? 'youApproved' : 'youRefused') | translate}}

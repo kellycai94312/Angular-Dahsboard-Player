@@ -22,6 +22,7 @@ import { OrganizationTypeApiService } from 'app/data/remote/rest-api/api/organiz
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
 import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
+import { LegalEntityPersonStatement } from 'app/module/group/person-statements/legal-entity-person-statement/model/legal-entity-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
@@ -62,9 +63,11 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public educationNgxSelect: NgxSelect<EducationType>;
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
+  public emailCreatorNgxInput: NgxInput;
   public createPersonalAccount: boolean;
   public firstStepCompleted: boolean;
   public individualPersonStatement: IndividualPersonStatement;
+  public legalEntityPersonStatement: LegalEntityPersonStatement;
 
   constructor(private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
@@ -141,11 +144,14 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.organizationTypeNgxSelect.control.setValidators(Validators.required);
           this.organizationTypeNgxSelect.control.setValue(data.organization.organizationType ? this.organizationTypeNgxSelect.items.find(x => x.id === data.organization.organizationType.id) : void 0);
 
-          this.phoneNgxInput = this._getNgxInput('headPersonPhone', person.phoneNumber, true);
+          this.phoneNgxInput = this._getNgxInput('Телефон группы', data.organization.phone, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
-          this.emailNgxInput = this._getNgxInput('headPersonEmail', data.creatorEmail, true);
+          this.emailNgxInput = this._getNgxInput('Email группы', data.organization.email, true);
           this.emailNgxInput.control.setValidators(emailValidators);
+
+          this.emailCreatorNgxInput = this._getNgxInput('Email создателя', data.creatorEmail, true);
+          this.emailCreatorNgxInput.control.setValidators(emailValidators);
         }
 
         this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
@@ -180,7 +186,9 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       this.individualPersonStatement.group = this.group;
       this.individualPersonStatement.groupPersonClaimRequest = this.data;
     } else if (this.data instanceof GroupClaimRequest) {
-      // TODO:
+      this.legalEntityPersonStatement = new LegalEntityPersonStatement();
+      this.legalEntityPersonStatement.organization = this.group as Organization;
+      this.legalEntityPersonStatement.groupClaimRequest = this.data;
     }
     this.firstStepCompleted = true;
   }
@@ -198,12 +206,13 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     } else if (this.data instanceof GroupClaimRequest) {
       this.data.organization.name = this.organizationNameNgxInput.control.value;
       this.data.organization.organizationType = this.organizationTypeNgxSelect.control.value;
-      this.data.creator.phoneNumber = this.phoneNgxInput.control.value;
-      this.data.creatorEmail = this.emailNgxInput.control.value;
+      this.data.organization.phone = this.phoneNgxInput.control.value;
+      this.data.organization.email = this.emailNgxInput.control.value;
+      this.data.creatorEmail = this.emailCreatorNgxInput.control.value;
 
       person = this.data.creator;
 
-      person.birthDate = person.birthDate || new Date('1970');
+      person.birthDate = person.birthDate || this.appHelper.getGmtDate(new Date('1970'));
       person.sex = person.sex || SexEnum.MALE;
     }
 

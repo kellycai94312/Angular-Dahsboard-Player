@@ -45,6 +45,12 @@
         <new-ngx-input fxFlex
                        [data]="emailNgxInput"></new-ngx-input>
       </div>
+      <div *ngIf="personType === personTypeClass.LEGAL_ENTITY"
+           fxLayout="row"
+           fxLayoutGap="10px">
+        <new-ngx-input fxFlex
+                       [data]="emailCreatorNgxInput"></new-ngx-input>
+      </div>
     </div>
 
     <div fxLayout="column"
@@ -71,7 +77,11 @@
   </ng-container>
 
   <ng-template #nextStepTemplate>
-    <app-individual-person-statement [data]="individualPersonStatement"></app-individual-person-statement>
+    <app-individual-person-statement *ngIf="personType === personTypeClass.INDIVIDUAL; else elseContentTemplate"
+                                     [data]="individualPersonStatement"></app-individual-person-statement>
+    <ng-template #elseContentTemplate>
+      <app-legal-entity-person-statement [data]="legalEntityPersonStatement"></app-legal-entity-person-statement>
+    </ng-template>
   </ng-template>
 </div>
 

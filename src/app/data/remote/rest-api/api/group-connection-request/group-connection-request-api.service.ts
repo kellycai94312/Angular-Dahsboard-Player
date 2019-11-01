@@ -20,8 +20,8 @@ export class GroupConnectionRequestApiService {
   constructor(private _apiService: ApiService) {
   }
 
-  public approveGroupConnectionRequest(groupConnectionRequest: GroupConnectionRequest, value: GroupCluster): Observable<GroupConnection> {
-    return this._apiService.createValue(GroupConnection, `${this._basePath}/${groupConnectionRequest.id}/approve`, new IdRequest(value.id)) as Observable<GroupConnection>;
+  public approveGroupConnectionRequest(groupConnectionRequest: GroupConnectionRequest, value?: GroupCluster): Observable<GroupConnection> {
+    return this._apiService.createValue(GroupConnection, `${this._basePath}/${groupConnectionRequest.id}/approve`, value ? new IdRequest(value.id) : void 0) as Observable<GroupConnection>;
   }
 
   public rejectGroupConnectionRequest(groupConnectionRequest: GroupConnectionRequest): Observable<BaseGroupConnectionRequest> {

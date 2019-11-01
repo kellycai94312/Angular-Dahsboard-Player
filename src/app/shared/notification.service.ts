@@ -2,7 +2,11 @@ import { Injectable, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Group } from 'app/data/remote/model/group/base';
-import { GroupConnectionRequest, GroupConnectionTypeEnum } from 'app/data/remote/model/group/connection';
+import {
+  GroupConnectionRequest,
+  GroupConnectionRequestClaim,
+  GroupConnectionTypeEnum
+} from 'app/data/remote/model/group/connection';
 import { Observable, Subject } from 'rxjs';
 import { map, takeWhile } from 'rxjs/operators';
 import { NotificationWrapper } from '../data/remote/bean/wrapper/notification-wrapper';
@@ -90,16 +94,31 @@ export class NotificationService implements OnDestroy {
       let parentGroup: string;
 
       // TODO: Fix notifications!
-      if (notification.groupConnectionRequest instanceof GroupConnectionRequest && notification.groupConnectionRequest.groupConnectionTypeEnum === GroupConnectionTypeEnum.REQUEST) {
-        innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
-        parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
-      } else {
-        innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
-        parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
+
+      if (notification.groupConnectionRequest instanceof GroupConnectionRequest) {
+        if (notification.groupConnectionRequest.groupConnectionTypeEnum === GroupConnectionTypeEnum.REQUEST) {
+          innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
+          parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
+        } else {
+          innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
+          parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
+        }
+        key = `groupConnectionNotificationType.${notification.groupConnectionNotificationType}`;
+        params = {group: innerGroup, parentGroup};
+      } else if (notification.groupConnectionRequest instanceof GroupConnectionRequestClaim) {
+        key = `Заявление в '${notification.groupConnectionRequest.parentGroup.name}' от '${notification.groupConnectionRequest.group.name}'`;
       }
 
-      key = `groupConnectionNotificationType.${notification.groupConnectionNotificationType}`;
-      params = {group: innerGroup, parentGroup};
+      // TODO:
+      // if (notification.groupConnectionRequest.discriminator === GroupConnectionRequestType.REQUEST_CLAIM) {
+      //   innerGroup = this._getLinkedGroup(notification.groupConnectionRequest.parentGroup);
+      //   parentGroup = this._getLinkedGroup(notification.groupConnectionRequest.group);
+      //   key = `groupConnectionNotificationType.${notification.groupConnectionNotificationType}`;
+      //   params = {group: innerGroup, parentGroup};
+      // } else if (notification.groupConnectionRequest instanceof GroupConnectionRequestClaim) {
+      //   notification.groupConnectionRequest.key = `groupConnectionNotificationType.${notification.groupConnectionNotificationType}`;
+      //   params = {group: innerGroup, parentGroup};
+      // }
     }
     if (notification instanceof SubgroupNotification) {
       const template = notification.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.name;
