@@ -6,7 +6,6 @@ export class GroupClaimRequest extends ClaimRequest {
   public organization: Organization;
   public creator: Person;
   public creatorEmail: string;
-  public headFullName: string;
   public deputyHeadFullName: string;
   public headPhone: string;
   public deputyHeadPhone: string;

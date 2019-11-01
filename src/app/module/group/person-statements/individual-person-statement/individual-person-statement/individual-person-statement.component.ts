@@ -101,8 +101,8 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.cityAddressNgxInput = this._getNgxInput('city', data.groupPersonClaimRequest.address.city, true);
     this.streetAddressNgxInput = this._getNgxInput('street', data.groupPersonClaimRequest.address.street, true);
     this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequest.address.house, true);
-    this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequest.address.block, true);
-    this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequest.address.liter, true);
+    this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequest.address.block);
+    this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequest.address.liter);
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {

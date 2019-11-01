@@ -54,7 +54,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public organizationNameNgxInput: NgxInput;
-  public organizationTypeNgxSelect: NgxSelect<OrganizationType>;
   public firstNgxInput: NgxInput;
   public lastNgxInput: NgxInput;
   public patronymicNgxInput: NgxInput;
@@ -63,7 +62,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public educationNgxSelect: NgxSelect<EducationType>;
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
-  public emailCreatorNgxInput: NgxInput;
   public createPersonalAccount: boolean;
   public firstStepCompleted: boolean;
   public individualPersonStatement: IndividualPersonStatement;
@@ -135,23 +133,11 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
 
           this.organizationNameNgxInput = this._getNgxInput('organizationName', data.organization.name, true);
 
-          this.organizationTypeNgxSelect = new NgxSelect<OrganizationType>();
-          this.organizationTypeNgxSelect.labelTranslation = 'organizationType';
-          this.organizationTypeNgxSelect.display = 'name';
-          this.organizationTypeNgxSelect.required = true;
-          this.organizationTypeNgxSelect.compare = (first, second) => first.id === second.id;
-          this.organizationTypeNgxSelect.items = await this._organizationTypeApiService.getOrganizationTypes().toPromise();
-          this.organizationTypeNgxSelect.control.setValidators(Validators.required);
-          this.organizationTypeNgxSelect.control.setValue(data.organization.organizationType ? this.organizationTypeNgxSelect.items.find(x => x.id === data.organization.organizationType.id) : void 0);
-
-          this.phoneNgxInput = this._getNgxInput('Телефон группы', data.organization.phone, true);
+          this.phoneNgxInput = this._getNgxInput('Телефон руководителя', data.headPhone, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
-          this.emailNgxInput = this._getNgxInput('Email группы', data.organization.email, true);
+          this.emailNgxInput = this._getNgxInput('Email руководителя', data.creatorEmail, true);
           this.emailNgxInput.control.setValidators(emailValidators);
-
-          this.emailCreatorNgxInput = this._getNgxInput('Email создателя', data.creatorEmail, true);
-          this.emailCreatorNgxInput.control.setValidators(emailValidators);
         }
 
         this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
@@ -205,10 +191,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       person.sex = this.sexNgxSelect.control.value.data;
     } else if (this.data instanceof GroupClaimRequest) {
       this.data.organization.name = this.organizationNameNgxInput.control.value;
-      this.data.organization.organizationType = this.organizationTypeNgxSelect.control.value;
-      this.data.organization.phone = this.phoneNgxInput.control.value;
-      this.data.organization.email = this.emailNgxInput.control.value;
-      this.data.creatorEmail = this.emailCreatorNgxInput.control.value;
+      this.data.headPhone = this.phoneNgxInput.control.value;
+      this.data.creatorEmail = this.emailNgxInput.control.value;
 
       person = this.data.creator;
 
@@ -229,6 +213,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       if (this.data instanceof GroupPersonClaimRequest) {
         component.containerRef.createEmbeddedView(this.individualPersonClaimTemplate, {
           $implicit: {
+            created: new Date(),
             lastName: this.lastNgxInput.control.value,
             firstName: this.firstNgxInput.control.value,
             patronymic: this.patronymicNgxInput.control.value,
@@ -238,6 +223,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       } else if (this.data instanceof GroupClaimRequest) {
         component.containerRef.createEmbeddedView(this.legalEntityClaimTemplate, {
           $implicit: {
+            created: new Date(),
             lastName: this.lastNgxInput.control.value,
             firstName: this.firstNgxInput.control.value,
             patronymic: this.patronymicNgxInput.control.value,

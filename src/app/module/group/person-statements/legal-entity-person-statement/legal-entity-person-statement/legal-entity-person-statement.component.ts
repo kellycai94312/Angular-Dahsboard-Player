@@ -140,8 +140,10 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   private _initializePersons(): void {
     this.data.groupClaimRequest.creator = this.data.groupClaimRequest.creator || new Person();
 
-    this.headFullNameNgxInputNgxInput = this._utilService.getNgxInput('Полное имя руководителя', this.data.groupClaimRequest.headFullName);
+    this.headFullNameNgxInputNgxInput = this._utilService.getNgxInput('Полное имя руководителя', `${this.data.groupClaimRequest.creator.lastName} ${this.data.groupClaimRequest.creator.firstName} ${this.data.groupClaimRequest.creator.patronymic || ''}`);
+    this.headFullNameNgxInputNgxInput.control.disable();
     this.phoneHeadPersonNgxInput = this._utilService.getNgxInput('Телефон руководителя', this.data.groupClaimRequest.headPhone);
+    this.phoneHeadPersonNgxInput.control.disable();
 
     this.deputyHeadFullNameNgxInput = this._utilService.getNgxInput('Полное имя заместителя руководителя', this.data.groupClaimRequest.deputyHeadFullName);
     this.deputyHeadPhoneNgxInput = this._utilService.getNgxInput('Телефон заместителя руководителя', this.data.groupClaimRequest.deputyHeadPhone);
@@ -203,8 +205,6 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     this.data.groupClaimRequest.organization.kpp = this.kppGroupNgxInput.control.value;
     this.data.groupClaimRequest.organization.okdad = this.okdadGroupNgxInput.control.value;
     this.data.groupClaimRequest.organization.okpo = this.okpoGroupNgxInput.control.value;
-
-    this.data.groupClaimRequest.headFullName = this.headFullNameNgxInputNgxInput.control.value;
     this.data.groupClaimRequest.headPhone = this.phoneHeadPersonNgxInput.control.value;
 
     this.data.groupClaimRequest.deputyHeadFullName = this.deputyHeadFullNameNgxInput.control.value;

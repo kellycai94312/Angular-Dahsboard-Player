@@ -20,7 +20,6 @@
     <div fxLayout="column">
       <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
         <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
-        <ngx-select [data]="organizationTypeNgxSelect"></ngx-select>
       </ng-container>
       <div fxLayout="row"
            fxLayoutGap="10px">
@@ -44,12 +43,6 @@
                        [data]="phoneNgxInput"></new-ngx-input>
         <new-ngx-input fxFlex
                        [data]="emailNgxInput"></new-ngx-input>
-      </div>
-      <div *ngIf="personType === personTypeClass.LEGAL_ENTITY"
-           fxLayout="row"
-           fxLayoutGap="10px">
-        <new-ngx-input fxFlex
-                       [data]="emailCreatorNgxInput"></new-ngx-input>
       </div>
     </div>
 
@@ -91,7 +84,7 @@
   <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
     спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
   <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
-  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: right;">{{item.created | date:'d-MM-y'}}</p>
   <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
   <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
     федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
@@ -108,7 +101,7 @@
   <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
     спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
   <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
-  <p style="text-align: right;">&nbsp;&laquo;___&raquo; ________ 20___г.</p>
+  <p style="text-align: right;">{{item.created | date:'d-MM-y'}}</p>
   <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
   <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
     федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
