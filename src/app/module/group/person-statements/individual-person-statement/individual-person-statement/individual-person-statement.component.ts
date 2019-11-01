@@ -28,7 +28,9 @@ import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
+import { UtilService } from 'app/services/util/util.service';
 import { AppHelper } from 'app/utils/app-helper';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-individual-person-statement',
@@ -65,6 +67,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
               private _modalBuilderService: ModalBuilderService,
               private _countryApiService: CountryApiService,
               private _groupApiService: GroupApiService,
+              private _utilService: UtilService,
               private _router: Router,
               private _ngxModalService: NgxModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
@@ -76,7 +79,6 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
     return this.appHelper.tryLoad(async () => {
       data.groupPersonClaimRequest.passport = new Document();
-      data.groupPersonClaimRequest.passport.citizenship = data.groupPersonClaimRequest.passport.citizenship || new Country();
       this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series);
       this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number);
       this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date);
@@ -118,12 +120,6 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   }
 
   async onSave(): Promise<boolean> {
-    if (!this.person && this.data.groupPersonClaimRequest.states) {
-      for (let i = 0; i < this.data.groupPersonClaimRequest.states.length; i++) {
-        delete this.data.groupPersonClaimRequest.states[i].id;
-      }
-      this.data.groupPersonClaimRequest.states = this.data.groupPersonClaimRequest.states.filter(x => !x.deleted);
-    }
     await this._groupApiService.createGroupPersonClaim(this.data.group, this.data.groupPersonClaimRequest as any).toPromise();
 
     return this.appHelper.trySave(async () => {
@@ -171,16 +167,38 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     let editGroupPersonClaimStateComponent: EditGroupPersonClaimStateComponent;
     await modal.componentInstance.initializeBody(EditGroupPersonClaimStateComponent, async component => {
       editGroupPersonClaimStateComponent = component;
-      await component.initialize(baseGroupPersonClaimState);
+      await component.initialize(this._utilService.clone(baseGroupPersonClaimState));
+      modal.componentInstance.splitButtonItems = [];
+      const saveSplitButtonItem = {
+        nameKey: 'save',
+        callback: async () => {
+          if (await component.onSave()) {
+            modal.close();
+          }
+        }
+      };
 
-      modal.componentInstance.splitButtonItems = [
-        this._ngxModalService.saveSplitItemButton(async () => {
-          await this._ngxModalService.save(modal, component);
-        }),
-        this._ngxModalService.removeSplitItemButton(async () => {
-          await this._ngxModalService.remove(modal, component);
-        })
-      ];
+      const deleteSplitButtonItem = this._ngxModalService.removeSplitItemButton(async () => {
+        await this._ngxModalService.remove(modal, component);
+      });
+      if (baseGroupPersonClaimState.id) {
+        modal.componentInstance.splitButtonItems = [deleteSplitButtonItem];
+      }
+
+      component.validFromGroup$
+        .pipe(takeUntil(component.destroyComponent$))
+        .subscribe(value => {
+          const itemIndex = modal.componentInstance.splitButtonItems.indexOf(saveSplitButtonItem);
+          if (value) {
+            if (itemIndex < 0) {
+              modal.componentInstance.splitButtonItems.push(saveSplitButtonItem);
+            }
+          } else {
+            if (itemIndex > -1) {
+              modal.componentInstance.splitButtonItems.splice(itemIndex, 1);
+            }
+          }
+        });
     });
     const result = await this._ngxModalService.awaitModalResult(modal);
     return {result, data: editGroupPersonClaimStateComponent.data};
@@ -251,7 +269,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequest.passport.birthplace = this.documentBirthplaceNgxInput.control.value;
     this.data.groupPersonClaimRequest.passport.citizenship = this.documentCitizenshipNgxSelect.control.value;
     const passport = this.data.groupPersonClaimRequest.passport;
-    if (passport.series && passport.number && passport.date && passport.issuedBy && passport.birthplace && passport.citizenship) {
+    if (!passport.series && !passport.number && !passport.date && !passport.issuedBy && !passport.birthplace && !passport.citizenship) {
       delete this.data.groupPersonClaimRequest.passport;
     }
 
@@ -262,7 +280,14 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequest.address.liter = this.literAddressNgxInput.control.value;
 
     this.data.groupPersonClaimRequest.groupPersonClaim.workplace = this.jobPlaceNgxInput.control.value;
-    this.data.groupPersonClaimRequest.states = this.ngxGridComponent.items;
+    this.data.groupPersonClaimRequest.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
+
+    if (!this.person && this.data.groupPersonClaimRequest.states) {
+      for (let i = 0; i < this.data.groupPersonClaimRequest.states.length; i++) {
+        delete this.data.groupPersonClaimRequest.states[i].id;
+      }
+      this.data.groupPersonClaimRequest.states = this.data.groupPersonClaimRequest.states.filter(x => !x.deleted);
+    }
   }
 
   private _getNgxSelect(labelTranslation: string, required = false): NgxSelect {

@@ -84,9 +84,9 @@ export class UtilService {
   public getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
     const ngxInput = new NgxInput();
     ngxInput.labelTranslation = labelTranslation;
-    ngxInput.required = required;
     ngxInput.control.setValue(value);
     if (required) {
+      ngxInput.required = required;
       ngxInput.control.setValidators(Validators.required);
     }
     return ngxInput;

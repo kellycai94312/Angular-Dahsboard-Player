@@ -97,6 +97,7 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
           this.personRankNgxSelect = this._utilService.getNgxSelect('Разряд', true);
           this.personRankNgxSelect.items = await this._personApiService.getPersonRanks(this.person).toPromise();
           this.personRankNgxSelect.compare = (first, second) => first.id === second.id;
+          this.formGroup.setControl('personRankNgxSelect', this.personRankNgxSelect.control);
         }
       }
 
@@ -104,6 +105,7 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
       this.claimStateNgxSelect.items = await this._claimStateApiService.getClaimStates().toPromise();
       this.claimStateNgxSelect.compare = (first, second) => first.id === second.id;
       this.claimStateNgxSelect.control.setValue(selectedClaimState);
+      this.formGroup.setControl('claimStateNgxSelect', this.claimStateNgxSelect.control);
 
       this.claimStateNgxSelect.control.valueChanges
         .pipe(takeUntil(this.destroyComponent$))
@@ -117,12 +119,18 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
                 this.rankNgxSelect.control.reset();
                 this.data.discriminator = GroupPersonClaimStateType.RANK;
                 this.data = plainToClass(GroupPersonClaimRank, this.data);
+
+                this.formGroup.setControl('rankNgxSelect', this.rankNgxSelect.control);
+                this.formGroup.removeControl('nameNgxInput');
                 break;
               case ClaimStateEnum.FKIS_EMPLOYEE:
               case ClaimStateEnum.ATHLETE_REPRESENTATIVE:
               case ClaimStateEnum.OTHER:
                 this.data.discriminator = GroupPersonClaimStateType.STATUS;
                 this.data = plainToClass(GroupPersonClaimStatus, this.data);
+
+                this.formGroup.setControl('nameNgxInput', this.nameNgxInput.control);
+                this.formGroup.removeControl('rankNgxSelect');
                 break;
             }
           }
@@ -134,16 +142,22 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
       }
       this.rankNgxSelect.compare = (first, second) => first.id === second.id;
       this.rankNgxSelect.control.setValue(rank);
+      this.formGroup.setControl('rankNgxSelect', this.rankNgxSelect.control);
 
       this.sportTypeNgxSelect = this._utilService.getNgxSelect('sportType', true);
       this.sportTypeNgxSelect.items = (await this._sportTypeApiService.getSportTypes({count: PropertyConstant.pageSizeMax}).toPromise()).list;
       this.sportTypeNgxSelect.compare = (first, second) => first.id === second.id;
       this.sportTypeNgxSelect.control.setValue(sportType);
+      this.formGroup.setControl('sportTypeNgxSelect', this.sportTypeNgxSelect.control);
 
       this.nameNgxInput = this._utilService.getNgxInput('name', name, true);
+      this.formGroup.setControl('nameNgxInput', this.nameNgxInput.control);
       this.numberNgxInput = this._utilService.getNgxInput('Номер приказа', numberDocument, true);
+      this.formGroup.setControl('numberNgxInput', this.numberNgxInput.control);
       this.issuedByNgxInput = this._utilService.getNgxInput('issuedBy', issuedBy, true);
+      this.formGroup.setControl('issuedByNgxInput', this.issuedByNgxInput.control);
       this.issuedAtNgxDate = this._utilService.getNgxDate('issuedAt', issuedAt, true);
+      this.formGroup.setControl('issuedAtNgxDate', this.issuedAtNgxDate.control);
     });
   }
 
