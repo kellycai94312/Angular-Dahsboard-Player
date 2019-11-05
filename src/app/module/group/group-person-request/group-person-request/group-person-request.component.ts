@@ -13,7 +13,7 @@ import { EducationType } from 'app/data/remote/model/education-type';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
 import { Group } from 'app/data/remote/model/group/base';
-import { Organization, OrganizationType } from 'app/data/remote/model/group/organization';
+import { Organization } from 'app/data/remote/model/group/organization';
 import { GroupPersonClaim } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
@@ -82,7 +82,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     const result = super.initializeComponent(data);
     if (result) {
       const emailValidators = [Validators.required, ValidationService.emailValidator];
-      const phoneValidators = [Validators.required, Validators.minLength(4), Validators.maxLength(15), ValidationService.integerValidator];
+      const phoneValidators = [Validators.required, Validators.minLength(4), Validators.maxLength(15), ValidationService.phoneValidator];
       return this.appHelper.tryLoad(async () => {
         let person: Person;
         if (data instanceof GroupPersonClaimRequest) {
@@ -94,6 +94,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.educationNgxSelect.labelTranslation = 'Образование';
           this.educationNgxSelect.items = await this._educationTypeApiService.getEducationTypes().toPromise();
           this.educationNgxSelect.display = 'name';
+          this.educationNgxSelect.hasNone = true;
           this.educationNgxSelect.compare = (first, second) => first.id === second.id;
           if (data.groupPersonClaim.educationType) {
             this.sexNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonClaim.educationType.id));

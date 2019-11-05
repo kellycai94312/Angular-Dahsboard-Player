@@ -11,6 +11,7 @@ import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-
 import { LegalEntityPersonStatement } from 'app/module/group/person-statements/legal-entity-person-statement/model/legal-entity-person-statement';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
+import { ValidationService } from 'app/service/validation/validation.service';
 import { UtilService } from 'app/services/util/util.service';
 import { AppHelper } from 'app/utils/app-helper';
 
@@ -120,6 +121,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     }
 
     this.phoneGroupNgxInput = this._getNgxInput('Телефон', organization.phone);
+    this.phoneGroupNgxInput.control.setValidators(ValidationService.phoneValidator);
     this.faxGroupNgxInput = this._getNgxInput('Факс', organization.fax);
     this.websiteGroupNgxInput = this._getNgxInput('Web-страница', organization.website);
     this.emailGroupNgxInput = this._getNgxInput('Email', organization.email);

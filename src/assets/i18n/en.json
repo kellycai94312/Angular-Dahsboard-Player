@@ -940,5 +940,6 @@
   "headPersonPhone": "Head phone",
   "claim": "Claim",
   "issuedAt": "Issued at",
-  "status": "Status"
+  "status": "Status",
+  "phoneInvalid": "Phone invalid. Example: 89211234567"
 }
