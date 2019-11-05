@@ -10,7 +10,7 @@ import { ContactItem } from '../model';
 export class ContactsComponent implements OnInit {
 
   public items: Array<NameWrapper<MenuData>> = [];
-  public menuSize = '46px';
+  public menuSize = '20%';
 
   public ngOnInit(): void {
     this.items = Object.keys(ContactItem).map(value => new NameWrapper(this._getPathByContactItem(value as ContactItem), `contactItemEnum.${value}`));

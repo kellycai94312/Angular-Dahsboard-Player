@@ -1,6 +1,11 @@
-import {Injectable} from '@angular/core';
-import {classToClass, ClassTransformOptions, plainToClassFromExist} from 'class-transformer';
-import {DiscriminatorObject} from '../../data/remote/bean/discriminator-object';
+import { Injectable } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
+import { NgxInput } from 'app/module/ngx/ngx-input';
+import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
+import { classToClass, ClassTransformOptions, plainToClassFromExist } from 'class-transformer';
+import { DiscriminatorObject } from '../../data/remote/bean/discriminator-object';
 
 @Injectable({
   providedIn: 'root'
@@ -51,6 +56,40 @@ export class UtilService {
       }
     }
     return items.join('&');
+  }
+
+  public getNgxSelect(labelTranslation: string, required = false): NgxSelect {
+    const ngxInput = new NgxSelect();
+    ngxInput.labelTranslation = labelTranslation;
+    ngxInput.required = required;
+    ngxInput.display = 'name';
+    if (required) {
+      ngxInput.control.setValidators(Validators.required);
+    }
+    return ngxInput;
+  }
+
+  public getNgxDate(labelTranslation: string, value: Date, required = false): NgxDate {
+    const ngxDate = new NgxDate();
+    ngxDate.placeholderTranslation = labelTranslation;
+    ngxDate.format = PropertyConstant.dateFormat;
+    ngxDate.control = new FormControl(value);
+    if (required) {
+      ngxDate.required = required;
+      ngxDate.control.setValidators(Validators.required);
+    }
+    return ngxDate;
+  }
+
+  public getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
+    const ngxInput = new NgxInput();
+    ngxInput.labelTranslation = labelTranslation;
+    ngxInput.control.setValue(value);
+    if (required) {
+      ngxInput.required = required;
+      ngxInput.control.setValidators(Validators.required);
+    }
+    return ngxInput;
   }
 
 }

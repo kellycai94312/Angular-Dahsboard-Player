@@ -1,0 +1,29 @@
+<div *ngIf="data"
+     fxLayout="column">
+  <ngx-select [data]="claimStateNgxSelect"></ngx-select>
+
+  <ng-container [ngSwitch]="data.discriminator">
+    <ng-container *ngSwitchCase="groupPersonClaimStateTypeClass.RANK">
+      <mat-slide-toggle *ngIf="person?.id"
+                        [(ngModel)]="createRank"></mat-slide-toggle>
+      <ng-container *ngIf="createRank; else selectPersonRankTemplate">
+        <ngx-select [data]="rankNgxSelect"></ngx-select>
+        <ng-container [ngTemplateOutlet]="commonDataTemplate"></ng-container>
+      </ng-container>
+      <ng-template #selectPersonRankTemplate>
+        <ngx-select [data]="personRankNgxSelect"></ngx-select>
+      </ng-template>
+    </ng-container>
+    <ng-container *ngSwitchCase="groupPersonClaimStateTypeClass.STATUS">
+      <new-ngx-input [data]="nameNgxInput"></new-ngx-input>
+      <ng-container [ngTemplateOutlet]="commonDataTemplate"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #commonDataTemplate>
+    <ngx-select [data]="sportTypeNgxSelect"></ngx-select>
+    <new-ngx-input [data]="numberNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="issuedByNgxInput"></new-ngx-input>
+    <ngx-date [data]="issuedAtNgxDate"></ngx-date>
+  </ng-template>
+</div>

@@ -58,6 +58,10 @@ export class DocumentApiService {
     return this._apiService.updateValue(void 0, `${this._basePath}/${document.id}/file`, new IdRequest(resourceFile.id)) as Observable<null>;
   }
 
+  public verifyDocument(document: Document): Observable<Document> {
+    return this._apiService.updateValue(Document, `${this._basePath}/${document.id}/verify`) as Observable<Document>;
+  }
+
   public removeDocumentFile(document: Document): Observable<ResourceFile> {
     return this._apiService.removeValue(void 0, `${this._basePath}/${document.id}/file`) as Observable<ResourceFile>;
   }

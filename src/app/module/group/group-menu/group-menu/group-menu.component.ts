@@ -49,14 +49,14 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
               type: 'group',
               icon: 'apps',
               children: [
-                {
-                  id: '1',
-                  translate: 'email',
-                  type: 'item',
-                  url: 'email',
-                  icon: 'email',
-                  disabled: true
-                },
+                // {
+                //   id: '1',
+                //   translate: 'email',
+                //   type: 'item',
+                //   url: 'email',
+                //   icon: 'email',
+                //   disabled: true
+                // },
                 {
                   id: 'personnelManagement',
                   translate: 'personnelManagement',
@@ -70,14 +70,14 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                       svgIcon: 'person-positions',
                       url: `/group/${value.id}/settings/position`
                     },
-                    {
-                      id: 'competencyManagement',
-                      translate: 'competencyManagement',
-                      type: 'item',
-                      url: 'competencyManagement',
-                      svgIcon: 'competency-management',
-                      disabled: true
-                    },
+                    // {
+                    //   id: 'competencyManagement',
+                    //   translate: 'competencyManagement',
+                    //   type: 'item',
+                    //   url: 'competencyManagement',
+                    //   svgIcon: 'competency-management',
+                    //   disabled: true
+                    // },
                     {
                       id: 'vacancies',
                       translate: 'vacancies',
@@ -85,17 +85,17 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                       svgIcon: 'vacancies',
                       url: `/group/${value.id}/settings/vacancy`
                     },
-                    {
-                      id: 'staffRecruitment',
-                      translate: 'staffRecruitment',
-                      type: 'item',
-                      url: 'staffRecruitment',
-                      svgIcon: 'staff-recruitment',
-                      disabled: true
-                    },
+                    // {
+                    //   id: 'staffRecruitment',
+                    //   translate: 'staffRecruitment',
+                    //   type: 'item',
+                    //   url: 'staffRecruitment',
+                    //   svgIcon: 'staff-recruitment',
+                    //   disabled: true
+                    // },
                     {
                       id: 'subgroupsStructure',
-                      translate: 'subgroupsStructure',
+                      translate: 'Штатное расписание',
                       type: 'item',
                       svgIcon: 'subgroups-structure',
                       url: `/group/${value.id}/subgroup`
@@ -115,77 +115,77 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                   svgIcon: 'project-office',
                   type: 'collapsable',
                   children: [
-                    {
-                      id: 'projectManagement',
-                      translate: 'projectManagement',
-                      type: 'item',
-                      url: 'projectManagement',
-                      disabled: true
-                    },
+                    // {
+                    //   id: 'projectManagement',
+                    //   translate: 'projectManagement',
+                    //   type: 'item',
+                    //   url: 'projectManagement',
+                    //   disabled: true
+                    // },
                     {
                       id: 'hierarchyManagement',
-                      translate: 'hierarchyManagement',
+                      translate: 'Структура кластеров',
                       type: 'item',
                       svgIcon: 'hierarchy-management',
                       url: `/group/${value.id}/structure/cluster`
                     },
-                    {
-                      id: 'projectChat',
-                      translate: 'projectChat',
-                      type: 'item',
-                      url: 'projectChat',
-                      disabled: true
-                    },
-                    {
-                      id: 'analytics',
-                      translate: 'analytics',
-                      type: 'item',
-                      url: 'analytics',
-                      svgIcon: 'analytics',
-                      disabled: true
-                    }
+                    // {
+                    //   id: 'projectChat',
+                    //   translate: 'projectChat',
+                    //   type: 'item',
+                    //   url: 'projectChat',
+                    //   disabled: true
+                    // },
+                    // {
+                    //   id: 'analytics',
+                    //   translate: 'analytics',
+                    //   type: 'item',
+                    //   url: 'analytics',
+                    //   svgIcon: 'analytics',
+                    //   disabled: true
+                    // }
                   ]
                 },
-                {
-                  id: 'showcase',
-                  translate: 'showcase',
-                  type: 'item',
-                  svgIcon: 'showcase',
-                  url: 'showcase',
-                  disabled: true
-                },
-                {
-                  id: 'knowledgeBase',
-                  translate: 'knowledgeBase',
-                  type: 'item',
-                  url: 'knowledgeBase',
-                  svgIcon: 'knowledge-base',
-                  disabled: true
-                },
-                {
-                  id: 'briefcase',
-                  translate: 'briefcase',
-                  type: 'item',
-                  url: 'briefcase',
-                  svgIcon: 'briefcase',
-                  disabled: true
-                },
-                {
-                  id: 'finance',
-                  translate: 'finance',
-                  type: 'item',
-                  url: 'finance',
-                  svgIcon: 'finance',
-                  disabled: true
-                },
-                {
-                  id: 'groupRepository',
-                  translate: 'groupRepository',
-                  type: 'item',
-                  url: 'groupRepository',
-                  svgIcon: 'group-repository',
-                  disabled: true
-                }
+                // {
+                //   id: 'showcase',
+                //   translate: 'showcase',
+                //   type: 'item',
+                //   svgIcon: 'showcase',
+                //   url: 'showcase',
+                //   disabled: true
+                // },
+                // {
+                //   id: 'knowledgeBase',
+                //   translate: 'knowledgeBase',
+                //   type: 'item',
+                //   url: 'knowledgeBase',
+                //   svgIcon: 'knowledge-base',
+                //   disabled: true
+                // },
+                // {
+                //   id: 'briefcase',
+                //   translate: 'briefcase',
+                //   type: 'item',
+                //   url: 'briefcase',
+                //   svgIcon: 'briefcase',
+                //   disabled: true
+                // },
+                // {
+                //   id: 'finance',
+                //   translate: 'finance',
+                //   type: 'item',
+                //   url: 'finance',
+                //   svgIcon: 'finance',
+                //   disabled: true
+                // },
+                // {
+                //   id: 'groupRepository',
+                //   translate: 'groupRepository',
+                //   type: 'item',
+                //   url: 'groupRepository',
+                //   svgIcon: 'group-repository',
+                //   disabled: true
+                // }
               ]
             }
           ];

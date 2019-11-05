@@ -1,0 +1,89 @@
+<div fxLayout="column"
+     fxLayoutGap="10px">
+<!--  <div fxLayout="row"-->
+<!--       fxLayoutAlign="center center">-->
+<!--    <ngx-image [width]="128"-->
+<!--               [height]="128"-->
+<!--               [object]="person"-->
+<!--               [type]="imageTypeClass.LOGO"-->
+<!--               [fileClass]="fileClassClass.PERSON"></ngx-image>-->
+<!--  </div>-->
+  <div>
+    <label class="label">{{'identityDocument' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
+  <div fxLayout
+       fxLayoutGap="10px">
+    <new-ngx-input class="document-field"
+                   [data]="documentSeriesNgxInput"></new-ngx-input>
+    <new-ngx-input class="document-field"
+                   [data]="documentNumberNgxInput"></new-ngx-input>
+    <ngx-date [data]="documentDateNgxInput"></ngx-date>
+    <new-ngx-input [data]="documentIssuedByNgxInput"></new-ngx-input>
+  </div>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <ngx-select [data]="documentCitizenshipNgxSelect"></ngx-select>
+    <new-ngx-input [data]="documentBirthplaceNgxInput"></new-ngx-input>
+  </div>
+  <div>
+    <label class="label">{{'Место жительства' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="cityAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="streetAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="houseAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="blockAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="literAddressNgxInput"></new-ngx-input>
+  </div>
+
+  <div>
+    <label class="label">{{'Дополнительные данные' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
+  <new-ngx-input [data]="jobPlaceNgxInput"></new-ngx-input>
+  <ngx-grid [canEdit]="true"
+            [fetchItems]="fetchItems"
+            [edit]="editTable"
+            [add]="addNewRow">
+    <ngx-column nameKey="status">
+      <ng-template let-item>
+        {{getStatus(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="name">
+      <ng-template let-item>
+        {{getName(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="sportType">
+      <ng-template let-item>
+        {{getSportTypeName(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="number">
+      <ng-template let-item>
+        {{getNumber(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="issuedBy">
+      <ng-template let-item>
+        {{getIssuedBy(item)}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="issuedAt">
+      <ng-template let-item>
+        {{getIssuedAt(item) | date: propertyConstantClass.dateFormat}}
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <button mat-raised-button
+            [disabled]="formGroup.invalid"
+            (click)="onCreateClaim()">{{'Отправить анкету' | translate}}</button>
+  </div>
+</div>

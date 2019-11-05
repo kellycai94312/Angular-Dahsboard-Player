@@ -12,8 +12,9 @@ export class PersonRank extends IdentifiedObject {
   public sportType: SportType;
 
   @Type(() => Date)
-  public date: Date;
+  public issuedAt: Date;
 
-  public number: number;
+  public issuedBy: string;
+  public number: string;
 
 }

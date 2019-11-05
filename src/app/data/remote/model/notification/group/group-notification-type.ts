@@ -9,7 +9,8 @@ export enum GroupNotificationType {
   INVITE_PERSON_APPROVE = 'INVITE_PERSON_APPROVE', // Пользователь принял приглашение в группу, отправляется администраторам
   INVITE_PERSON_REFUSE = 'INVITE_PERSON_REFUSE', // Пользователь отклонил приглашение в группу, отправляется администраторам
   DELETE_PERSON = 'DELETE_PERSON', // Отправляется пользователю, которого исключили из участников группы
+  DELETE_PERSON_CLAIM = 'DELETE_PERSON_CLAIM', // Отправляется пользователю, которого исключили из членов группы
   UPDATE_POSITIONS = 'UPDATE_POSITIONS', // Отправляется пользователю, которому обновили должности в группе
   UPDATE_POSITIONS_APPROVE = 'UPDATE_POSITIONS_APPROVE', // Пользователь согласился с изменениями должностей, отправляется создателю группы и редактору должности
-  UPDATE_POSITIONS_REFUSE = 'UPDATE_POSITIONS_REFUSE', // Пользователь отказался от изменений должностей, отправляется создателю группы и редактору должности
+  UPDATE_POSITIONS_REFUSE = 'UPDATE_POSITIONS_REFUSE' // Пользователь отказался от изменений должностей, отправляется создателю группы и редактору должности
 }

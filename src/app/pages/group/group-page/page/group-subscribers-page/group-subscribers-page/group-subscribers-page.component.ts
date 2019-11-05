@@ -27,7 +27,7 @@ export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
   async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
-    this.query.groupPersonState = GroupPersonState.FOLLOWING;
+    this.query.state = GroupPersonState.FOLLOWING;
     await this.groupPersonsListComponent.updateItems();
   }
 

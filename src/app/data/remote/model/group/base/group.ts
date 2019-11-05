@@ -31,6 +31,8 @@ export class Group extends NamedObject {
   public inn?: string;
   public kpp?: string;
   public oktmo?: string;
+  public okdad?: string;
+  public okpo?: string;
   public recipient?: string;
   public recipientPersonalAccount?: string;
   public bankFacility?: string;
@@ -38,6 +40,12 @@ export class Group extends NamedObject {
   public bik?: string;
   public kbk?: string;
   public email?: string;
+  public fax?: string;
+  public website?: string;
+  public stateRegistrationCertificateNumber?: string;
+  public accreditationOrderNumber?: string;
+  public paymentAccount?: string;
+  public correspondentAccount?: string;
 
   //region Transient
 

@@ -66,7 +66,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       enableHtml: true,
-      positionClass: 'toast-top-center',
+      positionClass: 'toast-bottom-left',
       timeOut: 3000,
       maxOpened: 3
     }),

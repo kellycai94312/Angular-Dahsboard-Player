@@ -3,7 +3,6 @@ import { SexEnum } from 'app/data/remote/misc/sex-enum';
 import { GroupPersonJob } from 'app/data/remote/model/group/person/group-person-job';
 import { AthleteState } from 'app/data/remote/model/person/athlete-state';
 import { Type } from 'class-transformer';
-import { Address } from './address';
 import { User } from './user';
 
 export class Person extends IdentifiedObject {
@@ -14,11 +13,6 @@ export class Person extends IdentifiedObject {
   public birthDate: Date;
   public sex: SexEnum;
   public countryCode: string;
-  public phoneNumber: string;
-
-  @Type(() => Address)
-  public address: Address;
-
   public user: User;
   public athleteState: AthleteState;
   public legalRepresentativesPhone: string;

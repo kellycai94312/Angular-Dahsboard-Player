@@ -792,12 +792,15 @@
   },
   "groupNotification": {
     "JOIN_PERSON": "{{person}} applied to the group {{group}} on positions {{positions}}",
+    "JOIN_PERSON_CLAIM": "{{sender}} sent claim to the group {{group}}",
     "JOIN_PERSON_APPROVE": "{{sender}} added you to the group {{group}}",
     "JOIN_PERSON_REFUSE": "{{sender}} refused you to add in the group {{group}}",
+    "JOIN_PERSON_CLAIM_APPROVE": "{{sender}} approved you to add in the group {{group}}",
     "INVITE_PERSON": "{{sender}} invited you in the group {{group}}",
     "INVITE_PERSON_APPROVE": "{{person}} approved to add in the group {{group}}",
     "INVITE_PERSON_REFUSE": "{{person}} refused to add in the group {{group}}",
     "DELETE_PERSON": "{{sender}} removed you from the group {{group}}",
+    "DELETE_PERSON_CLAIM": "{{sender}} removed you from the group {{group}}",
     "UPDATE_POSITIONS": "{{sender}} updated your positions {{positions}} in the {{group}}",
     "UPDATE_POSITIONS_APPROVE": "{{person}} approved positions changes in the {{group}}",
     "UPDATE_POSITIONS_REFUSE": "{{person}} refused positions changes in the {{group}}"
@@ -935,5 +938,8 @@
   "organizationPhone": "Organization phone",
   "organizationEmail": "Organization email",
   "headPersonPhone": "Head phone",
-  "claim": "Claim"
+  "claim": "Claim",
+  "issuedAt": "Issued at",
+  "status": "Status",
+  "phoneInvalid": "Phone invalid. Example: 89211234567"
 }

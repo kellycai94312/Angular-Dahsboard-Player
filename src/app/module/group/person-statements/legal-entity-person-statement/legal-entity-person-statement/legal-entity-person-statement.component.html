@@ -1,0 +1,96 @@
+<div *ngIf="data"
+     class="content"
+     fxLayout="column"
+     fxLayoutGap="10px">
+  <div fxLayout="column">
+    <new-ngx-input [data]="nameGroupNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="fullNameGroupNgxInput"></new-ngx-input>
+    <ngx-select [data]="companyTypeNgxSelect"></ngx-select>
+  </div>
+
+  <label class="label">{{'Полный юридический адрес' | translate}}</label>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="postIndexLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="regionLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="cityLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="streetLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="houseLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="blockLegalAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="literLegalAddressNgxInput"></new-ngx-input>
+  </div>
+
+  <label class="label">{{'Полный фактический адрес' | translate}}</label>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="postIndexActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="regionActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="cityActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="streetActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="houseActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="blockActualAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="literActualAddressNgxInput"></new-ngx-input>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="phoneGroupNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="faxGroupNgxInput"></new-ngx-input>
+  </div>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="websiteGroupNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="emailGroupNgxInput"></new-ngx-input>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="headFullNameNgxInputNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="phoneHeadPersonNgxInput"></new-ngx-input>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <new-ngx-input [data]="deputyHeadFullNameNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="deputyHeadPhoneNgxInput"></new-ngx-input>
+  </div>
+
+  <label class="label">{{'Дополнительная информация' | translate}}</label>
+
+  <new-ngx-input [data]="stateRegistrationCertificateNumberGroupNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="accreditationOrderNumberGroupNgxInput"></new-ngx-input>
+
+  <label class="label">{{'Банковские реквизиты' | translate}}</label>
+
+  <new-ngx-input [data]="bankFacilityGroupNgxInput"></new-ngx-input>
+
+  <div fxLayout="row"
+       fxLayoutGap="10px">
+    <div fxFlex
+         fxLayout="column">
+      <new-ngx-input [data]="paymentAccountGroupNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="innGroupNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="oktmoGroupNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="kbkGroupNgxInput"></new-ngx-input>
+    </div>
+    <div fxFlex
+         fxLayout="column">
+      <new-ngx-input [data]="correspondentAccountGroupNgxInput"></new-ngx-input>
+      <div fxLayout="row"
+           fxLayoutGap="10px">
+        <new-ngx-input [data]="bikGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="kppGroupNgxInput"></new-ngx-input>
+      </div>
+      <new-ngx-input [data]="okdadGroupNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="okpoGroupNgxInput"></new-ngx-input>
+    </div>
+  </div>
+  <div fxLayout="row">
+    <button mat-raised-button
+            color="primary"
+            [disabled]="formGroup.invalid"
+            (click)="onApply()">{{'apply' | translate}}</button>
+  </div>
+</div>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ClaimStateEnum } from 'app/data/remote/model/group/person/state';
 import { BaseRank, RankType } from 'app/data/remote/model/rank';
 import { ApiService } from 'app/data/remote/rest-api/api';
 import { Observable } from 'rxjs';
@@ -14,7 +15,7 @@ export class RankApiService {
   constructor(private _apiService: ApiService) {
   }
 
-  public getRanks(query?: { name?: string, rankType?: RankType }): Observable<BaseRank[]> {
+  public getRanks(query?: { name?: string, claimStateEnum?: ClaimStateEnum, rankType?: RankType }): Observable<BaseRank[]> {
     return this._apiService.getValues(BaseRank, this._basePath, query);
   }
 

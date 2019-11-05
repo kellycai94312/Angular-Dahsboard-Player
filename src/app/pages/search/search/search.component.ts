@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class SearchComponent implements OnInit {
 
   public items: Array<any> = [];
-  public menuSize = '46px';
+  public menuSize = '20%';
 
   public ngOnInit(): void {
     this.items = [
