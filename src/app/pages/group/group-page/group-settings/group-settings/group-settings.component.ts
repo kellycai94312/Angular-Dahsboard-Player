@@ -6,6 +6,7 @@ import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
 import { Group } from 'app/data/remote/model/group/base';
 import { ToolbarService } from 'app/layout/components/toolbar/services/toolbar.service';
+import { GroupEmailComponent } from 'app/pages/group/group-page/group-settings/group-email/group-email/group-email.component';
 import { AppHelper } from 'app/utils/app-helper';
 import { takeWhile } from 'rxjs/operators';
 import { GroupService } from '../../service/group.service';
@@ -25,6 +26,7 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
   public selectedComponent: BaseGroupSettingsComponent<Group>;
   public items: NameWrapper<string>[];
   public visibleGroupMenu: boolean;
+  public visibleRightMenu = true;
 
   constructor(private _activatedRoute: ActivatedRoute,
               private _router: Router,
@@ -62,6 +64,12 @@ export class GroupSettingsComponent extends BaseGroupComponent<Group> implements
 
   public onRouterOutletActivate(value: any): void {
     this.selectedComponent = value;
+
+    if (value instanceof GroupEmailComponent) {
+      delete this.visibleRightMenu;
+    } else {
+      this.visibleRightMenu = true;
+    }
   }
 
   public onRouterOutletDeactivate(value: any): void {

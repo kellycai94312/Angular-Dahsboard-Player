@@ -49,14 +49,13 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
               type: 'group',
               icon: 'apps',
               children: [
-                // {
-                //   id: '1',
-                //   translate: 'email',
-                //   type: 'item',
-                //   url: 'email',
-                //   icon: 'email',
-                //   disabled: true
-                // },
+                {
+                  id: '1',
+                  translate: 'email',
+                  type: 'item',
+                  icon: 'email',
+                  url: `/group/${value.id}/settings/email`
+                },
                 {
                   id: 'personnelManagement',
                   translate: 'personnelManagement',

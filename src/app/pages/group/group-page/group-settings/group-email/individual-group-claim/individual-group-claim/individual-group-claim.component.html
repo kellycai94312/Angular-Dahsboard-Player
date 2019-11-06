@@ -1,0 +1,18 @@
+<ngx-grid [fetchItems]="fetchItems">
+  <ngx-column nameKey="Отправитель заявки">
+    <ng-template let-item>
+      {{item?.person?.lastName + ' ' + item?.person?.firstName}} {{item?.person?.patronymic}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column nameKey="Дата заявки">
+    <ng-template let-item>
+      {{item.created | date: propertyConstantClass.dateFormat}}
+    </ng-template>
+  </ngx-column>
+
+  <ngx-column>
+    <ng-template let-item>
+    </ng-template>
+  </ngx-column>
+</ngx-grid>

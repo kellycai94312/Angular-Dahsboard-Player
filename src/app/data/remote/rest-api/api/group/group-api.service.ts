@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupConnectionRequestType } from 'app/data/remote/bean/group-connection-request-type';
 import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { RequestType } from 'app/data/remote/bean/request-type';
 import { StringWrapper } from 'app/data/remote/bean/wrapper/string-wrapper';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import {
   BaseGroupConnectionRequest,
   GroupCluster,
-  GroupConnectionRequestClaim
+  GroupConnectionRequestClaim,
+  GroupConnectionRequestType
 } from 'app/data/remote/model/group/connection';
 import { BaseGroupContract } from 'app/data/remote/model/group/contract';
 import { GroupNews } from 'app/data/remote/model/group/news';
@@ -300,7 +301,7 @@ export class GroupApiService {
 
   //#endregion
 
-  public getGroupConnectionRequests(group: Group, query?: { type?: GroupConnectionRequestType } & PageQuery): Observable<PageContainer<BaseGroupConnectionRequest>> {
+  public getGroupConnectionRequests(group: Group, query?: { requestType?: RequestType, groupConnectionRequestType?: GroupConnectionRequestType } & PageQuery): Observable<PageContainer<BaseGroupConnectionRequest>> {
     return this._apiService.getPageContainer(BaseGroupConnectionRequest, `${this._basePath}/${group.id}/connectionRequest`, query) as Observable<PageContainer<BaseGroupConnectionRequest>>;
   }
 

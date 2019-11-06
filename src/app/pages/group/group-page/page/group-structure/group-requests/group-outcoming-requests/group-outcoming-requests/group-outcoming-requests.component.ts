@@ -2,8 +2,8 @@ import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular
 import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
 import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { GroupConnectionRequestType } from 'app/data/remote/bean/group-connection-request-type';
 import { PageContainer } from 'app/data/remote/bean/page-container';
+import { RequestType } from 'app/data/remote/bean/request-type';
 import { Group } from 'app/data/remote/model/group/base';
 import { GroupConnectionRequest } from 'app/data/remote/model/group/connection';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
@@ -53,7 +53,7 @@ export class GroupOutcomingRequestsComponent extends BaseGroupComponent<Group> i
   }
 
   public fetchItems = async (query: GroupConnectionRequestQuery): Promise<PageContainer<GroupConnectionRequest>> => {
-    query.type = GroupConnectionRequestType.OUTCOMING;
+    query.type = RequestType.OUTCOMING;
     return this._groupApiService.getGroupConnectionRequests(this.group, query).toPromise();
   };
 
