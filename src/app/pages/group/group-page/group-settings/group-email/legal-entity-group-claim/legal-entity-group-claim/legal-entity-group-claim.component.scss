@@ -1,0 +1,11 @@
+:host {
+  ::ng-deep {
+    .table tbody tr:nth-of-type(odd) {
+      background-color: unset !important;
+    }
+
+    .table td {
+      text-align: left;
+    }
+  }
+}

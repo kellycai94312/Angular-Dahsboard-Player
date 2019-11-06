@@ -1,4 +1,4 @@
-export enum GroupConnectionRequestType {
+export enum RequestType {
   INCOMING = 'INCOMING',
   OUTCOMING = 'OUTCOMING'
 }

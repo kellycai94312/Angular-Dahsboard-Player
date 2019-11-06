@@ -70,7 +70,7 @@ export const navigation: FuseNavigation[] = [
         type: 'item',
         icon: 'chat',
         url: '/conversation'
-      },
+      }
       // {
       //   id: 'laborExchange',
       //   translate: 'laborExchange',

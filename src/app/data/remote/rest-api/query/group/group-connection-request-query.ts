@@ -1,6 +1,6 @@
-import {PageQuery} from '../../page-query';
-import {GroupConnectionRequestType} from '../../../bean/group-connection-request-type';
+import { RequestType } from '../../../bean/request-type';
+import { PageQuery } from '../../page-query';
 
 export class GroupConnectionRequestQuery extends PageQuery {
-  public type?: GroupConnectionRequestType;
+  public type?: RequestType;
 }

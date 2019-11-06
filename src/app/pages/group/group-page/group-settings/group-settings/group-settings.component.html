@@ -27,7 +27,8 @@
         </button>
       </div>
     </mat-card>
-    <mat-card fxFlex="30"
+    <mat-card *ngIf="visibleRightMenu"
+              fxFlex="30"
               fxLayout="column"
               fxLayoutGap="10px">
       <div fxLayout="row"
