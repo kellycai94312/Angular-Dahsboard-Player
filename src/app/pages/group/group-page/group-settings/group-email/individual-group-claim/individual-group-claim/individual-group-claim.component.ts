@@ -3,7 +3,7 @@ import { BaseGroupComponent } from 'app/data/local/component/group/base-group-co
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { PageContainer } from 'app/data/remote/bean/page-container';
 import { Group } from 'app/data/remote/model/group/base';
-import { BaseGroupPerson, GroupPersonClaimState } from 'app/data/remote/model/group/person';
+import { GroupPerson, GroupPersonTypeClaimState } from 'app/data/remote/model/group/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
 import { GroupService } from 'app/pages/group/group-page/service/group.service';
@@ -23,8 +23,8 @@ export class IndividualGroupClaimComponent extends BaseGroupComponent<Group> {
     super(groupService, appHelper);
   }
 
-  public fetchItems = async (query: GroupPersonQuery): Promise<PageContainer<BaseGroupPerson>> => {
-    query.claimState = GroupPersonClaimState.JOIN_REQUEST;
+  public fetchItems = async (query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> => {
+    query.claimState = GroupPersonTypeClaimState.JOIN_REQUEST;
     return this._groupApiService.getPersons(this.group, query).toPromise();
   };
 

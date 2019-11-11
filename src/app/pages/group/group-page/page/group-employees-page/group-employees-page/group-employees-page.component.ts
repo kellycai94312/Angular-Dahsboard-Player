@@ -1,10 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
+import { GroupPersonType } from 'app/data/remote/model/group/person';
 import { takeWhile } from 'rxjs/operators';
 import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
 import { NameWrapper } from '../../../../../../data/local/name-wrapper';
 import { Group } from '../../../../../../data/remote/model/group/base/group';
 import { GroupPerson } from '../../../../../../data/remote/model/group/person/group-person';
-import { GroupPersonState } from '../../../../../../data/remote/model/group/person/group-person-state';
+import { GroupPersonTypeState } from '../../../../../../data/remote/model/group/person/type/group-person-type-state';
 import { PositionLevelEnum } from '../../../../../../data/remote/model/person-position/position-level-enum';
 import { GroupPersonQuery } from '../../../../../../data/remote/rest-api/query/group-person-query';
 import { GroupPersonsListComponent } from '../../../../../../module/group/group-persons-list/group-persons-list/group-persons-list.component';
@@ -36,10 +37,14 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
   public async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
-    this.query.state = GroupPersonState.APPROVED;
+    this.query.state = GroupPersonTypeState.APPROVED;
     let positionLevels = await this._translateObjectService.getTranslatedEnumCollection<PositionLevelEnum>(PositionLevelEnum, 'PositionLevelEnum');
-    if (!groupPerson || groupPerson.state !== GroupPersonState.APPROVED) {
-      positionLevels = positionLevels.filter(x => x.data === PositionLevelEnum.HEAD);
+
+    if (groupPerson) {
+      const groupPersonType = groupPerson.groupPersonTypes.find(x => x instanceof GroupPerson) as GroupPersonType;
+      if (!groupPersonType || groupPersonType.state !== GroupPersonTypeState.APPROVED) {
+        positionLevels = positionLevels.filter(x => x.data === PositionLevelEnum.HEAD);
+      }
     }
 
     this.positionLevelNgxSelect = new NgxSelect();

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BaseComponent } from 'app/data/local/component/base/base-component';
 import { Group } from 'app/data/remote/model/group/base';
-import { BaseGroupPerson } from 'app/data/remote/model/group/person';
+import { GroupPerson } from 'app/data/remote/model/group/person';
 import { GroupItemType } from '../model/group-item-type';
 
 @Component({
@@ -15,7 +15,7 @@ export class GroupDetailComponent extends BaseComponent<Group> implements OnInit
   public group: Group;
 
   @Input()
-  public groupPerson: BaseGroupPerson;
+  public groupPerson: GroupPerson;
 
   public readonly groupItemTypeClass = GroupItemType;
   public menuItems: MenuItem[] = [];
@@ -45,7 +45,7 @@ export class GroupDetailComponent extends BaseComponent<Group> implements OnInit
     }
   }
 
-  public onChangeGroupPerson(groupPerson: BaseGroupPerson): void {
+  public onChangeGroupPerson(groupPerson: GroupPerson): void {
     this.groupPerson = groupPerson;
   }
 

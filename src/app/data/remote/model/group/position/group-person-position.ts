@@ -1,5 +1,5 @@
+import { IdentifiedObject } from 'app/data/remote/base';
 import { Type } from 'class-transformer';
-import { IdentifiedObject } from '../../../base/identified-object';
 import { BasePosition } from '../../person-position/base-position';
 import { GroupPosition } from '../../person-position/group-position';
 import { Position } from '../../person-position/position';

@@ -12,6 +12,7 @@ import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import { Document } from 'app/data/remote/model/document/document';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
+import { GroupPerson } from 'app/data/remote/model/group/person';
 import {
   BaseGroupPersonClaimState,
   GroupPersonClaimRank,
@@ -78,7 +79,8 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     await super.initializeComponent(data);
 
     return this.appHelper.tryLoad(async () => {
-      data.groupPersonClaimRequest.passport = new Document();
+      data.groupPersonClaimRequest.passport = data.groupPersonClaimRequest.passport || new Document();
+      data.groupPersonClaimRequest.groupPerson = data.groupPersonClaimRequest.groupPerson || new GroupPerson();
       this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series);
       this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number);
       this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date);
@@ -90,7 +92,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
       this.documentCitizenshipNgxSelect.control.setValue(data.groupPersonClaimRequest.passport.citizenship);
 
       this._initializeAddress(data);
-      this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequest.groupPersonClaim.workplace);
+      this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequest.groupPerson.workplace);
     });
   }
 
@@ -279,7 +281,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequest.address.block = this.blockAddressNgxInput.control.value;
     this.data.groupPersonClaimRequest.address.liter = this.literAddressNgxInput.control.value;
 
-    this.data.groupPersonClaimRequest.groupPersonClaim.workplace = this.jobPlaceNgxInput.control.value;
+    this.data.groupPersonClaimRequest.groupPerson.workplace = this.jobPlaceNgxInput.control.value;
     this.data.groupPersonClaimRequest.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
 
     if (!this.person && this.data.groupPersonClaimRequest.states) {

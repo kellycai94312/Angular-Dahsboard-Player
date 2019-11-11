@@ -7,7 +7,7 @@ import { NgxVirtualScrollComponent } from '../../../../../../components/ngx-virt
 import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
 import { PropertyConstant } from '../../../../../../data/local/property-constant';
 import { Group } from '../../../../../../data/remote/model/group/base/group';
-import { GroupPersonState } from '../../../../../../data/remote/model/group/person/group-person-state';
+import { GroupPersonTypeState } from '../../../../../../data/remote/model/group/person/type/group-person-type-state';
 import { PageQuery } from '../../../../../../data/remote/rest-api/page-query';
 import { ParticipantRestApiService } from '../../../../../../data/remote/rest-api/participant-rest-api.service';
 import { GroupPersonQuery } from '../../../../../../data/remote/rest-api/query/group-person-query';
@@ -38,7 +38,7 @@ export class GroupPersonRequestsPageComponent extends BaseGroupComponent<Group> 
     this.groupPersonQuery.name = '';
     this.groupPersonQuery.from = 0;
     this.groupPersonQuery.count = PropertyConstant.pageSize;
-    this.groupPersonQuery.state = GroupPersonState.JOIN_REQUEST;
+    this.groupPersonQuery.state = GroupPersonTypeState.JOIN_REQUEST;
 
     this.splitButtonsItems = [
       {
