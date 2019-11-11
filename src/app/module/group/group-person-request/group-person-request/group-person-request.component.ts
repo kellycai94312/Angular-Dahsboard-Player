@@ -91,6 +91,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
         if (data instanceof GroupPersonClaimRequest) {
           data.groupPersonTypeClaim = data.groupPersonTypeClaim || new GroupPersonTypeClaim();
           data.groupPerson = data.groupPerson || new GroupPerson();
+          data.groupPerson.person = data.groupPerson.person || new Person();
           person = data.groupPerson.person;
 
           this.educationNgxSelect = new NgxSelect<EducationType>();
