@@ -13,7 +13,7 @@ import {
 } from 'app/data/remote/model/group/connection';
 import { BaseGroupContract } from 'app/data/remote/model/group/contract';
 import { GroupNews } from 'app/data/remote/model/group/news';
-import { GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
+import { BaseGroupPersonType, GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/state';
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { FileApiService } from 'app/data/remote/rest-api/api';
@@ -104,6 +104,10 @@ export class GroupApiService {
 
   public createGroupPersonClaim<T extends Group>(group: T, value: GroupPersonClaimRequest, file?: File): Observable<GroupPersonTypeClaim> {
     return this._apiService.createValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/claim/person`, this._fileApiService.getFileFormData(value, file)) as Observable<GroupPersonTypeClaim>;
+  }
+
+  public removeGroupPersonType<T extends BaseGroupPersonType>(group: Group, groupPersonType: BaseGroupPersonType): Observable<T> {
+    return this._apiService.removeValue(BaseGroupPersonType, `${this._basePath}/${group.id}/groupPersonType/${groupPersonType.id}`) as Observable<T>;
   }
 
   public createGroupConnectionRequestClaim<T extends Group>(group: T, value: GroupClaimRequest): Observable<GroupConnectionRequestClaim> {

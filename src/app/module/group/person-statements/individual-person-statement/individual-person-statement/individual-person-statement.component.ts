@@ -81,6 +81,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     return this.appHelper.tryLoad(async () => {
       data.groupPersonClaimRequest.passport = data.groupPersonClaimRequest.passport || new Document();
       data.groupPersonClaimRequest.groupPerson = data.groupPersonClaimRequest.groupPerson || new GroupPerson();
+      data.groupPersonClaimRequest.groupPerson.person = data.groupPersonClaimRequest.groupPerson.person || new Person();
       this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series);
       this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number);
       this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date);

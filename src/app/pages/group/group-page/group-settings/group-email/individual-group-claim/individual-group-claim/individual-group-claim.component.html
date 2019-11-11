@@ -13,6 +13,17 @@
 
   <ngx-column>
     <ng-template let-item>
+      <div fxFlex="initial"
+           fxLayout="row"
+           fxLayoutGap="10px">
+        <button mat-raised-button
+                color="primary"
+                (click)="onOpenClaim(item)">{{'Заявка' | translate}}</button>
+        <button mat-icon-button
+                (click)="onRemoveClaim(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
     </ng-template>
   </ngx-column>
 </ngx-grid>

@@ -49,6 +49,9 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   @Input()
   public personType: PersonType;
 
+  @Input()
+  public readonly: boolean;
+
   public readonly propertyConstantClass = PropertyConstant;
   public readonly personTypeClass = PersonType;
   public readonly imageTypeClass = ImageType;
@@ -97,7 +100,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.educationNgxSelect.hasNone = true;
           this.educationNgxSelect.compare = (first, second) => first.id === second.id;
           if (data.groupPersonTypeClaim.educationType) {
-            this.sexNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonTypeClaim.educationType.id));
+            this.educationNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonTypeClaim.educationType.id));
           }
           this.formGroup.setControl('education', this.educationNgxSelect.control);
 
