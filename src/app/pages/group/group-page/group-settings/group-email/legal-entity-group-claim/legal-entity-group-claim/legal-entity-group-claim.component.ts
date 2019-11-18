@@ -13,10 +13,14 @@ import {
   GroupConnectionRequestType
 } from 'app/data/remote/model/group/connection';
 import { Organization } from 'app/data/remote/model/group/organization';
+import { GroupPersonTypeState } from 'app/data/remote/model/group/person';
+import { Person } from 'app/data/remote/model/person';
+import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { GroupConnectionRequestApiService } from 'app/data/remote/rest-api/api/group-connection-request/group-connection-request-api.service';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { GroupPersonRequestComponent } from 'app/module/group/group-person-request/group-person-request/group-person-request.component';
+import { PersonType } from 'app/module/group/group-person-request/model/person-type';
 import { GroupService } from 'app/pages/group/group-page/service/group.service';
 import { TemplateModalService } from 'app/service/template-modal.service';
 import { AppHelper } from 'app/utils/app-helper';
@@ -53,11 +57,25 @@ export class LegalEntityGroupClaimComponent extends BaseGroupComponent<Group> {
     modal.componentInstance.title = 'Заявка';
     await modal.componentInstance.initializeBody(GroupPersonRequestComponent, async component => {
       component.group = this.group;
+      component.personType = PersonType.LEGAL_ENTITY;
       component.readonly = true;
+      const headGroupPersons = (await this._groupApiService.getPersons(item.group, {
+        count: PropertyConstant.pageSizeMax,
+        state: GroupPersonTypeState.APPROVED,
+        positionLevelEnum: PositionLevelEnum.HEAD
+      }).toPromise()).list;
+      let person: Person;
+      if (headGroupPersons && headGroupPersons.length) {
+        person = headGroupPersons[0].person;
+      }
 
       const claimRequest = new GroupClaimRequest();
       claimRequest.organization = plainToClass(Organization, item.group);
-      claimRequest.creator = item.group.head;
+      // TODO: Use this expression claimRequest.creator = item.group.head;
+      claimRequest.creator = person;
+      claimRequest.headPhone = item.headPhone;
+      claimRequest.creatorEmail = item.group.email;
+
       await component.initialize(claimRequest);
       component.formGroup.disable();
     });

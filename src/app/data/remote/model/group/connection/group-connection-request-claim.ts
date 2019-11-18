@@ -12,6 +12,7 @@ export class GroupConnectionRequestClaim extends BaseGroupConnectionRequest {
   public deputyHead?: GroupPerson;
 
   public headPlain?: string;
+  public headPhone?: string;
   public deputyHeadPlain?: string;
 
   constructor() {
