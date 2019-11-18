@@ -31,7 +31,7 @@ thead > tr {
       color: $light-blue !important;
     }
     &:hover {
-      background-color: darken($odd-item-color, 3%);
+      background-color: unset;
       p, h1, h2, h3, h4, h5, h6 {
         color: darken($light-blue, 10%) !important;
       }

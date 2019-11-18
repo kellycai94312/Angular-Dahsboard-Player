@@ -13,9 +13,11 @@
 
   <ngx-column>
     <ng-template let-item>
-      <div fxFlex="initial"
+      <div fxFlex="auto"
            fxLayout="row"
+           fxLayoutAlign="space-between center"
            fxLayoutGap="10px">
+        <div></div>
         <button mat-raised-button
                 color="primary"
                 (click)="onOpenClaim(item)">{{'Просмотреть' | translate}}</button>
