@@ -29,6 +29,7 @@ import { NotificationService } from './shared/notification.service';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  public browserCompatible = true;
   private _fuseConfig: any;
   private _person: Person;
   private _notDestroyed = true;
@@ -204,6 +205,8 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this._platform.ANDROID || this._platform.IOS) {
       this.document.body.classList.add('is-mobile');
     }
+
+    this.browserCompatible = this._platform.BLINK || this._platform.WEBKIT;
 
     //#endregion
 

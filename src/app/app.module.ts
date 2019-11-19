@@ -2,6 +2,7 @@ import { DatePipe, LocationStrategy, PathLocationStrategy, registerLocaleData } 
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import localeRu from '@angular/common/locales/ru';
 import { APP_INITIALIZER, Injector, NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -87,6 +88,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     EventPersonItemModule,
     NamedObjectModule,
     FuseModule.forRoot(fuseConfig),
+    FlexLayoutModule,
 
     // TODO: Need for resolve entryComponent
     NgxSelectionModule,
