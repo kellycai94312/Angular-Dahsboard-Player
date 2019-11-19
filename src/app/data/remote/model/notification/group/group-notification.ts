@@ -1,4 +1,4 @@
-import { BaseGroupPerson, GROUP_PERSON_TYPE_OPTIONS } from 'app/data/remote/model/group/person';
+import { GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { BaseNotification } from 'app/data/remote/model/notification/base/base-notification';
 import { NotificationType } from 'app/data/remote/model/notification/base/notification-type';
@@ -9,8 +9,8 @@ export class GroupNotification extends BaseNotification {
 
   public groupNotificationType: GroupNotificationType;
 
-  @Type(() => BaseGroupPerson, GROUP_PERSON_TYPE_OPTIONS)
-  private groupPerson: BaseGroupPerson;
+  @Type(() => GroupPersonTypeClaim)
+  private groupPersonTypeClaim: GroupPersonTypeClaim;
 
   //region Transient
 

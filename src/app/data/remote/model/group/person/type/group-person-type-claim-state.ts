@@ -1,4 +1,4 @@
-export enum GroupPersonClaimState {
+export enum GroupPersonTypeClaimState {
   JOIN_REQUEST = 'JOIN_REQUEST', // Заявление на вступление
   APPROVED = 'APPROVED' // Заявление на вступление подтверждено
 }

@@ -1,26 +1,27 @@
 import { GroupTypeEnum } from 'app/data/remote/model/group/base';
-import { GroupPersonState } from 'app/data/remote/model/group/person';
+import { GroupPersonTypeClaimState, GroupPersonTypeState } from 'app/data/remote/model/group/person';
 import { StageEnum } from 'app/data/remote/model/stage/stage-enum';
 import { UserRoleEnum } from 'app/data/remote/model/user-role-enum';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 
 export class EventGroupQuery extends PageQuery {
-  groupTypeEnum?: GroupTypeEnum;
-  userRoleEnum?: UserRoleEnum;
-  sportTypeId?: number;
-  ageGroupId?: number;
-  leagueId?: number;
-  countryId?: number;
-  regionId?: number;
-  cityId?: number;
-  stageEnum?: StageEnum;
-  stageYear?: number;
+  public groupTypeEnum?: GroupTypeEnum;
+  public userRoleEnum?: UserRoleEnum;
+  public sportTypeId?: number;
+  public ageGroupId?: number;
+  public leagueId?: number;
+  public countryId?: number;
+  public regionId?: number;
+  public cityId?: number;
+  public stageEnum?: StageEnum;
+  public stageYear?: number;
   // Группы, в которых состоят пользователи, находящиеся в беседе
-  conversationId?: number;
+  public conversationId?: number;
   // Все группы или привязанные к пользователю
-  all?: boolean;
-  state?: GroupPersonState;
+  public all?: boolean;
+  public state?: GroupPersonTypeState;
+  public claimState?: GroupPersonTypeClaimState;
   // Может ли пользователь редактировать группу
-  canEdit?: boolean;
-  unassigned?: boolean;
+  public canEdit?: boolean;
+  public unassigned?: boolean;
 }

@@ -1,4 +1,4 @@
-<md2-datepicker *ngIf="data"
+<md2-datepicker *ngIf="data && !data.materialControl"
                 placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
                 [touchUi]="data.touchUi"
                 [format]="data.format"
@@ -9,3 +9,18 @@
                 [formControl]="data.control"
                 [required]="data.required"
                 [disabled]="data.disabled"></md2-datepicker>
+<mat-form-field *ngIf="data && data.materialControl"
+                [appearance]="data.appearance">
+  <mat-label *ngIf="data.label || data.labelTranslation">{{data.label ? data.label : (data.labelTranslation | translate)}}</mat-label>
+  <input matInput
+         autocomplete="off"
+         placeholder="{{data.placeholder ? data.placeholder : (data.placeholderTranslation | translate)}}"
+         [min]="data.min"
+         [max]="data.max"
+         [required]="data.required"
+         [formControl]="data.control"
+         [matDatepicker]="picker1">
+  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+  <mat-datepicker #picker1></mat-datepicker>
+  <mat-error *ngIf="data.control?.invalid && data.getErrorMessage">{{data.getErrorMessage(data) | async}}</mat-error>
+</mat-form-field>

@@ -13,7 +13,7 @@ import {
 } from 'app/data/remote/model/group/connection';
 import { BaseGroupContract } from 'app/data/remote/model/group/contract';
 import { GroupNews } from 'app/data/remote/model/group/news';
-import { BaseGroupPerson, GroupPerson, GroupPersonClaim } from 'app/data/remote/model/group/person';
+import { BaseGroupPersonType, GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/state';
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { FileApiService } from 'app/data/remote/rest-api/api';
@@ -89,21 +89,25 @@ export class GroupApiService {
 
   //region Group person
 
-  public getCurrentGroupPerson<T extends BaseGroupPerson>(group: Group): Observable<T> {
+  public getCurrentGroupPerson(group: Group): Observable<GroupPerson> {
     return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/currentGroupPerson`)
-      .pipe(map(value => this._apiService.mapObject(BaseGroupPerson, value.value) as T));
+      .pipe(map(value => this._apiService.mapObject(GroupPerson, value.value) as GroupPerson));
   }
 
   public getGroupPerson<T extends Group>(group: T, person: Person): Observable<GroupPerson> {
     return this._apiService.getValue(GroupPerson, `${this._basePath}/${group.id}/person/${person.id}`);
   }
 
-  public joinGroup<T extends Group, P extends BasePosition>(group: T, positions: P[]): Observable<BaseGroupPerson> {
-    return this._apiService.createValue(BaseGroupPerson, `${this._basePath}/${group.id}/join`, new ListRequest(positions.map(x => new IdRequest(x.id)))) as Observable<BaseGroupPerson>;
+  public joinGroup<T extends Group, P extends BasePosition>(group: T, positions: P[]): Observable<GroupPerson> {
+    return this._apiService.createValue(GroupPerson, `${this._basePath}/${group.id}/join`, new ListRequest(positions.map(x => new IdRequest(x.id)))) as Observable<GroupPerson>;
   }
 
-  public createGroupPersonClaim<T extends Group>(group: T, value: GroupPersonClaimRequest, file?: File): Observable<GroupPersonClaim> {
-    return this._apiService.createValue(GroupPersonClaim, `${this._basePath}/${group.id}/claim/person`, this._fileApiService.getFileFormData(value, file)) as Observable<GroupPersonClaim>;
+  public createGroupPersonClaim<T extends Group>(group: T, value: GroupPersonClaimRequest, file?: File): Observable<GroupPersonTypeClaim> {
+    return this._apiService.createValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/claim/person`, this._fileApiService.getFileFormData(value, file)) as Observable<GroupPersonTypeClaim>;
+  }
+
+  public removeGroupPersonType<T extends BaseGroupPersonType>(group: Group, groupPersonType: BaseGroupPersonType): Observable<T> {
+    return this._apiService.removeValue(BaseGroupPersonType, `${this._basePath}/${group.id}/groupPersonType/${groupPersonType.id}`) as Observable<T>;
   }
 
   public createGroupConnectionRequestClaim<T extends Group>(group: T, value: GroupClaimRequest): Observable<GroupConnectionRequestClaim> {
@@ -128,23 +132,23 @@ export class GroupApiService {
 
   //endregion
 
-  public getPersons<T extends BaseGroupPerson>(group: Group,
-                                               query: GroupPersonQuery): Observable<PageContainer<T>> {
-    return this._apiService.getPageContainer(BaseGroupPerson, `${this._basePath}/${group.id}/person`, query) as Observable<PageContainer<T>>;
+  public getPersons(group: Group,
+                    query: GroupPersonQuery): Observable<PageContainer<GroupPerson>> {
+    return this._apiService.getPageContainer(GroupPerson, `${this._basePath}/${group.id}/person`, query) as Observable<PageContainer<GroupPerson>>;
   }
 
-  public updateGroupPersonAddress<T extends BaseGroupPerson>(group: Group,
-                                                             person: Person,
-                                                             value: PlainAddress): Observable<PlainAddress> {
+  public updateGroupPersonAddress(group: Group,
+                                  person: Person,
+                                  value: PlainAddress): Observable<PlainAddress> {
     return this._apiService.updateValue(PlainAddress, `${this._basePath}/${group.id}/person/${person.id}/address`, value) as Observable<PlainAddress>;
   }
 
-  public updateGroupPersonWorkplace<T extends BaseGroupPerson>(group: Group,
-                                                               person: Person,
-                                                               value: string): Observable<BaseGroupPerson> {
+  public updateGroupPersonWorkplace(group: Group,
+                                    person: Person,
+                                    value: string): Observable<GroupPerson> {
     const stringWrapper = new StringWrapper();
     stringWrapper.name = value;
-    return this._apiService.updateValue(BaseGroupPerson, `${this._basePath}/${group.id}/person/${person.id}/workplace`, stringWrapper) as Observable<BaseGroupPerson>;
+    return this._apiService.updateValue(GroupPerson, `${this._basePath}/${group.id}/person/${person.id}/workplace`, stringWrapper) as Observable<GroupPerson>;
   }
 
   public issueGroupPersonCertificate(group: Group,

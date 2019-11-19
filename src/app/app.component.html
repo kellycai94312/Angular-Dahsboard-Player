@@ -1,1 +1,8 @@
-<vertical-layout-1></vertical-layout-1>
+<div fxFlexFill
+     fxLayout="column">
+  <vertical-layout-1></vertical-layout-1>
+  <div *ngIf="!browserCompatible"
+       class="warning-content">Правильность работы системы не гарантируется с вашим браузером. Воспользуйтесь
+    совместимым браузером <a href="https://www.google.com/intl/ru/chrome/">Google Chrome</a>.
+  </div>
+</div>

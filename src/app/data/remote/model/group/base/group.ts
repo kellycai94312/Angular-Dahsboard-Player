@@ -1,10 +1,11 @@
+import { GroupPersonTypeClaimState } from 'app/data/remote/model/group/person';
 import { Type } from 'class-transformer';
 import { NamedObject } from '../../../base';
 import { Activity } from '../../activity/activity';
 import { BaseAddress } from '../../address/base/base-address';
 import { PlainAddress } from '../../address/plain-address';
 import { Person } from '../../person';
-import { GroupPersonState } from '../person/group-person-state';
+import { GroupPersonTypeState } from '../person/type/group-person-type-state';
 import { GroupTypeEnum } from './group-type-enum';
 
 export class Group extends NamedObject {
@@ -49,7 +50,8 @@ export class Group extends NamedObject {
 
   //region Transient
 
-  public groupPersonState?: GroupPersonState;
+  public groupPersonState?: GroupPersonTypeState;
+  public groupPersonTypeClaimState?: GroupPersonTypeClaimState;
   public dataOperator?: boolean;
   public bookmarked?: boolean;
 

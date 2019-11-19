@@ -7,7 +7,7 @@ import { ImageType } from 'app/data/remote/model/file/image';
 import { Group } from 'app/data/remote/model/group/base';
 import { IntervalGroup } from 'app/data/remote/model/group/interval';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { BaseGroupPerson, GroupPerson, GroupPersonState } from 'app/data/remote/model/group/person';
+import { GroupPerson, GroupPersonType, GroupPersonTypeState } from 'app/data/remote/model/group/person';
 import { Team } from 'app/data/remote/model/group/team';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { MenuItem } from 'app/module/common/item-line/model/menu-item';
@@ -29,7 +29,7 @@ export class GroupHeadComponent {
   public group: Group;
 
   @Input()
-  public set groupPerson(value: BaseGroupPerson) {
+  public set groupPerson(value: GroupPerson) {
     this._groupPerson = value;
     this._updateGroupActions();
   }
@@ -44,12 +44,12 @@ export class GroupHeadComponent {
   public readonly navigate = new EventEmitter();
 
   @Output()
-  public readonly changeGroupPerson = new EventEmitter<BaseGroupPerson>();
+  public readonly changeGroupPerson = new EventEmitter<GroupPerson>();
 
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public actions: MenuItem[] = [];
-  private _groupPerson: BaseGroupPerson;
+  private _groupPerson: GroupPerson;
 
   constructor(private _translateService: TranslateService,
               private _permissionService: PermissionService,
@@ -59,7 +59,7 @@ export class GroupHeadComponent {
               private _groupApiService: GroupApiService) {
   }
 
-  public get groupPerson(): BaseGroupPerson {
+  public get groupPerson(): GroupPerson {
     return this._groupPerson;
   }
 
@@ -102,15 +102,16 @@ export class GroupHeadComponent {
     const isOwner = this._groupPerson && this._permissionService.areYouCreator(this.group, this._groupPerson.person);
     if (this._groupPerson) {
       if (!isOwner) {
-        if (this._groupPerson instanceof GroupPerson) {
-          if (this._groupPerson.state !== GroupPersonState.FOLLOWING) {
+        const groupPersonType = this._groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonType) as GroupPersonType;
+        if (groupPersonType) {
+          if (groupPersonType.state !== GroupPersonTypeState.FOLLOWING) {
             this.actions.push({
               translationLabel: 'leave',
               action: item => {
                 this._leaveGroup(this.group).subscribe();
               }
             });
-          } else if (this._groupPerson.state === GroupPersonState.FOLLOWING) {
+          } else if (groupPersonType.state === GroupPersonTypeState.FOLLOWING) {
             this.actions.push({
               translationLabel: 'unsubscribe',
               action: item => {

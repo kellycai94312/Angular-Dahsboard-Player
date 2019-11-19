@@ -1,5 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
 import { HtmlContentComponent } from 'app/components/html-content/html-content/html-content.component';
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
@@ -14,7 +15,7 @@ import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
 import { Group } from 'app/data/remote/model/group/base';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { GroupPersonClaim } from 'app/data/remote/model/group/person';
+import { GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { EducationTypeApiService } from 'app/data/remote/rest-api/api/education-type/education-type-api.service';
@@ -33,7 +34,7 @@ import { AppHelper } from 'app/utils/app-helper';
 @Component({
   selector: 'app-group-person-request',
   templateUrl: './group-person-request.component.html',
-  styleUrls: ['./group-person-request.component.scss']
+  styleUrls: ['./group-person-request.component.scss'],
 })
 export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest> {
 
@@ -48,6 +49,9 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
 
   @Input()
   public personType: PersonType;
+
+  @Input()
+  public readonly: boolean;
 
   public readonly propertyConstantClass = PropertyConstant;
   public readonly personTypeClass = PersonType;
@@ -72,10 +76,12 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
               private _router: Router,
               private _groupApiService: GroupApiService,
               private _ngxModalService: NgxModalService,
+              private _dateAdapter: DateAdapter<any>,
               private _organizationTypeApiService: OrganizationTypeApiService,
               private _educationTypeApiService: EducationTypeApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+    this._dateAdapter.setLocale('ru');
   }
 
   public async initializeComponent(data: ClaimRequest): Promise<boolean> {
@@ -86,9 +92,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       return this.appHelper.tryLoad(async () => {
         let person: Person;
         if (data instanceof GroupPersonClaimRequest) {
-          data.groupPersonClaim = data.groupPersonClaim || new GroupPersonClaim();
-          data.groupPersonClaim.person = data.groupPersonClaim.person || new Person();
-          person = data.groupPersonClaim.person;
+          data.groupPersonTypeClaim = data.groupPersonTypeClaim || new GroupPersonTypeClaim();
+          data.groupPerson = data.groupPerson || new GroupPerson();
+          data.groupPerson.person = data.groupPerson.person || new Person();
+          person = data.groupPerson.person;
 
           this.educationNgxSelect = new NgxSelect<EducationType>();
           this.educationNgxSelect.labelTranslation = 'Образование';
@@ -96,12 +103,13 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.educationNgxSelect.display = 'name';
           this.educationNgxSelect.hasNone = true;
           this.educationNgxSelect.compare = (first, second) => first.id === second.id;
-          if (data.groupPersonClaim.educationType) {
-            this.sexNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonClaim.educationType.id));
+          if (data.groupPersonTypeClaim.educationType) {
+            this.educationNgxSelect.control.setValue(this.educationNgxSelect.items.find(x => x.id === data.groupPersonTypeClaim.educationType.id));
           }
           this.formGroup.setControl('education', this.educationNgxSelect.control);
 
           this.birthDateNgxDate = new NgxDate();
+          this.birthDateNgxDate.materialControl = true;
           this.birthDateNgxDate.placeholderTranslation = 'birthDate';
           this.birthDateNgxDate.format = PropertyConstant.dateFormat;
           this.birthDateNgxDate.required = true;
@@ -120,10 +128,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.sexNgxSelect.control.setValue(this.sexNgxSelect.items.find(x => x.data === person.sex));
           this.formGroup.setControl('sex', this.sexNgxSelect.control);
 
-          this.phoneNgxInput = this._getNgxInput('phone', data.groupPersonClaim.phone, true);
+          this.phoneNgxInput = this._getNgxInput('phone', data.groupPersonTypeClaim.phone, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
-          this.emailNgxInput = this._getNgxInput('email', data.groupPersonClaim.email, true);
+          this.emailNgxInput = this._getNgxInput('email', data.groupPersonTypeClaim.email, true);
           this.emailNgxInput.control.setValidators(emailValidators);
         } else if (data instanceof GroupClaimRequest) {
           data.organization = data.organization || new Organization();
@@ -182,10 +190,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     this.data.createPersonalAccount = this.createPersonalAccount;
     let person: Person;
     if (this.data instanceof GroupPersonClaimRequest) {
-      this.data.groupPersonClaim.educationType = this.educationNgxSelect.control.value;
-      this.data.groupPersonClaim.phone = this.phoneNgxInput.control.value;
-      this.data.groupPersonClaim.email = this.emailNgxInput.control.value;
-      person = this.data.groupPersonClaim.person;
+      this.data.groupPersonTypeClaim.educationType = this.educationNgxSelect.control.value;
+      this.data.groupPersonTypeClaim.phone = this.phoneNgxInput.control.value;
+      this.data.groupPersonTypeClaim.email = this.emailNgxInput.control.value;
+      person = this.data.groupPerson.person;
       person.birthDate = this.appHelper.getGmtDate(this.birthDateNgxDate.control.value);
       person.sex = this.sexNgxSelect.control.value.data;
     } else if (this.data instanceof GroupClaimRequest) {

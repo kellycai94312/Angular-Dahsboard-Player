@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DateAdapter } from '@angular/material';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { ClaimState } from 'app/data/remote/model/claim-state';
@@ -60,9 +61,11 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
               private _rankApiService: RankApiService,
               private _sportTypeApiService: SportTypeApiService,
               private _groupApiService: GroupApiService,
+              private _dateAdapter: DateAdapter<any>,
               private _personApiService: PersonApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+    this._dateAdapter.setLocale('ru');
   }
 
   protected async initializeComponent(data: BaseGroupPersonClaimState): Promise<boolean> {

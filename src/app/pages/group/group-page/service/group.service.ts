@@ -3,7 +3,8 @@ import { DialogResult } from 'app/data/local/dialog-result';
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { PageContainer } from 'app/data/remote/bean/page-container';
 import { Group } from 'app/data/remote/model/group/base';
-import { BaseGroupPerson, GroupPerson, GroupPersonState } from 'app/data/remote/model/group/person';
+import { GroupPerson } from 'app/data/remote/model/group/person';
+import { GroupPersonType, GroupPersonTypeState } from 'app/data/remote/model/group/person/type';
 import { BasePosition } from 'app/data/remote/model/person-position/base-position';
 import { GroupPosition } from 'app/data/remote/model/person-position/group-position';
 import { Position } from 'app/data/remote/model/person-position/position';
@@ -24,7 +25,7 @@ import { shareReplay } from 'rxjs/operators';
 export class GroupService implements OnDestroy {
 
   public readonly group$: Observable<Group>;
-  public readonly groupPerson$: Observable<BaseGroupPerson>;
+  public readonly groupPerson$: Observable<GroupPerson>;
   public refreshMembers: Subject<void>;
 
   get updateData$(): Observable<any> {
@@ -33,7 +34,7 @@ export class GroupService implements OnDestroy {
 
   private readonly _groupSubject: Subject<Group>;
   private readonly _groupSubscription: Unsubscribable;
-  private readonly _groupPersonSubject: Subject<BaseGroupPerson>;
+  private readonly _groupPersonSubject: Subject<GroupPerson>;
   private readonly _updateDataSubject = new Subject<any>();
 
   constructor(private _permissionService: PermissionService,
@@ -48,7 +49,7 @@ export class GroupService implements OnDestroy {
       await this.initializeGroupPerson(val);
     });
 
-    this._groupPersonSubject = new Subject<BaseGroupPerson>();
+    this._groupPersonSubject = new Subject<GroupPerson>();
     this.groupPerson$ = this._groupPersonSubject.asObservable().pipe(shareReplay(1));
     this.refreshMembers = new Subject<void>();
   }
@@ -73,7 +74,7 @@ export class GroupService implements OnDestroy {
     this._groupSubject.next(group);
   }
 
-  public updateGroupPerson(groupPerson: BaseGroupPerson): void {
+  public updateGroupPerson(groupPerson: GroupPerson): void {
     this._groupPersonSubject.next(groupPerson);
   }
 
@@ -143,8 +144,9 @@ export class GroupService implements OnDestroy {
 
   private async canEditByAnyUserRole(userRoleEnums: UserRoleEnum[]): Promise<boolean> {
     const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
-    if (groupPerson instanceof GroupPerson) {
-      if (groupPerson.state !== GroupPersonState.APPROVED) {
+    if (groupPerson) {
+      const groupPersonType = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonType);
+      if (!groupPersonType || (groupPersonType instanceof GroupPersonType) && groupPersonType.state !== GroupPersonTypeState.APPROVED) {
         return false;
       }
 

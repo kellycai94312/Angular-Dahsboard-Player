@@ -20,6 +20,10 @@ export class GroupConnectionRequestApiService {
   constructor(private _apiService: ApiService) {
   }
 
+  public removeGroupConnectionRequest<T extends BaseGroupConnectionRequest>(groupConnectionRequest: T): Observable<T> {
+    return this._apiService.removeValue(BaseGroupConnectionRequest, `${this._basePath}/${groupConnectionRequest.id}`) as Observable<T>;
+  }
+
   public approveGroupConnectionRequest(groupConnectionRequest: GroupConnectionRequest, value?: GroupCluster): Observable<GroupConnection> {
     return this._apiService.createValue(GroupConnection, `${this._basePath}/${groupConnectionRequest.id}/approve`, value ? new IdRequest(value.id) : void 0) as Observable<GroupConnection>;
   }
