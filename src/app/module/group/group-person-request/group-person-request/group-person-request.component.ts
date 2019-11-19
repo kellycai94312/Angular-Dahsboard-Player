@@ -1,5 +1,6 @@
 import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
 import { HtmlContentComponent } from 'app/components/html-content/html-content/html-content.component';
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
@@ -33,7 +34,7 @@ import { AppHelper } from 'app/utils/app-helper';
 @Component({
   selector: 'app-group-person-request',
   templateUrl: './group-person-request.component.html',
-  styleUrls: ['./group-person-request.component.scss']
+  styleUrls: ['./group-person-request.component.scss'],
 })
 export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest> {
 
@@ -75,10 +76,12 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
               private _router: Router,
               private _groupApiService: GroupApiService,
               private _ngxModalService: NgxModalService,
+              private _dateAdapter: DateAdapter<any>,
               private _organizationTypeApiService: OrganizationTypeApiService,
               private _educationTypeApiService: EducationTypeApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+    this._dateAdapter.setLocale('ru');
   }
 
   public async initializeComponent(data: ClaimRequest): Promise<boolean> {
@@ -106,6 +109,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.formGroup.setControl('education', this.educationNgxSelect.control);
 
           this.birthDateNgxDate = new NgxDate();
+          this.birthDateNgxDate.materialControl = true;
           this.birthDateNgxDate.placeholderTranslation = 'birthDate';
           this.birthDateNgxDate.format = PropertyConstant.dateFormat;
           this.birthDateNgxDate.required = true;

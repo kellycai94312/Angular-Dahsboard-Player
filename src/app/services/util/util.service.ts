@@ -71,6 +71,7 @@ export class UtilService {
 
   public getNgxDate(labelTranslation: string, value: Date, required = false): NgxDate {
     const ngxDate = new NgxDate();
+    ngxDate.materialControl = true;
     ngxDate.placeholderTranslation = labelTranslation;
     ngxDate.format = PropertyConstant.dateFormat;
     ngxDate.control = new FormControl(value);

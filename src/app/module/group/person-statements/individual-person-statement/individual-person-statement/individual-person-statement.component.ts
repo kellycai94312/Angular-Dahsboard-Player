@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
 import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
@@ -70,9 +71,11 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
               private _groupApiService: GroupApiService,
               private _utilService: UtilService,
               private _router: Router,
+              private _dateAdapter: DateAdapter<any>,
               private _ngxModalService: NgxModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+    this._dateAdapter.setLocale('ru');
   }
 
   protected async initializeComponent(data: IndividualPersonStatement): Promise<boolean> {
@@ -307,6 +310,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
   private _getNgxDate(labelTranslation: string, value: Date, required = false): NgxDate {
     const ngxDate = new NgxDate();
+    ngxDate.materialControl = true;
     ngxDate.placeholderTranslation = labelTranslation;
     ngxDate.format = PropertyConstant.dateFormat;
     ngxDate.control = new FormControl(value);
