@@ -30,6 +30,7 @@ import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ValidationService } from 'app/service/validation/validation.service';
 import { TranslateObjectService } from 'app/shared/translate-object.service';
 import { AppHelper } from 'app/utils/app-helper';
+import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-person-request',
@@ -113,10 +114,12 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.birthDateNgxDate.placeholderTranslation = 'birthDate';
           this.birthDateNgxDate.format = PropertyConstant.dateFormat;
           this.birthDateNgxDate.required = true;
-          this.birthDateNgxDate.min = this._validationService.getBirthDateMin();
+          const minDate = new Date();
+          minDate.setFullYear(minDate.getFullYear() - 18);
+          this.birthDateNgxDate.min = minDate;
           this.birthDateNgxDate.max = this._validationService.getBirthDateMax();
           this.birthDateNgxDate.control = new FormControl('', [Validators.required]);
-          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : void 0);
+          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : minDate);
           this.formGroup.setControl('birthDate', this.birthDateNgxDate.control);
 
           this.sexNgxSelect = new NgxSelect();
@@ -150,6 +153,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
         this.firstNgxInput = this._getNgxInput('firstName', person.firstName, true);
         this.lastNgxInput = this._getNgxInput('lastName', person.lastName, true);
         this.patronymicNgxInput = this._getNgxInput('patronymic', person.patronymic);
+
+        this._addUpdateUppercaseFirstSymbol(this.firstNgxInput);
+        this._addUpdateUppercaseFirstSymbol(this.lastNgxInput);
+        this._addUpdateUppercaseFirstSymbol(this.patronymicNgxInput);
       });
     }
     return result;
@@ -184,6 +191,19 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
       this.legalEntityPersonStatement.groupClaimRequest = this.data;
     }
     this.firstStepCompleted = true;
+  }
+
+  private _addUpdateUppercaseFirstSymbol(ngxInput: NgxInput): void {
+    ngxInput.control.valueChanges
+      .pipe(
+        takeUntil(this.destroyComponent$),
+        debounceTime(500),
+        filter(value => value),
+        map(value => `${value[0].toUpperCase()}${value.slice(1)}`)
+      )
+      .subscribe(value => {
+        ngxInput.control.setValue(value, {emitEvent: false});
+      });
   }
 
   private _buildData(): void {

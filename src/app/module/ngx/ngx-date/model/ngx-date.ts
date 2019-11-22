@@ -16,7 +16,7 @@ export class NgxDate {
   public placeholderTranslation?: string;
   public disabled?: boolean;
   public materialControl?: boolean;
-  public appearance: MatFormFieldAppearance = 'legacy';
+  public appearance: MatFormFieldAppearance = 'outline';
   public label?: string;
   public labelTranslation?: string;
   public getErrorMessage?: (ngxDate: NgxDate) => Observable<string>;

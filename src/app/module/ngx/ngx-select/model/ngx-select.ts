@@ -3,7 +3,7 @@ import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs';
 
 export class NgxSelect<T = any> {
-  public appearance: MatFormFieldAppearance = 'legacy';
+  public appearance: MatFormFieldAppearance = 'outline';
   public control = new FormControl();
   public items: T[];
   public label?: string;

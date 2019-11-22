@@ -10,7 +10,7 @@
                [type]="imageTypeClass.LOGO"
                [fileClass]="fileClassClass.GROUP"></ngx-image>
     <div fxLayout="column">
-      <h4>{{group?.name}}</h4>
+      <h4 class="text-center">Регистрационная форма на вступление в {{group?.name}}</h4>
       <p *ngIf="group?.description"
          class="description">{{group?.description}}</p>
     </div>
@@ -21,14 +21,22 @@
       <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
         <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
       </ng-container>
+
+      <label *ngIf="personType === personTypeClass.LEGAL_ENTITY"
+             class="label">Данные руководителя</label>
+
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
         <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
         <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
       </div>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <ngx-date fxFlex
                   [data]="birthDateNgxDate"></ngx-date>
         <ngx-select fxFlex
@@ -38,7 +46,9 @@
                     [data]="educationNgxSelect"></ngx-select>
       </div>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <new-ngx-input fxFlex
                        [data]="phoneNgxInput"></new-ngx-input>
         <new-ngx-input fxFlex
@@ -54,18 +64,19 @@
            fxLayoutGap="5px">
         <mat-checkbox #personalDataProcessingContractCheckbox>
           <a href="assets/documents/consent_for_personal_data_processing.pdf"
-             target="_blank">{{'personalDataProcessingContract' | translate}}</a>
+             target="_blank">Согласен с {{'personalDataProcessingContract' | translate}}</a>
         </mat-checkbox>
         <mat-checkbox [(ngModel)]="createPersonalAccount">{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
       </div>
       <div fxLayout="row"
+           fxLayout.lt-sm="column"
            fxLayoutGap="10px">
         <button *ngIf="!readonly"
                 mat-raised-button
                 class="text-uppercase"
                 color="primary"
                 [disabled]="!(formGroup.valid && personalDataProcessingContractCheckbox.checked)"
-                (click)="onApply()">{{'apply' | translate}}</button>
+                (click)="onApply()">{{'further' | translate}}</button>
         <button mat-raised-button
                 class="text-uppercase"
                 [disabled]="formGroup.invalid"
@@ -88,10 +99,10 @@
   <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
   <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
     спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
-  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;М.А.Рахлину</p>
   <p style="text-align: right;">{{item.created | date:'d-MM-y'}}</p>
   <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
-  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
+  <p style="text-align: center;"><strong>о вступлении в Общественную организацию &laquo;Региональная спортивная
     федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
   <p><br/> Я, __<em><u>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}
     {{item.birthDate | date:'d-MM-y'}} г.р. </u></em>, прошу принять меня в члены Общественной организации &laquo;Региональная
@@ -105,10 +116,10 @@
   <p style="text-align: right;">Президенту Общественной организации&nbsp;</p>
   <p style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&laquo;Региональная
     спортивная федерация дзюдо Санкт-Петербурга&raquo;</p>
-  <p style="text-align: right;">&nbsp;Рахлину М.А.</p>
+  <p style="text-align: right;">&nbsp;М.А.Рахлину</p>
   <p style="text-align: right;">{{item.created | date:'d-MM-y'}}</p>
   <p style="text-align: center;"><strong>ЗАЯВЛЕНИЕ</strong></p>
-  <p style="text-align: center;"><strong>о вступлении в Общественную Организацию &laquo;Региональная спортивная
+  <p style="text-align: center;"><strong>о вступлении в Общественную организацию &laquo;Региональная спортивная
     федерация дзюдо Санкт-Петербурга&raquo;</strong></p>
   <p><em><u>{{item.organizationName}}</u></em>, заявляя о намерении вступить в Общественную Организацию &laquo;Региональная
     спортивная федерация дзюдо Санкт-Петербурга&raquo;, подтверждает свое согласие действовать в соответствии с Уставом

@@ -793,11 +793,8 @@
   },
   "groupNotification": {
     "JOIN_PERSON": "{{person}} подал(a) заявку в группу {{group}} на должности {{positions}}",
-    "JOIN_PERSON_CLAIM": "{{sender}} отправил(a) заявку в группу {{group}}",
     "JOIN_PERSON_APPROVE": "{{sender}} одобрил(a) вашу заявку на вступление в группу {{group}}",
     "JOIN_PERSON_REFUSE": "{{sender}} отклонил(a) вашу заявку на вступление в группу {{group}}",
-    "JOIN_PERSON_CLAIM_APPROVE": "{{sender}} одобрил(a) вашу заявку на вступление в группу {{group}}",
-    "JOIN_PERSON_CLAIM_REFUSE": "{{sender}} отклонил(a) вашу заявку на вступление в группу {{group}}",
     "INVITE_PERSON": "{{sender}} пригласил(a) вас в группу {{group}}",
     "INVITE_PERSON_APPROVE": "{{person}} принял(а) приглашение в группу {{group}}",
     "INVITE_PERSON_REFUSE": "{{person}} отклонил(а) приглашение в группу {{group}}",
@@ -944,5 +941,6 @@
   "claim": "Заявка",
   "issuedAt": "Когда выдан",
   "status": "Статус",
-  "phoneInvalid": "Номер телефона введён неверно. Пример: 89211234567"
+  "phoneInvalid": "Номер телефона введён неверно. Пример: 89211234567",
+  "further": "Далее"
 }
