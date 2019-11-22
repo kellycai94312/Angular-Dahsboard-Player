@@ -6,7 +6,7 @@ import { NgxInputSuffix } from './ngx-input-suffix';
 import { NgxInputType } from './ngx-input-type';
 
 export class NgxInput {
-  public appearance: MatFormFieldAppearance = 'legacy';
+  public appearance: MatFormFieldAppearance = 'outline';
   public floatLabel: FloatLabelType = 'auto';
   public type = NgxInputType.TEXT;
   public control = new FormControl();

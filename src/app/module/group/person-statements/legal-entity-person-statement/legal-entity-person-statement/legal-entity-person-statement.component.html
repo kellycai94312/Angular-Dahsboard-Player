@@ -11,7 +11,9 @@
   <label class="label">{{'Полный юридический адрес' | translate}}</label>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="postIndexLegalAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="regionLegalAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="cityLegalAddressNgxInput"></new-ngx-input>
@@ -24,7 +26,9 @@
   <label class="label">{{'Полный фактический адрес' | translate}}</label>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="postIndexActualAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="regionActualAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="cityActualAddressNgxInput"></new-ngx-input>
@@ -35,24 +39,32 @@
   </div>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="phoneGroupNgxInput"></new-ngx-input>
     <new-ngx-input [data]="faxGroupNgxInput"></new-ngx-input>
   </div>
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="websiteGroupNgxInput"></new-ngx-input>
     <new-ngx-input [data]="emailGroupNgxInput"></new-ngx-input>
   </div>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="headFullNameNgxInputNgxInput"></new-ngx-input>
     <new-ngx-input [data]="phoneHeadPersonNgxInput"></new-ngx-input>
   </div>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <new-ngx-input [data]="deputyHeadFullNameNgxInput"></new-ngx-input>
     <new-ngx-input [data]="deputyHeadPhoneNgxInput"></new-ngx-input>
   </div>
@@ -67,7 +79,9 @@
   <new-ngx-input [data]="bankFacilityGroupNgxInput"></new-ngx-input>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayout.lt-sm="column"
+       fxLayoutGap="10px"
+       fxLayoutGap.lt-sm="unset">
     <div fxFlex
          fxLayout="column">
       <new-ngx-input [data]="paymentAccountGroupNgxInput"></new-ngx-input>
@@ -79,7 +93,9 @@
          fxLayout="column">
       <new-ngx-input [data]="correspondentAccountGroupNgxInput"></new-ngx-input>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <new-ngx-input [data]="bikGroupNgxInput"></new-ngx-input>
         <new-ngx-input [data]="kppGroupNgxInput"></new-ngx-input>
       </div>

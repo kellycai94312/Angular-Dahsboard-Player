@@ -10,7 +10,7 @@
                [type]="imageTypeClass.LOGO"
                [fileClass]="fileClassClass.GROUP"></ngx-image>
     <div fxLayout="column">
-      <h4>{{group?.name}}</h4>
+      <h4 class="text-center">Регистрационная форма на вступление в {{group?.name}}</h4>
       <p *ngIf="group?.description"
          class="description">{{group?.description}}</p>
     </div>
@@ -22,13 +22,17 @@
         <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
       </ng-container>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
         <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
         <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
       </div>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <ngx-date fxFlex
                   [data]="birthDateNgxDate"></ngx-date>
         <ngx-select fxFlex
@@ -38,7 +42,9 @@
                     [data]="educationNgxSelect"></ngx-select>
       </div>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <new-ngx-input fxFlex
                        [data]="phoneNgxInput"></new-ngx-input>
         <new-ngx-input fxFlex
@@ -59,7 +65,9 @@
         <mat-checkbox [(ngModel)]="createPersonalAccount">{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
       </div>
       <div fxLayout="row"
-           fxLayoutGap="10px">
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
         <button *ngIf="!readonly"
                 mat-raised-button
                 class="text-uppercase"
