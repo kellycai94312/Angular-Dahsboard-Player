@@ -792,10 +792,8 @@
   },
   "groupNotification": {
     "JOIN_PERSON": "{{person}} applied to the group {{group}} on positions {{positions}}",
-    "JOIN_PERSON_CLAIM": "{{sender}} sent claim to the group {{group}}",
     "JOIN_PERSON_APPROVE": "{{sender}} added you to the group {{group}}",
     "JOIN_PERSON_REFUSE": "{{sender}} refused you to add in the group {{group}}",
-    "JOIN_PERSON_CLAIM_APPROVE": "{{sender}} approved you to add in the group {{group}}",
     "INVITE_PERSON": "{{sender}} invited you in the group {{group}}",
     "INVITE_PERSON_APPROVE": "{{person}} approved to add in the group {{group}}",
     "INVITE_PERSON_REFUSE": "{{person}} refused to add in the group {{group}}",
