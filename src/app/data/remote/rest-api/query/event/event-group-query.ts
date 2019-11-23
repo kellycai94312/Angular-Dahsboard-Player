@@ -18,8 +18,6 @@ export class EventGroupQuery extends PageQuery {
   public stageYear?: number;
   // Группы, в которых состоят пользователи, находящиеся в беседе
   public conversationId?: number;
-  // Все группы или привязанные к пользователю
-  public all?: boolean;
   public stateEnum?: GroupPersonTypeStateEnum;
   public claimStateEnum?: GroupClaimStateEnum;
   // Может ли пользователь редактировать группу

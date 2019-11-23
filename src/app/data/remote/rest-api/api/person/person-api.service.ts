@@ -9,6 +9,7 @@ import { Person } from 'app/data/remote/model/person';
 import { MedicalExamination } from 'app/data/remote/model/person/medical-examination';
 import { PersonContact } from 'app/data/remote/model/person/person-contact';
 import { PersonRank } from 'app/data/remote/model/person/rank/person-rank';
+import { User } from 'app/data/remote/model/user';
 import { ApiService } from 'app/data/remote/rest-api/api';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { PersonQuery } from 'app/data/remote/rest-api/query/person-query';
@@ -27,6 +28,10 @@ export class PersonApiService {
 
   public getPerson(personId: number): Observable<Person> {
     return this._apiService.getValue(Person, `${this._basePath}/${personId}`);
+  }
+
+  public getPersonByUserId(user: User): Observable<Person> {
+    return this._apiService.getValue(Person, `${this._basePath}/user/${user.id}`);
   }
 
   public getPersons<T extends Person>(query: PersonQuery): Observable<PageContainer<T>> {
@@ -209,4 +214,5 @@ export class PersonApiService {
   }
 
   //endregion
+
 }
