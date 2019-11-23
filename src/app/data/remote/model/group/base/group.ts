@@ -1,27 +1,27 @@
-import { GroupPersonTypeClaimState } from 'app/data/remote/model/group/person';
+import { NamedObject } from 'app/data/remote/base';
+import { Activity } from 'app/data/remote/model/activity/activity';
+import { BaseAddress } from 'app/data/remote/model/address/base/base-address';
+import { PlainAddress } from 'app/data/remote/model/address/plain-address';
+import { GroupAdditionalInformation, GroupClaimStateEnum, GroupRequisites } from 'app/data/remote/model/group';
+import { Person } from 'app/data/remote/model/person';
 import { Type } from 'class-transformer';
-import { NamedObject } from '../../../base';
-import { Activity } from '../../activity/activity';
-import { BaseAddress } from '../../address/base/base-address';
-import { PlainAddress } from '../../address/plain-address';
-import { Person } from '../../person';
-import { GroupPersonTypeState } from '../person/type/group-person-type-state';
+import { GroupPersonTypeStateEnum } from '../person';
 import { GroupTypeEnum } from './group-type-enum';
 
 export class Group extends NamedObject {
 
   public discriminator: GroupTypeEnum;
 
-  @Type(type => BaseAddress)
+  @Type(() => BaseAddress)
   public address?: BaseAddress;
 
-  @Type(type => PlainAddress)
+  @Type(() => PlainAddress)
   public legalAddress?: PlainAddress;
 
-  @Type(type => Activity)
+  @Type(() => Activity)
   public activity: Activity;
 
-  @Type(type => Person)
+  @Type(() => Person)
   public head?: Person;
 
   public approved?: boolean;
@@ -29,29 +29,20 @@ export class Group extends NamedObject {
   public fullName?: string;
   public shortName?: string;
   public phone?: string;
-  public inn?: string;
-  public kpp?: string;
-  public oktmo?: string;
-  public okdad?: string;
-  public okpo?: string;
-  public recipient?: string;
-  public recipientPersonalAccount?: string;
-  public bankFacility?: string;
-  public account?: string;
-  public bik?: string;
-  public kbk?: string;
   public email?: string;
   public fax?: string;
   public website?: string;
-  public stateRegistrationCertificateNumber?: string;
-  public accreditationOrderNumber?: string;
-  public paymentAccount?: string;
-  public correspondentAccount?: string;
+
+  @Type(() => GroupRequisites)
+  public requisites?: GroupRequisites;
+
+  @Type(() => GroupAdditionalInformation)
+  public additionalInformation?: GroupAdditionalInformation;
 
   //region Transient
 
-  public groupPersonState?: GroupPersonTypeState;
-  public groupPersonTypeClaimState?: GroupPersonTypeClaimState;
+  public stateEnum?: GroupPersonTypeStateEnum;
+  public claimStateEnum?: GroupClaimStateEnum;
   public dataOperator?: boolean;
   public bookmarked?: boolean;
 

@@ -3,7 +3,7 @@ import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.comp
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
+import { GroupClaimRequest } from 'app/data/remote/bean/claim';
 import { PageContainer } from 'app/data/remote/bean/page-container';
 import { RequestType } from 'app/data/remote/bean/request-type';
 import { Group } from 'app/data/remote/model/group/base';
@@ -13,7 +13,7 @@ import {
   GroupConnectionRequestType
 } from 'app/data/remote/model/group/connection';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { GroupPersonTypeState } from 'app/data/remote/model/group/person';
+import { GroupPersonTypeStateEnum } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
@@ -61,7 +61,7 @@ export class LegalEntityGroupClaimComponent extends BaseGroupComponent<Group> {
       component.readonly = true;
       const headGroupPersons = (await this._groupApiService.getPersons(item.group, {
         count: PropertyConstant.pageSizeMax,
-        state: GroupPersonTypeState.APPROVED,
+        stateEnum: GroupPersonTypeStateEnum.APPROVED,
         positionLevelEnum: PositionLevelEnum.HEAD
       }).toPromise()).list;
       let person: Person;

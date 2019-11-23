@@ -4,7 +4,7 @@ import { PropertyConstant } from 'app/data/local/property-constant';
 import { PageContainer } from 'app/data/remote/bean/page-container';
 import { Group } from 'app/data/remote/model/group/base';
 import { GroupPerson } from 'app/data/remote/model/group/person';
-import { GroupPersonType, GroupPersonTypeState } from 'app/data/remote/model/group/person/type';
+import { GroupPersonType, GroupPersonTypeStateEnum } from 'app/data/remote/model/group/person/type';
 import { BasePosition } from 'app/data/remote/model/person-position/base-position';
 import { GroupPosition } from 'app/data/remote/model/person-position/group-position';
 import { Position } from 'app/data/remote/model/person-position/position';
@@ -146,7 +146,7 @@ export class GroupService implements OnDestroy {
     const groupPerson = await this._appHelper.toPromise(this.groupPerson$);
     if (groupPerson) {
       const groupPersonType = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonType);
-      if (!groupPersonType || (groupPersonType instanceof GroupPersonType) && groupPersonType.state !== GroupPersonTypeState.APPROVED) {
+      if (!groupPersonType || (groupPersonType instanceof GroupPersonType) && groupPersonType.stateEnum !== GroupPersonTypeStateEnum.APPROVED) {
         return false;
       }
 

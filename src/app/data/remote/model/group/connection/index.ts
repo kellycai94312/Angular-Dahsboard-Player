@@ -1,3 +1,4 @@
+export * from './request';
 export * from './base-group-connection';
 export * from './base-group-connection-request';
 export * from './group-cluster';
@@ -5,7 +6,6 @@ export * from './group-cluster-rank';
 export * from './group-cluster-rank-connection';
 export * from './group-connection';
 export * from './group-connection-request';
-export * from './group-connection-request-claim';
 export * from './group-connection-request-subtypes';
 export * from './group-connection-request-type';
 export * from './group-connection-request-type-options';

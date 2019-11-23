@@ -6,9 +6,7 @@ import { HtmlContentComponent } from 'app/components/html-content/html-content/h
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { ClaimRequest } from 'app/data/remote/bean/claim-request';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { SexEnum } from 'app/data/remote/misc/sex-enum';
 import { EducationType } from 'app/data/remote/model/education-type';
 import { FileClass } from 'app/data/remote/model/file/base';

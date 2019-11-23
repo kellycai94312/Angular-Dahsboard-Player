@@ -1,4 +1,4 @@
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { Group } from 'app/data/remote/model/group/base';
 import { Person } from 'app/data/remote/model/person';
 

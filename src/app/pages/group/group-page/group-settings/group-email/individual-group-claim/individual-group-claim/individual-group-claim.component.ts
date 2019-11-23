@@ -3,7 +3,7 @@ import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.comp
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { PageContainer } from 'app/data/remote/bean/page-container';
 import { Group } from 'app/data/remote/model/group/base';
 import { GroupPerson, GroupPersonTypeClaim, GroupPersonTypeClaimState } from 'app/data/remote/model/group/person';

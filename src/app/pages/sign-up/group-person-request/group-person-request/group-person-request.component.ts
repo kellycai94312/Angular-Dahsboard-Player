@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClaimRequest } from 'app/data/remote/bean/claim-request';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { Group } from 'app/data/remote/model/group/base';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';

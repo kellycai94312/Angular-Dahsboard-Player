@@ -1,4 +1,4 @@
-import {NamedObject} from '../../../base/named-object';
+import { NamedObject } from 'app/data/remote/base';
 
 export class Country extends NamedObject {
 }

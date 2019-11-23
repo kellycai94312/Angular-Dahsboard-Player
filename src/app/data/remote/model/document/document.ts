@@ -1,11 +1,12 @@
 import { AbstractVersionObject } from 'app/data/remote/base/version';
 import { Country } from 'app/data/remote/model/address/linked/country';
-import { DocumentClass } from 'app/data/remote/model/document/document-class';
+import { ResourceFile } from 'app/data/remote/model/file/base';
 import { Type } from 'class-transformer';
-import { ResourceFile } from '../file/base';
+import { DocumentClass } from './document-class';
 import { DocumentType } from './document-type';
 
 export class Document extends AbstractVersionObject {
+
   public clazz: DocumentClass;
   public objectId: number;
 
@@ -19,6 +20,8 @@ export class Document extends AbstractVersionObject {
   public validityInDays?: number;
   public issuedBy?: string;
   public birthplace?: string;
+  // Лицо без гражданства
+  public statelessness?: boolean;
   public verified?: boolean;
 
   @Type(() => Country)

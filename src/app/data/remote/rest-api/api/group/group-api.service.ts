@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { RequestType } from 'app/data/remote/bean/request-type';
 import { StringWrapper } from 'app/data/remote/bean/wrapper/string-wrapper';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
@@ -17,10 +16,10 @@ import { BaseGroupPersonType, GroupPerson, GroupPersonTypeClaim } from 'app/data
 import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/state';
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { FileApiService } from 'app/data/remote/rest-api/api';
+import { UtilService } from 'app/services/util/util.service';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
-import { UtilService } from '../../../../../services/util/util.service';
 import { EventDay } from '../../../bean/event/event-day';
 import { PageContainer } from '../../../bean/page-container';
 import { ReportExtension } from '../../../bean/report-extension';

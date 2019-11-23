@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
 import { BaseGroupComponent } from 'app/data/local/component/group/base-group-component';
 import { Group } from 'app/data/remote/model/group/base';
-import { GroupPerson, GroupPersonTypeState } from 'app/data/remote/model/group/person';
+import { GroupPerson, GroupPersonTypeStateEnum } from 'app/data/remote/model/group/person';
 import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
+import { GroupPersonsListComponent } from 'app/module/group/group-persons-list/group-persons-list/group-persons-list.component';
 import { GroupService } from 'app/pages/group/group-page/service/group.service';
 import { AppHelper } from 'app/utils/app-helper';
-import { GroupPersonsListComponent } from '../../../../../../module/group/group-persons-list/group-persons-list/group-persons-list.component';
 
 @Component({
   selector: 'app-group-subscribers-page',
@@ -27,7 +27,7 @@ export class GroupSubscribersPageComponent extends BaseGroupComponent<Group> {
   async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
-    this.query.state = GroupPersonTypeState.FOLLOWING;
+    this.query.stateEnum = GroupPersonTypeStateEnum.FOLLOWING;
     await this.groupPersonsListComponent.updateItems();
   }
 

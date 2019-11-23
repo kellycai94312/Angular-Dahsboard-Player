@@ -14,8 +14,8 @@ export class EducationTypeApiService {
   constructor(private _apiService: ApiService) {
   }
 
-  public getEducationTypes(query?: { name?: string }): Observable<EducationType[]> {
-    return this._apiService.getValues(EducationType, this._basePath, query);
+  public getEducationTypes(): Observable<EducationType[]> {
+    return this._apiService.getValues(EducationType, this._basePath);
   }
 
 }
