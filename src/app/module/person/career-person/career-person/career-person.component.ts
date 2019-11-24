@@ -58,10 +58,7 @@ export class CareerPersonComponent extends BaseEditComponent<Person> implements 
         this.groupNgxSelect.display = 'name';
         this.groupNgxSelect.required = true;
         this.groupNgxSelect.compare = (first, second) => first.id == second.id;
-        this.groupNgxSelect.items = (await this._groupApiService.getGroups({
-          count: PropertyConstant.pageSizeMax,
-          all: false
-        }).toPromise()).list;
+        this.groupNgxSelect.items = (await this._groupApiService.getGroups({count: PropertyConstant.pageSizeMax}).toPromise()).list;
         this.groupNgxSelect.control.setValidators(Validators.required);
 
         this.positionNgxSelect = new NgxSelect<BasePosition>();

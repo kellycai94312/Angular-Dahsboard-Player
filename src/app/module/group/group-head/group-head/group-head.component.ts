@@ -15,7 +15,6 @@ import { GroupWindowService } from 'app/services/windows/group-window/group-wind
 import { PermissionService } from 'app/shared/permission.service';
 import { AppHelper } from 'app/utils/app-helper';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-head',
@@ -145,10 +144,13 @@ export class GroupHeadComponent {
   }
 
   private _leaveGroup(group: Group): Observable<null> {
-    return this._groupApiService.leaveGroup(group)
-      .pipe(tap(() => {
-        this.changeGroupPerson.emit(void 0);
-      }));
+    // TODO: Add leave from group
+    // return this._groupApiService.leaveGroup(group)
+    //   .pipe(tap(() => {
+    //     this.changeGroupPerson.emit(void 0);
+    //   }));
+
+    throw new Error('Not implemented leave from group');
   }
 
 }

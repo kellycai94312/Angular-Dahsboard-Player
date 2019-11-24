@@ -2,9 +2,11 @@ import { NamedObject } from 'app/data/remote/base';
 import { Activity } from 'app/data/remote/model/activity/activity';
 import { BaseAddress } from 'app/data/remote/model/address/base/base-address';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
-import { GroupAdditionalInformation, GroupClaimStateEnum, GroupRequisites } from 'app/data/remote/model/group';
+import { GroupAdditionalInformation } from 'app/data/remote/model/group/group-additional-information';
+import { GroupRequisites } from 'app/data/remote/model/group/group-requisites';
 import { Person } from 'app/data/remote/model/person';
 import { Type } from 'class-transformer';
+import { GroupClaimStateEnum, } from '../group-claim-state-enum';
 import { GroupPersonTypeStateEnum } from '../person';
 import { GroupTypeEnum } from './group-type-enum';
 

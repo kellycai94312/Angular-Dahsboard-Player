@@ -73,7 +73,7 @@ export class LegalEntityGroupClaimComponent extends BaseGroupComponent<Group> {
       claimRequest.organization = plainToClass(Organization, item.group);
       // TODO: Use this expression claimRequest.creator = item.group.head;
       claimRequest.creator = person;
-      claimRequest.headPhone = item.headPhone;
+      claimRequest.creatorPhone = item.headPhone;
       claimRequest.creatorEmail = item.group.email;
 
       await component.initialize(claimRequest);

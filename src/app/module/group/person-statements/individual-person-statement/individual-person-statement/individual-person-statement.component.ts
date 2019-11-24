@@ -13,7 +13,6 @@ import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import { Document } from 'app/data/remote/model/document/document';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
-import { GroupPerson } from 'app/data/remote/model/group/person';
 import {
   BaseGroupPersonClaimState,
   GroupPersonClaimRank,
@@ -82,32 +81,30 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     await super.initializeComponent(data);
 
     return this.appHelper.tryLoad(async () => {
-      data.groupPersonClaimRequest.passport = data.groupPersonClaimRequest.passport || new Document();
-      data.groupPersonClaimRequest.groupPerson = data.groupPersonClaimRequest.groupPerson || new GroupPerson();
-      data.groupPersonClaimRequest.groupPerson.person = data.groupPersonClaimRequest.groupPerson.person || new Person();
-      this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequest.passport.series);
-      this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequest.passport.number);
-      this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequest.passport.date);
-      this.documentIssuedByNgxInput = this._getNgxInput('Кем выдан', data.groupPersonClaimRequest.passport.issuedBy);
-      this.documentBirthplaceNgxInput = this._getNgxInput('Место рождения', data.groupPersonClaimRequest.passport.birthplace);
+      data.groupPersonClaimRequestProfile.passport = data.groupPersonClaimRequestProfile.passport || new Document();
+      this.documentSeriesNgxInput = this._getNgxInput('Серия', data.groupPersonClaimRequestProfile.passport.series);
+      this.documentNumberNgxInput = this._getNgxInput('Номер', data.groupPersonClaimRequestProfile.passport.number);
+      this.documentDateNgxInput = this._getNgxDate('Дата', data.groupPersonClaimRequestProfile.passport.date);
+      this.documentIssuedByNgxInput = this._getNgxInput('Кем выдан', data.groupPersonClaimRequestProfile.passport.issuedBy);
+      this.documentBirthplaceNgxInput = this._getNgxInput('Место рождения', data.groupPersonClaimRequestProfile.passport.birthplace);
       this.documentCitizenshipNgxSelect = this._getNgxSelect('Гражданство');
       this.documentCitizenshipNgxSelect.items = (await this._countryApiService.getCountries({count: PropertyConstant.pageSizeMax}).toPromise()).list;
       this.documentCitizenshipNgxSelect.compare = (first, second) => first.id === second.id;
-      this.documentCitizenshipNgxSelect.control.setValue(data.groupPersonClaimRequest.passport.citizenship);
+      this.documentCitizenshipNgxSelect.control.setValue(data.groupPersonClaimRequestProfile.passport.citizenship);
 
       this._initializeAddress(data);
-      this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequest.groupPerson.workplace);
+      this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequestProfile.workplace);
     });
   }
 
   private _initializeAddress(data: IndividualPersonStatement): void {
-    data.groupPersonClaimRequest.address = data.groupPersonClaimRequest.address || new PlainAddress();
+    data.groupPersonClaimRequestProfile.address = data.groupPersonClaimRequestProfile.address || new PlainAddress();
 
-    this.cityAddressNgxInput = this._getNgxInput('city', data.groupPersonClaimRequest.address.city);
-    this.streetAddressNgxInput = this._getNgxInput('street', data.groupPersonClaimRequest.address.street);
-    this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequest.address.house);
-    this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequest.address.block);
-    this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequest.address.liter);
+    this.cityAddressNgxInput = this._getNgxInput('city', data.groupPersonClaimRequestProfile.address.city);
+    this.streetAddressNgxInput = this._getNgxInput('street', data.groupPersonClaimRequestProfile.address.street);
+    this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequestProfile.address.house);
+    this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequestProfile.address.block);
+    this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequestProfile.address.liter);
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
@@ -126,7 +123,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   }
 
   async onSave(): Promise<boolean> {
-    await this._groupApiService.createGroupPersonClaim(this.data.group, this.data.groupPersonClaimRequest as any).toPromise();
+    await this._groupApiService.createGroupPersonClaim(this.data.group, this.data.groupPersonClaimRequestProfile as any).toPromise();
 
     return this.appHelper.trySave(async () => {
     });
@@ -268,31 +265,31 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   //endregion
 
   private _buildData(): void {
-    this.data.groupPersonClaimRequest.passport.series = this.documentSeriesNgxInput.control.value;
-    this.data.groupPersonClaimRequest.passport.number = this.documentNumberNgxInput.control.value;
-    this.data.groupPersonClaimRequest.passport.date = this.appHelper.getGmtDate(this.documentDateNgxInput.control.value);
-    this.data.groupPersonClaimRequest.passport.issuedBy = this.documentIssuedByNgxInput.control.value;
-    this.data.groupPersonClaimRequest.passport.birthplace = this.documentBirthplaceNgxInput.control.value;
-    this.data.groupPersonClaimRequest.passport.citizenship = this.documentCitizenshipNgxSelect.control.value;
-    const passport = this.data.groupPersonClaimRequest.passport;
+    this.data.groupPersonClaimRequestProfile.passport.series = this.documentSeriesNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.passport.number = this.documentNumberNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.passport.date = this.appHelper.getGmtDate(this.documentDateNgxInput.control.value);
+    this.data.groupPersonClaimRequestProfile.passport.issuedBy = this.documentIssuedByNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.passport.birthplace = this.documentBirthplaceNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.passport.citizenship = this.documentCitizenshipNgxSelect.control.value;
+    const passport = this.data.groupPersonClaimRequestProfile.passport;
     if (!passport.series && !passport.number && !passport.date && !passport.issuedBy && !passport.birthplace && !passport.citizenship) {
-      delete this.data.groupPersonClaimRequest.passport;
+      delete this.data.groupPersonClaimRequestProfile.passport;
     }
 
-    this.data.groupPersonClaimRequest.address.city = this.cityAddressNgxInput.control.value;
-    this.data.groupPersonClaimRequest.address.street = this.streetAddressNgxInput.control.value;
-    this.data.groupPersonClaimRequest.address.house = this.houseAddressNgxInput.control.value;
-    this.data.groupPersonClaimRequest.address.block = this.blockAddressNgxInput.control.value;
-    this.data.groupPersonClaimRequest.address.liter = this.literAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.city = this.cityAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.street = this.streetAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.house = this.houseAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.block = this.blockAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.liter = this.literAddressNgxInput.control.value;
 
-    this.data.groupPersonClaimRequest.groupPerson.workplace = this.jobPlaceNgxInput.control.value;
-    this.data.groupPersonClaimRequest.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
+    this.data.groupPersonClaimRequestProfile.workplace = this.jobPlaceNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
 
-    if (!this.person && this.data.groupPersonClaimRequest.states) {
-      for (let i = 0; i < this.data.groupPersonClaimRequest.states.length; i++) {
-        delete this.data.groupPersonClaimRequest.states[i].id;
+    if (!this.person && this.data.groupPersonClaimRequestProfile.states) {
+      for (let i = 0; i < this.data.groupPersonClaimRequestProfile.states.length; i++) {
+        delete this.data.groupPersonClaimRequestProfile.states[i].id;
       }
-      this.data.groupPersonClaimRequest.states = this.data.groupPersonClaimRequest.states.filter(x => !x.deleted);
+      this.data.groupPersonClaimRequestProfile.states = this.data.groupPersonClaimRequestProfile.states.filter(x => !x.deleted);
     }
   }
 

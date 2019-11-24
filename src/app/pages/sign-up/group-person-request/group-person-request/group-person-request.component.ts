@@ -16,7 +16,7 @@ export class GroupPersonRequestComponent implements OnInit, OnDestroy {
 
   public group: Group;
   public personType = PersonType.LEGAL_ENTITY;
-  public claimRequest: ClaimRequest;
+  public claimRequest: GroupPersonClaimRequest | GroupClaimRequest;
   private readonly _destroyComponentSubject = new Subject();
 
   constructor(private _layoutService: LayoutService,

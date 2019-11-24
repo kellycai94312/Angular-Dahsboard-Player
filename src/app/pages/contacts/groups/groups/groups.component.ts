@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {GroupsListComponent} from '../../../../module/group/groups-list/groups-list/groups-list.component';
-import {GroupQuery} from '../../../../data/remote/rest-api/query/group-query';
-import {ItemDisplay} from '../../../../module/common/item-list/model/item-display';
-import {skip, take, takeWhile} from 'rxjs/operators';
-import {ListHeadingService} from '../../../../module/common/list-heading/services/list-heading.service';
-import {zip} from 'rxjs';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { zip } from 'rxjs';
+import { skip, take, takeWhile } from 'rxjs/operators';
+import { GroupQuery } from '../../../../data/remote/rest-api/query/group-query';
+import { ItemDisplay } from '../../../../module/common/item-list/model/item-display';
+import { ListHeadingService } from '../../../../module/common/list-heading/services/list-heading.service';
+import { GroupsListComponent } from '../../../../module/group/groups-list/groups-list/groups-list.component';
 
 @Component({
   selector: 'app-groups',
@@ -13,7 +13,7 @@ import {zip} from 'rxjs';
 })
 export class GroupsComponent implements OnInit, OnDestroy {
 
-  @ViewChild(GroupsListComponent, { static: false })
+  @ViewChild(GroupsListComponent, {static: false})
   public _groupsListComponent: GroupsListComponent;
 
   public readonly groupQuery: GroupQuery;
@@ -22,8 +22,7 @@ export class GroupsComponent implements OnInit, OnDestroy {
 
   constructor(private _listHeadingService: ListHeadingService) {
     this.groupQuery = {
-      name: '',
-      all: false
+      name: ''
     };
   }
 

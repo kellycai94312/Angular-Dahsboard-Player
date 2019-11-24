@@ -5,8 +5,9 @@ import { BaseGroupComponent } from 'app/data/local/component/group/base-group-co
 import { PropertyConstant } from 'app/data/local/property-constant';
 import { GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { PageContainer } from 'app/data/remote/bean/page-container';
+import { GroupClaimStateEnum } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
-import { GroupPerson, GroupPersonTypeClaim, GroupPersonTypeClaimState } from 'app/data/remote/model/group/person';
+import { GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { GroupPersonQuery } from 'app/data/remote/rest-api/query/group-person-query';
 import { GroupPersonRequestComponent } from 'app/module/group/group-person-request/group-person-request/group-person-request.component';
@@ -35,7 +36,7 @@ export class IndividualGroupClaimComponent extends BaseGroupComponent<Group> {
   }
 
   public fetchItems = async (query: GroupPersonQuery): Promise<PageContainer<GroupPerson>> => {
-    query.claimState = GroupPersonTypeClaimState.JOIN_REQUEST;
+    query.claimStateEnum = GroupClaimStateEnum.JOIN_REQUEST;
     return this._groupApiService.getPersons(this.group, query).toPromise();
   };
 
@@ -47,7 +48,7 @@ export class IndividualGroupClaimComponent extends BaseGroupComponent<Group> {
       component.readonly = true;
 
       const claimRequest = new GroupPersonClaimRequest();
-      claimRequest.groupPerson = item;
+      claimRequest.person = item.person;
       claimRequest.groupPersonTypeClaim = item.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
       await component.initialize(claimRequest);
       component.formGroup.disable();
@@ -62,7 +63,7 @@ export class IndividualGroupClaimComponent extends BaseGroupComponent<Group> {
           callback: async () => {
             const groupPersonTypeClaim = item.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
             if (groupPersonTypeClaim) {
-              await this._groupApiService.removeGroupPersonType(this.group, groupPersonTypeClaim).toPromise();
+              // TODO: Fix it! await this._groupApiService.removeGroupPersonType(this.group, groupPersonTypeClaim).toPromise();
               await this.ngxGridComponent.reset();
             }
             modal.close();

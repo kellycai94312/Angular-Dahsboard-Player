@@ -13,7 +13,7 @@ import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
 import { Group } from 'app/data/remote/model/group/base';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
+import { GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { EducationTypeApiService } from 'app/data/remote/rest-api/api/education-type/education-type-api.service';
@@ -35,7 +35,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
   templateUrl: './group-person-request.component.html',
   styleUrls: ['./group-person-request.component.scss'],
 })
-export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest> {
+export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> {
 
   @ViewChild('individualPersonClaimTemplate', {static: true})
   public individualPersonClaimTemplate: TemplateRef<any>;
@@ -65,7 +65,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public educationNgxSelect: NgxSelect<EducationType>;
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
-  public createPersonalAccount: boolean;
   public firstStepCompleted: boolean;
   public individualPersonStatement: IndividualPersonStatement;
   public legalEntityPersonStatement: LegalEntityPersonStatement;
@@ -83,7 +82,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     this._dateAdapter.setLocale('ru');
   }
 
-  public async initializeComponent(data: ClaimRequest): Promise<boolean> {
+  public async initializeComponent(data: GroupPersonClaimRequest | GroupClaimRequest): Promise<boolean> {
     const result = super.initializeComponent(data);
     if (result) {
       const emailValidators = [Validators.required, ValidationService.emailValidator];
@@ -92,9 +91,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
         let person: Person;
         if (data instanceof GroupPersonClaimRequest) {
           data.groupPersonTypeClaim = data.groupPersonTypeClaim || new GroupPersonTypeClaim();
-          data.groupPerson = data.groupPerson || new GroupPerson();
-          data.groupPerson.person = data.groupPerson.person || new Person();
-          person = data.groupPerson.person;
+          data.person = data.person || new Person();
+          person = data.person;
 
           this.educationNgxSelect = new NgxSelect<EducationType>();
           this.educationNgxSelect.labelTranslation = 'Образование';
@@ -112,12 +110,12 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.birthDateNgxDate.placeholderTranslation = 'birthDate';
           this.birthDateNgxDate.format = PropertyConstant.dateFormat;
           this.birthDateNgxDate.required = true;
-          const minDate = new Date();
-          minDate.setFullYear(minDate.getFullYear() - 18);
-          this.birthDateNgxDate.min = minDate;
-          this.birthDateNgxDate.max = this._validationService.getBirthDateMax();
+          const maxDate = new Date();
+          maxDate.setFullYear(maxDate.getFullYear() - 18);
+          this.birthDateNgxDate.min = this._validationService.getBirthDateMin();
+          this.birthDateNgxDate.max = maxDate;
           this.birthDateNgxDate.control = new FormControl('', [Validators.required]);
-          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : minDate);
+          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : maxDate);
           this.formGroup.setControl('birthDate', this.birthDateNgxDate.control);
 
           this.sexNgxSelect = new NgxSelect();
@@ -141,7 +139,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
 
           this.organizationNameNgxInput = this._getNgxInput('organizationName', data.organization.name, true);
 
-          this.phoneNgxInput = this._getNgxInput('Телефон руководителя', data.headPhone, true);
+          this.phoneNgxInput = this._getNgxInput('Телефон руководителя', data.creatorPhone, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
           this.emailNgxInput = this._getNgxInput('Email руководителя', data.creatorEmail, true);
@@ -182,7 +180,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     if (this.data instanceof GroupPersonClaimRequest) {
       this.individualPersonStatement = new IndividualPersonStatement();
       this.individualPersonStatement.group = this.group;
-      this.individualPersonStatement.groupPersonClaimRequest = this.data;
+      // TODO: Fix it! this.individualPersonStatement.groupPersonClaimRequestProfile = this.data;
     } else if (this.data instanceof GroupClaimRequest) {
       this.legalEntityPersonStatement = new LegalEntityPersonStatement();
       this.legalEntityPersonStatement.organization = this.group as Organization;
@@ -205,18 +203,17 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   }
 
   private _buildData(): void {
-    this.data.createPersonalAccount = this.createPersonalAccount;
     let person: Person;
     if (this.data instanceof GroupPersonClaimRequest) {
       this.data.groupPersonTypeClaim.educationType = this.educationNgxSelect.control.value;
       this.data.groupPersonTypeClaim.phone = this.phoneNgxInput.control.value;
       this.data.groupPersonTypeClaim.email = this.emailNgxInput.control.value;
-      person = this.data.groupPerson.person;
+      person = this.data.person;
       person.birthDate = this.appHelper.getGmtDate(this.birthDateNgxDate.control.value);
       person.sex = this.sexNgxSelect.control.value.data;
     } else if (this.data instanceof GroupClaimRequest) {
       this.data.organization.name = this.organizationNameNgxInput.control.value;
-      this.data.headPhone = this.phoneNgxInput.control.value;
+      this.data.creatorPhone = this.phoneNgxInput.control.value;
       this.data.creatorEmail = this.emailNgxInput.control.value;
 
       person = this.data.creator;
