@@ -1,6 +1,6 @@
+import { AbstractVersionObject } from 'app/data/remote/base/version';
 import { Country } from 'app/data/remote/model/address/linked/country';
 import { Type } from 'class-transformer';
-import { AbstractVersionObject } from '../../base/version';
 import { DocumentType } from './document-type';
 
 export class DocumentVersion extends AbstractVersionObject {
@@ -12,6 +12,8 @@ export class DocumentVersion extends AbstractVersionObject {
   public validityInDays?: number;
   public issuedBy?: string;
   public birthplace?: string;
+  // Лицо без гражданства
+  public statelessness?: boolean;
   public verified?: boolean;
 
   @Type(() => Country)

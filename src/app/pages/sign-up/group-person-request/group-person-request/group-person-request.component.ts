@@ -1,8 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ClaimRequest } from 'app/data/remote/bean/claim-request';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { Group } from 'app/data/remote/model/group/base';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
@@ -18,7 +16,7 @@ export class GroupPersonRequestComponent implements OnInit, OnDestroy {
 
   public group: Group;
   public personType = PersonType.LEGAL_ENTITY;
-  public claimRequest: ClaimRequest;
+  public claimRequest: GroupPersonClaimRequest | GroupClaimRequest;
   private readonly _destroyComponentSubject = new Subject();
 
   constructor(private _layoutService: LayoutService,

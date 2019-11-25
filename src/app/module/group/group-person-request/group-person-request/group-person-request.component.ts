@@ -6,24 +6,21 @@ import { HtmlContentComponent } from 'app/components/html-content/html-content/h
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { ClaimRequest } from 'app/data/remote/bean/claim-request';
-import { GroupClaimRequest } from 'app/data/remote/bean/group-claim-request';
-import { GroupPersonClaimRequest } from 'app/data/remote/bean/group-person-claim-request';
+import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
 import { SexEnum } from 'app/data/remote/misc/sex-enum';
 import { EducationType } from 'app/data/remote/model/education-type';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
+import { GroupClaimJoinRequestStateEnum } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { GroupPerson, GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
+import { GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { EducationTypeApiService } from 'app/data/remote/rest-api/api/education-type/education-type-api.service';
 import { OrganizationTypeApiService } from 'app/data/remote/rest-api/api/organization-type/organization-type-api.service';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
-import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
-import { LegalEntityPersonStatement } from 'app/module/group/person-statements/legal-entity-person-statement/model/legal-entity-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
@@ -37,13 +34,19 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
   templateUrl: './group-person-request.component.html',
   styleUrls: ['./group-person-request.component.scss'],
 })
-export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest> {
+export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> {
 
   @ViewChild('individualPersonClaimTemplate', {static: true})
   public individualPersonClaimTemplate: TemplateRef<any>;
 
   @ViewChild('legalEntityClaimTemplate', {static: true})
   public legalEntityClaimTemplate: TemplateRef<any>;
+
+  @ViewChild('personalDataProcessingContractTemplate', {static: true})
+  public personalDataProcessingContractTemplate: TemplateRef<any>;
+
+  @ViewChild('groupClaimJoinRequestStateTemplate', {static: true})
+  public groupClaimJoinRequestStateTemplate: TemplateRef<any>;
 
   @Input()
   public group: Group;
@@ -58,6 +61,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public readonly personTypeClass = PersonType;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
+  public readonly groupClaimJoinRequestStateEnumClass = GroupClaimJoinRequestStateEnum;
   public organizationNameNgxInput: NgxInput;
   public firstNgxInput: NgxInput;
   public lastNgxInput: NgxInput;
@@ -67,10 +71,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   public educationNgxSelect: NgxSelect<EducationType>;
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
-  public createPersonalAccount: boolean;
-  public firstStepCompleted: boolean;
-  public individualPersonStatement: IndividualPersonStatement;
-  public legalEntityPersonStatement: LegalEntityPersonStatement;
 
   constructor(private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
@@ -85,7 +85,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     this._dateAdapter.setLocale('ru');
   }
 
-  public async initializeComponent(data: ClaimRequest): Promise<boolean> {
+  public async initializeComponent(data: GroupPersonClaimRequest | GroupClaimRequest): Promise<boolean> {
     const result = super.initializeComponent(data);
     if (result) {
       const emailValidators = [Validators.required, ValidationService.emailValidator];
@@ -94,9 +94,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
         let person: Person;
         if (data instanceof GroupPersonClaimRequest) {
           data.groupPersonTypeClaim = data.groupPersonTypeClaim || new GroupPersonTypeClaim();
-          data.groupPerson = data.groupPerson || new GroupPerson();
-          data.groupPerson.person = data.groupPerson.person || new Person();
-          person = data.groupPerson.person;
+          data.person = data.person || new Person();
+          person = data.person;
 
           this.educationNgxSelect = new NgxSelect<EducationType>();
           this.educationNgxSelect.labelTranslation = 'Образование';
@@ -114,12 +113,12 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
           this.birthDateNgxDate.placeholderTranslation = 'birthDate';
           this.birthDateNgxDate.format = PropertyConstant.dateFormat;
           this.birthDateNgxDate.required = true;
-          const minDate = new Date();
-          minDate.setFullYear(minDate.getFullYear() - 18);
-          this.birthDateNgxDate.min = minDate;
-          this.birthDateNgxDate.max = this._validationService.getBirthDateMax();
+          const maxDate = new Date();
+          maxDate.setFullYear(maxDate.getFullYear() - 18);
+          this.birthDateNgxDate.min = this._validationService.getBirthDateMin();
+          this.birthDateNgxDate.max = maxDate;
           this.birthDateNgxDate.control = new FormControl('', [Validators.required]);
-          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : minDate);
+          this.birthDateNgxDate.control.setValue(person.birthDate ? new Date(person.birthDate) : maxDate);
           this.formGroup.setControl('birthDate', this.birthDateNgxDate.control);
 
           this.sexNgxSelect = new NgxSelect();
@@ -143,7 +142,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
 
           this.organizationNameNgxInput = this._getNgxInput('organizationName', data.organization.name, true);
 
-          this.phoneNgxInput = this._getNgxInput('Телефон руководителя', data.headPhone, true);
+          this.phoneNgxInput = this._getNgxInput('Телефон руководителя', data.creatorPhone, true);
           this.phoneNgxInput.control.setValidators(phoneValidators);
 
           this.emailNgxInput = this._getNgxInput('Email руководителя', data.creatorEmail, true);
@@ -178,19 +177,41 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
     });
   }
 
-  public async onApply(): Promise<void> {
+  public async onFurther(): Promise<void> {
     this._buildData();
+    await this.onSave();
+    await this._router.navigate(['/sign-in']);
+    // const modal = this._ngxModalService.open({size: 'lg', backdrop: true, centered: true});
+    // await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+    //
+    //   let person: Person;
+    //   if (this.data instanceof GroupPersonClaimRequest) {
+    //     person = this.data.person;
+    //   } else if (this.data instanceof GroupClaimRequest) {
+    //     person = this.data.creator;
+    //   }
+    //   component.containerRef.createEmbeddedView(this.groupClaimJoinRequestStateTemplate, {
+    //     $implicit: person
+    //   });
+    // });
+  }
 
-    if (this.data instanceof GroupPersonClaimRequest) {
-      this.individualPersonStatement = new IndividualPersonStatement();
-      this.individualPersonStatement.group = this.group;
-      this.individualPersonStatement.groupPersonClaimRequest = this.data;
-    } else if (this.data instanceof GroupClaimRequest) {
-      this.legalEntityPersonStatement = new LegalEntityPersonStatement();
-      this.legalEntityPersonStatement.organization = this.group as Organization;
-      this.legalEntityPersonStatement.groupClaimRequest = this.data;
-    }
-    this.firstStepCompleted = true;
+  public async onSend(groupClaimJoinRequestStateEnum: GroupClaimJoinRequestStateEnum): Promise<void> {
+    // if (this.data instanceof GroupPersonClaimRequest) {
+    //   this.data.groupPersonTypeClaim.joinRequestStateEnum = groupClaimJoinRequestStateEnum;
+    // } else if (this.data instanceof GroupClaimRequest) {
+    //   this.data.
+    // }
+    //
+    // await this._router.navigate(['/sign-in']);
+  }
+
+  public async onOpenPersonalDataProcessingContract(): Promise<void> {
+    const modal = this._ngxModalService.open({size: 'lg', backdrop: true, centered: true});
+    modal.componentInstance.titleKey = 'personalDataProcessingContract';
+    await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.containerRef.createEmbeddedView(this.personalDataProcessingContractTemplate);
+    });
   }
 
   private _addUpdateUppercaseFirstSymbol(ngxInput: NgxInput): void {
@@ -207,18 +228,17 @@ export class GroupPersonRequestComponent extends BaseEditComponent<ClaimRequest>
   }
 
   private _buildData(): void {
-    this.data.createPersonalAccount = this.createPersonalAccount;
     let person: Person;
     if (this.data instanceof GroupPersonClaimRequest) {
       this.data.groupPersonTypeClaim.educationType = this.educationNgxSelect.control.value;
       this.data.groupPersonTypeClaim.phone = this.phoneNgxInput.control.value;
       this.data.groupPersonTypeClaim.email = this.emailNgxInput.control.value;
-      person = this.data.groupPerson.person;
+      person = this.data.person;
       person.birthDate = this.appHelper.getGmtDate(this.birthDateNgxDate.control.value);
       person.sex = this.sexNgxSelect.control.value.data;
     } else if (this.data instanceof GroupClaimRequest) {
       this.data.organization.name = this.organizationNameNgxInput.control.value;
-      this.data.headPhone = this.phoneNgxInput.control.value;
+      this.data.creatorPhone = this.phoneNgxInput.control.value;
       this.data.creatorEmail = this.emailNgxInput.control.value;
 
       person = this.data.creator;

@@ -1,11 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { GroupPersonType } from 'app/data/remote/model/group/person';
+import { GroupPersonType, GroupPersonTypeStateEnum } from 'app/data/remote/model/group/person';
 import { takeWhile } from 'rxjs/operators';
 import { BaseGroupComponent } from '../../../../../../data/local/component/group/base-group-component';
 import { NameWrapper } from '../../../../../../data/local/name-wrapper';
 import { Group } from '../../../../../../data/remote/model/group/base/group';
 import { GroupPerson } from '../../../../../../data/remote/model/group/person/group-person';
-import { GroupPersonTypeState } from '../../../../../../data/remote/model/group/person/type/group-person-type-state';
 import { PositionLevelEnum } from '../../../../../../data/remote/model/person-position/position-level-enum';
 import { GroupPersonQuery } from '../../../../../../data/remote/rest-api/query/group-person-query';
 import { GroupPersonsListComponent } from '../../../../../../module/group/group-persons-list/group-persons-list/group-persons-list.component';
@@ -37,12 +36,12 @@ export class GroupEmployeesPageComponent extends BaseGroupComponent<Group> {
   public async initializeGroupPerson(groupPerson: GroupPerson): Promise<void> {
     await super.initializeGroupPerson(groupPerson);
     this.query.id = this.group.id;
-    this.query.state = GroupPersonTypeState.APPROVED;
+    this.query.stateEnum = GroupPersonTypeStateEnum.APPROVED;
     let positionLevels = await this._translateObjectService.getTranslatedEnumCollection<PositionLevelEnum>(PositionLevelEnum, 'PositionLevelEnum');
 
     if (groupPerson) {
       const groupPersonType = groupPerson.groupPersonTypes.find(x => x instanceof GroupPerson) as GroupPersonType;
-      if (!groupPersonType || groupPersonType.state !== GroupPersonTypeState.APPROVED) {
+      if (!groupPersonType || groupPersonType.stateEnum !== GroupPersonTypeStateEnum.APPROVED) {
         positionLevels = positionLevels.filter(x => x.data === PositionLevelEnum.HEAD);
       }
     }

@@ -1,9 +1,9 @@
-import {AccurateAddress} from '../base/accurate-address';
-import {Country} from './country';
-import {City} from './city';
-import {District} from './district';
-import {AddressType} from '../base/address-type';
-import {Type} from 'class-transformer';
+import { Type } from 'class-transformer';
+import { AccurateAddress } from '../base/accurate-address';
+import { AddressType } from '../base/address-type';
+import { City } from './city';
+import { Country } from './country';
+import { District } from './district';
 
 export class LinkedAddress extends AccurateAddress {
 
@@ -20,4 +20,5 @@ export class LinkedAddress extends AccurateAddress {
     super();
     this.discriminator = AddressType.LINKED;
   }
+
 }

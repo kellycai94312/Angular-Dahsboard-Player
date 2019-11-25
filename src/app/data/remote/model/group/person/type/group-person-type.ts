@@ -1,7 +1,7 @@
-import { BaseGroupPersonType, GroupPersonTypeEnum, GroupPersonTypeState } from './';
+import { BaseGroupPersonType, GroupPersonTypeEnum, GroupPersonTypeStateEnum } from './';
 
 export class GroupPersonType extends BaseGroupPersonType {
-  public state: GroupPersonTypeState;
+  public stateEnum: GroupPersonTypeStateEnum;
 
   constructor() {
     super();

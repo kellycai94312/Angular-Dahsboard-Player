@@ -1,5 +1,13 @@
-import { NamedObject } from '../base/named-object';
+import { NamedObject } from 'app/data/remote/base';
 
 export class SportType extends NamedObject {
-  public sportTypeEnum: string;
+
+  public number: string;
+
+  //region Transient
+
+  public bookmarked?: boolean;
+
+  //endregion
+
 }

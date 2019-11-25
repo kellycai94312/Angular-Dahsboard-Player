@@ -1,14 +1,15 @@
-import {Component} from '@angular/core';
-import {NgxInput} from '../../../../ngx/ngx-input/model/ngx-input';
-import {Group} from '../../../../../data/remote/model/group/base/group';
-import {NgxSelect} from '../../../../ngx/ngx-select/model/ngx-select';
-import {GroupApiService} from '../../../../../data/remote/rest-api/api/group/group-api.service';
-import {PositionLevelEnum} from '../../../../../data/remote/model/person-position/position-level-enum';
-import {PropertyConstant} from '../../../../../data/local/property-constant';
-import {Person} from '../../../../../data/remote/model/person';
-import {BaseEditComponent} from '../../../../../data/local/component/base/base-edit-component';
-import {ParticipantRestApiService} from '../../../../../data/remote/rest-api/participant-rest-api.service';
-import {AppHelper} from '../../../../../utils/app-helper';
+import { Component } from '@angular/core';
+import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
+import { PropertyConstant } from 'app/data/local/property-constant';
+import { GroupAdditionalInformation, GroupRequisites } from 'app/data/remote/model/group';
+import { Group } from 'app/data/remote/model/group/base';
+import { Person } from 'app/data/remote/model/person';
+import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
+import { NgxInput } from 'app/module/ngx/ngx-input';
+import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
+import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
   selector: 'app-edit-group-details',
@@ -58,6 +59,9 @@ export class EditGroupDetailsComponent extends BaseEditComponent<Group> {
     }).toPromise()).list.map(x => x.person);
     this.headNgxSelect.control.setValue(data.head);
 
+    data.requisites = data.requisites || new GroupRequisites();
+    data.additionalInformation = data.additionalInformation || new GroupAdditionalInformation();
+
     this.postIndexNgxInput = this._getNgxInput('postIndex', data.legalAddress.postIndex);
     this.cityNgxInput = this._getNgxInput('city', data.legalAddress.city);
     this.streetNgxInput = this._getNgxInput('street', data.legalAddress.street);
@@ -65,15 +69,15 @@ export class EditGroupDetailsComponent extends BaseEditComponent<Group> {
     this.blockNgxInput = this._getNgxInput('addressBlock', data.legalAddress.block);
     this.literNgxInput = this._getNgxInput('liter', data.legalAddress.liter);
     this.phoneNgxInput = this._getNgxInput('phone', data.phone);
-    this.innNgxInput = this._getNgxInput('inn', data.inn);
-    this.kppNgxInput = this._getNgxInput('kpp', data.kpp);
-    this.oktmoNgxInput = this._getNgxInput('oktmo', data.oktmo);
-    this.recipientNgxInput = this._getNgxInput('recipient', data.recipient);
-    this.recipientPersonalAccountNgxInput = this._getNgxInput('editGroupDetails.recipientPersonalAccount', data.recipientPersonalAccount);
-    this.bankFacilityNgxInput = this._getNgxInput('bankFacility', data.bankFacility);
-    this.accountNgxInput = this._getNgxInput('editGroupDetails.account', data.account);
-    this.bikNgxInput = this._getNgxInput('bik', data.bik);
-    this.kbkNgxInput = this._getNgxInput('kbk', data.kbk);
+    this.innNgxInput = this._getNgxInput('inn', data.requisites.inn);
+    this.kppNgxInput = this._getNgxInput('kpp', data.requisites.kpp);
+    this.oktmoNgxInput = this._getNgxInput('oktmo', data.requisites.oktmo);
+    this.recipientNgxInput = this._getNgxInput('recipient', data.requisites.recipient);
+    this.recipientPersonalAccountNgxInput = this._getNgxInput('editGroupDetails.recipientPersonalAccount', data.requisites.recipientPersonalAccount);
+    this.bankFacilityNgxInput = this._getNgxInput('bankFacility', data.requisites.bankFacility);
+    this.accountNgxInput = this._getNgxInput('editGroupDetails.account', data.requisites.account);
+    this.bikNgxInput = this._getNgxInput('bik', data.requisites.bik);
+    this.kbkNgxInput = this._getNgxInput('kbk', data.requisites.kbk);
     return true;
   }
 
@@ -88,15 +92,15 @@ export class EditGroupDetailsComponent extends BaseEditComponent<Group> {
     this.data.legalAddress.block = this.blockNgxInput.control.value;
     this.data.legalAddress.liter = this.literNgxInput.control.value;
     this.data.phone = this.phoneNgxInput.control.value;
-    this.data.inn = this.innNgxInput.control.value;
-    this.data.kpp = this.kppNgxInput.control.value;
-    this.data.oktmo = this.oktmoNgxInput.control.value;
-    this.data.recipient = this.recipientNgxInput.control.value;
-    this.data.recipientPersonalAccount = this.recipientPersonalAccountNgxInput.control.value;
-    this.data.bankFacility = this.bankFacilityNgxInput.control.value;
-    this.data.account = this.accountNgxInput.control.value;
-    this.data.bik = this.bikNgxInput.control.value;
-    this.data.kbk = this.kbkNgxInput.control.value;
+    this.data.requisites.inn = this.innNgxInput.control.value;
+    this.data.requisites.kpp = this.kppNgxInput.control.value;
+    this.data.requisites.oktmo = this.oktmoNgxInput.control.value;
+    this.data.requisites.recipient = this.recipientNgxInput.control.value;
+    this.data.requisites.recipientPersonalAccount = this.recipientPersonalAccountNgxInput.control.value;
+    this.data.requisites.bankFacility = this.bankFacilityNgxInput.control.value;
+    this.data.requisites.account = this.accountNgxInput.control.value;
+    this.data.requisites.bik = this.bikNgxInput.control.value;
+    this.data.requisites.kbk = this.kbkNgxInput.control.value;
   }
 
   public async onRemove(): Promise<boolean> {

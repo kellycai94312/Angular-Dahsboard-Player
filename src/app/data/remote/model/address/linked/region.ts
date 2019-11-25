@@ -1,6 +1,6 @@
-import {NamedObject} from '../../../base/named-object';
-import {Country} from './country';
-import {Type} from 'class-transformer';
+import { NamedObject } from 'app/data/remote/base';
+import { Type } from 'class-transformer';
+import { Country } from './country';
 
 export class Region extends NamedObject {
 

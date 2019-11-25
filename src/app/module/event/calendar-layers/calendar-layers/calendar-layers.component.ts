@@ -1,7 +1,14 @@
-import {ChangeDetectionStrategy, Component, ComponentFactoryResolver, EventEmitter, Input, Output} from '@angular/core';
-import {Group} from '../../../../data/remote/model/group/base/group';
-import {BaseEventQuery} from '../../../../data/remote/rest-api/query/event/base-event-query';
-import {GroupWindowService} from '../../../../services/windows/group-window/group-window.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ComponentFactoryResolver,
+  EventEmitter,
+  Input,
+  Output
+} from '@angular/core';
+import { Group } from '../../../../data/remote/model/group/base/group';
+import { BaseEventQuery } from '../../../../data/remote/rest-api/query/event/base-event-query';
+import { GroupWindowService } from '../../../../services/windows/group-window/group-window.service';
 
 @Component({
   selector: 'app-calendar-layers',
@@ -24,7 +31,7 @@ export class CalendarLayersComponent {
   }
 
   public async onEditGroups(): Promise<void> {
-    const dialogResult = await this._groupWindowService.openSelectionGroupsWindow(this.selectedGroups, {all: true}, {componentFactoryResolver: this._componentFactoryResolver});
+    const dialogResult = await this._groupWindowService.openSelectionGroupsWindow(this.selectedGroups, {}, {componentFactoryResolver: this._componentFactoryResolver});
     if (dialogResult.result) {
       this.selectedGroups = dialogResult.data;
       this._updateQuery();

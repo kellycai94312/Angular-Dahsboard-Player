@@ -16,82 +16,70 @@
     </div>
   </div>
 
-  <ng-container *ngIf="!firstStepCompleted; else nextStepTemplate">
+  <div fxLayout="column">
+    <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
+      <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
+    </ng-container>
+
+    <label *ngIf="personType === personTypeClass.LEGAL_ENTITY"
+           class="label">Данные руководителя</label>
+
+    <div fxLayout="row"
+         fxLayout.lt-sm="column"
+         fxLayoutGap="10px"
+         fxLayoutGap.lt-sm="unset">
+      <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
+    </div>
+    <div fxLayout="row"
+         fxLayout.lt-sm="column"
+         fxLayoutGap="10px"
+         fxLayoutGap.lt-sm="unset">
+      <ngx-date fxFlex
+                [data]="birthDateNgxDate"></ngx-date>
+      <ngx-select fxFlex
+                  [data]="sexNgxSelect"></ngx-select>
+      <ngx-select *ngIf="personType !== personTypeClass.LEGAL_ENTITY"
+                  fxFlex
+                  [data]="educationNgxSelect"></ngx-select>
+    </div>
+    <div fxLayout="row"
+         fxLayout.lt-sm="column"
+         fxLayoutGap="10px"
+         fxLayoutGap.lt-sm="unset">
+      <new-ngx-input fxFlex
+                     [data]="phoneNgxInput"></new-ngx-input>
+      <new-ngx-input fxFlex
+                     [data]="emailNgxInput"></new-ngx-input>
+    </div>
+  </div>
+
+  <div *ngIf="!readonly"
+       fxLayout="column"
+       fxLayoutGap="20px"
+       fxLayoutAlign="center center">
     <div fxLayout="column">
-      <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
-        <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
-      </ng-container>
-
-      <label *ngIf="personType === personTypeClass.LEGAL_ENTITY"
-             class="label">Данные руководителя</label>
-
-      <div fxLayout="row"
-           fxLayout.lt-sm="column"
-           fxLayoutGap="10px"
-           fxLayoutGap.lt-sm="unset">
-        <new-ngx-input [data]="lastNgxInput"></new-ngx-input>
-        <new-ngx-input [data]="firstNgxInput"></new-ngx-input>
-        <new-ngx-input [data]="patronymicNgxInput"></new-ngx-input>
-      </div>
-      <div fxLayout="row"
-           fxLayout.lt-sm="column"
-           fxLayoutGap="10px"
-           fxLayoutGap.lt-sm="unset">
-        <ngx-date fxFlex
-                  [data]="birthDateNgxDate"></ngx-date>
-        <ngx-select fxFlex
-                    [data]="sexNgxSelect"></ngx-select>
-        <ngx-select *ngIf="personType !== personTypeClass.LEGAL_ENTITY"
-                    fxFlex
-                    [data]="educationNgxSelect"></ngx-select>
-      </div>
-      <div fxLayout="row"
-           fxLayout.lt-sm="column"
-           fxLayoutGap="10px"
-           fxLayoutGap.lt-sm="unset">
-        <new-ngx-input fxFlex
-                       [data]="phoneNgxInput"></new-ngx-input>
-        <new-ngx-input fxFlex
-                       [data]="emailNgxInput"></new-ngx-input>
-      </div>
+      <mat-checkbox #personalDataProcessingContractCheckbox>
+        <a (click)="onOpenPersonalDataProcessingContract()">Согласен
+          с <span class="link">{{'personalDataProcessingContract' | translate}}</span></a>
+      </mat-checkbox>
     </div>
-
-    <div *ngIf="!readonly"
-         fxLayout="column"
-         fxLayoutGap="20px"
-         fxLayoutAlign="center center">
-      <div fxLayout="column"
-           fxLayoutGap="5px">
-        <mat-checkbox #personalDataProcessingContractCheckbox>
-          <a href="assets/documents/consent_for_personal_data_processing.pdf"
-             target="_blank">Согласен с {{'personalDataProcessingContract' | translate}}</a>
-        </mat-checkbox>
-        <mat-checkbox [(ngModel)]="createPersonalAccount">{{'createAPersonalAccountArZone' | translate}}</mat-checkbox>
-      </div>
-      <div fxLayout="row"
-           fxLayout.lt-sm="column"
-           fxLayoutGap="10px">
-        <button *ngIf="!readonly"
-                mat-raised-button
-                class="text-uppercase"
-                color="primary"
-                [disabled]="!(formGroup.valid && personalDataProcessingContractCheckbox.checked)"
-                (click)="onApply()">{{'further' | translate}}</button>
-        <button mat-raised-button
-                class="text-uppercase"
-                [disabled]="formGroup.invalid"
-                (click)="onViewStatementText()">{{'viewStatementText' | translate}}</button>
-      </div>
+    <div fxLayout="row"
+         fxLayout.lt-sm="column"
+         fxLayoutGap="10px">
+      <button *ngIf="!readonly"
+              mat-raised-button
+              class="text-uppercase"
+              color="primary"
+              [disabled]="!(formGroup.valid && personalDataProcessingContractCheckbox.checked)"
+              (click)="onFurther()">{{'further' | translate}}</button>
+      <button mat-raised-button
+              class="text-uppercase"
+              [disabled]="formGroup.invalid"
+              (click)="onViewStatementText()">{{'viewStatementText' | translate}}</button>
     </div>
-  </ng-container>
-
-  <ng-template #nextStepTemplate>
-    <app-individual-person-statement *ngIf="personType === personTypeClass.INDIVIDUAL; else elseContentTemplate"
-                                     [data]="individualPersonStatement"></app-individual-person-statement>
-    <ng-template #elseContentTemplate>
-      <app-legal-entity-person-statement [data]="legalEntityPersonStatement"></app-legal-entity-person-statement>
-    </ng-template>
-  </ng-template>
+  </div>
 </div>
 
 <ng-template #individualPersonClaimTemplate
@@ -129,4 +117,80 @@
     Арбитражная Палата&raquo;, по разрешению споров гражданско-правового характера, которые возникли или могут
     возникнуть при осуществлении членами Федерации своей деятельности.</p>
   <p><strong>{{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}</strong></p>
+</ng-template>
+<ng-template #personalDataProcessingContractTemplate>
+  <p style="text-align: center;"><strong> СОГЛАСИЕ НА ОБРАБОТКУ ПЕРСОНАЛЬНЫХ ДАННЫХ</strong></p>
+  <p>Настоящим, во исполнение требований Федерального закона Российской Федерации от 27.07.2006 г. № 152-ФЗ «О
+    персональных
+    данных», я, (далее – субъект персональных данных) свободно, своей волей и в своих интересах даю согласие на
+    обработку
+    моих персональных данных, а именно сбор, запись, систематизацию, накопление, хранение, уточнение (обновление,
+    изменение), извлечение, использование, передачу (распространение, предоставление, доступ), обезличивание,
+    блокирование, удаление, уничтожение моих персональных данных Общественной Организации «Региональная спортивная
+    федерация дзюдо Санкт-Петербурга», ОГРН 1037858028361, ИНН 7825355110, юридический адрес: 191025, Санкт-Петербург,
+    ул.
+    Рубинштейна, д. 3, лит. А, помещение 15-Н, фактический адрес: 195197, г. Санкт-Петербург, Кондратьевский пр., д. 13
+    А,
+    тел. +7 (812) 576-99-31.</p>
+  <p>Персональные данные, на обработку которых распространяется данное разрешение, включают в себя
+    мои паспортные данные; данные, содержащиеся в моём документе о среднем профессиональном и (или) высшем образовании
+    либо документе, подтверждающем получение среднего профессионального и (или) высшего образования; номера контактных
+    телефонов; адреса электронной почты, а также иную, указанную мной информацию.</p>
+  <p>Обработка персональных данных необходима
+    для гражданско-правового взаимодействия, стороной которого я являюсь, как субъект персональных данных.</p>
+  <p>Персональные
+    данные не предназначаются для трансграничной передачи персональных данных. Хранение моих персональных данных в
+    указанных целях может осуществляться в срок до 3 (трёх) лет с момента выдачи данного согласия, если иное не
+    установлено законодательством Российской Федерации.
+    Обработка персональных данных может быть, как автоматизированная,
+    так и без использования средств автоматизации.</p>
+  <p>Настоящее согласие может быть отозвано субъектом персональных данных в
+    любой момент по соглашению оператора и субъекта персональных данных. В случае неправомерного использования
+    предоставленных данных соглашение отзывается письменным заявлением субъекта персональных данных.</p>
+  <p>Субъект персональных
+    данных по письменному запросу имеет право на получение информации, касающейся обработки его персональных данных в
+    соответствии с ч. 4 ст. 14 Федерального закона Российской Федерации от 27.07.2006 г. № 152-ФЗ «О персональных
+    данных».</p>
+  <p>Настоящее согласие выдано без ограничения срока его действия.</p>
+</ng-template>
+<ng-template #groupClaimJoinRequestStateTemplate
+             let-item>
+  <div fxLayout="column"
+       fxLayoutGap="10px">
+    <div>
+      <p>Уважаемый(ая) {{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}, ваша
+        заявка
+        на вступление в Региональную спортивную
+        федерацию дзюдо Санкт-Петербурга была успешно отправлена. Необходимо заполнить анкету для более детальной
+        информации
+        о
+        вас.</p>
+      <p>Анкету на вступление Вы можете заполнить лично в офисе организации, либо сделать это сейчас, нажав на кнопку
+        Далее.
+        Электронная форма подачи сэкономит Ваше время, личный визит потребуется только для предоставления оригиналов
+        документов с одновременным получения оригинала членского билета в офисе Федерации по адресу
+        _________________________________</p>
+      <p>Если у вас нет возможности заполнить анкету сейчас, выберете вариант Заполнить Позже. Вы сможете сделать это по
+        ссылке, указанной в письме, которое придет к вам на электронную почту или зайти через электронную платформу,
+        аккаунт,
+        которой будет сгенерирован для Вас автоматически.
+        Напоминаем, что вступление в федерацию Дзюдо Санкт-Петербурга бесплатно.</p>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="center center">
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED)">
+        Заполнить сейчас
+      </button>
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_LATER)">
+        Заполнить позже
+      </button>
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_OFFICE)">
+        Заполнить в офисе
+      </button>
+    </div>
+  </div>
 </ng-template>
