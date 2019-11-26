@@ -69,8 +69,10 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   public houseAddressNgxInput: NgxInput;
   public blockAddressNgxInput: NgxInput;
   public literAddressNgxInput: NgxInput;
+  public apartmentAddressNgxInput: NgxInput;
 
   public jobPlaceNgxInput: NgxInput;
+  public positionNgxInput: NgxInput;
   private _modal: NgxModalRef;
 
   constructor(private _positionApiService: PositionApiService,
@@ -117,6 +119,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
       this._initializeAddress(data);
       this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequestProfile.workplace);
+      this.positionNgxInput = this._getNgxInput('Должность', data.groupPersonClaimRequestProfile.position);
     });
   }
 
@@ -128,6 +131,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequestProfile.address.house);
     this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequestProfile.address.block);
     this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequestProfile.address.liter);
+    this.apartmentAddressNgxInput = this._getNgxInput('apartment', data.groupPersonClaimRequestProfile.address.apartment);
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
@@ -199,7 +203,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
   private async _showEditGroupPersonClaimStateComponent(baseGroupPersonClaimState: BaseGroupPersonClaimState): Promise<DialogResult<BaseGroupPersonClaimState>> {
     const modal = this._ngxModalService.open();
-
+    modal.componentInstance.title = 'Статус / Разряды / Звания';
     let editGroupPersonClaimStateComponent: EditGroupPersonClaimStateComponent;
     await modal.componentInstance.initializeBody(EditGroupPersonClaimStateComponent, async component => {
       editGroupPersonClaimStateComponent = component;
@@ -314,8 +318,10 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequestProfile.address.house = this.houseAddressNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.address.block = this.blockAddressNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.address.liter = this.literAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.apartment = this.apartmentAddressNgxInput.control.value;
 
     this.data.groupPersonClaimRequestProfile.workplace = this.jobPlaceNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.position = this.positionNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
 
     if (!this.person && this.data.groupPersonClaimRequestProfile.states) {

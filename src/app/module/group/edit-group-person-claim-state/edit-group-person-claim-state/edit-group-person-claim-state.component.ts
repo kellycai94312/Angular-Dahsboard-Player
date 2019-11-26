@@ -139,7 +139,7 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
           }
         });
 
-      this.rankNgxSelect = this._utilService.getNgxSelect('Разряд', true);
+      this.rankNgxSelect = this._utilService.getNgxSelect('Категория', true);
       if (selectedClaimState) {
         this.rankNgxSelect.items = await this._rankApiService.getRanks({claimStateEnum: selectedClaimState.claimStateEnum}).toPromise();
       }

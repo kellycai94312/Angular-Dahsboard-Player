@@ -6,4 +6,5 @@ export class AccurateAddress extends BaseAddress {
   public house?: string;
   public block?: string;
   public liter?: string;
+  public apartment?: string;
 }

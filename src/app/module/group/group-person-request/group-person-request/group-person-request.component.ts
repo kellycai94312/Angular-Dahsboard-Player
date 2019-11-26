@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { SexEnum } from 'app/data/remote/misc/sex-enum';
 import { EducationType } from 'app/data/remote/model/education-type';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
+import { GroupClaimJoinRequestStateEnum } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
 import { Organization } from 'app/data/remote/model/group/organization';
 import { GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
@@ -36,7 +37,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
   templateUrl: './group-person-request.component.html',
   styleUrls: ['./group-person-request.component.scss'],
 })
-export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> {
+export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> implements OnInit {
 
   @ViewChild('individualPersonClaimTemplate', {static: true})
   public individualPersonClaimTemplate: TemplateRef<any>;
@@ -84,6 +85,30 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
     this._dateAdapter.setLocale('ru');
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+    this._authorizationService.person$
+      .pipe(takeUntil(this.destroyComponent$))
+      .subscribe(async value => {
+        if (value) {
+          const groupPerson = await this._groupApiService.getCurrentGroupPerson(this.group).toPromise();
+          if (groupPerson) {
+            const groupPersonTypeClaim = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
+            if (groupPersonTypeClaim && groupPersonTypeClaim.joinRequestStateEnum === GroupClaimJoinRequestStateEnum.FILL_LATER) {
+              this.individualPersonStatement = new IndividualPersonStatement();
+              this.individualPersonStatement.group = this.group;
+              this.individualPersonStatement.person = groupPerson.person;
+              this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
+              this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
+            } else {
+              await this._router.navigate(['/sign-in']);
+            }
+          }
+        }
+      });
   }
 
   public async initializeComponent(data: GroupPersonClaimRequest | GroupClaimRequest): Promise<boolean> {

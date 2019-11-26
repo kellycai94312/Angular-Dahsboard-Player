@@ -43,13 +43,21 @@
     <new-ngx-input [data]="houseAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="blockAddressNgxInput"></new-ngx-input>
     <new-ngx-input [data]="literAddressNgxInput"></new-ngx-input>
+    <new-ngx-input [data]="apartmentAddressNgxInput"></new-ngx-input>
   </div>
 
   <div>
     <label class="label">{{'Дополнительные данные' | translate}}</label>
     <mat-divider></mat-divider>
   </div>
+
   <new-ngx-input [data]="jobPlaceNgxInput"></new-ngx-input>
+  <new-ngx-input [data]="positionNgxInput"></new-ngx-input>
+
+  <div>
+    <label class="label">{{'Статус / Разряды / Звания' | translate}}</label>
+    <mat-divider></mat-divider>
+  </div>
   <ngx-grid [canEdit]="true"
             [fetchItems]="fetchItems"
             [edit]="editTable"
