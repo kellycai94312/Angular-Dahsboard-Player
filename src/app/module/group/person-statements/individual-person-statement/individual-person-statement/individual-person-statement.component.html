@@ -87,9 +87,61 @@
   </ngx-grid>
 
   <div fxLayout="row"
-       fxLayoutGap="10px">
+       fxLayoutGap="10px"
+       fxLayoutAlign="center center">
     <button mat-raised-button
             [disabled]="formGroup.invalid"
-            (click)="onCreateClaim()">{{'Отправить анкету' | translate}}</button>
+            (click)="onCreateClaim(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED)">
+      Отправить анкету
+    </button>
+    <button mat-raised-button
+            (click)="onCreateClaim(groupClaimJoinRequestStateEnumClass.FILL_LATER)">
+      Заполнить позже
+    </button>
+    <button mat-raised-button
+            (click)="onCreateClaim(groupClaimJoinRequestStateEnumClass.FILL_OFFICE)">
+      Заполнить в офисе
+    </button>
   </div>
 </div>
+<ng-template #groupClaimJoinRequestStateTemplate
+             let-item>
+  <div fxLayout="column"
+       fxLayoutGap="10px">
+    <div>
+      <p>Уважаемый(ая) {{item.lastName + ' ' + item.firstName + (item.patronymic ? ' ' + item.patronymic : '')}}, ваша
+        заявка
+        на вступление в Региональную спортивную
+        федерацию дзюдо Санкт-Петербурга была успешно отправлена. Необходимо заполнить анкету для более детальной
+        информации
+        о
+        вас.</p>
+      <p>Анкету на вступление Вы можете заполнить лично в офисе организации, либо сделать это сейчас, нажав на кнопку
+        Далее.
+        Электронная форма подачи сэкономит Ваше время, личный визит потребуется только для предоставления оригиналов
+        документов с одновременным получения оригинала членского билета в офисе Федерации по адресу г. Санкт-Петербург,
+        Кондратьевский пр., д. 13 А, тел. +7 (812) 576-99-31.</p>
+      <p>Если у вас нет возможности заполнить анкету сейчас, выберете вариант Заполнить Позже. Вы сможете сделать это по
+        ссылке, указанной в письме, которое придет к вам на электронную почту или зайти через электронную платформу,
+        аккаунт,
+        которой будет сгенерирован для Вас автоматически.
+        Напоминаем, что вступление в федерацию Дзюдо Санкт-Петербурга бесплатно.</p>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="center center">
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED)">
+        Заполнить сейчас
+      </button>
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_LATER)">
+        Заполнить позже
+      </button>
+      <button mat-raised-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_OFFICE)">
+        Заполнить в офисе
+      </button>
+    </div>
+  </div>
+</ng-template>

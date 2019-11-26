@@ -163,16 +163,16 @@ export class GroupApiService {
     return this._apiService.createValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/claim/person`, value) as Observable<GroupPersonTypeClaim>;
   }
 
-  public updateGroupPersonTypeClaimProfile<T extends Group>(group: T, groupPersonType: GroupPersonType, value: GroupPersonClaimRequestProfile): Observable<GroupPersonTypeClaim> {
-    return this._apiService.updateValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/groupPersonTypeClaim/${groupPersonType.id}/profile`, value) as Observable<GroupPersonTypeClaim>;
+  public updateGroupPersonTypeClaimProfile<T extends Group>(group: T, groupPersonTypeClaim: GroupPersonTypeClaim, value: GroupPersonClaimRequestProfile, file?: File): Observable<GroupPersonTypeClaim> {
+    return this._apiService.updateValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/groupPersonTypeClaim/${groupPersonTypeClaim.id}/profile`, this._fileApiService.getFileFormData(value, file)) as Observable<GroupPersonTypeClaim>;
   }
 
   public updateGroupPersonTypeClaim<T extends Group>(group: T, groupPersonType: GroupPersonType, value: GroupPersonTypeClaim): Observable<GroupPersonTypeClaim> {
     return this._apiService.updateValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/groupPersonTypeClaim/${groupPersonType.id}`, value) as Observable<GroupPersonTypeClaim>;
   }
 
-  public updateGroupPersonClaimJoinRequestState<T extends Group>(group: T, groupPersonType: GroupPersonType, value: GroupClaimJoinRequestStateEnum): Observable<GroupPersonTypeClaim> {
-    return this._apiService.updateValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/groupPersonTypeClaim/${groupPersonType.id}/joinRequestState`, new SingleAttributeWrapper(value)) as Observable<GroupPersonTypeClaim>;
+  public updateGroupPersonClaimJoinRequestState<T extends Group>(group: T, groupPersonTypeClaim: GroupPersonTypeClaim, value: GroupClaimJoinRequestStateEnum): Observable<GroupPersonTypeClaim> {
+    return this._apiService.updateValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/groupPersonTypeClaim/${groupPersonTypeClaim.id}/joinRequestState`, new SingleAttributeWrapper(value)) as Observable<GroupPersonTypeClaim>;
   }
 
   public removeGroupPersonTypeClaim<T extends Group>(group: T, groupPersonTypeClaim: GroupPersonTypeClaim): Observable<GroupPersonTypeClaim> {

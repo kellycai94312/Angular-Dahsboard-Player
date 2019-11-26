@@ -2,7 +2,8 @@
   <div class="modal-header">
     <h4 *ngIf="title || titleKey"
         class="modal-title">{{title ? (title) : (titleKey | translate)}}</h4>
-    <button mat-icon-button
+    <button *ngIf="canClose"
+            mat-icon-button
             (click)="onClose()">
       <mat-icon>clear</mat-icon>
     </button>

@@ -1,8 +1,16 @@
-import {Component, ComponentFactory, ComponentFactoryResolver, Input, Type, ViewChild, ViewContainerRef} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {SplitButtonItem} from '../../ngx-split-button/bean/split-button-item';
-import {INgxContent} from '../bean/ingx-content';
-import {NgxModalConfiguration} from '../bean/ngx-modal-configuration';
+import {
+  Component,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  Input,
+  Type,
+  ViewChild,
+  ViewContainerRef
+} from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SplitButtonItem } from '../../ngx-split-button/bean/split-button-item';
+import { INgxContent } from '../bean/ingx-content';
+import { NgxModalConfiguration } from '../bean/ngx-modal-configuration';
 
 @Component({
   selector: 'ngx-modal',
@@ -36,6 +44,7 @@ export class NgxModalComponent {
   public splitButtonItems: SplitButtonItem[] = [];
 
   public bodyComponentType: Type<any>;
+  public canClose = true;
 
   constructor(public modal: NgbActiveModal,
               private _componentFactoryResolver: ComponentFactoryResolver) {
