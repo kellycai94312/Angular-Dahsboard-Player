@@ -3,6 +3,7 @@
      fxLayoutAlign="center center">
   <mat-card class="mat-elevation-z24 overflow-auto">
     <app-group-person-request *ngIf="group"
+                              [autoOpenProfile]="true"
                               [group]="group"
                               [personType]="personType"
                               [(data)]="claimRequest"></app-group-person-request>

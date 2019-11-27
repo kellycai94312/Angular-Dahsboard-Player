@@ -57,6 +57,9 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   @Input()
   public readonly: boolean;
 
+  @Input()
+  public autoOpenProfile: boolean;
+
   public readonly propertyConstantClass = PropertyConstant;
   public readonly personTypeClass = PersonType;
   public readonly imageTypeClass = ImageType;
@@ -90,25 +93,27 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   public async ngOnInit(): Promise<void> {
     await super.ngOnInit();
 
-    this._authorizationService.person$
-      .pipe(takeUntil(this.destroyComponent$))
-      .subscribe(async value => {
-        if (value) {
-          const groupPerson = await this._groupApiService.getCurrentGroupPerson(this.group).toPromise();
-          if (groupPerson) {
-            const groupPersonTypeClaim = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
-            if (groupPersonTypeClaim && groupPersonTypeClaim.joinRequestStateEnum === GroupClaimJoinRequestStateEnum.FILL_LATER) {
-              this.individualPersonStatement = new IndividualPersonStatement();
-              this.individualPersonStatement.group = this.group;
-              this.individualPersonStatement.person = groupPerson.person;
-              this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
-              this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
-            } else {
-              await this._router.navigate(['/sign-in']);
+    if (this.autoOpenProfile) {
+      this._authorizationService.person$
+        .pipe(takeUntil(this.destroyComponent$))
+        .subscribe(async value => {
+          if (value) {
+            const groupPerson = await this._groupApiService.getCurrentGroupPerson(this.group).toPromise();
+            if (groupPerson) {
+              const groupPersonTypeClaim = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
+              if (groupPersonTypeClaim && groupPersonTypeClaim.joinRequestStateEnum === GroupClaimJoinRequestStateEnum.FILL_LATER) {
+                this.individualPersonStatement = new IndividualPersonStatement();
+                this.individualPersonStatement.group = this.group;
+                this.individualPersonStatement.person = groupPerson.person;
+                this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
+                this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
+              } else {
+                await this._router.navigate(['/sign-in']);
+              }
             }
           }
-        }
-      });
+        });
+    }
   }
 
   public async initializeComponent(data: GroupPersonClaimRequest | GroupClaimRequest): Promise<boolean> {

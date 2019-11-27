@@ -45,12 +45,14 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
   public person: Person;
 
   public readonly groupPersonClaimStateTypeClass = GroupPersonClaimStateType;
+  public readonly claimStateEnumClass = ClaimStateEnum;
 
   public claimStateNgxSelect: NgxSelect<ClaimState>;
   public rankNgxSelect: NgxSelect<BaseRank>;
   public sportTypeNgxSelect: NgxSelect<SportType>;
   public personRankNgxSelect: NgxSelect<PersonRank>;
   public nameNgxInput: NgxInput;
+  public nameNgxSelect: NgxSelect;
   public numberNgxInput: NgxInput;
   public issuedByNgxInput: NgxInput;
   public issuedAtNgxDate: NgxDate;
@@ -136,6 +138,8 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
                 this.formGroup.removeControl('rankNgxSelect');
                 break;
             }
+
+            this._updateFields(value);
           }
         });
 
@@ -161,6 +165,8 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
       this.formGroup.setControl('issuedByNgxInput', this.issuedByNgxInput.control);
       this.issuedAtNgxDate = this._utilService.getNgxDate('issuedAt', issuedAt, true);
       this.formGroup.setControl('issuedAtNgxDate', this.issuedAtNgxDate.control);
+
+      this._updateFields(selectedClaimState);
     });
   }
 
@@ -190,6 +196,7 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
       } else if (this.data instanceof GroupPersonClaimStatus) {
         this.data.name = this.nameNgxInput.control.value;
         this.data.claimState = this.claimStateNgxSelect.control.value;
+        this.data.sportType = this.sportTypeNgxSelect.control.value;
         this.data.number = this.numberNgxInput.control.value;
         this.data.issuedBy = this.issuedByNgxInput.control.value;
         this.data.issuedAt = this.appHelper.getGmtDate(this.issuedAtNgxDate.control.value);
@@ -201,6 +208,22 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
         this.data.id = Date.now();
       }
     });
+  }
+
+  private _updateFields(value: ClaimState): void {
+    if (value) {
+      this.nameNgxInput.labelTranslation = value.claimStateEnum === ClaimStateEnum.FKIS_EMPLOYEE ? 'Должность и организация' : 'name';
+
+      if (value.claimStateEnum === ClaimStateEnum.FKIS_EMPLOYEE || value.claimStateEnum === ClaimStateEnum.ATHLETE_REPRESENTATIVE) {
+        this.numberNgxInput.control.disable();
+        this.issuedByNgxInput.control.disable();
+        this.issuedAtNgxDate.control.disable();
+      } else {
+        this.numberNgxInput.control.enable();
+        this.issuedByNgxInput.control.enable();
+        this.issuedAtNgxDate.control.enable();
+      }
+    }
   }
 
 }

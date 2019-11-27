@@ -22,8 +22,10 @@
 
   <ng-template #commonDataTemplate>
     <ngx-select [data]="sportTypeNgxSelect"></ngx-select>
-    <new-ngx-input [data]="numberNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="issuedByNgxInput"></new-ngx-input>
-    <ngx-date [data]="issuedAtNgxDate"></ngx-date>
+    <ng-container *ngIf="claimStateNgxSelect?.control?.value?.claimStateEnum !== claimStateEnumClass.FKIS_EMPLOYEE && claimStateNgxSelect?.control?.value?.claimStateEnum !== claimStateEnumClass.ATHLETE_REPRESENTATIVE">
+      <new-ngx-input [data]="numberNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="issuedByNgxInput"></new-ngx-input>
+      <ngx-date [data]="issuedAtNgxDate"></ngx-date>
+    </ng-container>
   </ng-template>
 </div>

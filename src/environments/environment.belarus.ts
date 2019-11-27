@@ -3,7 +3,7 @@ import { IEnvironment } from './ienvironment';
 
 export const environment: IEnvironment = {
   production: true,
-  version: '1.1.1-56',
+  version: '1.1.1-57',
   type: EnvironmentType.BELARUS,
   host: 'by.api.ar.zone',
   restUrl: 'https://by.api.ar.zone/sp/v2',
