@@ -22,7 +22,7 @@ export class SportTypeApiService {
   }
 
   public getSportTypes(query?: PageQuery): Observable<PageContainer<SportType>> {
-    return this._apiService.getPageContainer(SportType, this._basePath);
+    return this._apiService.getPageContainer(SportType, this._basePath, query);
   }
 
   //region Discipline
