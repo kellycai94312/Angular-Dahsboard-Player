@@ -1,8 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
+import { HtmlContentComponent } from 'app/components/html-content/html-content/html-content.component';
 import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { NgxModalRef } from 'app/components/ngx-modal/bean/ngx-modal-ref';
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { DialogResult } from 'app/data/local/dialog-result';
@@ -13,6 +15,7 @@ import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import { Document } from 'app/data/remote/model/document/document';
 import { FileClass } from 'app/data/remote/model/file/base';
 import { ImageType } from 'app/data/remote/model/file/image';
+import { GroupClaimJoinRequestStateEnum } from 'app/data/remote/model/group';
 import {
   BaseGroupPersonClaimState,
   GroupPersonClaimRank,
@@ -30,6 +33,7 @@ import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ModalBuilderService } from 'app/service/modal-builder/modal-builder.service';
 import { UtilService } from 'app/services/util/util.service';
+import { AuthorizationService } from 'app/shared/authorization.service';
 import { AppHelper } from 'app/utils/app-helper';
 import { takeUntil } from 'rxjs/operators';
 
@@ -38,7 +42,10 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './individual-person-statement.component.html',
   styleUrls: ['./individual-person-statement.component.scss']
 })
-export class IndividualPersonStatementComponent extends BaseEditComponent<IndividualPersonStatement> {
+export class IndividualPersonStatementComponent extends BaseEditComponent<IndividualPersonStatement> implements OnInit {
+
+  @ViewChild('groupClaimJoinRequestStateTemplate', {static: true})
+  public groupClaimJoinRequestStateTemplate: TemplateRef<any>;
 
   @ViewChild(NgxGridComponent, {static: true})
   public ngxGridComponent: NgxGridComponent;
@@ -46,6 +53,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
   public readonly propertyConstantClass = PropertyConstant;
+  public readonly groupClaimJoinRequestStateEnumClass = GroupClaimJoinRequestStateEnum;
 
   public person: Person;
 
@@ -61,8 +69,11 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   public houseAddressNgxInput: NgxInput;
   public blockAddressNgxInput: NgxInput;
   public literAddressNgxInput: NgxInput;
+  public apartmentAddressNgxInput: NgxInput;
 
   public jobPlaceNgxInput: NgxInput;
+  public positionNgxInput: NgxInput;
+  private _modal: NgxModalRef;
 
   constructor(private _positionApiService: PositionApiService,
               private _modalBuilderService: ModalBuilderService,
@@ -72,9 +83,23 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
               private _router: Router,
               private _dateAdapter: DateAdapter<any>,
               private _ngxModalService: NgxModalService,
+              private _authorizationService: AuthorizationService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
     this._dateAdapter.setLocale('ru');
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+    this._modal = this._ngxModalService.open({size: 'lg', backdrop: 'static', centered: true});
+    this._modal.componentInstance.title = 'Заполнение анкеты';
+    this._modal.componentInstance.canClose = false;
+    await this._modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.containerRef.createEmbeddedView(this.groupClaimJoinRequestStateTemplate, {
+        $implicit: this.data.person
+      });
+    });
   }
 
   protected async initializeComponent(data: IndividualPersonStatement): Promise<boolean> {
@@ -94,6 +119,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
       this._initializeAddress(data);
       this.jobPlaceNgxInput = this._getNgxInput('Место работы или учебы', data.groupPersonClaimRequestProfile.workplace);
+      this.positionNgxInput = this._getNgxInput('Должность', data.groupPersonClaimRequestProfile.position);
     });
   }
 
@@ -105,6 +131,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.houseAddressNgxInput = this._getNgxInput('house', data.groupPersonClaimRequestProfile.address.house);
     this.blockAddressNgxInput = this._getNgxInput('addressBlock', data.groupPersonClaimRequestProfile.address.block);
     this.literAddressNgxInput = this._getNgxInput('liter', data.groupPersonClaimRequestProfile.address.liter);
+    this.apartmentAddressNgxInput = this._getNgxInput('apartment', data.groupPersonClaimRequestProfile.address.apartment);
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {
@@ -123,21 +150,31 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
   }
 
   async onSave(): Promise<boolean> {
-    await this._groupApiService.createGroupPersonClaim(this.data.group, this.data.groupPersonClaimRequestProfile as any).toPromise();
-
     return this.appHelper.trySave(async () => {
+      await this._groupApiService.updateGroupPersonTypeClaimProfile(this.data.group, this.data.groupPersonTypeClaim, this.data.groupPersonClaimRequestProfile).toPromise();
     });
   }
 
-  public async onCreateClaim(): Promise<void> {
+  public async onSend(groupClaimJoinRequestStateEnum: GroupClaimJoinRequestStateEnum): Promise<void> {
+    if (groupClaimJoinRequestStateEnum !== GroupClaimJoinRequestStateEnum.FILL_COMPLETED) {
+      await this._groupApiService.updateGroupPersonClaimJoinRequestState(this.data.group, this.data.groupPersonTypeClaim, groupClaimJoinRequestStateEnum).toPromise();
+      await this._authorizationService.logOut(true);
+    }
+    this._modal.close();
+  }
+
+  public async onCreateClaim(groupClaimJoinRequestStateEnum: GroupClaimJoinRequestStateEnum): Promise<void> {
     this._buildData();
+
+    this.data.groupPersonClaimRequestProfile.joinRequestStateEnum = groupClaimJoinRequestStateEnum;
     if (await this.onSave()) {
+      await this._authorizationService.logOut();
       await this._router.navigate(['/sign-in']);
     }
   }
 
   public fetchItems = async (query: PageQuery): Promise<PageContainer<any>> => {
-    if (this.data.person) {
+    if (!this.data.person.isNew) {
       const items = await this._groupApiService.getGroupPersonClaimStates(this.data.group, this.data.person).toPromise();
       return this.appHelper.arrayToPageContainer(items);
     }
@@ -166,7 +203,7 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
 
   private async _showEditGroupPersonClaimStateComponent(baseGroupPersonClaimState: BaseGroupPersonClaimState): Promise<DialogResult<BaseGroupPersonClaimState>> {
     const modal = this._ngxModalService.open();
-
+    modal.componentInstance.title = 'Статус / Разряды / Звания';
     let editGroupPersonClaimStateComponent: EditGroupPersonClaimStateComponent;
     await modal.componentInstance.initializeBody(EditGroupPersonClaimStateComponent, async component => {
       editGroupPersonClaimStateComponent = component;
@@ -281,8 +318,10 @@ export class IndividualPersonStatementComponent extends BaseEditComponent<Indivi
     this.data.groupPersonClaimRequestProfile.address.house = this.houseAddressNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.address.block = this.blockAddressNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.address.liter = this.literAddressNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.address.apartment = this.apartmentAddressNgxInput.control.value;
 
     this.data.groupPersonClaimRequestProfile.workplace = this.jobPlaceNgxInput.control.value;
+    this.data.groupPersonClaimRequestProfile.position = this.positionNgxInput.control.value;
     this.data.groupPersonClaimRequestProfile.states = JSON.parse(JSON.stringify(this.ngxGridComponent.items));
 
     if (!this.person && this.data.groupPersonClaimRequestProfile.states) {

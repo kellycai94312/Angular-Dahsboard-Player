@@ -940,5 +940,6 @@
   "issuedAt": "Issued at",
   "status": "Status",
   "phoneInvalid": "Phone invalid. Example: 89211234567",
-  "further": "Further"
+  "further": "Further",
+  "apartment": "Apartment"
 }

@@ -174,7 +174,7 @@ export class ParticipantRestApiService extends Rest {
 
   @RestAction({
     method: RestRequestMethod.Post,
-    path: '/user/verification'
+    path: '/verification'
   })
   verification: IRestMethod<VerificationRequest, void>;
 

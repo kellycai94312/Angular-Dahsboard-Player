@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material';
 import { Router } from '@angular/router';
@@ -6,7 +6,7 @@ import { HtmlContentComponent } from 'app/components/html-content/html-content/h
 import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { GroupClaimRequest, GroupPersonClaimRequest } from 'app/data/remote/bean/claim';
+import { GroupClaimRequest, GroupPersonClaimRequest, GroupPersonClaimRequestProfile } from 'app/data/remote/bean/claim';
 import { SexEnum } from 'app/data/remote/misc/sex-enum';
 import { EducationType } from 'app/data/remote/model/education-type';
 import { FileClass } from 'app/data/remote/model/file/base';
@@ -18,13 +18,16 @@ import { GroupPersonTypeClaim } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { EducationTypeApiService } from 'app/data/remote/rest-api/api/education-type/education-type-api.service';
+import { GroupConnectionRequestClaimApiService } from 'app/data/remote/rest-api/api/group-connection-request-claim/group-connection-request-claim-api.service';
 import { OrganizationTypeApiService } from 'app/data/remote/rest-api/api/organization-type/organization-type-api.service';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
+import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ValidationService } from 'app/service/validation/validation.service';
+import { AuthorizationService } from 'app/shared/authorization.service';
 import { TranslateObjectService } from 'app/shared/translate-object.service';
 import { AppHelper } from 'app/utils/app-helper';
 import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
@@ -34,7 +37,7 @@ import { debounceTime, filter, map, takeUntil } from 'rxjs/operators';
   templateUrl: './group-person-request.component.html',
   styleUrls: ['./group-person-request.component.scss'],
 })
-export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> {
+export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonClaimRequest | GroupClaimRequest> implements OnInit {
 
   @ViewChild('individualPersonClaimTemplate', {static: true})
   public individualPersonClaimTemplate: TemplateRef<any>;
@@ -45,9 +48,6 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   @ViewChild('personalDataProcessingContractTemplate', {static: true})
   public personalDataProcessingContractTemplate: TemplateRef<any>;
 
-  @ViewChild('groupClaimJoinRequestStateTemplate', {static: true})
-  public groupClaimJoinRequestStateTemplate: TemplateRef<any>;
-
   @Input()
   public group: Group;
 
@@ -57,11 +57,13 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   @Input()
   public readonly: boolean;
 
+  @Input()
+  public autoOpenProfile: boolean;
+
   public readonly propertyConstantClass = PropertyConstant;
   public readonly personTypeClass = PersonType;
   public readonly imageTypeClass = ImageType;
   public readonly fileClassClass = FileClass;
-  public readonly groupClaimJoinRequestStateEnumClass = GroupClaimJoinRequestStateEnum;
   public organizationNameNgxInput: NgxInput;
   public firstNgxInput: NgxInput;
   public lastNgxInput: NgxInput;
@@ -71,6 +73,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   public educationNgxSelect: NgxSelect<EducationType>;
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
+  public individualPersonStatement: IndividualPersonStatement;
 
   constructor(private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
@@ -79,10 +82,38 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
               private _ngxModalService: NgxModalService,
               private _dateAdapter: DateAdapter<any>,
               private _organizationTypeApiService: OrganizationTypeApiService,
+              private _authorizationService: AuthorizationService,
+              private _groupConnectionRequestClaimApiService: GroupConnectionRequestClaimApiService,
               private _educationTypeApiService: EducationTypeApiService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
     this._dateAdapter.setLocale('ru');
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+    if (this.autoOpenProfile) {
+      this._authorizationService.person$
+        .pipe(takeUntil(this.destroyComponent$))
+        .subscribe(async value => {
+          if (value) {
+            const groupPerson = await this._groupApiService.getCurrentGroupPerson(this.group).toPromise();
+            if (groupPerson) {
+              const groupPersonTypeClaim = groupPerson.groupPersonTypes.find(x => x instanceof GroupPersonTypeClaim) as GroupPersonTypeClaim;
+              if (groupPersonTypeClaim && groupPersonTypeClaim.joinRequestStateEnum === GroupClaimJoinRequestStateEnum.FILL_LATER) {
+                this.individualPersonStatement = new IndividualPersonStatement();
+                this.individualPersonStatement.group = this.group;
+                this.individualPersonStatement.person = groupPerson.person;
+                this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
+                this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
+              } else {
+                await this._router.navigate(['/sign-in']);
+              }
+            }
+          }
+        });
+    }
   }
 
   public async initializeComponent(data: GroupPersonClaimRequest | GroupClaimRequest): Promise<boolean> {
@@ -179,31 +210,16 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
 
   public async onFurther(): Promise<void> {
     this._buildData();
-    await this.onSave();
-    await this._router.navigate(['/sign-in']);
-    // const modal = this._ngxModalService.open({size: 'lg', backdrop: true, centered: true});
-    // await modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
-    //
-    //   let person: Person;
-    //   if (this.data instanceof GroupPersonClaimRequest) {
-    //     person = this.data.person;
-    //   } else if (this.data instanceof GroupClaimRequest) {
-    //     person = this.data.creator;
-    //   }
-    //   component.containerRef.createEmbeddedView(this.groupClaimJoinRequestStateTemplate, {
-    //     $implicit: person
-    //   });
-    // });
-  }
+    await this._authorizationService.logOut(false);
 
-  public async onSend(groupClaimJoinRequestStateEnum: GroupClaimJoinRequestStateEnum): Promise<void> {
-    // if (this.data instanceof GroupPersonClaimRequest) {
-    //   this.data.groupPersonTypeClaim.joinRequestStateEnum = groupClaimJoinRequestStateEnum;
-    // } else if (this.data instanceof GroupClaimRequest) {
-    //   this.data.
-    // }
-    //
-    // await this._router.navigate(['/sign-in']);
+    if (this.personType === PersonType.INDIVIDUAL) {
+      const groupPersonTypeClaim = await this._groupApiService.createGroupPersonClaim(this.group, this.data as any).toPromise();
+      this.individualPersonStatement = new IndividualPersonStatement();
+      this.individualPersonStatement.group = this.group;
+      this.individualPersonStatement.person = (this.data as GroupPersonClaimRequest).person;
+      this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
+      this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
+    }
   }
 
   public async onOpenPersonalDataProcessingContract(): Promise<void> {
