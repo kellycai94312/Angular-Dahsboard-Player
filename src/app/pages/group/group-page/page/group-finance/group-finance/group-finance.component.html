@@ -1,0 +1,14 @@
+<mat-accordion>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Квитанция
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <app-subgroups-trees [getChildren]="getChildren"
+                         [getNodeName]="getNodeName"
+                         [getNodeContextMenuItem]="onGetNodeContextMenuItem"></app-subgroups-trees>
+
+  </mat-expansion-panel>
+</mat-accordion>

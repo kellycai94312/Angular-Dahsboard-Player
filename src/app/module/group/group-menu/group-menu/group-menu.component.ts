@@ -169,14 +169,14 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                 //   svgIcon: 'briefcase',
                 //   disabled: true
                 // },
-                // {
-                //   id: 'finance',
-                //   translate: 'finance',
-                //   type: 'item',
-                //   url: 'finance',
-                //   svgIcon: 'finance',
-                //   disabled: true
-                // },
+                {
+                  id: 'finance',
+                  translate: 'finance',
+                  type: 'item',
+                  url: 'finance',
+                  svgIcon: 'finance',
+                  disabled: false
+                }
                 // {
                 //   id: 'groupRepository',
                 //   translate: 'groupRepository',
