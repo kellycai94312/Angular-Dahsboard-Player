@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { ApplyingSubgroupTemplateModule } from 'app/module/group/applying-subgroup-template/applying-subgroup-template.module';
 import { EditSubgroupTemplateModule } from 'app/module/group/edit-subgroup-template/edit-subgroup-template.module';
 import { EditSubgroupModule } from 'app/module/group/edit-subgroup/edit-subgroup.module';
@@ -25,7 +26,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     EditSubgroupModule,
     ApplyingSubgroupTemplateModule,
     SubgroupReportModule,
-    MatExpansionModule
+    MatExpansionModule,
+    TranslateModule
   ]
 })
 export class GroupFinanceModule {
