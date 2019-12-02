@@ -173,7 +173,7 @@ export class GroupMenuComponent implements OnInit, OnDestroy {
                   id: 'finance',
                   translate: 'finance',
                   type: 'item',
-                  url: 'finance',
+                  url: `/group/${value.id}/finance`,
                   svgIcon: 'finance',
                   disabled: false
                 }
