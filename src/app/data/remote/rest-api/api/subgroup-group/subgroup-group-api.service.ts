@@ -1,19 +1,22 @@
-import {Injectable} from '@angular/core';
-import {environment} from '../../../../../../environments/environment';
-import {ApiService} from '../base/api.service';
-import {Observable} from 'rxjs';
-import {PageContainer} from '../../../bean/page-container';
-import {SubgroupPerson} from '../../../model/group/subgroup/person/subgroup-person';
-import {SubgroupPersonQuery} from '../../query/subgroup-person-query';
-import {SubgroupGroup} from '../../../model/group/subgroup/subgroup/subgroup-group';
-import {SubgroupPersonListRequest} from '../../../request/subgroup-person-list-request';
-import {SubgroupPersonRequest} from '../../../request/subgroup-person-request';
-import {ListRequest} from '../../../request/list-request';
-import {IdRequest} from '../../../request/id-request';
-import {UtilService} from '../../../../../services/util/util.service';
-import {Person} from '../../../model/person';
-import {AppHelper} from '../../../../../utils/app-helper';
-import {Group} from '../../../model/group/base/group';
+import { Injectable } from '@angular/core';
+import { GroupContractServiceMonthPayment } from 'app/data/remote/bean/group-contract-service-month-payment';
+import { ReportExtension } from 'app/data/remote/bean/report-extension';
+import { GroupContractService } from 'app/data/remote/model/group/contract';
+import { Observable } from 'rxjs';
+import { environment } from '../../../../../../environments/environment';
+import { UtilService } from '../../../../../services/util/util.service';
+import { AppHelper } from '../../../../../utils/app-helper';
+import { PageContainer } from '../../../bean/page-container';
+import { Group } from '../../../model/group/base/group';
+import { SubgroupPerson } from '../../../model/group/subgroup/person/subgroup-person';
+import { SubgroupGroup } from '../../../model/group/subgroup/subgroup/subgroup-group';
+import { Person } from '../../../model/person';
+import { IdRequest } from '../../../request/id-request';
+import { ListRequest } from '../../../request/list-request';
+import { SubgroupPersonListRequest } from '../../../request/subgroup-person-list-request';
+import { SubgroupPersonRequest } from '../../../request/subgroup-person-request';
+import { SubgroupPersonQuery } from '../../query/subgroup-person-query';
+import { ApiService } from '../base/api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -43,22 +46,47 @@ export class SubgroupGroupApiService {
     return this._apiService.removeValue(SubgroupPerson, `${this._basePath}/${subgroupGroup.id}/person`, null, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<SubgroupPerson[]>;
   }
 
-  public getSubgroupGroupReceiptReport(subgroupGroup: SubgroupGroup,
-                                       persons: Person[],
-                                       kosgu: string,
-                                       date: Date): string {
-    const query = {personIds: persons.map(x => x.id).join('_'), kosgu, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
-    return `${this._basePath}/${subgroupGroup.id}/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
-  }
-
   public getSubgroupGroupAttendanceReport(subgroupGroup: SubgroupGroup,
                                           group: Group,
                                           headPerson: Person,
                                           executorPerson: Person,
                                           specialistPerson: Person,
                                           date: Date): string {
-    const query = {groupId: group.id, headPersonId: headPerson.id, executorPersonId: executorPerson.id, specialistPersonId: specialistPerson.id, date: this._appHelper.dateByFormat(date, 'yyyy-MM')};
+    const query = {
+      groupId: group.id,
+      headPersonId: headPerson.id,
+      executorPersonId: executorPerson.id,
+      specialistPersonId: specialistPerson.id,
+      date: this._appHelper.dateByFormat(date, 'yyyy-MM')
+    };
     return `${this._basePath}/${subgroupGroup.id}/attendance?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`;
   }
+
+  //region Group claim service
+
+  public getSubgroupGroupContractServices(subgroupGroup: SubgroupGroup): Observable<GroupContractService[]> {
+    return this._apiService.getValues(GroupContractService, `${this._basePath}/${subgroupGroup.id}/groupContractService`);
+  }
+
+  public getSubgroupGroupContractService(subgroupGroup: SubgroupGroup, groupContractService: GroupContractService): Observable<GroupContractService> {
+    return this._apiService.getValue(GroupContractService, `${this._basePath}/${subgroupGroup.id}/groupContractService/${groupContractService.id}`);
+  }
+
+  //endregion
+
+  //region Group contract payment
+
+  public getSubgroupGroupContractMonthPayments(subgroupGroup: SubgroupGroup, query: { period: Date }): Observable<GroupContractServiceMonthPayment[]> {
+    return this._apiService.getValues(GroupContractServiceMonthPayment, `${this._basePath}/${subgroupGroup.id}/groupContractService/payment`);
+  }
+
+  public downloadSubgroupGroupReceipt(subgroupGroup: SubgroupGroup,
+                                      query: { period: Date, extension?: ReportExtension },
+                                      value: GroupContractServiceMonthPayment[]): Observable<void> {
+    query.period = this._appHelper.dateByFormat(query.period, 'yyyy-MM');
+    return this._apiService.createValue(void 0, `${this._basePath}/${subgroupGroup.id}/groupContractService/payment/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`, value) as Observable<void>;
+  }
+
+  //endregion
 
 }

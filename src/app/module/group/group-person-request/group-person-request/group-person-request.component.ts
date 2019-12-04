@@ -201,7 +201,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
 
     return this.appHelper.trySave(async () => {
       if (this.data instanceof GroupPersonClaimRequest) {
-        await this._groupApiService.createGroupPersonClaim(this.group, this.data as any).toPromise();
+        await this._groupApiService.createGroupPersonTypeClaim(this.group, this.data as any).toPromise();
       } else if (this.data instanceof GroupClaimRequest) {
         await this._groupApiService.createGroupConnectionRequestClaim(this.group, this.data as any).toPromise();
       }
@@ -213,7 +213,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
     await this._authorizationService.logOut(false);
 
     if (this.personType === PersonType.INDIVIDUAL) {
-      const groupPersonTypeClaim = await this._groupApiService.createGroupPersonClaim(this.group, this.data as any).toPromise();
+      const groupPersonTypeClaim = await this._groupApiService.createGroupPersonTypeClaim(this.group, this.data as any).toPromise();
       this.individualPersonStatement = new IndividualPersonStatement();
       this.individualPersonStatement.group = this.group;
       this.individualPersonStatement.person = (this.data as GroupPersonClaimRequest).person;

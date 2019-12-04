@@ -22,7 +22,6 @@ export class Document extends AbstractVersionObject {
   public birthplace?: string;
   // Лицо без гражданства
   public statelessness?: boolean;
-  public verified?: boolean;
 
   @Type(() => Country)
   public citizenship?: Country;

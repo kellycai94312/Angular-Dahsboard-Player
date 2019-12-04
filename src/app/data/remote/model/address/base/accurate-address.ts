@@ -1,4 +1,4 @@
-import {BaseAddress} from './base-address';
+import { BaseAddress } from './base-address';
 
 export class AccurateAddress extends BaseAddress {
   public postIndex?: string;

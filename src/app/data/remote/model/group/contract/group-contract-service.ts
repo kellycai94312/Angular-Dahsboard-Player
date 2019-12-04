@@ -1,10 +1,12 @@
+import { SubgroupPerson } from 'app/data/remote/model/group/subgroup/person/subgroup-person';
 import { SubgroupGroup } from 'app/data/remote/model/group/subgroup/subgroup/subgroup-group';
 import { Type } from 'class-transformer';
 import { BaseGroupContract } from './base-group-contract';
 import { GroupContractType } from './group-contract-type';
 
 export class GroupContractService extends BaseGroupContract {
-  public workPlace: string;
+
+  public workplace: string;
   public course: string;
   // Услуги платные
   public paidService: boolean;
@@ -23,6 +25,9 @@ export class GroupContractService extends BaseGroupContract {
   @Type(() => SubgroupGroup)
   public subgroupGroup: SubgroupGroup;
 
+  @Type(() => SubgroupPerson)
+  public subgroupPerson: SubgroupPerson;
+
   // Руководитель/специалист
   public head: string;
 
@@ -30,4 +35,5 @@ export class GroupContractService extends BaseGroupContract {
     super();
     this.discriminator = GroupContractType.SERVICE;
   }
+
 }

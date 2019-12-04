@@ -11,7 +11,7 @@
   <mat-divider></mat-divider>
   <div fxLayout="column">
     <ng-container *ngIf="data.discriminator === groupContractTypeClass.SERVICE">
-      <new-ngx-input [data]="workPlaceNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="workplaceNgxInput"></new-ngx-input>
       <new-ngx-input [data]="courseNgxInput"></new-ngx-input>
       <mat-checkbox
         [(ngModel)]="getGroupContractService(data).paidService">{{'groupContractService.paidService' | translate}}</mat-checkbox>
