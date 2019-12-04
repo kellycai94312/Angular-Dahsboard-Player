@@ -1,11 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {SubgroupGroup} from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {NgxInput} from '../../../ngx/ngx-input/model/ngx-input';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SubgroupGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {ObjectWrapper} from '../../../../data/local/object-wrapper';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ObjectWrapper } from '../../../../data/local/object-wrapper';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { SubgroupGroup } from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupGroupApiService } from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import { NgxInput } from '../../../ngx/ngx-input/model/ngx-input';
 
 @Component({
   selector: 'app-subgroup-group-receipt',
@@ -45,7 +45,7 @@ export class SubgroupGroupReceiptComponent implements OnInit {
   }
 
   public onGetReport(): void {
-    window.open(this._subgroupGroupApiService.getSubgroupGroupReceiptReport(this.subgroupGroup, this._personControl.value.map(x => x.data), this.kosguNgxInput.control.value, this.dateNgxDate.control.value), '_blank');
+    // TODO: this._subgroupGroupApiService.downloadSubgroupGroupReceipt(this.subgroupGroup, this._personControl.value.map(x => x.data), this.kosguNgxInput.control.value, this.dateNgxDate.control.value)
   }
 
 }

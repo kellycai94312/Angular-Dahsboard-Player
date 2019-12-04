@@ -17,6 +17,9 @@ export class SubgroupGroup extends SubgroupPersonInterface {
   @Type(type => SubgroupGroupItem)
   public subgroupGroupItem: SubgroupGroupItem;
 
+  // КОСГУ
+  public kosgu?: string;
+
   // Transient
   public participantsAmount?: number;
 

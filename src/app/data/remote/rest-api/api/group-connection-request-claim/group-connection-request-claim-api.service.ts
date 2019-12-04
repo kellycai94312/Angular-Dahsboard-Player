@@ -38,15 +38,19 @@ export class GroupConnectionRequestClaimApiService {
   }
 
   public proceedGroupConnectionRequest(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
-    return this._apiService.createValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/proceed`) as Observable<GroupConnectionRequestClaim>;
+    return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/proceed`) as Observable<GroupConnectionRequestClaim>;
   }
 
   public removeGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
     return this._apiService.removeValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/proceed`) as Observable<GroupConnectionRequestClaim>;
   }
 
-  public approveGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
-    return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/approve`) as Observable<GroupConnectionRequestClaim>;
+  public leaveGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
+    return this._apiService.removeValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/leave`) as Observable<GroupConnectionRequestClaim>;
+  }
+
+  public approveGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim, ticketNumber: string): Observable<GroupConnectionRequestClaim> {
+    return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/approve`, new SingleAttributeWrapper(ticketNumber)) as Observable<GroupConnectionRequestClaim>;
   }
 
   public rejectGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {

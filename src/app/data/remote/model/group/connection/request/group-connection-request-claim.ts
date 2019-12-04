@@ -20,6 +20,7 @@ export class GroupConnectionRequestClaim extends BaseGroupConnectionRequest {
 
   public joinRequestStateEnum?: GroupClaimJoinRequestStateEnum;
   public ticketIssuedDate?: Date;
+  public ticketNumber?: number;
 
   @Type(() => GroupPerson)
   public head?: GroupPerson;

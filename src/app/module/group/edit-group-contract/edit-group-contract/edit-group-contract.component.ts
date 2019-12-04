@@ -43,7 +43,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
   public validSinceNgxDate: NgxDate;
   public validUntilNgxDate: NgxDate;
 
-  public workPlaceNgxInput: NgxInput;
+  public workplaceNgxInput: NgxInput;
   public courseNgxInput: NgxInput;
   public sectionNgxInput: NgxInput;
   public headNgxInput: NgxInput;
@@ -167,7 +167,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
   private async _updateControls(): Promise<void> {
     const data = this.data;
     if (data instanceof GroupContractService) {
-      this.workPlaceNgxInput = this._getNgxInput('groupContractService.workPlace', data.workPlace, true);
+      this.workplaceNgxInput = this._getNgxInput('groupContractService.workPlace', data.workplace, true);
       this.courseNgxInput = this._getNgxInput('groupContractService.course', data.course, true);
       this.headNgxInput = this._getNgxInput('groupContractService.head', data.head, true);
       this.pricePerMonthNgxInput = this._getNgxInput('groupContractService.pricePerMonth', data.pricePerMonth, true, true);
@@ -197,7 +197,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     this.data.personalAccount = this.personalAccountNgxInput.control.value;
 
     if (this.data instanceof GroupContractService) {
-      this.data.workPlace = this.workPlaceNgxInput.control.value;
+      this.data.workplace = this.workplaceNgxInput.control.value;
       this.data.course = this.courseNgxInput.control.value;
       this.data.head = this.headNgxInput.control.value;
       this.data.pricePerMonth = this.pricePerMonthNgxInput.control.value;
