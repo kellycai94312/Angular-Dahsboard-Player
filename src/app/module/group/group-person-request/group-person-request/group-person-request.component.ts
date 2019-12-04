@@ -219,6 +219,8 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
       this.individualPersonStatement.person = (this.data as GroupPersonClaimRequest).person;
       this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
       this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
+    } else if (await this.onSave()) {
+      await this._router.navigate(['/sign-in']);
     }
   }
 
