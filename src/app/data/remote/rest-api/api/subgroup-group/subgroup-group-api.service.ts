@@ -1,8 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { GroupContractServiceMonthPayment } from 'app/data/remote/bean/group-contract-service-month-payment';
 import { ReportExtension } from 'app/data/remote/bean/report-extension';
 import { GroupContractService } from 'app/data/remote/model/group/contract';
+import { FileApiService } from 'app/data/remote/rest-api/api';
 import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
 import { UtilService } from '../../../../../services/util/util.service';
 import { AppHelper } from '../../../../../utils/app-helper';
@@ -26,7 +29,9 @@ export class SubgroupGroupApiService {
   private readonly _basePath = `${environment.restUrl}/subgroupGroup`;
 
   constructor(private _apiService: ApiService,
+              private _httpClient: HttpClient,
               private _utilService: UtilService,
+              private _fileApiService: FileApiService,
               private _appHelper: AppHelper) {
   }
 
@@ -77,14 +82,38 @@ export class SubgroupGroupApiService {
   //region Group contract payment
 
   public getSubgroupGroupContractMonthPayments(subgroupGroup: SubgroupGroup, query: { period: Date }): Observable<GroupContractServiceMonthPayment[]> {
-    return this._apiService.getValues(GroupContractServiceMonthPayment, `${this._basePath}/${subgroupGroup.id}/groupContractService/payment`);
+    query.period = this._appHelper.dateByFormat(query.period, 'yyyy-MM');
+    return this._apiService.getValues(GroupContractServiceMonthPayment, `${this._basePath}/${subgroupGroup.id}/groupContractService/payment`, query);
   }
 
   public downloadSubgroupGroupReceipt(subgroupGroup: SubgroupGroup,
-                                      query: { period: Date, extension?: ReportExtension },
-                                      value: GroupContractServiceMonthPayment[]): Observable<void> {
+                                      query: { period: Date, extension?: ReportExtension, requisitesId: number },
+                                      value: GroupContractServiceMonthPayment[]): Observable<Response> {
     query.period = this._appHelper.dateByFormat(query.period, 'yyyy-MM');
-    return this._apiService.createValue(void 0, `${this._basePath}/${subgroupGroup.id}/groupContractService/payment/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`, value) as Observable<void>;
+
+    return this._httpClient.post<any>(`${this._basePath}/${subgroupGroup.id}/groupContractService/payment/receipt?${this._utilService.getHttpQueryFromObject(this._utilService.clone(query, {excludeNullable: true}))}`, new ListRequest(value), {
+      observe: 'response' as 'body',
+      responseType: 'blob' as 'json',
+      withCredentials: true
+    })
+      .pipe(
+        tap((response: Response) => {
+          let dataType = response.type;
+          let binaryData = [];
+          binaryData.push(response.body);
+          let downloadLink = document.createElement('a');
+          downloadLink.href = window.URL.createObjectURL(new Blob(binaryData, {type: dataType}));
+          const contentDisposition = response.headers.get('content-disposition') || '';
+          const matches = /filename=([^;]+)/ig.exec(contentDisposition);
+          const filename = 'Квитанции.zip';
+          // TODO: Fix it const filename = (matches[1] || 'untitled').trim();
+          if (filename) {
+            downloadLink.setAttribute('download', filename);
+          }
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        }));
   }
 
   //endregion

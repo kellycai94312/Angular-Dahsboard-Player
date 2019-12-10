@@ -21,6 +21,10 @@ export class GroupConnectionRequestClaimApiService {
   constructor(private _apiService: ApiService) {
   }
 
+  public getGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
+    return this._apiService.getValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}`) as Observable<GroupConnectionRequestClaim>;
+  }
+
   public updateGroupClaimJoinRequestState(groupConnectionRequestClaim: GroupConnectionRequestClaim, value: GroupClaimJoinRequestStateEnum): Observable<GroupConnectionRequestClaim> {
     return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/joinRequestState`, new SingleAttributeWrapper(value)) as Observable<GroupConnectionRequestClaim>;
   }
@@ -35,6 +39,10 @@ export class GroupConnectionRequestClaimApiService {
 
   public updateGroupConnectionRequestClaimProfileStep3(groupConnectionRequestClaim: GroupConnectionRequestClaim, value: GroupClaimRequestProfileStep3): Observable<GroupConnectionRequestClaim> {
     return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}/profile/step3`, value) as Observable<GroupConnectionRequestClaim>;
+  }
+
+  public updateGroupConnectionRequestClaim(groupConnectionRequestClaim: GroupConnectionRequestClaim, value: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {
+    return this._apiService.updateValue(GroupConnectionRequestClaim, `${this._basePath}/${groupConnectionRequestClaim.id}`, value) as Observable<GroupConnectionRequestClaim>;
   }
 
   public proceedGroupConnectionRequest(groupConnectionRequestClaim: GroupConnectionRequestClaim): Observable<GroupConnectionRequestClaim> {

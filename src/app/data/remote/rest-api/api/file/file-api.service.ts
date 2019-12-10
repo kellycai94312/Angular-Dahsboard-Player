@@ -149,7 +149,7 @@ export class FileApiService {
       }));
   }
 
-  public getFileFormData<T extends any>(value: T, file: File): FormData {
+  public getFileFormData<T extends any>(value: T, file?: File): FormData {
     const formData = new FormData();
     if (file) {
       formData.append('file', file, file.name);

@@ -1,12 +1,13 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {SubgroupGroupReceiptComponent} from './subgroup-group-receipt/subgroup-group-receipt.component';
-import {SubgroupPersonListModule} from '../subgroup-person-list/subgroup-person-list.module';
-import {NgxInputModule} from '../../ngx/ngx-input/ngx-input.module';
-import {FlexLayoutModule} from '@angular/flex-layout';
-import {MatButtonModule, MatIconModule} from '@angular/material';
-import {NgxDateModule} from '../../ngx/ngx-date/ngx-date.module';
-import {TranslateModule} from '@ngx-translate/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatIconModule } from '@angular/material';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgxGridModule } from 'app/components/ngx-grid/ngx-grid.module';
+import { NgxDateModule } from 'app/module/ngx/ngx-date/ngx-date.module';
+import { NgxInputModule } from 'app/module/ngx/ngx-input';
+import { SubgroupGroupReceiptComponent } from './subgroup-group-receipt/subgroup-group-receipt.component';
 
 @NgModule({
   declarations: [SubgroupGroupReceiptComponent],
@@ -20,7 +21,8 @@ import {TranslateModule} from '@ngx-translate/core';
     TranslateModule.forChild(),
     NgxInputModule,
     NgxDateModule,
-    SubgroupPersonListModule
+    NgxGridModule,
+    FormsModule
   ]
 })
 export class SubgroupGroupReceiptModule {

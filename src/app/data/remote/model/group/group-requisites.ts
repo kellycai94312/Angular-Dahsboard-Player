@@ -1,15 +1,11 @@
-import { IdentifiedObject } from 'app/data/remote/base';
+import { NamedObject } from 'app/data/remote/base';
 
-export class GroupRequisites extends IdentifiedObject {
+export class GroupRequisites extends NamedObject {
 
   public inn?: string;
   public kpp?: string;
   // ОКТМО
   public oktmo?: string;
-  // ОКВЭД
-  public okvad?: string;
-  // ОКПО
-  public okpo?: string;
   // Имя получателя
   public recipient?: string;
   // Счет получателя

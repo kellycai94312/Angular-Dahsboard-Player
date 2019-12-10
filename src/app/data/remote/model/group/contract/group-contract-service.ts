@@ -11,7 +11,7 @@ export class GroupContractService extends BaseGroupContract {
   // Услуги платные
   public paidService: boolean;
   // Стоимость занятий в месяц
-  public pricePerMonth: number;
+  public pricePerMonthInKopeks: number;
   // Количество занятий в месяц
   public classesPerMonth: number;
   // Количество занятий в неделю
@@ -28,8 +28,7 @@ export class GroupContractService extends BaseGroupContract {
   @Type(() => SubgroupPerson)
   public subgroupPerson: SubgroupPerson;
 
-  // Руководитель/специалист
-  public head: string;
+  public enabled: boolean;
 
   constructor() {
     super();
