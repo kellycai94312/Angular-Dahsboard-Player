@@ -159,11 +159,11 @@ export class EditGroupPersonClaimStateComponent extends BaseEditComponent<BaseGr
 
       this.nameNgxInput = this._utilService.getNgxInput('name', name, true);
       this.formGroup.setControl('nameNgxInput', this.nameNgxInput.control);
-      this.numberNgxInput = this._utilService.getNgxInput('Номер приказа', numberDocument, true);
+      this.numberNgxInput = this._utilService.getNgxInput('Номер приказа', numberDocument);
       this.formGroup.setControl('numberNgxInput', this.numberNgxInput.control);
-      this.issuedByNgxInput = this._utilService.getNgxInput('issuedBy', issuedBy, true);
+      this.issuedByNgxInput = this._utilService.getNgxInput('issuedBy', issuedBy);
       this.formGroup.setControl('issuedByNgxInput', this.issuedByNgxInput.control);
-      this.issuedAtNgxDate = this._utilService.getNgxDate('issuedAt', issuedAt, true);
+      this.issuedAtNgxDate = this._utilService.getNgxDate('issuedAt', issuedAt);
       this.formGroup.setControl('issuedAtNgxDate', this.issuedAtNgxDate.control);
 
       this._updateFields(selectedClaimState);
