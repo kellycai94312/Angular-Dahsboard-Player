@@ -46,7 +46,6 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
   public workplaceNgxInput: NgxInput;
   public courseNgxInput: NgxInput;
   public sectionNgxInput: NgxInput;
-  public headNgxInput: NgxInput;
   public pricePerMonthNgxInput: NgxInput;
   public classesPerMonthNgxInput: NgxInput;
   public classesPerWeekNgxInput: NgxInput;
@@ -169,8 +168,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     if (data instanceof GroupContractService) {
       this.workplaceNgxInput = this._getNgxInput('groupContractService.workPlace', data.workplace, true);
       this.courseNgxInput = this._getNgxInput('groupContractService.course', data.course, true);
-      this.headNgxInput = this._getNgxInput('groupContractService.head', data.head, true);
-      this.pricePerMonthNgxInput = this._getNgxInput('groupContractService.pricePerMonth', data.pricePerMonth, true, true);
+      this.pricePerMonthNgxInput = this._getNgxInput('groupContractService.pricePerMonth', data.pricePerMonthInKopeks, true, true);
       this.classesPerMonthNgxInput = this._getNgxInput('groupContractService.classesPerMonth', data.classesPerMonth, true, true);
       this.classesPerWeekNgxInput = this._getNgxInput('groupContractService.classesPerWeek', data.classesPerWeek, true, true);
       this.classDurationNgxInput = this._getNgxInput('groupContractService.classDuration', data.classDuration, true, true);
@@ -199,8 +197,7 @@ export class EditGroupContractComponent extends BaseEditComponent<BaseGroupContr
     if (this.data instanceof GroupContractService) {
       this.data.workplace = this.workplaceNgxInput.control.value;
       this.data.course = this.courseNgxInput.control.value;
-      this.data.head = this.headNgxInput.control.value;
-      this.data.pricePerMonth = this.pricePerMonthNgxInput.control.value;
+      this.data.pricePerMonthInKopeks = this.pricePerMonthNgxInput.control.value;
       this.data.classesPerMonth = this.classesPerMonthNgxInput.control.value;
       this.data.classesPerWeek = this.classesPerWeekNgxInput.control.value;
       this.data.classDuration = this.classDurationNgxInput.control.value;

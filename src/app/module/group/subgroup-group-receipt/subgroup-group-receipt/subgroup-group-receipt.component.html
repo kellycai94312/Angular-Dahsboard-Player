@@ -1,9 +1,38 @@
 <div fxLayout="column"
      fxLayoutGap="10px">
-  <new-ngx-input [data]="kosguNgxInput"></new-ngx-input>
   <ngx-date [data]="dateNgxDate"></ngx-date>
-  <app-subgroup-person-list [subgroupGroup]="subgroupGroup"
-                            (selectedItemsChange)="onSelectedItemsChange($event)"></app-subgroup-person-list>
+
+  <ngx-grid [autoInit]="false"
+            [fetchItems]="fetchItems"
+            [selectionType]="selectionTypeClass.MULTIPLE"
+            (selectedItemsChange)="onSelectedItemsChange($event)">
+    <ngx-column nameKey="lastName">
+      <ng-template let-item>
+        {{item.person.lastName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="firstName">
+      <ng-template let-item>
+        {{item.person.firstName}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="patronymic">
+      <ng-template let-item>
+        {{item.person.patronymic}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="Сумма по договору">
+      <ng-template let-item>
+        {{item.amountInRubles}}
+      </ng-template>
+    </ngx-column>
+    <ngx-column nameKey="К оплате">
+      <ng-template let-item>
+        <input type="number"
+               [(ngModel)]="item.bill"/>
+      </ng-template>
+    </ngx-column>
+  </ngx-grid>
   <div>
     <button mat-raised-button
             color="primary"

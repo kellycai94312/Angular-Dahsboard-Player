@@ -3,7 +3,7 @@ import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
-import { GroupAdditionalInformation, GroupRequisites } from 'app/data/remote/model/group';
+import { GroupAdditionalInformation } from 'app/data/remote/model/group';
 import { Organization } from 'app/data/remote/model/group/organization';
 import { Person } from 'app/data/remote/model/person';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
@@ -94,7 +94,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
 
   public async _initializeGroup(organization: Organization): Promise<void> {
     organization.legalAddress = organization.legalAddress || new PlainAddress();
-    organization.requisites = organization.requisites || new GroupRequisites();
+    // organization.requisites = organization.requisites || new GroupRequisites();
     organization.additionalInformation = organization.additionalInformation || new GroupAdditionalInformation();
     organization.address = organization.address || new PlainAddress();
 
@@ -130,16 +130,17 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     this.emailGroupNgxInput = this._getNgxInput('Email', organization.email);
     this.stateRegistrationCertificateNumberGroupNgxInput = this._getNgxInput('№ Свидетельства о государственной регистрации', organization.additionalInformation.stateRegistrationCertificateNumber);
     this.accreditationOrderNumberGroupNgxInput = this._getNgxInput('№ Номер приказа об аккредитации и названии выдавшей его', organization.additionalInformation.accreditationOrderNumber);
-    this.bankFacilityGroupNgxInput = this._getNgxInput('Учреждение банка', organization.requisites.bankFacility);
-    this.paymentAccountGroupNgxInput = this._getNgxInput('Расчетный счет', organization.requisites.paymentAccount);
-    this.innGroupNgxInput = this._getNgxInput('ИНН', organization.requisites.inn);
-    this.oktmoGroupNgxInput = this._getNgxInput('ОКТМО', organization.requisites.oktmo);
-    this.kbkGroupNgxInput = this._getNgxInput('КБК', organization.requisites.kbk);
-    this.correspondentAccountGroupNgxInput = this._getNgxInput('Корреспонденский ссчет', organization.requisites.correspondentAccount);
-    this.bikGroupNgxInput = this._getNgxInput('БИК', organization.requisites.bik);
-    this.kppGroupNgxInput = this._getNgxInput('КПП', organization.requisites.kpp);
-    this.okdadGroupNgxInput = this._getNgxInput('ОКВЭД', organization.requisites.okvad);
-    this.okpoGroupNgxInput = this._getNgxInput('ОКПО', organization.requisites.okpo);
+    // TODO: Add editing group requisites
+    // this.bankFacilityGroupNgxInput = this._getNgxInput('Учреждение банка', organization.requisites.bankFacility);
+    // this.paymentAccountGroupNgxInput = this._getNgxInput('Расчетный счет', organization.requisites.paymentAccount);
+    // this.innGroupNgxInput = this._getNgxInput('ИНН', organization.requisites.inn);
+    // this.oktmoGroupNgxInput = this._getNgxInput('ОКТМО', organization.requisites.oktmo);
+    // this.kbkGroupNgxInput = this._getNgxInput('КБК', organization.requisites.kbk);
+    // this.correspondentAccountGroupNgxInput = this._getNgxInput('Корреспонденский ссчет', organization.requisites.correspondentAccount);
+    // this.bikGroupNgxInput = this._getNgxInput('БИК', organization.requisites.bik);
+    // this.kppGroupNgxInput = this._getNgxInput('КПП', organization.requisites.kpp);
+    // this.okdadGroupNgxInput = this._getNgxInput('ОКВЭД', organization.requisites.okvad);
+    // this.okpoGroupNgxInput = this._getNgxInput('ОКПО', organization.requisites.okpo);
   }
 
   private _initializePersons(): void {
@@ -200,16 +201,17 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     this.data.groupClaimRequest.organization.email = this.emailGroupNgxInput.control.value;
     this.data.groupClaimRequest.organization.additionalInformation.stateRegistrationCertificateNumber = this.stateRegistrationCertificateNumberGroupNgxInput.control.value;
     this.data.groupClaimRequest.organization.additionalInformation.accreditationOrderNumber = this.accreditationOrderNumberGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.inn = this.innGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.oktmo = this.oktmoGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.kbk = this.kbkGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.correspondentAccount = this.correspondentAccountGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.bik = this.bikGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.kpp = this.kppGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.okvad = this.okdadGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.requisites.okpo = this.okpoGroupNgxInput.control.value;
+    // TODO: Add editing group requisites
+    // this.data.groupClaimRequest.organization.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.inn = this.innGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.oktmo = this.oktmoGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.kbk = this.kbkGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.correspondentAccount = this.correspondentAccountGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.bik = this.bikGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.kpp = this.kppGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.okvad = this.okdadGroupNgxInput.control.value;
+    // this.data.groupClaimRequest.organization.requisites.okpo = this.okpoGroupNgxInput.control.value;
     // TODO:
     // this.data.groupClaimRequest.headPhone = this.phoneHeadPersonNgxInput.control.value;
     //

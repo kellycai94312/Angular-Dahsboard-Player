@@ -5,4 +5,8 @@ export class GroupAdditionalInformation extends IdentifiedObject {
   public stateRegistrationCertificateNumber?: string;
   // № приказа о аккредитации и название организации, выдавшей его
   public accreditationOrderNumber?: string;
+  // ОКВЭД
+  public okvad?: string;
+  // ОКПО
+  public okpo?: string;
 }

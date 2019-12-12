@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
 import { PropertyConstant } from 'app/data/local/property-constant';
-import { GroupAdditionalInformation, GroupRequisites } from 'app/data/remote/model/group';
 import { Group } from 'app/data/remote/model/group/base';
 import { Person } from 'app/data/remote/model/person';
 import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
@@ -58,26 +57,26 @@ export class EditGroupDetailsComponent extends BaseEditComponent<Group> {
       count: PropertyConstant.pageSizeMax
     }).toPromise()).list.map(x => x.person);
     this.headNgxSelect.control.setValue(data.head);
-
-    data.requisites = data.requisites || new GroupRequisites();
-    data.additionalInformation = data.additionalInformation || new GroupAdditionalInformation();
-
-    this.postIndexNgxInput = this._getNgxInput('postIndex', data.legalAddress.postIndex);
-    this.cityNgxInput = this._getNgxInput('city', data.legalAddress.city);
-    this.streetNgxInput = this._getNgxInput('street', data.legalAddress.street);
-    this.houseNgxInput = this._getNgxInput('house', data.legalAddress.house);
-    this.blockNgxInput = this._getNgxInput('addressBlock', data.legalAddress.block);
-    this.literNgxInput = this._getNgxInput('liter', data.legalAddress.liter);
-    this.phoneNgxInput = this._getNgxInput('phone', data.phone);
-    this.innNgxInput = this._getNgxInput('inn', data.requisites.inn);
-    this.kppNgxInput = this._getNgxInput('kpp', data.requisites.kpp);
-    this.oktmoNgxInput = this._getNgxInput('oktmo', data.requisites.oktmo);
-    this.recipientNgxInput = this._getNgxInput('recipient', data.requisites.recipient);
-    this.recipientPersonalAccountNgxInput = this._getNgxInput('editGroupDetails.recipientPersonalAccount', data.requisites.recipientPersonalAccount);
-    this.bankFacilityNgxInput = this._getNgxInput('bankFacility', data.requisites.bankFacility);
-    this.accountNgxInput = this._getNgxInput('editGroupDetails.account', data.requisites.account);
-    this.bikNgxInput = this._getNgxInput('bik', data.requisites.bik);
-    this.kbkNgxInput = this._getNgxInput('kbk', data.requisites.kbk);
+    // TODO: Add editing group requisites
+    // data.requisites = data.requisites || new GroupRequisites();
+    // data.additionalInformation = data.additionalInformation || new GroupAdditionalInformation();
+    //
+    // this.postIndexNgxInput = this._getNgxInput('postIndex', data.legalAddress.postIndex);
+    // this.cityNgxInput = this._getNgxInput('city', data.legalAddress.city);
+    // this.streetNgxInput = this._getNgxInput('street', data.legalAddress.street);
+    // this.houseNgxInput = this._getNgxInput('house', data.legalAddress.house);
+    // this.blockNgxInput = this._getNgxInput('addressBlock', data.legalAddress.block);
+    // this.literNgxInput = this._getNgxInput('liter', data.legalAddress.liter);
+    // this.phoneNgxInput = this._getNgxInput('phone', data.phone);
+    // this.innNgxInput = this._getNgxInput('inn', data.requisites.inn);
+    // this.kppNgxInput = this._getNgxInput('kpp', data.requisites.kpp);
+    // this.oktmoNgxInput = this._getNgxInput('oktmo', data.requisites.oktmo);
+    // this.recipientNgxInput = this._getNgxInput('recipient', data.requisites.recipient);
+    // this.recipientPersonalAccountNgxInput = this._getNgxInput('editGroupDetails.recipientPersonalAccount', data.requisites.recipientPersonalAccount);
+    // this.bankFacilityNgxInput = this._getNgxInput('bankFacility', data.requisites.bankFacility);
+    // this.accountNgxInput = this._getNgxInput('editGroupDetails.account', data.requisites.account);
+    // this.bikNgxInput = this._getNgxInput('bik', data.requisites.bik);
+    // this.kbkNgxInput = this._getNgxInput('kbk', data.requisites.kbk);
     return true;
   }
 
@@ -92,15 +91,16 @@ export class EditGroupDetailsComponent extends BaseEditComponent<Group> {
     this.data.legalAddress.block = this.blockNgxInput.control.value;
     this.data.legalAddress.liter = this.literNgxInput.control.value;
     this.data.phone = this.phoneNgxInput.control.value;
-    this.data.requisites.inn = this.innNgxInput.control.value;
-    this.data.requisites.kpp = this.kppNgxInput.control.value;
-    this.data.requisites.oktmo = this.oktmoNgxInput.control.value;
-    this.data.requisites.recipient = this.recipientNgxInput.control.value;
-    this.data.requisites.recipientPersonalAccount = this.recipientPersonalAccountNgxInput.control.value;
-    this.data.requisites.bankFacility = this.bankFacilityNgxInput.control.value;
-    this.data.requisites.account = this.accountNgxInput.control.value;
-    this.data.requisites.bik = this.bikNgxInput.control.value;
-    this.data.requisites.kbk = this.kbkNgxInput.control.value;
+    // TODO: Add editing group requisites
+    // this.data.requisites.inn = this.innNgxInput.control.value;
+    // this.data.requisites.kpp = this.kppNgxInput.control.value;
+    // this.data.requisites.oktmo = this.oktmoNgxInput.control.value;
+    // this.data.requisites.recipient = this.recipientNgxInput.control.value;
+    // this.data.requisites.recipientPersonalAccount = this.recipientPersonalAccountNgxInput.control.value;
+    // this.data.requisites.bankFacility = this.bankFacilityNgxInput.control.value;
+    // this.data.requisites.account = this.accountNgxInput.control.value;
+    // this.data.requisites.bik = this.bikNgxInput.control.value;
+    // this.data.requisites.kbk = this.kbkNgxInput.control.value;
   }
 
   public async onRemove(): Promise<boolean> {

@@ -1,4 +1,4 @@
-import { GroupClaimJoinRequestStateEnum } from 'app/data/remote/model/group';
+import { GroupClaimJoinRequestStateEnum, GroupRequisites } from 'app/data/remote/model/group';
 import { GroupPerson } from 'app/data/remote/model/group/person';
 import { Type } from 'class-transformer';
 import { BaseGroupConnectionRequest } from '../base-group-connection-request';
@@ -14,6 +14,9 @@ export class GroupConnectionRequestClaim extends BaseGroupConnectionRequest {
   public deputyHeadPhone?: string;
   public headEmail?: string;
   public deputyHeadEmail?: string;
+
+  @Type(() => GroupRequisites)
+  public requisites?: GroupRequisites;
 
   @Type(() => GroupConnectionRequestClaimState)
   public claimState?: GroupConnectionRequestClaimState;

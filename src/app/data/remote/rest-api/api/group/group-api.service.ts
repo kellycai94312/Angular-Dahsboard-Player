@@ -27,6 +27,7 @@ import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/st
 import { GroupPersonPosition } from 'app/data/remote/model/group/position';
 import { FileApiService } from 'app/data/remote/rest-api/api';
 import { UtilService } from 'app/services/util/util.service';
+import { plainToClass } from 'class-transformer';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../../../../environments/environment';
@@ -98,10 +99,6 @@ export class GroupApiService {
     return this._apiService.updateValue(GroupAdditionalInformation, `${this._basePath}/${group.id}/additionalInformation`, value) as Observable<GroupAdditionalInformation>;
   }
 
-  public updateGroupRequisites<T extends Group>(group: T, value: GroupRequisites): Observable<GroupRequisites> {
-    return this._apiService.updateValue(GroupRequisites, `${this._basePath}/${group.id}/requisites`, value) as Observable<GroupRequisites>;
-  }
-
   //endregion
 
   //region Group person
@@ -162,6 +159,10 @@ export class GroupApiService {
   //endregion
 
   //region Group person type claim
+
+  public getGroupPersonTypeClaim<T extends Group>(group: T, value: GroupPersonClaimRequest): Observable<GroupPersonTypeClaim> {
+    return this._apiService.getValue(SingleAttributeWrapper, `${this._basePath}/${group.id}/groupPersonTypeClaim`, value).pipe(map(x => plainToClass(GroupPersonTypeClaim, x.value)));
+  }
 
   public createGroupPersonTypeClaim<T extends Group>(group: T, value: GroupPersonClaimRequest): Observable<GroupPersonTypeClaim> {
     return this._apiService.createValue(GroupPersonTypeClaim, `${this._basePath}/${group.id}/claim/person`, value) as Observable<GroupPersonTypeClaim>;
@@ -424,6 +425,37 @@ export class GroupApiService {
 
   public updateGroupVacancies<T extends BasePosition>(group: Group, values: T[]): Observable<T[]> {
     return this._apiService.createValue(BasePosition, `${this._basePath}/${group.id}/vacancy`, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<T[]>;
+  }
+
+  //endregion
+
+  //region requisites
+
+  public getGroupRequisitesList(group: Group): Observable<GroupRequisites[]> {
+    return this._apiService.getValues(GroupRequisites, `${this._basePath}/${group.id}/requisites`);
+  }
+
+  public getGroupRequisites(group: Group, groupRequisites: GroupRequisites): Observable<GroupRequisites> {
+    return this._apiService.getValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${groupRequisites.id}`) as Observable<GroupRequisites>;
+  }
+
+  public createGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
+    return this._apiService.createValue(GroupRequisites, `${this._basePath}/${group.id}/requisites`, value) as Observable<GroupRequisites>;
+  }
+
+  public updateGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
+    return this._apiService.updateValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${value.id}`, value) as Observable<GroupRequisites>;
+  }
+
+  public saveGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
+    if (value.id) {
+      return this.updateGroupRequisites(group, value);
+    }
+    return this.createGroupRequisites(group, value);
+  }
+
+  public removeGroupRequisites(group: Group, groupRequisites: GroupRequisites): Observable<GroupRequisites> {
+    return this._apiService.removeValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${groupRequisites.id}`) as Observable<GroupRequisites>;
   }
 
   //endregion
