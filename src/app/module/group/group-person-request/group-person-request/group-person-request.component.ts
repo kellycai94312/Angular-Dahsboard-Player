@@ -23,6 +23,7 @@ import { OrganizationTypeApiService } from 'app/data/remote/rest-api/api/organiz
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
 import { IndividualPersonStatement } from 'app/module/group/person-statements/individual-person-statement/model/individual-person-statement';
+import { LegalEntityPersonStatement } from 'app/module/group/person-statements/legal-entity-person-statement/model/legal-entity-person-statement';
 import { NgxDate } from 'app/module/ngx/ngx-date/model/ngx-date';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
@@ -74,6 +75,7 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
   public phoneNgxInput: NgxInput;
   public emailNgxInput: NgxInput;
   public individualPersonStatement: IndividualPersonStatement;
+  public legalEntityPersonStatement: LegalEntityPersonStatement;
 
   constructor(private _validationService: ValidationService,
               private _translateObjectService: TranslateObjectService,
@@ -219,8 +221,10 @@ export class GroupPersonRequestComponent extends BaseEditComponent<GroupPersonCl
       this.individualPersonStatement.person = (this.data as GroupPersonClaimRequest).person;
       this.individualPersonStatement.groupPersonTypeClaim = groupPersonTypeClaim;
       this.individualPersonStatement.groupPersonClaimRequestProfile = new GroupPersonClaimRequestProfile();
-    } else if (await this.onSave()) {
-      await this._router.navigate(['/sign-in']);
+    } else if (this.personType === PersonType.LEGAL_ENTITY && this.data instanceof GroupClaimRequest) {
+      const groupConnectionRequestClaim = await this._groupApiService.createGroupConnectionRequestClaim(this.group, this.data).toPromise();
+      this.legalEntityPersonStatement = new LegalEntityPersonStatement();
+      this.legalEntityPersonStatement.groupConnectionRequestClaim = groupConnectionRequestClaim;
     }
   }
 

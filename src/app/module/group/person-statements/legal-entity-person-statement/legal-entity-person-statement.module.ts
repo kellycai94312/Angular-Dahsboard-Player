@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatButtonModule, MatDividerModule } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
 import { TranslateModule } from '@ngx-translate/core';
 import { NgxGridModule } from 'app/components/ngx-grid/ngx-grid.module';
 import { NgxImageModule } from 'app/components/ngx-image';
@@ -17,6 +18,7 @@ import { LegalEntityPersonStatementComponent } from './legal-entity-person-state
     CommonModule,
     MatDividerModule,
     MatButtonModule,
+    MatStepperModule,
     FlexLayoutModule,
     TranslateModule.forChild(),
     NgxImageModule,
