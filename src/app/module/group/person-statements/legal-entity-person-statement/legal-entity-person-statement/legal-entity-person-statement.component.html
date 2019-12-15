@@ -1,5 +1,4 @@
-<mat-horizontal-stepper #stepper
-                        *ngIf="data"
+<mat-horizontal-stepper *ngIf="data"
                         fxFlex="auto"
                         fxFlexFill
                         [selectedIndex]="selectedIndex"
@@ -102,8 +101,8 @@
     </div>
     <div fxLayout="row"
          fxLayoutGap="10px">
-<!--      <button mat-button-->
-<!--              matStepperPrevious>{{'back' | translate}}</button>-->
+      <!--      <button mat-button-->
+      <!--              matStepperPrevious>{{'back' | translate}}</button>-->
       <button mat-button
               matStepperNext>{{'nextStep' | translate}}</button>
       <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>
@@ -143,8 +142,8 @@
     </div>
     <div fxLayout="row"
          fxLayoutGap="10px">
-<!--      <button mat-button-->
-<!--              matStepperPrevious>{{'back' | translate}}</button>-->
+      <!--      <button mat-button-->
+      <!--              matStepperPrevious>{{'back' | translate}}</button>-->
       <button mat-button
               (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED,2)">{{'send' | translate}}</button>
       <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>

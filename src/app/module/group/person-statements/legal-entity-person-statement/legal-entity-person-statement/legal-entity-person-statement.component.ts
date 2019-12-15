@@ -293,6 +293,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   private _getGroupClaimRequestProfileStep3(): GroupClaimRequestProfileStep3 {
     const step3 = new GroupClaimRequestProfileStep3();
     step3.requisites = this.data.groupConnectionRequestClaim.requisites || new GroupRequisites();
+    step3.requisites.name = step3.requisites.name || 'Основные реквизиты';
     step3.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
     step3.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;
     step3.requisites.inn = this.innGroupNgxInput.control.value;
