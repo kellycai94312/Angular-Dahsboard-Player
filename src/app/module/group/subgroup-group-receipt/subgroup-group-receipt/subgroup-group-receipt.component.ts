@@ -46,8 +46,9 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
-    this.dateNgxDate.placeholderTranslation = 'date';
+    this.dateNgxDate.placeholderTranslation = 'duringThePeriod';
     this.dateNgxDate.required = true;
+    this.dateNgxDate.materialControl = true;
     this.dateNgxDate.format = PropertyConstant.dateFormat;
     this.dateNgxDate.control = new FormControl(void 0, [Validators.required]);
     this.dateNgxDate.control.valueChanges
@@ -58,6 +59,8 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
       .subscribe(async value => {
         await this.ngxGridComponent.reset();
       });
+
+    this.dateNgxDate.control.setValue(new Date());
 
     this.formGroup.setControl('date', this.dateNgxDate.control);
     this.formGroup.setControl('person', this._personControl);

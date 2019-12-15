@@ -220,13 +220,19 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   }
 
   public async onSelectionChange(e: { previouslySelectedIndex: number, selectedIndex: number }): Promise<void> {
-    this.selectedIndex = e.selectedIndex;
-    if (e.previouslySelectedIndex === 0) {
-      this.data.groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep1(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep1()).toPromise();
-    } else if (e.previouslySelectedIndex === 1) {
-      this.data.groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep2(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep2()).toPromise();
-    } else if (e.previouslySelectedIndex === 2) {
-      this.data.groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep3(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep3()).toPromise();
+    try {
+      this.selectedIndex = e.selectedIndex;
+      let groupConnectionRequestClaim;
+      if (e.previouslySelectedIndex === 0) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep1(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep1()).toPromise();
+      } else if (e.previouslySelectedIndex === 1) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep2(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep2()).toPromise();
+      } else if (e.previouslySelectedIndex === 2) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep3(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep3()).toPromise();
+      }
+      this.data.groupConnectionRequestClaim = groupConnectionRequestClaim;
+    } catch (err) {
+      this.selectedIndex = e.previouslySelectedIndex;
     }
   }
 

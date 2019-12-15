@@ -22,7 +22,7 @@
         "section": "Основные данные",
         "country": "Страна",
         "region": "Регион",
-        "city": "Гороorderд"
+        "city": "Город"
       },
       "anthropometry": {
         "section": "Антропометрия",
@@ -949,5 +949,6 @@
   "fillOutNow": "Заполнить сейчас",
   "fillOutLater": "Заполнить позже",
   "fillInTheOffice": "Заполнить в офисе",
-  "sendProfile": "Отправить анкету"
+  "sendProfile": "Отправить анкету",
+  "duringThePeriod": "За период"
 }

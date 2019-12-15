@@ -1,4 +1,3 @@
-import {merge as observableMerge, Unsubscribable} from 'rxjs';
 import {
   AfterViewInit,
   Component,
@@ -11,16 +10,17 @@ import {
   QueryList,
   ViewEncapsulation
 } from '@angular/core';
-import {PageQuery} from '../../../data/remote/rest-api/page-query';
-import {PageContainer} from '../../../data/remote/bean/page-container';
-import {Direction} from '../../ngx-virtual-scroll/model/direction';
-import {NgxColumnComponent} from '../ngx-column/ngx-column.component';
-import {SelectionType} from '../bean/selection-type';
-import {NgxVirtualScroll} from '../../ngx-virtual-scroll/bean/ngx-virtual-scroll';
-import {AppHelper} from '../../../utils/app-helper';
-import {Sort} from '../../../data/remote/rest-api/sort';
-import {mergeAll} from 'rxjs/operators';
-import {NameWrapper} from '../../../data/local/name-wrapper';
+import { merge as observableMerge, Unsubscribable } from 'rxjs';
+import { mergeAll } from 'rxjs/operators';
+import { NameWrapper } from '../../../data/local/name-wrapper';
+import { PageContainer } from '../../../data/remote/bean/page-container';
+import { PageQuery } from '../../../data/remote/rest-api/page-query';
+import { Sort } from '../../../data/remote/rest-api/sort';
+import { AppHelper } from '../../../utils/app-helper';
+import { NgxVirtualScroll } from '../../ngx-virtual-scroll/bean/ngx-virtual-scroll';
+import { Direction } from '../../ngx-virtual-scroll/model/direction';
+import { SelectionType } from '../bean/selection-type';
+import { NgxColumnComponent } from '../ngx-column/ngx-column.component';
 
 @Component({
   selector: 'ngx-grid',
@@ -87,7 +87,6 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
     this._sorts = [];
     this.autoInit = true;
   }
-
 
   async ngOnInit(): Promise<void> {
     this.getItems = (direction, pageQuery) => {
@@ -167,6 +166,38 @@ export class NgxGridComponent extends NgxVirtualScroll implements OnInit, AfterV
   public onSelectOrDeselectItem(value: any) {
     this.selectedItemChange.emit({value, selected: !!value['selected']});
     this.selectedItemsChange.emit(this.items.filter(x => x['selected']));
+  }
+
+  public descendantsAllSelected(): boolean {
+    return this.items.every(x => x['selected']);
+  }
+
+  public descendantsPartiallySelected(): boolean {
+    const result = this.items.some(child => child['selected']);
+    return result && !this.descendantsAllSelected();
+  }
+
+  public onParentSelectionToggle(): void {
+    if (this.descendantsAllSelected()) {
+      this._changeAllSelection(false);
+      this.selectedItemsChange.emit([]);
+    } else {
+      this._changeAllSelection(true);
+      this.selectedItemsChange.emit(this.items);
+    }
+  }
+
+  private _changeAllSelection(selected: boolean): void {
+    if (this.items) {
+      for (let i = 0; i < this.items.length; i++) {
+        const item = this.items[i];
+        if (selected) {
+          item['selected'] = true;
+        } else {
+          delete item['selected'];
+        }
+      }
+    }
   }
 
 }
