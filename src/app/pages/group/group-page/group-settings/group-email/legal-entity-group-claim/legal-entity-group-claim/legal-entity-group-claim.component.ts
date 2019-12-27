@@ -17,7 +17,7 @@ import { GroupPersonTypeStateEnum } from 'app/data/remote/model/group/person';
 import { Person } from 'app/data/remote/model/person';
 import { PositionLevelEnum } from 'app/data/remote/model/person-position/position-level-enum';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
-import { GroupConnectionRequestApiService } from 'app/data/remote/rest-api/api/group-connection-request/group-connection-request-api.service';
+import { GroupConnectionRequestClaimApiService } from 'app/data/remote/rest-api/api/group-connection-request-claim/group-connection-request-claim-api.service';
 import { PageQuery } from 'app/data/remote/rest-api/page-query';
 import { GroupPersonRequestComponent } from 'app/module/group/group-person-request/group-person-request/group-person-request.component';
 import { PersonType } from 'app/module/group/group-person-request/model/person-type';
@@ -40,7 +40,7 @@ export class LegalEntityGroupClaimComponent extends BaseGroupComponent<Group> {
 
   constructor(private _groupApiService: GroupApiService,
               private _ngxModalService: NgxModalService,
-              private _groupConnectionRequestApiService: GroupConnectionRequestApiService,
+              private _groupConnectionRequestClaimApiService: GroupConnectionRequestClaimApiService,
               private _componentFactoryResolver: ComponentFactoryResolver,
               private _templateModalService: TemplateModalService,
               groupService: GroupService, appHelper: AppHelper) {
@@ -87,7 +87,7 @@ export class LegalEntityGroupClaimComponent extends BaseGroupComponent<Group> {
         {
           nameKey: 'approve',
           callback: async () => {
-            await this._groupConnectionRequestApiService.removeGroupConnectionRequest(item).toPromise();
+            await this._groupConnectionRequestClaimApiService.removeGroupConnectionRequestClaim(item).toPromise();
             await this.ngxGridComponent.reset();
             modal.close();
           }

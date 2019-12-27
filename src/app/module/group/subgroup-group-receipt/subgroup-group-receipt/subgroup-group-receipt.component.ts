@@ -1,29 +1,52 @@
-import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SelectionType} from 'app/components/ngx-grid/bean/selection-type';
-import {NgxGridComponent} from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
-import {GroupContractServiceMonthPayment} from 'app/data/remote/bean/group-contract-service-month-payment';
-import {PageContainer} from 'app/data/remote/bean/page-container';
-import {Group} from 'app/data/remote/model/group/base';
-import {GroupContractService} from 'app/data/remote/model/group/contract';
-import {Person} from 'app/data/remote/model/person';
-import {GroupApiService} from 'app/data/remote/rest-api/api';
-import {PageQuery} from 'app/data/remote/rest-api/page-query';
-import {AppHelper} from 'app/utils/app-helper';
-import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
-import {ObjectWrapper} from '../../../../data/local/object-wrapper';
-import {PropertyConstant} from '../../../../data/local/property-constant';
-import {SubgroupGroup} from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import {SubgroupGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
-import {OrganizationApiService} from 'app/data/remote/rest-api/api/organization/organization-api.service';
-import {Organization} from 'app/data/remote/model/group/organization';
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { SelectionType } from 'app/components/ngx-grid/bean/selection-type';
+import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import { GroupContractServiceMonthPayment } from 'app/data/remote/bean/group-contract-service-month-payment';
+import { PageContainer } from 'app/data/remote/bean/page-container';
+import { Group } from 'app/data/remote/model/group/base';
+import { GroupContractService } from 'app/data/remote/model/group/contract';
+import { Organization } from 'app/data/remote/model/group/organization';
+import { Person } from 'app/data/remote/model/person';
+import { GroupApiService } from 'app/data/remote/rest-api/api';
+import { OrganizationApiService } from 'app/data/remote/rest-api/api/organization/organization-api.service';
+import { PageQuery } from 'app/data/remote/rest-api/page-query';
+import { NgxInput } from 'app/module/ngx/ngx-input';
+import { AppHelper } from 'app/utils/app-helper';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+import { ObjectWrapper } from '../../../../data/local/object-wrapper';
+import { PropertyConstant } from '../../../../data/local/property-constant';
+import { SubgroupGroup } from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import { SubgroupGroupApiService } from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM.YYYY'
+  },
+  display: {
+    dateInput: 'MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+  }
+};
 
 @Component({
   selector: 'app-subgroup-group-receipt',
   templateUrl: './subgroup-group-receipt.component.html',
-  styleUrls: ['./subgroup-group-receipt.component.scss']
+  styleUrls: ['./subgroup-group-receipt.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
+  ]
 })
 export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
 
@@ -37,6 +60,7 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
   public subgroupGroup: SubgroupGroup;
 
   public readonly selectionTypeClass = SelectionType;
+  public readonly kosguNgxInput = new NgxInput();
   public readonly dateNgxDate = new NgxDate();
   public readonly formGroup = new FormGroup({});
   private readonly _personControl = new FormControl([], [Validators.required, Validators.min(1)]);
@@ -49,6 +73,10 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
   }
 
   public async ngOnInit(): Promise<void> {
+    this.kosguNgxInput.labelTranslation = 'kosgu';
+    this.kosguNgxInput.control.setValue(this.subgroupGroup.kosgu);
+    this.kosguNgxInput.control.disable();
+
     this.dateNgxDate.placeholderTranslation = 'duringThePeriod';
     this.dateNgxDate.required = true;
     this.dateNgxDate.materialControl = true;
@@ -85,7 +113,7 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
     if (this.dateNgxDate.control.value) {
       items = (await this._subgroupGroupApiService.getSubgroupGroupContractMonthPayments(this.subgroupGroup, {period: this.dateNgxDate.control.value}).toPromise())
         .map(value => {
-          const sum = value.sumInKopeks / 100;
+          const sum = value.groupContractService.pricePerMonthInKopeks / 100;
           return {
             person: value.groupContractService.person,
             groupContractService: value.groupContractService,
@@ -104,8 +132,7 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
   };
 
   public async onGetReport(): Promise<void> {
-    const organizationRequisitesList = await this._organizationApiService
-      .getOrganizationRequisitesList(this.subgroupGroup.subgroupGroupItem.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.group as Organization).toPromise();
+    const organizationRequisitesList = await this._organizationApiService.getOrganizationRequisitesList(this.subgroupGroup.subgroupGroupItem.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.group as Organization).toPromise();
     if (organizationRequisitesList.length) {
       await this._subgroupGroupApiService.downloadSubgroupGroupReceipt(this.subgroupGroup, {
         period: this.dateNgxDate.control.value,

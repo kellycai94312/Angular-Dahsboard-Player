@@ -203,9 +203,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
 
   private _initializePersons(): void {
     this.headFullNameNgxInputNgxInput = this._utilService.getNgxInput('Полное имя руководителя', this.data.groupConnectionRequestClaim.headFullName);
-    this.headFullNameNgxInputNgxInput.control.disable();
     this.phoneHeadPersonNgxInput = this._utilService.getNgxInput('Телефон руководителя', this.data.groupConnectionRequestClaim.headPhone);
-    this.phoneHeadPersonNgxInput.control.disable();
 
     this.deputyHeadFullNameNgxInput = this._utilService.getNgxInput('Полное имя заместителя руководителя', this.data.groupConnectionRequestClaim.deputyHeadFullName);
     this.deputyHeadPhoneNgxInput = this._utilService.getNgxInput('Телефон заместителя руководителя', this.data.groupConnectionRequestClaim.deputyHeadPhone);
