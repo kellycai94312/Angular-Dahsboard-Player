@@ -1,22 +1,24 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { SelectionType } from 'app/components/ngx-grid/bean/selection-type';
-import { NgxGridComponent } from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
-import { GroupContractServiceMonthPayment } from 'app/data/remote/bean/group-contract-service-month-payment';
-import { PageContainer } from 'app/data/remote/bean/page-container';
-import { Group } from 'app/data/remote/model/group/base';
-import { GroupContractService } from 'app/data/remote/model/group/contract';
-import { Person } from 'app/data/remote/model/person';
-import { GroupApiService } from 'app/data/remote/rest-api/api';
-import { PageQuery } from 'app/data/remote/rest-api/page-query';
-import { AppHelper } from 'app/utils/app-helper';
-import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
-import { ObjectWrapper } from '../../../../data/local/object-wrapper';
-import { PropertyConstant } from '../../../../data/local/property-constant';
-import { SubgroupGroup } from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
-import { SubgroupGroupApiService } from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
-import { NgxDate } from '../../../ngx/ngx-date/model/ngx-date';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {SelectionType} from 'app/components/ngx-grid/bean/selection-type';
+import {NgxGridComponent} from 'app/components/ngx-grid/ngx-grid/ngx-grid.component';
+import {GroupContractServiceMonthPayment} from 'app/data/remote/bean/group-contract-service-month-payment';
+import {PageContainer} from 'app/data/remote/bean/page-container';
+import {Group} from 'app/data/remote/model/group/base';
+import {GroupContractService} from 'app/data/remote/model/group/contract';
+import {Person} from 'app/data/remote/model/person';
+import {GroupApiService} from 'app/data/remote/rest-api/api';
+import {PageQuery} from 'app/data/remote/rest-api/page-query';
+import {AppHelper} from 'app/utils/app-helper';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {ObjectWrapper} from '../../../../data/local/object-wrapper';
+import {PropertyConstant} from '../../../../data/local/property-constant';
+import {SubgroupGroup} from '../../../../data/remote/model/group/subgroup/subgroup/subgroup-group';
+import {SubgroupGroupApiService} from '../../../../data/remote/rest-api/api/subgroup-group/subgroup-group-api.service';
+import {NgxDate} from '../../../ngx/ngx-date/model/ngx-date';
+import {OrganizationApiService} from 'app/data/remote/rest-api/api/organization/organization-api.service';
+import {Organization} from 'app/data/remote/model/group/organization';
 
 @Component({
   selector: 'app-subgroup-group-receipt',
@@ -42,6 +44,7 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
 
   constructor(private _subgroupGroupApiService: SubgroupGroupApiService,
               private _groupApiService: GroupApiService,
+              private _organizationApiService: OrganizationApiService,
               private _appHelper: AppHelper) {
   }
 
@@ -101,11 +104,12 @@ export class SubgroupGroupReceiptComponent implements OnInit, OnDestroy {
   };
 
   public async onGetReport(): Promise<void> {
-    const groupRequisitesList = await this._groupApiService.getGroupRequisitesList(this.subgroupGroup.subgroupGroupItem.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.group).toPromise();
-    if (groupRequisitesList.length) {
+    const organizationRequisitesList = await this._organizationApiService
+      .getOrganizationRequisitesList(this.subgroupGroup.subgroupGroupItem.subgroupTemplateGroup.subgroupTemplateGroupVersion.template.group as Organization).toPromise();
+    if (organizationRequisitesList.length) {
       await this._subgroupGroupApiService.downloadSubgroupGroupReceipt(this.subgroupGroup, {
         period: this.dateNgxDate.control.value,
-        requisitesId: groupRequisitesList[0].id
+        requisitesId: organizationRequisitesList[0].id
       }, this._personControl.value.map(x => {
         const groupContractService = new GroupContractServiceMonthPayment();
         groupContractService.groupContractService = x.groupContractService;

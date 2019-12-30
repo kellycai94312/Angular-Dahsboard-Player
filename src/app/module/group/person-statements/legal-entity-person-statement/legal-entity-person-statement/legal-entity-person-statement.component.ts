@@ -14,9 +14,9 @@ import { PlainAddress } from 'app/data/remote/model/address/plain-address';
 import {
   GroupAdditionalInformation,
   GroupClaimJoinRequestStateEnum,
-  GroupRequisites
 } from 'app/data/remote/model/group';
 import { Organization } from 'app/data/remote/model/group/organization';
+import { OrganizationRequisites } from 'app/data/remote/model/group/organization';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { CompanyTypeApiService } from 'app/data/remote/rest-api/api/company-type/company-type-api.service';
 import { GroupConnectionRequestClaimApiService } from 'app/data/remote/rest-api/api/group-connection-request-claim/group-connection-request-claim-api.service';
@@ -141,8 +141,8 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     await super.initializeComponent(data);
     return this.appHelper.tryLoad(async () => {
       await this._initializeGroup(data.groupConnectionRequestClaim.group as Organization);
-      data.groupConnectionRequestClaim.requisites = data.groupConnectionRequestClaim.requisites || new GroupRequisites();
-      await this._initializeGroupRequisites(data.groupConnectionRequestClaim.requisites);
+      data.groupConnectionRequestClaim.requisites = data.groupConnectionRequestClaim.requisites || new OrganizationRequisites();
+      await this._initializeOrganizationRequisites(data.groupConnectionRequestClaim.requisites);
       this._initializePersons();
     });
   }
@@ -190,7 +190,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     this.okpoGroupNgxInput = this._getNgxInput('ОКПО', organization.additionalInformation.okpo);
   }
 
-  private _initializeGroupRequisites(requisites: GroupRequisites): void {
+  private _initializeOrganizationRequisites(requisites: OrganizationRequisites): void {
     this.bankFacilityGroupNgxInput = this._getNgxInput('Учреждение банка', requisites.bankFacility);
     this.paymentAccountGroupNgxInput = this._getNgxInput('Расчетный счет', requisites.paymentAccount);
     this.innGroupNgxInput = this._getNgxInput('ИНН', requisites.inn);
@@ -292,7 +292,7 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
 
   private _getGroupClaimRequestProfileStep3(): GroupClaimRequestProfileStep3 {
     const step3 = new GroupClaimRequestProfileStep3();
-    step3.requisites = this.data.groupConnectionRequestClaim.requisites || new GroupRequisites();
+    step3.requisites = this.data.groupConnectionRequestClaim.requisites || new OrganizationRequisites();
     step3.requisites.name = step3.requisites.name || 'Основные реквизиты';
     step3.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
     step3.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;

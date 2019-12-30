@@ -1,8 +1,9 @@
-import { GroupClaimJoinRequestStateEnum, GroupRequisites } from 'app/data/remote/model/group';
+import { GroupClaimJoinRequestStateEnum } from 'app/data/remote/model/group';
 import { Type } from 'class-transformer';
 import { BaseGroupConnectionRequest } from '../base-group-connection-request';
 import { GroupConnectionRequestType } from '../group-connection-request-type';
 import { GroupConnectionRequestClaimState } from './group-connection-request-claim-state';
+import { OrganizationRequisites } from 'app/data/remote/model/group/organization';
 
 // Заявление на создание связи между группами
 export class GroupConnectionRequestClaim extends BaseGroupConnectionRequest {
@@ -14,8 +15,8 @@ export class GroupConnectionRequestClaim extends BaseGroupConnectionRequest {
   public headEmail?: string;
   public deputyHeadEmail?: string;
 
-  @Type(() => GroupRequisites)
-  public requisites?: GroupRequisites;
+  @Type(() => OrganizationRequisites)
+  public requisites?: OrganizationRequisites;
 
   @Type(() => GroupConnectionRequestClaimState)
   public claimState?: GroupConnectionRequestClaimState;
