@@ -1,112 +1,200 @@
-<div *ngIf="data"
-     fxFlex="auto"
-     fxLayout="column"
-     fxLayoutGap="10px">
-  <div fxLayout="column">
-    <new-ngx-input [data]="nameGroupNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="fullNameGroupNgxInput"></new-ngx-input>
-    <ngx-select [data]="companyTypeNgxSelect"></ngx-select>
-  </div>
+<mat-horizontal-stepper *ngIf="data"
+                        fxFlex="auto"
+                        fxFlexFill
+                        [selectedIndex]="selectedIndex"
+                        [linear]="false"
+                        (selectionChange)="onSelectionChange($event)">
+  <mat-step [stepControl]="step1FormGroup">
+    <ng-template matStepLabel>{{'step' | translate}} 1</ng-template>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <div fxLayout="column">
+        <new-ngx-input [data]="nameGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="fullNameGroupNgxInput"></new-ngx-input>
+        <ngx-select [data]="companyTypeNgxSelect"></ngx-select>
+      </div>
 
-  <label class="label">{{'Полный юридический адрес' | translate}}</label>
+      <label class="label">{{'Полный юридический адрес' | translate}}</label>
 
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="postIndexLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="regionLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="cityLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="streetLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="houseLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="blockLegalAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="literLegalAddressNgxInput"></new-ngx-input>
-  </div>
-
-  <label class="label">{{'Полный фактический адрес' | translate}}</label>
-
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="postIndexActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="regionActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="cityActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="streetActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="houseActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="blockActualAddressNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="literActualAddressNgxInput"></new-ngx-input>
-  </div>
-
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="phoneGroupNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="faxGroupNgxInput"></new-ngx-input>
-  </div>
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="websiteGroupNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="emailGroupNgxInput"></new-ngx-input>
-  </div>
-
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="headFullNameNgxInputNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="phoneHeadPersonNgxInput"></new-ngx-input>
-  </div>
-
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <new-ngx-input [data]="deputyHeadFullNameNgxInput"></new-ngx-input>
-    <new-ngx-input [data]="deputyHeadPhoneNgxInput"></new-ngx-input>
-  </div>
-
-  <label class="label">{{'Дополнительная информация' | translate}}</label>
-
-  <new-ngx-input [data]="stateRegistrationCertificateNumberGroupNgxInput"></new-ngx-input>
-  <new-ngx-input [data]="accreditationOrderNumberGroupNgxInput"></new-ngx-input>
-
-  <label class="label">{{'Банковские реквизиты' | translate}}</label>
-
-  <new-ngx-input [data]="bankFacilityGroupNgxInput"></new-ngx-input>
-
-  <div fxLayout="row"
-       fxLayout.lt-sm="column"
-       fxLayoutGap="10px"
-       fxLayoutGap.lt-sm="unset">
-    <div fxFlex
-         fxLayout="column">
-      <new-ngx-input [data]="paymentAccountGroupNgxInput"></new-ngx-input>
-      <new-ngx-input [data]="innGroupNgxInput"></new-ngx-input>
-      <new-ngx-input [data]="oktmoGroupNgxInput"></new-ngx-input>
-      <new-ngx-input [data]="kbkGroupNgxInput"></new-ngx-input>
-    </div>
-    <div fxFlex
-         fxLayout="column">
-      <new-ngx-input [data]="correspondentAccountGroupNgxInput"></new-ngx-input>
       <div fxLayout="row"
            fxLayout.lt-sm="column"
            fxLayoutGap="10px"
            fxLayoutGap.lt-sm="unset">
-        <new-ngx-input [data]="bikGroupNgxInput"></new-ngx-input>
-        <new-ngx-input [data]="kppGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="postIndexLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="regionLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="cityLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="streetLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="houseLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="blockLegalAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="literLegalAddressNgxInput"></new-ngx-input>
       </div>
-      <new-ngx-input [data]="okdadGroupNgxInput"></new-ngx-input>
-      <new-ngx-input [data]="okpoGroupNgxInput"></new-ngx-input>
+
+      <label class="label">{{'Полный фактический адрес' | translate}}</label>
+
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="postIndexActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="regionActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="cityActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="streetActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="houseActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="blockActualAddressNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="literActualAddressNgxInput"></new-ngx-input>
+      </div>
+
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="phoneGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="faxGroupNgxInput"></new-ngx-input>
+      </div>
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="websiteGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="emailGroupNgxInput"></new-ngx-input>
+      </div>
+
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="headFullNameNgxInputNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="phoneHeadPersonNgxInput"></new-ngx-input>
+      </div>
+
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="deputyHeadFullNameNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="deputyHeadPhoneNgxInput"></new-ngx-input>
+      </div>
+    </div>
+
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <button mat-button
+              matStepperNext>{{'nextStep' | translate}}</button>
+      <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="step2FormGroup">
+    <ng-template matStepLabel>{{'step' | translate}} 2</ng-template>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <label class="label">{{'Дополнительная информация' | translate}}</label>
+
+      <new-ngx-input [data]="stateRegistrationCertificateNumberGroupNgxInput"></new-ngx-input>
+      <new-ngx-input [data]="accreditationOrderNumberGroupNgxInput"></new-ngx-input>
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <new-ngx-input [data]="okvadGroupNgxInput"></new-ngx-input>
+        <new-ngx-input [data]="okpoGroupNgxInput"></new-ngx-input>
+      </div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <!--      <button mat-button-->
+      <!--              matStepperPrevious>{{'back' | translate}}</button>-->
+      <button mat-button
+              matStepperNext>{{'nextStep' | translate}}</button>
+      <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="step3FormGroup">
+    <ng-template matStepLabel>{{'step' | translate}} 3</ng-template>
+    <div fxLayout="column"
+         fxLayoutGap="10px">
+      <label class="label">{{'Банковские реквизиты' | translate}}</label>
+
+      <new-ngx-input [data]="bankFacilityGroupNgxInput"></new-ngx-input>
+
+      <div fxLayout="row"
+           fxLayout.lt-sm="column"
+           fxLayoutGap="10px"
+           fxLayoutGap.lt-sm="unset">
+        <div fxFlex
+             fxLayout="column">
+          <new-ngx-input [data]="paymentAccountGroupNgxInput"></new-ngx-input>
+          <new-ngx-input [data]="innGroupNgxInput"></new-ngx-input>
+          <new-ngx-input [data]="oktmoGroupNgxInput"></new-ngx-input>
+        </div>
+        <div fxFlex
+             fxLayout="column">
+          <new-ngx-input [data]="correspondentAccountGroupNgxInput"></new-ngx-input>
+          <div fxLayout="row"
+               fxLayout.lt-sm="column"
+               fxLayoutGap="10px"
+               fxLayoutGap.lt-sm="unset">
+            <new-ngx-input [data]="bikGroupNgxInput"></new-ngx-input>
+            <new-ngx-input [data]="kppGroupNgxInput"></new-ngx-input>
+          </div>
+          <new-ngx-input [data]="kbkGroupNgxInput"></new-ngx-input>
+        </div>
+      </div>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <!--      <button mat-button-->
+      <!--              matStepperPrevious>{{'back' | translate}}</button>-->
+      <button mat-button
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED,2)">{{'send' | translate}}</button>
+      <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+<ng-template #groupClaimJoinRequestStateTemplate
+             let-item>
+  <div fxLayout="column"
+       fxLayoutGap="10px">
+    <div>
+      <p>Уважаемый(ая) {{item}}, ваша
+        заявка
+        на вступление в Региональную спортивную
+        федерацию дзюдо Санкт-Петербурга была успешно отправлена. Необходимо заполнить анкету для более детальной
+        информации
+        о
+        вас.</p>
+      <p>Анкету на вступление Вы можете заполнить лично в офисе организации, либо сделать это сейчас, нажав на кнопку
+        Далее.
+        Электронная форма подачи сэкономит Ваше время, личный визит потребуется только для предоставления оригиналов
+        документов с одновременным получения оригинала членского билета в офисе Федерации по адресу г. Санкт-Петербург,
+        Кондратьевский пр., д. 13 А, тел. +7 (812) 576-99-31.</p>
+      <p>Если у вас нет возможности заполнить анкету сейчас, выберете вариант Заполнить Позже. Вы сможете сделать это по
+        ссылке, указанной в письме, которое придет к вам на электронную почту или зайти через электронную платформу,
+        аккаунт,
+        которой будет сгенерирован для Вас автоматически.
+        Напоминаем, что вступление в федерацию Дзюдо Санкт-Петербурга бесплатно.</p>
+    </div>
+    <div fxLayout="row"
+         fxLayoutGap="10px"
+         fxLayoutAlign="center center">
+      <button mat-raised-button
+              [disabled]="formGroup.invalid"
+              (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_COMPLETED)">
+        {{'fillOutNow' | translate}}
+      </button>
+      <ng-container [ngTemplateOutlet]="claimActionsTemplate"></ng-container>
     </div>
   </div>
-  <div fxLayout="row">
+</ng-template>
+<ng-template #claimActionsTemplate>
+  <div fxLayout="row"
+       fxLayoutGap="10px">
     <button mat-raised-button
-            color="primary"
-            [disabled]="formGroup.invalid"
-            (click)="onApply()">{{'apply' | translate}}</button>
+            (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_LATER)">
+      {{'fillOutLater' | translate}}
+    </button>
+    <button mat-raised-button
+            (click)="onSend(groupClaimJoinRequestStateEnumClass.FILL_OFFICE)">
+      {{'fillInTheOffice' | translate}}
+    </button>
   </div>
-</div>
+</ng-template>

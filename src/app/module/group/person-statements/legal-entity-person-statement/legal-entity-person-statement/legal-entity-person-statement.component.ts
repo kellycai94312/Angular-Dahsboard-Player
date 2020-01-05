@@ -1,19 +1,32 @@
-import { Component } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HtmlContentComponent } from 'app/components/html-content/html-content/html-content.component';
+import { NgxModalRef } from 'app/components/ngx-modal/bean/ngx-modal-ref';
+import { NgxModalService } from 'app/components/ngx-modal/service/ngx-modal.service';
 import { BaseEditComponent } from 'app/data/local/component/base/base-edit-component';
+import {
+  GroupClaimRequestProfileStep1,
+  GroupClaimRequestProfileStep2,
+  GroupClaimRequestProfileStep3
+} from 'app/data/remote/bean/claim';
 import { PlainAddress } from 'app/data/remote/model/address/plain-address';
-import { GroupAdditionalInformation } from 'app/data/remote/model/group';
+import {
+  GroupAdditionalInformation,
+  GroupClaimJoinRequestStateEnum,
+} from 'app/data/remote/model/group';
 import { Organization } from 'app/data/remote/model/group/organization';
-import { Person } from 'app/data/remote/model/person';
+import { OrganizationRequisites } from 'app/data/remote/model/group/organization';
 import { GroupApiService } from 'app/data/remote/rest-api/api';
 import { CompanyTypeApiService } from 'app/data/remote/rest-api/api/company-type/company-type-api.service';
+import { GroupConnectionRequestClaimApiService } from 'app/data/remote/rest-api/api/group-connection-request-claim/group-connection-request-claim-api.service';
 import { ParticipantRestApiService } from 'app/data/remote/rest-api/participant-rest-api.service';
 import { LegalEntityPersonStatement } from 'app/module/group/person-statements/legal-entity-person-statement/model/legal-entity-person-statement';
 import { NgxInput } from 'app/module/ngx/ngx-input';
 import { NgxSelect } from 'app/module/ngx/ngx-select/model/ngx-select';
 import { ValidationService } from 'app/service/validation/validation.service';
 import { UtilService } from 'app/services/util/util.service';
+import { AuthorizationService } from 'app/shared/authorization.service';
 import { AppHelper } from 'app/utils/app-helper';
 
 @Component({
@@ -21,7 +34,12 @@ import { AppHelper } from 'app/utils/app-helper';
   templateUrl: './legal-entity-person-statement.component.html',
   styleUrls: ['./legal-entity-person-statement.component.scss']
 })
-export class LegalEntityPersonStatementComponent extends BaseEditComponent<LegalEntityPersonStatement> {
+export class LegalEntityPersonStatementComponent extends BaseEditComponent<LegalEntityPersonStatement> implements OnInit {
+
+  @ViewChild('groupClaimJoinRequestStateTemplate', {static: true})
+  public groupClaimJoinRequestStateTemplate: TemplateRef<any>;
+
+  public readonly groupClaimJoinRequestStateEnumClass = GroupClaimJoinRequestStateEnum;
 
   //region Legal address
   public postIndexLegalAddressNgxInput: NgxInput;
@@ -71,32 +89,69 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   public correspondentAccountGroupNgxInput: NgxInput;
   public bikGroupNgxInput: NgxInput;
   public kppGroupNgxInput: NgxInput;
-  public okdadGroupNgxInput: NgxInput;
+  public okvadGroupNgxInput: NgxInput;
   public okpoGroupNgxInput: NgxInput;
 
   //endregion
+
+  public step1FormGroup = new FormGroup({});
+  public step2FormGroup = new FormGroup({});
+  public step3FormGroup = new FormGroup({});
+  public selectedIndex = 0;
+  private _modal: NgxModalRef;
 
   constructor(private _companyTypeApiService: CompanyTypeApiService,
               private _utilService: UtilService,
               private _router: Router,
               private _groupApiService: GroupApiService,
+              private _authorizationService: AuthorizationService,
+              private _groupConnectionRequestClaimApiService: GroupConnectionRequestClaimApiService,
+              private _ngxModalService: NgxModalService,
               participantRestApiService: ParticipantRestApiService, appHelper: AppHelper) {
     super(participantRestApiService, appHelper);
+  }
+
+  public async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
+
+    this._modal = this._ngxModalService.open({size: 'lg', backdrop: 'static', centered: true});
+    this._modal.componentInstance.title = 'Заполнение анкеты';
+    this._modal.componentInstance.canClose = false;
+    await this._modal.componentInstance.initializeBody(HtmlContentComponent, async component => {
+      component.containerRef.createEmbeddedView(this.groupClaimJoinRequestStateTemplate, {
+        $implicit: this.data.groupConnectionRequestClaim.headFullName
+      });
+    });
+  }
+
+  public async onSend(groupClaimJoinRequestStateEnum: GroupClaimJoinRequestStateEnum, stepIndex?: number): Promise<void> {
+    if (stepIndex === 2) {
+      await this.onSelectionChange({previouslySelectedIndex: stepIndex, selectedIndex: stepIndex});
+    }
+
+    if (groupClaimJoinRequestStateEnum !== GroupClaimJoinRequestStateEnum.FILL_COMPLETED || stepIndex === 2) {
+      await this._groupConnectionRequestClaimApiService.updateGroupClaimJoinRequestState(this.data.groupConnectionRequestClaim, groupClaimJoinRequestStateEnum).toPromise();
+      await this._authorizationService.logOut(true);
+    }
+
+    this._modal.close();
   }
 
   protected async initializeComponent(data: LegalEntityPersonStatement): Promise<boolean> {
     await super.initializeComponent(data);
     return this.appHelper.tryLoad(async () => {
-      await this._initializeGroup(data.groupClaimRequest.organization);
+      await this._initializeGroup(data.groupConnectionRequestClaim.group as Organization);
+      data.groupConnectionRequestClaim.requisites = data.groupConnectionRequestClaim.requisites || new OrganizationRequisites();
+      await this._initializeOrganizationRequisites(data.groupConnectionRequestClaim.requisites);
       this._initializePersons();
     });
   }
 
   public async _initializeGroup(organization: Organization): Promise<void> {
     organization.legalAddress = organization.legalAddress || new PlainAddress();
-    // organization.requisites = organization.requisites || new GroupRequisites();
     organization.additionalInformation = organization.additionalInformation || new GroupAdditionalInformation();
     organization.address = organization.address || new PlainAddress();
+    organization.additionalInformation = organization.additionalInformation || new GroupAdditionalInformation();
 
     this.nameGroupNgxInput = this._getNgxInput('name', organization.name, true);
     this.fullNameGroupNgxInput = this._getNgxInput('Полное наименование организации', organization.fullName);
@@ -130,29 +185,28 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
     this.emailGroupNgxInput = this._getNgxInput('Email', organization.email);
     this.stateRegistrationCertificateNumberGroupNgxInput = this._getNgxInput('№ Свидетельства о государственной регистрации', organization.additionalInformation.stateRegistrationCertificateNumber);
     this.accreditationOrderNumberGroupNgxInput = this._getNgxInput('№ Номер приказа об аккредитации и названии выдавшей его', organization.additionalInformation.accreditationOrderNumber);
-    // TODO: Add editing group requisites
-    // this.bankFacilityGroupNgxInput = this._getNgxInput('Учреждение банка', organization.requisites.bankFacility);
-    // this.paymentAccountGroupNgxInput = this._getNgxInput('Расчетный счет', organization.requisites.paymentAccount);
-    // this.innGroupNgxInput = this._getNgxInput('ИНН', organization.requisites.inn);
-    // this.oktmoGroupNgxInput = this._getNgxInput('ОКТМО', organization.requisites.oktmo);
-    // this.kbkGroupNgxInput = this._getNgxInput('КБК', organization.requisites.kbk);
-    // this.correspondentAccountGroupNgxInput = this._getNgxInput('Корреспонденский ссчет', organization.requisites.correspondentAccount);
-    // this.bikGroupNgxInput = this._getNgxInput('БИК', organization.requisites.bik);
-    // this.kppGroupNgxInput = this._getNgxInput('КПП', organization.requisites.kpp);
-    // this.okdadGroupNgxInput = this._getNgxInput('ОКВЭД', organization.requisites.okvad);
-    // this.okpoGroupNgxInput = this._getNgxInput('ОКПО', organization.requisites.okpo);
+
+    this.okvadGroupNgxInput = this._getNgxInput('ОКВЭД', organization.additionalInformation.okvad);
+    this.okpoGroupNgxInput = this._getNgxInput('ОКПО', organization.additionalInformation.okpo);
+  }
+
+  private _initializeOrganizationRequisites(requisites: OrganizationRequisites): void {
+    this.bankFacilityGroupNgxInput = this._getNgxInput('Учреждение банка', requisites.bankFacility);
+    this.paymentAccountGroupNgxInput = this._getNgxInput('Расчетный счет', requisites.paymentAccount);
+    this.innGroupNgxInput = this._getNgxInput('ИНН', requisites.inn);
+    this.oktmoGroupNgxInput = this._getNgxInput('ОКТМО', requisites.oktmo);
+    this.kbkGroupNgxInput = this._getNgxInput('КБК', requisites.kbk);
+    this.correspondentAccountGroupNgxInput = this._getNgxInput('Корреспонденский ссчет', requisites.correspondentAccount);
+    this.bikGroupNgxInput = this._getNgxInput('БИК', requisites.bik);
+    this.kppGroupNgxInput = this._getNgxInput('КПП', requisites.kpp);
   }
 
   private _initializePersons(): void {
-    this.data.groupClaimRequest.creator = this.data.groupClaimRequest.creator || new Person();
-    // TODO:
-    // this.headFullNameNgxInputNgxInput = this._utilService.getNgxInput('Полное имя руководителя', `${this.data.groupClaimRequest.creator.lastName} ${this.data.groupClaimRequest.creator.firstName} ${this.data.groupClaimRequest.creator.patronymic || ''}`);
-    // this.headFullNameNgxInputNgxInput.control.disable();
-    // this.phoneHeadPersonNgxInput = this._utilService.getNgxInput('Телефон руководителя', this.data.groupClaimRequest.headPhone);
-    // this.phoneHeadPersonNgxInput.control.disable();
-    //
-    // this.deputyHeadFullNameNgxInput = this._utilService.getNgxInput('Полное имя заместителя руководителя', this.data.groupClaimRequest.deputyHeadFullName);
-    // this.deputyHeadPhoneNgxInput = this._utilService.getNgxInput('Телефон заместителя руководителя', this.data.groupClaimRequest.deputyHeadPhone);
+    this.headFullNameNgxInputNgxInput = this._utilService.getNgxInput('Полное имя руководителя', this.data.groupConnectionRequestClaim.headFullName);
+    this.phoneHeadPersonNgxInput = this._utilService.getNgxInput('Телефон руководителя', this.data.groupConnectionRequestClaim.headPhone);
+
+    this.deputyHeadFullNameNgxInput = this._utilService.getNgxInput('Полное имя заместителя руководителя', this.data.groupConnectionRequestClaim.deputyHeadFullName);
+    this.deputyHeadPhoneNgxInput = this._utilService.getNgxInput('Телефон заместителя руководителя', this.data.groupConnectionRequestClaim.deputyHeadPhone);
   }
 
   public async onRemove(): Promise<boolean> {
@@ -160,63 +214,93 @@ export class LegalEntityPersonStatementComponent extends BaseEditComponent<Legal
   }
 
   public async onSave(): Promise<boolean> {
-    return this.appHelper.trySave(async () => {
-      await this._groupApiService.createGroupConnectionRequestClaim(this.data.organization, this.data.groupClaimRequest).toPromise();
-    });
+    return undefined;
   }
 
-  public async onApply(): Promise<void> {
-    this._buildDate();
-    if (await this.onSave()) {
-      await this._router.navigate(['/sign-in']);
+  public async onSelectionChange(e: { previouslySelectedIndex: number, selectedIndex: number }): Promise<void> {
+    try {
+      this.selectedIndex = e.selectedIndex;
+      let groupConnectionRequestClaim;
+      if (e.previouslySelectedIndex === 0) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep1(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep1()).toPromise();
+      } else if (e.previouslySelectedIndex === 1) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep2(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep2()).toPromise();
+      } else if (e.previouslySelectedIndex === 2) {
+        groupConnectionRequestClaim = await this._groupConnectionRequestClaimApiService.updateGroupConnectionRequestClaimProfileStep3(this.data.groupConnectionRequestClaim, this._getGroupClaimRequestProfileStep3()).toPromise();
+      }
+      this.data.groupConnectionRequestClaim = groupConnectionRequestClaim;
+    } catch (err) {
+      this.selectedIndex = e.previouslySelectedIndex;
     }
   }
 
-  private _buildDate(): void {
-    this.data.groupClaimRequest.organization.name = this.nameGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.fullName = this.fullNameGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.companyType = this.companyTypeNgxSelect.control.value;
+  private _getGroupClaimRequestProfileStep1(): GroupClaimRequestProfileStep1 {
+    const step1 = new GroupClaimRequestProfileStep1();
+    step1.organization = this.data.groupConnectionRequestClaim.group as Organization;
+    step1.organization.legalAddress = step1.organization.legalAddress || new PlainAddress();
+    step1.organization.address = step1.organization.address || new PlainAddress();
+    step1.organization.additionalInformation = step1.organization.additionalInformation || new GroupAdditionalInformation();
 
-    this.data.groupClaimRequest.organization.legalAddress.postIndex = this.postIndexLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.region = this.regionLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.city = this.cityLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.street = this.streetLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.house = this.houseLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.block = this.blockLegalAddressNgxInput.control.value;
-    this.data.groupClaimRequest.organization.legalAddress.liter = this.literLegalAddressNgxInput.control.value;
+    step1.organization.name = this.nameGroupNgxInput.control.value;
+    step1.organization.fullName = this.fullNameGroupNgxInput.control.value;
+    step1.organization.companyType = this.companyTypeNgxSelect.control.value;
 
-    if (this.data.groupClaimRequest.organization.address instanceof PlainAddress) {
-      this.data.groupClaimRequest.organization.address.postIndex = this.postIndexActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.region = this.regionActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.city = this.cityActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.street = this.streetActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.house = this.houseActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.block = this.blockActualAddressNgxInput.control.value;
-      this.data.groupClaimRequest.organization.address.liter = this.literActualAddressNgxInput.control.value;
+    step1.organization.legalAddress.postIndex = this.postIndexLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.region = this.regionLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.city = this.cityLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.street = this.streetLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.house = this.houseLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.block = this.blockLegalAddressNgxInput.control.value;
+    step1.organization.legalAddress.liter = this.literLegalAddressNgxInput.control.value;
+
+    if (step1.organization.address instanceof PlainAddress) {
+      step1.organization.address.postIndex = this.postIndexActualAddressNgxInput.control.value;
+      step1.organization.address.region = this.regionActualAddressNgxInput.control.value;
+      step1.organization.address.city = this.cityActualAddressNgxInput.control.value;
+      step1.organization.address.street = this.streetActualAddressNgxInput.control.value;
+      step1.organization.address.house = this.houseActualAddressNgxInput.control.value;
+      step1.organization.address.block = this.blockActualAddressNgxInput.control.value;
+      step1.organization.address.liter = this.literActualAddressNgxInput.control.value;
     }
 
-    this.data.groupClaimRequest.organization.phone = this.phoneGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.fax = this.faxGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.website = this.websiteGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.email = this.emailGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.additionalInformation.stateRegistrationCertificateNumber = this.stateRegistrationCertificateNumberGroupNgxInput.control.value;
-    this.data.groupClaimRequest.organization.additionalInformation.accreditationOrderNumber = this.accreditationOrderNumberGroupNgxInput.control.value;
-    // TODO: Add editing group requisites
-    // this.data.groupClaimRequest.organization.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.inn = this.innGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.oktmo = this.oktmoGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.kbk = this.kbkGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.correspondentAccount = this.correspondentAccountGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.bik = this.bikGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.kpp = this.kppGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.okvad = this.okdadGroupNgxInput.control.value;
-    // this.data.groupClaimRequest.organization.requisites.okpo = this.okpoGroupNgxInput.control.value;
-    // TODO:
-    // this.data.groupClaimRequest.headPhone = this.phoneHeadPersonNgxInput.control.value;
-    //
-    // this.data.groupClaimRequest.deputyHeadFullName = this.deputyHeadFullNameNgxInput.control.value;
-    // this.data.groupClaimRequest.deputyHeadPhone = this.deputyHeadPhoneNgxInput.control.value;
+    step1.organization.phone = this.phoneGroupNgxInput.control.value;
+    step1.organization.fax = this.faxGroupNgxInput.control.value;
+    step1.organization.website = this.websiteGroupNgxInput.control.value;
+    step1.organization.email = this.emailGroupNgxInput.control.value;
+    step1.organization.additionalInformation.stateRegistrationCertificateNumber = this.stateRegistrationCertificateNumberGroupNgxInput.control.value;
+    step1.organization.additionalInformation.accreditationOrderNumber = this.accreditationOrderNumberGroupNgxInput.control.value;
+
+    step1.headFullName = this.headFullNameNgxInputNgxInput.control.value;
+    step1.headPhone = this.phoneHeadPersonNgxInput.control.value;
+    step1.deputyHeadFullName = this.deputyHeadFullNameNgxInput.control.value;
+    step1.deputyHeadPhone = this.deputyHeadPhoneNgxInput.control.value;
+
+    return step1;
+  }
+
+  private _getGroupClaimRequestProfileStep2(): GroupClaimRequestProfileStep2 {
+    const step2 = new GroupClaimRequestProfileStep2();
+    step2.additionalInformation = new GroupAdditionalInformation();
+    step2.additionalInformation.stateRegistrationCertificateNumber = this.stateRegistrationCertificateNumberGroupNgxInput.control.value;
+    step2.additionalInformation.accreditationOrderNumber = this.accreditationOrderNumberGroupNgxInput.control.value;
+    step2.additionalInformation.okvad = this.okvadGroupNgxInput.control.value;
+    step2.additionalInformation.okpo = this.okpoGroupNgxInput.control.value;
+    return step2;
+  }
+
+  private _getGroupClaimRequestProfileStep3(): GroupClaimRequestProfileStep3 {
+    const step3 = new GroupClaimRequestProfileStep3();
+    step3.requisites = this.data.groupConnectionRequestClaim.requisites || new OrganizationRequisites();
+    step3.requisites.name = step3.requisites.name || 'Основные реквизиты';
+    step3.requisites.bankFacility = this.bankFacilityGroupNgxInput.control.value;
+    step3.requisites.paymentAccount = this.paymentAccountGroupNgxInput.control.value;
+    step3.requisites.inn = this.innGroupNgxInput.control.value;
+    step3.requisites.oktmo = this.oktmoGroupNgxInput.control.value;
+    step3.requisites.kbk = this.kbkGroupNgxInput.control.value;
+    step3.requisites.correspondentAccount = this.correspondentAccountGroupNgxInput.control.value;
+    step3.requisites.bik = this.bikGroupNgxInput.control.value;
+    step3.requisites.kpp = this.kppGroupNgxInput.control.value;
+    return step3;
   }
 
   private _getNgxInput(labelTranslation: string, value: string, required = false): NgxInput {

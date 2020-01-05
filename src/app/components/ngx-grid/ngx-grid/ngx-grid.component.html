@@ -6,7 +6,13 @@
        (scrollDown)="onScrollDown()">
   <thead>
   <tr>
-    <th *ngIf="selectionType === selectionTypeClass.MULTIPLE"></th>
+    <th *ngIf="selectionType === selectionTypeClass.MULTIPLE">
+      <mat-checkbox [checked]="descendantsAllSelected()"
+                    [indeterminate]="descendantsPartiallySelected()"
+                    [disabled]="!items?.length"
+                    (change)="onParentSelectionToggle()"
+                    (click)="$event.stopPropagation()"></mat-checkbox>
+    </th>
     <th *ngFor="let item of ngxColumnComponents.toArray()"
         [class]="item.class"
         [width]="item.width"
@@ -28,8 +34,8 @@
       (click)="onItemClick(item)"
       (dblclick)="onItemDblClick(item); $event.stopPropagation()">
     <td *ngIf="selectionType === selectionTypeClass.MULTIPLE">
-      <ngx-check-box [(value)]="item.selected"
-                     (valueChange)="onSelectOrDeselectItem(item)"></ngx-check-box>
+      <mat-checkbox [(ngModel)]="item.selected"
+                    (change)="onSelectOrDeselectItem(item)"></mat-checkbox>
     </td>
     <td *ngFor="let column of ngxColumnComponents.toArray()"
         [width]="item.width">

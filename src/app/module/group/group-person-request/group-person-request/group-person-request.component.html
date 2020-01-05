@@ -15,7 +15,7 @@
          class="description">{{group?.description}}</p>
     </div>
   </div>
-  <ng-container *ngIf="!individualPersonStatement">
+  <ng-container *ngIf="!(individualPersonStatement || legalEntityPersonStatement)">
     <div fxLayout="column">
       <ng-container *ngIf="personType === personTypeClass.LEGAL_ENTITY">
         <new-ngx-input [data]="organizationNameNgxInput"></new-ngx-input>
@@ -88,6 +88,9 @@
 
   <ng-container *ngIf="individualPersonStatement">
     <app-individual-person-statement [(data)]="individualPersonStatement"></app-individual-person-statement>
+  </ng-container>
+  <ng-container *ngIf="legalEntityPersonStatement">
+    <app-legal-entity-person-statement [(data)]="legalEntityPersonStatement"></app-legal-entity-person-statement>
   </ng-container>
 </div>
 

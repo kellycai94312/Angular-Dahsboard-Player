@@ -1,57 +1,42 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { GroupClaimRequest, GroupPersonClaimRequest, GroupPersonClaimRequestProfile } from 'app/data/remote/bean/claim';
-import { RequestType } from 'app/data/remote/bean/request-type';
-import { PlainAddress } from 'app/data/remote/model/address/plain-address';
-import {
-  GroupAdditionalInformation,
-  GroupClaimJoinRequestStateEnum,
-  GroupClaimStateEnum,
-  GroupRequisites
-} from 'app/data/remote/model/group';
-import {
-  BaseGroupConnectionRequest,
-  GroupCluster,
-  GroupConnectionRequestClaim,
-  GroupConnectionRequestType
-} from 'app/data/remote/model/group/connection';
-import { BaseGroupContract } from 'app/data/remote/model/group/contract';
-import { GroupNews } from 'app/data/remote/model/group/news';
-import {
-  BaseGroupPersonType,
-  GroupPerson,
-  GroupPersonType,
-  GroupPersonTypeClaim
-} from 'app/data/remote/model/group/person';
-import { BaseGroupPersonClaimState } from 'app/data/remote/model/group/person/state';
-import { GroupPersonPosition } from 'app/data/remote/model/group/position';
-import { FileApiService } from 'app/data/remote/rest-api/api';
-import { UtilService } from 'app/services/util/util.service';
-import { plainToClass } from 'class-transformer';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from '../../../../../../environments/environment';
-import { EventDay } from '../../../bean/event/event-day';
-import { PageContainer } from '../../../bean/page-container';
-import { ReportExtension } from '../../../bean/report-extension';
-import { SingleAttributeWrapper } from '../../../bean/wrapper/single-attribute-wrapper';
-import { Group } from '../../../model/group/base/group';
-import { SubgroupTemplate } from '../../../model/group/subgroup/template/subgroup-template';
-import { SubgroupTemplateGroup } from '../../../model/group/subgroup/template/subgroup-template-group';
-import { Person } from '../../../model/person';
-import { BasePosition } from '../../../model/person-position/base-position';
-import { GroupPosition } from '../../../model/person-position/group-position';
-import { PositionLevelEnum } from '../../../model/person-position/position-level-enum';
-import { PersonRepresentative } from '../../../model/person/person-representative';
-import { IdRequest } from '../../../request/id-request';
-import { ListRequest } from '../../../request/list-request';
-import { PageQuery } from '../../page-query';
-import { GroupPersonPositionQuery } from '../../query/group-person-position-query';
-import { GroupPersonQuery } from '../../query/group-person-query';
-import { GroupQuery } from '../../query/group-query';
-import { ApiService } from '../base/api.service';
-import { PositionQuery } from '../position/model/position-query';
-import { ClusterGroupPosition } from './model/cluster-group-position';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {GroupClaimRequest, GroupPersonClaimRequest, GroupPersonClaimRequestProfile} from 'app/data/remote/bean/claim';
+import {RequestType} from 'app/data/remote/bean/request-type';
+import {PlainAddress} from 'app/data/remote/model/address/plain-address';
+import {GroupAdditionalInformation, GroupClaimJoinRequestStateEnum, GroupClaimStateEnum} from 'app/data/remote/model/group';
+import {BaseGroupConnectionRequest, GroupCluster, GroupConnectionRequestClaim, GroupConnectionRequestType} from 'app/data/remote/model/group/connection';
+import {BaseGroupContract} from 'app/data/remote/model/group/contract';
+import {GroupNews} from 'app/data/remote/model/group/news';
+import {BaseGroupPersonType, GroupPerson, GroupPersonType, GroupPersonTypeClaim} from 'app/data/remote/model/group/person';
+import {BaseGroupPersonClaimState} from 'app/data/remote/model/group/person/state';
+import {GroupPersonPosition} from 'app/data/remote/model/group/position';
+import {FileApiService} from 'app/data/remote/rest-api/api';
+import {UtilService} from 'app/services/util/util.service';
+import {plainToClass} from 'class-transformer';
+import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {environment} from '../../../../../../environments/environment';
+import {EventDay} from '../../../bean/event/event-day';
+import {PageContainer} from '../../../bean/page-container';
+import {ReportExtension} from '../../../bean/report-extension';
+import {SingleAttributeWrapper} from '../../../bean/wrapper/single-attribute-wrapper';
+import {Group} from '../../../model/group/base/group';
+import {SubgroupTemplate} from '../../../model/group/subgroup/template/subgroup-template';
+import {SubgroupTemplateGroup} from '../../../model/group/subgroup/template/subgroup-template-group';
+import {Person} from '../../../model/person';
+import {BasePosition} from '../../../model/person-position/base-position';
+import {GroupPosition} from '../../../model/person-position/group-position';
+import {PositionLevelEnum} from '../../../model/person-position/position-level-enum';
+import {PersonRepresentative} from '../../../model/person/person-representative';
+import {IdRequest} from '../../../request/id-request';
+import {ListRequest} from '../../../request/list-request';
+import {PageQuery} from '../../page-query';
+import {GroupPersonPositionQuery} from '../../query/group-person-position-query';
+import {GroupPersonQuery} from '../../query/group-person-query';
+import {GroupQuery} from '../../query/group-query';
+import {ApiService} from '../base/api.service';
+import {PositionQuery} from '../position/model/position-query';
+import {ClusterGroupPosition} from './model/cluster-group-position';
 
 @Injectable({
   providedIn: 'root'
@@ -425,37 +410,6 @@ export class GroupApiService {
 
   public updateGroupVacancies<T extends BasePosition>(group: Group, values: T[]): Observable<T[]> {
     return this._apiService.createValue(BasePosition, `${this._basePath}/${group.id}/vacancy`, new ListRequest(values.map(x => new IdRequest(x.id)))) as Observable<T[]>;
-  }
-
-  //endregion
-
-  //region requisites
-
-  public getGroupRequisitesList(group: Group): Observable<GroupRequisites[]> {
-    return this._apiService.getValues(GroupRequisites, `${this._basePath}/${group.id}/requisites`);
-  }
-
-  public getGroupRequisites(group: Group, groupRequisites: GroupRequisites): Observable<GroupRequisites> {
-    return this._apiService.getValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${groupRequisites.id}`) as Observable<GroupRequisites>;
-  }
-
-  public createGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
-    return this._apiService.createValue(GroupRequisites, `${this._basePath}/${group.id}/requisites`, value) as Observable<GroupRequisites>;
-  }
-
-  public updateGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
-    return this._apiService.updateValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${value.id}`, value) as Observable<GroupRequisites>;
-  }
-
-  public saveGroupRequisites(group: Group, value: GroupRequisites): Observable<GroupRequisites> {
-    if (value.id) {
-      return this.updateGroupRequisites(group, value);
-    }
-    return this.createGroupRequisites(group, value);
-  }
-
-  public removeGroupRequisites(group: Group, groupRequisites: GroupRequisites): Observable<GroupRequisites> {
-    return this._apiService.removeValue(GroupRequisites, `${this._basePath}/${group.id}/requisites/${groupRequisites.id}`) as Observable<GroupRequisites>;
   }
 
   //endregion

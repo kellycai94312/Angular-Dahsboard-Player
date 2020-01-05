@@ -570,6 +570,7 @@
   "sendInvitations": "Send invitations",
   "invitationsHaveBeenSent": "Invitations have been sent",
   "invitationsHaveNotBeenSent": "Invitations haven't been sent",
+  "step": "Step",
   "nextStep": "Next step",
   "back": "Back",
   "saveAndSend": "Save and send",
@@ -942,5 +943,10 @@
   "status": "Status",
   "phoneInvalid": "Phone invalid. Example: 89211234567",
   "further": "Further",
-  "apartment": "Apartment"
+  "apartment": "Apartment",
+  "fillOutNow": "Fill out now",
+  "fillOutLater": "Fill out later",
+  "fillInTheOffice": "Fill in the office",
+  "sendProfile": "Send profile",
+  "duringThePeriod": "During the period"
 }

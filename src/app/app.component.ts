@@ -8,8 +8,6 @@ import { ToastrService } from 'ngx-toastr';
 import { takeWhile } from 'rxjs/operators';
 import { FuseNavigationService } from '../@fuse/components/navigation/navigation.service';
 import { FuseConfigService } from '../@fuse/services/config.service';
-import { environment } from '../environments/environment';
-import { EnvironmentType } from '../environments/environment-type';
 import { Locale } from './data/remote/misc/locale';
 import { Person } from './data/remote/model/person';
 import { AssetsService } from './data/remote/rest-api/assets.service';
@@ -193,10 +191,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private fuseInitialization(): void {
     //#region Fuse
-
-    if (environment.type === EnvironmentType.PRODUCTION) {
-      navigation[0].children.splice(navigation[0].children.findIndex(x => x.id === 'dictionaries'), 1);
-    }
 
     this._fuseNavigationService.register('main', navigation);
 

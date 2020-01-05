@@ -22,7 +22,7 @@
         "section": "Основные данные",
         "country": "Страна",
         "region": "Регион",
-        "city": "Гороorderд"
+        "city": "Город"
       },
       "anthropometry": {
         "section": "Антропометрия",
@@ -570,6 +570,7 @@
   "sendInvitations": "Отправить приглашения",
   "invitationsHaveBeenSent": "Приглашения отправлены",
   "invitationsHaveNotBeenSent": "Приглашения не отправлены",
+  "step": "Шаг",
   "nextStep": "Следующий шаг",
   "back": "Назад",
   "saveAndSend": "Сохранить и отправить",
@@ -944,5 +945,10 @@
   "status": "Статус",
   "phoneInvalid": "Номер телефона введён неверно. Пример: 89211234567",
   "further": "Далее",
-  "apartment": "Квартира"
+  "apartment": "Квартира",
+  "fillOutNow": "Заполнить сейчас",
+  "fillOutLater": "Заполнить позже",
+  "fillInTheOffice": "Заполнить в офисе",
+  "sendProfile": "Отправить анкету",
+  "duringThePeriod": "За период"
 }

@@ -1,6 +1,6 @@
 import { NamedObject } from 'app/data/remote/base';
 
-export class GroupRequisites extends NamedObject {
+export class OrganizationRequisites extends NamedObject {
 
   public inn?: string;
   public kpp?: string;
