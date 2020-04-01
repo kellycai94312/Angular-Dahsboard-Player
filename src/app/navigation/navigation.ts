@@ -70,6 +70,28 @@ export const navigation: FuseNavigation[] = [
         type: 'item',
         icon: 'chat',
         url: '/conversation'
+      },
+      {
+        id: 'email',
+        translate: 'email',
+        type: 'collapsable',
+        icon: 'message',
+        children: [
+          {
+            id: 'notifications',
+            translate: 'notifications',
+            type: 'item',
+            //icon: 'notification',
+            url: '/notifications'
+          },
+          {
+            id: 'statements',
+            translate: 'statements',
+            type: 'item',
+            //icon: 'statement',
+            url: '/statements'
+          },
+        ]
       }
       // {
       //   id: 'laborExchange',
